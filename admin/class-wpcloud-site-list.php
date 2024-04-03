@@ -47,6 +47,7 @@ class WPCLOUD_Site_List extends WP_List_Table {
 		$columns = array(
 			'select' => '<input type="checkbox" />',
 			'site_name' => __( 'Site Name', 'wpcloud' ),
+			'owner' => __( 'Owner', 'wpcloud' ),
 			'status' => __( 'Status', 'wpcloud'),
 			'created' => __( 'Created', 'wpcloud' ),
 		);
@@ -86,6 +87,12 @@ class WPCLOUD_Site_List extends WP_List_Table {
 	public function column_created( $item ) {
 		$dt = get_post_datetime($item['id']);
 		return $dt->format('Y-m-d H:i:s');
+	}
+
+	public function column_owner( $item ) {
+		$owner_id = get_post_field( 'post_author', $item['id'] );
+		$owner = get_userdata( $owner_id );
+		return $owner->display_name;
 	}
 
 	protected function column_default( $item, $column_name ) {

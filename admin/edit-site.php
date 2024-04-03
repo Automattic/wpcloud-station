@@ -1,34 +1,45 @@
 <?php
+declare( strict_types = 1 );
 
 if ( ! defined( 'ABSPATH' ) ) {
 	die( '-1' );
 }
 
-function print_form_input_row( $label, $name, $value ) {
+
+function print_users_select( WPCloud_Site $wpcloud_site, array $filter = array() ): void {
+	$users = array_reduce( get_users($filter) , function ( $users, $user ) {
+		$users[$user->ID] = $user->display_name;
+		return $users;
+	}, array() );
+	print_form_select_row( 'Owner', 'owner_id', $users, $wpcloud_site->owner_id );
+}
+
+
+function print_form_input_row( string $label, string $name, ?string $value ): void {
 	?>
 	<tr class="wpcloud_row">
 		<th scope="row">
-			<label for="wpcloud_api_key">
+			<label for="<?php echo "wpcloud_$name" ?>">
 				<?php echo esc_html( $label ); ?>
 			</label>
 		</th>
 		<td>
-			<input type="text" id="wpcloud_api_key" name="wpcloud_site[<?php echo esc_attr( $name ); ?>]" value="<?php echo esc_attr( $value ); ?>">
+			<input type="text" id="<?php echo "wpcloud_$name" ?>" name="wpcloud_site[<?php echo esc_attr( $name ); ?>]" value="<?php echo esc_attr( $value ); ?>">
 		</td>
 	</tr>
 	<?php
 }
 
-function print_form_select_row($label, $name, $options, $value) {
+function print_form_select_row( string $label, string $name, array $options, ?string $value ): void {
 	?>
 	<tr class="wpcloud_row">
 		<th scope="row">
-			<label for="wpcloud_api_key">
+			<label for="<?php echo "wpcloud_$name" ?>">
 				<?php echo esc_html( $label ); ?>
 			</label>
 		</th>
 		<td>
-			<select id="wpcloud_api_key" name="wpcloud_site[<?php echo esc_attr( $name ); ?>]">
+			<select id="<?php echo "wpcloud_$name" ?>" name="wpcloud_site[<?php echo esc_attr( $name ); ?>]">
 				<?php
 				foreach ( $options as $option_value => $option_label ) {
 					?>
@@ -53,10 +64,11 @@ function print_form_select_row($label, $name, $options, $value) {
 			?>
 			<table class="form-table" role="presentation">
 				<tbody>
-					<input type="hidden" name="wpcloud_site[id]" value="<?php echo esc_attr( $wpcloud_site['id'] ); ?>" >
-					<?php print_form_input_row( 'Site Name', 'site_name', $wpcloud_site['site_name'] ); ?>
-					<?php print_form_select_row( 'PHP Version', 'php_version', WP_CLOUD_PHP_VERSIONS, $wpcloud_site['php_version'] ); ?>
-					<?php print_form_select_row( 'Data Center', 'data_center', WP_CLOUD_DATA_CENTERS, $wpcloud_site['php_version'] ); ?>
+					<input type="hidden" name="wpcloud_site[id]" value="<?php echo esc_attr( $wpcloud_site->id ); ?>" >
+					<?php print_users_select ($wpcloud_site ); ?>
+					<?php print_form_input_row( 'Site Name', 'site_name', $wpcloud_site->name ); ?>
+					<?php print_form_select_row( 'PHP Version', 'php_version', WPCLOUD_PHP_VERSIONS, $wpcloud_site->php_version ); ?>
+					<?php print_form_select_row( 'Data Center', 'data_center', WPCLOUD_DATA_CENTERS, $wpcloud_site->data_center ); ?>
 					</tbody>
 				</table>
 		<p class="submit">

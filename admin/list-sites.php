@@ -1,5 +1,12 @@
 <?php
+/**
+ * @package wpcloud-dashboard
+ */
+	if ( ! defined( 'ABSPATH' ) ) {
+		exit;
+	}
 
+	do_action( 'admin_notices' );
 
 	require_once  plugin_dir_path(__FILE__) . 'class-wpcloud-site-list.php';
 	$wpcloud_site_list = new WPCLOUD_Site_List();
