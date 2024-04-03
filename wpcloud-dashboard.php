@@ -12,6 +12,25 @@
  * @package         WP_Cloud_Dashboard
  */
 
+ const WP_CLOUD_PHP_VERSIONS = [
+	'7.4' => '7.4',
+	'8.1' => '8.1',
+	'8.2' => '8.2',
+	'8.3' => '8.3',
+];
+
+const WP_CLOUD_DATA_CENTERS = [
+	'NA' => 'No Preference',
+	'AMS' => 'Amsterdam, NL',
+	'BUR' => 'Los Angeles, CA',
+	'DCA' => 'Washington, D.C., USA',
+	'DFW' => 'Dallas, TX, USA',
+];
+
+const WPCLOUD_ACTION_CREATE_SITE = 'wpcloud_create_site';
+const WPCLOUD_ACTION_UPDATE_SITE = 'wpcloud_update_site';
+
+
 // Your code starts here.
 add_action( 'admin_init', 'wpcloud_settings_init' );
 function wpcloud_settings_init() {
@@ -88,16 +107,83 @@ function wpcloud_field_api_key_cb( $args ) {
 
 add_action( 'admin_menu', 'wpcloud_options_page' );
 function wpcloud_options_page() {
-    $hookname = add_menu_page(
+    add_menu_page(
         'WP Cloud',
         'WP Cloud',
         'manage_options',
         'wpcloud',
-        'wpcloud_options_page_html',
+        'wpcloud_site_list_cb',
         '',
         20
     );
-		add_action( 'load-' . $hookname, 'wpcloud_options_page_submit' );
+
+		add_submenu_page(
+			'wpcloud',
+			'New Site',
+			'Add Site',
+			'manage_options',
+			'wpcloud_admin_new_site',
+			'wpcloud_admin_new_site_cb',
+		);
+
+		add_submenu_page(
+			'wpcloud',
+			'Settings',
+			'Settings',
+			'manage_options',
+			'wpcloud_admin_settings',
+			'wpcloud_options_page_html',
+		);
+}
+
+function site_created__success() {
+?>
+<div class="notice notice-success is-dismissible">
+<p><?php _e( 'Provisioning a new Site', 'sample-text-domain' ); ?></p>
+</div>
+<?php
+}
+
+function wpcloud_site_list_cb() {
+	// check user capabilities
+	if ( ! current_user_can( 'manage_options' ) ) {
+		return;
+	}
+	if ( isset( $_POST['wpcloud_site'] ) ) {
+		check_admin_referer( 'wpcloud-edit-site' );
+		$wpcloud_site = $_POST['wpcloud_site'];
+		$wpcloud_site['user_id'] = get_current_user_id();
+		if ( $wpcloud_site['id'] !== '' ) {
+			do_action( WPCLOUD_ACTION_UPDATE_SITE, $wpcloud_site);
+		}
+		else {
+			$site_id = wp_insert_post( array(
+				'post_type' => 'wpcloud_site',
+				'post_title' => $wpcloud_site['site_name'],
+				'post_status' => 'draft',
+				'comment_status'=> 'closed',
+			) );
+			add_action( 'admin_notices', 'site_created__success' );
+			do_action( WPCLOUD_ACTION_CREATE_SITE, $wpcloud_site);
+		}
+	}
+	require_once	plugin_dir_path(__FILE__) . 'admin/list-sites.php';
+}
+
+function wpcloud_admin_new_site_cb() {
+	// check user capabilities - need to add a capability for this 'wpcloud_add_site' or something
+	if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+	}
+
+	$wpcloud_site = array(
+		'id' => '',
+		'site_name' => '',
+		'php_version' => '',
+		'datacenter' => '',
+	);
+
+	require_once  plugin_dir_path(__FILE__) . 'admin/edit-site.php';
 }
 
 function wpcloud_options_page_html() {
@@ -115,6 +201,24 @@ function wpcloud_options_page_html() {
 		require_once  plugin_dir_path(__FILE__) . 'admin/options.php';
 }
 
-function wpcloud_options_page_submit() {
-	return;
+function wpcloud_site_post_type() {
+	register_post_type( 'wpcloud_site',
+		array(
+			'labels'	=> array(
+				'name'			=> __( 'Sites', 'wpcloud' ),
+				'singular_name'	=> __( 'Site', 'wpcloud' ),
+				'add_new' => 'Add New Site',
+			),
+			'public'	=> true,
+			'has_archive' => true,
+			'show_in_rest' => true,
+			'show_in_ ui' => false,
+			'show_in_menu' => false,
+			'capabilities' => array(
+				'wpcloud_add_site' => true,
+			),
+
+		)
+	);
 }
+add_action( 'init', 'wpcloud_site_post_type' );
