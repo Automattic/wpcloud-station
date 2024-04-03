@@ -6,6 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 
+
 function print_users_select( WPCloud_Site $wpcloud_site, array $filter = array() ): void {
 	$users = array_reduce( get_users($filter) , function ( $users, $user ) {
 		$users[$user->ID] = $user->display_name;
@@ -15,7 +16,7 @@ function print_users_select( WPCloud_Site $wpcloud_site, array $filter = array()
 }
 
 
-function print_form_input_row( string $label, string $name, ?string $value ): void {
+function print_form_input_row( string $label, string $name, ?string $value, string $description = '' ): void {
 	?>
 	<tr class="wpcloud_row">
 		<th scope="row">
@@ -24,13 +25,13 @@ function print_form_input_row( string $label, string $name, ?string $value ): vo
 			</label>
 		</th>
 		<td>
-			<input type="text" id="<?php echo "wpcloud_$name" ?>" name="wpcloud_site[<?php echo esc_attr( $name ); ?>]" value="<?php echo esc_attr( $value ); ?>">
+			<input type="text" id="<?php echo "wpcloud_$name" ?>" name="wpcloud_site[<?php echo esc_attr( $name ); ?>]" value="<?php echo esc_attr( $value ); ?>"><span class="description"><?php echo $description ?></span>
 		</td>
 	</tr>
 	<?php
 }
 
-function print_form_select_row( string $label, string $name, array $options, ?string $value ): void {
+function print_form_select_row( string $label, string $name, array $options, mixed $value ): void {
 	?>
 	<tr class="wpcloud_row">
 		<th scope="row">
@@ -66,7 +67,7 @@ function print_form_select_row( string $label, string $name, array $options, ?st
 				<tbody>
 					<input type="hidden" name="wpcloud_site[id]" value="<?php echo esc_attr( $wpcloud_site->id ); ?>" >
 					<?php print_users_select ($wpcloud_site ); ?>
-					<?php print_form_input_row( 'Site Name', 'site_name', $wpcloud_site->name ); ?>
+					<?php print_form_input_row( 'Site Name', 'site_name', $wpcloud_site->name, '.' . $wpcloud_site->domain ); ?>
 					<?php print_form_select_row( 'PHP Version', 'php_version', WPCLOUD_PHP_VERSIONS, $wpcloud_site->php_version ); ?>
 					<?php print_form_select_row( 'Data Center', 'data_center', WPCLOUD_DATA_CENTERS, $wpcloud_site->data_center ); ?>
 					</tbody>
