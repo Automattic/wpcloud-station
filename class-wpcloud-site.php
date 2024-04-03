@@ -18,6 +18,31 @@ class WPCLOUD_Site {
 	public $data_center;
 	public $status;
 	public $owner_id;
+	public $domain;
+
+	public function __construct(string $domain = '') {
+		$this->id = 0;
+		$this->name = '';
+		$this->php_version = '';
+		$this->data_center = '';
+		$this->status = '';
+		$this->owner_id = 0;
+
+		if ( ! $domain ) {
+			$this->domain = self::get_default_domain();
+		} else {
+			$this->domain = $domain;
+		}
+	}
+
+	public static function get_default_domain(string $sub_domain = ''): string {
+		$settings = get_option( 'wpcloud_settings' );
+		$domain = $settings['wpcloud_domain'] ?? '';
+		if ( $sub_domain && $domain ) {
+			$domain = $sub_domain . '.' . $domain;
+		}
+		return $domain;
+	}
 
 	public static function register_post_type(): void {
 			register_post_type( 'wpcloud_site',
@@ -65,7 +90,7 @@ class WPCLOUD_Site {
 		return new self();
 	}
 
-	public static function create(string $name, string $php_version, string $data_center, ?string $owner_id): self {
+	public static function create(string $name, string $php_version, string $data_center, ?string $owner_id): mixed {
 		// Set up the site info
 		$status = apply_filters( WPCLOUD_INITIAL_SITE_STATUS, self::$initial_status );
 		$post_details = array(
@@ -84,20 +109,44 @@ class WPCLOUD_Site {
 
 		$should_create = apply_filters( WPCLOUD_SHOULD_CREATE_SITE, true, $owner_id );
 		if ( !$should_create ) {
-			throw new Exception( 'Site creation is disabled.' );
+			return new WP_Error( 'forbidden', __( 'Site creation is disabled.' ) );
+		}
+
+		// @TODO validate name for
+		$pattern = "/^(?!-)(?!.*--)[A-Za-z0-9-]{1,63}(?<!-)$/";
+		if ( ! preg_match( $pattern, $name ) ) {
+			return new WP_Error( 'forbidden', __( 'Invalid site name.' ) );
 		}
 
 		// Create the site CPT and set the meta data.
 		$site_id = wp_insert_post( $post_details );
 		if ( is_wp_error( $site_id ) ) {
-			throw new Exception( 'Failed to create site.' );
+			return $site_id;
 		}
 
 		//We only really need these for the initial creation so we can show the user what they just created.
 		update_post_meta( $site_id, 'php_version', $php_version );
 		update_post_meta( $site_id, 'data_center', $data_center );
 
-		// @TODO: call the wpcloud API to create the site.
+		$domain = self::get_default_domain( $name );
+		$admin =  get_user_by( 'id', $owner_id );
+
+		$data = array(
+			'php_version' => $php_version,
+			'geo_affinity' => $data_center,
+		);
+
+		$result = wpcloud_client_site_create(
+			domain: $domain,
+			admin_user: $admin->user_login,
+			admin_email: $admin->user_email,
+			data: $data
+		);
+
+		if ( is_wp_error( $result ) ) {
+			wp_delete_post( $site_id );
+			return $result;
+		}
 
 		do_action( WPCLOUD_ACTION_SITE_CREATED, $site_id, $owner_id, 'wp-admin' );
 

@@ -126,7 +126,10 @@ function site_created__success( WPCloud_Site $wpcloud_site ): void {
 ?>
 <div class="notice notice-success is-dismissible">
 	<p>
-		<?php echo sprintf( __( 'Provisioning  %s', 'wpcloud' ), $wpcloud_site->name ) ?>
+		<?php
+		/* translators: %s: name of the site */
+		echo sprintf( __( 'Provisioning  %s', 'wpcloud' ), $wpcloud_site->name )
+		?>
 	</p>
 </div>
 <?php
@@ -185,5 +188,5 @@ function wpcloud_options_page_html(): void {
 		}
 
 		settings_errors( 'wpcloud_messages' );
-		require_once  plugin_dir_path(__FILE__) . 'admin/options.php';
+		require_once  plugin_dir_path(__FILE__) . 'options.php';
 }
