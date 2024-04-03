@@ -5,46 +5,101 @@
  * @package wpcloud-dashboard
  */
 
+declare( strict_types = 1 );
+
+/**
+ * Get WP Cloud Client Name from settings.
+ *
+ * @return string|null Client Name on success. WP_Error on error.
+ */
+function wpcloud_get_client_name(): mixed {
+	$wpcloud_settings = get_option( 'wpcloud_settings' );
+
+	if ( ! $wpcloud_settings ) {
+		return null;
+	}
+
+    return $wpcloud_settings['wpcloud_client'];
+}
+
+/**
+ * Get WP Cloud API Key from settings.
+ *
+ * @return string|null Client API Key on success. WP_Error on error.
+ */
+function wpcloud_get_client_api_key(): mixed {
+	$wpcloud_settings = get_option( 'wpcloud_settings' );
+
+	if ( ! $wpcloud_settings ) {
+		return null;
+	}
+
+    return $wpcloud_settings['wpcloud_api_key'];
+}
+
+/**
+ * Get a list of sites for the client.
+ *
+ * @param string[] ...$meta_keys One or more meta keys to include in response.
+ *                               Supported: wp_version, php_version, space_quota, db_file_size, static_file_404, suspended
+ *
+ * @return array|WP_Error Site status details or error.
+ */
+function wpcloud_client_site_list( string ...$meta_keys ): mixed {
+    $client_name = wpcloud_get_client_name();
+    $path        = "get-sites/{$client_name}/";
+
+    foreach ( $meta_keys as $meta_key ) {
+		$path .= "{$meta_key}/";
+	}
+
+	return wpcloud_client_get( null, $path );
+}
+
 /**
  * Make a GET request the WP Cloud API.
  *
- * @param int    $wpcloud_site_id The WP Cloud Site ID.
- * @param string $path            The request path without host. e.g. 'get-site/example.com'.
+ * @param int|null $wpcloud_site_id The WP Cloud Site ID.
+ * @param string   $path            The request path without host. e.g. 'get-site/example.com'.
  *
  * @return mixed|WP_Error Response body on success. WP_Error on failure.
  */
-function wpcloud_client_get( $wpcloud_site_id, $path ) {
+function wpcloud_client_get( ?int $wpcloud_site_id, string $path ): mixed {
 	return wpcloud_client_request( $wpcloud_site_id, 'GET', $path );
 }
 
 /**
  * Make a POST request the WP Cloud API.
  *
- * @param int    $wpcloud_site_id The WP Cloud Site ID.
- * @param string $path            The request path without host. e.g. 'get-site/example.com'.
- * @param array  $body            The body of the request as an array.
+ * @param int|null $wpcloud_site_id The WP Cloud Site ID.
+ * @param string   $path            The request path without host. e.g. 'get-site/example.com'.
+ * @param array    $body            The body of the request as an array.
  *
  * @return mixed|WP_Error Response body on success. WP_Error on failure.
  */
-function wpcloud_client_post( $wpcloud_site_id, $path, $body = array() ) {
+function wpcloud_client_post( ?int $wpcloud_site_id, string $path, array $body = array() ): mixed {
 	return wpcloud_client_request( $wpcloud_site_id, 'POST', $path, $body );
 }
 
 /**
  * Make a request to WP Cloud API.
  *
- * @param int    $wpcloud_site_id The WP Cloud Site ID.
- * @param string $method          HTTP Request method. 'GET' or 'POST'.
- * @param string $path            The request path without host. e.g. 'get-site/example.com'.
- * @param array  $body            The body of the request as an array.
+ * @param int|null $wpcloud_site_id The WP Cloud Site ID.
+ * @param string   $method          HTTP Request method. 'GET' or 'POST'.
+ * @param string   $path            The request path without host. e.g. 'get-site/example.com'.
+ * @param array    $body            The body of the request as an array.
  *
  * @return mixed|WP_Error Response body on success. WP_Error on failure.
  */
-function wpcloud_client_request( $wpcloud_site_id, $method, $path, $body = array() ) {
-	$api_key = get_option( 'wpcloud' );
+function wpcloud_client_request( ?int $wpcloud_site_id, string $method, string $path, array $body = array() ): mixed {
+    $api_key     = wpcloud_get_client_api_key();
+    $client_name = wpcloud_get_client_name();
 
 	if ( empty( $api_key ) ) {
-		return new WP_Error( 'unauthorized', 'Please provide a WP Cloud API key in settings' );
+		return new WP_Error( 'unauthorized', 'Please provide a WP Cloud API Key in Settings' );
+	}
+	if ( empty( $client_name ) ) {
+		return new WP_Error( 'unauthorized', 'Please provide a WP Cloud Client Name in Settings' );
 	}
 
 	$scheme   = 'https';
