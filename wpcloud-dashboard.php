@@ -27,7 +27,7 @@ function wpcloud_settings_init() {
 	add_settings_field(
 		'wpcloud_field_api_key',
 		__( 'API Key', 'wpcloud' ),
-		'wpcloud_field_api_key_cb',
+		'wpcloud_field_input_cb',
 		'wpcloud',
 		'wpcloud_section_settings',
 		[
@@ -38,9 +38,22 @@ function wpcloud_settings_init() {
 	);
 
 	add_settings_field(
+		'wpcloud_field_client',
+		__( 'Client Name', 'wpcloud' ),
+		'wpcloud_field_input_cb',
+		'wpcloud',
+		'wpcloud_section_settings',
+		[
+			'label_for'         => 'wpcloud_client',
+			'class'             => 'wpcloud_row',
+			'wpcloud_custom_data' => 'custom',
+		]
+	);
+
+	add_settings_field(
 		'wpcloud_field_domain',
 		__( 'Domain', 'wpcloud' ),
-		'wpcloud_field_domain_cb',
+		'wpcloud_field_input_cb',
 		'wpcloud',
 		'wpcloud_section_settings',
 		[
@@ -48,7 +61,7 @@ function wpcloud_settings_init() {
 			'class'             => 'wpcloud_row',
 			'wpcloud_custom_data' => 'custom',
 		]
-		);
+	);
 }
 
 function wpcloud_section_options_cb( $args ) {
@@ -71,7 +84,7 @@ function wpcloud_field_domain_cb( $args ) {
 	<?php
 }
 
-function wpcloud_field_api_key_cb( $args ) {
+function wpcloud_field_input_cb( $args ) {
 
 	$options = get_option( 'wpcloud_settings' );
 	// output the field
