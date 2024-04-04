@@ -143,7 +143,7 @@ function wpcloud_site_list_cb(): void {
 	if ( isset( $_POST['wpcloud_site'] ) ) {
 		check_admin_referer( 'wpcloud-edit-site' );
 		$wpcloud_site = $_POST['wpcloud_site'];
-		if ( $wpcloud_site['id'] === '' ) {
+		if ( intval( $wpcloud_site[ 'id' ] ) === 0 ) {
 			// create a new site
 			$wpcloud_site = WPCloud_Site::create(
 				name: $wpcloud_site['site_name'],
@@ -152,7 +152,7 @@ function wpcloud_site_list_cb(): void {
 				owner_id: $wpcloud_site['owner_id']
 			);
 			if ( is_wp_error( $wpcloud_site ) ) {
-				// handle the error
+				error_log( $wpcloud_site->get_error_message());
 			} else {
 				add_action( 'admin_notices', function() use ( $wpcloud_site ):void {
 					site_created__success( $wpcloud_site );

@@ -91,6 +91,8 @@ class WPCLOUD_Site {
 	}
 
 	public static function create(string $name, string $php_version, string $data_center, ?string $owner_id): mixed {
+
+		error_log( 'Creating site: ' . $name . ' ' . $php_version . ' ' . $data_center . ' ' . $owner_id);
 		// Set up the site info
 		$status = apply_filters( WPCLOUD_INITIAL_SITE_STATUS, self::$initial_status );
 		$post_details = array(
@@ -133,8 +135,11 @@ class WPCLOUD_Site {
 
 		$data = array(
 			'php_version' => $php_version,
-			'geo_affinity' => $data_center,
 		);
+
+		if ( $data_center != 'NA' ) {
+			$data['data_center'] = $data_center;
+		}
 
 		$result = wpcloud_client_site_create(
 			domain: $domain,
@@ -144,6 +149,7 @@ class WPCLOUD_Site {
 		);
 
 		if ( is_wp_error( $result ) ) {
+			error_log( 'Error creating site: ' . $result->get_error_message() );
 			wp_delete_post( $site_id );
 			return $result;
 		}
