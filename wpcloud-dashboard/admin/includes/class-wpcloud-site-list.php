@@ -13,12 +13,17 @@ class WPCLOUD_Site_List extends WP_List_Table {
 		) );
 	}
 
-	public function prepare_items() {
+	public function prepare_items(bool $from_client = false) {
 		$columns = $this->get_columns();
 		$hidden = array();
 		$sortable = $this->get_sortable_columns();
 
 		$this->_column_headers = array( $columns, $hidden, $sortable );
+
+		$this->items = $from_client ? $this->get_sites_from_client() : $this->get_sites_from_db();
+	}
+
+	private function get_sites_from_db(array $options = array()): array {
 
 		$defaults = array(
 			'post_status' => 'any',
@@ -29,18 +34,22 @@ class WPCLOUD_Site_List extends WP_List_Table {
 			'post_type' => 'wpcloud_site',
 		);
 
+		$options = wp_parse_args( $options, $defaults );
+
 		$q = new WP_Query();
 
-		$results = $q->query( $defaults );
+		$results = $q->query( $options );
 
-		foreach( (array) $results as $result ) {
-			$this->items[] = array(
-				'id' => $result->ID,
-				'site_name' => $result->post_title,
-				'status' => $result->post_status,
-				'created' => $result->post_date,
-			);
-		}
+		return array_map( fn( $post ) => array(
+			'id' => $post->ID,
+			'site_name' => $post->post_title,
+			'status' => $post->post_status,
+			'created' => $post->post_date,
+		), $results );
+	}
+
+	private function get_sites_from_client(): array {
+		return array();
 	}
 
 	public function get_columns() {
