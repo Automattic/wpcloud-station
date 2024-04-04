@@ -6,7 +6,7 @@
  */
 declare( strict_types = 1 );
 
-require_once  plugin_dir_path( __FILE__ ) . 'lib/wpcloud-client.php';
+require_once  plugin_dir_path( __FILE__ ) . 'wpcloud-client.php';
 
 class WPCLOUD_Site {
 

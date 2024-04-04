@@ -1,6 +1,6 @@
 <?php
 
-require_once plugin_dir_path( __FILE__ ) . 'class-wpcloud-site.php';
+require_once plugin_dir_path( __FILE__ ) . './includes/class-wpcloud-site.php';
 
 /**
  * Set up the plugin's capabilities.

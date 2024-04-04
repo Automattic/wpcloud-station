@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name:     WP Cloud Dashboard
- * Plugin URI:      https://github.com/Automattic/wpcloud-dashboard
+ * Plugin URI:      https://github.com/Automattic/wpcloud-dashboard/wpcloud-dashboard
  * Description:     Dashboard for managing your WP Cloud services.
  * Author:          Automattic Inc.
  * Author URI:      https://wp.cloud/
