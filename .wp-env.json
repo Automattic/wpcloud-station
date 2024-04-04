@@ -1,4 +1,9 @@
 {
 	"core": "WordPress/WordPress",
-	"plugins": [ "./wpcloud-dashboard" ]
+	"plugins": [ "./wpcloud-dashboard" ],
+	"config": {
+		"WP_DEBUG": true,
+    "WP_DEBUG_LOG": true,
+		"WP_DEBUG_DISPLAY": true
+  }
 }
