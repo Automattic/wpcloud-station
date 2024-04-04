@@ -87,6 +87,8 @@ function wpcloud_client_domain_verification_record( string $domain ): mixed {
 /**
  * Create a new site.
  *
+ * When a new site is created, it returns a Job ID for the site provisioning job which can be checked for completion.
+ *
  * @param string  $domain         The domain name for the site.
  * @param string  $admin_user     The WordPress admin username for the new site.
  * @param string  $admin_email    The WordPress admin email for the new site.
@@ -153,6 +155,56 @@ function wpcloud_client_site_create( string $domain, string $admin_user, string 
 	);
 
 	return wpcloud_client_post( null, "create-site/{$client_name}", $data );
+}
+
+/**
+ * Get details of a site.
+ *
+ * @param int  $wpcloud_site_id The WP Cloud Site ID.
+ * @param bool $extra           Include extra details.
+ *
+ * @return array|WP_Error Site status details or error.
+ */
+function wpcloud_client_site_details( int $wpcloud_site_id, bool $extra = false ): mixed {
+	$path = "get-site/{$wpcloud_site_id}";
+
+	if ( $extra ) {
+		$path .= '/extra';
+	}
+
+	return wpcloud_client_get( $wpcloud_site_id, $path );
+}
+
+/**
+ * Manages plugins/themes on WP Cloud site.
+ *
+ * Accepts an associative array of plugins/themes and their status.
+ * Keys:
+ *  - plugins/<plugin-slug>[/<version>] // Optional version. Discouraged. Defaults to latest.
+ *  - themes/<theme-slug>
+ * Possible statuses:
+ *  - 'activate'   // Install if missing and activate.
+ *  - 'install'    // Just install, don't activate.
+ *  - 'deactivate' // Deactivate if active, but do not remove.
+ *  - 'remove'     // Deactivate if active, and remove.
+ *
+ * Example:
+ * $software = [
+ *     'plugins/hello-dolly'                => 'remove',
+ *     'themes/pub/akuta'                   => 'deactivate',
+ *     'plugins/wordpress-seo/2.4.2'        => 'install',
+ *     'themes/premium/caldwell'            => 'activate',
+ * ];
+ *
+ * @param int   $wpcloud_site_id The WP Cloud Site ID.
+ * @param array $software        Array of plugins and themes.
+ *
+ * @return object|WP_Error Job ID on success. WP_Error on error.
+ */
+function wpcloud_client_site_manage_software( $wpcloud_site_id, $software ) {
+    $client_name = wpcloud_get_client_name();
+
+	return woa_client_post( $wpcloud_site_id, "site-manage-software/{$client_name}/{$wpcloud_site_id}", $software );
 }
 
 /**
@@ -230,7 +282,7 @@ function wpcloud_client_request( ?int $wpcloud_site_id, string $method, string $
 		'body'        => $body,
 		'headers'     => array(
 			'auth'       => $api_key,
-			'user-agent' => 'wpcloud-dashboard',
+			'user-agent' => $client_name,
 			'host'       => $hostname,
 		),
 	);
@@ -309,7 +361,7 @@ function wpcloud_client_request( ?int $wpcloud_site_id, string $method, string $
 		/**
 		 * Action triggered when an error occurs during a WP Cloud API request.
 		 *
-		 * @param int            The WP Cloud Site ID.
+		 * @param int|null       The WP Cloud Site ID.
  		 * @param string         HTTP Request method. 'GET' or 'POST'.
  		 * @param string         The request path without host. e.g. 'get-site/example.com'.
 		 * @param array|WP_Error Array containing 'headers', 'body', 'response', 'cookies', 'filename'. WP_Error on failure.
@@ -318,10 +370,11 @@ function wpcloud_client_request( ?int $wpcloud_site_id, string $method, string $
 
 		return $result;
 	}
+
 	/**
 	 * Action triggered on successful WP Cloud API request.
 	 *
-	 * @param int            The WP Cloud Site ID.
+	 * @param int|null       The WP Cloud Site ID.
  	 * @param string         HTTP Request method. 'GET' or 'POST'.
  	 * @param string         The request path without host. e.g. 'get-site/example.com'.
 	 * @param array|WP_Error Array containing 'headers', 'body', 'response', 'cookies', 'filename'. WP_Error on failure.
