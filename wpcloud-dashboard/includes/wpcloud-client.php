@@ -131,7 +131,7 @@ function wpcloud_client_domain_verification_record( string $domain ): mixed {
  *                                    photon_subsizes
  *                                    static_file_404
  *
- * @return array|WP_Error Site status details or error.
+ * @return object|WP_Error Create site job details. WP_Error on error.
  */
 function wpcloud_client_site_create( string $domain, string $admin_user, string $admin_email, array $data = array(), array $software = array(), array $meta = array() ): mixed {
     $client_name = wpcloud_get_client_name();
@@ -159,12 +159,25 @@ function wpcloud_client_site_create( string $domain, string $admin_user, string 
 }
 
 /**
+ * Delete a site.
+ *
+ * @param int  $wpcloud_site_id The WP Cloud Site ID.
+ *
+ * @return object|WP_Error Delete site job detals. WP_Error on error.
+ */
+function wpcloud_client_site_delete( int $wpcloud_site_id ): mixed {
+    $client_name = wpcloud_get_client_name();
+
+	return wpcloud_client_post( $wpcloud_site_id, "delete-site/{$client_name}/{$wpcloud_site_id}" );
+}
+
+/**
  * Get details of a site.
  *
  * @param int  $wpcloud_site_id The WP Cloud Site ID.
  * @param bool $extra           Include extra details.
  *
- * @return array|WP_Error Site status details or error.
+ * @return object|WP_Error Site details. WP_Error on error.
  */
 function wpcloud_client_site_details( int $wpcloud_site_id, bool $extra = false ): mixed {
 	$path = "get-site/{$wpcloud_site_id}";
