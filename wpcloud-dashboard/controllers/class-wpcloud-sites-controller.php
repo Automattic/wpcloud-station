@@ -27,12 +27,12 @@ if ( ! class_exists( 'WPCLOUD_Sites_Controller' ) ) {
 					array(
 						'methods'             => WP_REST_Server::READABLE,
 						'callback'            => array( $this, 'get_sites' ),
-						'permission_callback' => 'is_user_logged_in',
+						'permission_callback' => array( $this, 'manage_sites_permission_check' ),
 					),
 					array(
 						'methods'             => WP_REST_Server::CREATABLE,
 						'callback'            => array( $this, 'create_site' ),
-						'permission_callback' => 'is_user_logged_in',
+						'permission_callback' => array( $this, 'manage_sites_permission_check' ),
 					),
 				))
 			;
@@ -43,10 +43,21 @@ if ( ! class_exists( 'WPCLOUD_Sites_Controller' ) ) {
 					array(
 						'methods'             => WP_REST_Server::READABLE,
 						'callback'            => array( $this, 'get_site' ),
-						'permission_callback' => 'is_user_logged_in',
+						'permission_callback' => array( $this, 'manage_sites_permission_check' ),
 					),
 				)
 			);
+		}
+
+		/**
+		 * Validate that a user has the manage sites permission.
+		 *
+		 * @param WP_REST_Request $request
+		 *
+		 * @return WP_Error|WP_REST_Response
+		 */
+		public function manage_sites_permission_check( $request ) {
+			return current_user_can( WPCLOUD_CAN_MANAGE_SITES );
 		}
 
 		/**
