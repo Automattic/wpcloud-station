@@ -1,5 +1,7 @@
 <?php
 
+
+require_once plugin_dir_path( __FILE__ ) . './controllers/class-wpcloud-sites-controller.php';
 require_once plugin_dir_path( __FILE__ ) . './includes/class-wpcloud-site.php';
 
 /**
@@ -9,6 +11,12 @@ function wpcloud_add_capabilities() {
 	$role = get_role( 'administrator' );
 	$role->add_cap( WPCLOUD_CAN_MANAGE_SITES );
 }
+
+function register_controllers() {
+	$sites_controller = new WPCLOUD_Sites_Controller();
+	$sites_controller->register_routes();
+}
+add_action( 'rest_api_init', 'register_controllers' );
 
 /**
  * Initialize the plugin.
