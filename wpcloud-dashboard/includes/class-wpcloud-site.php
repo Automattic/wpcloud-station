@@ -91,8 +91,6 @@ class WPCLOUD_Site {
 	}
 
 	public static function create(string $name, string $php_version, string $data_center, ?string $owner_id): mixed {
-
-		error_log( 'Creating site: ' . $name . ' ' . $php_version . ' ' . $data_center . ' ' . $owner_id);
 		// Set up the site info
 		$status = apply_filters( WPCLOUD_INITIAL_SITE_STATUS, self::$initial_status );
 		$post_details = array(
@@ -159,25 +157,29 @@ class WPCLOUD_Site {
 		return self::from_post( get_post( $site_id ) );
 	}
 
-	public static function find_all(?string $user_id, array $query = array() ): array {
-		if ( ! $user_id && ! current_user_can( WPCLOUD_CAN_MANAGE_SITES ) ) {
+	public static function find_all(string $owner_id, array $query = array() ): mixed {
+
+		/*
+		this is an admin feature , move it
+		if ( ! current_user_can( WPCLOUD_CAN_MANAGE_SITES ) ) {
 			throw new Exception( 'Unauthorized to view all sites.');
 		}
+		*/
 
 		$defaults = array(
 			'post_type' => 'wpcloud_site',
 			'posts_per_page' => -1,
 			'orderby' => 'title',
 			'order' => 'ASC',
+			'author' => $owner_id,
 		);
 
 		$query = wp_parse_args( $query, $defaults );
 
-		if ( $user_id ) {
-			$query['author'] = $user_id;
-		} else
-
 		$results = new WP_Query( $query );
+		if ( is_wp_error( $results ) ) {
+			return $results;
+		}
 
 		return array_map( self::class . '::from_post', $results->posts );
 	}

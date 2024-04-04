@@ -95,7 +95,6 @@ function wpcloud_section_options_cb( array $args ): void {
 }
 
 function wpcloud_field_domain_cb( array $args ): void {
-
 	$options = get_option( 'wpcloud_settings' );
 	// output the field
 	?>
@@ -109,7 +108,6 @@ function wpcloud_field_domain_cb( array $args ): void {
 }
 
 function wpcloud_field_input_cb( array $args ): void {
-
 	$options = get_option( 'wpcloud_settings' );
 	// output the field
 	?>

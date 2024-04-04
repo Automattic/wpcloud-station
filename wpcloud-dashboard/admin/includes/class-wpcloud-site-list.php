@@ -13,49 +13,26 @@ class WPCLOUD_Site_List extends WP_List_Table {
 		) );
 	}
 
-	public function prepare_items(bool $from_client = false) {
+	public function prepare_items(array $options = array()) {
 		$columns = $this->get_columns();
 		$hidden = array();
 		$sortable = $this->get_sortable_columns();
 
 		$this->_column_headers = array( $columns, $hidden, $sortable );
 
-		$this->items = $from_client ? $this->get_sites_from_client() : $this->get_sites_from_db();
-	}
+		$sites = WPCLOUD_Site::find_all(owner_id: get_current_user_id(), query: $options);
+		if ( is_wp_error( $sites ) ) {
+			error_log( $sites->get_error_message() );
+			$sites = array();
+		}
 
-	private function get_sites_from_db(array $options = array()): array {
-
-		$defaults = array(
-			'post_status' => 'any',
-			'posts_per_page' => -1,
-			'offset' => 0,
-			'orderby' => 'created',
-			'order' => 'DESC',
-			'post_type' => 'wpcloud_site',
-		);
-
-		$options = wp_parse_args( $options, $defaults );
-
-		$q = new WP_Query();
-
-		$results = $q->query( $options );
-
-		return array_map( fn( $post ) => array(
-			'id' => $post->ID,
-			'site_name' => $post->post_title,
-			'status' => $post->post_status,
-			'created' => $post->post_date,
-		), $results );
-	}
-
-	private function get_sites_from_client(): array {
-		return array();
+		$this->items = array_map( fn($site) => (array) $site, $sites );
 	}
 
 	public function get_columns() {
 		$columns = array(
 			'select' => '<input type="checkbox" />',
-			'site_name' => __( 'Site Name', 'wpcloud' ),
+			'name' => __( 'Site Name', 'wpcloud' ),
 			'owner' => __( 'Owner', 'wpcloud' ),
 			'status' => __( 'Status', 'wpcloud'),
 			'created' => __( 'Created', 'wpcloud' ),
@@ -68,13 +45,13 @@ class WPCLOUD_Site_List extends WP_List_Table {
 		return $item['id'];
 	}
 
-	public function column_site_name( $item ) {
+	public function column_name( $item ) {
 		$actions = array(
 			'edit' => sprintf( '<a href="%s">Edit</a>', '#' ),
 			'delete' => sprintf( '<a href="%s">Delete</a>', '#' ),
 		);
 
-		return sprintf( '%1$s %2$s', $item['site_name'], $this->row_actions( $actions ) );
+		return sprintf( '%1$s %2$s', $item['name'], $this->row_actions( $actions ) );
 	}
 
 	public function column_status( $item ) {
