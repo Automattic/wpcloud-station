@@ -60,7 +60,8 @@ function wpcloud_client_domain_validate( string $domain ): mixed {
 				'conflict',
 				'Domain mapping already exists. To map domain to new site, add the domain verification record to DNS TXT records to provide proof of ownership.',
 				array(
-					'domain-verification-record' => $domain_verification_record
+					'domain-verification-record' => $domain_verification_record,
+					'status'                     => 409
 				)
 			);
 		}
@@ -201,7 +202,7 @@ function wpcloud_client_site_details( int $wpcloud_site_id, bool $extra = false 
  *
  * @return object|WP_Error Job ID on success. WP_Error on error.
  */
-function wpcloud_client_site_manage_software( $wpcloud_site_id, $software ) {
+function wpcloud_client_site_manage_software( int $wpcloud_site_id, array $software ): mixed {
     $client_name = wpcloud_get_client_name();
 
 	return woa_client_post( $wpcloud_site_id, "site-manage-software/{$client_name}/{$wpcloud_site_id}", $software );
@@ -266,10 +267,10 @@ function wpcloud_client_request( ?int $wpcloud_site_id, string $method, string $
     $client_name = wpcloud_get_client_name();
 
 	if ( empty( $api_key ) ) {
-		return new WP_Error( 'unauthorized', 'Please provide a WP Cloud API Key in Settings' );
+		return new WP_Error( 'unauthorized', 'Please provide a WP Cloud API Key in Settings', array( 'status' => 401 ) );
 	}
 	if ( empty( $client_name ) ) {
-		return new WP_Error( 'unauthorized', 'Please provide a WP Cloud Client Name in Settings' );
+		return new WP_Error( 'unauthorized', 'Please provide a WP Cloud Client Name in Settings', array( 'status' => 401 ) );
 	}
 
 	$scheme   = 'https';
@@ -295,7 +296,7 @@ function wpcloud_client_request( ?int $wpcloud_site_id, string $method, string $
 			$response = wp_remote_post( $url, $args );
 			break;
 		default:
-			return new WP_Error( 'method_not_supported', 'Request method must be GET or POST' );
+			return new WP_Error( 'method_not_supported', 'Request method must be GET or POST', array( 'status' => 400 ) );
 	}
 
 	if ( is_wp_error( $response ) ) {
@@ -318,43 +319,43 @@ function wpcloud_client_request( ?int $wpcloud_site_id, string $method, string $
 			if ( ! empty( $response_message ) ) {
 				$message = $response_message;
 			}
-			$result = new WP_Error( 'bad_request', $response_message );
+			$result = new WP_Error( 'bad_request', $response_message, array( 'status' => 400 ) );
 			break;
 		case 401:
-			$result = new WP_Error( 'unauthorized', 'Request is unauthorized' );
+			$result = new WP_Error( 'unauthorized', 'Request is unauthorized', array( 'status' => 401 ) );
 			break;
 		case 403:
-			$result = new WP_Error( 'forbidden', 'Request is not allowed' );
+			$result = new WP_Error( 'forbidden', 'Request is not allowed', array( 'status' => 403 ) );
 			break;
 		case 404:
-			$result = new WP_Error( 'not_found', 'Resource not found' );
+			$result = new WP_Error( 'not_found', 'Resource not found', array( 'status' => 404 ) );
 			break;
 		case 409:
 			$message = 'Request conflicts with expectations';
 			if ( ! empty( $response_message ) ) {
 				$message = $response_message;
 			}
-			$result = new WP_Error( 'conflict', $message );
+			$result = new WP_Error( 'conflict', $message, array( 'status' => 409 ) );
 			break;
 		case 500:
 			$message = 'Internal server error while executing the request';
 			if ( ! empty( $response_message ) ) {
 				$message = $response_message;
 			}
-			$result = new WP_Error( 'internal_server_error', $message );
+			$result = new WP_Error( 'internal_server_error', $message, array( 'status' => 500 ) );
 			break;
 		case 501:
-			$result = new WP_Error( 'not_implemented', 'Request is not implemented' );
+			$result = new WP_Error( 'not_implemented', 'Request is not implemented', array( 'status' => 501 ) );
 			break;
 		case 504:
-			$result = new WP_Error( 'timeout', 'Request did not complete in the allowed time period' );
+			$result = new WP_Error( 'timeout', 'Request did not complete in the allowed time period', array( 'status' => 504 ) );
 			break;
 		default:
 			$message = 'Error while executing the request';
 			if ( ! empty( $response_message ) ) {
 				$message = $response_message;
 			}
-			$result = new WP_Error( $response_code, $message );
+			$result = new WP_Error( $response_code, $message, array( 'status' => 500 ) );
 	}
 
 	if ( is_wp_error( $result ) ) {
