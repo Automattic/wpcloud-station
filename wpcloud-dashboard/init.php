@@ -50,7 +50,13 @@ function on_delete_site( int $site_id ): void {
 add_action( 'before_delete_post', 'on_delete_site', 10, 1 );
 
 function on_rest_prepare_wpcloud_site( WP_REST_Response $response, WP_Post $post ): WP_REST_Response {
-	$wpcloud_site_id = intval( get_post_meta( $post->ID, 'wpcloud_site_id', true ) );
+	$wpcloud_site_id = get_post_meta( $post->ID, 'wpcloud_site_id', true );
+
+	if ( empty( $wpcloud_site_id ) ) {
+		return $response;
+	}
+
+	$wpcloud_site_id = intval( $wpcloud_site_id );
 
 	$result = wpcloud_client_site_details( $wpcloud_site_id, true );
 	if ( is_wp_error( $result ) ) {
