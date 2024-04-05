@@ -157,13 +157,6 @@ function wpcloud_client_site_create( string $domain, string $admin_user, string 
 
 	return wpcloud_client_post( null, "create-site/{$client_name}", $data );
 }
-
-function wpcloud_client_site_delete( int $wpcloud_site_id ): mixed {
-  $client_name = wpcloud_get_client_name();
-
-	return wpcloud_client_post( $wpcloud_site_id, "delete-site/{$client_name}/{$wpcloud_site_id}" );
-}
-
 /**
  * Delete a site.
  *
