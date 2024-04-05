@@ -28,12 +28,18 @@ function register_controllers(): void {
 }
 add_action( 'rest_api_init', 'register_controllers' );
 
+function wpcloud_add_rewrite_rules(): void {
+	add_rewrite_rule( '^sites/?$', '?post_type=wpcloud_site', 'top' );
+	add_rewrite_rule( '^sites/([^/]+)/?$', '?post_type=wpcloud_site&p=$matches[1]', 'top' );
+}
+
 /**
  * Initialize the plugin.
  */
 function wpcloud_init(): void {
 	wpcloud_add_capabilities();
 	WPCloud_Site::register_post_type();
+	wpcloud_add_rewrite_rules();
 }
 add_action( 'init', 'wpcloud_init' );
 

@@ -232,7 +232,6 @@ function wpcloud_admin_view_site(): mixed  {
 }
 
 
-
 function wpcloud_admin_site_form( ?WPCLOUD_Site $site ): void {
 	$wpcloud_site = $site ?? new WPCloud_Site();
 
@@ -241,10 +240,10 @@ function wpcloud_admin_site_form( ?WPCLOUD_Site $site ): void {
 
 function wpcloud_admin_create_site(): mixed {
 	check_admin_referer( 'wpcloud-admin-site-form' );
-	if ( ! isset( $_POST['wpcloud_site'] ) ) {
+	if ( ! isset( $_POST[ WPCLOUD_SITE_POST_TYPE] ) ) {
 		return new WP_Error( 'no-data', __( 'No data found', 'wpcloud' ) );
 	}
-	$wpcloud_site = $_POST['wpcloud_site'];
+	$wpcloud_site = $_POST[ WPCLOUD_SITE_POST_TYPE ];
 			// create a new site
 	$wpcloud_site = WPCloud_Site::create(
 		name: $wpcloud_site['site_name'],

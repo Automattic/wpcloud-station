@@ -12,7 +12,7 @@
  * @package        wpcloud-dashboard
  */
 
-
+define( 'WPCLOUD_SITE_POST_TYPE', 'wpcloud-site' );
 /**
  *  Actions
  */

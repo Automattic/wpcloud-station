@@ -5,8 +5,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( '-1' );
 }
 
-
-
 function print_users_select( WPCloud_Site $wpcloud_site, array $filter = array() ): void {
 	$users = array_reduce( get_users($filter) , function ( $users, $user ) {
 		$users[$user->ID] = $user->display_name;
@@ -25,7 +23,7 @@ function print_form_input_row( string $label, string $name, ?string $value, stri
 			</label>
 		</th>
 		<td>
-			<input type="text" id="<?php echo "wpcloud_$name" ?>" name="wpcloud_site[<?php echo esc_attr( $name ); ?>]" value="<?php echo esc_attr( $value ); ?>"><span class="description"><?php echo $description ?></span>
+			<input type="text" id="<?php echo "wpcloud_$name" ?>" name="wpcloud-site[<?php echo esc_attr( $name ); ?>]" value="<?php echo esc_attr( $value ); ?>"><span class="description"><?php echo $description ?></span>
 		</td>
 	</tr>
 	<?php
@@ -40,7 +38,7 @@ function print_form_select_row( string $label, string $name, array $options, mix
 			</label>
 		</th>
 		<td>
-			<select id="<?php echo "wpcloud_$name" ?>" name="wpcloud_site[<?php echo esc_attr( $name ); ?>]">
+			<select id="<?php echo "wpcloud_$name" ?>" name="wpcloud-site[<?php echo esc_attr( $name ); ?>]">
 				<?php
 				foreach ( $options as $option_value => $option_label ) {
 					?>
@@ -66,7 +64,7 @@ function print_form_select_row( string $label, string $name, array $options, mix
 			<table class="form-table" role="presentation">
 				<tbody>
 					<input type="hidden" name="action" value="<?php echo $wpcloud_site->id ? 'edit' : 'create' ?>">
-					<input type="hidden" name="wpcloud_site[id]" value="<?php echo esc_attr( $wpcloud_site->id ); ?>" >
+					<input type="hidden" name="wpcloud-site[id]" value="<?php echo esc_attr( $wpcloud_site->id ); ?>" >
 					<?php print_users_select ($wpcloud_site ); ?>
 					<?php print_form_input_row( 'Domain', 'site_name', $wpcloud_site->name, '.' . $wpcloud_site->domain ); ?>
 					<?php print_form_select_row( 'PHP Version', 'php_version', WPCLOUD_PHP_VERSIONS, $wpcloud_site->php_version ); ?>

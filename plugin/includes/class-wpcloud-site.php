@@ -70,7 +70,7 @@ class WPCLOUD_Site {
 	}
 
 	public static function register_post_type(): void {
-			register_post_type( 'wpcloud_site',
+			register_post_type( WPCLOUD_SITE_POST_TYPE ,
 				array(
 				'labels'	=> array(
 					'name'			=> __( 'Sites', 'wpcloud' ),
@@ -208,7 +208,7 @@ class WPCLOUD_Site {
 		self::test();
  		$status = apply_filters( WPCLOUD_INITIAL_SITE_STATUS, self::$initial_status );
 		$post_details = array(
-			'post_type' => 'wpcloud_site',
+			'post_type' => WPCLOUD_SITE_POST_TYPE,
 			'post_title' => $name,
 			'post_status' => $status,
 			'comment_status'=> 'closed',
@@ -240,7 +240,7 @@ class WPCLOUD_Site {
 
 	public static function find_all(string $owner_id, array $query = array(), bool $backfill_from_host = false ): mixed {
 		$defaults = array(
-			'post_type' => 'wpcloud_site',
+			'post_type' => WPCLOUD_SITE_POST_TYPE,
 			'posts_per_page' => -1,
 			'orderby' => 'title',
 			'order' => 'ASC',
