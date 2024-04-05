@@ -10,26 +10,26 @@ require_once  plugin_dir_path( __FILE__ ) . 'wpcloud-client.php';
 
 class WPCLOUD_Site {
 
-	const WPCLOUD_DETAIL_KEYS = [
-    'atomic_site_id',
-    'domain_name',
-    'server_pool_id',
-    'atomic_client_id',
+	const WPCLOUD_DETAIL_KEYS = array(
+		'atomic_site_id',
+		'domain_name',
+		'server_pool_id',
+		'atomic_client_id',
 		'chroot_path',
 		'chroot_ssh_path',
-    'cache_prefix',
-    'db_charset',
-    'db_collate',
+		'cache_prefix',
+		'db_charset',
+		'db_collate',
 		'db_password',
-    'php_version',
-    'site_api_key',
-    'wp_admin_email',
-    'wp_admin_user',
-    'wp_version',
-    'static_file_404',
-    'smtp_pass',
+		'php_version',
+		'site_api_key',
+		'wp_admin_email',
+		'wp_admin_user',
+		'wp_version',
+		'static_file_404',
+		'smtp_pass',
 		'geo_affinity',
-	];
+	);
 
 	private static $initial_status = 'draft';
 
@@ -44,14 +44,14 @@ class WPCLOUD_Site {
 	public array $details;
 
 	public function __construct(string $domain = '') {
-		$this->id = 0;
-		$this->name = '';
-		$this->php_version = '';
-		$this->data_center = '';
-		$this->status = '';
-		$this->owner_id = 0;
+		$this->id              = 0;
+		$this->name            = '';
+		$this->php_version     = '';
+		$this->data_center     = '';
+		$this->status          = '';
+		$this->owner_id        = 0;
 		$this->wpcloud_site_id = 0;
-		$this->details = array();
+		$this->details         = array();
 
 		if ( ! $domain ) {
 			$this->domain = self::get_default_domain();
@@ -77,12 +77,13 @@ class WPCLOUD_Site {
 					'singular_name'	=> __( 'Site', 'wpcloud' ),
 					'add_new' => 'Add New Site',
 				),
-				'public'	=> true,
-				'has_archive' => true,
+				'public'	   => true,
+				'has_archive'  => true,
 				'show_in_rest' => true,
-				'show_in_ ui' => false,
+				'rest_base'    => 'wpcloud/sites',
+				'show_in_ ui'  => false,
 				'show_in_menu' => false,
-				'taxonomies' => array( 'category', 'tag' ),
+				'taxonomies'   => array( 'category', 'tag' ),
 			)
 		);
 	}
