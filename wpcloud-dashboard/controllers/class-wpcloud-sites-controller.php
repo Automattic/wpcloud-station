@@ -73,8 +73,6 @@ if ( ! class_exists( 'WPCLOUD_Sites_Controller' ) ) {
 		 * @return WP_Error|WP_REST_Response
 		 */
 		public function get_sites( $request ) {
-			require_once  plugin_dir_path( __FILE__ ) . '../includes/wpcloud-client.php';
-
 			$result = wpcloud_client_site_list( 'wp_version', 'php_version', 'space_quota', 'db_file_size', 'static_file_404', 'suspended' );
 			if ( is_wp_error( $result) ) {
 				return $result;
@@ -91,8 +89,6 @@ if ( ! class_exists( 'WPCLOUD_Sites_Controller' ) ) {
 		 * @return WP_Error|WP_REST_Response
 		 */
 		public function get_site( $request ) {
-			require_once  plugin_dir_path( __FILE__ ) . '../includes/wpcloud-client.php';
-
 			$params = $request->get_params();
 			$wpcloud_site_id = intval( $params['id'] );
 
@@ -117,8 +113,6 @@ if ( ! class_exists( 'WPCLOUD_Sites_Controller' ) ) {
 		 * @return WP_Error|WP_REST_Response
 		 */
 		public function create_site( $request ) {
-			require_once  plugin_dir_path( __FILE__ ) . '../includes/wpcloud-client.php';
-
 			$params      = $request->get_params();
 			$domain      = $params['domain'];
 			$admin_user  = $params['admin_user'];
@@ -140,8 +134,6 @@ if ( ! class_exists( 'WPCLOUD_Sites_Controller' ) ) {
 		 * @return WP_Error|WP_REST_Response
 		 */
 		public function delete_site( $request ) {
-			require_once  plugin_dir_path( __FILE__ ) . '../includes/wpcloud-client.php';
-
 			$params = $request->get_params();
 			$wpcloud_site_id = intval( $params['id'] );
 

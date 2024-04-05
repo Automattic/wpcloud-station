@@ -2,7 +2,7 @@
 /**
  * WP Cloud API client library.
  *
- * @package wpcloud-dashboard
+ * @package wpcloud-client
  */
 
 declare( strict_types = 1 );
