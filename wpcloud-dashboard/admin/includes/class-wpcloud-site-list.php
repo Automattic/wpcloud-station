@@ -20,7 +20,9 @@ class WPCLOUD_Site_List extends WP_List_Table {
 
 		$this->_column_headers = array( $columns, $hidden, $sortable );
 
-		$sites = WPCLOUD_Site::find_all(owner_id: get_current_user_id(), query: $options);
+		$should_backfill = get_option( 'wpcloud_backfill', false );
+
+		$sites = WPCLOUD_Site::find_all(owner_id: get_current_user_id(), query: $options, backfill_from_host: $should_backfill);
 		if ( is_wp_error( $sites ) ) {
 			error_log( $sites->get_error_message() );
 			$sites = array();
@@ -64,7 +66,7 @@ class WPCLOUD_Site_List extends WP_List_Table {
 
 		$actions = array(
 			'edit' => sprintf( __( '<a href="%s">Edit</a>' ), $edit_link ),
-			'view' => sprintf( __( '<a href="%s">View</a>' ), get_permalink( $item[ 'id' ] ) ),
+			'view' => sprintf( __( '<a href="%s">View</a>' ), $view_link ),
 			'delete' => sprintf( __( '<a href="%s">Delete</a>' ), get_delete_post_link( $item[ 'id' ], '', true ) ),
 		);
 

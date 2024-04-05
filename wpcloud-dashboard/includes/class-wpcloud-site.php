@@ -10,15 +10,37 @@ require_once  plugin_dir_path( __FILE__ ) . 'wpcloud-client.php';
 
 class WPCLOUD_Site {
 
+	const WPCLOUD_DETAIL_KEYS = [
+    'atomic_site_id',
+    'domain_name',
+    'server_pool_id',
+    'atomic_client_id',
+		'chroot_path',
+		'chroot_ssh_path',
+    'cache_prefix',
+    'db_charset',
+    'db_collate',
+		'db_password',
+    'php_version',
+    'site_api_key',
+    'wp_admin_email',
+    'wp_admin_user',
+    'wp_version',
+    'static_file_404',
+    'smtp_pass'
+	];
+
 	private static $initial_status = 'draft';
 
-	public $id;
-	public $name;
-	public $php_version;
-	public $data_center;
-	public $status;
-	public $owner_id;
-	public $domain;
+	public int $id;
+	public string $name;
+	public string $php_version;
+	public string $data_center;
+	public string $status;
+	public int $owner_id;
+	public string $domain;
+	public int $wpcloud_site_id;
+	public array $details;
 
 	public function __construct(string $domain = '') {
 		$this->id = 0;
@@ -27,6 +49,8 @@ class WPCLOUD_Site {
 		$this->data_center = '';
 		$this->status = '';
 		$this->owner_id = 0;
+		$this->wpcloud_site_id = 0;
+		$this->details = array();
 
 		if ( ! $domain ) {
 			$this->domain = self::get_default_domain();
@@ -74,18 +98,25 @@ class WPCLOUD_Site {
 		$site->php_version = get_post_meta( $post->ID, 'php_version', true );
 		$site->data_center = get_post_meta( $post->ID, 'data_center', true );
 		$site->status = $post->post_status;
-		$site->owner_id = $post->post_author;
+		$site->owner_id = intval( $post->post_author );
+		$site->domain = get_post_meta( $post->ID, 'domain', true );
+		$site->wpcloud_site_id = intval( get_post_meta( $post->ID, 'wpcloud_site_id', true ) );
 		return $site;
 	}
 
 	/**
-	 * Create a new WPCLOUD_Site from WP Cloud.
-	 * @param string $id
-	 * @return WPCLOUD_Site
+	 * @return mixed
 	 */
-	public static function from_client(string $id): self {
-		//@TODO: call the wpcloud API to get the site details.
-		return new self();
+	public function set_client_details(array $detail_keys = array() ): mixed {
+		$wpcloud_site = wpcloud_client_site_details( $this->wpcloud_site_id );
+		if ( is_wp_error( $wpcloud_site ) ) {
+			return $wpcloud_site;
+		}
+		$detail_keys = array_unique( array_merge( $detail_keys, self::WPCLOUD_DETAIL_KEYS ) );
+
+		$this->details = array_intersect_key( (array) $wpcloud_site, array_flip( $detail_keys ) );
+
+		return true;
 	}
 
 	public function delete( ): mixed {
@@ -116,7 +147,6 @@ class WPCLOUD_Site {
 			return new WP_Error( 'forbidden', __( 'Site creation is disabled.' ) );
 		}
 
-		// @TODO validate name for
 		$pattern = "/^(?!-)(?!.*--)[A-Za-z0-9-]{1,63}(?<!-)$/";
 		if ( ! preg_match( $pattern, $name ) ) {
 			return new WP_Error( 'forbidden', __( 'Invalid site name.' ) );
@@ -180,7 +210,7 @@ class WPCLOUD_Site {
 			return $site_id;
 		}
 
-		update_post_meta( $site_id, 'wpcloud_id', $wpcloud_id );
+		update_post_meta( $site_id, 'wpcloud_site_id', $wpcloud_id );
 		//We only really need these for the initial creation so we can show the user what they just created.
 		update_post_meta( $site_id, 'php_version', $data[ 'php_version' ] ?? '' );
 		update_post_meta( $site_id, 'data_center', $data[ 'data_center' ] ?? '' );
@@ -211,7 +241,9 @@ class WPCLOUD_Site {
 		if ( is_wp_error( $results ) ) {
 			return $results;
 		}
-		self::backfill_from_host( $results->posts );
+		if ( $backfill_from_host ) {
+			self::backfill_from_host( $results->posts );
+		}
 		return array_map( self::class . '::from_post', $results->posts );
 	}
 

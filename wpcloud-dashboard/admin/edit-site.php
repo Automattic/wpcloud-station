@@ -61,10 +61,11 @@ function print_form_select_row( string $label, string $name, array $options, mix
 	<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
 	<form action="<?php echo menu_page_url( 'wpcloud', false ) ; ?>" method="post">
 			<?php
-			wp_nonce_field( 'wpcloud-edit-site');
+			wp_nonce_field( 'wpcloud-admin-site-form' );
 			?>
 			<table class="form-table" role="presentation">
 				<tbody>
+					<input type="hidden" name="action" value="<?php echo $wpcloud_site->id ? 'edit' : 'create' ?>">
 					<input type="hidden" name="wpcloud_site[id]" value="<?php echo esc_attr( $wpcloud_site->id ); ?>" >
 					<?php print_users_select ($wpcloud_site ); ?>
 					<?php print_form_input_row( 'Site Name', 'site_name', $wpcloud_site->name, '.' . $wpcloud_site->domain ); ?>
