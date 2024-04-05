@@ -27,15 +27,14 @@ function wpcloud_register_site_post_type(): void {
 
 	// Set the custom post type args
 	$args = array(
-		'labels'	        => $labels,
-		'show_ui'           => true,
-		'show_in_menu'      => true,
-		'public'	        => true,
-		'has_archive'       => true,
-		'show_in_rest'      => true,
-		'show_in_admin_bar' => true,
-		'rest_base'         => 'wpcloud/sites',
-		'taxonomies'        => array( 'category', 'tag' ),
+		'labels'	   => $labels,
+		'public'	   => true,
+		'has_archive'  => true,
+		'show_in_rest' => true,
+		'rest_base'    => 'wpcloud/sites',
+		'show_in_ ui'  => false,
+		'show_in_menu' => false,
+		'taxonomies'   => array( 'category', 'tag' ),
 	);
 
 	// Register the custom post type
