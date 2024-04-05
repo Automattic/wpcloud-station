@@ -57,9 +57,7 @@ class WPCLOUD_Site {
 				'show_in_rest' => true,
 				'show_in_ ui' => false,
 				'show_in_menu' => false,
-				'capabilities' => array(
-					'wpcloud_add_site' => true,
-				),
+				'taxonomies' => array( 'category', 'tag' ),
 			)
 		);
 	}
@@ -90,27 +88,31 @@ class WPCLOUD_Site {
 		return new self();
 	}
 
-	public static function create(string $name, string $php_version, string $data_center, ?string $owner_id): mixed {
+	public function delete( ): mixed {
+		$wpcloud_id = get_post_meta( $this->id, 'wpcloud_id', true );
 
-		error_log( 'Creating site: ' . $name . ' ' . $php_version . ' ' . $data_center . ' ' . $owner_id);
-		// Set up the site info
-		$status = apply_filters( WPCLOUD_INITIAL_SITE_STATUS, self::$initial_status );
-		$post_details = array(
-			'post_type' => 'wpcloud_site',
-			'post_title' => $name,
-			'post_status' => $status,
-			'comment_status'=> 'closed',
-		);
+		if ( ! $wpcloud_id ) {
+			return new WP_Error( 'not_found', __( 'WP Cloud site id not found.' ) );
+		}
 
+		$result = wpcloud_client_site_delete( intval( $wpcloud_id ) );
+		if ( is_wp_error( $result ) ) {
+			return $result;
+		}
+
+		error_log( 'Result from wpcloud_client_site_delete: ' . print_r( $result, true ) );
+
+		return true;
+	}
+
+	public static function create(string $name, string $php_version, string $data_center, ?int $owner_id): mixed {
 		// Check if the user is allowed to create a site.
-		if ( !$owner_id) {
+		if ( ! $owner_id) {
 			$owner_id = get_current_user_id();
-		} else {
-			$post_details['post_author'] = $owner_id;
 		}
 
 		$should_create = apply_filters( WPCLOUD_SHOULD_CREATE_SITE, true, $owner_id );
-		if ( !$should_create ) {
+		if ( ! $should_create ) {
 			return new WP_Error( 'forbidden', __( 'Site creation is disabled.' ) );
 		}
 
@@ -119,16 +121,6 @@ class WPCLOUD_Site {
 		if ( ! preg_match( $pattern, $name ) ) {
 			return new WP_Error( 'forbidden', __( 'Invalid site name.' ) );
 		}
-
-		// Create the site CPT and set the meta data.
-		$site_id = wp_insert_post( $post_details );
-		if ( is_wp_error( $site_id ) ) {
-			return $site_id;
-		}
-
-		//We only really need these for the initial creation so we can show the user what they just created.
-		update_post_meta( $site_id, 'php_version', $php_version );
-		update_post_meta( $site_id, 'data_center', $data_center );
 
 		$domain = self::get_default_domain( $name );
 		$admin =  get_user_by( 'id', $owner_id );
@@ -148,37 +140,119 @@ class WPCLOUD_Site {
 			data: $data
 		);
 
+		error_log( 'Result from wpcloud_client_site_create: ' . print_r( $result, true ) );
+
 		if ( is_wp_error( $result ) ) {
 			error_log( 'Error creating site: ' . $result->get_error_message() );
-			wp_delete_post( $site_id );
 			return $result;
 		}
 
-		do_action( WPCLOUD_ACTION_SITE_CREATED, $site_id, $owner_id, 'wp-admin' );
+		$result = (array) $result;
+		$site_id = self::create_post( owner_id: $owner_id, wpcloud_id: $result[ 'atomic_site_id' ], domain: $domain, data: $data );
 
+		if ( is_wp_error( $site_id ) ) {
+			error_log(  'Error creating site post: ' . $site_id->get_error_message() );
+			return $site_id;
+		}
+
+		do_action( WPCLOUD_ACTION_SITE_CREATED, $site_id, $owner_id, 'wp-admin' );
 		return self::from_post( get_post( $site_id ) );
 	}
 
-	public static function find_all(?string $user_id, array $query = array() ): array {
-		if ( ! $user_id && ! current_user_can( WPCLOUD_CAN_MANAGE_SITES ) ) {
-			throw new Exception( 'Unauthorized to view all sites.');
+	private static function test() {
+		error_log( 'Test' );
+	}
+
+	private static function create_post(int $owner_id, int $wpcloud_id, string $domain, array $data ): mixed {
+		self::test();
+ 		$status = apply_filters( WPCLOUD_INITIAL_SITE_STATUS, self::$initial_status );
+		$post_details = array(
+			'post_type' => 'wpcloud_site',
+			'post_title' => $domain,
+			'post_status' => $status,
+			'comment_status'=> 'closed',
+			'author' => $owner_id,
+		);
+
+			// Create the site CPT and set the meta data.
+		$site_id = wp_insert_post( $post_details );
+		if ( is_wp_error( $site_id ) ) {
+			return $site_id;
 		}
 
+		update_post_meta( $site_id, 'wpcloud_id', $wpcloud_id );
+		//We only really need these for the initial creation so we can show the user what they just created.
+		update_post_meta( $site_id, 'php_version', $data[ 'php_version' ] ?? '' );
+		update_post_meta( $site_id, 'data_center', $data[ 'data_center' ] ?? '' );
+
+		return $site_id;
+	}
+
+	public static function find( int $site_id ): mixed {
+		$site = get_post( $site_id );
+		if ( ! $site ) {
+			return new WP_Error( 'not_found', __( 'Site not found.' ) );
+		}
+		return self::from_post( $site );
+	}
+
+	public static function find_all(string $owner_id, array $query = array(), bool $backfill_from_host = false ): mixed {
 		$defaults = array(
 			'post_type' => 'wpcloud_site',
 			'posts_per_page' => -1,
 			'orderby' => 'title',
 			'order' => 'ASC',
+			'author' => $owner_id,
 		);
 
 		$query = wp_parse_args( $query, $defaults );
 
-		if ( $user_id ) {
-			$query['author'] = $user_id;
-		} else
-
 		$results = new WP_Query( $query );
-
+		if ( is_wp_error( $results ) ) {
+			return $results;
+		}
+		self::backfill_from_host( $results->posts );
 		return array_map( self::class . '::from_post', $results->posts );
+	}
+
+	private static function backfill_from_host(array $local_sites): void {
+		$remote_sites = self::fetch_all();
+		if ( is_wp_error( $remote_sites ) ) {
+			return;
+		}
+
+		$remote_ids = array_map( fn($remote_site) => $remote_site->atomic_site_id ,$remote_sites );
+		error_log( 'Remote ids: ' . print_r( $remote_ids, true ) );
+		$local_ids = array_map( function( $site ) {
+			$wpcloud_id = get_post_meta( $site->ID, 'wpcloud_id', true );
+			return $wpcloud_id ? intval( $wpcloud_id ) : 0;
+		}, $local_sites );
+
+		$missing_ids = array_diff( $remote_ids, $local_ids );
+		$missing_sites = array_filter( $remote_sites, fn( $site ) => in_array( $site->atomic_site_id, $missing_ids ) );
+
+		$owner_id = get_current_user_id();
+
+		error_log( 'Missing ids: ' . print_r( $missing_ids, true ) );
+		foreach ( $missing_sites as $site ) {
+			$site_id = self::create_post( $owner_id, intval($site->atomic_site_id), $site->domain_name, array() );
+			if ( is_wp_error( $site_id ) ) {
+				error_log( 'Error creating site post: ' . $site_id->get_error_message() );
+				continue;
+			}
+			wp_set_post_tags( $site_id, array( 'backfill' ), true );
+
+			do_action( WPCLOUD_ACTION_SITE_CREATED, $site_id, $owner_id, 'wp-admin' );
+		}
+	}
+
+	private static function fetch_all(): mixed {
+		$sites = wpcloud_client_site_list();
+		if ( is_wp_error( $sites ) ) {
+			error_log( 'Error fetching sites: ' . $sites->get_error_message() );
+			return $sites;
+		}
+		return $sites;
+		//return array_reduce( $sites, fn( $indexed, $site ) => $indexed + [ $site->atomic_site_id => (array) $site ], array() );
 	}
 }

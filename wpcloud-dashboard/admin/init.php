@@ -95,7 +95,6 @@ function wpcloud_section_options_cb( array $args ): void {
 }
 
 function wpcloud_field_domain_cb( array $args ): void {
-
 	$options = get_option( 'wpcloud_settings' );
 	// output the field
 	?>
@@ -109,7 +108,6 @@ function wpcloud_field_domain_cb( array $args ): void {
 }
 
 function wpcloud_field_input_cb( array $args ): void {
-
 	$options = get_option( 'wpcloud_settings' );
 	// output the field
 	?>
@@ -136,6 +134,7 @@ function site_created__success( WPCloud_Site $wpcloud_site ): void {
 }
 
 function wpcloud_site_list_cb(): void {
+
 	// check user capabilities
 	if ( ! current_user_can( 'manage_options' ) ) {
 		return;
@@ -149,7 +148,7 @@ function wpcloud_site_list_cb(): void {
 				name: $wpcloud_site['site_name'],
 				php_version: $wpcloud_site['php_version'],
 				data_center: $wpcloud_site['data_center'],
-				owner_id: $wpcloud_site['owner_id']
+				owner_id: intval($wpcloud_site['owner_id'])
 			);
 			if ( is_wp_error( $wpcloud_site ) ) {
 				error_log( $wpcloud_site->get_error_message());

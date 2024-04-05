@@ -13,43 +13,29 @@ class WPCLOUD_Site_List extends WP_List_Table {
 		) );
 	}
 
-	public function prepare_items() {
+	public function prepare_items(array $options = array()) {
 		$columns = $this->get_columns();
 		$hidden = array();
 		$sortable = $this->get_sortable_columns();
 
 		$this->_column_headers = array( $columns, $hidden, $sortable );
 
-		$defaults = array(
-			'post_status' => 'any',
-			'posts_per_page' => -1,
-			'offset' => 0,
-			'orderby' => 'created',
-			'order' => 'DESC',
-			'post_type' => 'wpcloud_site',
-		);
-
-		$q = new WP_Query();
-
-		$results = $q->query( $defaults );
-
-		foreach( (array) $results as $result ) {
-			$this->items[] = array(
-				'id' => $result->ID,
-				'site_name' => $result->post_title,
-				'status' => $result->post_status,
-				'created' => $result->post_date,
-			);
+		$sites = WPCLOUD_Site::find_all(owner_id: get_current_user_id(), query: $options);
+		if ( is_wp_error( $sites ) ) {
+			error_log( $sites->get_error_message() );
+			$sites = array();
 		}
+		$this->items = array_map( fn($site) => (array) $site, $sites );
 	}
 
 	public function get_columns() {
 		$columns = array(
 			'select' => '<input type="checkbox" />',
-			'site_name' => __( 'Site Name', 'wpcloud' ),
+			'name' => __( 'Site Name', 'wpcloud' ),
 			'owner' => __( 'Owner', 'wpcloud' ),
 			'status' => __( 'Status', 'wpcloud'),
 			'created' => __( 'Created', 'wpcloud' ),
+			'tags' => __( 'Tags', 'wpcloud' ),
 		);
 
 		return $columns;
@@ -59,13 +45,30 @@ class WPCLOUD_Site_List extends WP_List_Table {
 		return $item['id'];
 	}
 
-	public function column_site_name( $item ) {
-		$actions = array(
-			'edit' => sprintf( '<a href="%s">Edit</a>', '#' ),
-			'delete' => sprintf( '<a href="%s">Delete</a>', '#' ),
+	public function column_name( $item ) {
+		$edit_link = add_query_arg(
+			array(
+				'post' => absint( $item[ 'id' ] ),
+				'action' => 'edit',
+			),
+			menu_page_url( 'wpcloud_admin_new_site', false )
 		);
 
-		return sprintf( '%1$s %2$s', $item['site_name'], $this->row_actions( $actions ) );
+		$view_link = add_query_arg(
+			array(
+				'post' => absint( $item[ 'id' ] ),
+				'action' => 'view',
+			),
+			menu_page_url( 'wpcloud', false )
+		);
+
+		$actions = array(
+			'edit' => sprintf( __( '<a href="%s">Edit</a>' ), $edit_link ),
+			'view' => sprintf( __( '<a href="%s">View</a>' ), get_permalink( $item[ 'id' ] ) ),
+			'delete' => sprintf( __( '<a href="%s">Delete</a>' ), get_delete_post_link( $item[ 'id' ], '', true ) ),
+		);
+
+		return sprintf( '%1$s %2$s', $item['name'], $this->row_actions( $actions ) );
 	}
 
 	public function column_status( $item ) {
@@ -93,6 +96,14 @@ class WPCLOUD_Site_List extends WP_List_Table {
 		$owner_id = get_post_field( 'post_author', $item['id'] );
 		$owner = get_userdata( $owner_id );
 		return $owner->display_name;
+	}
+
+	public function column_tags( $item ) {
+		$tags = get_the_tags( $item['id'] );
+		if ( ! $tags ) {
+			return '';
+		}
+		return implode( ', ', array_map( fn($tag) => $tag->name, $tags ) );
 	}
 
 	protected function column_default( $item, $column_name ) {
