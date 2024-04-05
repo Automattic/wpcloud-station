@@ -27,24 +27,15 @@ function wpcloud_register_site_post_type(): void {
 
 	// Set the custom post type args
 	$args = array(
-		'label'               => __( 'Sites', 'wpcloud' ),
-		'description'         => __( 'Sites', 'wpcloud' ),
-		'labels'              => $labels,
-		//
-		// 'can_export'          => true,
-		// 'capability_type'     => 'post',
-		// 'exclude_from_search' => false,
-		'has_archive'         => true,
-		// 'hierarchical'        => false,
-		'public'              => true,
-		// 'publicly_queryable'  => false,
-		'rest_base'           => 'wpcloud/sites',
-		"show_in_rest"        => true,
-		'show_ui'             => false,
-		// 'show_in_admin_bar'   => false,
-		'show_in_menu'        => false,
-		// 'show_in_nav_menus'   => false,
-		'taxonomies'          => array( 'category', 'tag' ),
+		'labels'	        => $labels,
+		'show_ui'           => true,
+		'show_in_menu'      => true,
+		'public'	        => true,
+		'has_archive'       => true,
+		'show_in_rest'      => true,
+		'show_in_admin_bar' => true,
+		'rest_base'         => 'wpcloud/sites',
+		'taxonomies'        => array( 'category', 'tag' ),
 	);
 
 	// Register the custom post type
