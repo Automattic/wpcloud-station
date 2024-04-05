@@ -33,7 +33,7 @@ class WPCLOUD_Site_List extends WP_List_Table {
 	public function get_columns() {
 		$columns = array(
 			'select' => '<input type="checkbox" />',
-			'name' => __( 'Site Name', 'wpcloud' ),
+			'domain' => __( 'Domain', 'wpcloud' ),
 			'owner' => __( 'Owner', 'wpcloud' ),
 			'status' => __( 'Status', 'wpcloud'),
 			'created' => __( 'Created', 'wpcloud' ),
@@ -47,7 +47,7 @@ class WPCLOUD_Site_List extends WP_List_Table {
 		return $item['id'];
 	}
 
-	public function column_name( $item ) {
+	public function column_domain( $item ) {
 		$edit_link = add_query_arg(
 			array(
 				'post' => absint( $item[ 'id' ] ),
@@ -70,7 +70,7 @@ class WPCLOUD_Site_List extends WP_List_Table {
 			'delete' => sprintf( __( '<a href="%s">Delete</a>' ), get_delete_post_link( $item[ 'id' ], '', true ) ),
 		);
 
-		return sprintf( '%1$s %2$s', $item['name'], $this->row_actions( $actions ) );
+		return sprintf( '<a href="https://%1$s" target="_blank">%1s</a> %2$s', $item['domain'], $this->row_actions( $actions ) );
 	}
 
 	public function column_status( $item ) {
