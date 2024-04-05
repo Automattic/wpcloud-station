@@ -32,7 +32,7 @@ function wpcloud_register_site_post_type(): void {
 		'labels'              => $labels,
 		//
 		// 'can_export'          => true,
-		'capability_type'     => 'post',
+		// 'capability_type'     => 'post',
 		// 'exclude_from_search' => false,
 		'has_archive'         => true,
 		// 'hierarchical'        => false,
