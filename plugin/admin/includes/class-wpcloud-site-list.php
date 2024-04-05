@@ -69,7 +69,7 @@ class WPCLOUD_Site_List extends WP_List_Table {
 			'view' => sprintf( __( '<a href="%s">View</a>' ), $view_link ),
 			'delete' => sprintf( __( '<a href="%s">Delete</a>' ), get_delete_post_link( $item[ 'id' ], '', true ) ),
 		);
-
+var_dump( get_delete_post_link( $item[ 'id' ], '', true ) );
 		return sprintf( '<a href="https://%1$s" target="_blank">%1s</a> %2$s', $item['domain'], $this->row_actions( $actions ) );
 	}
 

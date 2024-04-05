@@ -1,12 +1,11 @@
 <?php
 /**
- * WP Cloud Site .
+ * WP Cloud Site.
  *
  * @package wpcloud-dashboard
  */
-declare( strict_types = 1 );
 
-require_once  plugin_dir_path( __FILE__ ) . 'wpcloud-client.php';
+declare( strict_types = 1 );
 
 class WPCLOUD_Site {
 
@@ -69,25 +68,6 @@ class WPCLOUD_Site {
 		return $domain;
 	}
 
-	public static function register_post_type(): void {
-			register_post_type( 'wpcloud_site',
-				array(
-				'labels'	=> array(
-					'name'			=> __( 'Sites', 'wpcloud' ),
-					'singular_name'	=> __( 'Site', 'wpcloud' ),
-					'add_new' => 'Add New Site',
-				),
-				'public'	   => true,
-				'has_archive'  => true,
-				'show_in_rest' => true,
-				'rest_base'    => 'wpcloud/sites',
-				'show_in_ ui'  => false,
-				'show_in_menu' => false,
-				'taxonomies'   => array( 'category', 'tag' ),
-			)
-		);
-	}
-
 	/**
 	 * Create a new WPCLOUD_Site from a WP_Post object.
 	 * @param WP_Post $post
@@ -123,23 +103,6 @@ class WPCLOUD_Site {
 		if ( array_search('geo_affinity', $detail_keys) !== false ) {
 			$this->details[ 'geo_affinity' ] = $wpcloud_site->extra->server_pool->geo_affinity;
 		}
-
-		return true;
-	}
-
-	public function delete( ): mixed {
-		$wpcloud_id = get_post_meta( $this->id, 'wpcloud_id', true );
-
-		if ( ! $wpcloud_id ) {
-			return new WP_Error( 'not_found', __( 'WP Cloud site id not found.' ) );
-		}
-
-		$result = wpcloud_client_site_delete( intval( $wpcloud_id ) );
-		if ( is_wp_error( $result ) ) {
-			return $result;
-		}
-
-		error_log( 'Result from wpcloud_client_site_delete: ' . print_r( $result, true ) );
 
 		return true;
 	}
