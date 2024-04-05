@@ -27,7 +27,8 @@ class WPCLOUD_Site {
     'wp_admin_user',
     'wp_version',
     'static_file_404',
-    'smtp_pass'
+    'smtp_pass',
+		'geo_affinity',
 	];
 
 	private static $initial_status = 'draft';
@@ -108,13 +109,19 @@ class WPCLOUD_Site {
 	 * @return mixed
 	 */
 	public function set_client_details(array $detail_keys = array() ): mixed {
-		$wpcloud_site = wpcloud_client_site_details( $this->wpcloud_site_id );
+		$wpcloud_site = wpcloud_client_site_details( $this->wpcloud_site_id, true );
 		if ( is_wp_error( $wpcloud_site ) ) {
 			return $wpcloud_site;
 		}
+		error_log( 'Site details: ' . print_r( $wpcloud_site, true ) );
 		$detail_keys = array_unique( array_merge( $detail_keys, self::WPCLOUD_DETAIL_KEYS ) );
 
+
 		$this->details = array_intersect_key( (array) $wpcloud_site, array_flip( $detail_keys ) );
+
+		if ( array_search('geo_affinity', $detail_keys) !== false ) {
+			$this->details[ 'geo_affinity' ] = $wpcloud_site->extra->server_pool->geo_affinity;
+		}
 
 		return true;
 	}
@@ -178,7 +185,7 @@ class WPCLOUD_Site {
 		}
 
 		$result = (array) $result;
-		$site_id = self::create_post( owner_id: $owner_id, wpcloud_id: $result[ 'atomic_site_id' ], domain: $domain, data: $data );
+		$site_id = self::create_post( owner_id: $owner_id, wpcloud_id: $result[ 'atomic_site_id' ], name: $name, domain: $domain, data: $data );
 
 		if ( is_wp_error( $site_id ) ) {
 			error_log(  'Error creating site post: ' . $site_id->get_error_message() );
@@ -193,12 +200,12 @@ class WPCLOUD_Site {
 		error_log( 'Test' );
 	}
 
-	private static function create_post(int $owner_id, int $wpcloud_id, string $domain, array $data ): mixed {
+	private static function create_post(int $owner_id, int $wpcloud_id, string $name, string $domain, array $data ): mixed {
 		self::test();
  		$status = apply_filters( WPCLOUD_INITIAL_SITE_STATUS, self::$initial_status );
 		$post_details = array(
 			'post_type' => 'wpcloud_site',
-			'post_title' => $domain,
+			'post_title' => $name,
 			'post_status' => $status,
 			'comment_status'=> 'closed',
 			'author' => $owner_id,
@@ -214,6 +221,7 @@ class WPCLOUD_Site {
 		//We only really need these for the initial creation so we can show the user what they just created.
 		update_post_meta( $site_id, 'php_version', $data[ 'php_version' ] ?? '' );
 		update_post_meta( $site_id, 'data_center', $data[ 'data_center' ] ?? '' );
+		update_post_meta( $site_id, 'domain', $domain );
 
 		return $site_id;
 	}
@@ -265,9 +273,8 @@ class WPCLOUD_Site {
 
 		$owner_id = get_current_user_id();
 
-		error_log( 'Missing ids: ' . print_r( $missing_ids, true ) );
 		foreach ( $missing_sites as $site ) {
-			$site_id = self::create_post( $owner_id, intval($site->atomic_site_id), $site->domain_name, array() );
+			$site_id = self::create_post( $owner_id, intval($site->atomic_site_id), $site->domain_name, $site->domain_name, array() );
 			if ( is_wp_error( $site_id ) ) {
 				error_log( 'Error creating site post: ' . $site_id->get_error_message() );
 				continue;
