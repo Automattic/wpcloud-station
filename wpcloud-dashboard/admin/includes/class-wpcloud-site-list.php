@@ -25,7 +25,6 @@ class WPCLOUD_Site_List extends WP_List_Table {
 			error_log( $sites->get_error_message() );
 			$sites = array();
 		}
-
 		$this->items = array_map( fn($site) => (array) $site, $sites );
 	}
 
@@ -36,6 +35,7 @@ class WPCLOUD_Site_List extends WP_List_Table {
 			'owner' => __( 'Owner', 'wpcloud' ),
 			'status' => __( 'Status', 'wpcloud'),
 			'created' => __( 'Created', 'wpcloud' ),
+			'tags' => __( 'Tags', 'wpcloud' ),
 		);
 
 		return $columns;
@@ -46,9 +46,26 @@ class WPCLOUD_Site_List extends WP_List_Table {
 	}
 
 	public function column_name( $item ) {
+		$edit_link = add_query_arg(
+			array(
+				'post' => absint( $item[ 'id' ] ),
+				'action' => 'edit',
+			),
+			menu_page_url( 'wpcloud_admin_new_site', false )
+		);
+
+		$view_link = add_query_arg(
+			array(
+				'post' => absint( $item[ 'id' ] ),
+				'action' => 'view',
+			),
+			menu_page_url( 'wpcloud', false )
+		);
+
 		$actions = array(
-			'edit' => sprintf( '<a href="%s">Edit</a>', '#' ),
-			'delete' => sprintf( '<a href="%s">Delete</a>', '#' ),
+			'edit' => sprintf( __( '<a href="%s">Edit</a>' ), $edit_link ),
+			'view' => sprintf( __( '<a href="%s">View</a>' ), get_permalink( $item[ 'id' ] ) ),
+			'delete' => sprintf( __( '<a href="%s">Delete</a>' ), get_delete_post_link( $item[ 'id' ], '', true ) ),
 		);
 
 		return sprintf( '%1$s %2$s', $item['name'], $this->row_actions( $actions ) );
@@ -79,6 +96,14 @@ class WPCLOUD_Site_List extends WP_List_Table {
 		$owner_id = get_post_field( 'post_author', $item['id'] );
 		$owner = get_userdata( $owner_id );
 		return $owner->display_name;
+	}
+
+	public function column_tags( $item ) {
+		$tags = get_the_tags( $item['id'] );
+		if ( ! $tags ) {
+			return '';
+		}
+		return implode( ', ', array_map( fn($tag) => $tag->name, $tags ) );
 	}
 
 	protected function column_default( $item, $column_name ) {

@@ -28,6 +28,18 @@ function wpcloud_init() {
 add_action( 'init', 'wpcloud_init' );
 
 
+function on_delete_site( int $site_id ): void {
+	$site = WPCloud_Site::find( $site_id );
+	if ( ! $site ) {
+		return;
+	}
+	$result = $site->delete();
+	if ( is_wp_error( $result ) ) {
+		error_log( $result->get_error_message() );
+	}
+}
+add_action( 'before_delete_post', 'on_delete_site', 10, 1 );
+
 if ( is_admin() ) {
 	require_once plugin_dir_path( __FILE__ ) . 'admin/init.php';
 }
