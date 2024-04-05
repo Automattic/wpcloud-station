@@ -143,7 +143,7 @@ class WPCLOUD_Site {
 		return true;
 	}
 
-	public static function create(string $name, string $php_version, string $data_center, ?int $owner_id): mixed {
+	public static function create(string $name, string $php_version, string $data_center, ?int $owner_id, int $post_id = 0 ): mixed {
 		// Check if the user is allowed to create a site.
 		if ( ! $owner_id) {
 			$owner_id = get_current_user_id();
@@ -185,13 +185,16 @@ class WPCLOUD_Site {
 		}
 
 		$result = (array) $result;
-		$site_id = self::create_post( owner_id: $owner_id, wpcloud_id: $result[ 'atomic_site_id' ], name: $name, domain: $domain, data: $data );
+		if ( $post_id ) {
+			update_post_meta( $post_id, 'wpcloud_id', $result[ 'atomic_site_id' ] );
+		} else {
+			$site_id = self::create_post( owner_id: $owner_id, wpcloud_id: $result[ 'atomic_site_id' ], name: $name, domain: $domain, data: $data );
 
-		if ( is_wp_error( $site_id ) ) {
-			error_log(  'Error creating site post: ' . $site_id->get_error_message() );
-			return $site_id;
+			if ( is_wp_error( $site_id ) ) {
+				error_log(  'Error creating site post: ' . $site_id->get_error_message() );
+				return $site_id;
+			}
 		}
-
 		do_action( WPCLOUD_ACTION_SITE_CREATED, $site_id, $owner_id, 'wp-admin' );
 		return self::from_post( get_post( $site_id ) );
 	}
