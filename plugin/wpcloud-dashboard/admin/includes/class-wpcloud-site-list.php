@@ -67,6 +67,7 @@ class WPCLOUD_Site_List extends WP_List_Table {
 		$actions = array(
 			'edit' => sprintf( __( '<a href="%s">Edit</a>' ), $edit_link ),
 			'view' => sprintf( __( '<a href="%s">View</a>' ), $view_link ),
+			'view in dash' => sprintf( '<a href="%s" target="_blank">View in Dash</a>', get_permalink($item[ 'id' ]) ),
 			'delete' => sprintf( __( '<a href="%s">Delete</a>' ), get_delete_post_link( $item[ 'id' ], '', true ) ),
 		);
 

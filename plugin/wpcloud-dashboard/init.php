@@ -43,3 +43,21 @@ add_action( 'before_delete_post', 'on_delete_site', 10, 1 );
 if ( is_admin() ) {
 	require_once plugin_dir_path( __FILE__ ) . 'admin/init.php';
 }
+
+// load the templates
+/* Filter the single_template with our custom function*/
+add_filter('single_template', 'load_wpcloud_site_template');
+
+function load_wpcloud_site_template( $single ): string {
+
+    global $post;
+		global $wpcloud_site;
+
+    /* Checks for single template by post type */
+    if ( $post->post_type == 'wpcloud_site' ) {
+			$wpcloud_site = WPCloud_Site::find( $post->ID );
+			$wpcloud_site->set_client_details();
+			return plugin_dir_path( __FILE__ ) . '/templates/single-wpcloud-site.php';
+		}
+		return $single;
+}
