@@ -18,7 +18,8 @@ services:
     image: wordpress:latest
     volumes:
       - wp_data:/var/www/html
-      - ./wpcloud-dashboard:/var/www/html/wp-content/plugins/wpcloud-dashboard
+      - ./plugin:/var/www/html/wp-content/plugins/wpcloud-dashboard
+      - ./theme:/var/www/html/wp-content/themes/wpcloud-dashboard
     ports:
       - 8282:80
     restart: always
