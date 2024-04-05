@@ -217,7 +217,7 @@ function wpcloud_client_site_details( int $wpcloud_site_id, bool $extra = false 
 function wpcloud_client_site_manage_software( int $wpcloud_site_id, array $software ): mixed {
     $client_name = wpcloud_get_client_name();
 
-	return woa_client_post( $wpcloud_site_id, "site-manage-software/{$client_name}/{$wpcloud_site_id}", $software );
+	return wpcloud_client_post( $wpcloud_site_id, "site-manage-software/{$client_name}/{$wpcloud_site_id}", $software );
 }
 
 /**
