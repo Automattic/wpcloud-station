@@ -38,23 +38,38 @@ function wpcloud_get_client_api_key(): mixed {
 }
 
 /**
+ * Get the IPs for a client. If a domain is included, get suggested IPs if possible for the client.
+ *
+ * @param integer|null $wpcloud_site_id Optional. The WP Cloud Site ID.
+ * @param string       $domain          The domain for which to get the IP addresses.
+ *
+ * @return string|WP_Error Domain verification record. WP_Error on error.
+ */
+function wpcloud_client_domain_ip_addresses( ?int $wpcloud_site_id, string $domain ): mixed {
+    $client_name = wpcloud_get_client_name();
+
+	return wpcloud_client_get( $wpcloud_site_id, "get-ips/{$client_name}/{$domain}" );
+}
+
+/**
  * Validate whether a domain is in use on WP Cloud.
  *
- * @param string $domain The name of the domain to validate.
+ * @param integer|null $wpcloud_site_id Optional. The WP Cloud Site ID.
+ * @param string       $domain          The name of the domain to validate.
  *
  * @return bool|WP_Error True if domain can be used. False if domain is currently in use. WP_Error on error.
  */
-function wpcloud_client_domain_validate( string $domain ): mixed {
+function wpcloud_client_domain_validate( ?int $wpcloud_site_id, string $domain ): mixed {
     $client_name = wpcloud_get_client_name();
 
-	$response = wpcloud_client_get( null, "check-can-host-domain/{$client_name}/{$domain}" );
+	$response = wpcloud_client_get( $wpcloud_site_id, "check-can-host-domain/{$client_name}/{$domain}" );
 
 	// If an error is returned, check if it is for existing domain mapping.
 	// If so, provide a friendly response with information about next steps.
 	// Otherwise, return the error.
 	if ( is_wp_error( $response ) ) {
 		if ( ! strpos( $response->get_error_message(), 'Domain mapping record already exists' ) ) {
-			$domain_verification_record = wpcloud_client_domain_verification_record( $domain );
+			$domain_verification_record = wpcloud_client_domain_verification_record( $wpcloud_site_id, $domain );
 
 			return new WP_Error(
 				'conflict',
@@ -75,14 +90,15 @@ function wpcloud_client_domain_validate( string $domain ): mixed {
 /**
  * Retrieve the domain verification record for a domain.
  *
- * @param string $domain The domain for which to get the domain verification record.
+ * @param integer|null $wpcloud_site_id Optional. The WP Cloud Site ID.
+ * @param string       $domain          The domain for which to get the domain verification record.
  *
  * @return string|WP_Error Domain verification record. WP_Error on error.
  */
-function wpcloud_client_domain_verification_record( string $domain ): mixed {
+function wpcloud_client_domain_verification_record( ?int $wpcloud_site_id, string $domain ): mixed {
     $client_name = wpcloud_get_client_name();
 
-	return wpcloud_client_get( null, "get-domain-verification-code/{$client_name}/{$domain}" );
+	return wpcloud_client_get( $wpcloud_site_id, "get-domain-verification-code/{$client_name}/{$domain}" );
 }
 
 /**
@@ -157,10 +173,11 @@ function wpcloud_client_site_create( string $domain, string $admin_user, string 
 
 	return wpcloud_client_post( null, "create-site/{$client_name}", $data );
 }
+
 /**
  * Delete a site.
  *
- * @param int  $wpcloud_site_id The WP Cloud Site ID.
+ * @param integer $wpcloud_site_id The WP Cloud Site ID.
  *
  * @return object|WP_Error Delete site job detals. WP_Error on error.
  */
@@ -173,8 +190,8 @@ function wpcloud_client_site_delete( int $wpcloud_site_id ): mixed {
 /**
  * Get details of a site.
  *
- * @param int  $wpcloud_site_id The WP Cloud Site ID.
- * @param bool $extra           Include extra details.
+ * @param integer $wpcloud_site_id The WP Cloud Site ID.
+ * @param bool    $extra           Include extra details.
  *
  * @return object|WP_Error Site details. WP_Error on error.
  */
@@ -186,6 +203,114 @@ function wpcloud_client_site_details( int $wpcloud_site_id, bool $extra = false 
 	}
 
 	return wpcloud_client_get( $wpcloud_site_id, $path );
+}
+
+/**
+ * Add domain alias (CNAME) for a site.
+ *
+ * @param integer $wpcloud_site_id The WP Cloud Site ID.
+ * @param bool    $domain          The domain to add as an alias.
+ *
+ * @return array|WP_Error List of domain aliases. WP_Error on error.
+ */
+function wpcloud_client_site_domain_alias_add( int $wpcloud_site_id, string $domain ): mixed {
+    $client_name = wpcloud_get_client_name();
+
+	$response = wpcloud_client_get( $wpcloud_site_id, "site-alias/{$client}/{$wpcloud_site_id}/add/{$domain}" );
+	if ( is_wp_error( $response ) ) {
+		return $response;
+	}
+
+	if ( ! isset( $response->domains ) ) {
+		return array();
+	}
+
+	return $response->domains;
+}
+
+/**
+ * Get a list of domain aliases for a site.
+ *
+ * @param integer $wpcloud_site_id The WP Cloud Site ID.
+ *
+ * @return array|WP_Error List of domain aliases. WP_Error on error.
+ */
+function wpcloud_client_site_domain_alias_list( int $wpcloud_site_id ): mixed {
+    $client_name = wpcloud_get_client_name();
+
+	$response = wpcloud_client_get( $wpcloud_site_id, "site-alias/{$client}/{$wpcloud_site_id}/list" );
+	if ( is_wp_error( $response ) ) {
+		return $response;
+	}
+
+	if ( ! isset( $response->domains ) ) {
+		return array();
+	}
+
+	return $response->domains;
+}
+
+/**
+ * Remove domain alias (CNAME) for a site.
+ *
+ * @param integer $wpcloud_site_id The WP Cloud Site ID.
+ * @param bool    $domain          The domain to remove as an alias.
+ *
+ * @return array|WP_Error List of domain aliases. WP_Error on error.
+ */
+function wpcloud_client_site_domain_alias_remove( int $wpcloud_site_id, string $domain ): mixed {
+    $client_name = wpcloud_get_client_name();
+
+	$response = wpcloud_client_get( $wpcloud_site_id, "site-alias/{$client}/{$wpcloud_site_id}/remove/{$domain}" );
+	if ( is_wp_error( $response ) ) {
+		return $response;
+	}
+
+	if ( ! isset( $response->domains ) ) {
+		return array();
+	}
+
+	return $response->domains;
+}
+
+/**
+ * Get SSL certificate information for site.
+ *
+ * @param integer $wpcloud_site_id The WP Cloud Site ID.
+ * @param string  $domain          Required. The new domain for the site.
+ * @param bool    $keep            Optional. True to keep previous domain as an alias. Default: false.
+ *
+ * @return object|WP_Error SSL certificate information on success. WP_Error on error.
+ */
+function wpcloud_client_site_domain_primary_set( int $wpcloud_site_id, string $domain, bool $keep = false ): mixed {
+    $client_name = wpcloud_get_client_name();
+
+	$path = "update-site-domain/{$client_name}/{$domain}";
+
+	if ( $keep ) {
+		$path .= '/keep';
+	}
+
+	return wpcloud_client_post( $wpcloud_site_id, $path );
+}
+
+/**
+ * Get a list of sites for the client.
+ *
+ * @param string[] ...$meta_keys One or more meta keys to include in response.
+ *                               Supported: wp_version, php_version, space_quota, db_file_size, static_file_404, suspended
+ *
+ * @return array|WP_Error Site status details or error.
+ */
+function wpcloud_client_site_list( string ...$meta_keys ): mixed {
+    $client_name = wpcloud_get_client_name();
+    $path        = "get-sites/{$client_name}/";
+
+    foreach ( $meta_keys as $meta_key ) {
+		$path .= "{$meta_key}/";
+	}
+
+	return wpcloud_client_get( null, $path );
 }
 
 /**
@@ -209,8 +334,8 @@ function wpcloud_client_site_details( int $wpcloud_site_id, bool $extra = false 
  *     'themes/premium/caldwell'            => 'activate',
  * ];
  *
- * @param int   $wpcloud_site_id The WP Cloud Site ID.
- * @param array $software        Array of plugins and themes.
+ * @param integer $wpcloud_site_id The WP Cloud Site ID.
+ * @param array   $software        Array of plugins and themes.
  *
  * @return object|WP_Error Job ID on success. WP_Error on error.
  */
@@ -221,29 +346,65 @@ function wpcloud_client_site_manage_software( int $wpcloud_site_id, array $softw
 }
 
 /**
- * Get a list of sites for the client.
+ * Get PHPMyAdmin URL for site.
  *
- * @param string[] ...$meta_keys One or more meta keys to include in response.
- *                               Supported: wp_version, php_version, space_quota, db_file_size, static_file_404, suspended
+ * @param integer $wpcloud_site_id The WP Cloud Site ID.
  *
- * @return array|WP_Error Site status details or error.
+ * @return string|WP_Error PHPMyAdmin URL on success. WP_Error on error.
  */
-function wpcloud_client_site_list( string ...$meta_keys ): mixed {
-    $client_name = wpcloud_get_client_name();
-    $path        = "get-sites/{$client_name}/";
-
-    foreach ( $meta_keys as $meta_key ) {
-		$path .= "{$meta_key}/";
+function wpcloud_client_site_phpmyadmin_url( int $wpcloud_site_id ): mixed {
+	$response = wpcloud_client_post( $wpcloud_site_id, "site-phpmyadmin/{$wpcloud_site_id}" );
+	if ( is_wp_error( $response ) ) {
+		return $response;
 	}
 
-	return wpcloud_client_get( null, $path );
+	return $response->url;
+}
+
+/**
+ * Get SSL certificate information for site.
+ *
+ * @param integer $wpcloud_site_id The WP Cloud Site ID.
+ *
+ * @return object|WP_Error SSL certificate information on success. WP_Error on error.
+ */
+function wpcloud_client_site_ssl_info( int $wpcloud_site_id ): mixed {
+	return wpcloud_client_post( $wpcloud_site_id, "ssl-info/{$wpcloud_site_id}" );
+}
+
+/**
+ * Retry SSL certificate provisioning.
+ *
+ * @param integer $wpcloud_site_id The WP Cloud Site ID.
+ * @param string  $domain          The domain of the site.
+ *
+ * @return bool|WP_Error True if retry queued. False if not queued.. WP_Error on error.
+ */
+function wpcloud_client_site_ssl_retry( int $wpcloud_site_id, string $domain ): mixed {
+	$response = wpcloud_client_post( $wpcloud_site_id, "ssl-retry/{$domain}" );
+	if ( is_wp_error( $response ) ) {
+		return $response;
+	}
+
+	return (bool) $response->queued;
+}
+
+/**
+ * Get the status of a job.
+ *
+ * @param integer $job_id The job id for which to get the status.
+ *
+ * @return string|WP_Error "success", "failure", "queued". WP Error on error.
+ */
+function wpcloud_client_job_status( int $job_id ) {
+	return wpcloud_client_get( null, "job-completion/{$job_id}" );
 }
 
 /**
  * Make a GET request the WP Cloud API.
  *
- * @param int|null $wpcloud_site_id The WP Cloud Site ID.
- * @param string   $path            The request path without host. e.g. 'get-site/example.com'.
+ * @param integer|null $wpcloud_site_id Optional. The WP Cloud Site ID.
+ * @param string       $path            The request path without host. e.g. 'get-site/example.com'.
  *
  * @return mixed|WP_Error Response body on success. WP_Error on failure.
  */
@@ -254,9 +415,9 @@ function wpcloud_client_get( ?int $wpcloud_site_id, string $path ): mixed {
 /**
  * Make a POST request the WP Cloud API.
  *
- * @param int|null $wpcloud_site_id The WP Cloud Site ID.
- * @param string   $path            The request path without host. e.g. 'get-site/example.com'.
- * @param array    $body            The body of the request as an array.
+ * @param integer|null $wpcloud_site_id Optional. The WP Cloud Site ID.
+ * @param string       $path            The request path without host. e.g. 'get-site/example.com'.
+ * @param array        $body            The body of the request as an array.
  *
  * @return mixed|WP_Error Response body on success. WP_Error on failure.
  */
@@ -267,10 +428,10 @@ function wpcloud_client_post( ?int $wpcloud_site_id, string $path, array $body =
 /**
  * Make a request to WP Cloud API.
  *
- * @param int|null $wpcloud_site_id The WP Cloud Site ID.
- * @param string   $method          HTTP Request method. 'GET' or 'POST'.
- * @param string   $path            The request path without host. e.g. 'get-site/example.com'.
- * @param array    $body            The body of the request as an array.
+ * @param integer|null $wpcloud_site_id Optional. The WP Cloud Site ID.
+ * @param string       $method          HTTP Request method. 'GET' or 'POST'.
+ * @param string       $path            The request path without host. e.g. 'get-site/example.com'.
+ * @param array        $body            The body of the request as an array.
  *
  * @return mixed|WP_Error Response body on success. WP_Error on failure.
  */
@@ -374,7 +535,7 @@ function wpcloud_client_request( ?int $wpcloud_site_id, string $method, string $
 		/**
 		 * Action triggered when an error occurs during a WP Cloud API request.
 		 *
-		 * @param int|null       The WP Cloud Site ID.
+		 * @param integer|null   The WP Cloud Site ID.
  		 * @param string         HTTP Request method. 'GET' or 'POST'.
  		 * @param string         The request path without host. e.g. 'get-site/example.com'.
 		 * @param array|WP_Error Array containing 'headers', 'body', 'response', 'cookies', 'filename'. WP_Error on failure.
@@ -387,7 +548,7 @@ function wpcloud_client_request( ?int $wpcloud_site_id, string $method, string $
 	/**
 	 * Action triggered on successful WP Cloud API request.
 	 *
-	 * @param int|null       The WP Cloud Site ID.
+	 * @param integer|null   The WP Cloud Site ID.
  	 * @param string         HTTP Request method. 'GET' or 'POST'.
  	 * @param string         The request path without host. e.g. 'get-site/example.com'.
 	 * @param array|WP_Error Array containing 'headers', 'body', 'response', 'cookies', 'filename'. WP_Error on failure.
