@@ -14,6 +14,16 @@ services:
     expose:
       - 3306
       - 33060
+
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    ports:
+      - 8383:80
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: somewordpress
+
   wordpress:
     image: wordpress:latest
     volumes:
@@ -31,6 +41,7 @@ services:
       # Enable application passwords for REST API
       WORDPRESS_CONFIG_EXTRA: |
         define( 'WP_ENVIRONMENT_TYPE', 'local' );
+
 volumes:
   db_data:
   wp_data:
