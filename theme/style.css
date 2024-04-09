@@ -1,7 +1,182 @@
 /**
 Theme Name: WP Cloud Dashboard Theme
 */
+html,
+body {
+	border: none;
+	margin: 0;
+	padding: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+address,
+big,
+cite,
+code,
+em,
+font,
+img,
+small,
+strike,
+sub,
+sup,
+li,
+ol,
+ul,
+fieldset,
+form,
+label,
+legend,
+button,
+table,
+caption,
+tr,
+th,
+td {
+	border: none;
+	font-size: inherit;
+	line-height: inherit;
+	margin: 0;
+	padding: 0;
+	text-align: inherit;
+}
+
+blockquote::before,
+blockquote::after {
+	content: "";
+}
+
+.group::after,
+.entry-content::after {
+	clear: both;
+	content: "";
+	display: block;
+}
+
+
+a,
+path {
+	transition: all 0.15s linear;
+}
+
+
+/* Screen Reader Text ------------------------ */
+
+.screen-reader-text {
+	border: 0;
+	clip: rect(1px, 1px, 1px, 1px);
+	-webkit-clip-path: inset(50%);
+	clip-path: inset(50%);
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	padding: 0;
+	position: absolute !important;
+	width: 1px;
+	word-wrap: normal !important;
+	word-break: normal;
+}
+
+.screen-reader-text:focus {
+	background-color: #f1f1f1;
+	border-radius: 3px;
+	box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.6);
+	clip: auto !important;
+	-webkit-clip-path: none;
+	clip-path: none;
+	color: #21759b;
+	display: block;
+	font-size: 0.875rem;
+	font-weight: 700;
+	height: auto;
+	right: 5px;
+	line-height: normal;
+	padding: 15px 23px 14px;
+	text-decoration: none;
+	top: 5px;
+	width: auto;
+	z-index: 100000;
+}
+
+
+
+html {
+	font-size: 62.5%; /* 1rem = 10px */
+	scroll-behavior: smooth;
+}
 
 body {
 	background: #1A1515;
+	color: #FFFFFF;
+	font-family: "DM Sans";
+	font-size: 1.4rem;
+}
+
+a, a.visited {
+	color: #FFFFFF;
+	text-decoration: none;
+}
+
+ul {
+	list-style: none;
+}
+
+
+.layout {
+	display: flex;
+	flex-direction: row;
+}
+
+.sidebar {
+	display: flex;
+	width: 272px;
+	height: 100vh;
+	padding: 48px 24px;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: flex-start;
+	flex-shrink: 0;
+	border-right: 1px solid rgba(85, 85, 85, 0.50);
+}
+
+main#site-content {
+	flex: 1;
+	padding: 48px 24px;
+}
+
+.sidebar .navigation .menu-wp-cloud-dashboard-container li  {
+	display: flex;
+	height: 40px;
+	padding: 8px var(--grid-unit-15, 12px);
+	align-items: center;
+	align-self: stretch;
+	overflow: hidden;
+	color: var(--color-bw-white, #FFF);
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	font-family: "DM Sans";
+	font-size: 14px;
+	font-style: normal;
+	font-weight: 400;
+	line-height: 20px; /* 142.857% */
+	align-self: center;
+
+}
+
+.sidebar .menu-wp-cloud-dashboard-container .current-menu-item {
+	border-radius: 4px;
+	background: #F72B00;
+}
+
+.sidebar .menu-wp-cloud-dashboard-container .wpcloud-nav-sites a::before {
+	content: url("/wp-content/themes/theme/assets/icons/nav-wp.svg");
+  width: 24px;
+  height: 24px;
 }
