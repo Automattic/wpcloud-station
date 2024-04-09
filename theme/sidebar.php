@@ -6,32 +6,22 @@
  * @package WP Cloud
  * @subpackage WP_Cloud_Dashboard
  */
-$nav_items =  wp_get_nav_menu_items( 'WP Cloud Dashboard' );
-
-
-	error_log( print_r(wp_get_nav_menus(), true) );
 
 ?>
 <aside id="secondary" class="sidebar" role="complementary">
 	<section class="navigation">
 		<?php echo get_custom_logo(); ?>
-		<ul class="menu menu-wp-cloud-dashboard">
-			<?php
-			foreach ( $nav_items as $nav_item ) {
-				?>
-				<li>
-					<a href="<?php echo $nav_item->url; ?>">
-						<?php echo $nav_item->title; ?>
-					</a>
-				</li>
-				<?php
-			}
-			?>
-		</ul>
-
+		<div class="wpcloud-menu">
+			<?php wp_nav_menu('WP Cloud Dashboard'); ?>
+		</div>
 	</section>
 	<section class="settings">
-		<a href="#">Settings</a>
-		<a href="#">Help</a>
+		<div class="settings-avatar">
+			<?php echo get_avatar( get_current_user_id(), 32 ); ?>
+		</div>
+		<div class="settings-links">
+			<a href="#" class="settings" >Settings</a>
+			<a href="#" class="help" >Help</a>
+		</div>
 	</section>
 </aside><!-- #secondary -->
