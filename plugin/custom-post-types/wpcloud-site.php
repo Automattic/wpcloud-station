@@ -41,6 +41,48 @@ function wpcloud_register_site_post_type(): void {
 	register_post_type( 'wpcloud_site', $args );
 }
 
+function wpcloud_site_get_default_domain( string $domain = '' ): string {
+	$settings       = get_option( 'wpcloud_settings' );
+	$default_domain = $settings['wpcloud_domain'] ?? '';
+
+	if ( $default_domain ) {
+		$domain .= ".{$default_domain}";
+	}
+
+	return $domain;
+}
+
+function wpcloud_on_create_site( int $post_id, WP_Post $post, bool $update ): void {
+	if ( $update ) {
+		return;
+	}
+
+	$data        = array();
+	$author      = get_user_by( 'id', $post->post_author );
+	$domain      = $post->post_title;
+	$php_version = get_post_meta( $post_id, 'php_version', true );
+	$data_center = get_post_meta( $post_id, 'data_center', true );
+
+	if ( ! empty( $php_version ) ) {
+		$data['php_version'] = $php_version;
+	}
+	if ('No Preference' !== $data_center ) {
+		$data['geo_affinity'] = $data_center;
+	}
+
+	$result = wpcloud_client_site_create( $domain, $author->user_login, $author->user_email, $data );
+
+	if ( is_wp_error( $result ) ) {
+		error_log( $result->get_error_message() );
+		return;
+	}
+
+	update_post_meta( $post_id, 'wpcloud_site_id', $result->atomic_site_id );
+
+	do_action( 'wpcloud_site_created', $post_id, $post, $result->atomic_site_id );
+}
+add_action( 'save_post_wpcloud_site', 'wpcloud_on_create_site', 10, 3 );
+
 function wpcloud_on_delete_site( int $post_id ): void {
 	$wpcloud_site_id = get_post_meta( $post_id, 'wpcloud_site_id', true );
 	// Site doesn't have associated wpcloud site id, proceed.

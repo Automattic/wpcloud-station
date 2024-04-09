@@ -42,7 +42,7 @@ class WPCLOUD_Site {
 	public int $wpcloud_site_id;
 	public array $details;
 
-	public function __construct(string $domain = '') {
+	public function __construct() {
 		$this->id              = 0;
 		$this->name            = '';
 		$this->php_version     = '';
@@ -51,21 +51,6 @@ class WPCLOUD_Site {
 		$this->owner_id        = 0;
 		$this->wpcloud_site_id = 0;
 		$this->details         = array();
-
-		if ( ! $domain ) {
-			$this->domain = self::get_default_domain();
-		} else {
-			$this->domain = $domain;
-		}
-	}
-
-	public static function get_default_domain(string $sub_domain = ''): string {
-		$settings = get_option( 'wpcloud_settings' );
-		$domain = $settings['wpcloud_domain'] ?? '';
-		if ( $sub_domain && $domain ) {
-			$domain = $sub_domain . '.' . $domain;
-		}
-		return $domain;
 	}
 
 	/**
@@ -81,7 +66,7 @@ class WPCLOUD_Site {
 		$site->data_center = get_post_meta( $post->ID, 'data_center', true );
 		$site->status = $post->post_status;
 		$site->owner_id = intval( $post->post_author );
-		$site->domain = get_post_meta( $post->ID, 'domain', true );
+		$site->domain = $post->post_title;
 		$site->wpcloud_site_id = intval( get_post_meta( $post->ID, 'wpcloud_site_id', true ) );
 		return $site;
 	}
@@ -105,92 +90,6 @@ class WPCLOUD_Site {
 		}
 
 		return true;
-	}
-
-	public static function create(string $name, string $php_version, string $data_center, ?int $owner_id, int $post_id = 0 ): mixed {
-		// Check if the user is allowed to create a site.
-		if ( ! $owner_id) {
-			$owner_id = get_current_user_id();
-		}
-
-		$should_create = apply_filters( WPCLOUD_SHOULD_CREATE_SITE, true, $owner_id );
-		if ( ! $should_create ) {
-			return new WP_Error( 'forbidden', __( 'Site creation is disabled.' ) );
-		}
-
-		$pattern = "/^(?!-)(?!.*--)[A-Za-z0-9-]{1,63}(?<!-)$/";
-		if ( ! preg_match( $pattern, $name ) ) {
-			return new WP_Error( 'forbidden', __( 'Invalid site name.' ) );
-		}
-
-		$domain = self::get_default_domain( $name );
-		$admin =  get_user_by( 'id', $owner_id );
-
-		$data = array(
-			'php_version' => $php_version,
-		);
-
-		if ( $data_center != 'NA' ) {
-			$data['data_center'] = $data_center;
-		}
-
-		$result = wpcloud_client_site_create(
-			domain: $domain,
-			admin_user: $admin->user_login,
-			admin_email: $admin->user_email,
-			data: $data
-		);
-
-		error_log( 'Result from wpcloud_client_site_create: ' . print_r( $result, true ) );
-
-		if ( is_wp_error( $result ) ) {
-			error_log( 'Error creating site: ' . $result->get_error_message() );
-			return $result;
-		}
-
-		$result = (array) $result;
-		if ( $post_id ) {
-			update_post_meta( $post_id, 'wpcloud_id', $result[ 'atomic_site_id' ] );
-		} else {
-			$site_id = self::create_post( owner_id: $owner_id, wpcloud_id: $result[ 'atomic_site_id' ], name: $name, domain: $domain, data: $data );
-
-			if ( is_wp_error( $site_id ) ) {
-				error_log(  'Error creating site post: ' . $site_id->get_error_message() );
-				return $site_id;
-			}
-		}
-		do_action( WPCLOUD_ACTION_SITE_CREATED, $site_id, $owner_id, 'wp-admin' );
-		return self::from_post( get_post( $site_id ) );
-	}
-
-	private static function test() {
-		error_log( 'Test' );
-	}
-
-	private static function create_post(int $owner_id, int $wpcloud_id, string $name, string $domain, array $data ): mixed {
-		self::test();
- 		$status = apply_filters( WPCLOUD_INITIAL_SITE_STATUS, self::$initial_status );
-		$post_details = array(
-			'post_type' => 'wpcloud_site',
-			'post_title' => $name,
-			'post_status' => $status,
-			'comment_status'=> 'closed',
-			'author' => $owner_id,
-		);
-
-			// Create the site CPT and set the meta data.
-		$site_id = wp_insert_post( $post_details );
-		if ( is_wp_error( $site_id ) ) {
-			return $site_id;
-		}
-
-		update_post_meta( $site_id, 'wpcloud_site_id', $wpcloud_id );
-		//We only really need these for the initial creation so we can show the user what they just created.
-		update_post_meta( $site_id, 'php_version', $data[ 'php_version' ] ?? '' );
-		update_post_meta( $site_id, 'data_center', $data[ 'data_center' ] ?? '' );
-		update_post_meta( $site_id, 'domain', $domain );
-
-		return $site_id;
 	}
 
 	public static function find( int $site_id ): mixed {

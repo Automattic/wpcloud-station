@@ -141,13 +141,14 @@ function wpcloud_field_input_cb( array $args ): void {
 	<?php
 }
 
-function site_created__success( WPCloud_Site $wpcloud_site ): void {
+function site_created__success( int $wpcloud_site_id ): void {
+	$wpcloud_site = get_post( $wpcloud_site_id );
 ?>
 <div class="notice notice-success is-dismissible">
 	<p>
 		<?php
 		/* translators: %s: name of the site */
-		echo sprintf( __( 'Provisioning  %s', 'wpcloud' ), $wpcloud_site->name )
+		echo sprintf( __( 'Provisioning  %s', 'wpcloud' ), $wpcloud_site->post_title )
 		?>
 	</p>
 </div>
@@ -163,18 +164,18 @@ function wpcloud_admin_controller(): void {
 
 	switch ( wpcloud_get_action() ) {
 		case 'create':
-			$wpcloud_site = wpcloud_admin_create_site();
-			if ( is_wp_error( $wpcloud_site ) ) {
-				add_action( 'admin_notices', function() use ( $wpcloud_site ): void {
+			$wpcloud_site_id = wpcloud_admin_create_site();
+			if ( is_wp_error( $wpcloud_site_id ) ) {
+				add_action( 'admin_notices', function() use ( $wpcloud_site_id ): void {
 					?>
 					<div class="notice notice-error is-dismissible">
-						<p><?php echo esc_html( $wpcloud_site->get_error_message() ); ?></p>
+						<p><?php echo esc_html( $wpcloud_site_id->get_error_message() ); ?></p>
 					</div>
 					<?php
 				});
 			} else {
-				add_action( 'admin_notices', function() use ( $wpcloud_site ): void {
-					site_created__success( $wpcloud_site );
+				add_action( 'admin_notices', function() use ( $wpcloud_site_id ): void {
+					site_created__success( $wpcloud_site_id );
 				});
 			}
 			break;
@@ -231,8 +232,6 @@ function wpcloud_admin_view_site(): mixed  {
 	return null;
 }
 
-
-
 function wpcloud_admin_site_form( ?WPCLOUD_Site $site ): void {
 	$wpcloud_site = $site ?? new WPCloud_Site();
 
@@ -244,16 +243,15 @@ function wpcloud_admin_create_site(): mixed {
 	if ( ! isset( $_POST['wpcloud_site'] ) ) {
 		return new WP_Error( 'no-data', __( 'No data found', 'wpcloud' ) );
 	}
-	$wpcloud_site = $_POST['wpcloud_site'];
-			// create a new site
-	$wpcloud_site = WPCloud_Site::create(
-		name: $wpcloud_site['site_name'],
-		php_version: $wpcloud_site['php_version'],
-		data_center: $wpcloud_site['data_center'],
-		owner_id: intval( $wpcloud_site['owner_id'] )
-	);
 
-	return $wpcloud_site;
+	$_POST['wpcloud_site']['post_title'] = wpcloud_site_get_default_domain( $_POST['wpcloud_site']['post_title'] );
+
+	$post = wp_insert_post( $_POST['wpcloud_site'] );
+	if ( is_wp_error( $post ) ) {
+		error_log( $post->get_error_message() );
+	}
+
+	return $post;
 }
 
 function wpcloud_admin_options_controller(): void {
