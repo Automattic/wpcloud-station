@@ -28,3 +28,4 @@
 		<?php wp_body_open(); ?>
 		<div class="layout">
 		 <?php get_sidebar(); ?>
+		 <div class="main-wrapper">
