@@ -20,7 +20,7 @@ class WPCLOUD_Site_List extends WP_List_Table {
 
 		$this->_column_headers = array( $columns, $hidden, $sortable );
 
-		$should_backfill = get_option( 'wpcloud_backfill', false );
+		$should_backfill = get_option( 'wpcloud_settings', array() )['wpcloud_backfill'] ?? false;
 
 		$sites = WPCLOUD_Site::find_all(owner_id: get_current_user_id(), query: $options, backfill_from_host: $should_backfill);
 		if ( is_wp_error( $sites ) ) {
