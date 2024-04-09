@@ -153,7 +153,7 @@ function wpcloud_client_site_create( string $domain, string $admin_user, string 
     $client_name = wpcloud_get_client_name();
 
 	// First validate if the domain can be hosted
-	$validate_domain = wpcloud_client_domain_validate( $domain );
+	$validate_domain = wpcloud_client_domain_validate( null, $domain );
 	if ( is_wp_error( $validate_domain ) ) {
 		return $validate_domain;
 	} elseif ( ! $validate_domain ) {
