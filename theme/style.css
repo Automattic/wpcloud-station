@@ -196,30 +196,30 @@ ul {
 	column-gap: 12px;
 }
 .sidebar .menu-wp-cloud-dashboard-container .wpcloud-nav-sites a::before {
-	content: url("/wp-content/themes/theme/assets/nav-icons/wp.svg");
+	content: url("./assets/nav-icons/wp.svg");
   width: 24px;
   height: 24px;
 }
 
 .sidebar .menu-wp-cloud-dashboard-container .wpcloud-nav-collaborators a::before {
-	content: url("/wp-content/themes/theme/assets/nav-icons/people.svg");
+	content: url("./assets/nav-icons/people.svg");
   width: 24px;
   height: 24px;
 }
 .sidebar .menu-wp-cloud-dashboard-container .wpcloud-nav-usage a::before {
-	content: url("/wp-content/themes/theme/assets/nav-icons/trending.svg");
+	content: url("./assets/nav-icons/trending.svg");
   width: 24px;
   height: 24px;
 }
 
 .sidebar .menu-wp-cloud-dashboard-container .wpcloud-nav-billing a::before {
-	content: url("/wp-content/themes/theme/assets/nav-icons/currency-dollar.svg");
+	content: url("./assets/nav-icons/currency-dollar.svg");
   width: 24px;
   height: 24px;
 }
 
 .sidebar .menu-wp-cloud-dashboard-container .wpcloud-nav-tools a::before {
-	content: url("/wp-content/themes/theme/assets/nav-icons/tool.svg");
+	content: url("./assets/nav-icons/tool.svg");
   width: 24px;
   height: 24px;
 }
@@ -241,7 +241,7 @@ ul {
 }
 
 .sidebar .settings-links .settings {
-	background-image: url("/wp-content/themes/theme/assets/nav-icons/cog.svg");
+	background-image: url("./assets/nav-icons/cog.svg");
 	background-size: 24px;
 	text-indent: -9999px;
 	width: 24px;
@@ -249,7 +249,7 @@ ul {
 }
 
 .sidebar .settings-links .help {
-	background-image: url("/wp-content/themes/theme/assets/nav-icons/help.svg");
+	background-image: url("./assets/nav-icons/help.svg");
 	background-size: 24px;
 	text-indent: -9999px;
 	width: 24px;
