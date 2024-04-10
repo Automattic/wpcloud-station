@@ -14,9 +14,31 @@ if ( ! function_exists( 'wpcloud_dashboard_list_site_card' ) ) :
 	function wpcloud_dashboard_list_site_card() {
 		$site_url = get_the_title();
 		$site_name = get_the_title();
-		$site_url = get_the_permalink();
+		$view_url = get_the_permalink();
+		$site_name = get_post_meta( get_the_ID(), 'name', true );
 
-		echo '<a href="' . $site_url . '" class="site-card">' . $site_name . '</a>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		if ( empty( $site_name ) ) {
+			$site_name = $site_url;
+		}
+
+		// @TODO get real site thumbnail
+		$site_thumbnail = get_theme_file_uri( '/assets/Gravatar_filled_' . get_the_ID() % 5 . '.png' );
+
+		$ex_link = get_theme_file_uri( '/assets/external-link.svg' );
+
+		$site_card = <<<SITE
+		<div class="site-card">
+			<img src="$site_thumbnail" />
+			<h2 class="site-title">
+				<a href="$view_url">$site_name</a>
+			</h2>
+			<h3 class="site-url">
+				<a href="$site_url" target="_blank"><span>$site_url</span><img src="$ex_link"/></a>
+			</h3>
+		</div>
+SITE;
+
+		echo $site_card; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 endif;
 
