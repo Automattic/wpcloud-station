@@ -124,9 +124,10 @@ if ( ! function_exists( 'wpcloud_dashboard_list_is_favorite' ) ) :
 	 */
 	function wpcloud_dashboard_list_is_favorite() {
 		// @TODO: get real favorite data
-		$is_favorite = rand( -2, 1 ) > 0 ? '★' : '';
+		$is_favorite = rand( -2, 1 ) > 0;
 
-		echo '<span class="wpcloud-is-favorite">' . $is_favorite . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		$classnames = $is_favorite ? ' is-favorite' : '';
+		echo '<span class="wpcloud-list-favorite ' . $classnames  . '"></span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 endif;
 

@@ -961,7 +961,19 @@ ul#primary-menu .current-menu-item {
 			}
 		}
 	}
-}
+
+	.wpcloud-fav {
+		&:hover {
+			:not(.is-favorite)::before {
+				content: '☆';
+			}
+		}
+		.is-favorite::before {
+			content: '★';
+		}
+	}
+
+} /* end .wpcloud-site-table */
 
 /* Navigation
 --------------------------------------------- */
