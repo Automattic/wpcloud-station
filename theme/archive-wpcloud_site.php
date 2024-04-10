@@ -23,7 +23,8 @@ $sites = new WP_Query( array(
 		</div>
 		<div>
 			<div class="wpcloud-site-search">
-				<input type="search" placeholder="Search Sites">
+				<button>Find</button>
+				<input type="search" placeholder="Search sites">
 			</div>
 			<div class="wpcloud-site-filter hidden">
 				<select>

@@ -786,6 +786,34 @@ ul#primary-menu .current-menu-item {
 			font-weight: 500;
 			line-height: 120%; /* 28.8px */
 		}
+
+		.wpcloud-site-search {
+			border-radius: 2px;
+			border: 1px solid rgba(171, 163, 163, 0.50);
+
+			button, input {
+				border-radius: 0;
+				border: none;
+				background: none;
+				outline: none;
+				color: var(--color-bw-white, #FFF);
+			}
+			button {
+				background-image: url('./assets/search.svg');
+				background-repeat: no-repeat;
+				background-position: center;
+				text-indent: -9999px;
+			}
+
+			input::placeholder {
+				color: rgba(171, 163, 163, 0.50);
+				font-family: "SF Pro Text" Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+				font-size: 13px;
+				font-style: normal;
+				font-weight: 400;
+				line-height: 20px; /* 153.846% */
+			}
+		}
 	}
 }
 .wpcloud-site-table {
