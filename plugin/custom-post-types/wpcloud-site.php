@@ -30,9 +30,10 @@ function wpcloud_register_site_post_type(): void {
 		'labels'	   => $labels,
 		'public'	   => true,
 		'has_archive'  => true,
-		'show_in_rest' => true,
 		'rest_base'    => 'wpcloud/sites',
-		'show_in_ ui'  => false,
+		'rewrite'      => array( 'slug' => 'sites' ),
+		'show_in_rest' => true,
+		'show_in_ui'   => false,
 		'show_in_menu' => false,
 		'taxonomies'   => array( 'category', 'tag' ),
 	);

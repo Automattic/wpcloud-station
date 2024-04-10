@@ -8,16 +8,23 @@
  * @subpackage WP_Cloud_Dashboard
  */
 get_header();
+$sites = new WP_Query( array(
+	'post_type' => 'wpcloud_site',
+	'author' => get_current_user_id(),
+	'post_status' => 'any',
+));
 ?>
 
 <main id="site-content">
+	<header class="page-header">
+		<h1 class="page-title"><?php esc_html_e( 'Sites', 'wpcloud-dashboard' ); ?></h1>
+	</header><!-- .page-header -->
 
 	<?php
+	if ( $sites->have_posts() ) {
 
-	if ( have_posts() ) {
-
-		while ( have_posts() ) {
-			the_post();
+		while ( $sites->have_posts() ) {
+			$sites->the_post();
 
 			get_template_part( 'template-parts/content', get_post_type() );
 		}
