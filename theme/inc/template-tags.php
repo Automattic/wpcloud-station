@@ -30,10 +30,10 @@ if ( ! function_exists( 'wpcloud_dashboard_list_site_card' ) ) :
 		<div class="site-card">
 			<img src="$site_thumbnail" />
 			<h2 class="site-title">
-				<a href="$view_url">$site_name</a>
+				<a href="$site_url">$site_name</a>
 			</h2>
 			<h3 class="site-url">
-				<a href="$site_url" target="_blank"><span>$site_url</span><img src="$ex_link"/></a>
+				<a href="https://$site_url" target="_blank"><span>$site_url</span><img src="$ex_link"/></a>
 			</h3>
 		</div>
 SITE;
@@ -46,7 +46,7 @@ if ( ! function_exists( 'wpcloud_dashboard_site_status' ) ) :
 	/**
 	 * Prints HTML with meta information for the current post-date/time.
 	 */
-	function wpcloud_dashboard_site_status() {
+	function wpcloud_dashboard_list_status() {
 		$status = get_post_status() === 'publish' ? 'Live' : 'Provisioning';
 
 		echo '<span class="site-status">' . $status . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -58,6 +58,12 @@ if ( ! function_exists( 'wpcloud_dashboard_performance_excerpt' ) ) :
 	 * Prints HTML with meta information for the current post-date/time.
 	 */
 	function wpcloud_dashboard_list_performance() {
+
+		if ( get_post_status() !== 'publish' ) {
+			echo '<span class="wpcloud-performance"><span>–</span></span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			return;
+		}
+
 		// @TODO: get real performance data
 		$mobile = rand( 80, 100 );
 		$mobile_trend = rand( -1, 2 ) > 0 ? 'up' : 'down';
@@ -93,8 +99,8 @@ if ( ! function_exists( 'wpcloud_dashboard_list_ip_addresses' ) ) :
 	/**
 	 * Prints HTML with meta information for the current post-date/time.
 	 */
-	function wpcloud_dashboard_list_ip_addresses() {
-		$ip_addresses = array( '123.456.789.012', '123.456.789.013' );
+	function wpcloud_dashboard_list_ip_addresses($site_details = array()) {
+		$ip_addresses =  $site_details[ 'ip_addresses' ] ?? array( '–' );
 
 		echo '<span class="ip-addresses">' . implode('<br />', $ip_addresses ) . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
@@ -124,14 +130,34 @@ if ( ! function_exists( 'wpcloud_dashboard_list_is_favorite' ) ) :
 	}
 endif;
 
+if ( ! function_exists( 'wpcloud_dashboard_list_php_version' ) ) :
+	/**
+	 * Prints HTML with meta information for the current post-date/time.
+	 */
+	function wpcloud_dashboard_list_php_version( $site_details ) {
+		$php_version = $site_details['php_version'] ?? '–';
+
+		echo '<span class="php-version">' . $php_version . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	}
+endif;
+
+if ( ! function_exists( 'wpcloud_dashboard_list_datacenter' ) ) :
+	/**
+	 * Prints HTML with meta information for the current post-date/time.
+	 */
+	function wpcloud_dashboard_list_datacenter( $site_details ) {
+		$data_center = $site_details['datacenter'] ?? '–';
+
+		echo '<span class="data-center">' . $data_center . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	}
+endif;
+
 if ( ! function_exists( 'wpcloud_dashboard_posted_on' ) ) :
 	/**
 	 * Prints HTML with meta information for the current post-date/time.
 	 */
-	function wpcloud_dashboard_created_on() {
+	function wpcloud_dashboard_list_created_on() {
 		$time_string = '<time class="entry-date created" datetime="%1$s">%2$s</time>';
-
-
 		$time_string = sprintf(
 			$time_string,
 			esc_attr( get_the_date( DATE_W3C ) ),
