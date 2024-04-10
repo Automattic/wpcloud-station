@@ -43,9 +43,9 @@ function wpcloud_get_client_api_key(): mixed {
  * @param integer|null $wpcloud_site_id Optional. The WP Cloud Site ID.
  * @param string       $domain          The domain for which to get the IP addresses.
  *
- * @return string|WP_Error Domain verification record. WP_Error on error.
+ * @return object|WP_Error Domain verification record. WP_Error on error.
  */
-function wpcloud_client_domain_ip_addresses( ?int $wpcloud_site_id, string $domain ): mixed {
+function wpcloud_client_domain_ip_addresses( ?int $wpcloud_site_id, string $domain = ''): mixed {
     $client_name = wpcloud_get_client_name();
 
 	return wpcloud_client_get( $wpcloud_site_id, "get-ips/{$client_name}/{$domain}" );
@@ -216,7 +216,7 @@ function wpcloud_client_site_details( int $wpcloud_site_id, bool $extra = false 
 function wpcloud_client_site_domain_alias_add( int $wpcloud_site_id, string $domain ): mixed {
     $client_name = wpcloud_get_client_name();
 
-	$response = wpcloud_client_get( $wpcloud_site_id, "site-alias/{$client}/{$wpcloud_site_id}/add/{$domain}" );
+	$response = wpcloud_client_get( $wpcloud_site_id, "site-alias/{$client_name}/{$wpcloud_site_id}/add/{$domain}" );
 	if ( is_wp_error( $response ) ) {
 		return $response;
 	}
@@ -238,7 +238,7 @@ function wpcloud_client_site_domain_alias_add( int $wpcloud_site_id, string $dom
 function wpcloud_client_site_domain_alias_list( int $wpcloud_site_id ): mixed {
     $client_name = wpcloud_get_client_name();
 
-	$response = wpcloud_client_get( $wpcloud_site_id, "site-alias/{$client}/{$wpcloud_site_id}/list" );
+	$response = wpcloud_client_get( $wpcloud_site_id, "site-alias/{$client_name}/{$wpcloud_site_id}/list" );
 	if ( is_wp_error( $response ) ) {
 		return $response;
 	}
@@ -261,7 +261,7 @@ function wpcloud_client_site_domain_alias_list( int $wpcloud_site_id ): mixed {
 function wpcloud_client_site_domain_alias_remove( int $wpcloud_site_id, string $domain ): mixed {
     $client_name = wpcloud_get_client_name();
 
-	$response = wpcloud_client_get( $wpcloud_site_id, "site-alias/{$client}/{$wpcloud_site_id}/remove/{$domain}" );
+	$response = wpcloud_client_get( $wpcloud_site_id, "site-alias/{$client_name}/{$wpcloud_site_id}/remove/{$domain}" );
 	if ( is_wp_error( $response ) ) {
 		return $response;
 	}

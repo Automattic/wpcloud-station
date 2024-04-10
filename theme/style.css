@@ -33,6 +33,7 @@ Nicolas Gallagher and Jonathan Neal https://necolas.github.io/normalize.css/
 	- Elements
 	- Links
 	- Forms
+	- Variables
 ## Layouts
 # Components
 	- Navigation
@@ -396,6 +397,7 @@ html {
 
 /* Typography
 --------------------------------------------- */
+
 body,
 button,
 input,
@@ -403,7 +405,7 @@ select,
 optgroup,
 textarea {
 	color: #404040;
-	font-family: -apple-system, BlinkMacSystemFont, "DM Sans", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+	font-family:  "DM Sans", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
 	font-size: 1rem;
 	line-height: 1.5;
 }
@@ -547,7 +549,7 @@ a:active {
 }
 
 a:focus {
-	outline: thin dotted;
+	outline: none;
 }
 
 a:hover,
@@ -636,6 +638,18 @@ select {
 textarea {
 	width: 100%;
 }
+/* variables
+--------------------------------------------- */
+:root {
+	--color-bw-white: #FFF;
+
+
+	--grid-unit-15: 12px;
+
+	--wp-cloud-1-accent-600: #F72B00;
+	--wp-cloud-1-accent-700:  #CC1B02;
+}
+
 
 /*--------------------------------------------------------------
 # Layouts
@@ -689,9 +703,42 @@ ul#primary-menu .current-menu-item {
 	background: #F72B00;
 }
 
+.hidden {
+	display: none !important;
+}
 /*--------------------------------------------------------------
 # Components
 --------------------------------------------------------------*/
+
+.button {
+	text-transform: uppercase;
+	border-radius: 100px;
+	border: 2px solid var(--wp-cloud-1-accent-600, #F72B00);
+	box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12), 0px 1px 2px 0px rgba(0, 0, 0, 0.20);
+	padding: 12px 24px;
+	color: var(--color-bw-white, #FFF);
+	text-align: center;
+	font-size: 12px;
+	font-style: normal;
+	font-weight: 500;
+	line-height: 100%; /* 12px */
+	letter-spacing: 0.6px;
+	text-decoration: none;
+	outline: none;
+
+}
+
+.button--solid {
+	background: var(--wp-cloud-1-accent-600, #F72B00);
+	&:hover {
+		background: var(--wp-cloud-1-accent-scale-700, #CC1B02);
+		border: 2px solid var(--wp-cloud-1-accent-700,  #CC1B02);
+		color: var(--color-bw-white, #FFF);
+	}
+
+
+}
+
 #primary-menu a::before {
 	width: 24px;
 	height: 24px;
@@ -715,6 +762,205 @@ ul#primary-menu .current-menu-item {
 
 .wpcloud-nav-tools a::before {
 	content: url("/wp-content/themes/wpcloud-dashboard/assets/nav-icons/tool.svg");
+}
+
+
+.wpcloud-site-list {
+
+	.page-header {
+		display: flex;
+		flex-direction: column;
+		row-gap: 24px;
+
+		padding: 48px 0 24px 64px;
+
+		div {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+		}
+		.page-title {
+			color: var(--color-bw-white, #FFF);
+			font-size: 24px;
+			font-style: normal;
+			font-weight: 500;
+			line-height: 120%; /* 28.8px */
+		}
+
+		.wpcloud-site-search {
+			border-radius: 2px;
+			border: 1px solid rgba(171, 163, 163, 0.50);
+
+			button, input {
+				border-radius: 0;
+				border: none;
+				background: none;
+				outline: none;
+				color: var(--color-bw-white, #FFF);
+			}
+			button {
+				background-image: url('./assets/search.svg');
+				background-repeat: no-repeat;
+				background-position: center;
+				text-indent: -9999px;
+			}
+
+			input::placeholder {
+				color: rgba(171, 163, 163, 0.50);
+				font-family: "SF Pro Text" Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+				font-size: 13px;
+				font-style: normal;
+				font-weight: 400;
+				line-height: 20px; /* 153.846% */
+			}
+		}
+	}
+}
+.wpcloud-site-table {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	align-self: stretch;
+
+	a {
+		text-decoration: none;
+	}
+
+	.wpcloud-list-row {
+		display: flex;
+		height: 56px;
+		min-height: 48px;
+		padding: 0px 60px 0px 64px;
+		align-items: center;
+		align-self: stretch;
+		color: var(--color-bw-white, #FFF);
+		font-size: 11px;
+		line-height: 20px; /* 181.818% */
+		letter-spacing: 0.55px;
+		border-bottom: 1px solid rgba(85, 85, 85, 0.50);
+
+		th {
+			text-transform: uppercase;
+		}
+		td {
+			font-size: 13px;
+		}
+		&.wpcloud-list-data:hover {
+				background: rgba(255, 255, 255, 0.10);
+		}
+	}
+
+	.wpcloud-list-item {
+		display: flex;
+		max-width: 280px;
+		align-items: center;
+		gap: var(--grid-unit-15, 12px);
+		align-self: stretch;
+		font-weight: 400;
+		justify-content: flex-start;
+	  cursor: default;
+
+		&.wpcloud-site { width: 280px; }
+		&.wpcloud-role { min-width: 100px; }
+		&.wpcloud-created { min-width: 100px; }
+		&.wpcloud-state { width: 100px; }
+		&.wpcloud-php { width: 80px; }
+		&.wpcloud-perf { width: 140px; }
+		&.wpcloud-datacenter { width: 140px; }
+		&.wpcloud-ip-addresses { width: 120px; }
+		&.wpcloud-fav {
+			width: 80px;
+			justify-content: center;
+		}
+		&.wpcloud-actions { width: 140px; }
+	}
+
+	.wpcloud-list-wpadmin-button {
+		display:flex;
+		align-items: center;
+		justify-content: space-between;
+		height: 28px;
+		border-radius: 100px;
+		background: rgba(255, 255, 255, 0.10);
+		padding: 4px var(--grid-unit-15, 12px) 4px 8px;
+		width: 100%;
+
+		&:hover {
+			background: rgba(255, 255, 255, 0.20);
+			color: white;
+		}
+		&:focus {
+			color: white;
+			text-decoration: none;
+			outline: none;
+		}
+	}
+
+	.wpcloud-performance {
+		display: flex;
+		align-items: center;
+		width: 110px;
+		justify-content: space-between;
+		.wpcloud-performance-mobile, .wpcloud-performance-desktop {
+			display: flex;
+			align-items: center;
+			img:first-child {
+				margin-right: 4px;
+			}
+		}
+	}
+
+	.site-card {
+		display: grid;
+		grid-template-columns: 40px 1fr;
+		grid-template-rows: repeat(2, 20px);
+		grid-column-gap: 12px;
+		grid-row-gap: 4px;
+
+		img {
+			grid-area: 1 / 1 / 3 / 2;
+			border-radius: var(--Radius-10, 4px);
+		}
+		h2 {
+			margin: 0;
+			padding: 0;
+			grid-area: 1 / 2 / 2 / 3;
+			a {
+				overflow: hidden;
+				color: var(--color-bw-white, #FFF);
+				text-overflow: ellipsis;
+				font-size: 14px;
+				font-style: normal;
+				font-weight: 500;
+				line-height: 20px; /* 142.857% */
+				&:hover {
+					font-weight: 700;
+				}
+			}
+		}
+		h3 {
+			margin: 0;
+			padding:0;
+			grid-area: 2 / 2 / 3 / 3;
+			a {
+				color: #ABA3A3;
+				font-size: 12px;
+				font-style: normal;
+				font-weight: 400;
+				line-height: 16px; /* 133.333% */
+				display: flex;
+				align-items: center;
+				column-gap: 2px;
+				img {
+					width: 12px;
+					height: 12px;
+				}
+				&:hover {
+					font-weight: 700;
+				}
+			}
+		}
+	}
 }
 
 /* Navigation
