@@ -1,27 +1,17 @@
 <?php
 /**
- * The template for displaying the sidebar.
- * @link https://developer.wordpress.org/themes/basics/template-hierarchy/
+ * The sidebar containing the main widget area
  *
- * @package WP Cloud
- * @subpackage WP_Cloud_Dashboard
+ * @link https://developer.wordpress.org/themes/basics/template-files/#template-partials
+ *
+ * @package WP_Cloud_Dashboard
  */
 
+if ( ! is_active_sidebar( 'primary-sidebar' ) ) {
+	return;
+}
 ?>
-<aside id="secondary" class="sidebar" role="complementary">
-	<section class="navigation">
-		<?php echo get_custom_logo(); ?>
-		<div class="wpcloud-menu">
-			<?php wp_nav_menu('WP Cloud Dashboard'); ?>
-		</div>
-	</section>
-	<section class="settings">
-		<div class="settings-avatar">
-			<?php echo get_avatar( get_current_user_id(), 32 ); ?>
-		</div>
-		<div class="settings-links">
-			<a href="#" class="settings" >Settings</a>
-			<a href="#" class="help" >Help</a>
-		</div>
-	</section>
+
+<aside id="secondary" class="widget-area">
+	<?php dynamic_sidebar( 'primary-sidebar' ); ?>
 </aside><!-- #secondary -->

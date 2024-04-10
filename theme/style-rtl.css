@@ -1,15 +1,15 @@
 /*!
 Theme Name: WP Cloud Dashboard
-Theme URI: http://underscores.me/
-Author: Automattic, Inc.
-Author URI: https://wp.cloud
-Description: Description
+Theme URI: https://underscores.me/
+Author: Automattic
+Author URI: https://automattic.com/
+Description: Hi. I'm a starter theme called <code>WP Cloud Dashboard</code>, or <em>underscores</em>, if you like. I'm a theme meant for hacking so don't use me as a <em>Parent Theme</em>. Instead try turning me into the next, most awesome, WordPress theme out there. That's what I'm here for.
 Version: 1.0.0
 Tested up to: 5.4
 Requires PHP: 5.6
 License: GNU General Public License v2 or later
 License URI: LICENSE
-Text Domain: wpcloud-dashboard
+Text Domain: WP Cloud Dashboard
 Tags: custom-background, custom-logo, custom-menu, featured-images, threaded-comments, translation-ready
 
 This theme, like WordPress, is licensed under the GPL.
@@ -403,7 +403,7 @@ select,
 optgroup,
 textarea {
 	color: #404040;
-	font-family: -apple-system, BlinkMacSystemFont, "DM Sans", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
 	font-size: 1rem;
 	line-height: 1.5;
 }
@@ -472,7 +472,7 @@ big {
 /* Elements
 --------------------------------------------- */
 body {
-	background: #1A1515;
+	background: #fff;
 }
 
 hr {
@@ -484,7 +484,7 @@ hr {
 
 ul,
 ol {
-	margin: 0 0 1.5em 3em;
+	margin: 0 3em 1.5em 0;
 }
 
 ul {
@@ -498,7 +498,7 @@ ol {
 li > ul,
 li > ol {
 	margin-bottom: 0;
-	margin-left: 1.5em;
+	margin-right: 1.5em;
 }
 
 dt {
@@ -533,17 +533,17 @@ table {
 /* Links
 --------------------------------------------- */
 a {
-	color: #fff;
+	color: #4169e1;
 }
 
 a:visited {
-	color: #fff;
+	color: #800080;
 }
 
 a:hover,
 a:focus,
 a:active {
-	color: #cf2e2e;
+	color: #191970;
 }
 
 a:focus {
@@ -641,81 +641,9 @@ textarea {
 # Layouts
 --------------------------------------------------------------*/
 
-.site {
-	display: flex;
-	flex-direction: row;
-}
-
-ul#primary-menu {
-	display: flex;
-	width: 272px;
-	height: calc(100vh - 2 * 48px);
-	padding: 0;
-	flex-direction: column;
-	align-items: flex-start;
-	flex-shrink: 0;
-	border-right: 1px solid rgba(85, 85, 85, 0.50);
-}
-
-.site-branding {
-	padding: 2rem 1rem;
-}
-
-ul#primary-menu li {
-	display: flex;
-	align-items: center;
-	align-self: stretch;
-	overflow: hidden;
-	color: var(--color-bw-white, #FFF);
-	text-overflow: ellipsis;
-	white-space: nowrap;
-	font-size: 14px;
-	font-style: normal;
-	font-weight: 400;
-	line-height: 20px;
-}
-
-ul#primary-menu li a {
-	padding: 8px var(--grid-unit-15, 12px);
-	height: 40px;
-	width: 100%;
-	display: flex;
-	align-items: center;
-	column-gap: 12px;
-}
-
-ul#primary-menu .current-menu-item {
-	border-radius: 4px;
-	background: #F72B00;
-}
-
 /*--------------------------------------------------------------
 # Components
 --------------------------------------------------------------*/
-#primary-menu a::before {
-	width: 24px;
-	height: 24px;
-}
-
-.wpcloud-nav-sites a::before {
-	content: url("/wp-content/themes/wpcloud-dashboard/assets/nav-icons/wp.svg");
-}
-
-.wpcloud-nav-collaborators a::before {
-	content: url("/wp-content/themes/wpcloud-dashboard/assets/nav-icons/people.svg");
-}
-
-.wpcloud-nav-usage a::before {
-	content: url("/wp-content/themes/wpcloud-dashboard/assets/nav-icons/trending.svg");
-}
-
-.wpcloud-nav-billing a::before {
-	content: url("/wp-content/themes/wpcloud-dashboard/assets/nav-icons/currency-dollar.svg");
-}
-
-.wpcloud-nav-tools a::before {
-	content: url("/wp-content/themes/wpcloud-dashboard/assets/nav-icons/tool.svg");
-}
 
 /* Navigation
 --------------------------------------------- */
@@ -728,27 +656,27 @@ ul#primary-menu .current-menu-item {
 	display: none;
 	list-style: none;
 	margin: 0;
-	padding-left: 0;
+	padding-right: 0;
 }
 
 .main-navigation ul ul {
 	box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
-	float: left;
+	float: right;
 	position: absolute;
 	top: 100%;
-	left: -999em;
+	right: -999em;
 	z-index: 99999;
 }
 
 .main-navigation ul ul ul {
-	left: -999em;
+	right: -999em;
 	top: 0;
 }
 
 .main-navigation ul ul li:hover > ul,
 .main-navigation ul ul li.focus > ul {
 	display: block;
-	left: auto;
+	right: auto;
 }
 
 .main-navigation ul ul a {
@@ -757,7 +685,7 @@ ul#primary-menu .current-menu-item {
 
 .main-navigation ul li:hover > ul,
 .main-navigation ul li.focus > ul {
-	left: auto;
+	right: auto;
 }
 
 .main-navigation li {
@@ -884,8 +812,8 @@ ul#primary-menu .current-menu-item {
 
 .wp-caption img[class*="wp-image-"] {
 	display: block;
-	margin-left: auto;
 	margin-right: auto;
+	margin-left: auto;
 }
 
 .wp-caption .wp-caption-text {
@@ -996,7 +924,7 @@ ul#primary-menu .current-menu-item {
 	font-size: 0.875rem;
 	font-weight: 700;
 	height: auto;
-	left: 5px;
+	right: 5px;
 	line-height: normal;
 	padding: 15px 23px 14px;
 	text-decoration: none;
@@ -1013,21 +941,13 @@ ul#primary-menu .current-menu-item {
 /* Alignments
 --------------------------------------------- */
 .alignleft {
-
-	/*rtl:ignore*/
 	float: left;
-
-	/*rtl:ignore*/
 	margin-right: 1.5em;
 	margin-bottom: 1.5em;
 }
 
 .alignright {
-
-	/*rtl:ignore*/
 	float: right;
-
-	/*rtl:ignore*/
 	margin-left: 1.5em;
 	margin-bottom: 1.5em;
 }
@@ -1035,7 +955,7 @@ ul#primary-menu .current-menu-item {
 .aligncenter {
 	clear: both;
 	display: block;
-	margin-left: auto;
 	margin-right: auto;
+	margin-left: auto;
 	margin-bottom: 1.5em;
 }
