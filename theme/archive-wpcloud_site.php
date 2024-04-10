@@ -67,6 +67,15 @@ $sites = new WP_Query( array(
 		</tbody>
 	</table>
 </main><!-- #site-content -->
-
+<script>
+	const wpcloudReady = fn => document.readyState !== 'loading' ? fn() : document.addEventListener('DOMContentLoaded', fn);
+	wpcloudReady(() => {
+		document.querySelectorAll('.wpcloud-fav').forEach((fav) => {
+			fav.addEventListener('click', () => {
+				fav.querySelector('.wpcloud-list-favorite').classList.toggle('is-favorite');
+			});
+		});
+	});
+</script>
 <?php
 get_footer();
