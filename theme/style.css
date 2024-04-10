@@ -702,6 +702,10 @@ ul#primary-menu .current-menu-item {
 	border-radius: 4px;
 	background: #F72B00;
 }
+
+.hidden {
+	display: none !important;
+}
 /*--------------------------------------------------------------
 # Components
 --------------------------------------------------------------*/

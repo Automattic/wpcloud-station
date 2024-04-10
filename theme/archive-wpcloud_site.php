@@ -25,7 +25,7 @@ $sites = new WP_Query( array(
 			<div class="wpcloud-site-search">
 				<input type="search" placeholder="Search Sites">
 			</div>
-			<div class="wpcloud-site-filter">
+			<div class="wpcloud-site-filter hidden">
 				<select>
 					<option value="all">All</option>
 					<option value="active">Active</option>
