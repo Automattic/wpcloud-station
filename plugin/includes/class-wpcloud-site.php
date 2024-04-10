@@ -139,15 +139,24 @@ class WPCLOUD_Site {
 
 		$owner_id = get_current_user_id();
 
+		// remove the create site action
+		remove_action( 'save_post_wpcloud_site', 'wpcloud_on_create_site', 10, 3 );
+
 		foreach ( $missing_sites as $site ) {
-			$site_id = self::create_post( $owner_id, intval($site->atomic_site_id), $site->domain_name, $site->domain_name, array() );
-			if ( is_wp_error( $site_id ) ) {
-				error_log( 'Error creating site post: ' . $site_id->get_error_message() );
+
+			$post = wp_insert_post(
+				array(
+					'post_title' => $site->domain_name,
+					'post_type' => 'wpcloud_site',
+					'post_status' => self::$initial_status,
+					'post_author' => $owner_id,
+				)
+			);
+			if ( is_wp_error( $post ) ) {
+				error_log( 'Error creating site post: ' . $post->get_error_message() );
 				continue;
 			}
-			wp_set_post_tags( $site_id, array( 'backfill' ), true );
-
-			do_action( WPCLOUD_ACTION_SITE_CREATED, $site_id, $owner_id, 'wp-admin' );
+			wp_set_post_tags( $post, array( 'backfill' ), true );
 		}
 	}
 
