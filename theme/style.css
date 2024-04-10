@@ -808,6 +808,20 @@ ul#primary-menu .current-menu-item {
 			outline: none;
 		}
 	}
+
+	.wpcloud-performance {
+		display: flex;
+		align-items: center;
+		width: 110px;
+		justify-content: space-between;
+		.wpcloud-performance-mobile, .wpcloud-performance-desktop {
+			display: flex;
+			align-items: center;
+			img:first-child {
+				margin-right: 4px;
+			}
+		}
+	}
 }
 
 

@@ -1,0 +1,10 @@
+<svg width="17" height="16" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="icon/hardware/laptop_24px">
+<mask id="mask0_3_25599" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="0" y="2" width="17" height="12">
+<path id="icon/hardware/laptop_24px_2" fill-rule="evenodd" clip-rule="evenodd" d="M15.1153 10.6665C15.1153 11.3998 14.5182 11.9998 13.7885 11.9998H16.4421V13.3332H0.520508V11.9998H3.1741C2.44436 11.9998 1.8473 11.3998 1.8473 10.6665V3.99984C1.8473 3.2665 2.44436 2.6665 3.1741 2.6665H13.7885C14.5182 2.6665 15.1153 3.2665 15.1153 3.99984V10.6665ZM13.7885 3.99984H3.1741V10.6665H13.7885V3.99984Z" fill="white"/>
+</mask>
+<g mask="url(#mask0_3_25599)">
+<rect id="Rectangle" x="0.520508" width="15.9215" height="16" fill="white"/>
+</g>
+</g>
+</svg>

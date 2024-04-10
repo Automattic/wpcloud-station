@@ -36,9 +36,34 @@ if ( ! function_exists( 'wpcloud_dashboard_performance_excerpt' ) ) :
 	 * Prints HTML with meta information for the current post-date/time.
 	 */
 	function wpcloud_dashboard_list_performance() {
-		//$performance = get_field( 'performance' );
+		// @TODO: get real performance data
+		$mobile = rand( 80, 100 );
+		$mobile_trend = rand( -1, 2 ) > 0 ? 'up' : 'down';
+		$mobile_icon = get_theme_file_uri( '/assets/phone_android_24px.svg' );
+		$mobile_trend_icon = get_theme_file_uri( '/assets/trending_' . $mobile_trend . '_24px.svg' );
 
-		echo '<span class="performance"> metric(arrow up) metric(arrow down)</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		$desktop = rand( 80, 100 );
+		$desktop_trend = rand( -1, 2 ) > 0 ? 'up' : 'down';
+		$desktop_icon = get_theme_file_uri( '/assets/laptop_24px.svg' );
+		$desktop_trend_icon = get_theme_file_uri( '/assets/trending_' . $desktop_trend . '_24px.svg' );
+
+		$perf = <<<PERF
+		<span class="wpcloud-performance">
+			<span class="wpcloud-performance-mobile">
+				<img src="$mobile_icon" alt="mobile-trends" />
+				<span> $mobile </span>
+				<img src="$mobile_trend_icon" alt="trending $mobile_trend"/>
+			</span>
+			<span class="wpcloud-performance-desktop">
+				<img src="$desktop_icon" alt="desktop-trends" />
+				<span> $desktop </span>
+				<img src="$desktop_trend_icon" alt="trending $desktop_trend"/>
+			</span>
+		</span>
+
+		PERF;
+
+		echo $perf; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 endif;
 
@@ -62,6 +87,18 @@ if ( ! function_exists( 'wpcloud_dashboard_wp_admin_button' ) ) :
 		$wp_icon = get_theme_file_uri( '/assets/wordpress.svg' );
 		$ex_link = get_theme_file_uri( '/assets/external-link.svg' );
 		echo '<a class="wpcloud-list-wpadmin-button" target="_blank" href="https://' . get_the_title() . '/wp-admin" class="button"><img src="'. $wp_icon . '" /><span>WP Admin</span><img src="' . $ex_link . '"/></a>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	}
+endif;
+
+if ( ! function_exists( 'wpcloud_dashboard_list_is_favorite' ) ) :
+	/**
+	 * Prints HTML with meta information for the current post-date/time.
+	 */
+	function wpcloud_dashboard_list_is_favorite() {
+		// @TODO: get real favorite data
+		$is_favorite = rand( -2, 1 ) > 0 ? '★' : '';
+
+		echo '<span class="wpcloud-is-favorite">' . $is_favorite . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 endif;
 

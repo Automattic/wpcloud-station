@@ -22,6 +22,6 @@
 	<td class="wpcloud-list-item wpcloud-perf"><?php wpcloud_dashboard_list_performance(); ?></td>
 	<td class="wpcloud-list-item wpcloud-datacenter">us-west-2</td>
 	<td class="wpcloud-list-item wpcloud-ip-addresses"><?php wpcloud_dashboard_list_ip_addresses(); ?></td>
-	<td class="wpcloud-list-item wpcloud-fav">★</td>
+	<td class="wpcloud-list-item wpcloud-fav"><?php wpcloud_dashboard_list_is_favorite(); ?></td>
 	<td class="wpcloud-list-item wpcloud-actions" ><?php wpcloud_dashboard_wp_admin_button(); ?></td>
 </tr><!-- #site-<?php the_ID(); ?> -->
