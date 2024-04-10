@@ -58,7 +58,7 @@ class WPCLOUD_Site {
 	 * @param WP_Post $post
 	 * @return WPCLOUD_Site
 	 */
-	public static function from_post( WP_Post $post ): self {
+	public static function from_post( WP_Post $post, bool $fetch_details = false ): self {
 		$site = new self();
 		$site->id = $post->ID;
 		$site->name = $post->post_title;
@@ -68,6 +68,10 @@ class WPCLOUD_Site {
 		$site->owner_id = intval( $post->post_author );
 		$site->domain = $post->post_title;
 		$site->wpcloud_site_id = intval( get_post_meta( $post->ID, 'wpcloud_site_id', true ) );
+
+		if ( $fetch_details && $site->wpcloud_site_id ) {
+			$site->set_client_details();
+		}
 		return $site;
 	}
 
@@ -82,11 +86,20 @@ class WPCLOUD_Site {
 		error_log( 'Site details: ' . print_r( $wpcloud_site, true ) );
 		$detail_keys = array_unique( array_merge( $detail_keys, self::WPCLOUD_DETAIL_KEYS ) );
 
-
 		$this->details = array_intersect_key( (array) $wpcloud_site, array_flip( $detail_keys ) );
 
 		if ( array_search('geo_affinity', $detail_keys) !== false ) {
 			$this->details[ 'geo_affinity' ] = $wpcloud_site->extra->server_pool->geo_affinity;
+			$this->details[ 'datacenter' ] = WPCLOUD_DATA_CENTERS[ $this->details[ 'geo_affinity' ] ];
+		}
+
+		$ips = wpcloud_client_domain_ip_addresses( $this->wpcloud_site_id, $this->domain );
+
+		if ( is_wp_error( $ips ) ) {
+			error_log( 'Error while fetching WP Cloud Site IP addresses: ' . $ips->get_error_message() );
+			return $ips;
+		} else {
+				$this->details[ 'ip_addresses' ] = $ips->suggested ?? $ips->ips;
 		}
 
 		return true;
