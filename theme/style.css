@@ -33,6 +33,7 @@ Nicolas Gallagher and Jonathan Neal https://necolas.github.io/normalize.css/
 	- Elements
 	- Links
 	- Forms
+	- Variables
 ## Layouts
 # Components
 	- Navigation
@@ -548,7 +549,7 @@ a:active {
 }
 
 a:focus {
-	outline: thin dotted;
+	outline: none;
 }
 
 a:hover,
@@ -637,6 +638,18 @@ select {
 textarea {
 	width: 100%;
 }
+/* variables
+--------------------------------------------- */
+:root {
+	--color-bw-white: #FFF;
+
+
+	--grid-unit-15: 12px;
+
+	--wp-cloud-1-accent-600: #F72B00;
+	--wp-cloud-1-accent-700:  #CC1B02;
+}
+
 
 /*--------------------------------------------------------------
 # Layouts
@@ -689,21 +702,39 @@ ul#primary-menu .current-menu-item {
 	border-radius: 4px;
 	background: #F72B00;
 }
-.w-80px {
-	width: 80px;
-}
-.w-100px {
-	width: 100px;
-}
-.w-120px {
-	width: 120px;
-}
-.w-140px {
-	width: 140px;
-}
 /*--------------------------------------------------------------
 # Components
 --------------------------------------------------------------*/
+
+.button {
+	text-transform: uppercase;
+	border-radius: 100px;
+	border: 2px solid var(--wp-cloud-1-accent-600, #F72B00);
+	box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12), 0px 1px 2px 0px rgba(0, 0, 0, 0.20);
+	padding: 12px 24px;
+	color: var(--color-bw-white, #FFF);
+	text-align: center;
+	font-size: 12px;
+	font-style: normal;
+	font-weight: 500;
+	line-height: 100%; /* 12px */
+	letter-spacing: 0.6px;
+	text-decoration: none;
+	outline: none;
+
+}
+
+.button--solid {
+	background: var(--wp-cloud-1-accent-600, #F72B00);
+	&:hover {
+		background: var(--wp-cloud-1-accent-scale-700, #CC1B02);
+		border: 2px solid var(--wp-cloud-1-accent-700,  #CC1B02);
+		color: var(--color-bw-white, #FFF);
+	}
+
+
+}
+
 #primary-menu a::before {
 	width: 24px;
 	height: 24px;
@@ -729,7 +760,31 @@ ul#primary-menu .current-menu-item {
 	content: url("/wp-content/themes/wpcloud-dashboard/assets/nav-icons/tool.svg");
 }
 
-.wpcloud.site-list {
+
+.wpcloud-site-list {
+
+	.page-header {
+		display: flex;
+		flex-direction: column;
+		row-gap: 24px;
+
+		padding: 48px 0 24px 64px;
+
+		div {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+		}
+		.page-title {
+			color: var(--color-bw-white, #FFF);
+			font-size: 24px;
+			font-style: normal;
+			font-weight: 500;
+			line-height: 120%; /* 28.8px */
+		}
+	}
+}
+.wpcloud-site-table {
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
@@ -743,7 +798,7 @@ ul#primary-menu .current-menu-item {
 		display: flex;
 		height: 56px;
 		min-height: 48px;
-		padding: 0px 60px 0px 48px;
+		padding: 0px 60px 0px 64px;
 		align-items: center;
 		align-self: stretch;
 		color: var(--color-bw-white, #FFF);
@@ -875,8 +930,6 @@ ul#primary-menu .current-menu-item {
 		}
 	}
 }
-
-
 
 /* Navigation
 --------------------------------------------- */

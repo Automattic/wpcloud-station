@@ -15,12 +15,27 @@ $sites = new WP_Query( array(
 ));
 ?>
 
-<main id="site-content">
+<main class="wpcloud-site-list" id="site-content">
 	<header class="page-header">
-		<h1 class="page-title"><?php esc_html_e( 'Sites', 'wpcloud-dashboard' ); ?></h1>
+		<div>
+			<h1 class="page-title"><?php esc_html_e( 'Sites', 'wpcloud-dashboard' ); ?></h1>
+			<a class="wpcloud-add-site button button--solid" href="#">Add Site</a>
+		</div>
+		<div>
+			<div class="wpcloud-site-search">
+				<input type="search" placeholder="Search Sites">
+			</div>
+			<div class="wpcloud-site-filter">
+				<select>
+					<option value="all">All</option>
+					<option value="active">Active</option>
+					<option value="inactive">Inactive</option>
+				</select>
+			</div>
+		</div>
 	</header><!-- .page-header -->
 
-	<table class="wpcloud site-list">
+	<table class="wpcloud-site-table">
 		<thead>
 		<tr class="wpcloud-list-row" >
 			<th class="wpcloud-list-item wpcloud-site"><?php esc_html_e( 'Site', 'wpcloud-dashboard' ); ?></th>
