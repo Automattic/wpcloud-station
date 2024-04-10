@@ -7,31 +7,78 @@
  * @package WP_Cloud_Dashboard
  */
 
+if ( ! function_exists( 'wpcloud_dashboard_list_site_card' ) ) :
+	/**
+	 * Prints HTML with meta information for the current post-date/time.
+	 */
+	function wpcloud_dashboard_list_site_card() {
+		$site_url = get_the_title();
+		$site_name = get_the_title();
+		$site_url = get_the_permalink();
+
+		echo '<a href="' . $site_url . '" class="site-card">' . $site_name . '</a>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	}
+endif;
+
+if ( ! function_exists( 'wpcloud_dashboard_site_status' ) ) :
+	/**
+	 * Prints HTML with meta information for the current post-date/time.
+	 */
+	function wpcloud_dashboard_site_status() {
+		$status = get_post_status() === 'publish' ? 'Live' : 'Provisioning';
+
+		echo '<span class="site-status">' . $status . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	}
+endif;
+
+if ( ! function_exists( 'wpcloud_dashboard_performance_excerpt' ) ) :
+	/**
+	 * Prints HTML with meta information for the current post-date/time.
+	 */
+	function wpcloud_dashboard_list_performance() {
+		//$performance = get_field( 'performance' );
+
+		echo '<span class="performance"> metric(arrow up) metric(arrow down)</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	}
+endif;
+
+if ( ! function_exists( 'wpcloud_dashboard_list_ip_addresses' ) ) :
+	/**
+	 * Prints HTML with meta information for the current post-date/time.
+	 */
+	function wpcloud_dashboard_list_ip_addresses() {
+		$ip_addresses = array( '123.456.789.012', '123.456.789.013' );
+
+		echo '<span class="ip-addresses">' . implode('<br />', $ip_addresses ) . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	}
+endif;
+
+if ( ! function_exists( 'wpcloud_dashboard_wp_admin_button' ) ) :
+	/**
+	 * Prints HTML with meta information for the current post-date/time.
+	 */
+	function wpcloud_dashboard_wp_admin_button() {
+
+		$wp_icon = get_theme_file_uri( '/assets/wordpress.svg' );
+		$ex_link = get_theme_file_uri( '/assets/external-link.svg' );
+		echo '<a class="wpcloud-list-wpadmin-button" target="_blank" href="https://' . get_the_title() . '/wp-admin" class="button"><img src="'. $wp_icon . '" /><span>WP Admin</span><img src="' . $ex_link . '"/></a>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	}
+endif;
+
 if ( ! function_exists( 'wpcloud_dashboard_posted_on' ) ) :
 	/**
 	 * Prints HTML with meta information for the current post-date/time.
 	 */
-	function wpcloud_dashboard_posted_on() {
-		$time_string = '<time class="entry-date published updated" datetime="%1$s">%2$s</time>';
-		if ( get_the_time( 'U' ) !== get_the_modified_time( 'U' ) ) {
-			$time_string = '<time class="entry-date published" datetime="%1$s">%2$s</time><time class="updated" datetime="%3$s">%4$s</time>';
-		}
+	function wpcloud_dashboard_created_on() {
+		$time_string = '<time class="entry-date created" datetime="%1$s">%2$s</time>';
+
 
 		$time_string = sprintf(
 			$time_string,
 			esc_attr( get_the_date( DATE_W3C ) ),
-			esc_html( get_the_date() ),
-			esc_attr( get_the_modified_date( DATE_W3C ) ),
-			esc_html( get_the_modified_date() )
+			esc_html( get_the_date('Y/m/d') ),
 		);
-
-		$posted_on = sprintf(
-			/* translators: %s: post date. */
-			esc_html_x( 'Posted on %s', 'post date', 'wpcloud-dashboard' ),
-			'<a href="' . esc_url( get_permalink() ) . '" rel="bookmark">' . $time_string . '</a>'
-		);
-
-		echo '<span class="posted-on">' . $posted_on . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo '<span class="posted-on">' . $time_string . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 	}
 endif;

@@ -396,6 +396,7 @@ html {
 
 /* Typography
 --------------------------------------------- */
+
 body,
 button,
 input,
@@ -403,7 +404,7 @@ select,
 optgroup,
 textarea {
 	color: #404040;
-	font-family: -apple-system, BlinkMacSystemFont, "DM Sans", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+	font-family:  "DM Sans", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
 	font-size: 1rem;
 	line-height: 1.5;
 }
@@ -688,7 +689,18 @@ ul#primary-menu .current-menu-item {
 	border-radius: 4px;
 	background: #F72B00;
 }
-
+.w-80px {
+	width: 80px;
+}
+.w-100px {
+	width: 100px;
+}
+.w-120px {
+	width: 120px;
+}
+.w-140px {
+	width: 140px;
+}
 /*--------------------------------------------------------------
 # Components
 --------------------------------------------------------------*/
@@ -716,6 +728,89 @@ ul#primary-menu .current-menu-item {
 .wpcloud-nav-tools a::before {
 	content: url("/wp-content/themes/wpcloud-dashboard/assets/nav-icons/tool.svg");
 }
+
+.wpcloud.site-list {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	align-self: stretch;
+
+	a {
+		text-decoration: none;
+	}
+
+	.wpcloud-list-row {
+		display: flex;
+		height: 56px;
+		min-height: 48px;
+		padding: 0px 60px 0px 48px;
+		align-items: center;
+		align-self: stretch;
+		color: var(--color-bw-white, #FFF);
+		font-size: 11px;
+		line-height: 20px; /* 181.818% */
+		letter-spacing: 0.55px;
+		border-bottom: 1px solid rgba(85, 85, 85, 0.50);
+
+		th {
+			text-transform: uppercase;
+		}
+		td {
+			font-size: 13px;
+		}
+		&.wpcloud-list-data:hover {
+				background: rgba(255, 255, 255, 0.10);
+		}
+	}
+
+	.wpcloud-list-item {
+		display: flex;
+		max-width: 280px;
+		align-items: center;
+		gap: var(--grid-unit-15, 12px);
+		align-self: stretch;
+		font-weight: 400;
+		justify-content: flex-start;
+	  cursor: default;
+
+		&.wpcloud-site { width: 280px; }
+		&.wpcloud-role { min-width: 100px; }
+		&.wpcloud-created { min-width: 100px; }
+		&.wpcloud-state { width: 100px; }
+		&.wpcloud-php { width: 80px; }
+		&.wpcloud-perf { width: 140px; }
+		&.wpcloud-datacenter { width: 140px; }
+		&.wpcloud-ip-addresses { width: 120px; }
+		&.wpcloud-fav {
+			width: 80px;
+			justify-content: center;
+		}
+		&.wpcloud-actions { width: 140px; }
+	}
+
+	.wpcloud-list-wpadmin-button {
+		display:flex;
+		align-items: center;
+		justify-content: space-between;
+		height: 28px;
+		border-radius: 100px;
+		background: rgba(255, 255, 255, 0.10);
+		padding: 4px var(--grid-unit-15, 12px) 4px 8px;
+		width: 100%;
+
+		&:hover {
+			background: rgba(255, 255, 255, 0.20);
+			color: white;
+		}
+		&:focus {
+			color: white;
+			text-decoration: none;
+			outline: none;
+		}
+	}
+}
+
+
 
 /* Navigation
 --------------------------------------------- */
