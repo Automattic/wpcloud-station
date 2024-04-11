@@ -810,7 +810,7 @@ button.button, .button {
 	background-color: transparent;
 }
 
-button.disabled {
+button:disabled {
 	background: var(--wp-cloud-1-base-30, #5E4C4C);
 	border:  2px solid var(--wp-cloud-1-contrast-70, #978B8B);
 	color: var(--wp-cloud-1-contrast-70, #978B8B);
@@ -1148,6 +1148,42 @@ button.disabled {
 		align-items: flex-start;
 	}
 }
+
+.wpcloud-login {
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+
+
+	.wpcloud-notice--error {
+		width: 400px;
+		background: #F72B00;
+		color: var(--color-bw-white, #FFF);
+		padding: 16px;
+		border-radius: 4px;
+	}
+
+	h1 {
+		color: var(--color-bw-white, #FFF);;
+		font-size: 16px;
+		font-style: normal;
+		font-weight: 700;
+		line-height: 20px; /* 125% */
+		margin: 0;
+	}
+	p {
+		color: #ABA3A3;
+		font-size: 13px;
+		font-style: normal;
+		font-weight: 400;
+		line-height: 20px; /* 153.846% */
+		margin: 0 0 16px;
+	}
+}
+
 /* Navigation
 --------------------------------------------- */
 .main-navigation {

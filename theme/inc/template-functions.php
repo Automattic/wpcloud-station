@@ -35,3 +35,8 @@ function wpcloud_dashboard_pingback_header() {
 	}
 }
 add_action( 'wp_head', 'wpcloud_dashboard_pingback_header' );
+
+function wpcloud_site_name() {
+	$name = get_bloginfo( 'name' );
+	return $name ?? 'WP Cloud';
+}

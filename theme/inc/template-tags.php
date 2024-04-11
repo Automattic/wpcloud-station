@@ -7,6 +7,19 @@
  * @package WP_Cloud_Dashboard
  */
 
+ if ( ! function_exists( 'wpcloud_show_logo' ) ) {
+	function wpcloud_show_logo() {
+		if ( has_custom_logo() ) {
+			the_custom_logo();
+		} else {
+			$home_link = esc_url( home_url( '/' ) );
+			$name = get_bloginfo( 'name' );
+			$default_logo = get_template_directory_uri() . '/assets/wpcloud.svg';
+			printf( '<a href="%s" rel="home"><img src="%s" alt="%s" /></a>', $home_link, $default_logo, $name ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		}
+ 	}
+}
+
 if ( ! function_exists( 'wpcloud_dashboard_list_site_card' ) ) :
 	/**
 	 * Prints HTML with meta information for the current post-date/time.
