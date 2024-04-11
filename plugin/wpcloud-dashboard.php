@@ -54,5 +54,10 @@ define( 'WPCLOUD_DATA_CENTERS', array(
  */
 define( 'WPCLOUD_CAN_MANAGE_SITES', 'wpcloud_manage_sites' );
 
+/**
+ * Access Control
+ */
+define( 'WPCLOUD_PRIVATE_CATEGORY', 'wpcloud_private' );
+
 // Initialize the plugin.
 require_once plugin_dir_path( __FILE__ ) . 'init.php';

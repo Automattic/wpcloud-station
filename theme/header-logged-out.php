@@ -24,34 +24,6 @@
 <?php wp_body_open(); ?>
 <div id="page" class="site">
 	<a class="skip-link screen-reader-text" href="#primary"><?php esc_html_e( 'Skip to content', 'wpcloud-dashboard' ); ?></a>
-
-	<header id="masthead" class="site-header">
-		<div class="site-branding">
-			<?php wpcloud_show_logo() ?>
-		</div><!-- .site-branding -->
-
-		<nav id="site-navigation" class="main-navigation">
-			<button class="menu-toggle" aria-controls="primary-menu" aria-expanded="false"><?php esc_html_e( 'Primary Menu', 'wpcloud-dashboard' ); ?></button>
-			<?php
-			wp_nav_menu(
-				array(
-					'theme_location' => 'primary',
-					'menu_id'        => 'primary-menu',
-				)
-			);
-			?>
-		</nav><!-- #site-navigation -->
-		<nav id="profile-navigation" class="profile-navigation">
-			<?php
-			wp_nav_menu(
-				array(
-					'theme_location' => 'footer',
-					'menu_id'        => 'footer-menu',
-				)
-			);
-			?>
-		</nav>
-	</header><!-- #masthead -->
 	<div id="wpcloud-content">
 		<?php
 		/**
