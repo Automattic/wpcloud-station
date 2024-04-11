@@ -19,7 +19,7 @@ $sites = new WP_Query( array(
 	<header class="page-header">
 		<div>
 			<h1 class="page-title"><?php esc_html_e( 'Sites', 'wpcloud-dashboard' ); ?></h1>
-			<a class="wpcloud-add-site button button--solid" href="#">Add Site</a>
+			<a class="wpcloud-add-site button button--solid" href="/new-site">Add Site</a>
 		</div>
 		<div>
 			<div class="wpcloud-site-search">
