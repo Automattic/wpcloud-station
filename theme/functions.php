@@ -176,3 +176,40 @@ require get_template_directory() . '/inc/customizer.php';
 if ( defined( 'JETPACK__VERSION' ) ) {
 	require get_template_directory() . '/inc/jetpack.php';
 }
+
+add_action('init', 'wpcloud_start_session', 1);
+function wpcloud_start_session() {
+	session_start();
+}
+
+function wpcloud_dashboard_add_notice( $message, $type = 'success' ) {
+	$_SESSION['notices'][] = array(
+		'message' => $message,
+		'type'    => $type,
+	);
+	session_write_close();
+}
+
+function wpcloud_dashboard_notices() {
+	if ( isset( $_SESSION['notices'] ) ) {
+		$notices = $_SESSION['notices'];
+		foreach ( $notices as $notice ) {
+			?>
+			<div class="notice notice-<?php echo esc_attr( $notice['type'] ); ?> is-dismissible">
+				<p><?php echo esc_html( $notice['message'] ); ?></p>
+			</div>
+			<?php
+		}
+
+	}
+	session_unset();
+}
+
+add_action('wp_logout','wpcloud_end_session');
+add_action('wp_login','wpcloud_end_session');
+add_action('end_session_action','wpcloud_end_session');
+
+function wpcloud_end_session() {
+
+	session_destroy ();
+}
