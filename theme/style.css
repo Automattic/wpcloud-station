@@ -655,15 +655,43 @@ textarea {
 # Layouts
 --------------------------------------------------------------*/
 
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	overflow-y: scroll;
+	overflow-x: hidden;
+}
+
 .site {
-	display: flex;
-	flex-direction: row;
+	display: grid;
+	grid-template-areas: "header main"
+	                     "header footer";
+	grid-template-columns: 272px auto;
+	grid-template-rows: 1fr 60px;
+	min-height: 100vh;
+}
+
+.site-header {
+	grid-area: header;
+}
+
+.site-footer {
+	grid-area: footer;
+}
+
+.site-content {
+	grid-area: main;
+	overflow: auto;
 }
 
 ul#primary-menu {
 	display: flex;
 	width: 272px;
-	height: calc(100vh - 2 * 48px);
+	height: 100%;
 	padding: 0;
 	flex-direction: column;
 	align-items: flex-start;
@@ -1049,7 +1077,7 @@ ul#primary-menu .current-menu-item {
 .posts-navigation,
 .site-main
 .post-navigation {
-	margin: 0 0 1.5em;
+	margin: 0;
 }
 
 .comment-navigation .nav-links,
@@ -1079,7 +1107,7 @@ ul#primary-menu .current-menu-item {
 
 .post,
 .page {
-	margin: 0 0 1.5em;
+	margin: 0;
 }
 
 .updated:not(.published) {
