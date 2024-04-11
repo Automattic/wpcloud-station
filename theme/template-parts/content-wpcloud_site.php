@@ -17,7 +17,7 @@ $site_details = $cloud_site->details;
 
 <tr class="wpcloud-list-row wpcloud-list-data" id="site-<?php the_ID(); ?>" <?php post_class(); ?>>
 	<td class="wpcloud-list-item wpcloud-site"><?php wpcloud_dashboard_list_site_card() ?></td>
-	<td class="wpcloud-list-item wpcloud-role"><?php the_author(); ?></td>
+	<td class="wpcloud-list-item wpcloud-role"><?php wpcloud_dashboard_list_owner() ?></td>
 	<td class="wpcloud-list-item wpcloud-created"><?php wpcloud_dashboard_list_created_on(); ?></td>
 	<td class="wpcloud-list-item wpcloud-state"><?php wpcloud_dashboard_list_status(); ?></td>
 	<td class="wpcloud-list-item wpcloud-php"><?php wpcloud_dashboard_list_php_version($site_details); ?></td>

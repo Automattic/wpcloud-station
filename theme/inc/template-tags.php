@@ -42,6 +42,18 @@ SITE;
 	}
 endif;
 
+if ( ! function_exists( 'wpcloud_dashboard_list_owner' ) ) :
+	/**
+	 * Prints HTML with meta information for the current post-date/time.
+	 */
+	function wpcloud_dashboard_list_owner() {
+		$owner = get_the_author_meta( 'user_login' );
+		$link = get_edit_user_link( get_the_author_meta( 'ID' ) );
+
+		echo '<span class="site-owner"><a href=" ' . $link . ' ">' . $owner . '</a></span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	}
+endif;
+
 if ( ! function_exists( 'wpcloud_dashboard_site_status' ) ) :
 	/**
 	 * Prints HTML with meta information for the current post-date/time.
