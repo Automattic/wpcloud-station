@@ -1,73 +1,173 @@
 <?php
 /**
- * The template for displaying single posts and pages.
+ * The template for displaying all single posts
  *
- * @link https://developer.wordpress.org/themes/basics/template-hierarchy/
+ * @link https://developer.wordpress.org/themes/basics/template-hierarchy/#single-post
  *
- * @package WP Cloud
- * @subpackage WP_Cloud_Dashboard
+ * @package WP_Cloud_Dashboard
  */
+
+//  add_filter('nav_menu_css_class' , 'wpcloud-nav-sites' , 10 , 2);
+// function special_nav_class($classes, $item){
+//     if( in_array('current_page_parent', $classes) ){
+//     }
+// return $classes;
+// }
+function wpcloud_sites_set_current_menu_item( $classes, $item ) {
+    if ( is_single() && 'Sites' === $item->title ) {
+        $classes[] = 'current-menu-item';
+    }
+
+    return $classes;
+}
+add_filter( 'nav_menu_css_class', 'wpcloud_sites_set_current_menu_item', 10, 2 );
+
 get_header();
-
-$sites = new WP_Query( array(
-	'post_type' => 'wpcloud_site',
-	'author' => get_current_user_id(),
-	'post_status' => 'any',
-));
 ?>
+	<style>
+		.wpcloud-site-details {
+			display: grid;
+			grid-template-areas: "site-thumbnail site-title site-title"
+							     "site-thumbnail site-url site-url"
+								 ". nav content";
+			grid-template-columns: 100px 240px auto;
+			grid-template-rows: 50px 80px auto;
 
-<main class="wpcloud-site-list" id="site-content">
-	<header class="page-header">
-		<div>
-			<h1 class="page-title"><?php esc_html_e( 'Sites', 'wpcloud-dashboard' ); ?></h1>
-			<a class="wpcloud-add-site button button--solid" href="#">Add Site</a>
-		</div>
-		<div>
-			<div class="wpcloud-site-search">
-				<button>Find</button>
-				<input type="search" placeholder="Search sites">
-			</div>
-			<div class="wpcloud-site-filter hidden">
-				<select>
-					<option value="all">All</option>
-					<option value="active">Active</option>
-					<option value="inactive">Inactive</option>
-				</select>
-			</div>
-		</div>
-	</header><!-- .page-header -->
+			ul {
+				display: flex;
+				height: 100%;
+				padding: 0;
+				flex-direction: column;
+				align-items: flex-start;
+				flex-shrink: 0;
+				margin: 0;
 
-	<table class="wpcloud-site-table">
-		<thead>
-		<tr class="wpcloud-list-row" >
-			<th class="wpcloud-list-item wpcloud-site"><?php esc_html_e( 'Site', 'wpcloud-dashboard' ); ?></th>
-			<th class="wpcloud-list-item wpcloud-role"><?php esc_html_e( 'Owner', 'wpcloud-dashboard' ); ?></th>
-			<th class="wpcloud-list-item wpcloud-created"><?php esc_html_e( 'Created', 'wpcloud-dashboard' ); ?></th>
-			<th class="wpcloud-list-item wpcloud-state"><?php esc_html_e( 'State', 'wpcloud-dashboard' ); ?></th>
-			<th class="wpcloud-list-item wpcloud-php"><?php esc_html_e( 'PHP', 'wpcloud-dashboard' ); ?></th>
-			<th class="wpcloud-list-item wpcloud-perf"><?php esc_html_e( 'Performance', 'wpcloud-dashboard' ); ?></th>
-			<th class="wpcloud-list-item wpcloud-datacenter"><?php esc_html_e( 'Datacenter', 'wpcloud-dashboard' ); ?></th>
-			<th class="wpcloud-list-item wpcloud-ip-addresses"><?php esc_html_e( 'IP Addresses', 'wpcloud-dashboard' ); ?></th>
-			<th class="wpcloud-list-item wpcloud-fav" ><?php esc_html_e( '★', 'wpcloud-dashboard' ); ?></th>
-			<th class="wpcloud-list-item wpcloud-actions" ><?php esc_html_e( 'Actions', 'wpcloud-dashboard' ); ?></th>
-		</tr>
-		</thead>
-		<tbody>
+				.current-menu-item {
+					border-radius: 4px;
+					background: #F72B00;
+				}
 
-	<?php
-	if ( $sites->have_posts() ) {
+				li {
+					display: flex;
+					align-items: center;
+					align-self: stretch;
+					overflow: hidden;
+					color: var(--color-bw-white, #FFF);
+					text-overflow: ellipsis;
+					white-space: nowrap;
+					font-size: 14px;
+					font-style: normal;
+					font-weight: 400;
+					line-height: 20px;
 
-		while ( $sites->have_posts() ) {
-			$sites->the_post();
+					a {
+						height: 40px;
+						width: 100%;
+						display: flex;
+						align-items: center;
+						column-gap: 12px;
+						text-decoration: none;
+						padding: 8px var(--grid-unit-15, 12px);
+					}
+				}
+			}
 
-			get_template_part( 'template-parts/content', get_post_type() );
+			.wpcloud-site-details-content {
+				grid-area: content;
+				display: flex;
+
+				.wpcloud-site-details-section {
+					display: none;
+				}
+
+				.active {
+					display: block;
+				}
+			}
+
+			.site-thumbnail {
+				grid-area: site-thumbnail;
+				height: 80px;
+			}
+
+			.site-title {
+				grid-area: site-title;
+				margin: 0;
+
+				a {
+					display: inline-block;
+				}
+
+				a.button {
+					display: flex;
+					align-items: center;
+					justify-content: space-between;
+					border-radius: 100px;
+					padding: 4px var(--grid-unit-15, 12px) 4px 8px;
+					width: 150px;
+					float: right;
+				}
+			}
+
+			.site-url {
+				grid-area: site-url;
+				margin: 0;
+
+				a {
+					color: #ABA3A3;
+				}
+			}
+
+			.wpcloud-site-details-nav {
+				grid-area: nav;
+			}
+
+			.wpcloud-site-details-section {
+				width: 600px;
+				color: #fff;
+				border: 1px solid rgba(85, 85, 85, 0.50);
+				margin-left: 50px;
+				padding: 0 30px 30px 30px;
+
+				h3 {
+					color: #ABA3A3;
+					margin: 20px 0 5px;
+				}
+
+				p {
+					margin: 0;
+				}
+
+				select {
+					border-radius: 2px;
+					border: 1px solid rgba(171, 163, 163, 0.50);
+					background: none;
+					outline: none;
+					color: var(--color-bw-white, #FFF);
+					padding: 4px;
+					font-size: 14px;
+					width: 100%;
+				}
+			}
 		}
-	}
+	</style>
 
-	?>
-		</tbody>
-	</table>
-</main><!-- #site-content -->
+	<main class="wpcloud-site-details site-content" id="site-content">
 
+		<?php
+		while ( have_posts() ) :
+			the_post();
+
+			get_template_part( 'template-parts/single', get_post_type() );
+
+			// If comments are open or we have at least one comment, load up the comment template.
+			if ( comments_open() || get_comments_number() ) :
+				comments_template();
+			endif;
+
+		endwhile; // End of the loop.
+		?>
+
+	</main><!-- #main -->
 <?php
 get_footer();
