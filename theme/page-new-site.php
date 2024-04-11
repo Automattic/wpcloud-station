@@ -44,7 +44,7 @@ if ( isset( $_POST['action'] ) && 'create' === $_POST['action'] ) {
 
 }
 
-get_header();
+get_header( 'sidebar' );
 ?>
 <main class="wpcloud-new-site">
 	<header>

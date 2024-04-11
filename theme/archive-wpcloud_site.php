@@ -7,7 +7,7 @@
  * @package WP Cloud
  * @subpackage WP_Cloud_Dashboard
  */
-get_header();
+get_header( 'sidebar' );
 $args = array(
 	'post_type' => 'wpcloud_site',
 	'post_status' => 'any',
