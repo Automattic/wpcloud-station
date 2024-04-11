@@ -29,12 +29,56 @@ function register_controllers(): void {
 }
 add_action( 'rest_api_init', 'register_controllers' );
 
+
+/**
+ * Set up ACL for WP Cloud specific pages
+ */
+function wpcloud_setup_acl(): void {
+	// Verify that the private category exists
+	wp_insert_term( 'WP Cloud Private Page', 'category', array(
+    'description' => 'Private category for WP Cloud specific pages.',
+    'slug' => WPCLOUD_PRIVATE_CATEGORY,
+	) );
+
+	// Allow adding categories to pages
+	register_taxonomy_for_object_type('category', 'page');
+
+	add_filter('template_redirect', 'wpcloud_verify_logged_in');
+}
+
+/**
+ * Verify logged in for WP Cloud specific pages
+ */
+function wpcloud_verify_logged_in(): void {
+	if ( is_admin() ) {
+		return;
+	}
+
+	$categories = array_reduce(get_the_category(), function($categories, $category) {
+		$categories[] = $category->slug;
+		return $categories;
+	}, []);
+
+	$is_wpcloud_site_archive = is_post_type_archive( 'wpcloud_site' );
+	$is_wpcloud_private_page = array_search( WPCLOUD_PRIVATE_CATEGORY, $categories ) !== false;
+
+	if ( $is_wpcloud_site_archive || $is_wpcloud_private_page ) {
+		if ( ! is_user_logged_in() ) {
+			header( 'Location: /login/' ) ;
+   		exit();
+		} else {
+			error_log('User is logged in and can view the page.');
+		}
+	}
+}
+
 /**
  * Initialize the plugin.
  */
 function wpcloud_init(): void {
 	wpcloud_add_capabilities();
 	wpcloud_register_site_post_type();
+	wpcloud_setup_acl();
 }
 add_action( 'init', 'wpcloud_init' );
 
