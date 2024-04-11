@@ -8,11 +8,14 @@
  * @subpackage WP_Cloud_Dashboard
  */
 get_header();
-$sites = new WP_Query( array(
+$args = array(
 	'post_type' => 'wpcloud_site',
-	'author' => get_current_user_id(),
 	'post_status' => 'any',
-));
+);
+if ( ! current_user_can( 'manage_options' ) ) {
+	$args['author__in'] = array( get_current_user_id() );
+}
+$sites = new WP_Query( $args );
 ?>
 
 <main class="wpcloud-site-list" id="site-content">
