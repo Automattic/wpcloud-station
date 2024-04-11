@@ -563,13 +563,7 @@ button,
 input[type="button"],
 input[type="reset"],
 input[type="submit"] {
-	border: 1px solid;
-	border-color: #ccc #ccc #bbb;
-	border-radius: 3px;
-	background: #e6e6e6;
-	color: rgba(0, 0, 0, 0.8);
-	line-height: 1;
-	padding: 0.6em 1em 0.4em;
+
 }
 
 button:hover,
@@ -660,6 +654,11 @@ textarea {
 	flex-direction: row;
 }
 
+header#masthead {
+	border-right: 1px solid rgba(85, 85, 85, 0.50);
+	padding: 48px 24px;
+}
+
 ul#primary-menu {
 	display: flex;
 	width: 272px;
@@ -668,11 +667,11 @@ ul#primary-menu {
 	flex-direction: column;
 	align-items: flex-start;
 	flex-shrink: 0;
-	border-right: 1px solid rgba(85, 85, 85, 0.50);
+
 }
 
 .site-branding {
-	padding: 2rem 1rem;
+	padding-bottom: 48px;
 }
 
 ul#primary-menu li {
@@ -710,7 +709,37 @@ ul#primary-menu .current-menu-item {
 # Components
 --------------------------------------------------------------*/
 
-.button {
+.notice  p {
+		background:var(--wp-cloud-1-accent-600, #F72B00);
+    margin: 0;
+    padding: 20px 64px;
+    color: var(--color-bw-white, #FFF);
+}
+
+div#wpcloud-content {
+	width: 100%;
+}
+
+nav.breadcrumbs {
+	 a {
+			display: flex;
+			align-items: center;
+			text-decoration: none;
+			text-align: center;
+			color: #ABA3A3;
+
+			font-size: 12px;
+			font-style: normal;
+			font-weight: 400;
+			line-height: 16px; /* 133.333% */
+
+			&:hover {
+				color: var(--color-bw-white, #FFF);
+			}
+		}
+}
+
+button.button, .button {
 	text-transform: uppercase;
 	border-radius: 100px;
 	border: 2px solid var(--wp-cloud-1-accent-600, #F72B00);
@@ -725,7 +754,13 @@ ul#primary-menu .current-menu-item {
 	letter-spacing: 0.6px;
 	text-decoration: none;
 	outline: none;
+	background-color: transparent;
+}
 
+button.disabled {
+	background: var(--wp-cloud-1-base-30, #5E4C4C);
+	border:  2px solid var(--wp-cloud-1-contrast-70, #978B8B);
+	color: var(--wp-cloud-1-contrast-70, #978B8B);
 }
 
 .button--solid {
@@ -735,8 +770,6 @@ ul#primary-menu .current-menu-item {
 		border: 2px solid var(--wp-cloud-1-accent-700,  #CC1B02);
 		color: var(--color-bw-white, #FFF);
 	}
-
-
 }
 
 #primary-menu a::before {
@@ -766,12 +799,11 @@ ul#primary-menu .current-menu-item {
 
 
 .wpcloud-site-list {
-
 	.page-header {
 		display: flex;
 		flex-direction: column;
 		row-gap: 24px;
-
+		max-width: 1404px;;
 		padding: 48px 0 24px 64px;
 
 		div {
@@ -785,6 +817,7 @@ ul#primary-menu .current-menu-item {
 			font-style: normal;
 			font-weight: 500;
 			line-height: 120%; /* 28.8px */
+			margin: 0;
 		}
 
 		.wpcloud-site-search {
@@ -803,6 +836,7 @@ ul#primary-menu .current-menu-item {
 				background-repeat: no-repeat;
 				background-position: center;
 				text-indent: -9999px;
+				width: 32px;
 			}
 
 			input::placeholder {
@@ -975,6 +1009,92 @@ ul#primary-menu .current-menu-item {
 
 } /* end .wpcloud-site-table */
 
+
+.wpcloud-new-site {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+
+	header {
+		padding: 48px 64px 32px;
+		width: 100%;
+		border-bottom: 1px solid rgba(85, 85, 85, 0.50);
+
+		h1 {
+			color: var(--color-bw-white, #FFF);
+			font-size: 24px;
+			font-style: normal;
+			font-weight: 500;
+			line-height: 120%; /* 28.8px */
+			margin: 24px 0 0;
+		}
+
+	}
+
+	article {
+		padding: 24px 64px;
+	}
+}
+
+.wpcloud-form {
+	border-radius: 10px;
+	border: 1px solid rgba(85, 85, 85, 0.50);
+	padding: 16px;
+	width: fit-content;
+
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 20px 20px;
+
+
+	.wpcloud-form-group {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		width: 100%;
+		gap:8px;
+		label {
+			min-width: 200px;
+			color: var(--color-bw-white, #FFF);
+			font-size: 14px;
+			font-style: normal;
+			font-weight: 500;
+			line-height: 20px; /* 142.857% */
+		}
+		input, select {
+			border-radius: 2px;
+			border: 1px solid rgba(171, 163, 163, 0.50);
+			background: none;
+			outline: none;
+			color: var(--color-bw-white, #FFF);
+			padding: 4px;
+			font-size: 14px;
+			width: 100%;
+		}
+		input {
+			min-width: 200px;
+		}
+		select.no-border {
+			border: none;
+			text-align: right;
+		}
+
+		input::placeholder {
+			color: rgba(171, 163, 163, 0.50);
+			font-family: "SF Pro Text" Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+			font-size: 13px;
+			font-style: normal;
+			font-weight: 400;
+			line-height: 20px; /* 153.846% */
+		}
+	}
+
+	.wpcloud-form-group--stacked {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+}
 /* Navigation
 --------------------------------------------- */
 .main-navigation {
