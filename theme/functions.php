@@ -225,7 +225,8 @@ function wpcloud_update_footer_nav($item_output, $item, $depth, $args ) {
 
 	if (str_contains($item->url, 'profile') ) {
 		$avatar = get_avatar( get_current_user_id(), 32 );
-		return '<a class="avatar" href="' . $item->url . '">' .$avatar . '</a>';
+		// @TODO: have the avatar just log out
+		return '<a class="avatar" title="log out" href="' . wp_logout_url( '/login' ) . '">' .$avatar . '</a>';
 	}
 
 	if (str_contains($item->url, 'settings') ) {
@@ -242,3 +243,11 @@ function wpcloud_update_footer_nav($item_output, $item, $depth, $args ) {
 }
 
 add_filter( 'walker_nav_menu_start_el', 'wpcloud_update_footer_nav', 10, 4 );
+
+function wpcloud_hide_adminbar(){
+  if (is_blog_admin()) {
+    return true;
+  }
+  return current_user_can( 'administrator' );
+}
+add_filter( 'show_admin_bar', 'wpcloud_hide_adminbar' );

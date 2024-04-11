@@ -13,7 +13,7 @@
  $errors = null;
 
  if ( is_user_logged_in() ) {
- 	wp_redirect( '/' );
+ 	wp_redirect( '/sites' );
  	exit;
  }
  if (isset($_POST['_wpnonce']) && wp_verify_nonce( $_POST['_wpnonce'], 'wpcloud-login' ) ) {
@@ -25,7 +25,7 @@
 		exit;
 	}
  }
- get_header();
+ get_header( 'logged-out' );
 ?>
 <main class="wpcloud-login">
 
