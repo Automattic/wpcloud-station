@@ -51,6 +51,16 @@
 			);
 			?>
 		</nav><!-- #site-navigation -->
+		<nav id="profile-navigation" class="profile-navigation">
+			<?php
+			wp_nav_menu(
+				array(
+					'theme_location' => 'footer',
+					'menu_id'        => 'footer-menu',
+				)
+			);
+			?>
+		</nav>
 	</header><!-- #masthead -->
 	<div id="wpcloud-content">
 		<?php
