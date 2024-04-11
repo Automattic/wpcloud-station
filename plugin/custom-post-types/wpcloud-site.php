@@ -63,6 +63,9 @@ function wpcloud_on_create_site( int $post_id, WP_Post $post, bool $update ): vo
 	$domain      = $post->post_title;
 	$php_version = get_post_meta( $post_id, 'php_version', true );
 	$data_center = get_post_meta( $post_id, 'data_center', true );
+	$post_name   = str_replace( '.', '-', $domain );
+
+	wp_update_post( array( 'ID' => $post_id, 'post_name' => $post_name ) );
 
 	if ( ! empty( $php_version ) ) {
 		$data['php_version'] = $php_version;
