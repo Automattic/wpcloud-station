@@ -177,6 +177,10 @@ if ( defined( 'JETPACK__VERSION' ) ) {
 	require get_template_directory() . '/inc/jetpack.php';
 }
 
+
+/**
+ * Custom functions
+ */
 add_action('init', 'wpcloud_start_session', 1);
 function wpcloud_start_session() {
 	session_start();
@@ -212,3 +216,29 @@ add_action('end_session_action','wpcloud_end_session');
 function wpcloud_end_session() {
 	session_destroy ();
 }
+
+
+function wpcloud_update_footer_nav($item_output, $item, $depth, $args ) {
+	if ( 'footer' !== $args->theme_location ) {
+		return $item_output;
+	}
+
+	if (str_contains($item->url, 'profile') ) {
+		$avatar = get_avatar( get_current_user_id(), 32 );
+		return '<a class="avatar" href="' . $item->url . '">' .$avatar . '</a>';
+	}
+
+	if (str_contains($item->url, 'settings') ) {
+		$logo = '<img src="'. get_theme_file_uri( 'assets/nav-icons/cog.svg' ) . '" alt="settings"/>';
+		return '<a href="' . $item->url . '">' . $logo  . '</a>';
+	}
+
+	if (str_contains($item->url, 'support') ) {
+		$logo = '<img src="'. get_theme_file_uri( 'assets/nav-icons/help.svg' ) . '" alt="support"/>';
+		return '<a href="' . $item->url . '">' . $logo  . '</a>';
+	}
+
+	return $item_output;
+}
+
+add_filter( 'walker_nav_menu_start_el', 'wpcloud_update_footer_nav', 10, 4 );
