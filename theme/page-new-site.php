@@ -7,13 +7,15 @@
  * @package WP Cloud
  * @subpackage WP_Cloud_Dashboard
  */
-add_filter('nav_menu_css_class' , 'special_nav_class' , 10 , 2);
 
-function special_nav_class ($classes, $item) {
-  error_log(print_r($item, true));
-	error_log(print_r($classes, true));
+
+function wpcloud_set_sites_current ($classes) {
+	if (in_array('wpcloud-nav-sites', $classes) ){
+		$classes[] = ' current-menu-item ';
+	}
   return $classes;
 }
+add_filter('nav_menu_css_class' , 'wpcloud_set_sites_current' , 10 , 1);
 
 $new_site = true;
 
@@ -26,7 +28,7 @@ if ( isset( $_POST['action'] ) && 'create' === $_POST['action'] ) {
 	$post_id = wp_insert_post( array(
 		'post_title' => wpcloud_site_get_default_domain( $post_title ),
 		'post_type' => 'wpcloud_site',
-		'post_status' => 'publish', // TODO: Change to draft after the demo
+		'post_status' => 'publish', // @TODO: Change to draft after the demo
 		'post_author' => get_current_user_id(),
 		'meta_input' => array(
 			'php_version' => $php_version,
@@ -36,7 +38,6 @@ if ( isset( $_POST['action'] ) && 'create' === $_POST['action'] ) {
 	) );
 
 	if ( ! is_wp_error( $post_id ) ) {
-		//$_SESSION['notice'] = array( 'message' => __( 'Site created successfully' ), 'type' => 'success' );
 		wpcloud_dashboard_add_notice( __( 'Site created successfully' ), 'success');
 		wp_safe_redirect( '/sites' );
 	}

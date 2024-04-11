@@ -210,6 +210,5 @@ add_action('wp_login','wpcloud_end_session');
 add_action('end_session_action','wpcloud_end_session');
 
 function wpcloud_end_session() {
-
 	session_destroy ();
 }
