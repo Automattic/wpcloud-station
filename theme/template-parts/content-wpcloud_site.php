@@ -13,8 +13,6 @@
  */
 $cloud_site = WPCLOUD_Site::from_post( get_post(),true );
 $site_details = $cloud_site->details;
-error_log( 'Site' . print_r( $cloud_site, true ));
-error_log( 'Site details: ' . print_r( $site_details, true ) );
 ?>
 
 <tr class="wpcloud-list-row wpcloud-list-data" id="site-<?php the_ID(); ?>" <?php post_class(); ?>>
