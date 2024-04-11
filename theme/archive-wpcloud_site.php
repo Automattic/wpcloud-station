@@ -18,7 +18,7 @@ if ( ! current_user_can( 'manage_options' ) ) {
 $sites = new WP_Query( $args );
 ?>
 
-<main class="wpcloud-site-list" id="site-content">
+<main class="wpcloud-site-list site-content" id="site-content">
 	<header class="page-header">
 		<div>
 			<h1 class="page-title"><?php esc_html_e( 'Sites', 'wpcloud-dashboard' ); ?></h1>
