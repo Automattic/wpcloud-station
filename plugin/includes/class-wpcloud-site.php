@@ -83,7 +83,6 @@ class WPCLOUD_Site {
 		if ( is_wp_error( $wpcloud_site ) ) {
 			return $wpcloud_site;
 		}
-		error_log( 'Site details: ' . print_r( $wpcloud_site, true ) );
 		$detail_keys = array_unique( array_merge( $detail_keys, self::WPCLOUD_DETAIL_KEYS ) );
 
 		$this->details = array_intersect_key( (array) $wpcloud_site, array_flip( $detail_keys ) );
@@ -141,7 +140,6 @@ class WPCLOUD_Site {
 		}
 
 		$remote_ids = array_map( fn($remote_site) => $remote_site->atomic_site_id ,$remote_sites );
-		error_log( 'Remote ids: ' . print_r( $remote_ids, true ) );
 		$local_ids = array_map( function( $site ) {
 			$wpcloud_id = get_post_meta( $site->ID, 'wpcloud_id', true );
 			return $wpcloud_id ? intval( $wpcloud_id ) : 0;
