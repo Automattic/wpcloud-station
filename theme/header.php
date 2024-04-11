@@ -52,3 +52,10 @@
 			?>
 		</nav><!-- #site-navigation -->
 	</header><!-- #masthead -->
+	<div id="wpcloud-content">
+		<?php
+		/**
+		 * The template for displaying notices
+		 */
+		?>
+		<?php wpcloud_dashboard_notices(); ?>
