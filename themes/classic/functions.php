@@ -19,6 +19,10 @@ if ( ! defined( 'WPCLOUD_DASHBOARD_VERSION' ) ) {
  * as indicating support for post thumbnails.
  */
 function wpcloud_dashboard_setup() {
+	if ( ! is_admin() ) {
+		add_filter( 'show_admin_bar', '__return_false' );
+	}
+
 	/*
 		* Make theme available for translation.
 		* Translations can be filed in the /languages/ directory.
@@ -217,7 +221,6 @@ function wpcloud_end_session() {
 	session_destroy ();
 }
 
-
 function wpcloud_update_footer_nav($item_output, $item, $depth, $args ) {
 	if ( 'footer' !== $args->theme_location ) {
 		return $item_output;
@@ -245,9 +248,10 @@ function wpcloud_update_footer_nav($item_output, $item, $depth, $args ) {
 add_filter( 'walker_nav_menu_start_el', 'wpcloud_update_footer_nav', 10, 4 );
 
 function wpcloud_hide_adminbar(){
-  if (is_blog_admin()) {
+  if ( is_blog_admin() ) {
     return true;
   }
+
   return current_user_can( 'administrator' );
 }
 add_filter( 'show_admin_bar', 'wpcloud_hide_adminbar' );
