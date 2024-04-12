@@ -37,7 +37,6 @@
 			const container = document.getElementById('wpcloud-menu-image-' + itemId);
 			const preview = container.querySelector('.wpcloud-menu-image-preview-row');
 			const linkPlaceholder = preview.querySelector('span');
-			console.log(linkPlaceholder)
 			switch (value) {
 				case 'before':
 					preview.style.flexDirection = 'row';
@@ -71,7 +70,6 @@
 		const showSettings = (itemId) => {
 			const container = document.getElementById('wpcloud-menu-image-' + itemId);
 			const settings = container.querySelector('.wpcloud-menu-image-settings');
-			console.log('show settings', itemId, settings);
 
 			if ( ! settings.classList.contains('hidden') ) {
 				return;
@@ -111,7 +109,6 @@
 
 
 		const openMedia = (itemId) => {
-			console.log('open media', itemId);
 			if (!itemId) {
 				return;
 			}
