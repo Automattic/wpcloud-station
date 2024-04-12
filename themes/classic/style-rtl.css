@@ -1,15 +1,17 @@
+@charset "UTF-8";
+
 /*!
 Theme Name: WP Cloud Dashboard
-Theme URI: https://underscores.me/
-Author: Automattic
-Author URI: https://automattic.com/
-Description: Hi. I'm a starter theme called <code>WP Cloud Dashboard</code>, or <em>underscores</em>, if you like. I'm a theme meant for hacking so don't use me as a <em>Parent Theme</em>. Instead try turning me into the next, most awesome, WordPress theme out there. That's what I'm here for.
+Theme URI: http://underscores.me/
+Author: Automattic, Inc.
+Author URI: https://wp.cloud
+Description: Description
 Version: 1.0.0
 Tested up to: 5.4
 Requires PHP: 5.6
 License: GNU General Public License v2 or later
 License URI: LICENSE
-Text Domain: WP Cloud Dashboard
+Text Domain: wpcloud-dashboard
 Tags: custom-background, custom-logo, custom-menu, featured-images, threaded-comments, translation-ready
 
 This theme, like WordPress, is licensed under the GPL.
@@ -403,7 +405,7 @@ select,
 optgroup,
 textarea {
 	color: #404040;
-	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+	font-family: "DM Sans", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
 	font-size: 1rem;
 	line-height: 1.5;
 }
@@ -433,7 +435,7 @@ blockquote {
 }
 
 address {
-	margin: 0 0 1.5em;
+	margin: 0;
 }
 
 pre {
@@ -472,7 +474,7 @@ big {
 /* Elements
 --------------------------------------------- */
 body {
-	background: #fff;
+	background: #1a1515;
 }
 
 hr {
@@ -526,28 +528,28 @@ figure {
 }
 
 table {
-	margin: 0 0 1.5em;
+	margin: 0;
 	width: 100%;
 }
 
 /* Links
 --------------------------------------------- */
 a {
-	color: #4169e1;
+	color: #fff;
 }
 
 a:visited {
-	color: #800080;
+	color: #fff;
 }
 
 a:hover,
 a:focus,
 a:active {
-	color: #191970;
+	color: #cf2e2e;
 }
 
 a:focus {
-	outline: thin dotted;
+	outline: none;
 }
 
 a:hover,
@@ -557,19 +559,6 @@ a:active {
 
 /* Forms
 --------------------------------------------- */
-button,
-input[type="button"],
-input[type="reset"],
-input[type="submit"] {
-	border: 1px solid;
-	border-color: #ccc #ccc #bbb;
-	border-radius: 3px;
-	background: #e6e6e6;
-	color: rgba(0, 0, 0, 0.8);
-	line-height: 1;
-	padding: 0.6em 1em 0.4em;
-}
-
 button:hover,
 input[type="button"]:hover,
 input[type="reset"]:hover,
@@ -719,7 +708,7 @@ textarea {
 .posts-navigation,
 .site-main
 .post-navigation {
-	margin: 0 0 1.5em;
+	margin: 0;
 }
 
 .comment-navigation .nav-links,
@@ -749,7 +738,7 @@ textarea {
 
 .post,
 .page {
-	margin: 0 0 1.5em;
+	margin: 0;
 }
 
 .updated:not(.published) {
@@ -764,7 +753,7 @@ textarea {
 
 .page-links {
 	clear: both;
-	margin: 0 0 1.5em;
+	margin: 0;
 }
 
 /* Comments
@@ -780,7 +769,7 @@ textarea {
 /* Widgets
 --------------------------------------------- */
 .widget {
-	margin: 0 0 1.5em;
+	margin: 0;
 }
 
 .widget select {
@@ -958,4 +947,715 @@ textarea {
 	margin-right: auto;
 	margin-left: auto;
 	margin-bottom: 1.5em;
+}
+
+/* ToDo: Clean Up
+--------------------------------------------- */
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	overflow-y: scroll;
+	overflow-x: hidden;
+}
+
+.site {
+	display: grid;
+	grid-template-areas: "header main" "header footer";
+	grid-template-columns: 272px auto;
+	grid-template-rows: 1fr 60px;
+	min-height: 100vh;
+}
+
+.site-header {
+	grid-area: header;
+}
+
+.site-footer {
+	grid-area: footer;
+}
+
+.site-content {
+	grid-area: main;
+	overflow: auto;
+}
+
+header#masthead {
+	border-left: 1px solid rgba(85, 85, 85, 0.5);
+	padding: 48px 24px 10px;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	height: 100vh;
+}
+
+header#masthead #profile-navigation {
+	margin-top: auto;
+}
+
+header#masthead #profile-navigation #footer-menu {
+	display: flex;
+	width: 100%;
+	margin: 0;
+	padding: 0;
+	gap: 16px;
+	align-items: center;
+	list-style-type: none;
+}
+
+header#masthead #profile-navigation #footer-menu li:first-child {
+	margin-left: auto;
+}
+
+header#masthead #profile-navigation #footer-menu .avatar img {
+	border-radius: 50%;
+	width: 32px;
+	height: 32px;
+}
+
+ul#primary-menu {
+	display: flex;
+	width: 100%;
+	height: 100%;
+	padding: 0;
+	flex-direction: column;
+	align-items: flex-start;
+	flex-shrink: 0;
+}
+
+.site-branding {
+	padding-bottom: 48px;
+}
+
+ul#primary-menu li {
+	display: flex;
+	align-items: center;
+	align-self: stretch;
+	overflow: hidden;
+	color: #fff;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	font-size: 14px;
+	font-style: normal;
+	font-weight: 400;
+	line-height: 20px;
+}
+
+ul#primary-menu li a {
+	padding: 8px 12px;
+	height: 40px;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	column-gap: 12px;
+}
+
+ul#primary-menu .current-menu-item {
+	border-radius: 4px;
+	background: #f72b00;
+}
+
+.hidden {
+	display: none !important;
+}
+
+/*--------------------------------------------------------------
+# Components
+--------------------------------------------------------------*/
+.notice p {
+	background: #f72b00;
+	margin: 0;
+	padding: 20px 64px;
+	color: #fff;
+}
+
+div#wpcloud-content {
+	width: 100%;
+	padding: 48px 64px 0;
+}
+
+nav.breadcrumbs a {
+	display: flex;
+	align-items: center;
+	text-decoration: none;
+	text-align: center;
+	color: #aba3a3;
+	font-size: 12px;
+	font-style: normal;
+	font-weight: 400;
+	line-height: 16px;
+}
+
+nav.breadcrumbs a:hover {
+	color: #fff;
+}
+
+button.button,
+.button {
+	text-transform: uppercase;
+	border-radius: 100px;
+	border: 2px solid #f72b00;
+	box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+	padding: 12px 24px;
+	color: #fff;
+	text-align: center;
+	font-size: 12px;
+	font-style: normal;
+	font-weight: 500;
+	line-height: 12px;
+	letter-spacing: 0.6px;
+	text-decoration: none;
+	outline: none;
+	background-color: transparent;
+}
+
+button:disabled {
+	background: #5e4c4c;
+	border: 2px solid #978b8b;
+	color: #978b8b;
+}
+
+.button--solid {
+	background: #f72b00;
+}
+
+.button--solid:hover {
+	background: #cc1b02;
+	border: 2px solid #cc1b02;
+	color: #fff;
+}
+
+.button--wp {
+	background: #21759b;
+	border: 2px solid #398cb3;
+}
+
+.button--wp:hover {
+	background: #21759b;
+	border: 2px solid #398cb3;
+	color: #fff;
+}
+
+#primary-menu a::before {
+	width: 24px;
+	height: 24px;
+}
+
+.wpcloud-nav-sites a::before {
+	content: url(/wp-content/themes/wpcloud-dashboard/assets/nav-icons/wp.svg);
+}
+
+.wpcloud-nav-collaborators a::before {
+	content: url(/wp-content/themes/wpcloud-dashboard/assets/nav-icons/people.svg);
+}
+
+.wpcloud-nav-usage a::before {
+	content: url(/wp-content/themes/wpcloud-dashboard/assets/nav-icons/trending.svg);
+}
+
+.wpcloud-nav-billing a::before {
+	content: url(/wp-content/themes/wpcloud-dashboard/assets/nav-icons/currency-dollar.svg);
+}
+
+.wpcloud-nav-tools a::before {
+	content: url(/wp-content/themes/wpcloud-dashboard/assets/nav-icons/tool.svg);
+}
+
+.wpcloud-site-list .page-header {
+	display: flex;
+	flex-direction: column;
+	row-gap: 24px;
+	max-width: 1404px;
+	padding-bottom: 1rem;
+}
+
+.wpcloud-site-list .page-header div {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.wpcloud-site-list .page-header .page-title {
+	color: #fff;
+	font-size: 24px;
+	font-style: normal;
+	font-weight: 500;
+	line-height: 28.8px;
+	margin: 0;
+}
+
+.wpcloud-site-list .page-header .wpcloud-site-search {
+	border-radius: 2px;
+	border: 1px solid rgba(171, 163, 163, 0.5);
+}
+
+.wpcloud-site-list .page-header .wpcloud-site-search button,
+.wpcloud-site-list .page-header .wpcloud-site-search input {
+	border-radius: 0;
+	border: none;
+	background: none;
+	outline: none;
+	color: #fff;
+}
+
+.wpcloud-site-list .page-header .wpcloud-site-search button {
+	background-image: url(./assets/search.svg);
+	background-repeat: no-repeat;
+	background-position: center;
+	text-indent: -9999px;
+	width: 32px;
+}
+
+.wpcloud-site-list .page-header .wpcloud-site-search input::placeholder {
+	color: rgba(171, 163, 163, 0.5);
+	font-family: "SF Pro Text" Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+	font-size: 13px;
+	font-style: normal;
+	font-weight: 400;
+	line-height: 20px;
+}
+
+.wpcloud-site-table {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	align-self: stretch;
+}
+
+.wpcloud-site-table a {
+	text-decoration: none;
+}
+
+.wpcloud-site-table .wpcloud-list-row {
+	display: flex;
+	height: 56px;
+	min-height: 48px;
+	align-items: center;
+	align-self: stretch;
+	color: #fff;
+	font-size: 11px;
+	line-height: 20px;
+	letter-spacing: 0.55px;
+	border-bottom: 1px solid rgba(85, 85, 85, 0.5);
+}
+
+.wpcloud-site-table .wpcloud-list-row th {
+	text-transform: uppercase;
+}
+
+.wpcloud-site-table .wpcloud-list-row td {
+	font-size: 13px;
+}
+
+.wpcloud-site-table .wpcloud-list-row.wpcloud-list-data:hover {
+	background: rgba(255, 255, 255, 0.1);
+}
+
+.wpcloud-site-table .wpcloud-list-item {
+	display: flex;
+	max-width: 280px;
+	align-items: center;
+	gap: 12px;
+	align-self: stretch;
+	font-weight: 400;
+	justify-content: flex-start;
+	cursor: default;
+}
+
+.wpcloud-site-table .wpcloud-list-item.wpcloud-site {
+	width: 280px;
+}
+
+.wpcloud-site-table .wpcloud-list-item.wpcloud-role {
+	min-width: 100px;
+}
+
+.wpcloud-site-table .wpcloud-list-item.wpcloud-created {
+	min-width: 100px;
+}
+
+.wpcloud-site-table .wpcloud-list-item.wpcloud-state {
+	width: 100px;
+}
+
+.wpcloud-site-table .wpcloud-list-item.wpcloud-php {
+	width: 80px;
+}
+
+.wpcloud-site-table .wpcloud-list-item.wpcloud-perf {
+	width: 140px;
+}
+
+.wpcloud-site-table .wpcloud-list-item.wpcloud-datacenter {
+	width: 140px;
+}
+
+.wpcloud-site-table .wpcloud-list-item.wpcloud-ip-addresses {
+	width: 120px;
+}
+
+.wpcloud-site-table .wpcloud-list-item.wpcloud-fav {
+	width: 80px;
+	justify-content: center;
+}
+
+.wpcloud-site-table .wpcloud-list-item.wpcloud-actions {
+	width: 140px;
+}
+
+.wpcloud-site-table .wpcloud-list-wpadmin-button {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	height: 28px;
+	border-radius: 100px;
+	background: rgba(255, 255, 255, 0.1);
+	padding: 4px 8px 4px 12px;
+	width: 100%;
+}
+
+.wpcloud-site-table .wpcloud-list-wpadmin-button:hover {
+	background: rgba(255, 255, 255, 0.2);
+	color: #fff;
+}
+
+.wpcloud-site-table .wpcloud-list-wpadmin-button:focus {
+	color: #fff;
+	text-decoration: none;
+	outline: none;
+}
+
+.wpcloud-site-table .wpcloud-performance {
+	display: flex;
+	align-items: center;
+	width: 110px;
+	justify-content: space-between;
+}
+
+.wpcloud-site-table .wpcloud-performance .wpcloud-performance-mobile,
+.wpcloud-site-table .wpcloud-performance .wpcloud-performance-desktop {
+	display: flex;
+	align-items: center;
+}
+
+.wpcloud-site-table .wpcloud-performance .wpcloud-performance-mobile img:first-child,
+.wpcloud-site-table .wpcloud-performance .wpcloud-performance-desktop img:first-child {
+	margin-left: 4px;
+}
+
+.wpcloud-site-table .site-card {
+	display: grid;
+	grid-template-columns: 40px 1fr;
+	grid-template-rows: repeat(2, 20px);
+	grid-column-gap: 12px;
+	grid-row-gap: 4px;
+}
+
+.wpcloud-site-table .site-card img {
+	grid-area: 1 / 1 / 3 / 2;
+	border-radius: 4px;
+}
+
+.wpcloud-site-table .site-card h2 {
+	margin: 0;
+	padding: 0;
+	grid-area: 1 / 2 / 2 / 3;
+}
+
+.wpcloud-site-table .site-card h2 a {
+	overflow: hidden;
+	color: #fff;
+	text-overflow: ellipsis;
+	font-size: 14px;
+	font-style: normal;
+	font-weight: 500;
+	line-height: 20px;
+}
+
+.wpcloud-site-table .site-card h2 a:hover {
+	font-weight: 700;
+}
+
+.wpcloud-site-table .site-card h3 {
+	margin: 0;
+	padding: 0;
+	grid-area: 2 / 2 / 3 / 3;
+}
+
+.wpcloud-site-table .site-card h3 a {
+	color: #aba3a3;
+	font-size: 12px;
+	font-style: normal;
+	font-weight: 400;
+	line-height: 16px;
+	display: flex;
+	align-items: center;
+	column-gap: 2px;
+}
+
+.wpcloud-site-table .site-card h3 a img {
+	width: 12px;
+	height: 12px;
+}
+
+.wpcloud-site-table .site-card h3 a:hover {
+	font-weight: 700;
+}
+
+.wpcloud-site-table .wpcloud-fav:hover :not(.is-favorite)::before {
+	content: "☆";
+}
+
+.wpcloud-site-table .wpcloud-fav .is-favorite::before {
+	content: "★";
+}
+
+/* end .wpcloud-site-table */
+.wpcloud-new-site {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+}
+
+.wpcloud-new-site header {
+	width: 100%;
+	border-bottom: 1px solid rgba(85, 85, 85, 0.5);
+}
+
+.wpcloud-new-site header h1 {
+	color: #fff;
+	font-size: 24px;
+	font-style: normal;
+	font-weight: 500;
+	line-height: 28.8px;
+	margin: 24px 0 0;
+}
+
+.wpcloud-new-site article {
+	padding-top: 24px;
+}
+
+.wpcloud-form {
+	border-radius: 10px;
+	border: 1px solid rgba(85, 85, 85, 0.5);
+	padding: 16px;
+	width: fit-content;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 20px 20px;
+}
+
+.wpcloud-form .wpcloud-form-group {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+	gap: 8px;
+}
+
+.wpcloud-form .wpcloud-form-group label {
+	min-width: 200px;
+	color: #fff;
+	font-size: 14px;
+	font-style: normal;
+	font-weight: 500;
+	line-height: 20px;
+}
+
+.wpcloud-form .wpcloud-form-group input,
+.wpcloud-form .wpcloud-form-group select {
+	border-radius: 2px;
+	border: 1px solid rgba(171, 163, 163, 0.5);
+	background: none;
+	outline: none;
+	color: #fff;
+	padding: 4px;
+	font-size: 14px;
+	width: 100%;
+}
+
+.wpcloud-form .wpcloud-form-group input {
+	min-width: 200px;
+}
+
+.wpcloud-form .wpcloud-form-group select.no-border {
+	border: none;
+	text-align: left;
+}
+
+.wpcloud-form .wpcloud-form-group input::placeholder {
+	color: rgba(171, 163, 163, 0.5);
+	font-family: "SF Pro Text" Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+	font-size: 13px;
+	font-style: normal;
+	font-weight: 400;
+	line-height: 20px;
+}
+
+.wpcloud-form .wpcloud-form-group--stacked {
+	flex-direction: column;
+	align-items: flex-start;
+}
+
+.wpcloud-login {
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+.wpcloud-login .wpcloud-notice--error {
+	width: 400px;
+	background: #f72b00;
+	color: #fff;
+	padding: 16px;
+	border-radius: 4px;
+}
+
+.wpcloud-login h1 {
+	color: #fff;
+	font-size: 16px;
+	font-style: normal;
+	font-weight: 700;
+	line-height: 20px;
+	margin: 0;
+}
+
+.wpcloud-login p {
+	color: #aba3a3;
+	font-size: 13px;
+	font-style: normal;
+	font-weight: 400;
+	line-height: 20px;
+	margin: 0 0 16px;
+}
+
+.wpcloud-site-details {
+	display: grid;
+	grid-template-areas: "site-thumbnail site-title site-title" "site-thumbnail site-url site-url" ". nav content";
+	grid-template-columns: 100px 240px auto;
+	grid-template-rows: 50px 80px auto;
+}
+
+.wpcloud-site-details ul {
+	display: flex;
+	height: 100%;
+	padding: 0;
+	flex-direction: column;
+	align-items: flex-start;
+	flex-shrink: 0;
+	margin: 0;
+}
+
+.wpcloud-site-details ul .current-menu-item {
+	border-radius: 4px;
+	background: #f72b00;
+}
+
+.wpcloud-site-details ul li {
+	display: flex;
+	align-items: center;
+	align-self: stretch;
+	overflow: hidden;
+	color: #fff;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	font-size: 14px;
+	font-style: normal;
+	font-weight: 400;
+	line-height: 20px;
+}
+
+.wpcloud-site-details ul li a {
+	height: 40px;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	column-gap: 12px;
+	text-decoration: none;
+	padding: 8px 12px;
+}
+
+.wpcloud-site-details .wpcloud-site-details-content {
+	grid-area: content;
+	display: flex;
+}
+
+.wpcloud-site-details .wpcloud-site-details-content .wpcloud-site-details-section {
+	display: none;
+}
+
+.wpcloud-site-details .wpcloud-site-details-content .active {
+	display: block;
+}
+
+.wpcloud-site-details .site-thumbnail {
+	grid-area: site-thumbnail;
+	height: 80px;
+}
+
+.wpcloud-site-details .site-title {
+	grid-area: site-title;
+	margin: 0;
+}
+
+.wpcloud-site-details .site-title a {
+	display: inline-block;
+}
+
+.wpcloud-site-details .site-title a.button {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	border-radius: 100px;
+	padding: 4px 8px 4px 12px;
+	width: 150px;
+	float: left;
+}
+
+.wpcloud-site-details .site-url {
+	grid-area: site-url;
+	margin: 0;
+}
+
+.wpcloud-site-details .site-url a {
+	color: #aba3a3;
+}
+
+.wpcloud-site-details .wpcloud-site-details-nav {
+	grid-area: nav;
+}
+
+.wpcloud-site-details .wpcloud-site-details-section {
+	width: 600px;
+	color: #fff;
+	border: 1px solid rgba(85, 85, 85, 0.5);
+	margin-right: 50px;
+	padding: 0 30px 30px 30px;
+}
+
+.wpcloud-site-details .wpcloud-site-details-section h3 {
+	color: #aba3a3;
+	margin: 20px 0 5px;
+}
+
+.wpcloud-site-details .wpcloud-site-details-section p {
+	margin: 0;
+}
+
+.wpcloud-site-details .wpcloud-site-details-section select {
+	border-radius: 2px;
+	border: 1px solid rgba(171, 163, 163, 0.5);
+	background: none;
+	outline: none;
+	color: #fff;
+	padding: 4px;
+	font-size: 14px;
+	width: 100%;
 }
