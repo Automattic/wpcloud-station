@@ -8,25 +8,28 @@
 	function initMenuImageUpload() {
 		// handle menu item image upload
 		const openMediaButtons = document.querySelectorAll('.wpcloud-menu-image-upload');
-		const useAvatarRadios = document.querySelectorAll('.wpcloud-menu-image-input--avatar');
+		const useAvatarCb = document.querySelectorAll('.wpcloud-menu-image-input--avatar');
 		const settingsRadios = document.querySelectorAll('.wpcloud-menu-item-setting');
 		const itemList = document.getElementById('menu-to-edit');
 		let frame;
 
-		openMediaButtons.forEach( btn => btn.addEventListener('click', (e) => {
-			console.log('open media', btn.dataset.itemId);
-			openMedia(btn.dataset.itemId);
-	}));
-		useAvatarRadios.forEach(radio => radio.addEventListener('change', e => toggleUseAvatar(radio, radio.dataset.itemId)));
-		settingsRadios.forEach(radio => radio.addEventListener('change', e => settingChange(e.target, radio.dataset.itemId)));
+		openMediaButtons.forEach( btn => btn.addEventListener('click', e =>  openMedia(btn.dataset.itemId)));
+		useAvatarCb.forEach(cb => cb.addEventListener('change', e => toggleUseAvatar(cb, cb.dataset.itemId)));
+		settingsRadios.forEach(radio => radio.addEventListener('change', e => settingChange(radio, radio.dataset.itemId)));
 
 		itemList.addEventListener('DOMNodeInserted', (e) => {
 			const id = e.target?.id?.split('-').pop();
 			if ( ! id ) {
 				return;
 			}
-			const button = e.target.querySelector(`[data-item-id="${id}"]`);
+			const button = e.target.querySelector(`[data-item-id="${id}"].wpcloud-menu-image-upload`);
 			button?.addEventListener('click', e => openMedia(id));
+
+			const avatarCb = e.target.querySelector(`[data-item-id="${id}"].wpcloud-menu-image-input--avatar`);
+			avatarCb?.addEventListener('change', e => toggleUseAvatar(avatarCb, id));
+
+			const settingsRadios = e.target.querySelectorAll(`[data-item-id="${id}"].wpcloud-menu-item-setting`);
+			settingsRadios.forEach(radio => radio.addEventListener('change', e => settingChange(e.target, id)));
 		});
 
 		const settingChange = (setting, itemId) => {
@@ -115,12 +118,7 @@
 
 			const container = document.getElementById('wpcloud-menu-image-' + itemId);
 			const input = container.querySelector('.wpcloud-menu-image-input');
-/*
-			if (frame) {
-				frame.open();
-				return;
-			}
-*/
+
 			frame = wp.media({
 				title: 'Select or upload menu item image',
 				button: {
