@@ -5,6 +5,18 @@
 
  declare( strict_types = 1 );
 
+add_action( 'admin_enqueue_scripts', 'wpcloud_admin_enqueue_scripts' );
+function wpcloud_admin_enqueue_scripts(): void {
+
+	error_log(print_r(get_permalink(),true));
+	wp_enqueue_script( 'wpcloud-admin', plugin_dir_url( __FILE__ ) . 'assets/js/wpcloud-admin.js' );
+
+	wp_localize_script( 'wpcloud-admin', 'wpcloud', [
+		'ajax_url' => admin_url( 'admin-ajax.php' ),
+		'nonce'    => wp_create_nonce( 'wpcloud' ),
+	] );
+}
+
 add_action( 'admin_init', 'wpcloud_settings_init' );
 function wpcloud_settings_init(): void {
 	register_setting( 'wpcloud', 'wpcloud_settings' );
