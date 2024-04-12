@@ -9,6 +9,9 @@ function wpcloud_nav_menu_item_custom_fields( $item_id ) {
 	$is_avatar = $image_url === 'avatar' ? 'checked' : '';
 	$button_text = $image_url ? __( 'Replace Image', 'wpcloud' ) : __( 'Add Image', 'wpcloud' );
 
+	$row_placement = $is_after ? 'row-reverse' : 'row';
+	$span_display = $is_replace ? 'none' : 'inline-block' ;
+
 	$avatar_placeholder = plugin_dir_url( __DIR__ ) . 'admin/assets/img/gravatar.png';
 	$preview_url = $is_avatar ? $avatar_placeholder : $image_url;
 	?>
@@ -24,9 +27,9 @@ function wpcloud_nav_menu_item_custom_fields( $item_id ) {
 		</div>
 		<div class="wpcloud-menu-image-preview <?php echo $image_url ? '' : 'hidden'; ?> " >
 				<p><?php _e( 'Image Preview', 'wpcloud' ); ?></p>
-				<div class="wpcloud-menu-image-preview-row" style="display: flex; gap: 5px; justify-content: left;">
+				<div class="wpcloud-menu-image-preview-row" style="display: flex; gap: 5px; justify-content: left; flex-direction: <?php echo $row_placement ?>">
 					<img src="<?php echo $preview_url; ?>" data-avatar-placeholder="<?php echo $avatar_placeholder ?>" width="32" height="32">
-					<span style="display:inline-block; background: #8080806b; border-radius: 2px; height: 32px; width: 180px;"></span>
+					<span style="display:<?php echo $span_display ?>; background: #8080806b; border-radius: 2px; height: 32px; width: 180px;"></span>
 				</div>
 		</div>
 		<div class="wpcloud-menu-image-settings <?php echo $image_url ? '' : 'hidden' ?> " style="padding-bottom: 10px; padding-top:10px;">
