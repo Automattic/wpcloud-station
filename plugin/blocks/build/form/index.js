@@ -64,8 +64,12 @@ function Edit({
     'wpcloud-dashboard/form-submit',
     'wpcloud-dashboard/form-notice',
     */],
-    templateLock: false,
-    renderAppender: hasInnerBlocks ? undefined : _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.InnerBlocks.ButtonBlockAppender
+    templateLock: false
+    /*
+    renderAppender: hasInnerBlocks
+    	? undefined
+    	: InnerBlocks.ButtonBlockAppender,
+    */
   });
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("form", {
     ...innerBlocksProps,
