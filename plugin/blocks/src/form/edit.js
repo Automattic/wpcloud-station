@@ -49,9 +49,12 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 			*/
 		],
 		templateLock: false,
+		/*
 		renderAppender: hasInnerBlocks
 			? undefined
 			: InnerBlocks.ButtonBlockAppender,
+		*/
+
 	});
 
 	return (

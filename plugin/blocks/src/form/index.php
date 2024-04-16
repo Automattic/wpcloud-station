@@ -1,7 +1,7 @@
 <?php
 
 
-function wpcloud_form_render( $attributes, $content ) {
+function wpcloud_block_form_render( $attributes, $content ) {
 	/** @disregard P1009 Undefined type */
 	$processed_content = new WP_HTML_Tag_Processor( $content );
 	$processed_content->next_tag( 'form' );
@@ -30,10 +30,11 @@ function wpcloud_form_render( $attributes, $content ) {
  }
 
  function wpcloud_register_form_block() {
+	error_log( 'Registering form block' );
 	register_block_type(
 		dirname( __DIR__, 2 ) . '/build/form',
 		array(
-			'render_callback' => 'wpcloud_form_render',
+			'render_callback' => 'wpcloud_block_form_render',
 		)
 	);
  }
