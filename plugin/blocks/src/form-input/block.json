@@ -8,12 +8,81 @@
 	"icon": "cloud",
 	"description": "\"WP Cloud Form Input\"",
 	"example": {},
-	"supports": {
-		"html": false
-	},
 	"textdomain": "wpcloud",
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",
 	"style": "file:./style-index.css",
-	"viewScript": "file:./view.js"
+	"attributes": {
+		"type": {
+			"type": "string",
+			"default": "text"
+		},
+		"name": {
+			"type": "string"
+		},
+		"label": {
+			"type": "rich-text",
+			"default": "Label",
+			"selector": ".wp-block-form-input__label-content",
+			"source": "rich-text",
+			"__experimentalRole": "content"
+		},
+		"inlineLabel": {
+			"type": "boolean",
+			"default": false
+		},
+		"required": {
+			"type": "boolean",
+			"default": false,
+			"selector": ".wp-block-form-input__input",
+			"source": "attribute",
+			"attribute": "required"
+		},
+		"placeholder": {
+			"type": "string",
+			"selector": ".wp-block-form-input__input",
+			"source": "attribute",
+			"attribute": "placeholder",
+			"__experimentalRole": "content"
+		},
+		"options": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"label": {
+						"type": "string"
+					},
+					"value": {
+						"type": "string"
+					}
+				}
+			}
+		},
+		"value": {
+			"type": "string",
+			"default": "",
+			"selector": "input",
+			"source": "attribute",
+			"attribute": "value"
+		},
+		"visibilityPermissions": {
+			"type": "string",
+			"default": "all"
+		}
+	},
+	"supports": {
+		"anchor": true,
+		"reusable": false,
+		"spacing": {
+			"margin": [ "top", "bottom" ]
+		},
+		"__experimentalBorder": {
+			"radius": true,
+			"__experimentalSkipSerialization": true,
+			"__experimentalDefaultControls": {
+				"radius": true
+			}
+		}
+	}
 }

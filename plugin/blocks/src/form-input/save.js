@@ -1,24 +1,118 @@
-/**
- * React hook that is used to mark the block wrapper element.
- * It provides all the necessary props like the class name.
- *
- * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
- */
-import { useBlockProps } from '@wordpress/block-editor';
 
 /**
- * The save function defines the way in which the different attributes should
- * be combined into the final markup, which is then serialized by the block
- * editor into `post_content`.
- *
- * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-edit-save/#save
- *
- * @return {Element} Element to render.
+ * External dependencies
  */
-export default function save() {
+import classNames from 'classnames';
+import removeAccents from 'remove-accents';
+
+/**
+ * WordPress dependencies
+ */
+import {
+	RichText,
+	useBlockProps,
+	__experimentalGetBorderClassesAndStyles as getBorderClassesAndStyles,
+	__experimentalGetColorClassesAndStyles as getColorClassesAndStyles,
+} from '@wordpress/block-editor';
+import { __unstableStripHTML as stripHTML } from '@wordpress/dom';
+
+/**
+ * Get the name attribute from a content string.
+ *
+ * @param {string} content The block content.
+ *
+ * @return {string} Returns the slug.
+ */
+const getNameFromLabel = ( content ) => {
 	return (
-		<p { ...useBlockProps.save() }>
-			{ 'WP Cloud Form – hello from the saved content!' }
-		</p>
+		removeAccents( stripHTML( content ) )
+			// Convert anything that's not a letter or number to a hyphen.
+			.replace( /[^\p{L}\p{N}]+/gu, '-' )
+			// Convert to lowercase
+			.toLowerCase()
+			// Remove any remaining leading or trailing hyphens.
+			.replace( /(^-+)|(-+$)/g, '' )
+	);
+};
+
+function renderSelect({ options, label, name, required }, inputClasses, inputStyle ) {
+	return (
+		<select
+			className={inputClasses}
+			style={inputStyle}
+			name={name || getNameFromLabel(label)}
+			required={ required }
+			aria-required={ required }
+		>
+			{ options.map( ( option ) => (
+				<option key={ option.value } value={ option.value }>
+					{ option.label }
+				</option>
+			) ) }
+		</select>
+	);
+}
+
+function renderText({ type, name, label, required, placeholder }, inputClasses, inputStyle) {
+	const TagName = 'textarea' === type ? 'textarea' : 'input';
+	return (
+		<TagName
+			className={ inputClasses }
+			type={ 'textarea' === type ? undefined : type }
+			name={ name || getNameFromLabel( label ) }
+			required={ required }
+			aria-required={ required }
+			placeholder={ placeholder || undefined }
+			style={ inputStyle }
+		/>
+	);
+}
+
+function renderField( attributes ) {
+	const { type } = attributes;
+
+	const borderProps = getBorderClassesAndStyles( attributes );
+	const colorProps = getColorClassesAndStyles( attributes );
+
+	const inputStyle = {
+		...borderProps.style,
+		...colorProps.style,
+	};
+
+	const inputClasses = classNames(
+		'wp-block-form-input__input',
+		colorProps.className,
+		borderProps.className
+	);
+
+	return 'select' === type ?
+		renderSelect(attributes, inputClasses, inputStyle) :
+		renderText(attributes, inputClasses, inputStyle);
+}
+
+export default function save( { attributes } ) {
+	const { type, label, name, value, inlineLabel } =
+		attributes;
+	const blockProps = useBlockProps.save();
+
+	if ( 'hidden' === type ) {
+		return <input type={ type } name={ name } value={ value } />;
+	}
+
+	return (
+		<div { ...blockProps }>
+			{ /* eslint-disable jsx-a11y/label-has-associated-control */ }
+			 <label
+				className={ classNames( 'wp-block-form-input__label', {
+					'is-label-inline': inlineLabel,
+				} ) }
+			>
+				<span className="wp-block-form-input__label-content">
+					<RichText.Content value={ label } />
+				</span>
+				{ renderField( attributes ) }
+			</label>
+			{ /* eslint-enable jsx-a11y/label-has-associated-control */ }
+		</div>
 	);
 }

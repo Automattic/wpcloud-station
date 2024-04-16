@@ -15,37 +15,44 @@ import {
 	__experimentalUseColorProps as useColorProps,
 } from '@wordpress/block-editor';
 
-const controls = (
-	<>
-	</>
-);
-
-function Text( props ) {
+export default function TextField({ attributes, className, styleProps = {}, onPlaceholderChange }) {
+	const { placeholder, required, type } = attributes;
 	const {
-		label,
-		placeholder,
-		onPlaceholderChange,
-		onLabelChange,
+		borderProps,
+		colorProps,
+	} = styleProps;
 
-		blockProps
-	} = props;
+	const controls = (
+		<>
+		</>
+	);
+
+	const TagName = type === 'textarea' ? 'textarea' : 'input';
 	return (
-		<div { ...blockProps } >
+		<>
 			{ controls }
-			<span className={ classNames( "wpcloud-dashboard-form-input__label" ) }>
-				<RichText
-					tagName="span"
-					className="wp-block-form-input__label-content"
-					value={ label }
-					onChange={ ( event ) => onLabelChange( event.target.value ) }
-					aria-label={ label ? __( 'Label' ) : __( 'Empty label' ) }
-					data-empty={ label ? false : true }
-					placeholder={ __( 'Type the label for this input' ) }
-				/>
-
-			</span>
-		</div>
+			<TagName
+				type={ 'textarea' === type ? undefined : type }
+				className={ classNames(
+					className,
+					'wpcloud-block-form-input__input',
+					colorProps.className,
+					borderProps.className
+				) }
+				aria-label={ __( 'Optional placeholder text' ) }
+				placeholder={
+					placeholder ? undefined : __( 'Optional placeholder…' )
+				}
+				value={ placeholder }
+				onChange={ ( event ) =>
+					onPlaceholderChange( event.target.value)
+				}
+				aria-required={ required }
+				style={ {
+					...borderProps.style,
+					...colorProps.style,
+				} }
+			/>
+		</>
 	);
 }
-
-export default Text;

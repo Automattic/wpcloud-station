@@ -1,25 +1,86 @@
-
+/**
+ * External dependencies
+ */
 import classNames from 'classnames';
 
+/**
+ * WordPress dependencies
+ */
 import { __ } from '@wordpress/i18n';
-
-import { Text, Select, Hidden } from './fields';
+import {
+	InspectorControls,
+	RichText,
+	useBlockProps,
+	__experimentalUseBorderProps as useBorderProps,
+	__experimentalUseColorProps as useColorProps,
+} from '@wordpress/block-editor';
+import { PanelBody, TextControl, CheckboxControl } from '@wordpress/components';
+import { useRef, useCallback } from '@wordpress/element';
 
 /**
- * @return {Element} Element to render.
+ *
+ * Internal dependencies
  */
-export default function Edit(props) {
+import { Text, Select } from './fields';
 
-	const inputs = {
+function InputFieldBlock( { attributes, setAttributes, className } ) {
+
+	const { type, inlineLabel, label } =
+		attributes;
+	const blockProps = useBlockProps();
+	const ref = useRef();
+
+	const borderProps = useBorderProps( attributes );
+	const colorProps = useColorProps( attributes );
+	if ( ref.current ) {
+		ref.current.focus();
+	}
+
+	const updatePlaceholder = useCallback((placeholder) => setAttributes({ placeholder }), [setAttributes]);
+	const updateValue = useCallback((value) => setAttributes({ value }), [setAttributes]);
+	const isHidden = 'hidden' === type;
+
+	const inputTags = {
 		text: Text,
+		email: Text,
+		password: Text,
+		hidden: Text,
+		textarea: Text,
 		select: Select,
-		hidden: Hidden,
 	};
 
-	const Input = inputs[props.type] || Text;
-
+	const InputTag = inputTags[type] ? inputTags[type] : Text;
 
 	return (
-		<Input {...props} />
+		<div { ...blockProps }>
+			<span
+				className={ classNames( 'wpcloud-block-form-input__label', {
+					'is-label-inline': inlineLabel || 'checkbox' === type,
+				} ) }
+			>
+				{ ! isHidden && (
+					<RichText
+						tagName="span"
+						className="wpcloud-block-form-input__label-content"
+						value={ label }
+						onChange={ ( newLabel ) =>
+							setAttributes( { label: newLabel } )
+						}
+						aria-label={ label ? __( 'Label' ) : __( 'Empty label' ) }
+						data-empty={ label ? false : true }
+						placeholder={ __( 'Type the label for this input' ) }
+				/>
+				)}
+				<InputTag
+					attributes={attributes}
+					onPlaceholderChange={updatePlaceholder}
+					onValueChange={updateValue}
+					className={className}
+					styleProps={{ colorProps, borderProps }}
+				/>
+			</span>
+		</div>
 	);
 }
+
+export default InputFieldBlock;
