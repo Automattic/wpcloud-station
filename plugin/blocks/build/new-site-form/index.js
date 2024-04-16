@@ -33,15 +33,15 @@ __webpack_require__.r(__webpack_exports__);
  * Internal dependencies
  */
 
-const TEMPLATE = [['wpcdb/form', {}, [['core/heading', {
+const TEMPLATE = [['wpcloud/form', {}, [['core/heading', {
   level: 3,
   content: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('New Site')
-}], ['wpcdb/form-input', {
+}], ['wpcloud/form-input', {
   type: 'text',
   label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Name'),
   placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Enter site name'),
   required: true
-}], ['wpcdb/form-input', {
+}], ['wpcloud/form-input', {
   type: 'select',
   label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('PHP Version'),
   options: [{
@@ -61,7 +61,7 @@ const TEMPLATE = [['wpcdb/form', {}, [['core/heading', {
     label: '7.0'
   }],
   required: true
-}], ['wpcdb/form-input', {
+}], ['wpcloud/form-input', {
   type: 'select',
   label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Data Center'),
   options: [{
@@ -99,7 +99,7 @@ function Edit({
   });
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     ...innerBlocksProps,
-    className: "wpcdb-new-site-form"
+    className: "wpcloud-new-site-form"
   });
 }
 
@@ -279,7 +279,7 @@ module.exports = window["wp"]["i18n"];
   \*********************************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"wpcdb/new-site-form","version":"0.1.0","title":"New Site Form","category":"widgets","icon":"smiley","description":"Example block scaffolded with Create Block tool.","example":{},"supports":{"html":false},"textdomain":"new-site-form","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","viewScript":"file:./view.js"}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"wpcloud/new-site-form","version":"0.1.0","title":"New Site Form","category":"widgets","icon":"cloud","description":"Example block scaffolded with Create Block tool.","example":{},"supports":{"html":false},"textdomain":"new-site-form","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","viewScript":"file:./view.js"}');
 
 /***/ })
 

@@ -1,11 +1,11 @@
 {
   "$schema": "https://schemas.wp.org/trunk/block.json",
   "apiVersion": 3,
-  "name": "wpcdb/new-site-form",
+  "name": "wpcloud/new-site-form",
   "version": "0.1.0",
   "title": "New Site Form",
   "category": "widgets",
-  "icon": "smiley",
+  "icon": "cloud",
   "description": "Example block scaffolded with Create Block tool.",
   "example": {},
   "supports": {

@@ -19,7 +19,7 @@ import './editor.scss';
 
 const TEMPLATE = [
 	[
-		'wpcdb/form',
+		'wpcloud/form',
 		{},
 		[
 			[
@@ -30,7 +30,7 @@ const TEMPLATE = [
 				},
 			],
 			[
-				'wpcdb/form-input',
+				'wpcloud/form-input',
 				{
 					type: 'text',
 					label: __('Name'),
@@ -39,7 +39,7 @@ const TEMPLATE = [
 				},
 			],
 			[
-				'wpcdb/form-input',
+				'wpcloud/form-input',
 				{
 					type: 'select',
 					label: __('PHP Version'),
@@ -54,7 +54,7 @@ const TEMPLATE = [
 				},
 			],
 			[
-				'wpcdb/form-input',
+				'wpcloud/form-input',
 				{
 					type: 'select',
 					label: __('Data Center'),
@@ -94,6 +94,6 @@ export default function Edit({ clientId }) {
 	} );
 
 	return (
-		<div { ...innerBlocksProps } className="wpcdb-new-site-form"/>
+		<div { ...innerBlocksProps } className="wpcloud-new-site-form"/>
 	);
 }
