@@ -73,24 +73,11 @@ const TEMPLATE = [
  *
  * @return {Element} Element to render.
  */
-export default function Edit({ clientId }) {
+export default function Edit() {
 	const blockProps = useBlockProps();
-	const { hasInnerBlocks } = useSelect(
-		( select ) => {
-			const { getBlock } = select( blockEditorStore );
-			const block = getBlock( clientId );
-			return {
-				hasInnerBlocks: !! ( block && block.innerBlocks.length ),
-			};
-		},
-		[ clientId ]
-	);
 
 	const innerBlocksProps = useInnerBlocksProps( blockProps, {
 		template: TEMPLATE,
-		renderAppender: hasInnerBlocks
-			? undefined
-			: InnerBlocks.ButtonBlockAppender,
 	} );
 
 	return (

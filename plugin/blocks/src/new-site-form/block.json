@@ -6,7 +6,7 @@
 	"title": "New Site Form",
 	"category": "widgets",
 	"icon": "cloud",
-	"description": "Example block scaffolded with Create Block tool.",
+	"description": "Form to create a new site on WP Cloud",
 	"example": {},
 	"supports": {
 		"html": false
