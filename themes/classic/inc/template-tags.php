@@ -167,12 +167,12 @@ if ( ! function_exists( 'wpcloud_dashboard_list_php_version' ) ) :
 	}
 endif;
 
-if ( ! function_exists( 'wpcloud_dashboard_list_datacenter' ) ) :
+if ( ! function_exists( 'wpcloud_dashboard_list_data_center' ) ) :
 	/**
 	 * Prints HTML with meta information for the current post-date/time.
 	 */
-	function wpcloud_dashboard_list_datacenter( $site_details ) {
-		$data_center = $site_details['datacenter'] ?? '–';
+	function wpcloud_dashboard_list_data_center( $site_details ) {
+		$data_center = $site_details['data_center'] ?? '–';
 
 		echo '<span class="data-center">' . $data_center . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}

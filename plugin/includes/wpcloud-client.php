@@ -124,7 +124,7 @@ function wpcloud_client_domain_verification_record( ?int $wpcloud_site_id, strin
  *                                                            utf8_general_ci
  *                                                            utf8mb4_general_ci
  *                                                        Default: Corresponds to the appropriate collation for the character set.
- *                                          geo_affinity  if specified, the site will be assigned a primary pool server based on the preferred datacenter.
+ *                                          geo_affinity  if specified, the site will be assigned a primary pool server based on the preferred data_center.
  *                                                        Options:
  *                                                            ams Amsterdam
  *                                                            bur Burbank
