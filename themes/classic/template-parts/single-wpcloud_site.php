@@ -15,7 +15,7 @@ $view_url = get_the_permalink();
 $site_name = get_post_meta( get_the_ID(), 'name', true );
 $site_thumbnail = get_theme_file_uri( '/assets/Gravatar_filled_' . get_the_ID() % 5 . '.png' );
 $ex_link = get_theme_file_uri( '/assets/external-link.svg' );
-$datacenter = $site_details['datacenter'];
+$data_center = $site_details['data_center'];
 $php_version = $site_details['php_version'];
 $wordpress_version = $site_details['wp_version'];
 $wp_icon = get_theme_file_uri( '/assets/wordpress.svg' );
@@ -54,7 +54,7 @@ if ( empty( $site_name ) ) {
 		<h3>Primary Domain</h3>
 		<p><?php echo $site_url; ?></p>
 		<h3>Datacenter</h3>
-		<p><?php echo $datacenter; ?></p>
+		<p><?php echo $data_center; ?></p>
 		<h3>PHP Version</h3>
 		<select>
 			<?php

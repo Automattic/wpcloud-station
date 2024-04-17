@@ -65,6 +65,22 @@ if ( ! class_exists( 'WPCLOUD_Sites_Controller' ) ) {
 			return current_user_can( WPCLOUD_CAN_MANAGE_SITES );
 		}
 
+		public static function with_post_details( $wpcloud_site ) {
+			$post = wpcloud_lookup_post_by_site_id( $wpcloud_site->atomic_site_id );
+			if ( ! empty( $post ) ) {
+				$wpcloud_site->post_id     = $post->ID;
+				$wpcloud_site->post_status = ( 'draft' === $post_post_status ) ? 'provisioning' : 'active';
+			}
+
+			$wpcloud_site->wpcloud_site_id = $wpcloud_site->atomic_site_id;
+
+			unset( $wpcloud_site->atomic_site_id );
+			unset( $wpcloud_site->wpcom_blog_id );
+			unset( $wpcloud_site->atomic_client_id );
+
+			return $wpcloud_site;
+		}
+
 		/**
 		 * Get a collection of sites.
 		 *
@@ -73,12 +89,14 @@ if ( ! class_exists( 'WPCLOUD_Sites_Controller' ) ) {
 		 * @return WP_Error|WP_REST_Response
 		 */
 		public function get_sites( $request ) {
-			$result = wpcloud_client_site_list( 'wp_version', 'php_version', 'space_quota', 'db_file_size', 'static_file_404', 'suspended' );
-			if ( is_wp_error( $result) ) {
-				return $result;
+			$results = wpcloud_client_site_list( 'wp_version', 'php_version', 'space_quota', 'db_file_size', 'static_file_404', 'suspended' );
+			if ( is_wp_error( $results ) ) {
+				return $results;
 			}
 
-			return new WP_REST_Response( $result, WP_Http::OK );
+			$results = array_map( self::class . '::with_post_details', $results );
+
+			return new WP_REST_Response( $results, WP_Http::OK );
 		}
 
 		/**
@@ -102,6 +120,8 @@ if ( ! class_exists( 'WPCLOUD_Sites_Controller' ) ) {
 				return $result;
 			}
 
+			$result = self::with_post_details( $result );
+
 			return new WP_REST_Response( $result, WP_Http::OK );
 		}
 
@@ -115,11 +135,27 @@ if ( ! class_exists( 'WPCLOUD_Sites_Controller' ) ) {
 		public function create_site( $request ) {
 			$params      = $request->get_params();
 			$domain      = $params['domain'];
-			$admin_user  = $params['admin_user'];
-			$admin_email = $params['admin_email'];
+			$php_version = $params['php_version'];
+			$data_center = $params['data_center'];
+			$owner_id    = get_current_user_id();
 
-			$result = wpcloud_client_site_create( $domain, $admin_user, $admin_email, $params );
-			if ( is_wp_error( $result ) ) {
+			$post_data   = array(
+				'post_title' => $domain,
+				'post_type' => 'wpcloud_site',
+				'post_status' => 'draft',
+				'post_author' => $owner_id,
+			);
+
+			if ( ! empty( $php_version ) ) {
+				$data['meta_input']['php_version'] = $php_version;
+			}
+			if ( 'No Preference' !== $data_center ) {
+				$data['meta_input']['geo_affinity'] = $data_center;
+			}
+
+			$post = wp_insert_post( $post_data );
+			if ( is_wp_error( $post ) ) {
+				error_log( 'Error creating site post: ' . $post->get_error_message() );
 				return $result;
 			}
 

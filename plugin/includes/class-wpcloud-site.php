@@ -89,7 +89,7 @@ class WPCLOUD_Site {
 
 		if ( array_search('geo_affinity', $detail_keys) !== false ) {
 			$this->details[ 'geo_affinity' ] = $wpcloud_site->extra->server_pool->geo_affinity;
-			$this->details[ 'datacenter' ] = WPCLOUD_DATA_CENTERS[ $this->details[ 'geo_affinity' ] ];
+			$this->details[ 'data_center' ]  = WPCLOUD_DATA_CENTERS[ $this->details[ 'geo_affinity' ] ];
 		}
 
 		$ips = wpcloud_client_domain_ip_addresses( $this->wpcloud_site_id, $this->domain );
@@ -157,8 +157,8 @@ class WPCLOUD_Site {
 
 			$post = wp_insert_post(
 				array(
-					'post_title' => $site->domain_name,
-					'post_type' => 'wpcloud_site',
+					'post_title'  => $site->domain_name,
+					'post_type'   => 'wpcloud_site',
 					'post_status' => self::$initial_status,
 					'post_author' => $owner_id,
 				)

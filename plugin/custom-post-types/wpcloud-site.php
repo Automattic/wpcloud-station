@@ -126,3 +126,26 @@ function wpcloud_on_rest_prepare_site( WP_REST_Response $response, WP_Post $post
 	return $response;
 }
 add_filter( 'rest_prepare_wpcloud_site', 'wpcloud_on_rest_prepare_site', 10, 2 );
+
+/**
+ * Lookup `wpcloud_site` post by `wpcloud_site_id`.
+ *
+ * @param integer $wpcloud_site_id The WP Cloud Site ID.
+ *
+ * @return WP_Post|WP_Error The post. WP_Error on error.
+ */
+function wpcloud_lookup_post_by_site_id( int $wpcloud_site_id ): mixed {
+	$query = new WP_Query(
+		array(
+			'post_type' => 'wpcloud_site',
+			'meta_key' => 'wpcloud_site_id',
+			'meta_value' => $wpcloud_site_id
+		)
+	);
+
+	if ( ! $query->have_posts() ) {
+		return null;
+	}
+
+	return $query->posts[0];
+}
