@@ -25,7 +25,7 @@ import { Text, Select } from './fields';
 
 function InputFieldBlock( { attributes, setAttributes, className } ) {
 
-	const { type, inlineLabel, label } =
+	const { type, inlineLabel, label, adminOnly, required } =
 		attributes;
 	const blockProps = useBlockProps();
 	const ref = useRef();
@@ -51,8 +51,47 @@ function InputFieldBlock( { attributes, setAttributes, className } ) {
 
 	const InputTag = inputTags[type] ? inputTags[type] : Text;
 
+	const controls = (
+		<>
+			<InspectorControls>
+				<PanelBody title={ __( 'Settings' ) }>
+					{ 'checkbox' !== type && (
+						<CheckboxControl
+							label={ __( 'Inline label' ) }
+							checked={ inlineLabel }
+							onChange={ ( newVal ) => {
+								setAttributes( {
+									inlineLabel: newVal,
+								} );
+							} }
+						/>
+					)}
+				 <CheckboxControl
+						label={ __( 'Limit to Admins' ) }
+						checked={ adminOnly }
+						onChange={ ( newVal ) => {
+							setAttributes( {
+								adminOnly: newVal,
+							} );
+						} }
+					/>
+					<CheckboxControl
+						label={ __( 'Required' ) }
+						checked={ required }
+						onChange={ ( newVal ) => {
+							setAttributes( {
+								required: newVal,
+							} );
+						} }
+					/>
+				</PanelBody>
+			</InspectorControls>
+		</>
+	)
+
 	return (
-		<div { ...blockProps }>
+		<div {...blockProps}>
+			{ controls }
 			<span
 				className={ classNames( 'wpcloud-block-form-input__label', {
 					'is-label-inline': inlineLabel || 'checkbox' === type,

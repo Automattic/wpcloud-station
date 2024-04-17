@@ -41,6 +41,10 @@
       "source": "attribute",
       "attribute": "required"
     },
+    "adminOnly": {
+      "type": "boolean",
+      "default": false
+    },
     "placeholder": {
       "type": "string",
       "selector": ".wpcloud-block-form-input__input",
