@@ -38,7 +38,7 @@ const getNameFromLabel = ( content ) => {
 function renderSelect({ options, label, name, required }, inputClasses, inputStyle ) {
 	return (
 		<select
-			className={inputClasses}
+			className={ classNames( 'wpcloud-dashboard-form-input__select', inputClasses )}
 			style={inputStyle}
 			name={name || getNameFromLabel(label)}
 			required={ required }

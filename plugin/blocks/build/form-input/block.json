@@ -15,6 +15,7 @@
   "editorScript": "file:./index.js",
   "editorStyle": "file:./index.css",
   "style": "file:./style-index.css",
+  "render": "file:./render.php",
   "attributes": {
     "type": {
       "type": "string",
@@ -40,6 +41,10 @@
       "selector": ".wpcloud-block-form-input__input",
       "source": "attribute",
       "attribute": "required"
+    },
+    "adminOnly": {
+      "type": "boolean",
+      "default": false
     },
     "placeholder": {
       "type": "string",

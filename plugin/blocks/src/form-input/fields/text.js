@@ -16,7 +16,7 @@ import {
 } from '@wordpress/block-editor';
 
 export default function TextField({ attributes, className, styleProps = {}, onPlaceholderChange }) {
-	const { placeholder, required, type } = attributes;
+	const { placeholder, required, type, adminOnly } = attributes;
 	const {
 		borderProps,
 		colorProps,
