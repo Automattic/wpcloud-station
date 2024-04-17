@@ -41,6 +41,7 @@ class WPCLOUD_Site {
 	public string $domain;
 	public int $wpcloud_site_id;
 	public array $details;
+	public string $error_message;
 
 	public function __construct() {
 		$this->id              = 0;
@@ -51,6 +52,46 @@ class WPCLOUD_Site {
 		$this->owner_id        = 0;
 		$this->wpcloud_site_id = 0;
 		$this->details         = array();
+		$this->error_message   = '';
+	}
+
+	public static function create(array $options): mixed {
+		$author = get_user_by( 'id', $options[ 'site_owner_id' ] ?? 0 );
+
+		if ( ! $author ) {
+			return new WP_Error( 'invalid_user', __( 'Invalid user.', 'wpcloud' ) );
+		}
+
+		$can_create = apply_filters( 'wpcloud_can_create_site', true, $author, $options );
+		if ( ! $can_create ) {
+			return new WP_Error( 'unauthorized', __( 'You are not authorized to create a site.', 'wpcloud' ) );
+		}
+
+		$domain = wpcloud_site_get_default_domain( $options['site_name'] );
+		$php_version = $options['php_version'];
+		$data_center = $options['data_center'];
+		$post_name = str_replace( '.', '-', $domain );
+
+		$post_id = wp_insert_post(
+			array(
+				'post_title' => $domain,
+				'post_name' => $post_name,
+				'post_type' => 'wpcloud_site',
+				'post_status' => 'draft',
+				'post_author' => $author->ID,
+				'meta_input' => array(
+					'php_version' => $php_version,
+					'data_center' => $data_center,
+					'site_name' => $options[ 'site_name' ],
+				)
+			)
+		);
+
+		if ( is_wp_error( $post_id ) ) {
+			return $post_id;
+		}
+
+		return self::from_post( get_post( $post_id ) );
 	}
 
 	/**
@@ -68,6 +109,7 @@ class WPCLOUD_Site {
 		$site->owner_id = intval( $post->post_author );
 		$site->domain = $post->post_title;
 		$site->wpcloud_site_id = intval( get_post_meta( $post->ID, 'wpcloud_site_id', true ) );
+		$site->error_message = get_post_meta( $post->ID, 'wpcloud_site_error', true );
 
 		if ( $fetch_details && $site->wpcloud_site_id ) {
 			$site->set_client_details();
