@@ -67,7 +67,7 @@ function InputFieldBlock( { attributes, setAttributes, className } ) {
 						/>
 					)}
 				 <CheckboxControl
-						label={ __( 'Limit to Admins' ) }
+						label={ __( 'Limit to Admins (appears with dashed border in editor) ' ) }
 						checked={ adminOnly }
 						onChange={ ( newVal ) => {
 							setAttributes( {
@@ -95,6 +95,7 @@ function InputFieldBlock( { attributes, setAttributes, className } ) {
 			<span
 				className={ classNames( 'wpcloud-block-form-input__label', {
 					'is-label-inline': inlineLabel || 'checkbox' === type,
+					'is-admin-only': adminOnly,
 				} ) }
 			>
 				{ ! isHidden && (

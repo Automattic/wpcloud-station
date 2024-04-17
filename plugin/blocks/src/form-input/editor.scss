@@ -21,4 +21,12 @@
 			}
 		}
 	}
+
+}
+
+.wpcloud-block-form-input__label {
+	 border: 1px solid;
+		&.is-admin-only {
+			border: 2px dashed var(--wp--preset--color--contrast-2);
+		}
 }

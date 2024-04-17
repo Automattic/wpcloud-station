@@ -54,8 +54,22 @@
 		line-height: 2;
 		border: 1px solid;
 	}
+	color: rgb(117, 117, 117);
 }
 
 textarea.wpcloud-block-form-input__input {
 	min-height: 10em;
+}
+
+.wpcloud-dashboard-form-input__select {
+	padding: 9px;
+}
+
+
+.wpcloud-block-form-input__label {
+	padding: 10px;
+	// This should just be for the editor view but can't seem to get the editor styles to load
+		&.is-admin-only {
+			border: 2px dashed var(--wp--preset--color--contrast-2);
+		}
 }
