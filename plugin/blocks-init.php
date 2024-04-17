@@ -18,11 +18,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 function wpcloud_include_blocks() {
-	foreach( glob( __DIR__ . '/blocks/src/*/index.php' ) as $block ) {
-		require_once $block;
+
+	foreach( glob( __DIR__ . '/blocks/src/*' ) as $block_directory ) {
+		if ( is_file( $block_directory . '/index.php' ) ) {
+			// If we need any server code, include a blocks/src/{block}/index.php file.
+			require_once $block_directory . '/index.php';
+		}
+
+		register_block_type(
+			dirname( __FILE__ ) . '/blocks/build/' . basename( $block_directory )
+		);
 	}
 }
-
 add_action( 'init', 'wpcloud_include_blocks', 9 );
-
-//require_once __DIR__ . '/blocks/src/form/index.php';
