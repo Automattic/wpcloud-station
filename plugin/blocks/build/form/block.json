@@ -24,6 +24,9 @@
     },
     "action": {
       "type": "string"
+    },
+    "wpcloudAction": {
+      "type": "string"
     }
   }
 }
