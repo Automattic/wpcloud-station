@@ -34,3 +34,21 @@ function wpcloud_block_form_create_site_handler( $response, $data) {
 }
 
 add_filter('wpcloud_form_process_create_site', 'wpcloud_block_form_create_site_handler', 10, 2);
+
+
+function wpcloud_block_form_render_field_site_owner_id( $content ) {
+
+	$users = get_users();
+	$options = '';
+	foreach ( $users as $user ) {
+		$options .= sprintf(
+			'<option value="%d">%s</option>',
+			$user->ID,
+			$user->display_name
+		);
+	}
+
+	$regex = '/(<select[^>]*>)(?:\s*<option[^>]*>.*?<\/option>)*\s*(<\/select>)/';
+	return preg_replace($regex, '$1' . $options . '$2', $content);
+}
+add_filter( 'wpcloud_block_form_render_field_site_owner_id', 'wpcloud_block_form_render_field_site_owner_id' );

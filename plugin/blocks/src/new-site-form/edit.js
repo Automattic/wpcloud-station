@@ -74,6 +74,18 @@ const TEMPLATE = [
 				},
 			],
 			[
+				'wpcloud/form-input',
+				{
+					type: 'select',
+					name: 'site_owner_id',
+					label: __('Owner'),
+					adminOnly: true,
+					options: [
+						{ value: '1', label: 'Site Owner' },
+					],
+				}
+			],
+			[
 				'wpcloud/form-submit-button',
 				{
 					text: __('Create Site'),
@@ -88,7 +100,6 @@ const TEMPLATE = [
  * @return {Element} Element to render.
  */
 export default function Edit() {
-
 	const blockProps = useBlockProps();
 
 	const innerBlocksProps = useInnerBlocksProps( blockProps, {
