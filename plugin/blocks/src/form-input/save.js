@@ -27,7 +27,7 @@ const getNameFromLabel = ( content ) => {
 	return (
 		removeAccents( stripHTML( content ) )
 			// Convert anything that's not a letter or number to a hyphen.
-			.replace( /[^\p{L}\p{N}]+/gu, '-' )
+			.replace( /[^\p{L}\p{N}]+/gu, '_' )
 			// Convert to lowercase
 			.toLowerCase()
 			// Remove any remaining leading or trailing hyphens.
@@ -80,7 +80,7 @@ function renderField( attributes ) {
 	};
 
 	const inputClasses = classNames(
-		'wp-block-form-input__input',
+		'wpcloud-block-form-input__input',
 		colorProps.className,
 		borderProps.className
 	);
@@ -103,11 +103,11 @@ export default function save( { attributes } ) {
 		<div { ...blockProps }>
 			{ /* eslint-disable jsx-a11y/label-has-associated-control */ }
 			 <label
-				className={ classNames( 'wp-block-form-input__label', {
+				className={ classNames( 'wpcloud-block-form-input__label', {
 					'is-label-inline': inlineLabel,
 				} ) }
 			>
-				<span className="wp-block-form-input__label-content">
+				<span className="wpcloud-block-form-input__label-content">
 					<RichText.Content value={ label } />
 				</span>
 				{ renderField( attributes ) }

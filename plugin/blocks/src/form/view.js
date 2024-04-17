@@ -1,25 +1,39 @@
-/**
- * Use this file for JavaScript code that you want to run in the front-end
- * on posts/pages that contain this block.
- *
- * When this file is defined as the value of the `viewScript` property
- * in `block.json` it will be enqueued on the front end of the site.
- *
- * Example:
- *
- * ```js
- * {
- *   "viewScript": "file:./view.js"
- * }
- * ```
- *
- * If you're not making any changes to this file because your project doesn't need any
- * JavaScript running in the front-end, then you should delete this file and remove
- * the `viewScript` property from `block.json`.
- *
- * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-metadata/#view-script
- */
+// eslint-disable-next-line eslint-comments/disable-enable-pair
+/* eslint-disable no-undef */
 
-/* eslint-disable no-console */
-console.log( 'Hello World! (from wpcloud-dashboard-form block)' );
-/* eslint-enable no-console */
+const redirectNotification = ( status ) => {
+	const urlParams = new URLSearchParams( window.location.search );
+	urlParams.append( 'wp-form-result', status );
+	window.location.search = urlParams.toString();
+};
+document.querySelectorAll('form.wpcloud-block-form[data-ajax]').forEach((form) => {
+
+	const button = form.querySelector('button[type="submit"]');
+
+	form.addEventListener('submit', async ( e ) => {
+		e.preventDefault();
+		button.setAttribute('disabled', 'disabled');
+
+		const formData = Object.fromEntries(new FormData(form).entries());
+		formData.action = 'wpcloud_form_submit';
+
+		try {
+			const response = await fetch( 'http://localhost:8888/wp-admin/admin-ajax.php', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded',
+				},
+				body: new URLSearchParams(formData).toString(),
+			});
+
+			const result = await response.json();
+
+			if (response.ok && result?.data?.redirect) {
+				window.location = result.data.redirect;
+			}
+			button.removeAttribute('disabled');
+		} catch (error) {
+			redirectNotification('error');
+		}
+	} );
+} );

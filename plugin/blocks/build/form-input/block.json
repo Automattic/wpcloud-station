@@ -5,10 +5,13 @@
   "version": "0.1.0",
   "title": "WP Cloud Form Input",
   "category": "widgets",
-  "icon": "cloud",
+  "icon": "forms",
   "description": "\"WP Cloud Form Input\"",
   "example": {},
   "textdomain": "wpcloud",
+  "ancestor": [
+    "wpcloud/form"
+  ],
   "editorScript": "file:./index.js",
   "editorStyle": "file:./index.css",
   "style": "file:./style-index.css",
@@ -23,7 +26,7 @@
     "label": {
       "type": "rich-text",
       "default": "Label",
-      "selector": ".wp-block-form-input__label-content",
+      "selector": ".wpcloud-block-form-input__label-content",
       "source": "rich-text",
       "__experimentalRole": "content"
     },
@@ -34,13 +37,13 @@
     "required": {
       "type": "boolean",
       "default": false,
-      "selector": ".wp-block-form-input__input",
+      "selector": ".wpcloud-block-form-input__input",
       "source": "attribute",
       "attribute": "required"
     },
     "placeholder": {
       "type": "string",
-      "selector": ".wp-block-form-input__input",
+      "selector": ".wpcloud-block-form-input__input",
       "source": "attribute",
       "attribute": "placeholder",
       "__experimentalRole": "content"

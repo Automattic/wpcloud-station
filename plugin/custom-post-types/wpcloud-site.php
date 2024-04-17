@@ -78,6 +78,7 @@ function wpcloud_on_create_site( int $post_id, WP_Post $post, bool $update ): vo
 
 	if ( is_wp_error( $result ) ) {
 		error_log( $result->get_error_message() );
+		update_post_meta( $post_id, 'wpcloud_site_error', $result->get_error_message() );
 		return;
 	}
 
