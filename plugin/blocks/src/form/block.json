@@ -5,7 +5,7 @@
 	"version": "0.1.0",
 	"title": "WP Cloud Form",
 	"category": "widgets",
-	"icon": "cloud",
+	"icon": "feedback",
 	"description": "\"WP Cloud Form\"",
 	"example": {},
 	"supports": {
@@ -15,5 +15,15 @@
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",
 	"style": "file:./style-index.css",
-	"viewScript": "file:./view.js"
+	"viewScript": "file:./view.js",
+	"render": "file:./render.php",
+	"attributes": {
+		"ajax": {
+			"type": "boolean",
+			"default": "false"
+		},
+		"action": {
+			"type": "string"
+		}
+	}
 }

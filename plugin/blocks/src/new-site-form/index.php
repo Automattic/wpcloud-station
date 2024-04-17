@@ -1,7 +1,9 @@
 <?php
 
-
-function wpcloud_register_new_site_form_block() {
-	register_block_type( dirname( __DIR__, 2 ) . '/build/new-site-form', );
+function wpcloud_block_create_site() {
+	check_ajax_referer( 'wpcloud-form' );
+	error_log('wpcloud block create site ');
 }
-add_action( 'init', 'wpcloud_register_new_site_form_block' );
+
+add_action( 'wp_ajax_wpcloud_create_site', 'wpcloud_block_create_site' );
+add_action( 'wp_ajax_nopriv_wpcloud_create_site', 'wpcloud_block_create_site' );
