@@ -1,0 +1,23 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "wpcloud/form-submit-button",
+  "version": "0.1.0",
+  "title": "WP Cloud Form Submit Button",
+  "category": "widgets",
+  "icon": "button",
+  "description": "WP Cloud from submit button.",
+  "example": {},
+  "supports": {
+    "html": false
+  },
+  "textdomain": "form-submit-button",
+  "editorScript": "file:./index.js",
+  "style": "file:./style-index.css",
+  "attributes": {
+    "text": {
+      "type": "string",
+      "default": "Submit"
+    }
+  }
+}
