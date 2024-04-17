@@ -6,9 +6,10 @@ import {
 	InnerBlocks,
 	useBlockProps,
 	useInnerBlocksProps,
-	//InspectorControls,
+	InspectorControls,
 	store as blockEditorStore,
 } from '@wordpress/block-editor';
+import { CheckboxControl, TextControl, SelectControl, PanelBody } from '@wordpress/components';
 import { useSelect } from '@wordpress/data';
 
 /**
@@ -25,7 +26,7 @@ import './editor.scss';
  * @return {Element} Element to render.
  */
 export default function Edit({ attributes, setAttributes, clientId }) {
-	//const { action, method } = attributes;
+	const { action, ajax, wpcloudAction } = attributes;
 	const blockProps = useBlockProps();
 	const hasInnerBlocks = useSelect(
 		(select) => {
@@ -42,26 +43,52 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		allowedBlocks: [
 			'core/paragraph',
 			'core/heading',
-			'wpcloud-dashboard/form-input',
-			/*
-			'wpcloud-dashboard/form-submit',
-			'wpcloud-dashboard/form-notice',
-			*/
+			'wpcloud/form-input',
+			'wpcloud/form-submit-button',
 		],
 		templateLock: false,
-		/*
 		renderAppender: hasInnerBlocks
 			? undefined
 			: InnerBlocks.ButtonBlockAppender,
-		*/
-
 	});
 
 	return (
-		<form
-			{...innerBlocksProps}
-			className="wpcloud-dashboard-form"
-			encType="text/plain"
-		/>
+		<>
+			<InspectorControls>
+				<PanelBody title={ __( 'Form Settings' ) }>
+					<TextControl
+						label={ __( 'WP Cloud Action' ) }
+						value={ wpcloudAction }
+						onChange={(wpcloudAction) => setAttributes({ wpcloudAction })}
+						help={
+								__( 'The WP Cloud form action.' )
+						}
+					/>
+					<CheckboxControl
+						label={__('Enable AJAX')}
+						checked={attributes.ajax}
+						onChange={(ajax) => setAttributes({ ajax })}
+						help={
+							__( 'Enable AJAX form submission for a smoother experience.' )
+						}
+					/>
+					{ !ajax && (
+						<TextControl
+							label={ __( 'Action' ) }
+							value={ action }
+							onChange={ ( action ) => setAttributes( { action } ) }
+							help={
+								__( 'The URL to send the form data to.' )
+							}
+						/>
+					) }
+				</PanelBody>
+			</InspectorControls>
+			<form
+				{...innerBlocksProps}
+				className="wpcloud-block-form"
+				encType="text/plain"
+			/>
+	</>
 	);
 }
