@@ -4,9 +4,10 @@
 	"name": "wpcloud/form-submit-button",
 	"version": "0.1.0",
 	"title": "WP Cloud Form Submit Button",
-	"category": "widgets",
+	"category": "wpcloud",
 	"icon": "button",
 	"description": "WP Cloud from submit button.",
+	"ancestor": [ "wpcloud/form" ],
 	"example": {},
 	"supports": {
 		"html": false

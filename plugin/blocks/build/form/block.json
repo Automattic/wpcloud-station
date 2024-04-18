@@ -4,7 +4,7 @@
   "name": "wpcloud/form",
   "version": "0.1.0",
   "title": "WP Cloud Form",
-  "category": "widgets",
+  "category": "wpcloud",
   "icon": "feedback",
   "description": "WP Cloud Form",
   "example": {},
