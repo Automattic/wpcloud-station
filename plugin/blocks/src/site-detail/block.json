@@ -1,0 +1,44 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "wpcloud/site-detail",
+	"version": "0.1.0",
+	"title": "Site Detail",
+	"category": "widgets",
+	"icon": "info-outline",
+	"description": "The Site Detail block displays a key-value pair for a site detail. The gray italic text is just a placeholder for the actual site detail value.",
+	"example": {},
+	"supports": {
+		"html": false
+	},
+	"textdomain": "site-detail",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php",
+	"viewScript": "file:./view.js",
+	"usesContext": ["postId", "postType"],
+	"attributes" : {
+		"detailLabel": {
+			"type": "rich-text",
+			"default": "Label",
+			"source": "rich-text"
+		},
+		"key": {
+			"type": "string",
+			"default": ""
+		},
+		"displayKey" : {
+			"type": "string",
+			"default": "Value"
+		},
+		"adminOnly" :{
+			"type": "boolean",
+			"default": false
+		},
+		"inline" : {
+			"type": "boolean",
+			"default": false
+		}
+	}
+}

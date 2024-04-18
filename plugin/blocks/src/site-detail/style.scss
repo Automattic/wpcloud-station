@@ -1,0 +1,38 @@
+.wpcloud-block-site-detail__label {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	gap: 0.25em;
+	margin-bottom: 0.5em;
+
+	&.is-inline {
+		flex-direction: row;
+		gap: 0.5em;
+		align-items: center;
+
+		.wpcloud-block-site-detail__label-content {
+			margin-bottom: 0.5em;
+		}
+	}
+}
+
+.wpcloud-block-site-detail__label-content {
+	width: fit-content;
+}
+
+.wpcloud-block-site-detail__select {
+	padding: 9px;
+}
+
+.wpcloud-block-site-detail__label {
+	padding: 10px;
+	// This should just be for the editor view but can't seem to get the editor styles to load
+		&.is-admin-only {
+			border: 2px dashed var(--wp--preset--color--contrast-2);
+		}
+}
+
+.wpcloud-block-site-detail__value-placeholder {
+	color: #999;
+	font-style: italic;
+}
