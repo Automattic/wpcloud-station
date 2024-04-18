@@ -6,13 +6,15 @@ const redirectNotification = ( status ) => {
 	urlParams.append( 'wp-form-result', status );
 	window.location.search = urlParams.toString();
 };
-document.querySelectorAll('form.wpcloud-block-form[data-ajax]').forEach((form) => {
+document.querySelectorAll( 'form.wpcloud-block-form[data-ajax]' ).forEach((form) => {
 
 	const button = form.querySelector('button[type="submit"]');
 
 	form.addEventListener('submit', async ( e ) => {
 		e.preventDefault();
 		button.setAttribute('disabled', 'disabled');
+		form.classList.add('is-loading');
+		form.classList.remove('is-error');
 
 		const formData = Object.fromEntries(new FormData(form).entries());
 		formData.action = 'wpcloud_form_submit';
@@ -31,7 +33,13 @@ document.querySelectorAll('form.wpcloud-block-form[data-ajax]').forEach((form) =
 			if (response.ok && result?.data?.redirect) {
 				window.location = result.data.redirect;
 			}
+
 			button.removeAttribute('disabled');
+			form.classList.remove('is-loading');
+
+			if ( ! response.ok) {
+				form.classList.add('is-error');
+			}
 		} catch (error) {
 			redirectNotification('error');
 		}
