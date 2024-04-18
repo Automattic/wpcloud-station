@@ -1,7 +1,4 @@
 <?php
-
-
-
 /** @disregard P1009 Undefined type */
 $processed_content = new WP_HTML_Tag_Processor( $content );
 $processed_content->next_tag( 'form' );
@@ -12,9 +9,6 @@ $fields .= wpcloud_block_form_hidden_field( 'action', 'wpcloud_block_form_submit
 if ( isset( $attributes[ 'wpcloudAction' ] ) && $attributes[ 'wpcloudAction' ] ) {
 	$fields .= wpcloud_block_form_hidden_field( 'wpcloud_action', $attributes[ 'wpcloudAction' ] );
 }
-
-$owner_id = $attributes[ 'site_owner_id' ] ?? get_current_user_id();
-$fields .= wpcloud_block_form_hidden_field( 'site_owner_id', $owner_id );
 
 // Get the action for this form.
 $action = '';
