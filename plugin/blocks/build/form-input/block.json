@@ -4,7 +4,7 @@
   "name": "wpcloud/form-input",
   "version": "0.1.0",
   "title": "WP Cloud Form Input",
-  "category": "widgets",
+  "category": "wpcloud",
   "icon": "forms",
   "description": "WP Cloud Form Input block.",
   "example": {},

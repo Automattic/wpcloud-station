@@ -30,4 +30,15 @@ function wpcloud_include_blocks() {
 		);
 	}
 }
-add_action( 'init', 'wpcloud_include_blocks', 9 );
+add_action( 'init', 'wpcloud_include_blocks' );
+
+add_filter( 'block_categories_all' , function( $categories ) {
+
+    // Adding a new category.
+	$categories[] = array(
+		'slug'  => 'wpcloud',
+		'title' => 'WP Cloud'
+	);
+
+	return $categories;
+} );

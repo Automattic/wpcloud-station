@@ -4,7 +4,7 @@
   "name": "wpcloud/new-site-form",
   "version": "0.1.0",
   "title": "New Site Form",
-  "category": "widgets",
+  "category": "wpcloud",
   "icon": "cloud",
   "description": "Form to create a new site on WP Cloud",
   "example": {},
