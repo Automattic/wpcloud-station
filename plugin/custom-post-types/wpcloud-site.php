@@ -7,6 +7,9 @@
 
 declare( strict_types = 1 );
 
+/**
+ * Register WP Cloud Site post type.
+ */
 function wpcloud_register_site_post_type(): void {
 	$labels = array(
 		'name'               => _x( 'Sites', 'post type general name', 'wpcloud' ),
@@ -35,6 +38,7 @@ function wpcloud_register_site_post_type(): void {
 		'show_in_rest' => true,
 		'show_in_ui'   => false,
 		'show_in_menu' => false,
+		'supports'     => array( 'title', 'editor', 'comments', 'author', 'thumbnail', 'custom-fields' ),
 		'taxonomies'   => array( 'category', 'tag' ),
 	);
 
@@ -42,18 +46,37 @@ function wpcloud_register_site_post_type(): void {
 	register_post_type( 'wpcloud_site', $args );
 
 	// register the post meta
+	wpcloud_site_register_post_meta( 'wpcloud_site_id', 'integer' );
+	wpcloud_site_register_post_meta( 'php_version', 'string' );
+	wpcloud_site_register_post_meta( 'data_center', 'string' );
+}
+
+/**
+ * Register post meta for WP Cloud Site post type.
+ *
+ * @param string $name The name of the post meta.
+ * @param string $type The type of the post meta.
+ */
+function wpcloud_site_register_post_meta( string $name, string $type ) {
 	register_post_meta(
-  	'wpcloud_site',
-  	'wpcloud_site_id',
-  	array(
-  		'show_in_rest'       => true,
-  		'single'             => true,
-  		'type'               => 'integer',
-  		'sanitize_callback'  => 'wp_kses_post',
-  	)
+		'wpcloud_site',
+		$name,
+		array(
+			'show_in_rest'       => true,
+			'single'             => true,
+			'type'               => $type,
+			'sanitize_callback'  => 'wp_kses_post',
+		)
 	);
 }
 
+/**
+ * Get the default domain name for a WP Cloud site.
+ *
+ * @param string $domain Optional. The domain name to include as subdomain.
+ *
+ * @return string Domain with default domain added.
+ */
 function wpcloud_site_get_default_domain( string $domain = '' ): string {
 	$settings       = get_option( 'wpcloud_settings' );
 	$default_domain = $settings['wpcloud_domain'] ?? '';
@@ -65,8 +88,18 @@ function wpcloud_site_get_default_domain( string $domain = '' ): string {
 	return $domain;
 }
 
+/**
+ * After WP Cloud Site post has been created, create the site through the API.
+ *
+ * @param integer $post_id The post ID.
+ * @param WP_Post $post    The post.
+ * @param boolean $update  True if update. False of create.
+ */
 function wpcloud_on_create_site( int $post_id, WP_Post $post, bool $update ): void {
 	if ( $update ) {
+		return;
+	}
+	if ( 'wpcloud_site' !== $post->post_type ) {
 		return;
 	}
 
@@ -82,7 +115,7 @@ function wpcloud_on_create_site( int $post_id, WP_Post $post, bool $update ): vo
 	if ( ! empty( $php_version ) ) {
 		$data['php_version'] = $php_version;
 	}
-	if ('No Preference' !== $data_center ) {
+	if ( ! empty( $data_center ) && 'No Preference' !== $data_center ) {
 		$data['geo_affinity'] = $data_center;
 	}
 
@@ -98,8 +131,86 @@ function wpcloud_on_create_site( int $post_id, WP_Post $post, bool $update ): vo
 
 	do_action( 'wpcloud_site_created', $post_id, $post, $result->atomic_site_id );
 }
-add_action( 'save_post_wpcloud_site', 'wpcloud_on_create_site', 10, 3 );
+add_action( 'wp_after_insert_post', 'wpcloud_on_create_site', 10, 3 );
 
+/**
+ * Prepare WP Cloud Site data for REST response. Retrieve details from the API and add to the response.
+ *
+ * @param WP_REST_Response $response The response.
+ * @param WP_Post          $post     The post.
+ *
+ * @return WP_REST_Response The response.
+ */
+function wpcloud_on_rest_prepare_site( WP_REST_Response $response, WP_Post $post ): WP_REST_Response {
+	$response->data['status'] = ( 'draft' === $post->status ) ? 'provisioning' : 'active';
+
+	unset( $response->data['content'] );
+	unset( $response->data['guid'] );
+	unset( $response->data['meta'] );
+	unset( $response->data['template'] );
+	unset( $response->data['title'] );
+
+	$wpcloud_site_id = get_post_meta( $post->ID, 'wpcloud_site_id', true );
+	if ( empty( $wpcloud_site_id ) ) {
+		return $response;
+	}
+
+	$wpcloud_site_id = intval( $wpcloud_site_id );
+
+	$wpcloud_site = wpcloud_client_site_details( $wpcloud_site_id, true );
+	if ( is_wp_error( $wpcloud_site ) ) {
+		// On error, don't add the site data.
+		// Just return the original response.
+		return $response;
+	}
+
+	$response->data = array_merge(
+		$response->data,
+		array(
+			'wpcloud_site_id' => $wpcloud_site_id,
+			'data_center'     => $wpcloud_site->extra->server_pool->geo_affinity,
+			'php_version'     => $wpcloud_site->php_version,
+			'primary_domain'  => $wpcloud_site->domain_name,
+			'cache_prefix'    => $wpcloud_site->cache_prefix,
+			'db_charset'      => $wpcloud_site->db_charset,
+			'db_collate'      => $wpcloud_site->db_collate,
+			'wp_admin_user'   => $wpcloud_site->wp_admin_user,
+			'static_file_404' => $wpcloud_site->static_file_404,
+			'wp_admin_email'  => $wpcloud_site->wp_admin_email,
+			'wp_admin_user'   => $wpcloud_site->wp_admin_user,
+			'wp_version'      => $wpcloud_site->wp_version,
+		)
+	);
+
+	return $response;
+}
+add_filter( 'rest_prepare_wpcloud_site', 'wpcloud_on_rest_prepare_site', 10, 2 );
+
+/**
+ * Always query both draft and published sites in REST query.
+ *
+ * @param array      $args    The request arguments.
+ * @param WP_Request $request The request.
+ *
+ * @return array The arguments with draft and publish included.
+ */
+function wpcloud_site_rest_query( $args, $request ): array {
+	$args['post_status'] = array( 'draft', 'publish' );
+
+	return $args;
+}
+add_filter( 'rest_wpcloud_site_query', 'wpcloud_site_rest_query', 10, 2 );
+
+/**
+ * Prevent WP Cloud Site from trash. Must force delete.
+ */
+add_filter( 'rest_wpcloud_site_trashable', '__return_false' );
+
+/**
+ * On WP Cloud Site post delete, delete from API.
+ *
+ * @param integer $post_id The ID of the post being deleted.
+ */
 function wpcloud_on_delete_site( int $post_id ): void {
 	$wpcloud_site_id = get_post_meta( $post_id, 'wpcloud_site_id', true );
 	// Site doesn't have associated wpcloud site id, proceed.
@@ -115,30 +226,6 @@ function wpcloud_on_delete_site( int $post_id ): void {
 	}
 }
 add_action( 'before_delete_post', 'wpcloud_on_delete_site', 10, 1 );
-
-function wpcloud_on_rest_prepare_site( WP_REST_Response $response, WP_Post $post ): WP_REST_Response {
-	$wpcloud_site_id = get_post_meta( $post->ID, 'wpcloud_site_id', true );
-	if ( empty( $wpcloud_site_id ) ) {
-		return $response;
-	}
-
-	$wpcloud_site_id = intval( $wpcloud_site_id );
-
-	$result = wpcloud_client_site_details( $wpcloud_site_id, true );
-	if ( is_wp_error( $result ) ) {
-		return $result;
-	}
-
-	$response->data['wpcloud'] = array(
-		'php_version'     => $result->php_version,
-		'data_center'     => $result->extra->server_pool->geo_affinity,
-		'domain_name'     => $result->domain_name,
-		'wpcloud_site_id' => $wpcloud_site_id,
-	);
-
-	return $response;
-}
-add_filter( 'rest_prepare_wpcloud_site', 'wpcloud_on_rest_prepare_site', 10, 2 );
 
 /**
  * Lookup `wpcloud_site` post by `wpcloud_site_id`.
