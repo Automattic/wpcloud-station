@@ -12,6 +12,10 @@
  * @package        wpcloud-dashboard
  */
 
+/**
+ * Demo mode
+ */
+define( 'WPCLOUD_DEMO_MODE', true );
 
 /**
  *  Actions

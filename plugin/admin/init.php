@@ -67,19 +67,6 @@ function wpcloud_settings_init(): void {
 			'wpcloud_custom_data' => 'custom',
 		]
 		);
-
-	add_settings_field(
-		'wpcloud_field_demo_mode',
-		__( 'Demo Mode', 'wpcloud' ),
-		'wpcloud_field_input_cb',
-		'wpcloud',
-		'wpcloud_section_settings',
-		[
-			'label_for'         => 'wpcloud_demo_mode',
-			'class'             => 'wpcloud_row',
-			'wpcloud_custom_data' => 'custom',
-		]
-		);
 }
 
 add_action( 'admin_menu', 'wpcloud_options_page' );
