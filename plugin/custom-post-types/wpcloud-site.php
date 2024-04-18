@@ -166,13 +166,13 @@ function wpcloud_lookup_post_by_site_id( int $wpcloud_site_id ): mixed {
 /**
  * Get a site detail.
  *
- * @param string $key The detail key.
  * @param int|WP_Post $post The site post or ID.
+ * @param string $key The detail key.
  *
  * @return mixed The detail value. WP_Error on error.
  */
 
-function wpcloud_get_site_detail( string $key, int|WP_Post $post ): mixed {
+function wpcloud_get_site_detail( int|WP_Post $post, string $key, ): mixed {
 	if ( is_int( $post ) ) {
 		$post = get_post( $post );
 	}
