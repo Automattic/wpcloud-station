@@ -23,13 +23,6 @@ function wpcloud_add_capabilities(): void {
 	$role->add_cap( WPCLOUD_CAN_MANAGE_SITES );
 }
 
-function register_controllers(): void {
-	$sites_controller = new WPCLOUD_Sites_Controller();
-	$sites_controller->register_routes();
-}
-add_action( 'rest_api_init', 'register_controllers' );
-
-
 /**
  * Set up ACL for WP Cloud specific pages
  */
