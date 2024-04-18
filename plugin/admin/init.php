@@ -67,6 +67,19 @@ function wpcloud_settings_init(): void {
 			'wpcloud_custom_data' => 'custom',
 		]
 		);
+
+	add_settings_field(
+		'wpcloud_field_demo_mode',
+		__( 'Demo Mode', 'wpcloud' ),
+		'wpcloud_field_input_cb',
+		'wpcloud',
+		'wpcloud_section_settings',
+		[
+			'label_for'         => 'wpcloud_demo_mode',
+			'class'             => 'wpcloud_row',
+			'wpcloud_custom_data' => 'custom',
+		]
+		);
 }
 
 add_action( 'admin_menu', 'wpcloud_options_page' );
@@ -213,11 +226,13 @@ function wpcloud_admin_list_sites(): void {
 	<?php
 }
 
-
 function wpcloud_admin_view_site(): mixed  {
 	$wpcloud_site = WPCloud_Site::find( intval( $_GET[ 'post' ] ) );
 	if ( ! $wpcloud_site ) {
 		return new WP_Error( 'not_found', __( 'Site not found.' ) );
+	}
+	if ( is_wp_error( $wpcloud_site ) ) {
+		return $wpcloud_site;
 	}
 
 	$set_details = $wpcloud_site->set_client_details();
