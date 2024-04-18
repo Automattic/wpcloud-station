@@ -5,5 +5,16 @@
  */
 
 .wpcloud-block-site-detail {
-	border: 1px dotted #f00;
+	padding: 10px;
+	// This should just be for the editor view but can't seem to get the editor styles to load
+		&.is-admin-only {
+			border: 2px dashed var(--wp--preset--color--contrast-2);
+		}
+}
+
+.wpcloud-block-site-detail__value {
+	color: #999;
+	font-style: italic;
+	width: fit-content;
+  text-wrap: nowrap;
 }

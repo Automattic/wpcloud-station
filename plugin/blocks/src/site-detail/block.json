@@ -17,12 +17,11 @@
 	"style": "file:./style-index.css",
 	"render": "file:./render.php",
 	"viewScript": "file:./view.js",
-	"usesContext": ["postId", "postType"],
+
 	"attributes" : {
-		"detailLabel": {
-			"type": "rich-text",
-			"default": "Label",
-			"source": "rich-text"
+		"title": {
+			"type": "string",
+			"default": "Title"
 		},
 		"key": {
 			"type": "string",

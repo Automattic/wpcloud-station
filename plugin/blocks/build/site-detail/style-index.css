@@ -1,1 +1,32 @@
-.wpcloud-block-site-detail__label{display:flex;flex-direction:column;gap:.25em;margin-bottom:.5em;width:100%}.wpcloud-block-site-detail__label.is-inline{align-items:center;flex-direction:row;gap:.5em}.wpcloud-block-site-detail__label.is-inline .wpcloud-block-site-detail__label-content{margin-bottom:.5em}.wpcloud-block-site-detail__label-content{width:-moz-fit-content;width:fit-content}.wpcloud-block-site-detail__select{padding:9px}.wpcloud-block-site-detail__label{padding:10px}.wpcloud-block-site-detail__label.is-admin-only{border:2px dashed var(--wp--preset--color--contrast-2)}.wpcloud-block-site-detail__value-placeholder{color:#999;font-style:italic}
+/*!**********************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./blocks/src/site-detail/style.scss ***!
+  \**********************************************************************************************************************************************************************************************************************************************************/
+.wpcloud-block-site-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25em;
+}
+.wpcloud-block-site-detail.is-inline {
+  flex-direction: row;
+  gap: 0.5em;
+  align-items: center;
+  justify-content: flex-start;
+  align-items: baseline;
+}
+.wpcloud-block-site-detail.is-inline .wpcloud-block-site-detail__label-content {
+  margin-bottom: 0.5em;
+}
+
+.wpcloud-block-site-detail__title {
+  margin-bottom: 0.5em;
+}
+.wpcloud-block-site-detail__title h4 {
+  margin: 0;
+}
+
+.wpcloud-block-site-detail__title-content {
+  width: -moz-fit-content;
+  width: fit-content;
+}
+
+/*# sourceMappingURL=style-index.css.map*/

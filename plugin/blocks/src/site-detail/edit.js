@@ -11,8 +11,6 @@ import {
 	InspectorControls,
 	RichText,
 	useBlockProps,
-	__experimentalUseBorderProps as useBorderProps, // eslint-disable-line @wordpress/no-unsafe-wp-apis
-	__experimentalUseColorProps as useColorProps, // eslint-disable-line @wordpress/no-unsafe-wp-apis
 } from '@wordpress/block-editor';
 import { PanelBody, CheckboxControl, SelectControl } from '@wordpress/components';
 import { useRef } from '@wordpress/element';
@@ -42,6 +40,7 @@ const siteDetailKeys = [
 	'smtp_pass',
 	'geo_affinity',
 	'ip_addresses',
+	'dp_file_size',
 ];
 
 const getDisplayKey = (key = '') => {
@@ -52,17 +51,15 @@ const getDisplayKey = (key = '') => {
 		.replace(/\bphp\b/i, 'PHP')
 };
 
-function SiteDetailBlock( { attributes, setAttributes, className } ) {
-	const { detailLabel, key, adminOnly, inline, displayKey } = attributes;
+function SiteDetailBlock({ attributes, setAttributes, className }) {
+
+	const { title, key, adminOnly, inline, displayKey } = attributes;
 	const blockProps = useBlockProps();
 	const ref = useRef();
 
-	const borderProps = useBorderProps( attributes );
-	const colorProps = useColorProps( attributes );
 	if ( ref.current ) {
 		ref.current.focus();
 	}
-
 
 	const controls = (
 		<>
@@ -80,7 +77,7 @@ function SiteDetailBlock( { attributes, setAttributes, className } ) {
 							setAttributes({
 								key: newKey,
 								displayKey: sprintf(_x('{The %s}', 'The display name for the site detail key', 'wpcloud'), display ),
-								detailLabel: display,
+								title: display,
 							})
 						}}
 					/>
@@ -110,32 +107,37 @@ function SiteDetailBlock( { attributes, setAttributes, className } ) {
 
 	return (
 		<div {...blockProps}
-			className={classNames( className, 'wpcloud-block-site-detail', colorProps.className, borderProps.className)}
+			className={classNames(
+				className,
+				'wpcloud-block-site-detail',
+				{
+					'is-inline': inline,
+					'is-admin-only': adminOnly
+				},
+		)}
 			>
 			{ controls }
-			<span
-				className={ classNames( 'wpcloud-block-site-detail__label', {
-					'is-inline': inline,
-					'is-admin-only': adminOnly,
-				} ) }
-			>
+			<div
+				className={classNames(
+					className,
+					'wpcloud-block-site-detail__title'
+				)}>
 				<RichText
-					tagName="span"
-					className="wpcloud-block-site-detail__label-content"
-					value={ detailLabel }
-					onChange={ ( newDetail ) =>
-						setAttributes( { detailLabel: newDetail } )
+					tagName="h4"
+					className={ 'wpcloud-block-site-detail__title-content' }
+					value={ title }
+					onChange={(newTitle) => {
+						console.log('newTitle', newTitle);
+						setAttributes({ title: newTitle })
 					}
-					placeholder={ __( 'Detail' ) }
+					}
+					placeholder={ __( 'Title' ) }
 				/>
-
-				<div
-					className={ classNames(
-						className,
-						'wpcloud-block-site-detail__value-placeholder',
-					)}
-				 	>{ displayKey }	</div>
-			</span>
+			</div>
+			<div
+				className={'wpcloud-block-site-detail__value'}>
+				{displayKey}
+			</div>
 		</div>
 	);
 }

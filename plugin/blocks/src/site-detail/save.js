@@ -7,25 +7,42 @@ import classNames from 'classnames';
  * WordPress dependencies
  */
 import {
+	InnerBlocks,
 	RichText,
 	useBlockProps,
 } from '@wordpress/block-editor';
 
 
 export default function save({ attributes, className }) {
-	const { detailLabel, key } = attributes;
-	const blockProps = useBlockProps();
+	console.log('save attributes', attributes);
+	const { title, displayKey, inline, adminOnly } = attributes;
+	const blockProps = useBlockProps.save();
 	return (
 		<div {...blockProps}
 			className={classNames(
 				className,
 				'wpcloud-block-site-detail',
-			) }
+				{
+					'is-inline': inline,
+					'is-admin-only': adminOnly
+				},
+		)}
 		>
-			<div className="wpcloud-block-site-detail__label">
-				<RichText.Content value={ detailLabel} />
+		<div
+				className={classNames(
+					className,
+					'wpcloud-block-site-detail__title'
+				)}>
+				<RichText.Content
+					tagName="h4"
+					className={ 'wpcloud-block-site-detail__title-content' }
+					value={ title }
+				/>
 			</div>
-			<div className="wpcloud-block-site-detail__value" data-site-detail={ key } />
+			<div
+				className={'wpcloud-block-site-detail__value'}>
+				{displayKey}
+			</div>
 		</div>
 	)
 }

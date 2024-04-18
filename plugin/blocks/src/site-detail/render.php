@@ -1,8 +1,13 @@
 <?php
-/**
- * @see https://github.com/WordPress/gutenberg/blob/trunk/docs/reference-guides/block-api/block-metadata.md#render
- */
-?>
-<p <?php echo get_block_wrapper_attributes(); ?>>
-	<?php esc_html_e( 'Site Detail – hello from a dynamic block!', 'site-detail' ); ?>
-</p>
+
+
+
+if (get_post_type() !== 'wpcloud_site') {
+	return;
+}
+
+error_log(print_r(the_post(),true));
+
+
+
+echo $content;

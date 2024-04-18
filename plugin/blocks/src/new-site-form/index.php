@@ -6,7 +6,8 @@ function wpcloud_block_form_create_site_fields( array $fields ) {
 }
 add_filter( 'wpcloud_block_form_submitted_fields', 'wpcloud_block_form_create_site_fields', 11, 1 );
 
-function wpcloud_block_form_create_site_handler( $response, $data) {
+function wpcloud_block_form_create_site_handler( $response, $data ) {
+	error_log(print_r($data,true));
 
 	if ( ! isset( $data['site_owner_id' ] ) ) {
 		$data[ 'site_owner_id' ] = get_current_user_id();
