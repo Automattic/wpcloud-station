@@ -1,13 +1,21 @@
 <?php
-
-
-
-if (get_post_type() !== 'wpcloud_site') {
+/*
+ * The site detail block is only rendered when the current post is a `wpcloud_site` post.
+ * If we're not on a `wpcloud_site` post, we should return early.
+ * But we can still render the block in demo mode.
+ */
+if (get_post_type() !== 'wpcloud_site' && ! wpcloud_is_demo_mode() ) {
 	return;
 }
 
-error_log(print_r(the_post(),true));
 
+$detail = wpcloud_get_site_detail( get_the_ID(), $attributes[ 'key' ] ) ?? '';
 
+if ( is_array( $detail ) ) {
+	$detail = implode( ', ', $detail );
+}
 
-echo $content;
+// match the placeholder which is in the last set of curly braces  { The placeholder }
+$regex = '/\{[^{}]*\}(?=[^{}]*$)/';
+
+echo preg_replace($regex, $detail, $content);
