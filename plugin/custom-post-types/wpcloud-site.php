@@ -131,7 +131,7 @@ function wpcloud_on_create_site( int $post_id, WP_Post $post, bool $update ): vo
 
 	do_action( 'wpcloud_site_created', $post_id, $post, $result->atomic_site_id );
 }
-add_action( 'wp_after_insert_post', 'wpcloud_on_create_site', 20, 3 );
+add_action( 'wp_after_insert_post', 'wpcloud_on_create_site', 10, 3 );
 
 /**
  * Prepare WP Cloud Site data for REST response. Retrieve details from the API and add to the response.
@@ -159,6 +159,8 @@ function wpcloud_on_rest_prepare_site( WP_REST_Response $response, WP_Post $post
 
 	$wpcloud_site = wpcloud_client_site_details( $wpcloud_site_id, true );
 	if ( is_wp_error( $wpcloud_site ) ) {
+		// On error, don't add the site data.
+		// Just return the original response.
 		return $response;
 	}
 
