@@ -24,7 +24,6 @@ import { useRef, useCallback } from '@wordpress/element';
 import { Text, Select } from './fields';
 
 function InputFieldBlock( { attributes, setAttributes, className } ) {
-	console.log(attributes);
 	const { type, inlineLabel, label, adminOnly, required, name } = attributes;
 	const blockProps = useBlockProps();
 	const ref = useRef();

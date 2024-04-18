@@ -6,13 +6,17 @@ import classNames from 'classnames';
 /**
  * WordPress dependencies
  */
-import { __, _x, sprintf } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import {
 	InspectorControls,
 	RichText,
 	useBlockProps,
 } from '@wordpress/block-editor';
-import { PanelBody, CheckboxControl, SelectControl } from '@wordpress/components';
+import {
+	PanelBody,
+	CheckboxControl,
+	SelectControl,
+} from '@wordpress/components';
 import { useRef } from '@wordpress/element';
 
 /**
@@ -43,16 +47,16 @@ const siteDetailKeys = [
 	'dp_file_size',
 ];
 
-const getDisplayKey = (key = '') => {
-	return key.replace(/_/g, ' ')
-		.replace(/\b\w/g, s => s.toUpperCase())
-		.replace(/\b(.{2})\b/i, twochar => twochar.toUpperCase())
-		.replace(/\bapi\b/i, 'API')
-		.replace(/\bphp\b/i, 'PHP')
+const getDisplayKey = ( key = '' ) => {
+	return key
+		.replace( /_/g, ' ' )
+		.replace( /\b\w/g, ( s ) => s.toUpperCase() )
+		.replace( /\b(.{2})\b/i, ( twochar ) => twochar.toUpperCase() )
+		.replace( /\bapi\b/i, 'API' )
+		.replace( /\bphp\b/i, 'PHP' );
 };
 
-function SiteDetailBlock({ attributes, setAttributes, className }) {
-
+function SiteDetailBlock( { attributes, setAttributes, className } ) {
 	const { title, key, adminOnly, inline, displayKey } = attributes;
 	const blockProps = useBlockProps();
 	const ref = useRef();
@@ -64,22 +68,27 @@ function SiteDetailBlock({ attributes, setAttributes, className }) {
 	const controls = (
 		<>
 			<InspectorControls>
-				<PanelBody title={__('Settings')}>
+				<PanelBody title={ __( 'Settings' ) }>
 					<SelectControl
-						label={__('Select a site detail')}
-						value={key}
-						options={siteDetailKeys.map((detailKey) => ({
+						label={ __( 'Select a site detail' ) }
+						value={ key }
+						options={ siteDetailKeys.map( ( detailKey ) => ( {
 							value: detailKey,
-							label: getDisplayKey(detailKey)
-						}))}
-						onChange={(newKey) => {
-							const display = getDisplayKey(newKey);
-							setAttributes({
+							label: getDisplayKey( detailKey ),
+						} ) ) }
+						onChange={ ( newKey ) => {
+							const display = getDisplayKey( newKey );
+							setAttributes( {
 								key: newKey,
-								displayKey: sprintf(_x('{The %s}', 'The display name for the site detail key', 'wpcloud'), display ),
+
+								displayKey: sprintf(
+									/* translators: %s is the display name of the site detail key */
+									__( '{The %s}', 'wpcloud' ),
+									display
+								),
 								title: display,
-							})
-						}}
+							} );
+						} }
 					/>
 					<CheckboxControl
 						label={ __( 'Display Inline' ) }
@@ -106,37 +115,32 @@ function SiteDetailBlock({ attributes, setAttributes, className }) {
 	);
 
 	return (
-		<div {...blockProps}
-			className={classNames(
-				className,
-				'wpcloud-block-site-detail',
-				{
-					'is-inline': inline,
-					'is-admin-only': adminOnly
-				},
-		)}
-			>
+		<div
+			{ ...blockProps }
+			className={ classNames( className, 'wpcloud-block-site-detail', {
+				'is-inline': inline,
+				'is-admin-only': adminOnly,
+			} ) }
+		>
 			{ controls }
 			<div
-				className={classNames(
+				className={ classNames(
 					className,
 					'wpcloud-block-site-detail__title'
-				)}>
+				) }
+			>
 				<RichText
 					tagName="h4"
 					className={ 'wpcloud-block-site-detail__title-content' }
 					value={ title }
-					onChange={(newTitle) => {
-						console.log('newTitle', newTitle);
-						setAttributes({ title: newTitle })
-					}
-					}
+					onChange={ ( newTitle ) => {
+						setAttributes( { title: newTitle } );
+					} }
 					placeholder={ __( 'Title' ) }
 				/>
 			</div>
-			<div
-				className={'wpcloud-block-site-detail__value'}>
-				{displayKey}
+			<div className={ 'wpcloud-block-site-detail__value' }>
+				{ displayKey }
 			</div>
 		</div>
 	);
