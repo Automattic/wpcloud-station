@@ -25,7 +25,7 @@ import { Text, Select } from './fields';
 
 function InputFieldBlock( { attributes, setAttributes, className } ) {
 
-	const { type, inlineLabel, label, adminOnly, required } =
+	const { type, inlineLabel, label, adminOnly, required, name } =
 		attributes;
 	const blockProps = useBlockProps();
 	const ref = useRef();
@@ -67,13 +67,14 @@ function InputFieldBlock( { attributes, setAttributes, className } ) {
 						/>
 					)}
 				 <CheckboxControl
-						label={ __( 'Limit to Admins (appears with dashed border in editor) ' ) }
+						label={ __( 'Limit to Admins' ) }
 						checked={ adminOnly }
 						onChange={ ( newVal ) => {
 							setAttributes( {
 								adminOnly: newVal,
 							} );
-						} }
+						}}
+						help={ __( 'Only admins will see this field. Inputs marked as admin only will appear with a dashed border in the editor' ) }
 					/>
 					<CheckboxControl
 						label={ __( 'Required' ) }
@@ -85,6 +86,14 @@ function InputFieldBlock( { attributes, setAttributes, className } ) {
 						} }
 					/>
 				</PanelBody>
+			</InspectorControls>
+			<InspectorControls group="advanced">
+				<TextControl
+						label={__('Name')}
+						value={name}
+						onChange={(name) => setAttributes({name})}
+						help={__('The name attribute of the input field')}
+				/>
 			</InspectorControls>
 		</>
 	)

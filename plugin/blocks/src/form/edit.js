@@ -25,7 +25,7 @@ import './editor.scss';
  *
  * @return {Element} Element to render.
  */
-export default function Edit({ attributes, setAttributes, clientId }) {
+export default function Edit({ attributes, setAttributes, clientId, isSelected }) {
 	const { action, ajax, wpcloudAction } = attributes;
 	const blockProps = useBlockProps();
 	const hasInnerBlocks = useSelect(
@@ -39,6 +39,12 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		[clientId]
 	);
 
+	const isChildSelected = useSelect((select) =>
+    select('core/block-editor').hasSelectedInnerBlock(clientId)
+	);
+
+	console.log(isChildSelected);
+
 	const innerBlocksProps = useInnerBlocksProps(blockProps, {
 		allowedBlocks: [
 			'core/paragraph',
@@ -47,9 +53,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 			'wpcloud/form-submit-button',
 		],
 		templateLock: false,
-		renderAppender: hasInnerBlocks
-			? undefined
-			: InnerBlocks.ButtonBlockAppender,
+		renderAppender: isSelected || isChildSelected ? InnerBlocks.ButtonBlockAppender : undefined,
 	});
 
 	return (

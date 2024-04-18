@@ -6,7 +6,7 @@
 	"title": "WP Cloud Form",
 	"category": "widgets",
 	"icon": "feedback",
-	"description": "\"WP Cloud Form\"",
+	"description": "WP Cloud Form",
 	"example": {},
 	"supports": {
 		"html": false
