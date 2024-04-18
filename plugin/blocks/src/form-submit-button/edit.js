@@ -4,13 +4,13 @@
 import { __ } from '@wordpress/i18n';
 import { useBlockProps, useInnerBlocksProps } from '@wordpress/block-editor';
 
-
-const Edit = ({ attributes }) => {
+const Edit = ( { attributes } ) => {
 	const { text } = attributes;
 	const template = [
-		[ 'core/button',
+		[
+			'core/button',
 			{
-				text: text || __('Submit'),
+				text: text || __( 'Submit' ),
 				tagName: 'button',
 				type: 'submit',
 			},
@@ -18,11 +18,14 @@ const Edit = ({ attributes }) => {
 	];
 
 	const blockProps = useBlockProps();
-	const innerBlocksProps = useInnerBlocksProps(blockProps, {
-		template: template,
+	const innerBlocksProps = useInnerBlocksProps( blockProps, {
+		template,
 	} );
 	return (
-		<div className="wpcloud-block-form-submit-wrapper" { ...innerBlocksProps } />
+		<div
+			className="wpcloud-block-form-submit-wrapper"
+			{ ...innerBlocksProps }
+		/>
 	);
 };
 export default Edit;

@@ -7,9 +7,8 @@ import {
 	useBlockProps,
 	useInnerBlocksProps,
 	InspectorControls,
-	store as blockEditorStore,
 } from '@wordpress/block-editor';
-import { CheckboxControl, TextControl, SelectControl, PanelBody } from '@wordpress/components';
+import { CheckboxControl, TextControl, PanelBody } from '@wordpress/components';
 import { useSelect } from '@wordpress/data';
 
 /**
@@ -18,34 +17,28 @@ import { useSelect } from '@wordpress/data';
 import './editor.scss';
 
 /**
- * The edit function describes the structure of your block in the context of the
- * editor. This represents what the editor will render when the block is used.
  *
- * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-edit-save/#edit
- *
+ * @param {Object}  props               Component props.
+ * @param {Object}  props.attributes
+ * @param {Object}  props.setAttributes
+ * @param {number}  props.clientId
+ * @param {boolean} props.isSelected
  * @return {Element} Element to render.
  */
-export default function Edit({ attributes, setAttributes, clientId, isSelected }) {
+export default function Edit( {
+	attributes,
+	setAttributes,
+	clientId,
+	isSelected,
+} ) {
 	const { action, ajax, wpcloudAction } = attributes;
 	const blockProps = useBlockProps();
-	const hasInnerBlocks = useSelect(
-		(select) => {
-			const { getBlockOrder } = select(blockEditorStore);
-			const block = getBlockOrder(clientId);
-			return {
-				hasInnerBlocks: !! block?.innerBlocks?.length,
-			};
-		},
-		[clientId]
+
+	const isChildSelected = useSelect( ( select ) =>
+		select( 'core/block-editor' ).hasSelectedInnerBlock( clientId )
 	);
 
-	const isChildSelected = useSelect((select) =>
-    select('core/block-editor').hasSelectedInnerBlock(clientId)
-	);
-
-	console.log(isChildSelected);
-
-	const innerBlocksProps = useInnerBlocksProps(blockProps, {
+	const innerBlocksProps = useInnerBlocksProps( blockProps, {
 		allowedBlocks: [
 			'core/paragraph',
 			'core/heading',
@@ -53,8 +46,11 @@ export default function Edit({ attributes, setAttributes, clientId, isSelected }
 			'wpcloud/form-submit-button',
 		],
 		templateLock: false,
-		renderAppender: isSelected || isChildSelected ? InnerBlocks.ButtonBlockAppender : undefined,
-	});
+		renderAppender:
+			isSelected || isChildSelected
+				? InnerBlocks.ButtonBlockAppender
+				: undefined,
+	} );
 
 	return (
 		<>
@@ -63,36 +59,38 @@ export default function Edit({ attributes, setAttributes, clientId, isSelected }
 					<TextControl
 						label={ __( 'WP Cloud Action' ) }
 						value={ wpcloudAction }
-						onChange={(wpcloudAction) => setAttributes({ wpcloudAction })}
-						help={
-								__( 'The WP Cloud form action.' )
+						onChange={ ( newValue ) =>
+							setAttributes( { wpcloudAction: newValue } )
 						}
+						help={ __( 'The WP Cloud form action.' ) }
 					/>
 					<CheckboxControl
-						label={__('Enable AJAX')}
-						checked={attributes.ajax}
-						onChange={(ajax) => setAttributes({ ajax })}
-						help={
-							__( 'Enable AJAX form submission for a smoother experience.' )
+						label={ __( 'Enable AJAX' ) }
+						checked={ attributes.ajax }
+						onChange={ ( newValue ) =>
+							setAttributes( { ajax: newValue } )
 						}
+						help={ __(
+							'Enable AJAX form submission for a smoother experience.'
+						) }
 					/>
-					{ !ajax && (
+					{ ! ajax && (
 						<TextControl
 							label={ __( 'Action' ) }
 							value={ action }
-							onChange={ ( action ) => setAttributes( { action } ) }
-							help={
-								__( 'The URL to send the form data to.' )
+							onChange={ ( newValue ) =>
+								setAttributes( { action: newValue } )
 							}
+							help={ __( 'The URL to send the form data to.' ) }
 						/>
 					) }
 				</PanelBody>
 			</InspectorControls>
 			<form
-				{...innerBlocksProps}
+				{ ...innerBlocksProps }
 				className="wpcloud-block-form"
 				encType="text/plain"
 			/>
-	</>
+		</>
 	);
 }

@@ -2,45 +2,35 @@
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import {
-	InnerBlocks,
-	useBlockProps,
-	useInnerBlocksProps,
-	InspectorControls,
-	store as blockEditorStore,
-} from '@wordpress/block-editor';
-import { TextControl, PanelBody } from '@wordpress/components';
-import { useSelect } from '@wordpress/data';
-
+import { useBlockProps, useInnerBlocksProps } from '@wordpress/block-editor';
 
 /**
  * Internal dependencies
  */
 import './editor.scss';
 
-
 const TEMPLATE = [
 	[
 		'wpcloud/form',
 		{
 			ajax: true,
-			wpcloudAction: 'create_site'
+			wpcloudAction: 'create_site',
 		},
 		[
 			[
 				'core/heading',
 				{
 					level: 3,
-					content: __('New Site'),
+					content: __( 'New Site' ),
 				},
 			],
 			[
 				'wpcloud/form-input',
 				{
 					type: 'text',
-					label: __('Name'),
+					label: __( 'Name' ),
 					name: 'site_name',
-					placeholder: __('Enter site name'),
+					placeholder: __( 'Enter site name' ),
 					required: true,
 				},
 			],
@@ -48,7 +38,7 @@ const TEMPLATE = [
 				'wpcloud/form-input',
 				{
 					type: 'select',
-					label: __('PHP Version'),
+					label: __( 'PHP Version' ),
 					name: 'php_version',
 					options: [
 						{ value: '7.4', label: '7.4' },
@@ -65,9 +55,9 @@ const TEMPLATE = [
 				{
 					type: 'select',
 					name: 'data_center',
-					label: __('Data Center'),
-						options: [
-						{ value: ' ', label: __( 'No Preference' )},
+					label: __( 'Data Center' ),
+					options: [
+						{ value: ' ', label: __( 'No Preference' ) },
 						{ value: 'bur', label: __( 'Los Angeles, CA' ) },
 					],
 					required: true,
@@ -78,17 +68,15 @@ const TEMPLATE = [
 				{
 					type: 'select',
 					name: 'site_owner_id',
-					label: __('Owner'),
+					label: __( 'Owner' ),
 					adminOnly: true,
-					options: [
-						{ value: '1', label: 'Site Owner' },
-					],
-				}
+					options: [ { value: '1', label: 'Site Owner' } ],
+				},
 			],
 			[
 				'wpcloud/form-submit-button',
 				{
-					text: __('Create Site'),
+					text: __( 'Create Site' ),
 				},
 			],
 		],
@@ -106,7 +94,5 @@ export default function Edit() {
 		template: TEMPLATE,
 	} );
 
-	return (
-		<div { ...innerBlocksProps } className="wpcloud-new-site-form" />
-	);
+	return <div { ...innerBlocksProps } className="wpcloud-new-site-form" />;
 }

@@ -8,40 +8,40 @@ import classNames from 'classnames';
  */
 import { __ } from '@wordpress/i18n';
 
+export default function SelectField( {
+	attributes,
+	className,
+	styleProps = {},
+	onValueChange,
+} ) {
+	const { value, options } = attributes;
+	const { borderProps, colorProps } = styleProps;
 
-export default function SelectField({ attributes, className, styleProps = {}, onValueChange }) {
-	const { value, options} = attributes;
-	const {
-		borderProps,
-		colorProps,
-	} = styleProps;
-
-	const controls = (
-		<>
-		</>
-	);
+	const controls = <></>;
 	return (
 		<>
 			{ controls }
-				<select
-				className={classNames(
+			<select
+				className={ classNames(
 					className,
 					'wpcloud-dashboard-form-input__select',
 					colorProps.className,
 					borderProps.className
-				)}
-				aria-label={__('Select')}
-				value={value}
-				onChange={(event) => onValueChange(event.target.value)}
-					style={{
-						...borderProps.style,
-						...colorProps.style,
-					}}
-				>
-					{ options.map( ( option ) => (
-						<option key={ option.value } value={ option.value }>{ option.label }</option>
-					) ) }
-				</select>
+				) }
+				aria-label={ __( 'Select' ) }
+				value={ value }
+				onChange={ ( event ) => onValueChange( event.target.value ) }
+				style={ {
+					...borderProps.style,
+					...colorProps.style,
+				} }
+			>
+				{ options.map( ( option ) => (
+					<option key={ option.value } value={ option.value }>
+						{ option.label }
+					</option>
+				) ) }
+			</select>
 		</>
 	);
 }
