@@ -8,21 +8,15 @@ import { useBlockProps, useInnerBlocksProps } from '@wordpress/block-editor';
 const Edit = ({ attributes }) => {
 	const { text } = attributes;
 	const template = [
-		[
-			'core/buttons',
-			{},
-			[
-				[
-					'core/button',
-					{
-						text: text || __( 'Submit' ),
-						tagName: 'button',
-						type: 'submit',
-					},
-				],
-			],
+		[ 'core/button',
+			{
+				text: text || __('Submit'),
+				tagName: 'button',
+				type: 'submit',
+			},
 		],
 	];
+
 	const blockProps = useBlockProps();
 	const innerBlocksProps = useInnerBlocksProps(blockProps, {
 		template: template,
