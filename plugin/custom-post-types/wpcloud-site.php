@@ -40,6 +40,18 @@ function wpcloud_register_site_post_type(): void {
 
 	// Register the custom post type
 	register_post_type( 'wpcloud_site', $args );
+
+	// register the post meta
+	register_post_meta(
+  	'wpcloud_site',
+  	'wpcloud_site_id',
+  	array(
+  		'show_in_rest'       => true,
+  		'single'             => true,
+  		'type'               => 'integer',
+  		'sanitize_callback'  => 'wp_kses_post',
+  	)
+	);
 }
 
 function wpcloud_site_get_default_domain( string $domain = '' ): string {
@@ -149,4 +161,41 @@ function wpcloud_lookup_post_by_site_id( int $wpcloud_site_id ): mixed {
 	}
 
 	return $query->posts[0];
+}
+
+/**
+ * Get a site detail.
+ *
+ * @param string $key The detail key.
+ * @param int|WP_Post $post The site post or ID.
+ *
+ * @return mixed The detail value. WP_Error on error.
+ */
+
+function wpcloud_get_site_detail( string $key, int|WP_Post $post ): mixed {
+	if ( is_int( $post ) ) {
+		$post = get_post( $post );
+	}
+
+	if ( ! $post ) {
+		return null;
+	}
+
+	$wpcloud_site_id = get_post_meta( $post->ID, 'wpcloud_site_id', true );
+	if ( empty( $wpcloud_site_id ) ) {
+		return null;
+	}
+
+	$wpcloud_site_id = intval( $wpcloud_site_id );
+
+	$result = wpcloud_client_site_details( $wpcloud_site_id, true );
+	if ( is_wp_error( $result ) ) {
+		return $result;
+	}
+
+	if ( ! isset( $result->$key ) ) {
+		return null;
+	}
+
+	return $result->$key;
 }
