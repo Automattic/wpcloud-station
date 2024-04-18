@@ -69,14 +69,14 @@ if ( ! class_exists( 'WPCLOUD_Sites_Controller' ) ) {
 			$post = wpcloud_lookup_post_by_site_id( $wpcloud_site->atomic_site_id );
 			if ( ! empty( $post ) ) {
 				$wpcloud_site->post_id     = $post->ID;
-				$wpcloud_site->post_status = ( 'draft' === $post_post_status ) ? 'provisioning' : 'active';
+				$wpcloud_site->post_status = ( 'draft' === $post->post_status ) ? 'provisioning' : 'active';
 			}
 
 			$wpcloud_site->wpcloud_site_id = $wpcloud_site->atomic_site_id;
 
-			unset( $wpcloud_site->atomic_site_id );
-			unset( $wpcloud_site->wpcom_blog_id );
-			unset( $wpcloud_site->atomic_client_id );
+			// unset( $wpcloud_site->atomic_site_id );
+			// unset( $wpcloud_site->wpcom_blog_id );
+			// unset( $wpcloud_site->atomic_client_id );
 
 			return $wpcloud_site;
 		}
@@ -171,14 +171,14 @@ if ( ! class_exists( 'WPCLOUD_Sites_Controller' ) ) {
 		 */
 		public function delete_site( $request ) {
 			$params = $request->get_params();
-			$wpcloud_site_id = intval( $params['id'] );
+			$post_id = intval( $params['id'] );
 
-			$result = wpcloud_client_site_delete( $wpcloud_site_id );
+			$result = wp_delete_post( $id, true );
 			if ( is_wp_error( $result ) ) {
 				return $result;
 			}
 
-			return new WP_REST_Response( $result, WP_Http::OK );
+			return new WP_REST_Response( null, WP_Http::NO_CONTENT );
 		}
 	}
 

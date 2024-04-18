@@ -160,7 +160,7 @@ class WPCLOUD_Site {
 			'posts_per_page' => -1,
 			'orderby' => 'title',
 			'order' => 'ASC',
-			'author' => $owner_id,
+			// 'author' => $owner_id,
 		);
 
 		$query = wp_parse_args( $query, $defaults );
