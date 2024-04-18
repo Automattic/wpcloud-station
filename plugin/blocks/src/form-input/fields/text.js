@@ -7,25 +7,17 @@ import classNames from 'classnames';
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import {
-	InspectorControls,
-	RichText,
-	useBlockProps,
-	__experimentalUseBorderProps as useBorderProps,
-	__experimentalUseColorProps as useColorProps,
-} from '@wordpress/block-editor';
 
-export default function TextField({ attributes, className, styleProps = {}, onPlaceholderChange }) {
-	const { placeholder, required, type, adminOnly } = attributes;
-	const {
-		borderProps,
-		colorProps,
-	} = styleProps;
+export default function TextField( {
+	attributes,
+	className,
+	styleProps = {},
+	onPlaceholderChange,
+} ) {
+	const { placeholder, required, type } = attributes;
+	const { borderProps, colorProps } = styleProps;
 
-	const controls = (
-		<>
-		</>
-	);
+	const controls = <></>;
 
 	const TagName = type === 'textarea' ? 'textarea' : 'input';
 	return (
@@ -45,7 +37,7 @@ export default function TextField({ attributes, className, styleProps = {}, onPl
 				}
 				value={ placeholder }
 				onChange={ ( event ) =>
-					onPlaceholderChange( event.target.value)
+					onPlaceholderChange( event.target.value )
 				}
 				aria-required={ required }
 				style={ {

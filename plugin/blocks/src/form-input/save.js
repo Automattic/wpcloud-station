@@ -1,4 +1,3 @@
-
 /**
  * External dependencies
  */
@@ -11,10 +10,10 @@ import removeAccents from 'remove-accents';
 import {
 	RichText,
 	useBlockProps,
-	__experimentalGetBorderClassesAndStyles as getBorderClassesAndStyles,
-	__experimentalGetColorClassesAndStyles as getColorClassesAndStyles,
+	__experimentalGetBorderClassesAndStyles as getBorderClassesAndStyles, // eslint-disable-line @wordpress/no-unsafe-wp-apis
+	__experimentalGetColorClassesAndStyles as getColorClassesAndStyles, // eslint-disable-line @wordpress/no-unsafe-wp-apis
 } from '@wordpress/block-editor';
-import { __unstableStripHTML as stripHTML } from '@wordpress/dom';
+import { __unstableStripHTML as stripHTML } from '@wordpress/dom'; // eslint-disable-line @wordpress/no-unsafe-wp-apis
 
 /**
  * Get the name attribute from a content string.
@@ -35,12 +34,19 @@ const getNameFromLabel = ( content ) => {
 	);
 };
 
-function renderSelect({ options, label, name, required }, inputClasses, inputStyle ) {
+function renderSelect(
+	{ options, label, name, required },
+	inputClasses,
+	inputStyle
+) {
 	return (
 		<select
-			className={ classNames( 'wpcloud-dashboard-form-input__select', inputClasses )}
-			style={inputStyle}
-			name={name || getNameFromLabel(label)}
+			className={ classNames(
+				'wpcloud-dashboard-form-input__select',
+				inputClasses
+			) }
+			style={ inputStyle }
+			name={ name || getNameFromLabel( label ) }
 			required={ required }
 			aria-required={ required }
 		>
@@ -53,7 +59,11 @@ function renderSelect({ options, label, name, required }, inputClasses, inputSty
 	);
 }
 
-function renderText({ type, name, label, required, placeholder }, inputClasses, inputStyle) {
+function renderText(
+	{ type, name, label, required, placeholder },
+	inputClasses,
+	inputStyle
+) {
 	const TagName = 'textarea' === type ? 'textarea' : 'input';
 	return (
 		<TagName
@@ -85,14 +95,13 @@ function renderField( attributes ) {
 		borderProps.className
 	);
 
-	return 'select' === type ?
-		renderSelect(attributes, inputClasses, inputStyle) :
-		renderText(attributes, inputClasses, inputStyle);
+	return 'select' === type
+		? renderSelect( attributes, inputClasses, inputStyle )
+		: renderText( attributes, inputClasses, inputStyle );
 }
 
 export default function save( { attributes } ) {
-	const { type, label, name, value, inlineLabel } =
-		attributes;
+	const { type, label, name, value, inlineLabel } = attributes;
 	const blockProps = useBlockProps.save();
 
 	if ( 'hidden' === type ) {
@@ -102,7 +111,7 @@ export default function save( { attributes } ) {
 	return (
 		<div { ...blockProps }>
 			{ /* eslint-disable jsx-a11y/label-has-associated-control */ }
-			 <label
+			<label
 				className={ classNames( 'wpcloud-block-form-input__label', {
 					'is-label-inline': inlineLabel,
 				} ) }

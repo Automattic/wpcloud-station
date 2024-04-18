@@ -3,15 +3,14 @@
  */
 import { InnerBlocks, useBlockProps } from '@wordpress/block-editor';
 
-const Save = ( { attributes } ) => {
+const Save = () => {
 	const blockProps = useBlockProps.save();
-	const { submissionMethod } = attributes;
 
 	return (
 		<form
 			{ ...blockProps }
-			className='wpcloud-block-form'
-			encType='text/plain'
+			className="wpcloud-block-form"
+			encType="text/plain"
 		>
 			<InnerBlocks.Content />
 		</form>
