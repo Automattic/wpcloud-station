@@ -8,6 +8,12 @@ if (get_post_type() !== 'wpcloud_site' && ! wpcloud_is_demo_mode() ) {
 	return;
 }
 
+error_log('should check for admin');
+/* Return early if the user is not an admin and the block is admin only */
+if ( $attributes[ 'adminOnly' ] && ! current_user_can( 'manage_options' ) ) {
+	return;
+}
+
 
 $detail = wpcloud_get_site_detail( get_the_ID(), $attributes[ 'key' ] ) ?? '';
 
