@@ -7,6 +7,6 @@
 		"WP_DEBUG_DISPLAY": true
   },
 	"mappings": {
-		"wp-content/themes/wpcloud-dashboard": "./themes/classic"
-	}
+		"wp-content/themes/wpcloud-dashboard": "./themes/classic",
+		"wp-content/themes/wpcloud-block": "./themes/block"	}
 }
