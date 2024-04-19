@@ -7,6 +7,7 @@ import {
 	useBlockProps,
 	useInnerBlocksProps,
 	InspectorControls,
+	store as blockEditorStore,
 } from '@wordpress/block-editor';
 import { CheckboxControl, TextControl, PanelBody } from '@wordpress/components';
 import { useSelect } from '@wordpress/data';
@@ -38,11 +39,23 @@ export default function Edit( {
 		select( 'core/block-editor' ).hasSelectedInnerBlock( clientId )
 	);
 
+	const { hasInnerBlocks } = useSelect(
+		( select ) => {
+			const { getBlock } = select( blockEditorStore );
+			const block = getBlock( clientId );
+			return {
+				hasInnerBlocks: !! ( block && block.innerBlocks.length ),
+			};
+		},
+		[ clientId ]
+	);
+
 	const innerBlocksProps = useInnerBlocksProps( blockProps, {
 		renderAppender:
-			isSelected || isChildSelected
+			! hasInnerBlocks || isSelected || isChildSelected
 				? InnerBlocks.ButtonBlockAppender
 				: undefined,
+		template: hasInnerBlocks ? undefined : [ [ 'wpcloud/form-input' ] ],
 	} );
 
 	return (
