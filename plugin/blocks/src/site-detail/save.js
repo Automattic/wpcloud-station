@@ -11,8 +11,9 @@ export default function save( { attributes, className } ) {
 	const { title, displayKey, inline, adminOnly, hideTitle } = attributes;
 	const blockProps = useBlockProps.save();
 	return (
+		<span { ...blockProps }>
 		<div
-			{ ...blockProps }
+
 			className={ classNames( className, 'wpcloud-block-site-detail', {
 				'is-inline': inline,
 				'is-admin-only': adminOnly,
@@ -35,6 +36,7 @@ export default function save( { attributes, className } ) {
 			<div className={ 'wpcloud-block-site-detail__value' }>
 				{ displayKey }
 			</div>
-		</div>
+			</div>
+		</span>
 	);
 }

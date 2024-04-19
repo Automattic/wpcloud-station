@@ -1,0 +1,15 @@
+/**
+ * The following styles get applied inside the editor only.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+.wpcloud-block-site-detail-card {
+	border: 1px solid var(--wp--preset--color--contrast-2);
+	border-radius: 4px;
+	padding: 10px;
+
+	&.is-admin-only {
+		border: 2px dashed var(--wp--preset--color--contrast-2);
+	}
+}
