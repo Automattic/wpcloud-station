@@ -260,6 +260,18 @@ function wpcloud_lookup_post_by_site_id( int $wpcloud_site_id ): mixed {
  */
 
 function wpcloud_get_site_detail( int|WP_Post $post, string $key, ): mixed {
+	/**
+	 * Return fixture data if in demo mode.
+	 */
+	if ( wpcloud_is_demo_mode() ) {
+		$site = wpcloud_site_details_fixture();
+		if ( isset( $site->$key ) ) {
+			return $site->$key;
+		} else {
+			return null;
+		}
+	}
+
 	if ( is_int( $post ) ) {
 		$post = get_post( $post );
 	}
