@@ -1,0 +1,31 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "wpcloud/site-details",
+	"version": "0.1.0",
+	"title": "All Site Details",
+	"category": "wpcloud",
+	"icon": "info",
+	"description": "A block to display site details",
+	"example": {},
+	"supports": {
+		"html": false
+	},
+	"textdomain": "site-detail-card",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"allowedBlocks" : [
+		"wpcloud/site-detail-card",
+		"core/columns",
+		"core/column",
+		"core/paragraph",
+		"core/heading"
+	],
+	"attributes" : {
+		"adminOnly": {
+			"type": "boolean",
+			"default": false
+		}
+	}
+}
