@@ -4,7 +4,7 @@
   "name": "wpcloud/site-detail",
   "version": "0.1.0",
   "title": "Site Detail",
-  "category": "wpcloud",
+  "category": "wpcloudnp",
   "icon": "info-outline",
   "description": "The Site Detail block displays a key-value pair for a site detail. The gray italic text is just a placeholder for the actual site detail value.",
   "example": {},
@@ -35,6 +35,10 @@
       "default": false
     },
     "inline": {
+      "type": "boolean",
+      "default": false
+    },
+    "hideTitle": {
       "type": "boolean",
       "default": false
     }

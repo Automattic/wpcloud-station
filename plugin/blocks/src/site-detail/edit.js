@@ -57,7 +57,7 @@ const getDisplayKey = ( key = '' ) => {
 };
 
 function SiteDetailBlock( { attributes, setAttributes, className } ) {
-	const { title, key, adminOnly, inline, displayKey } = attributes;
+	const { title, key, adminOnly, inline, displayKey, hideTitle } = attributes;
 	const blockProps = useBlockProps();
 	const ref = useRef();
 
@@ -98,6 +98,18 @@ function SiteDetailBlock( { attributes, setAttributes, className } ) {
 						} }
 					/>
 					<CheckboxControl
+						label={ __( 'Show Value only' ) }
+						checked={ hideTitle }
+						onChange={ ( newVal ) => {
+							setAttributes( {
+								hideTitle: newVal,
+							} );
+						} }
+						help={ __(
+							'Only show the value of the site detail. The title will be hidden.'
+						) }
+					/>
+					<CheckboxControl
 						label={ __( 'Limit to Admins' ) }
 						checked={ adminOnly }
 						onChange={ ( newVal ) => {
@@ -123,22 +135,24 @@ function SiteDetailBlock( { attributes, setAttributes, className } ) {
 			} ) }
 		>
 			{ controls }
-			<div
-				className={ classNames(
-					className,
-					'wpcloud-block-site-detail__title'
-				) }
-			>
-				<RichText
-					tagName="h4"
-					className={ 'wpcloud-block-site-detail__title-content' }
-					value={ title }
-					onChange={ ( newTitle ) => {
-						setAttributes( { title: newTitle } );
-					} }
-					placeholder={ __( 'Title' ) }
-				/>
-			</div>
+			{ hideTitle ? null : (
+				<div
+					className={ classNames(
+						className,
+						'wpcloud-block-site-detail__title'
+					) }
+				>
+					<RichText
+						tagName="h4"
+						className={ 'wpcloud-block-site-detail__title-content' }
+						value={ title }
+						onChange={ ( newTitle ) => {
+							setAttributes( { title: newTitle } );
+						} }
+						placeholder={ __( 'Title' ) }
+					/>
+				</div>
+			) }
 			<div className={ 'wpcloud-block-site-detail__value' }>
 				{ displayKey }
 			</div>
