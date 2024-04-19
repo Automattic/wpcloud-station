@@ -24,7 +24,7 @@ import { useRef, useCallback } from '@wordpress/element';
 import { Text, Select } from './fields';
 
 function InputFieldBlock( { attributes, setAttributes, className } ) {
-	const { type, inlineLabel, label, adminOnly, required, name } = attributes;
+	const { type, inlineLabel, label, adminOnly, required, fieldName } = attributes;
 	const blockProps = useBlockProps();
 	const ref = useRef();
 
@@ -58,15 +58,15 @@ function InputFieldBlock( { attributes, setAttributes, className } ) {
 	const controls = (
 		<>
 			<InspectorControls>
-				<PanelBody title={ __( 'Settings' ) }>
+				<PanelBody title={__('Settings')}>
 					<TextControl
-						label={ __( 'Name' ) }
-						value={ name }
-						onChange={ ( newValue ) =>
-							setAttributes( { name: newValue } )
-						}
-						help={ __( 'The name attribute of the input field' ) }
-					/>
+					label={ __( 'Field Name' ) }
+					value={ fieldName }
+					onChange={ ( newValue ) =>
+						setAttributes( { fieldName: newValue } )
+					}
+					help={ __( 'The name attribute of the input field' ) }
+				/>
 					{ 'checkbox' !== type && (
 						<CheckboxControl
 							label={ __( 'Inline label' ) }

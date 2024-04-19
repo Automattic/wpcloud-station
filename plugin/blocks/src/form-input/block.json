@@ -19,7 +19,7 @@
 			"type": "string",
 			"default": "text"
 		},
-		"name": {
+		"fieldName": {
 			"type": "string",
 			"default": ""
 		},
