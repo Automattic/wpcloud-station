@@ -20,7 +20,7 @@
 	"attributes": {
 		"ajax": {
 			"type": "boolean",
-			"default": "false"
+			"default": false
 		},
 		"action": {
 			"type": "string"
@@ -28,5 +28,11 @@
 		"wpcloudAction": {
 			"type": "string"
 		}
-	}
+	},
+	"allowedBlocks": [
+		 "wpcloud/site-detail",
+			"core/paragraph",
+			"core/heading",
+			"wpcloud/form-input",
+			"wpcloud/form-submit-button" ]
 }

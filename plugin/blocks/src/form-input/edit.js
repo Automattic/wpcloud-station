@@ -59,6 +59,14 @@ function InputFieldBlock( { attributes, setAttributes, className } ) {
 		<>
 			<InspectorControls>
 				<PanelBody title={ __( 'Settings' ) }>
+					<TextControl
+						label={ __( 'Name' ) }
+						value={ name }
+						onChange={ ( newValue ) =>
+							setAttributes( { name: newValue } )
+						}
+						help={ __( 'The name attribute of the input field' ) }
+					/>
 					{ 'checkbox' !== type && (
 						<CheckboxControl
 							label={ __( 'Inline label' ) }
@@ -92,16 +100,6 @@ function InputFieldBlock( { attributes, setAttributes, className } ) {
 						} }
 					/>
 				</PanelBody>
-			</InspectorControls>
-			<InspectorControls group="advanced">
-				<TextControl
-					label={ __( 'Name' ) }
-					value={ name }
-					onChange={ ( newValue ) =>
-						setAttributes( { name: newValue } )
-					}
-					help={ __( 'The name attribute of the input field' ) }
-				/>
 			</InspectorControls>
 		</>
 	);

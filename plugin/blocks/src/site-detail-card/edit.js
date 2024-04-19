@@ -1,4 +1,9 @@
 /**
+ * External dependencies
+ */
+import classNames from 'classnames';
+
+/**
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
@@ -9,7 +14,7 @@ import {
 	InspectorControls,
 	store as blockEditorStore,
 } from '@wordpress/block-editor';
-import { CheckboxControl, TextControl, PanelBody } from '@wordpress/components';
+import { CheckboxControl, PanelBody } from '@wordpress/components';
 import { useSelect } from '@wordpress/data';
 
 /**
@@ -32,7 +37,7 @@ export default function Edit( {
 	clientId,
 	isSelected,
 } ) {
-	const { action, ajax, wpcloudAction } = attributes;
+	const { adminOnly } = attributes;
 	const blockProps = useBlockProps();
 
 	const isChildSelected = useSelect( ( select ) =>
@@ -52,50 +57,35 @@ export default function Edit( {
 
 	const innerBlocksProps = useInnerBlocksProps( blockProps, {
 		renderAppender:
-			! hasInnerBlocks || isSelected || isChildSelected
+			isSelected || isChildSelected
 				? InnerBlocks.ButtonBlockAppender
 				: undefined,
-		template: hasInnerBlocks ? undefined : [ [ 'wpcloud/form-input' ] ],
+		template: hasInnerBlocks ? undefined : [ [ 'wpcloud/site-detail' ] ],
 	} );
 
 	return (
 		<>
 			<InspectorControls>
 				<PanelBody title={ __( 'Form Settings' ) }>
-					<TextControl
-						label={ __( 'WP Cloud Action' ) }
-						value={ wpcloudAction }
-						onChange={ ( newValue ) =>
-							setAttributes( { wpcloudAction: newValue } )
-						}
-						help={ __( 'The WP Cloud form action.' ) }
-					/>
 					<CheckboxControl
-						label={ __( 'Enable AJAX' ) }
-						checked={ attributes.ajax }
-						onChange={ ( newValue ) =>
-							setAttributes( { ajax: newValue } )
-						}
+						label={ __( 'Limit to Admins' ) }
+						checked={ adminOnly }
+						onChange={ ( newVal ) => {
+							setAttributes( {
+								adminOnly: newVal,
+							} );
+						} }
 						help={ __(
-							'Enable AJAX form submission for a smoother experience.'
+							'Only admins will see this field. Inputs marked as admin only will appear with a dashed border in the editor'
 						) }
 					/>
-					{ ! ajax && (
-						<TextControl
-							label={ __( 'Action' ) }
-							value={ action }
-							onChange={ ( newValue ) =>
-								setAttributes( { action: newValue } )
-							}
-							help={ __( 'The URL to send the form data to.' ) }
-						/>
-					) }
 				</PanelBody>
 			</InspectorControls>
-			<form
+			<div
 				{ ...innerBlocksProps }
-				className="wpcloud-block-form"
-				encType="text/plain"
+				className={ classNames( 'wpcloud-block-site-detail-card', {
+					'is-admin-only': adminOnly,
+				} ) }
 			/>
 		</>
 	);

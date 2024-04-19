@@ -1,0 +1,33 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "wpcloud/site-detail-card",
+	"version": "0.1.0",
+	"title": "Site Detail Card",
+	"category": "wpcloud",
+	"icon": "info",
+	"description": "A block to display site details",
+	"example": {},
+	"supports": {
+		"html": false
+	},
+	"textdomain": "site-detail-card",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"allowedBlocks" : [
+		"allowedBlocks",
+		"core/paragraph",
+		"core/heading",
+		"core/group",
+		"core/columns",
+		"wpcloud/site-detail",
+		"wpcloud/form"
+	],
+	"attributes" : {
+		"adminOnly": {
+			"type": "boolean",
+			"default": false
+		}
+	}
+}
