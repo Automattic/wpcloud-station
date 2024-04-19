@@ -15,7 +15,7 @@
 /**
  * Demo mode
  */
-define( 'WPCLOUD_DEMO_MODE', true );
+define( 'WPCLOUD_DEMO_MODE', false );
 
 /**
  *  Actions
