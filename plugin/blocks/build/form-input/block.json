@@ -22,7 +22,8 @@
       "default": "text"
     },
     "name": {
-      "type": "string"
+      "type": "string",
+      "default": ""
     },
     "label": {
       "type": "rich-text",

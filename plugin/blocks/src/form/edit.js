@@ -39,13 +39,6 @@ export default function Edit( {
 	);
 
 	const innerBlocksProps = useInnerBlocksProps( blockProps, {
-		allowedBlocks: [
-			'core/paragraph',
-			'core/heading',
-			'wpcloud/form-input',
-			'wpcloud/form-submit-button',
-		],
-		templateLock: false,
 		renderAppender:
 			isSelected || isChildSelected
 				? InnerBlocks.ButtonBlockAppender
