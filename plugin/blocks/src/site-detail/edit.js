@@ -17,7 +17,6 @@ import {
 	CheckboxControl,
 	SelectControl,
 } from '@wordpress/components';
-import { useRef } from '@wordpress/element';
 
 /**
  *
@@ -59,12 +58,6 @@ const getDisplayKey = ( key = '' ) => {
 function SiteDetailBlock( { attributes, setAttributes, className } ) {
 	const { title, key, adminOnly, inline, displayKey, hideTitle } = attributes;
 	const blockProps = useBlockProps();
-	const ref = useRef();
-
-	if ( ref.current ) {
-		ref.current.focus();
-	}
-
 	const controls = (
 		<>
 			<InspectorControls>
@@ -127,8 +120,9 @@ function SiteDetailBlock( { attributes, setAttributes, className } ) {
 	);
 
 	return (
+		<span { ...blockProps }>
 		<div
-			{ ...blockProps }
+
 			className={ classNames( className, 'wpcloud-block-site-detail', {
 				'is-inline': inline,
 				'is-admin-only': adminOnly,
@@ -156,7 +150,8 @@ function SiteDetailBlock( { attributes, setAttributes, className } ) {
 			<div className={ 'wpcloud-block-site-detail__value' }>
 				{ displayKey }
 			</div>
-		</div>
+			</div>
+		</span>
 	);
 }
 
