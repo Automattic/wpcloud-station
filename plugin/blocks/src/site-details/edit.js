@@ -33,61 +33,61 @@ const TEMPLATE = [
 				[
 					[
 						'wpcloud/site-detail',
-						{ title: 'Domain', key: 'domain_name', inline: true },
+						{ label: 'Domain', name: 'domain_name', inline: true },
 					],
 					[
 						'wpcloud/site-detail',
 						{
-							title: 'PHP Version',
-							key: 'php_version',
+							label: 'PHP Version',
+							name: 'php_version',
 							inline: true,
 						},
 					],
 					[
 						'wpcloud/site-detail',
 						{
-							title: 'Data Center',
-							key: 'geo_affinity',
+							label: 'Data Center',
+							name: 'geo_affinity',
 							inline: true,
 						},
 					],
 					[
 						'wpcloud/site-detail',
 						{
-							title: 'WP Version',
-							key: 'wp_version',
+							label: 'WP Version',
+							name: 'wp_version',
 							inline: true,
 						},
 					],
 					[
 						'wpcloud/site-detail',
 						{
-							title: 'Admin Email',
-							key: 'wp_admin_email',
+							label: 'Admin Email',
+							name: 'wp_admin_email',
 							inline: true,
 						},
 					],
 					[
 						'wpcloud/site-detail',
 						{
-							title: 'Admin User',
-							key: 'wp_admin_user',
+							label: 'Admin User',
+							name: 'wp_admin_user',
 							inline: true,
 						},
 					],
 					[
 						'wpcloud/site-detail',
 						{
-							title: 'IP Addresses',
-							key: 'ip_addresses',
+							label: 'IP Addresses',
+							name: 'ip_addresses',
 							inline: true,
 						},
 					],
 					[
 						'wpcloud/site-detail',
 						{
-							title: 'Static 404',
-							key: 'static_file_404',
+							label: 'Static 404',
+							name: 'static_file_404',
 							inline: true,
 						},
 					],
@@ -102,88 +102,88 @@ const TEMPLATE = [
 					[
 						'wpcloud/site-detail',
 						{
-							title: 'DB Charset',
-							key: 'db_charset',
+							label: 'DB Charset',
+							name: 'db_charset',
 							inline: true,
 						},
 					],
 					[
 						'wpcloud/site-detail',
 						{
-							title: 'DB Collate',
-							key: 'db_collate',
+							label: 'DB Collate',
+							name: 'db_collate',
 							inline: true,
 						},
 					],
 					[
 						'wpcloud/site-detail',
 						{
-							title: 'DB Password',
-							key: 'db_password',
+							label: 'DB Password',
+							name: 'db_password',
 							inline: true,
 						},
 					],
 					[
 						'wpcloud/site-detail',
 						{
-							title: 'DB File Size',
-							key: 'db_file_size',
+							label: 'DB File Size',
+							name: 'db_file_size',
 							inline: true,
 						},
 					],
 					[
 						'wpcloud/site-detail',
 						{
-							title: 'SMTP Password',
-							key: 'smtp_pass',
+							label: 'SMTP Password',
+							name: 'smtp_pass',
 							inline: true,
 						},
 					],
 					[
 						'wpcloud/site-detail',
 						{
-							title: 'Server Pool ID',
-							key: 'server_pool_id',
+							label: 'Server Pool ID',
+							name: 'server_pool_id',
 							inline: true,
 						},
 					],
 					[
 						'wpcloud/site-detail',
 						{
-							title: 'Atomic Client ID',
-							key: 'atomic_client_id',
+							label: 'Atomic Client ID',
+							name: 'atomic_client_id',
 							inline: true,
 						},
 					],
 					[
 						'wpcloud/site-detail',
 						{
-							title: 'Chroot Path',
-							key: 'chroot_path',
+							label: 'Chroot Path',
+							name: 'chroot_path',
 							inline: true,
 						},
 					],
 					[
 						'wpcloud/site-detail',
 						{
-							title: 'Chroot SSH Path',
-							key: 'chroot_ssh_path',
+							label: 'Chroot SSH Path',
+							name: 'chroot_ssh_path',
 							inline: true,
 						},
 					],
 					[
 						'wpcloud/site-detail',
 						{
-							title: 'Cache Prefix',
-							key: 'cache_prefix',
+							label: 'Cache Prefix',
+							name: 'cache_prefix',
 							inline: true,
 						},
 					],
 					[
 						'wpcloud/site-detail',
 						{
-							title: 'Site API Key',
-							key: 'site_api_key',
+							label: 'Site API name',
+							name: 'site_api_key',
 							inline: true,
 						},
 					],

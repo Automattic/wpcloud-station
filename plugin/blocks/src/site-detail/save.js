@@ -8,7 +8,7 @@ import classNames from 'classnames';
  */
 import { RichText, useBlockProps } from '@wordpress/block-editor';
 export default function save( { attributes, className } ) {
-	const { title, displayKey, inline, adminOnly, hideTitle } = attributes;
+	const { label, displayKey, inline, adminOnly, hideTitle } = attributes;
 	const blockProps = useBlockProps.save();
 	return (
 		<span { ...blockProps }>
@@ -29,7 +29,7 @@ export default function save( { attributes, className } ) {
 					<RichText.Content
 						tagName="h4"
 						className={ 'wpcloud-block-site-detail__title-content' }
-						value={ title }
+						value={ label }
 					/>
 				</div>
 			) }

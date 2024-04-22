@@ -46,8 +46,8 @@ const siteDetailKeys = [
 	'dp_file_size',
 ];
 
-const getDisplayKey = ( key = '' ) => {
-	return key
+const getDisplayKey = ( name = '' ) => {
+	return name
 		.replace( /_/g, ' ' )
 		.replace( /\b\w/g, ( s ) => s.toUpperCase() )
 		.replace( /\b(.{2})\b/i, ( twochar ) => twochar.toUpperCase() )
@@ -56,15 +56,15 @@ const getDisplayKey = ( key = '' ) => {
 };
 
 function SiteDetailBlock( { attributes, setAttributes, className } ) {
-	const { title, key, adminOnly, inline, displayKey, hideTitle } = attributes;
+	const { label, name, adminOnly, inline, displayKey, hideTitle } = attributes;
 	const blockProps = useBlockProps();
 	const controls = (
 		<>
 			<InspectorControls>
-				<PanelBody title={ __( 'Settings' ) }>
+				<PanelBody label={ __( 'Settings' ) }>
 					<SelectControl
 						label={ __( 'Select a site detail' ) }
-						value={ key }
+						value={ name }
 						options={ siteDetailKeys.map( ( detailKey ) => ( {
 							value: detailKey,
 							label: getDisplayKey( detailKey ),
@@ -72,14 +72,14 @@ function SiteDetailBlock( { attributes, setAttributes, className } ) {
 						onChange={ ( newKey ) => {
 							const display = getDisplayKey( newKey );
 							setAttributes( {
-								key: newKey,
+								name: newKey,
 
 								displayKey: sprintf(
-									/* translators: %s is the display name of the site detail key */
+									/* translators: %s is the display name of the site detail name */
 									__( '{The %s}', 'wpcloud' ),
 									display
 								),
-								title: display,
+								label: display,
 							} );
 						} }
 					/>
@@ -99,7 +99,7 @@ function SiteDetailBlock( { attributes, setAttributes, className } ) {
 							} );
 						} }
 						help={ __(
-							'Only show the value of the site detail. The title will be hidden.'
+							'Only show the value of the site detail. The label will be hidden.'
 						) }
 					/>
 					<CheckboxControl
@@ -139,11 +139,11 @@ function SiteDetailBlock( { attributes, setAttributes, className } ) {
 					<RichText
 						tagName="h4"
 						className={ 'wpcloud-block-site-detail__title-content' }
-						value={ title }
+						value={ label }
 						onChange={ ( newTitle ) => {
-							setAttributes( { title: newTitle } );
+							setAttributes( { label: newTitle } );
 						} }
-						placeholder={ __( 'Title' ) }
+						placeholder={ __( 'label' ) }
 					/>
 				</div>
 			) }
