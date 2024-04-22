@@ -12,24 +12,28 @@ import { PanelBody } from '@wordpress/components';
 /**
  * Internal dependencies
  */
-import DetailSelectControl from './site/detailSelect';
+import DetailSelectControl from './detailSelect';
 
 
 /**
  * Inject a 'WP Cloud Site' control section for the site block.
-
  */
 
-wp.compose.createHigherOrderComponent((BlockEdit) => {
-	return ({ attributes, setAttributes, isSelected, }) => {
+const shouldInjectSiteControls = (name) => {
+	return name == 'wpcloud/form-input';
+};
+
+const SiteControls = wp.compose.createHigherOrderComponent((BlockEdit) => {
+	return (props) => {
+		const { isSelected, name } = props;
 		return (
 			<>
 				<BlockEdit {...props} />
-				{isSelected && (props.name == 'wpcloud/site') &&
+				{ isSelected && shouldInjectSiteControls( name ) &&
 					<InspectorControls>
 						<PanelBody title={__('WP Cloud Site')}>
-							{ props.name == 'wpcloud/form' && <DetailSelectControl attributes={attributes} setAttributes={setAttributes} /> }
-							</PanelBody>
+							{ name == 'wpcloud/form-input' && <DetailSelectControl {...props} /> }
+						</PanelBody>
 					</InspectorControls>
 				}
 			</>
@@ -40,5 +44,5 @@ wp.compose.createHigherOrderComponent((BlockEdit) => {
 wp.hooks.addFilter(
 	'editor.BlockEdit',
 	'wpcloud/site-controls',
-	SiteDetailSelectControl
+	SiteControls
 );

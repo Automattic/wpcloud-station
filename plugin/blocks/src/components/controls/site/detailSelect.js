@@ -13,29 +13,22 @@ const formatDisplayKey = ( key = '' ) => {
 		.replace( /\bphp\b/i, 'PHP' );
 };
 
-const siteDetailKeys = wpcloud?.siteDetails || [];
-
-export default DetailSelect = function ({ attributes, setAttributes }) {
-	const { key } = attributes;
+export default function DetailSelect({ attributes, setAttributes }) {
+	const siteDetailKeys = window.wpcloud?.siteDetailKeys || [];
+	const options = [ '-' ].concat(siteDetailKeys);
+	const { name } = attributes;
 	return (
 		<SelectControl
 			label={ __( 'Select a site detail' ) }
-			value={ key }
-			options={ siteDetailKeys.map( ( detailKey ) => ( {
+			value={ name }
+			options={ options.map( ( detailKey ) => ( {
 				value: detailKey,
 				label: formatDisplayKey( detailKey ),
 			} ) ) }
-			onChange={ ( newKey ) => {
-				const display = formatDisplayKey( newKey );
+			onChange={ ( newName ) => {
 				setAttributes( {
-					key: newKey,
-
-					displayKey: sprintf(
-						/* translators: %s is the display name of the site detail key */
-						__( '{The %s}', 'wpcloud' ),
-						display
-					),
-					title: display,
+					name: newName,
+					label: formatDisplayKey( newName ),
 				} );
 			} }
 		/>

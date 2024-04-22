@@ -29,7 +29,7 @@ const TEMPLATE = [
 				{
 					type: 'text',
 					label: __( 'Name' ),
-					fieldName: 'site_name',
+					name: 'site_name',
 					placeholder: __( 'Enter site name' ),
 					required: true,
 				},
@@ -39,7 +39,7 @@ const TEMPLATE = [
 				{
 					type: 'select',
 					label: __( 'PHP Version' ),
-					fieldName: 'php_version',
+					name: 'php_version',
 					options: [
 						{ value: '7.4', label: '7.4' },
 						{ value: '8.1', label: '8.1' },
@@ -54,7 +54,7 @@ const TEMPLATE = [
 				'wpcloud/form-input',
 				{
 					type: 'select',
-					fieldName: 'data_center',
+					name: 'data_center',
 					label: __( 'Data Center' ),
 					options: [
 						{ value: ' ', label: __( 'No Preference' ) },
@@ -67,7 +67,7 @@ const TEMPLATE = [
 				'wpcloud/form-input',
 				{
 					type: 'select',
-					fieldName: 'site_owner_id',
+					name: 'site_owner_id',
 					label: __( 'Owner' ),
 					adminOnly: true,
 					options: [ { value: '1', label: 'Site Owner' } ],
