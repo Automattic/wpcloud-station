@@ -4,8 +4,8 @@
 import { __ } from '@wordpress/i18n';
 import { SelectControl } from '@wordpress/components';
 
-const formatDisplayKey = ( key = '' ) => {
-	return key
+export const formatDisplayName = ( name = '' ) => {
+	return name
 		.replace( /_/g, ' ' )
 		.replace( /\b\w/g, ( s ) => s.toUpperCase() )
 		.replace( /\b(.{2})\b/i, ( twoChar ) => twoChar.toUpperCase() )
@@ -13,24 +13,25 @@ const formatDisplayKey = ( key = '' ) => {
 		.replace( /\bphp\b/i, 'PHP' );
 };
 
-export default function DetailSelect({ attributes, setAttributes }) {
+export default function DetailSelect({ attributes, setAttributes, onChange }) {
 	const siteDetailKeys = window.wpcloud?.siteDetailKeys || [];
 	const options = [ '-' ].concat(siteDetailKeys);
 	const { name } = attributes;
 	return (
 		<SelectControl
-			label={ __( 'Select a site detail' ) }
-			value={ name }
-			options={ options.map( ( detailKey ) => ( {
+			label={__('Select a site detail')}
+			value={name}
+			options={options.map((detailKey) => ({
 				value: detailKey,
-				label: formatDisplayKey( detailKey ),
-			} ) ) }
-			onChange={ ( newName ) => {
-				setAttributes( {
+				label: formatDisplayName(detailKey),
+			}))}
+			onChange={(newName) => {
+				setAttributes({
 					name: newName,
-					label: formatDisplayKey( newName ),
-				} );
-			} }
+					label: formatDisplayName(newName),
+				});
+				onChange && onChange(newName);
+			}}
 		/>
 	);
 };
