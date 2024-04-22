@@ -35,7 +35,7 @@ const getNameFromLabel = ( content ) => {
 };
 
 function renderSelect(
-	{ options, label, fieldName, required },
+	{ options, label, name, required },
 	inputClasses,
 	inputStyle
 ) {
@@ -46,7 +46,7 @@ function renderSelect(
 				inputClasses
 			) }
 			style={ inputStyle }
-			name={ fieldName || getNameFromLabel( label ) }
+			name={ name || getNameFromLabel( label ) }
 			required={ required }
 			aria-required={ required }
 		>
@@ -60,7 +60,7 @@ function renderSelect(
 }
 
 function renderText(
-	{ type, fieldName, label, required, placeholder },
+	{ type, name, label, required, placeholder },
 	inputClasses,
 	inputStyle
 ) {
@@ -69,7 +69,7 @@ function renderText(
 		<TagName
 			className={ inputClasses }
 			type={ 'textarea' === type ? undefined : type }
-			name={ fieldName || getNameFromLabel( label ) }
+			name={ name || getNameFromLabel( label ) }
 			required={ required }
 			aria-required={ required }
 			placeholder={ placeholder || undefined }

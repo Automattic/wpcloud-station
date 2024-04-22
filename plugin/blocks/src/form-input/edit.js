@@ -24,7 +24,7 @@ import { useRef, useCallback } from '@wordpress/element';
 import { Text, Select } from './fields';
 
 function InputFieldBlock( { attributes, setAttributes, className } ) {
-	const { type, inlineLabel, label, adminOnly, required, fieldName } = attributes;
+	const { type, inlineLabel, label, adminOnly, required, name } = attributes;
 	const blockProps = useBlockProps();
 	const ref = useRef();
 
@@ -61,9 +61,9 @@ function InputFieldBlock( { attributes, setAttributes, className } ) {
 				<PanelBody title={__('Settings')}>
 					<TextControl
 					label={ __( 'Field Name' ) }
-					value={ fieldName }
+					value={ name }
 					onChange={ ( newValue ) =>
-						setAttributes( { fieldName: newValue } )
+						setAttributes( { name: newValue } )
 					}
 					help={ __( 'The name attribute of the input field' ) }
 				/>
