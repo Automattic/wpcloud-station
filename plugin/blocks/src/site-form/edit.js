@@ -3,13 +3,33 @@
  */
 import { __ } from '@wordpress/i18n';
 import { useBlockProps, useInnerBlocksProps } from '@wordpress/block-editor';
+import { useMemo } from '@wordpress/element';
 
 /**
  * Internal dependencies
  */
 import './editor.scss';
 
-const TEMPLATE = [
+function formatOptions(data) {
+	const options = [];
+	for (const key in data) {
+		const value = data[key];
+		options.push( { value, label: value } );
+	}
+	return options;
+}
+
+/*
+ *
+ * @return {Element} Element to render.
+ */
+export default function Edit() {
+	const blockProps = useBlockProps();
+
+	const phpVersionOptions = window.wpcloud?.phpVersions || [];
+	const dataCenterOptions = window.wpcloud?.dataCenters || [];
+
+	const template = useMemo(() => ([
 	[
 		'wpcloud/form',
 		{
@@ -40,13 +60,7 @@ const TEMPLATE = [
 					type: 'select',
 					label: __( 'PHP Version' ),
 					name: 'php_version',
-					options: [
-						{ value: '7.4', label: '7.4' },
-						{ value: '8.1', label: '8.1' },
-						{ value: '8.2', label: '8.2' },
-						{ value: '8.3', label: '8.3' },
-						{ value: '7.0', label: '7.0' },
-					],
+					options: formatOptions(phpVersionOptions),
 					required: true,
 				},
 			],
@@ -56,10 +70,7 @@ const TEMPLATE = [
 					type: 'select',
 					name: 'data_center',
 					label: __( 'Data Center' ),
-					options: [
-						{ value: ' ', label: __( 'No Preference' ) },
-						{ value: 'bur', label: __( 'Los Angeles, CA' ) },
-					],
+					options: formatOptions(dataCenterOptions),
 					required: true,
 				},
 			],
@@ -81,17 +92,10 @@ const TEMPLATE = [
 			],
 		],
 	],
-];
-
-/*
- *
- * @return {Element} Element to render.
- */
-export default function Edit() {
-	const blockProps = useBlockProps();
+]),[]);
 
 	const innerBlocksProps = useInnerBlocksProps( blockProps, {
-		template: TEMPLATE,
+		template
 	} );
 
 	return <div { ...innerBlocksProps } className="wpcloud-new-site-form" />;

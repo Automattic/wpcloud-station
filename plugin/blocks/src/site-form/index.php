@@ -59,7 +59,10 @@ function wpcloud_block_site_form_enqueue_scripts() {
 	wp_enqueue_script( 'wpcloud-blocks-site-form' );
 	wp_add_inline_script(
 		'wpcloud-blocks-site-form',
-		'window.wpcloud = window.wpcloud ?? {}; wpcloud.siteDetailKeys = ' . json_encode( WPCloud_Site::DETAIL_KEYS ) . ';',
+		'window.wpcloud = window.wpcloud ?? {};' .
+		 'wpcloud.siteDetailKeys=' . json_encode( WPCloud_Site::DETAIL_KEYS ) . ';' .
+		 'wpcloud.phpVersions=' . json_encode( WPCLOUD_PHP_VERSIONS ) . ';' .
+		 'wpcloud.dataCenters=' . json_encode( WPCLOUD_DATA_CENTERS ) . ';'
 	);
 }
 add_action( 'admin_enqueue_scripts', 'wpcloud_block_site_form_enqueue_scripts' );

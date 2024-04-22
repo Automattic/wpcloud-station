@@ -17,6 +17,7 @@ class WPCLOUD_Site {
 		'wp_admin_user',
 		'smtp_pass',
 		'geo_affinity',
+		'data_center',  // We advertise this as data center but it maps to geo_affinity
 		'ip_addresses',
 		'wp_version',
 		'php_version',
