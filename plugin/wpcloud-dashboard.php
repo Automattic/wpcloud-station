@@ -53,6 +53,21 @@ define( 'WPCLOUD_DATA_CENTERS', array(
 	'dfw'           => 'Dallas, TX, USA',
 ) );
 
+define( 'WPCLOUD_UPDATE_SITE_META_KEYS', array(
+	'db_charset',
+	'db_collate',
+	'suspended',
+	'suspend_after',
+	'php_version',
+	'wp_version',
+	'do_not_delete',
+	'space_quota',
+	'photon_subsizes',
+	'privacy_model',
+	'geo_affinity',
+	'static_file_404',
+	'default_php_conns'
+))
 /**
  * Capabilities
  */
