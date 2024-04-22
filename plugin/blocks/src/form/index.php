@@ -8,7 +8,6 @@ function wpcloud_form_submit_handler() {
 	check_ajax_referer( 'wpcloud_form' );
 
 	// Get the form fields.
-	error_log("applying field filters");
 	$fields = apply_filters( 'wpcloud_block_form_submitted_fields', array(
 		'wpcloud_action',
 	) );
