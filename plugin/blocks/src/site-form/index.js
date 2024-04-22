@@ -21,6 +21,9 @@ import Edit from './edit';
 import save from './save';
 import metadata from './block.json';
 
+// Hook in the select controls into the form blocks
+import '../components/controls/site/inject.js';
+
 /**
  * Every block starts by registering a new block type definition.
  *

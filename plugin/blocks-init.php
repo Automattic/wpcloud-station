@@ -20,6 +20,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 function wpcloud_include_blocks() {
 
 	foreach( glob( __DIR__ . '/blocks/src/*' ) as $block_directory ) {
+		if ( 'components' === basename( $block_directory ) ) {
+			continue;
+		}
+
 		try {
 			register_block_type(
 				dirname( __FILE__ ) . '/blocks/build/' . basename( $block_directory )

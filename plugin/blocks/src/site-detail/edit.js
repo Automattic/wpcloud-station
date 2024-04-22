@@ -15,74 +15,37 @@ import {
 import {
 	PanelBody,
 	CheckboxControl,
-	SelectControl,
 } from '@wordpress/components';
+import {
+	useCallback,
+} from '@wordpress/element';
 
 /**
  *
  * Internal dependencies
  */
-// @TODO: We should pick this up from PHP WPCLOUD_Site::WPCLOUD_SITE_DETAIL_KEYS
-const siteDetailKeys = [
-	'',
-	'domain_name',
-	'server_pool_id',
-	'atomic_client_id',
-	'chroot_path',
-	'chroot_ssh_path',
-	'cache_prefix',
-	'db_charset',
-	'db_collate',
-	'db_password',
-	'php_version',
-	'site_api_key',
-	'wp_admin_email',
-	'wp_admin_user',
-	'wp_version',
-	'static_file_404',
-	'smtp_pass',
-	'geo_affinity',
-	'ip_addresses',
-	'dp_file_size',
-];
+import DetailSelectControl, { formatDisplayName } from  '../components/controls/site/detailSelect';
 
-const getDisplayKey = ( key = '' ) => {
-	return key
-		.replace( /_/g, ' ' )
-		.replace( /\b\w/g, ( s ) => s.toUpperCase() )
-		.replace( /\b(.{2})\b/i, ( twochar ) => twochar.toUpperCase() )
-		.replace( /\bapi\b/i, 'API' )
-		.replace( /\bphp\b/i, 'PHP' );
-};
 
 function SiteDetailBlock( { attributes, setAttributes, className } ) {
-	const { title, key, adminOnly, inline, displayKey, hideTitle } = attributes;
+	const { label, adminOnly, inline, displayKey, hideLabel } = attributes;
 	const blockProps = useBlockProps();
+
+	const onDetailSelectionChange = useCallback((newName) => {
+		setAttributes({
+			displayKey: sprintf(
+									/* translators: %s is the display name of the site detail name */
+									__( '{The %s}', 'wpcloud' ),
+									formatDisplayName(newName)
+								),
+		})
+
+	}, [ setAttributes ] );
 	const controls = (
 		<>
 			<InspectorControls>
-				<PanelBody title={ __( 'Settings' ) }>
-					<SelectControl
-						label={ __( 'Select a site detail' ) }
-						value={ key }
-						options={ siteDetailKeys.map( ( detailKey ) => ( {
-							value: detailKey,
-							label: getDisplayKey( detailKey ),
-						} ) ) }
-						onChange={ ( newKey ) => {
-							const display = getDisplayKey( newKey );
-							setAttributes( {
-								key: newKey,
-
-								displayKey: sprintf(
-									/* translators: %s is the display name of the site detail key */
-									__( '{The %s}', 'wpcloud' ),
-									display
-								),
-								title: display,
-							} );
-						} }
-					/>
+				<PanelBody label={ __( 'Settings' ) }>
+					<DetailSelectControl attributes={attributes} setAttributes={setAttributes} onChange={onDetailSelectionChange} />
 					<CheckboxControl
 						label={ __( 'Display Inline' ) }
 						checked={ inline }
@@ -92,14 +55,14 @@ function SiteDetailBlock( { attributes, setAttributes, className } ) {
 					/>
 					<CheckboxControl
 						label={ __( 'Show Value only' ) }
-						checked={ hideTitle }
+						checked={ hideLabel }
 						onChange={ ( newVal ) => {
 							setAttributes( {
-								hideTitle: newVal,
+								hideLabel: newVal,
 							} );
 						} }
 						help={ __(
-							'Only show the value of the site detail. The title will be hidden.'
+							'Only show the value of the site detail. The label will be hidden.'
 						) }
 					/>
 					<CheckboxControl
@@ -129,7 +92,7 @@ function SiteDetailBlock( { attributes, setAttributes, className } ) {
 			} ) }
 		>
 			{ controls }
-			{ hideTitle ? null : (
+			{ hideLabel ? null : (
 				<div
 					className={ classNames(
 						className,
@@ -139,11 +102,11 @@ function SiteDetailBlock( { attributes, setAttributes, className } ) {
 					<RichText
 						tagName="h4"
 						className={ 'wpcloud-block-site-detail__title-content' }
-						value={ title }
+						value={ label }
 						onChange={ ( newTitle ) => {
-							setAttributes( { title: newTitle } );
+							setAttributes( { label: newTitle } );
 						} }
-						placeholder={ __( 'Title' ) }
+						placeholder={ __( 'label' ) }
 					/>
 				</div>
 			) }

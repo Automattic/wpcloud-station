@@ -6,7 +6,7 @@
 	"title": "Site Detail",
 	"category": "wpcloud",
 	"icon": "info-outline",
-	"description": "The Site Detail block displays a key-value pair for a site detail. The gray italic text is just a placeholder for the actual site detail value.",
+	"description": "The Site Detail block displays a name-value pair for a site detail. The gray italic text is just a placeholder for the actual site detail value.",
 	"example": {},
 	"supports": {
 		"html": false
@@ -19,11 +19,11 @@
 	"viewScript": "file:./view.js",
 
 	"attributes" : {
-		"title": {
+		"label": {
 			"type": "string",
-			"default": "Title"
+			"default": "label"
 		},
-		"key": {
+		"name": {
 			"type": "string",
 			"default": ""
 		},
@@ -39,7 +39,7 @@
 			"type": "boolean",
 			"default": false
 		},
-		"hideTitle" : {
+		"hideLabel" : {
 			"type": "boolean",
 			"default": false
 		}

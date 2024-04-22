@@ -6,7 +6,7 @@ if ( $limit_to_admin && ! current_user_can( 'manage_options' ) ) {
 	return '';
 }
 
-$name = $attributes['fieldName'] ?? 'any';
+$name = $attributes['name'] ?? 'any';
 
 $allowed = apply_filters( 'wpcloud_block_form_allow_field_' . $name,  true, $attributes, $block );
 

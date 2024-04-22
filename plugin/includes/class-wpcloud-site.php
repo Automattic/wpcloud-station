@@ -9,25 +9,29 @@ declare( strict_types = 1 );
 
 class WPCLOUD_Site {
 
-	const WPCLOUD_DETAIL_KEYS = array(
-		'atomic_site_id',
+	const DETAIL_KEYS = array(
+		'site_name', // only used locally
+		'site_owner_id', // only used locally
 		'domain_name',
-		'server_pool_id',
-		'atomic_client_id',
-		'chroot_path',
-		'chroot_ssh_path',
-		'cache_prefix',
-		'db_charset',
-		'db_collate',
-		'db_password',
-		'php_version',
-		'site_api_key',
 		'wp_admin_email',
 		'wp_admin_user',
-		'wp_version',
-		'static_file_404',
 		'smtp_pass',
 		'geo_affinity',
+		'data_center',  // We advertise this as data center but it maps to geo_affinity
+		'ip_addresses',
+		'wp_version',
+		'php_version',
+		'static_file_404',
+		'db_password',
+		'db_charset',
+		'db_collate',
+		'cache_prefix',
+		'chroot_path',
+		'chroot_ssh_path',
+		'site_api_key',
+		'atomic_site_id',
+		'atomic_client_id',
+		'server_pool_id',
 	);
 
 	private static $initial_status = 'draft';
@@ -125,7 +129,7 @@ class WPCLOUD_Site {
 		if ( is_wp_error( $wpcloud_site ) ) {
 			return $wpcloud_site;
 		}
-		$detail_keys = array_unique( array_merge( $detail_keys, self::WPCLOUD_DETAIL_KEYS ) );
+		$detail_keys = array_unique( array_merge( $detail_keys, self::DETAIL_KEYS ) );
 
 		$this->details = array_intersect_key( (array) $wpcloud_site, array_flip( $detail_keys ) );
 
