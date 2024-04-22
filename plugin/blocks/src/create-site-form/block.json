@@ -1,9 +1,9 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
-	"name": "wpcloud/site-form",
+	"name": "wpcloud/create-site-form",
 	"version": "0.1.0",
-	"title": "WP Cloud Site Form",
+	"title": "Create Site Form",
 	"category": "wpcloud",
 	"icon": "cloud",
 	"description": "Form to create a new site on WP Cloud",
@@ -11,7 +11,7 @@
 	"supports": {
 		"html": false
 	},
-	"textdomain": "new-site-form",
+	"textdomain": "wpcloud",
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",
 	"style": "file:./style-index.css"
