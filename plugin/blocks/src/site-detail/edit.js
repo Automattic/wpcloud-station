@@ -28,7 +28,7 @@ import DetailSelectControl, { formatDisplayName } from  '../components/controls/
 
 
 function SiteDetailBlock( { attributes, setAttributes, className } ) {
-	const { label, name, adminOnly, inline, displayKey, hideTitle } = attributes;
+	const { label, adminOnly, inline, displayKey, hideLabel } = attributes;
 	const blockProps = useBlockProps();
 
 	const onDetailSelectionChange = useCallback((newName) => {
@@ -55,10 +55,10 @@ function SiteDetailBlock( { attributes, setAttributes, className } ) {
 					/>
 					<CheckboxControl
 						label={ __( 'Show Value only' ) }
-						checked={ hideTitle }
+						checked={ hideLabel }
 						onChange={ ( newVal ) => {
 							setAttributes( {
-								hideTitle: newVal,
+								hideLabel: newVal,
 							} );
 						} }
 						help={ __(
@@ -92,7 +92,7 @@ function SiteDetailBlock( { attributes, setAttributes, className } ) {
 			} ) }
 		>
 			{ controls }
-			{ hideTitle ? null : (
+			{ hideLabel ? null : (
 				<div
 					className={ classNames(
 						className,

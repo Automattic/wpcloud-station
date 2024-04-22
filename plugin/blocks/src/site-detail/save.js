@@ -8,7 +8,7 @@ import classNames from 'classnames';
  */
 import { RichText, useBlockProps } from '@wordpress/block-editor';
 export default function save( { attributes, className } ) {
-	const { label, displayKey, inline, adminOnly, hideTitle } = attributes;
+	const { label, displayKey, inline, adminOnly, hideLabel } = attributes;
 	const blockProps = useBlockProps.save();
 	return (
 		<span { ...blockProps }>
@@ -19,7 +19,7 @@ export default function save( { attributes, className } ) {
 				'is-admin-only': adminOnly,
 			} ) }
 		>
-			{ hideTitle ? null : (
+			{ hideLabel ? null : (
 				<div
 					className={ classNames(
 						className,

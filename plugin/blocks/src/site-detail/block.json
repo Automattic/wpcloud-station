@@ -39,7 +39,7 @@
 			"type": "boolean",
 			"default": false
 		},
-		"hideTitle" : {
+		"hideLabel" : {
 			"type": "boolean",
 			"default": false
 		}
