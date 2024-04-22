@@ -9,7 +9,7 @@ declare( strict_types = 1 );
 
 class WPCLOUD_Site {
 
-	const WPCLOUD_DETAIL_KEYS = array(
+	const DETAIL_KEYS = array(
 		'atomic_site_id',
 		'domain_name',
 		'server_pool_id',
@@ -28,6 +28,7 @@ class WPCLOUD_Site {
 		'static_file_404',
 		'smtp_pass',
 		'geo_affinity',
+		'ip_addresses',
 	);
 
 	private static $initial_status = 'draft';
@@ -125,7 +126,7 @@ class WPCLOUD_Site {
 		if ( is_wp_error( $wpcloud_site ) ) {
 			return $wpcloud_site;
 		}
-		$detail_keys = array_unique( array_merge( $detail_keys, self::WPCLOUD_DETAIL_KEYS ) );
+		$detail_keys = array_unique( array_merge( $detail_keys, self::DETAIL_KEYS ) );
 
 		$this->details = array_intersect_key( (array) $wpcloud_site, array_flip( $detail_keys ) );
 
