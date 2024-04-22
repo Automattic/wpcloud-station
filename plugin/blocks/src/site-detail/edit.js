@@ -15,74 +15,37 @@ import {
 import {
 	PanelBody,
 	CheckboxControl,
-	SelectControl,
 } from '@wordpress/components';
+import {
+	useCallback,
+} from '@wordpress/element';
 
 /**
  *
  * Internal dependencies
  */
-// @TODO: We should pick this up from PHP WPCLOUD_Site::WPCLOUD_SITE_DETAIL_KEYS
-const siteDetailKeys = [
-	'',
-	'domain_name',
-	'server_pool_id',
-	'atomic_client_id',
-	'chroot_path',
-	'chroot_ssh_path',
-	'cache_prefix',
-	'db_charset',
-	'db_collate',
-	'db_password',
-	'php_version',
-	'site_api_key',
-	'wp_admin_email',
-	'wp_admin_user',
-	'wp_version',
-	'static_file_404',
-	'smtp_pass',
-	'geo_affinity',
-	'ip_addresses',
-	'dp_file_size',
-];
+import DetailSelectControl, { formatDisplayName } from  '../components/controls/site/detailSelect';
 
-const getDisplayKey = ( name = '' ) => {
-	return name
-		.replace( /_/g, ' ' )
-		.replace( /\b\w/g, ( s ) => s.toUpperCase() )
-		.replace( /\b(.{2})\b/i, ( twochar ) => twochar.toUpperCase() )
-		.replace( /\bapi\b/i, 'API' )
-		.replace( /\bphp\b/i, 'PHP' );
-};
 
 function SiteDetailBlock( { attributes, setAttributes, className } ) {
 	const { label, name, adminOnly, inline, displayKey, hideTitle } = attributes;
 	const blockProps = useBlockProps();
+
+	const onDetailSelectionChange = useCallback((newName) => {
+		setAttributes({
+			displayKey: sprintf(
+									/* translators: %s is the display name of the site detail name */
+									__( '{The %s}', 'wpcloud' ),
+									formatDisplayName(newName)
+								),
+		})
+
+	}, [ setAttributes ] );
 	const controls = (
 		<>
 			<InspectorControls>
 				<PanelBody label={ __( 'Settings' ) }>
-					<SelectControl
-						label={ __( 'Select a site detail' ) }
-						value={ name }
-						options={ siteDetailKeys.map( ( detailKey ) => ( {
-							value: detailKey,
-							label: getDisplayKey( detailKey ),
-						} ) ) }
-						onChange={ ( newKey ) => {
-							const display = getDisplayKey( newKey );
-							setAttributes( {
-								name: newKey,
-
-								displayKey: sprintf(
-									/* translators: %s is the display name of the site detail name */
-									__( '{The %s}', 'wpcloud' ),
-									display
-								),
-								label: display,
-							} );
-						} }
-					/>
+					<DetailSelectControl attributes={attributes} setAttributes={setAttributes} onChange={onDetailSelectionChange} />
 					<CheckboxControl
 						label={ __( 'Display Inline' ) }
 						checked={ inline }
