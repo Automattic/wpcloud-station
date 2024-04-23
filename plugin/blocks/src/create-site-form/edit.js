@@ -1,4 +1,9 @@
 /**
+ * External dependencies
+ */
+import classNames from 'classnames';
+
+/**
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
@@ -29,6 +34,7 @@ export default function Edit() {
 	const phpVersionOptions = window.wpcloud?.phpVersions || [];
 	const dataCenterOptions = window.wpcloud?.dataCenters || [];
 
+	// @TODO: Make sure the required fields are not mutable.
 	const template = useMemo(() => ([
 	[
 		'wpcloud/form',
@@ -98,5 +104,5 @@ export default function Edit() {
 		template
 	} );
 
-	return <div { ...innerBlocksProps } className="wpcloud-new-site-form" />;
+	return <div {...innerBlocksProps} className={classNames("wpcloud-new-site-form", innnerBlocksProps?.className)} />;
 }
