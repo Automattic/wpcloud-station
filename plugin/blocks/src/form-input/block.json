@@ -33,6 +33,10 @@
 			"type": "boolean",
 			"default": false
 		},
+		"hideLabel": {
+			"type": "boolean",
+			"default": false
+		},
 		"required": {
 			"type": "boolean",
 			"default": false,
