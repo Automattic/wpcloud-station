@@ -33,6 +33,10 @@ function wpcloud_form_submit_handler() {
 
 	$result = apply_filters( 'wpcloud_form_process_' . $action, $success_result, $data );
 
+	if ( $result[ 'success' ] === false ) {
+		wp_send_json_error($result, $result[ 'status' ] ?? 400);
+	}
+
 	wp_send_json_success($result, $result[ 'status' ] ?? 200);
 }
 
