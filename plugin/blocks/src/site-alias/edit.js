@@ -36,7 +36,7 @@ export default function Edit() {
 						'wpcloud/form',
 						{
 							ajax: true,
-							wpcloudAction: 'site-alias-remove',
+							wpcloudAction: 'site_alias_remove',
 							inline: true,
 							className: 'wpcloud-block-site-alias-form-remove',
 						},
@@ -63,7 +63,7 @@ export default function Edit() {
 						'wpcloud/form',
 						{
 							ajax: true,
-							wpcloudAction: 'site-alias-remove',
+							wpcloudAction: 'site_alias_remove',
 							inline: true,
 						},
 						[
@@ -89,7 +89,7 @@ export default function Edit() {
 						'wpcloud/form',
 						{
 							ajax: true,
-							wpcloudAction: 'site-alias-add',
+							wpcloudAction: 'site_alias_add',
 							inline: true,
 							className: 'wpcloud-block-site-alias-form-remove',
 						},
