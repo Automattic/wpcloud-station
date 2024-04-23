@@ -1,4 +1,9 @@
 /**
+ * External dependencies
+ */
+import classNames from 'classnames';
+
+/**
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
@@ -9,7 +14,7 @@ import {
 	InspectorControls,
 	store as blockEditorStore,
 } from '@wordpress/block-editor';
-import { CheckboxControl, TextControl, PanelBody } from '@wordpress/components';
+import { ToggleControl, TextControl, PanelBody } from '@wordpress/components';
 import { useSelect } from '@wordpress/data';
 
 /**
@@ -32,7 +37,7 @@ export default function Edit( {
 	clientId,
 	isSelected,
 } ) {
-	const { action, ajax, wpcloudAction } = attributes;
+	const { action, ajax, wpcloudAction, inline } = attributes;
 	const blockProps = useBlockProps();
 
 	const isChildSelected = useSelect( ( select ) =>
@@ -70,7 +75,17 @@ export default function Edit( {
 						}
 						help={ __( 'The WP Cloud form action.' ) }
 					/>
-					<CheckboxControl
+					<ToggleControl
+						label={ __( 'Display Inline' ) }
+						checked={ inline }
+						onChange={ ( newVal ) => {
+							setAttributes( {
+								inline: newVal,
+							} );
+						} }
+					/>
+
+					<ToggleControl
 						label={ __( 'Enable AJAX' ) }
 						checked={ attributes.ajax }
 						onChange={ ( newValue ) =>
@@ -94,7 +109,13 @@ export default function Edit( {
 			</InspectorControls>
 			<form
 				{ ...innerBlocksProps }
-				className="wpcloud-block-form"
+				className={ classNames(
+					innerBlocksProps.className,
+					'wpcloud-block-form',
+					{
+						'is-inline': inline,
+					}
+				) }
 				encType="text/plain"
 			/>
 		</>

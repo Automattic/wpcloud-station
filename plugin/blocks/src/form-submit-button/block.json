@@ -19,6 +19,9 @@
 		"text" : {
 			"type" : "string",
 			"default" : "Submit"
+		},
+		"icon" :{
+			"type" : "string"
 		}
 	}
 }

@@ -4,3 +4,28 @@
  *
  * Replace them with your own styles or remove the file completely.
  */
+
+ .wpcloud-block-form {
+		display: flex;
+		flex-direction: column;
+		&.is-inline {
+			flex-direction: row;
+			justify-content: space-between;
+			align-items: center;
+
+			.wpcloud-block-form-input__label, .wpcloud-block-form-input__input, .wpcloud-block-form-input__label-content {
+				margin: 0;
+			}
+			.wpcloud-block-form-input__label {
+				padding-top: 0;
+				padding-bottom: 0;
+			}
+			.wpcloud-block-form-input__label.is-label-inline .wpcloud-block-form-input__label-content {
+				margin-bottom: 0;
+			}
+
+		}
+		button {
+			width: fit-content;
+		}
+ }

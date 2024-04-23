@@ -14,7 +14,7 @@ import {
 	__experimentalUseBorderProps as useBorderProps, // eslint-disable-line @wordpress/no-unsafe-wp-apis
 	__experimentalUseColorProps as useColorProps, // eslint-disable-line @wordpress/no-unsafe-wp-apis
 } from '@wordpress/block-editor';
-import { PanelBody, TextControl, CheckboxControl } from '@wordpress/components';
+import { PanelBody, TextControl, ToggleControl } from '@wordpress/components';
 import { useRef, useCallback } from '@wordpress/element';
 
 /**
@@ -24,7 +24,8 @@ import { useRef, useCallback } from '@wordpress/element';
 import { Text, Select } from './fields';
 
 function InputFieldBlock( { attributes, setAttributes, className } ) {
-	const { type, inlineLabel, label, adminOnly, required, name } = attributes;
+	const { type, inlineLabel, label, adminOnly, required, name, hideLabel } =
+		attributes;
 	const blockProps = useBlockProps();
 	const ref = useRef();
 
@@ -42,7 +43,6 @@ function InputFieldBlock( { attributes, setAttributes, className } ) {
 		( value ) => setAttributes( { value } ),
 		[ setAttributes ]
 	);
-	const isHidden = 'hidden' === type;
 
 	const inputTags = {
 		text: Text,
@@ -58,27 +58,38 @@ function InputFieldBlock( { attributes, setAttributes, className } ) {
 	const controls = (
 		<>
 			<InspectorControls>
-				<PanelBody title={__('Settings')}>
+				<PanelBody title={ __( 'Settings' ) }>
 					<TextControl
-					label={ __( 'Field Name' ) }
-					value={ name }
-					onChange={ ( newValue ) =>
-						setAttributes( { name: newValue } )
-					}
-					help={ __( 'The name attribute of the input field' ) }
-				/>
+						label={ __( 'Field Name' ) }
+						value={ name }
+						onChange={ ( newValue ) =>
+							setAttributes( { name: newValue } )
+						}
+						help={ __( 'The name attribute of the input field' ) }
+					/>
 					{ 'checkbox' !== type && (
-						<CheckboxControl
-							label={ __( 'Inline label' ) }
-							checked={ inlineLabel }
-							onChange={ ( newVal ) => {
-								setAttributes( {
-									inlineLabel: newVal,
-								} );
-							} }
-						/>
+						<>
+							<ToggleControl
+								label={ __( 'Inline Label' ) }
+								checked={ inlineLabel }
+								onChange={ ( newVal ) => {
+									setAttributes( {
+										inlineLabel: newVal,
+									} );
+								} }
+							/>
+							<ToggleControl
+								label={ __( 'Hide Label' ) }
+								checked={ hideLabel }
+								onChange={ ( newVal ) => {
+									setAttributes( {
+										hideLabel: newVal,
+									} );
+								} }
+							/>
+						</>
 					) }
-					<CheckboxControl
+					<ToggleControl
 						label={ __( 'Limit to Admins' ) }
 						checked={ adminOnly }
 						onChange={ ( newVal ) => {
@@ -90,7 +101,7 @@ function InputFieldBlock( { attributes, setAttributes, className } ) {
 							'Only admins will see this field. Inputs marked as admin only will appear with a dashed border in the editor'
 						) }
 					/>
-					<CheckboxControl
+					<ToggleControl
 						label={ __( 'Required' ) }
 						checked={ required }
 						onChange={ ( newVal ) => {
@@ -113,7 +124,7 @@ function InputFieldBlock( { attributes, setAttributes, className } ) {
 					'is-admin-only': adminOnly,
 				} ) }
 			>
-				{ ! isHidden && (
+				{ ! hideLabel && (
 					<RichText
 						tagName="span"
 						className="wpcloud-block-form-input__label-content"

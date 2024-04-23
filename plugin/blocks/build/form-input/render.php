@@ -15,6 +15,6 @@ if ( ! $allowed ) {
 }
 
 $content = apply_filters( 'wpcloud_block_form_render_field_' . $name, $content, $attributes, $block );
-
+$content = apply_filters( 'wpcloud_block_form_render_field', $content, $attributes, $block );
 
 echo $content;

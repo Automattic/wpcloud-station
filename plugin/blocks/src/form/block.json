@@ -27,6 +27,10 @@
 		},
 		"wpcloudAction": {
 			"type": "string"
+		},
+		"inline" : {
+			"type": "boolean",
+			"default": false
 		}
 	},
 	"allowedBlocks": [
