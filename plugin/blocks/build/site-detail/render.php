@@ -13,7 +13,6 @@ if ( $attributes[ 'adminOnly' ] && ! current_user_can( 'manage_options' ) ) {
 	return;
 }
 
-
 $detail = wpcloud_get_site_detail( get_the_ID(), $attributes[ 'name' ] ) ?? '';
 
 if ( is_array( $detail ) ) {
