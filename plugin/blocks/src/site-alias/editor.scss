@@ -1,0 +1,24 @@
+/**
+ * The following styles get applied inside the editor only.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+ .wpcloud-block-site-alias {
+	border: 1px solid var(--wp--preset--color--contrast-2);
+	border-radius: 4px;
+	.wpcloud-block-site-alias-heading {
+		padding: 1.2rem;
+	}
+	.wpcloud-block-form {
+		margin-top: 0;
+		border: none;
+		border-top: 1px solid var(--wp--preset--color--contrast-2);
+		border-radius: 0;
+		&:last-child {
+			margin-bottom: 1.2rem;
+			margin-top: 0;
+			padding-top: 1.2rem;
+		}
+	}
+ }

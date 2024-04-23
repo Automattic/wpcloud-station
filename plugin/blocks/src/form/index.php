@@ -6,11 +6,14 @@ function wpcloud_block_form_hidden_field( $name, $value ) {
 
 function wpcloud_form_submit_handler() {
 	check_ajax_referer( 'wpcloud_form' );
+	$action = $_POST[ 'wpcloud_action' ] ?? '';
 
 	// Get the form fields.
 	$fields = apply_filters( 'wpcloud_block_form_submitted_fields', array(
 		'wpcloud_action',
-	) );
+	), array_keys( $_POST ) );
+	$fields = apply_filters( 'wpcloud_block_form_submitted_fields_' . $action , $fields, array_keys( $_POST ) );
+
 
 	// Get the form data.
 	$data = array();
@@ -28,9 +31,11 @@ function wpcloud_form_submit_handler() {
 		'status' => 200
 	);
 
-	$action = $data[ 'wpcloud_action' ] ?? '';
+	$result = apply_filters( 'wpcloud_form_process_' . $action, $success_result, $data );
 
-	$result = apply_filters( 'wpcloud_form_process_' . $action , $success_result, $data );
+	if ( $result[ 'success' ] === false ) {
+		wp_send_json_error($result, $result[ 'status' ] ?? 400);
+	}
 
 	wp_send_json_success($result, $result[ 'status' ] ?? 200);
 }
