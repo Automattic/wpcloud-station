@@ -12,7 +12,7 @@ import {
 	RichText,
 	useBlockProps,
 } from '@wordpress/block-editor';
-import { PanelBody, CheckboxControl } from '@wordpress/components';
+import { PanelBody, ToggleControl } from '@wordpress/components';
 
 /**
  *
@@ -32,14 +32,14 @@ function SiteDetailBlock( { attributes, setAttributes, className } ) {
 						attributes={ attributes }
 						setAttributes={ setAttributes }
 					/>
-					<CheckboxControl
+					<ToggleControl
 						label={ __( 'Display Inline' ) }
 						checked={ inline }
 						onChange={ ( newVal ) => {
 							setAttributes( { inline: newVal } );
 						} }
 					/>
-					<CheckboxControl
+					<ToggleControl
 						label={ __( 'Show Value only' ) }
 						checked={ hideLabel }
 						onChange={ ( newVal ) => {
@@ -51,7 +51,7 @@ function SiteDetailBlock( { attributes, setAttributes, className } ) {
 							'Only show the value of the site detail. The label will be hidden.'
 						) }
 					/>
-					<CheckboxControl
+					<ToggleControl
 						label={ __( 'Limit to Admins' ) }
 						checked={ adminOnly }
 						onChange={ ( newVal ) => {
