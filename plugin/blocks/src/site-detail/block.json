@@ -27,10 +27,6 @@
 			"type": "string",
 			"default": ""
 		},
-		"displayKey" : {
-			"type": "string",
-			"default": "{ Site Value }"
-		},
 		"adminOnly" :{
 			"type": "boolean",
 			"default": false

@@ -28,24 +28,14 @@ import DetailSelectControl, { formatDisplayName } from  '../components/controls/
 
 
 function SiteDetailBlock( { attributes, setAttributes, className } ) {
-	const { label, adminOnly, inline, displayKey, hideLabel } = attributes;
+	const { label, adminOnly, inline, hideLabel } = attributes;
 	const blockProps = useBlockProps();
 
-	const onDetailSelectionChange = useCallback((newName) => {
-		setAttributes({
-			displayKey: sprintf(
-									/* translators: %s is the display name of the site detail name */
-									__( '{The %s}', 'wpcloud' ),
-									formatDisplayName(newName)
-								),
-		})
-
-	}, [ setAttributes ] );
 	const controls = (
 		<>
 			<InspectorControls>
 				<PanelBody label={ __( 'Settings' ) }>
-					<DetailSelectControl attributes={attributes} setAttributes={setAttributes} onChange={onDetailSelectionChange} />
+					<DetailSelectControl attributes={attributes} setAttributes={setAttributes} />
 					<CheckboxControl
 						label={ __( 'Display Inline' ) }
 						checked={ inline }
@@ -111,7 +101,7 @@ function SiteDetailBlock( { attributes, setAttributes, className } ) {
 				</div>
 			) }
 			<div className={ 'wpcloud-block-site-detail__value' }>
-				{ displayKey }
+				{ `{ ${label} }`}
 			</div>
 			</div>
 		</span>

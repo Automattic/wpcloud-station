@@ -34,7 +34,7 @@ export default function save( { attributes, className } ) {
 				</div>
 			) }
 			<div className={ 'wpcloud-block-site-detail__value' }>
-				{ displayKey }
+				{ `{ ${label} }` }
 			</div>
 			</div>
 		</span>
