@@ -1,11 +1,17 @@
 /**
+ * External dependencies
+ */
+import classNames from 'classnames';
+
+/**
  * WordPress dependencies
  */
 import { InnerBlocks, useBlockProps } from '@wordpress/block-editor';
+
 export default function save() {
 	const blockProps = useBlockProps.save();
 	return (
-		<div { ...blockProps } className="wpcloud-block-new-site-form">
+		<div { ...blockProps } className={classNames("wpcloud-new-site-form", blockProps?.className)}>
 			<InnerBlocks.Content />
 		</div>
 	);
