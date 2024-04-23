@@ -11,7 +11,13 @@ import { InnerBlocks, useBlockProps } from '@wordpress/block-editor';
 export default function save() {
 	const blockProps = useBlockProps.save();
 	return (
-		<div { ...blockProps } className={classNames("wpcloud-new-site-form", blockProps?.className)}>
+		<div
+			{ ...blockProps }
+			className={ classNames(
+				'wpcloud-new-site-form',
+				blockProps?.className
+			) }
+		>
 			<InnerBlocks.Content />
 		</div>
 	);

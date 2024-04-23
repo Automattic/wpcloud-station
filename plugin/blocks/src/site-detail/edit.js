@@ -6,26 +6,19 @@ import classNames from 'classnames';
 /**
  * WordPress dependencies
  */
-import { __, sprintf } from '@wordpress/i18n';
+import { __ } from '@wordpress/i18n';
 import {
 	InspectorControls,
 	RichText,
 	useBlockProps,
 } from '@wordpress/block-editor';
-import {
-	PanelBody,
-	CheckboxControl,
-} from '@wordpress/components';
-import {
-	useCallback,
-} from '@wordpress/element';
+import { PanelBody, CheckboxControl } from '@wordpress/components';
 
 /**
  *
  * Internal dependencies
  */
-import DetailSelectControl, { formatDisplayName } from  '../components/controls/site/detailSelect';
-
+import DetailSelectControl from '../components/controls/site/detailSelect';
 
 function SiteDetailBlock( { attributes, setAttributes, className } ) {
 	const { label, adminOnly, inline, hideLabel } = attributes;
@@ -35,7 +28,10 @@ function SiteDetailBlock( { attributes, setAttributes, className } ) {
 		<>
 			<InspectorControls>
 				<PanelBody label={ __( 'Settings' ) }>
-					<DetailSelectControl attributes={attributes} setAttributes={setAttributes} />
+					<DetailSelectControl
+						attributes={ attributes }
+						setAttributes={ setAttributes }
+					/>
 					<CheckboxControl
 						label={ __( 'Display Inline' ) }
 						checked={ inline }
@@ -74,35 +70,40 @@ function SiteDetailBlock( { attributes, setAttributes, className } ) {
 
 	return (
 		<span { ...blockProps }>
-		<div
-
-			className={ classNames( className, 'wpcloud-block-site-detail', {
-				'is-inline': inline,
-				'is-admin-only': adminOnly,
-			} ) }
-		>
-			{ controls }
-			{ hideLabel ? null : (
-				<div
-					className={ classNames(
-						className,
-						'wpcloud-block-site-detail__title'
-					) }
-				>
-					<RichText
-						tagName="h4"
-						className={ 'wpcloud-block-site-detail__title-content' }
-						value={ label }
-						onChange={ ( newTitle ) => {
-							setAttributes( { label: newTitle } );
-						} }
-						placeholder={ __( 'label' ) }
-					/>
+			<div
+				className={ classNames(
+					className,
+					'wpcloud-block-site-detail',
+					{
+						'is-inline': inline,
+						'is-admin-only': adminOnly,
+					}
+				) }
+			>
+				{ controls }
+				{ hideLabel ? null : (
+					<div
+						className={ classNames(
+							className,
+							'wpcloud-block-site-detail__title'
+						) }
+					>
+						<RichText
+							tagName="h4"
+							className={
+								'wpcloud-block-site-detail__title-content'
+							}
+							value={ label }
+							onChange={ ( newTitle ) => {
+								setAttributes( { label: newTitle } );
+							} }
+							placeholder={ __( 'label' ) }
+						/>
+					</div>
+				) }
+				<div className={ 'wpcloud-block-site-detail__value' }>
+					{ `{ ${ label } }` }
 				</div>
-			) }
-			<div className={ 'wpcloud-block-site-detail__value' }>
-				{ `{ ${label} }`}
-			</div>
 			</div>
 		</span>
 	);

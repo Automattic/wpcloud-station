@@ -15,7 +15,10 @@ const Save = () => {
 		<form
 			{ ...blockProps }
 			encType="text/plain"
-			className={ classNames( blockProps.className, 'wpcloud-block-form')}
+			className={ classNames(
+				blockProps.className,
+				'wpcloud-block-form'
+			) }
 		>
 			<InnerBlocks.Content />
 		</form>

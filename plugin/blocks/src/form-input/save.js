@@ -79,7 +79,6 @@ function renderText(
 }
 
 function renderField( attributes ) {
-
 	const { type } = attributes;
 
 	const borderProps = getBorderClassesAndStyles( attributes );

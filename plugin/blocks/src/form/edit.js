@@ -55,7 +55,6 @@ export default function Edit( {
 		[ clientId ]
 	);
 
-
 	const innerBlocksProps = useInnerBlocksProps( blockProps, {
 		renderAppender:
 			! hasInnerBlocks || isSelected || isChildSelected
@@ -77,14 +76,14 @@ export default function Edit( {
 						help={ __( 'The WP Cloud form action.' ) }
 					/>
 					<ToggleControl
-							label={ __( 'Display Inline' ) }
-							checked={ inline }
-							onChange={ ( newVal ) => {
-								setAttributes( {
-									inline: newVal,
-								} );
-							} }
-						/>
+						label={ __( 'Display Inline' ) }
+						checked={ inline }
+						onChange={ ( newVal ) => {
+							setAttributes( {
+								inline: newVal,
+							} );
+						} }
+					/>
 
 					<ToggleControl
 						label={ __( 'Enable AJAX' ) }
@@ -108,13 +107,17 @@ export default function Edit( {
 					) }
 				</PanelBody>
 			</InspectorControls>
-				<form
-					{ ...innerBlocksProps }
-				className={classNames(innerBlocksProps.className, 'wpcloud-block-form', {
-					'is-inline': inline,
-					} ) }
-					encType="text/plain"
-				/>
+			<form
+				{ ...innerBlocksProps }
+				className={ classNames(
+					innerBlocksProps.className,
+					'wpcloud-block-form',
+					{
+						'is-inline': inline,
+					}
+				) }
+				encType="text/plain"
+			/>
 		</>
 	);
 }

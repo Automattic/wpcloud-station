@@ -15,10 +15,10 @@ import { useMemo } from '@wordpress/element';
  */
 import './editor.scss';
 
-function formatOptions(data) {
+function formatOptions( data ) {
 	const options = [];
-	for (const key in data) {
-		const value = data[key];
+	for ( const key in data ) {
+		const value = data[ key ];
 		options.push( { value, label: value } );
 	}
 	return options;
@@ -31,78 +31,97 @@ function formatOptions(data) {
 export default function Edit() {
 	const blockProps = useBlockProps();
 
-	const phpVersionOptions = window.wpcloud?.phpVersions || [];
-	const dataCenterOptions = window.wpcloud?.dataCenters || [];
+	const phpVersionOptions = useMemo(
+		() => window.wpcloud?.phpVersions,
+		[],
+		[]
+	);
+	const dataCenterOptions = useMemo(
+		() => window.wpcloud?.dataCenters,
+		[],
+		[]
+	);
 
 	// @TODO: Make sure the required fields are not mutable.
-	const template = useMemo(() => ([
-	[
-		'wpcloud/form',
-		{
-			ajax: true,
-			wpcloudAction: 'create_site',
-		},
-		[
+	const template = useMemo(
+		() => [
 			[
-				'core/heading',
+				'wpcloud/form',
 				{
-					level: 3,
-					content: __( 'New Site' ),
+					ajax: true,
+					wpcloudAction: 'create_site',
 				},
-			],
-			[
-				'wpcloud/form-input',
-				{
-					type: 'text',
-					label: __( 'Name' ),
-					name: 'site_name',
-					placeholder: __( 'Enter site name' ),
-					required: true,
-				},
-			],
-			[
-				'wpcloud/form-input',
-				{
-					type: 'select',
-					label: __( 'PHP Version' ),
-					name: 'php_version',
-					options: formatOptions(phpVersionOptions),
-					required: true,
-				},
-			],
-			[
-				'wpcloud/form-input',
-				{
-					type: 'select',
-					name: 'data_center',
-					label: __( 'Data Center' ),
-					options: formatOptions(dataCenterOptions),
-					required: true,
-				},
-			],
-			[
-				'wpcloud/form-input',
-				{
-					type: 'select',
-					name: 'site_owner_id',
-					label: __( 'Owner' ),
-					adminOnly: true,
-					options: [ { value: '1', label: 'Site Owner' } ],
-				},
-			],
-			[
-				'wpcloud/form-submit-button',
-				{
-					text: __( 'Create Site' ),
-				},
+				[
+					[
+						'core/heading',
+						{
+							level: 3,
+							content: __( 'New Site' ),
+						},
+					],
+					[
+						'wpcloud/form-input',
+						{
+							type: 'text',
+							label: __( 'Name' ),
+							name: 'site_name',
+							placeholder: __( 'Enter site name' ),
+							required: true,
+						},
+					],
+					[
+						'wpcloud/form-input',
+						{
+							type: 'select',
+							label: __( 'PHP Version' ),
+							name: 'php_version',
+							options: formatOptions( phpVersionOptions ),
+							required: true,
+						},
+					],
+					[
+						'wpcloud/form-input',
+						{
+							type: 'select',
+							name: 'data_center',
+							label: __( 'Data Center' ),
+							options: formatOptions( dataCenterOptions ),
+							required: true,
+						},
+					],
+					[
+						'wpcloud/form-input',
+						{
+							type: 'select',
+							name: 'site_owner_id',
+							label: __( 'Owner' ),
+							adminOnly: true,
+							options: [ { value: '1', label: 'Site Owner' } ],
+						},
+					],
+					[
+						'wpcloud/form-submit-button',
+						{
+							text: __( 'Create Site' ),
+						},
+					],
+				],
 			],
 		],
-	],
-]),[]);
+		[ dataCenterOptions, phpVersionOptions ]
+	);
 
 	const innerBlocksProps = useInnerBlocksProps( blockProps, {
-		template
+		template,
 	} );
 
-	return <div {...innerBlocksProps} className={classNames("wpcloud-new-site-form", innnerBlocksProps?.className)} />;
+	return (
+		<div
+			{ ...innerBlocksProps }
+			className={ classNames(
+				'wpcloud-new-site-form',
+				innerBlocksProps?.className
+			) }
+		/>
+	);
 }
