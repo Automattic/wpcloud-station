@@ -32,6 +32,7 @@ export default function Edit() {
 							className: 'wpcloud-block-site-alias-heading',
 						},
 					],
+					/*
 					[
 						'wpcloud/form',
 						{
@@ -85,6 +86,7 @@ export default function Edit() {
 							],
 						],
 					],
+					*/
 					[
 						'wpcloud/form',
 						{
