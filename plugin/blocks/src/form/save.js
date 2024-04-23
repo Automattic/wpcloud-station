@@ -1,4 +1,9 @@
 /**
+ * External dependencies
+ */
+import classNames from 'classnames';
+
+/**
  * WordPress dependencies
  */
 import { InnerBlocks, useBlockProps } from '@wordpress/block-editor';
@@ -9,8 +14,8 @@ const Save = () => {
 	return (
 		<form
 			{ ...blockProps }
-			className="wpcloud-block-form"
 			encType="text/plain"
+			className={ classNames( blockProps.className, 'wpcloud-block-form')}
 		>
 			<InnerBlocks.Content />
 		</form>
