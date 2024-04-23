@@ -10,7 +10,7 @@ function wpcloud_form_submit_handler() {
 	// Get the form fields.
 	$fields = apply_filters( 'wpcloud_block_form_submitted_fields', array(
 		'wpcloud_action',
-	) );
+	), array_keys( $_POST ) );
 
 	// Get the form data.
 	$data = array();
