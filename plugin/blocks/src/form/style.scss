@@ -13,12 +13,15 @@
 			justify-content: space-between;
 			align-items: center;
 
-			.wpcloud-block-form-input__label, .wpcloud-block-form-input__input {
+			.wpcloud-block-form-input__label, .wpcloud-block-form-input__input, .wpcloud-block-form-input__label-content {
 				margin: 0;
 			}
 			.wpcloud-block-form-input__label {
 				padding-top: 0;
 				padding-bottom: 0;
+			}
+			.wpcloud-block-form-input__label.is-label-inline .wpcloud-block-form-input__label-content {
+				margin-bottom: 0;
 			}
 
 		}
