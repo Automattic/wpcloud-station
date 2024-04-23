@@ -73,6 +73,7 @@ const Edit = ( { attributes, setAttributes } ) => {
 
 	return (
 		<>
+			{ controls }
 			<div
 				className={ classNames(
 					'wpcloud-block-form-submit-wrapper',
