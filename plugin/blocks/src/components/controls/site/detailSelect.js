@@ -4,9 +4,13 @@
 import { __ } from '@wordpress/i18n';
 import { SelectControl } from '@wordpress/components';
 
-export const formatDisplayName = ( name = '' ) => {
-	return name
-		.replace( /_/g, ' ' )
+export const formatDisplayName = (name = '') => {
+	const words = name.replace(/–|-|_/g, ' ');
+	if ( ! words.includes( ' ' ) ) {
+		return name;
+	}
+
+	return words
 		.replace( /\b\w/g, ( s ) => s.toUpperCase() )
 		.replace( /\b(.{2})\b/i, ( twoChar ) => twoChar.toUpperCase() )
 		.replace( /\bapi\b/i, 'API' )
