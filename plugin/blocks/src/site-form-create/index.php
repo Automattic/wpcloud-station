@@ -37,7 +37,6 @@ function wpcloud_block_form_create_site_handler( $response, $data ) {
 
 	return $response;
 }
-
 add_filter('wpcloud_form_process_create_site', 'wpcloud_block_form_create_site_handler', 10, 2);
 
 
