@@ -1,0 +1,1 @@
+(()=>{"use strict";const o=window.wp.hooks;window.wpcloud=window.wpcloud||{},wpcloud.hooks=wpcloud.hooks||(0,o.createHooks)(),wpcloud.fadeOut=(o,s=1e3)=>{o.classList.contains("no-fade-out")||(o.style.transition=`opacity ${s}ms`,o.style.opacity=0,setTimeout((()=>{o.style.display="none"}),s))}})();
