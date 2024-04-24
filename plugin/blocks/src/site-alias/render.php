@@ -16,26 +16,28 @@ $forms = $xpath->query('//form[contains(@class, "wpcloud-block-site-alias-form-r
 
 // hold on to the first one
 $removeForm = $forms[0];
-
-// Remove the placeholder forms
-foreach ($forms as $form) {
-	//$form->parentNode->removeChild($form);
-}
+$formContainer = $removeForm->parentNode;
 
 foreach( $siteAliases as $alias) {
 	$clonedForm = $removeForm->cloneNode(true) ;
 
 	$valueDivs = $clonedForm->getElementsByTagName('div');
-  foreach ($valueDivs as $valueDiv) {
-    if ($valueDiv->getAttribute('class') === 'wpcloud-block-site-detail__value') {
-    	$valueDiv->nodeValue = $alias;
-    }
-  }
-  // Append the cloned form node to its parent node
-  $form->parentNode->appendChild($clonedForm);
+	foreach ($valueDivs as $valueDiv) {
+		if ($valueDiv->getAttribute('class') === 'wpcloud-block-site-detail__value') {
+			$valueDiv->nodeValue = $alias;
+		}
+	}
+
+	$domain_input = $dom->createElement('input');
+	$domain_input->setAttribute('type', 'hidden');
+	$domain_input->setAttribute('name', 'site_alias');
+	$domain_input->setAttribute('value', $alias);
+	$clonedForm->appendChild($domain_input);
+
+	// Append the cloned form node to its parent node
+	$formContainer->appendChild($clonedForm);
 }
 $removeForm->parentNode->removeChild($removeForm);
-// Get the modified HTML content
 $modifiedHtml = $dom->saveHTML();
-// Output the modified HTML
+
 echo $modifiedHtml;
