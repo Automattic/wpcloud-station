@@ -32,68 +32,47 @@ export default function Edit() {
 							className: 'wpcloud-block-site-alias-heading',
 						},
 					],
-					/*
 					[
-						'wpcloud/form',
-						{
-							ajax: true,
-							wpcloudAction: 'site_alias_remove',
-							inline: true,
-							className: 'wpcloud-block-site-alias-form-remove',
-						},
+						'core/group',
+						{},
 						[
 							[
-								'wpcloud/site-detail',
+								'wpcloud/form',
 								{
-									label: __( 'example.com' ),
-									name: 'site_alias',
+									ajax: true,
+									wpcloudAction: 'site_alias_remove',
 									inline: true,
-									hideLabel: true,
+									className:
+										'wpcloud-block-site-alias-form-remove',
 								},
-							],
-							[
-								'wpcloud/form-submit-button',
-								{
-									text: __( 'remove' ),
-									icon: 'trash',
-								},
+								[
+									[
+										'wpcloud/site-detail',
+										{
+											label: __( 'example.com' ),
+											name: 'site_alias',
+											inline: true,
+											hideLabel: true,
+										},
+									],
+									[
+										'wpcloud/form-submit-button',
+										{
+											text: __( 'remove' ),
+											icon: 'trash',
+										},
+									],
+								],
 							],
 						],
 					],
-					[
-						'wpcloud/form',
-						{
-							ajax: true,
-							wpcloudAction: 'site_alias_remove',
-							inline: true,
-						},
-						[
-							[
-								'wpcloud/site-detail',
-								{
-									label: __( 'another.example.com' ),
-									name: 'site_alias',
-									inline: true,
-									hideLabel: true,
-								},
-							],
-							[
-								'wpcloud/form-submit-button',
-								{
-									text: __( 'remove' ),
-									icon: 'trash',
-								},
-							],
-						],
-					],
-					*/
 					[
 						'wpcloud/form',
 						{
 							ajax: true,
 							wpcloudAction: 'site_alias_add',
 							inline: true,
-							className: 'wpcloud-block-site-alias-form-remove',
+							className: 'wpcloud-block-site-alias-form-add',
 						},
 						[
 							[
