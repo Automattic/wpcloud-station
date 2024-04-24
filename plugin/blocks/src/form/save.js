@@ -8,8 +8,9 @@ import classNames from 'classnames';
  */
 import { InnerBlocks, useBlockProps } from '@wordpress/block-editor';
 
-const Save = () => {
+const Save = ( { attributes } ) => {
 	const blockProps = useBlockProps.save();
+	const { inline } = attributes;
 
 	return (
 		<form
@@ -17,7 +18,8 @@ const Save = () => {
 			encType="text/plain"
 			className={ classNames(
 				blockProps.className,
-				'wpcloud-block-form'
+				'wpcloud-block-form',
+				{ 'is-inline': inline }
 			) }
 		>
 			<InnerBlocks.Content />
