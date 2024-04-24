@@ -1,4 +1,5 @@
 <?php
+
 /** @disregard P1009 Undefined type */
 $processed_content = new WP_HTML_Tag_Processor( $content );
 $processed_content->next_tag( 'form' );
@@ -15,7 +16,7 @@ $action = '';
 if ( isset( $attributes['ajax'] ) && $attributes['ajax'] ) {
 	$action = admin_url( 'admin-ajax.php' );
 	$processed_content->set_attribute( 'data-ajax', 'true' );
-	$fields .= wp_nonce_field( 'wpcloud_form', '_ajax_nonce', true, false );
+	$fields .=  wpcloud_block_form_hidden_field('_ajax_nonce', wp_create_nonce( 'wpcloud_form' ));
 }
 elseif ( isset( $attributes['action'] ) ) {
 	$action = str_replace(
@@ -23,7 +24,7 @@ elseif ( isset( $attributes['action'] ) ) {
 		array( site_url(), admin_url() ),
 		$attributes['action']
 	);
-	$fields .= wp_nonce_field( 'wpcloud_form', 'nonce', true, false );
+	$fields .= wpcloud_block_form_hidden_field('_wpnonce', wp_create_nonce( 'wpcloud_form' ));
 }
 
 if ( isset( $attributes['redirect'] ) ) {
