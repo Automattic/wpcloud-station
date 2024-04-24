@@ -13,6 +13,7 @@ import {
 	InspectorControls,
 } from '@wordpress/block-editor';
 import { PanelBody, TextControl, Dashicon } from '@wordpress/components';
+
 const Edit = ( { attributes, setAttributes } ) => {
 	const { text, icon } = attributes;
 	const template = [

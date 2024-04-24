@@ -4,8 +4,10 @@
 import classNames from 'classnames';
 
 import { useBlockProps, InnerBlocks } from '@wordpress/block-editor';
+import { Dashicon } from '@wordpress/components';
 
-const Save = () => {
+const Save = ( { attributes } ) => {
+	const { icon, text } = attributes;
 	const blockProps = useBlockProps.save();
 	return (
 		<div
@@ -15,6 +17,20 @@ const Save = () => {
 			) }
 			{ ...blockProps }
 		>
+			{ icon && (
+				<button
+					type="submit"
+					className={ classNames(
+						'button',
+						'wpcloud-block-form-submit-icon-button',
+						blockProps.className
+					) }
+					{ ...blockProps }
+					aria-label={ text }
+				>
+					<Dashicon icon={ icon } />
+				</button>
+			) }
 			<InnerBlocks.Content />
 		</div>
 	);
