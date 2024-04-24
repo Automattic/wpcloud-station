@@ -34,7 +34,9 @@ export default function Edit() {
 					],
 					[
 						'core/group',
-						{},
+						{
+							className: "wpcloud-block-site-alias-list",
+						},
 						[
 							[
 								'wpcloud/form',
