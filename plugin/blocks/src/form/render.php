@@ -1,5 +1,4 @@
 <?php
-
 /** @disregard P1009 Undefined type */
 $processed_content = new WP_HTML_Tag_Processor( $content );
 $processed_content->next_tag( 'form' );
