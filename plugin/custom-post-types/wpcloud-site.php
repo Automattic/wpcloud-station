@@ -310,6 +310,7 @@ function wpcloud_get_domain_alias_list( int|WP_Post| null $post = null ): array 
 		global $post;
 	}
 
+
 	if ( ! $post ) {
 		error_log( 'WP Cloud get domain alias list: No post found.');
 		return array();
@@ -324,6 +325,7 @@ function wpcloud_get_domain_alias_list( int|WP_Post| null $post = null ): array 
 	$wpcloud_site_id = intval( $wpcloud_site_id );
 
 	$result = wpcloud_client_site_domain_alias_list( $wpcloud_site_id );
+
 	if ( is_wp_error( $result ) ) {
 		error_log( $result->get_error_message() );
 		return array();
