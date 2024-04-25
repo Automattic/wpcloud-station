@@ -1,0 +1,17 @@
+.wpcloud-block-site-alias-form-remove {
+	column-gap: 10px;
+
+	span:first-child {
+		width: 100%;
+	}
+	&:not(:first-child) {
+		flex:1;
+	}
+	.wpcloud-block-site-alias-make-primary {
+		.wp-element-button {
+			text-decoration: underline;
+			white-space: nowrap !important; // Gutenberg is injecting an inline style white-space: pre-wrap ; which is causing the button to wrap
+		}
+
+	}
+}

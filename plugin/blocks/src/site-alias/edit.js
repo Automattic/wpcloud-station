@@ -39,6 +39,15 @@ export default function Edit() {
 						},
 						[
 							[
+										'wpcloud/site-detail',
+										{
+											label: __( 'Primary Domain' ),
+											name: 'domain_name',
+											inline: true,
+											hideLabel: true,
+										},
+									],
+							[
 								'wpcloud/form',
 								{
 									ajax: true,
@@ -51,10 +60,18 @@ export default function Edit() {
 									[
 										'wpcloud/site-detail',
 										{
-											label: __( 'example.com' ),
+											label: __( 'Domain Alias' ),
 											name: 'site_alias',
 											inline: true,
 											hideLabel: true,
+										},
+									],
+									[
+										'wpcloud/form-submit-button',
+										{
+											text: __( 'make primary' ),
+											type: 'button',
+											className: 'wpcloud-block-site-alias-make-primary'
 										},
 									],
 									[
