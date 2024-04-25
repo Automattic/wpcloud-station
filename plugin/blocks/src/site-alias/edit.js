@@ -35,9 +35,20 @@ export default function Edit() {
 					[
 						'core/group',
 						{
-							className: "wpcloud-block-site-alias-list",
+							className: 'wpcloud-block-site-alias-list',
 						},
 						[
+							[
+								'wpcloud/site-detail',
+								{
+									label: __( 'Primary Domain' ),
+									name: 'domain_name',
+									inline: true,
+									hideLabel: true,
+									className:
+										'wpcloud-block-site-alias-list__item--primary',
+								},
+							],
 							[
 								'wpcloud/form',
 								{
@@ -51,14 +62,23 @@ export default function Edit() {
 									[
 										'wpcloud/site-detail',
 										{
-											label: __( 'example.com' ),
+											label: __( 'Domain Alias' ),
 											name: 'site_alias',
 											inline: true,
 											hideLabel: true,
 										},
 									],
 									[
-										'wpcloud/form-submit-button',
+										'wpcloud/button',
+										{
+											text: __( 'make primary' ),
+											type: 'button',
+											className:
+												'wpcloud-block-site-alias-make-primary',
+										},
+									],
+									[
+										'wpcloud/button',
 										{
 											text: __( 'remove' ),
 											icon: 'trash',
@@ -89,7 +109,7 @@ export default function Edit() {
 								},
 							],
 							[
-								'wpcloud/form-submit-button',
+								'wpcloud/button',
 								{
 									text: __( 'Add' ),
 									inline: true,

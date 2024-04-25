@@ -101,7 +101,9 @@ export default function Edit( {
 						onChange={ ( newValue ) =>
 							setAttributes( { redirect: newValue } )
 						}
-						help={ __( 'The url to redirect to after a successful form submission.' ) }
+						help={ __(
+							'The url to redirect to after a successful form submission.'
+						) }
 					/>
 					{ ! ajax && (
 						<TextControl

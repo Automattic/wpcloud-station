@@ -1,34 +1,120 @@
+( ( wpcloud ) => {
+	const aliasList = document.querySelector(
+		'.wpcloud-block-site-alias-list'
+	);
+	const removeForm = document.querySelector(
+		'.wpcloud-block-site-alias-form-remove'
+	);
+	const makePrimaryButtons = document.querySelectorAll(
+		'.wpcloud-block-site-alias-make-primary'
+	);
+	const newAliasInput = document.querySelector(
+		'.wpcloud-block-site-alias-form-add input[name=site_alias]'
+	);
 
-((wpcloud) => {
+	function bindMakePrimaryButton( button ) {
+		if ( ! button ) {
+			return;
+		}
+		button.addEventListener( 'click', ( e ) => {
+			e.preventDefault();
+			const form = e.target.closest( 'form' );
+			updateAliasFormAction( form, 'site_alias_make_primary' );
+			form.dispatchEvent( new Event( 'submit' ) );
+		} );
+	}
+	makePrimaryButtons.forEach( bindMakePrimaryButton );
 
-	const aliasList = document.querySelector('.wpcloud-block-site-alias-list');
-	const removeForm = document.querySelector('.wpcloud-block-site-alias-form-remove');
+	function updateAliasFormAction( form, action ) {
+		form.querySelector( 'input[name=wpcloud_action]' ).value = action;
+	}
 
-	const newAliasInput = document.querySelector('.wpcloud-block-site-alias-form-add input[name=site_alias]');
+	function siteAliasAddResponse( result ) {
+		if ( ! result.success ) {
+			alert( result.message ); // eslint-disable-line no-alert, no-undef
+			return;
+		}
+		const newAlias = removeForm.cloneNode( true );
+		newAlias.querySelector(
+			'.wpcloud-block-site-detail__value'
+		).textContent = result.site_alias;
+		newAlias.querySelector( 'input[name=site_alias]' ).value =
+			result.site_alias;
+		newAlias.dataset.siteAlias = result.site_alias;
+		newAlias.removeAttribute( 'style' );
+		aliasList.appendChild( newAlias );
+		bindMakePrimaryButton(
+			newAlias.querySelector( '.wpcloud-block-site-alias-make-primary' )
+		);
+		wpcloud.bindFormHandler( newAlias );
+		newAliasInput.value = '';
+	}
 
-	wpcloud.hooks.addAction('wpcloud_form_response', 'site_alias_add', (result) => {
-		if (result?.action === 'site_alias_add') {
-			if (result.success) {
-				const newAlias = removeForm.cloneNode(true);
-				newAlias.querySelector('.wpcloud-block-site-detail__value').textContent = result.site_alias;
-				newAlias.querySelector('input[name=site_alias]').value = result.site_alias;
-				newAlias.dataset.siteAlias = result.site_alias;
-				newAlias.removeAttribute('style');
-				aliasList.appendChild(newAlias);
+	function siteAliasRemoveResponse( result ) {
+		if ( ! result.success ) {
+			alert( result.message ); // eslint-disable-line no-alert, no-undef
+			return;
+		}
+		const removed = aliasList.querySelector(
+			`[data-site-alias="${ result.site_alias }"]`
+		);
+		removed.ontransitionend = () => {
+			removed.remove();
+		};
+		removed.style.opacity = 0;
+	}
 
-				wpcloud.bindFormHandler(newAlias);
-				newAliasInput.value = '';
+	function siteAliasMakePrimaryResponse( result, form ) {
+		updateAliasFormAction( form, 'site_alias_remove' );
+		if ( ! result.success ) {
+			alert( result.message ); // eslint-disable-line no-alert, no-undef
+			return;
+		}
+		const primary = aliasList.querySelector(
+			'.wpcloud-block-site-alias-list__item--primary'
+		);
+		const primaryValue = primary.querySelector(
+			'.wpcloud-block-site-detail__value'
+		);
+		const oldAliasValueInput = form.querySelector(
+			'.wpcloud-block-site-detail__value'
+		);
+		const oldPrimary = primaryValue.textContent;
+		const newPrimary = result.site_alias;
 
-			} else {
-				alert(result.message);
+		const removeFormInput = form.querySelector( 'input[name=site_alias]' );
+		removeFormInput.value = oldPrimary;
+		removeFormInput.name = 'site_alias';
+
+		[
+			[ primaryValue, newPrimary ],
+			[ oldAliasValueInput, oldPrimary ],
+		].forEach( ( val ) => {
+			const [ el, newText ] = val;
+			el.ontransitionend = () => {
+				el.textContent = newText;
+				el.classList.remove( 'wpcloud-hide' );
+				el.ontransitionend = null;
+			};
+		} );
+
+		primaryValue.classList.add( 'wpcloud-hide' );
+		oldAliasValueInput.classList.add( 'wpcloud-hide' );
+	}
+
+	wpcloud.hooks.addAction(
+		'wpcloud_form_response',
+		'site_alias_add',
+		( result, form ) => {
+			if ( result?.action === 'site_alias_add' ) {
+				return siteAliasAddResponse( result );
+			}
+			if ( result?.action === 'site_alias_remove' ) {
+				return siteAliasRemoveResponse( result );
+			}
+			if ( result?.action === 'site_alias_make_primary' ) {
+				return siteAliasMakePrimaryResponse( result, form );
 			}
 		}
-	});
-
-	wpcloud.hooks.addAction('wpcloud_form_response', 'site_alias_remove', (result) => {
-		if (result?.action === 'site_alias_remove') {
-			wpcloud.fadeOut(aliasList.querySelector(`[data-site-alias="${result.site_alias}"]`));
-		}
-	});
-
-	})(window.wpcloud);
+	);
+} )( window.wpcloud );

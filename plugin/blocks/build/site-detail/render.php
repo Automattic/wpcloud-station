@@ -29,7 +29,7 @@ if ( is_array( $detail ) ) {
 	$detail = $list;
 }
 if (str_starts_with($detail, 'http')) {
-	$detail = sprintf('<a href="%s">%s</a>', $detail, $detail);
+	$detail = sprintf('<a href="%s" target="_blank" ><span class="dashicons dashicons-external"></span></a>', $detail, $detail);
 }
 
 // match the placeholder which is in the last set of curly braces  { The placeholder }

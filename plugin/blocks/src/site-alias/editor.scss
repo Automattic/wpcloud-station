@@ -22,3 +22,9 @@
 		}
 	}
  }
+
+.wpcloud-block-site-alias-make-primary {
+	.wp-element-button[role="textbox"]  {
+		white-space: nowrap !important; // Gutenberg is injecting an inline style white-space: pre-wrap ; which is causing the button to wrap
+	}
+}

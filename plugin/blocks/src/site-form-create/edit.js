@@ -100,7 +100,7 @@ export default function Edit() {
 						},
 					],
 					[
-						'wpcloud/form-submit-button',
+						'wpcloud/button',
 						{
 							text: __( 'Create Site' ),
 						},
