@@ -54,7 +54,7 @@ function wpcloud_settings_init(): void {
 			'wpcloud_custom_data' => 'custom',
 		]
 	);
-
+/*
 	add_settings_field(
 		'wpcloud_field_backfill',
 		__( 'Backfill (DEV ONLY)', 'wpcloud' ),
@@ -67,6 +67,7 @@ function wpcloud_settings_init(): void {
 			'wpcloud_custom_data' => 'custom',
 		]
 		);
+		*/
 }
 
 add_action( 'admin_menu', 'wpcloud_options_page' );
@@ -267,17 +268,5 @@ function wpcloud_admin_options_controller(): void {
 		}
 
 		settings_errors( 'wpcloud_messages' );
-		?>
-	<div class="wrap">
-				<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
-				<form action="options.php" method="post">
-						<?php
-						settings_fields( 'wpcloud' );
-						do_settings_sections( 'wpcloud' );
-						submit_button( __( 'Save Settings', 'wpcloud' ) );
-						?>
-				</form>
-		</div>
-		<?php
-
+		require_once  plugin_dir_path(__FILE__) . 'options.php';
 }
