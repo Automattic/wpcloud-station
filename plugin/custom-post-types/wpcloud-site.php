@@ -287,6 +287,26 @@ function wpcloud_get_site_detail( int|WP_Post $post, string $key, ): mixed {
 
 	$wpcloud_site_id = intval( $wpcloud_site_id );
 
+	switch ($key) {
+		case 'phpmyadmin_url':
+			$result = wpcloud_client_site_phpmyadmin_url( $wpcloud_site_id );
+			return $result;
+			break;
+		case 'ssl_info':
+			// @TODO getting timeout errors but probably since we are not using valid domains ?
+			//$result = wpcloud_client_site_ssl_info( $wpcloud_site_id );
+			return '';
+		case 'ip_addresses':
+			$result = wpcloud_client_site_ip_addresses( );
+			if ( is_wp_error( $result ) ) {
+				return $result;
+			}
+
+			return $result->ips;
+		default:
+			$result = wpcloud_client_site_details( $wpcloud_site_id, true );
+	}
+
 	$result = wpcloud_client_site_details( $wpcloud_site_id, true );
 	if ( is_wp_error( $result ) ) {
 		return $result;

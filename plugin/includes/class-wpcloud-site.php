@@ -32,6 +32,9 @@ class WPCLOUD_Site {
 		'atomic_site_id',
 		'atomic_client_id',
 		'server_pool_id',
+		'phpmyadmin_url',
+		'ssl_info',
+
 	);
 
 	private static $initial_status = 'draft';

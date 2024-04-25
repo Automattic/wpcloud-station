@@ -90,6 +90,22 @@ const TEMPLATE = [
 							inline: true,
 						},
 					],
+					[
+						'wpcloud/site-detail',
+						{
+							label: 'PHPMyAdmin Url ',
+							name: 'phpmyadmin_url',
+							inline: true,
+						},
+					],
+					[
+						'wpcloud/site-detail',
+						{
+							label: 'SSL Info',
+							name: 'ssl_info',
+							inline: true,
+						},
+					],
 				],
 			],
 			[

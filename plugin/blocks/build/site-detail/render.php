@@ -19,8 +19,17 @@ if ( is_wp_error( $detail ) ) {
 	return;
 }
 
+
 if ( is_array( $detail ) ) {
-	$detail = implode( ', ', $detail );
+	$list = "<ul class='wpcloud_block_site_detail__value__list'>";
+	foreach ( $detail as $key => $value ) {
+		$list .= "<li>$value</li>";
+	}
+	$list .= "</ul>";
+	$detail = $list;
+}
+if (str_starts_with($detail, 'http')) {
+	$detail = sprintf('<a href="%s">%s</a>', $detail, $detail);
 }
 
 // match the placeholder which is in the last set of curly braces  { The placeholder }

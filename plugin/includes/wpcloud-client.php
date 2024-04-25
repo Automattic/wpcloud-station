@@ -373,6 +373,18 @@ function wpcloud_client_site_ssl_info( int $wpcloud_site_id ): mixed {
 }
 
 /**
+ * Get SSL certificate information for site.
+ *
+ * @param integer $wpcloud_site_id The WP Cloud Site ID.
+ *
+ * @return object|WP_Error SSL certificate information on success. WP_Error on error.
+ */
+function wpcloud_client_site_ip_addresses( string $domain ='' ): mixed {
+	$client_name = wpcloud_get_client_name();
+	return wpcloud_client_get( null, "get-ips/$client_name/$domain" );
+}
+
+/**
  * Retry SSL certificate provisioning.
  *
  * @param integer $wpcloud_site_id The WP Cloud Site ID.
