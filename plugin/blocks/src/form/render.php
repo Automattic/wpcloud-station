@@ -10,6 +10,10 @@ if ( isset( $attributes[ 'wpcloudAction' ] ) && $attributes[ 'wpcloudAction' ] )
 	$fields .= wpcloud_block_form_hidden_field( 'wpcloud_action', $attributes[ 'wpcloudAction' ] );
 }
 
+if ( isset( $attributes[ 'redirect' ] ) ) {
+	$fields .= wpcloud_block_form_hidden_field( 'redirect', $attributes[ 'redirect' ] );
+}
+
 // Get the action for this form.
 $action = '';
 if ( isset( $attributes['ajax'] ) && $attributes['ajax'] ) {

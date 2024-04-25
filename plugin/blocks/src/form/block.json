@@ -31,12 +31,19 @@
 		"inline" : {
 			"type": "boolean",
 			"default": false
+		},
+		"redirect": {
+			"type": "string"
 		}
 	},
 	"allowedBlocks": [
 		 "wpcloud/site-detail",
 			"core/paragraph",
 			"core/heading",
+			"core/group",
+			"core/image",
+			"core/columns",
+			"core/grid",
 			"wpcloud/form-input",
 			"wpcloud/form-submit-button" ]
 }

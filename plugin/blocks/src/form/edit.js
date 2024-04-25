@@ -37,7 +37,7 @@ export default function Edit( {
 	clientId,
 	isSelected,
 } ) {
-	const { action, ajax, wpcloudAction, inline } = attributes;
+	const { action, ajax, wpcloudAction, inline, redirect } = attributes;
 	const blockProps = useBlockProps();
 
 	const isChildSelected = useSelect( ( select ) =>
@@ -94,6 +94,14 @@ export default function Edit( {
 						help={ __(
 							'Enable AJAX form submission for a smoother experience.'
 						) }
+					/>
+					<TextControl
+						label={ __( 'Redirect' ) }
+						value={ redirect }
+						onChange={ ( newValue ) =>
+							setAttributes( { redirect: newValue } )
+						}
+						help={ __( 'The url to redirect to after a successful form submission.' ) }
 					/>
 					{ ! ajax && (
 						<TextControl
