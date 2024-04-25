@@ -71,7 +71,7 @@ export default function Edit() {
 					},
 				],
 				[
-					'wpcloud/form-submit-button',
+					'wpcloud/button',
 					{
 						text: __('Login In'),
 					},

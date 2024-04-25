@@ -67,7 +67,7 @@ export default function Edit() {
 										},
 									],
 									[
-										'wpcloud/form-submit-button',
+										'wpcloud/button',
 										{
 											text: __( 'make primary' ),
 											type: 'button',
@@ -75,7 +75,7 @@ export default function Edit() {
 										},
 									],
 									[
-										'wpcloud/form-submit-button',
+										'wpcloud/button',
 										{
 											text: __( 'remove' ),
 											icon: 'trash',
@@ -106,7 +106,7 @@ export default function Edit() {
 								},
 							],
 							[
-								'wpcloud/form-submit-button',
+								'wpcloud/button',
 								{
 									text: __( 'Add' ),
 									inline: true,
