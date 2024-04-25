@@ -28,7 +28,8 @@ function wpcloud_form_submit_handler() {
 		'success' => true,
 		'message' => 'Form submitted successfully.',
 		'redirect' => '',
-		'status' => 200
+		'status' => 200,
+		'action' => $action,
 	);
 
 	$result = apply_filters( 'wpcloud_form_process_' . $action, $success_result, $data );
