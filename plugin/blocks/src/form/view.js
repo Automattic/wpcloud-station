@@ -13,6 +13,14 @@ wpcloud.bindFormHandler = (form) => {
 		);
 		formData.action = 'wpcloud_form_submit';
 
+		// override redirect if a ref query string is present
+		const queryString = window.location.search;
+		const urlParams = new URLSearchParams(queryString);
+		const redirect = urlParams.get('ref');
+		if ( redirect ) {
+			formData.redirect = redirect;
+		}
+
 		try {
 			const response = await fetch(
 				'http://localhost:8888/wp-admin/admin-ajax.php',

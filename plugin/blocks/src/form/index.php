@@ -11,6 +11,7 @@ function wpcloud_form_submit_handler() {
 	// Get the form fields.
 	$fields = apply_filters( 'wpcloud_block_form_submitted_fields', array(
 		'wpcloud_action',
+		'redirect',
 	), array_keys( $_POST ) );
 	$fields = apply_filters( 'wpcloud_block_form_submitted_fields_' . $action , $fields, array_keys( $_POST ) );
 
@@ -27,11 +28,11 @@ function wpcloud_form_submit_handler() {
 	$success_result = array(
 		'success' => true,
 		'message' => 'Form submitted successfully.',
-		'redirect' => '',
+		'redirect' => $data[ 'redirect' ] ?? '',
 		'status' => 200,
 		'action' => $action,
 	);
-
+	error_log('wpcloud_form_process_' . $action);
 	$result = apply_filters( 'wpcloud_form_process_' . $action, $success_result, $data );
 
 	if ( $result[ 'success' ] === false ) {
