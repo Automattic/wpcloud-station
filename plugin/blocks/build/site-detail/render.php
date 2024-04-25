@@ -4,7 +4,7 @@
  * If we're not on a `wpcloud_site` post, we should return early.
  * But we can still render the block in demo mode.
  */
-if (get_post_type() !== 'wpcloud_site' && ! wpcloud_is_demo_mode() ) {
+if ( ! is_wpcloud_site_post() ) {
 	return;
 }
 
@@ -14,6 +14,10 @@ if ( $attributes[ 'adminOnly' ] && ! current_user_can( 'manage_options' ) ) {
 }
 
 $detail = wpcloud_get_site_detail( get_the_ID(), $attributes[ 'name' ] ) ?? '';
+if ( is_wp_error( $detail ) ) {
+	error_log( 'WP Cloud Site Detail Block: ' . $detail->get_error_message() );
+	return;
+}
 
 if ( is_array( $detail ) ) {
 	$detail = implode( ', ', $detail );
