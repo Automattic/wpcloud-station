@@ -11,6 +11,15 @@
 		.wp-element-button {
 			text-decoration: underline;
 			white-space: nowrap !important; // Gutenberg is injecting an inline style white-space: pre-wrap ; which is causing the button to wrap
+			background: transparent;
+			border: none;
+			&:focus {
+				border: none;
+				outline: none;
+			}
+			&:hover {
+				font-weight: 600;
+			}
 		}
 
 	}
