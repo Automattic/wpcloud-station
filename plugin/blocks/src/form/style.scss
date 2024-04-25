@@ -28,4 +28,7 @@
 		button {
 			width: fit-content;
 		}
+		&.is-loading {
+			opacity: 0.8;
+		}
  }
