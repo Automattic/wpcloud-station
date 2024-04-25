@@ -20,7 +20,7 @@ wpcloud.bindFormHandler = (form) => {
 		if ( redirect ) {
 			formData.redirect = redirect;
 		}
-
+		wpcloud.hooks.doAction( 'wpcloud_form_submit', form );
 		try {
 			const response = await fetch(
 				'http://localhost:8888/wp-admin/admin-ajax.php',
@@ -32,12 +32,16 @@ wpcloud.bindFormHandler = (form) => {
 					body: new URLSearchParams( formData ).toString(),
 				}
 			);
-			wpcloud.hooks.doAction( 'wpcloud_form_submit', form );
+
 			const result = await response.json();
 
 			wpcloud.hooks.doAction( 'wpcloud_form_response', result.data );
 
-			if ( response.ok && result?.data?.redirect ) {
+			if (response.ok && result?.data?.redirect) {
+				if ( result.data.redirect === 'reload') {
+					window.location.reload();
+					return;
+				}
 				window.location = result.data.redirect;
 			}
 
