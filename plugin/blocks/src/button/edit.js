@@ -22,12 +22,10 @@ const Edit = ( { attributes, setAttributes } ) => {
 			{
 				text: text || __( 'Submit' ),
 				tagName: 'button',
-				type: type,
+				type,
 			},
 		],
 	];
-
-	console.log( 'template', template );
 
 	const controls = (
 		<>

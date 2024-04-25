@@ -35,19 +35,20 @@ export default function Edit() {
 					[
 						'core/group',
 						{
-							className: "wpcloud-block-site-alias-list",
+							className: 'wpcloud-block-site-alias-list',
 						},
 						[
 							[
-										'wpcloud/site-detail',
-										{
-											label: __( 'Primary Domain' ),
-											name: 'domain_name',
-											inline: true,
-											hideLabel: true,
-											className: 'wpcloud-block-site-alias-list__item--primary',
-										},
-									],
+								'wpcloud/site-detail',
+								{
+									label: __( 'Primary Domain' ),
+									name: 'domain_name',
+									inline: true,
+									hideLabel: true,
+									className:
+										'wpcloud-block-site-alias-list__item--primary',
+								},
+							],
 							[
 								'wpcloud/form',
 								{
@@ -72,7 +73,8 @@ export default function Edit() {
 										{
 											text: __( 'make primary' ),
 											type: 'button',
-											className: 'wpcloud-block-site-alias-make-primary'
+											className:
+												'wpcloud-block-site-alias-make-primary',
 										},
 									],
 									[

@@ -45,6 +45,6 @@
     "core/columns",
     "core/grid",
     "wpcloud/form-input",
-    "wpcloud/form-submit-button"
+    "wpcloud/button"
   ]
 }
