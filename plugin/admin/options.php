@@ -12,7 +12,7 @@ if ( is_wp_error( $ip_request ) ) {
 
 ?>
 <div class="wrap">
-	<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
+	<h1>WP Cloud</h1>
 	<form action="options.php" method="post">
 			<?php
 			settings_fields( 'wpcloud' );
