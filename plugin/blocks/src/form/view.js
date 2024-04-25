@@ -35,7 +35,7 @@ wpcloud.bindFormHandler = (form) => {
 
 			const result = await response.json();
 
-			wpcloud.hooks.doAction( 'wpcloud_form_response', result.data );
+			wpcloud.hooks.doAction( 'wpcloud_form_response', result.data, form );
 
 			if (response.ok && result?.data?.redirect) {
 				if ( result.data.redirect === 'reload') {
