@@ -22,6 +22,10 @@
 		},
 		"icon" :{
 			"type" : "string"
+		},
+		"type" : {
+			"type" : "string",
+			"default" : "submit"
 		}
 	}
 }

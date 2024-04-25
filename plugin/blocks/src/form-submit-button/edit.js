@@ -15,17 +15,19 @@ import {
 import { PanelBody, TextControl, Dashicon } from '@wordpress/components';
 
 const Edit = ( { attributes, setAttributes } ) => {
-	const { text, icon } = attributes;
+	const { text, icon, type } = attributes;
 	const template = [
 		[
 			'core/button',
 			{
 				text: text || __( 'Submit' ),
 				tagName: 'button',
-				type: 'submit',
+				type: type,
 			},
 		],
 	];
+
+	console.log( 'template', template );
 
 	const controls = (
 		<>
@@ -56,7 +58,7 @@ const Edit = ( { attributes, setAttributes } ) => {
 			<>
 				{ controls }
 				<button
-					type="submit"
+					type={ type }
 					onClick={ ( event ) => event.preventDefault() }
 					className={ classNames(
 						'button',
