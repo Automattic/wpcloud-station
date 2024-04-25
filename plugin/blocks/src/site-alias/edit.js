@@ -45,6 +45,7 @@ export default function Edit() {
 											name: 'domain_name',
 											inline: true,
 											hideLabel: true,
+											className: 'wpcloud-block-site-alias-list__item--primary',
 										},
 									],
 							[

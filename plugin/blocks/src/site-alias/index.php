@@ -103,11 +103,6 @@ function wpcloud_block_form_site_alias_make_primary($response, $data) {
 	$response['message'] = 'Site alias set as primary successfully.';
 	$response['site_alias'] = $data['site_alias'];
 
-	// @TODO: For now we'll trigger a page refresh till the UI can make the appropriate changes.
-	$response['redirect'] = 'reload';
 	return $response;
 }
-
-
-
 add_filter('wpcloud_form_process_site_alias_make_primary', 'wpcloud_block_form_site_alias_make_primary', 10, 2);
