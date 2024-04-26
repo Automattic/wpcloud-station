@@ -400,7 +400,20 @@ function wpcloud_client_site_ssl_retry( int $wpcloud_site_id, string $domain ): 
 
 	return (bool) $response->queued;
 }
+/**
+ * Get PHP versions available for the client.
+ *
+ * @return array|WP_Error List of PHP versions available. WP_Error on error.
+ */
+function wpcloud_client_php_versions_available(): array | WP_error {
+	$client_name = wpcloud_get_client_name();
+	return wpcloud_client_get( null, "get-php-versions/$client_name" );
+}
 
+function wpcloud_client_datacenters_available(): array | WP_error {
+	$client_name = wpcloud_get_client_name();
+	return wpcloud_client_get( null, "get-available-datacenters/$client_name" );
+}
 /**
  * Get the status of a job.
  *

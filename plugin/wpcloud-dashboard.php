@@ -32,26 +32,6 @@ define( 'WPCLOUD_CLIENT_RESPONSE_SUCCESS', 'wpcloud_client_response_success' );
 define( 'WPCLOUD_SHOULD_CREATE_SITE', 'wpcloud_should_create_site' );
 define( 'WPCLOUD_INITIAL_SITE_STATUS', 'wpcloud_initial_site_status' );
 
-/**
- * Allowed PHP versions.
-*/
-define( 'WPCLOUD_PHP_VERSIONS', array(
-	'7.4' => '7.4',
-	'8.1' => '8.1',
-	'8.2' => '8.2',
-	'8.3' => '8.3',
-) );
-
-/*
- * Allowed Data Centers.
- */
-define( 'WPCLOUD_DATA_CENTERS', array(
-	'No Preference' => 'No Preference',
-	'ams'           => 'Amsterdam, NL',
-	'bur'           => 'Los Angeles, CA',
-	'dca'           => 'Washington, D.C., USA',
-	'dfw'           => 'Dallas, TX, USA',
-) );
 
 /**
  * Capabilities
