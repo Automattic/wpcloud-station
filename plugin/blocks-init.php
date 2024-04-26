@@ -71,3 +71,35 @@ function wpcloud_block_allow_site_id_field( $fields, $post_keys ) {
 	return $fields;
 }
 add_filter( 'wpcloud_block_form_submitted_fields', 'wpcloud_block_allow_site_id_field', 10, 2 );
+
+
+function wpcloud_block_available_php_options(): array {
+	$php_versions = wpcloud_client_php_versions_available();
+	if ( is_wp_error( $php_versions) ) {
+		error_log( 'WP Cloud: ' . $php_versions->get_error_message() );
+		return [];
+	}
+	return array_reduce( $php_versions, function( $versions, $version ) {
+			$versions[ $version ] = $version;
+			return $versions;
+		}, [] );
+}
+
+function wpcloud_block_available_datacenters_options(): array {
+	$data_center_cities = array(
+		'ams'           => __( 'Amsterdam, NL' ),
+		'bur'           => __( 'Los Angeles, CA' ),
+		'dca'           => __( 'Washington, D.C., USA' ),
+		'dfw'           => __( 'Dallas, TX, USA' ) ,
+	);
+
+	$data_centers = array( ' ' => __( 'No Preference' ) );
+	$available_data_centers  = wpcloud_client_datacenters_available();
+	error_log( print_r( $available_data_centers, true ) );
+	if ( is_wp_error( $available_data_centers ) ) {
+		error_log( 'WP Cloud: ' . $available_data_centers->get_error_message() );
+	} else {
+		$data_centers += array_intersect_key( $data_center_cities, array_flip( $available_data_centers ) );
+	}
+	return $data_centers;
+}
