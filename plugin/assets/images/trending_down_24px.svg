@@ -1,0 +1,10 @@
+<svg width="17" height="16" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Actions / trending_down_24px">
+<mask id="mask0_101_15336" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="1" y="4" width="15" height="8">
+<path id="icon/action/trending_down_24px" d="M11.0561 12L12.5753 10.4733L9.3379 7.22L6.68432 9.88667L1.76855 4.94L2.70394 4L6.68432 8L9.3379 5.33333L13.5173 9.52667L15.0365 8V12H11.0561Z" fill="white"/>
+</mask>
+<g mask="url(#mask0_101_15336)">
+<rect id="Rectangle" x="0.441895" width="15.9215" height="16" fill="#FFBF86"/>
+</g>
+</g>
+</svg>
