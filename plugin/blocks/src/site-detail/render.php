@@ -12,13 +12,15 @@ if ( ! is_wpcloud_site_post() ) {
 if ( $attributes[ 'adminOnly' ] && ! current_user_can( 'manage_options' ) ) {
 	return;
 }
-
-$detail = wpcloud_get_site_detail( get_the_ID(), $attributes[ 'name' ] ) ?? '';
+$name = $attributes[ 'name' ] ?? '';
+$detail = wpcloud_get_site_detail( get_the_ID(), $name );
 if ( is_wp_error( $detail ) ) {
 	error_log( 'WP Cloud Site Detail Block: ' . $detail->get_error_message() );
 	return;
 }
-
+if ( $name === 'domain_name' || $name === 'site_alias' ) {
+	$detail = "<a href='https://$detail' target='_blank'>$detail <span class='dashicons dashicons-external'></a>";
+}
 
 if ( is_array( $detail ) ) {
 	$list = "<ul class='wpcloud_block_site_detail__value__list'>";
