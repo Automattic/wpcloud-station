@@ -56,7 +56,7 @@ export default function Edit() {
 						'core/heading',
 						{
 							level: 3,
-							content: __( 'New Site' ),
+							content: __( 'Add Site' ),
 						},
 					],
 					[
@@ -87,6 +87,14 @@ export default function Edit() {
 							label: __( 'Data Center' ),
 							options: formatOptions( dataCenterOptions ),
 							required: true,
+						},
+					],
+					[
+						'wpcloud/form-input',
+						{
+							type: 'password',
+							name: 'admin_pass',
+							label: __('Admin Password'),
 						},
 					],
 					[

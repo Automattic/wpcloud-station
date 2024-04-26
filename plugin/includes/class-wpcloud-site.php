@@ -78,6 +78,13 @@ class WPCLOUD_Site {
 		$data_center = $options['data_center'];
 		$post_name = str_replace( '.', '-', $domain );
 
+		if ( isset( $options[ 'admin_pass' ] ) && $options[ 'admin_pass' ] ) {
+			add_filter( 'wpcloud_site_create_data', function( $data ) use ( $options ) {
+				$data[ 'admin_pass' ] = $options[ 'admin_pass' ];
+				return $data;
+			} );
+		}
+
 		$post_id = wp_insert_post(
 			array(
 				'post_title' => $domain,
