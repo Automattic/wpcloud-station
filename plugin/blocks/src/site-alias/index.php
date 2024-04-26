@@ -81,8 +81,6 @@ add_filter('wpcloud_form_process_site_alias_remove', 'wpcloud_block_form_site_al
 function wpcloud_block_form_site_alias_make_primary($response, $data) {
 	$wpcloud_site_id = get_post_meta( $data['site_id'], 'wpcloud_site_id', true );
 
-	error_log(print_r($data,true));
-
 	if ( ! $wpcloud_site_id ) {
 		$response['message'] = 'Site not found.';
 		$response['status'] = 400;
