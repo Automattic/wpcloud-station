@@ -150,14 +150,14 @@ function wpcloud_client_domain_verification_record( ?int $wpcloud_site_id, strin
  * @return object|WP_Error Create site job details. WP_Error on error.
  */
 function wpcloud_client_site_create( string $domain, string $admin_user, string $admin_email, array $data = array(), array $software = array(), array $meta = array() ): mixed {
-    $client_name = wpcloud_get_client_name();
+	$client_name = wpcloud_get_client_name();
 
 	// First validate if the domain can be hosted
 	$validate_domain = wpcloud_client_domain_validate( null, $domain );
 	if ( is_wp_error( $validate_domain ) ) {
 		return $validate_domain;
 	} elseif ( ! $validate_domain ) {
-		$result = new WP_Error( 'forbidden', 'Domain cannot be hosted' );
+		return new WP_Error( 'forbidden', 'Domain cannot be hosted' );
 	}
 
 	$data = array_merge(
@@ -410,10 +410,17 @@ function wpcloud_client_php_versions_available(): array | WP_error {
 	return wpcloud_client_get( null, "get-php-versions/$client_name" );
 }
 
+/*
+ * Get available datacenters for the client.
+ *
+ * @return array|WP_Error List of datacenters available. WP_Error on error.
+ */
 function wpcloud_client_datacenters_available(): array | WP_error {
 	$client_name = wpcloud_get_client_name();
 	return wpcloud_client_get( null, "get-available-datacenters/$client_name" );
 }
+
+
 /**
  * Get the status of a job.
  *
