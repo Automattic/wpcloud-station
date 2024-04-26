@@ -86,20 +86,13 @@ function wpcloud_block_available_php_options(): array {
 }
 
 function wpcloud_block_available_datacenters_options(): array {
-	$data_center_cities = array(
-		'ams'           => __( 'Amsterdam, NL' ),
-		'bur'           => __( 'Los Angeles, CA' ),
-		'dca'           => __( 'Washington, D.C., USA' ),
-		'dfw'           => __( 'Dallas, TX, USA' ) ,
-	);
-
 	$data_centers = array( ' ' => __( 'No Preference' ) );
 	$available_data_centers  = wpcloud_client_datacenters_available();
 	error_log( print_r( $available_data_centers, true ) );
 	if ( is_wp_error( $available_data_centers ) ) {
 		error_log( 'WP Cloud: ' . $available_data_centers->get_error_message() );
 	} else {
-		$data_centers += array_intersect_key( $data_center_cities, array_flip( $available_data_centers ) );
+		$data_centers += array_intersect_key( wpcloud_client_data_center_cities(), array_flip( $available_data_centers ) );
 	}
 	return $data_centers;
 }

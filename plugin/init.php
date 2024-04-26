@@ -88,3 +88,17 @@ add_action( 'init', 'wpcloud_init' );
 if ( is_admin() ) {
 	require_once plugin_dir_path( __FILE__ ) . 'admin/init.php';
 }
+
+
+/*
+* Data center labels. These are used to display the data center in the UI.
+* Call wpcloud_client_datacenters_available() to get actual data centers available
+*/
+function wpcloud_client_data_center_cities(): array  {
+	return 	array(
+		'ams'           => __( 'Amsterdam, NL' ),
+		'bur'           => __( 'Los Angeles, CA' ),
+		'dca'           => __( 'Washington, D.C., USA' ),
+		'dfw'           => __( 'Dallas, TX, USA' ),
+	);
+}
