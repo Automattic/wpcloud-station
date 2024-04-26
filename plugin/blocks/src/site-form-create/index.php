@@ -37,7 +37,6 @@ function wpcloud_block_form_create_site_handler( $response, $data ) {
 }
 add_filter('wpcloud_form_process_create_site', 'wpcloud_block_form_create_site_handler', 10, 2);
 
-
 function wpcloud_block_form_render_field_site_owner_id( $content ) {
 
 	$users = get_users();
@@ -56,13 +55,23 @@ function wpcloud_block_form_render_field_site_owner_id( $content ) {
 add_filter( 'wpcloud_block_form_render_field_site_owner_id', 'wpcloud_block_form_render_field_site_owner_id' );
 
 function wpcloud_block_site_form_enqueue_scripts() {
+	$php_versions = wpcloud_get_php_versions();
+	if ( is_wp_error( $php_versions) ) {
+		error_log( 'WP Cloud: ' . $php_versions->get_error_message() );
+	} else {
+		$php_versions = array_reduce( $php_versions, function( $versions, $version ) {
+			$versions[ $version ] = $version;
+			return $versions;
+		}, [] );
+	}
+
 	wp_register_script( 'wpcloud-blocks-site-form', '',);
 	wp_enqueue_script( 'wpcloud-blocks-site-form' );
 	wp_add_inline_script(
 		'wpcloud-blocks-site-form',
 		'window.wpcloud = window.wpcloud ?? {};' .
 		 'wpcloud.siteDetailKeys=' . json_encode( WPCloud_Site::DETAIL_KEYS ) . ';' .
-		 'wpcloud.phpVersions=' . json_encode( WPCLOUD_PHP_VERSIONS ) . ';' .
+		 'wpcloud.phpVersions=' . json_encode( $php_versions ) . ';' .
 		 'wpcloud.dataCenters=' . json_encode( WPCLOUD_DATA_CENTERS ) . ';'
 	);
 }
