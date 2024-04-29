@@ -36,12 +36,9 @@
 
 	function onSiteAliasAdded( alias ) {
 		const newForm = aliasList.querySelector( 'form' ).cloneNode( true );
-		const anchor = document.createElement( 'a' );
-		anchor.href = `https://${ alias }`;
-		anchor.textContent = alias;
-		newForm
-			.querySelector( '.wpcloud-block-site-detail__value' )
-			.appendChild( anchor );
+		newForm.querySelector(
+			'.wpcloud-block-site-detail__value'
+		).textContent = alias;
 
 		newForm.querySelector( 'input[name=site_alias]' ).value = alias;
 		bindMakePrimaryButton(

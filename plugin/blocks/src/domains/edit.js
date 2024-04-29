@@ -25,29 +25,25 @@ export default function Edit() {
 	// @TODO: Make sure the required fields are not mutable.
 	const template = useMemo(
 		() => [
+			[
+				'core/group',
+				{
+					className: 'wpcloud-domains',
+				},
 				[
-					'core/group',
-					{
-						className: 'wpcloud-domains',
-					},
 					[
-						[
-							'core/heading',
-							{
-								level: 2,
-								className: 'wpcloud-domains__title',
-								content: __( 'Domains' ),
-							},
-						],
-						[
-							'wpcloud/site-form-add-alias',
-						],
-						[
-							'wpcloud/site-alias-list',
-						],
+						'core/heading',
+						{
+							level: 2,
+							className: 'wpcloud-domains__title',
+							content: __( 'Domains' ),
+						},
 					],
+					[ 'wpcloud/site-alias-list' ],
+					[ 'wpcloud/site-form-add-alias' ],
 				],
 			],
+		],
 		[]
 	);
 

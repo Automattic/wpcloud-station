@@ -25,36 +25,36 @@ export default function Edit() {
 	// @TODO: Make sure the required fields are not mutable.
 	const template = useMemo(
 		() => [
+			[
+				'wpcloud/form',
+				{
+					ajax: true,
+					wpcloudAction: 'site_alias_add',
+					inline: true,
+					className: 'wpcloud-block-form--site-alias-add',
+				},
 				[
-					'wpcloud/form',
-					{
-						ajax: true,
-						wpcloudAction: 'site_alias_add',
-						inline: true,
-						className: 'wpcloud-block-form--site-alias-add',
-					},
 					[
-						[
-							'wpcloud/form-input',
-							{
-								type: 'text',
-								label: __( 'Add a Domain' ),
-								name: 'site_alias',
-								placeholder: __( 'example.com' ),
-								required: true,
-								inline: true,
-							},
-						],
-						[
-							'wpcloud/button',
-							{
-								text: __( 'Add' ),
-								inline: true,
-							},
-						],
+						'wpcloud/form-input',
+						{
+							type: 'text',
+							label: __( 'Add a Domain' ),
+							name: 'site_alias',
+							placeholder: __( 'example.com' ),
+							required: true,
+							inline: true,
+						},
+					],
+					[
+						'wpcloud/button',
+						{
+							text: __( 'Add' ),
+							inline: true,
+						},
 					],
 				],
 			],
+		],
 		[]
 	);
 

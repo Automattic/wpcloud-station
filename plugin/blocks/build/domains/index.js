@@ -55,7 +55,7 @@ function Edit() {
     level: 2,
     className: 'wpcloud-domains__title',
     content: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Domains')
-  }], ['wpcloud/site-form-add-alias'], ['wpcloud/site-alias-list']]]], []);
+  }], ['wpcloud/site-alias-list'], ['wpcloud/site-form-add-alias']]]], []);
   const innerBlocksProps = (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__.useInnerBlocksProps)(blockProps, {
     template
   });
