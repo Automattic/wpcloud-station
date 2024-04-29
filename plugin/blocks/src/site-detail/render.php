@@ -13,13 +13,14 @@ if ( $attributes[ 'adminOnly' ] && ! current_user_can( 'manage_options' ) ) {
 	return;
 }
 $name = $attributes[ 'name' ] ?? '';
-$detail = wpcloud_get_site_detail( get_the_ID(), $name );
+$detail = wpcloud_get_site_detail( get_the_ID(), $name ) ?? '';
 if ( is_wp_error( $detail ) ) {
 	error_log( 'WP Cloud Site Detail Block: ' . $detail->get_error_message() );
-	return;
+	return '' ;
 }
-if ( $name === 'domain_name' || $name === 'site_alias' ) {
-	$detail = "<a href='https://$detail' target='_blank'>$detail <span class='dashicons dashicons-external'></a>";
+
+if ( $name === 'domain_name' || $name === 'site_url') {
+	$detail = "<a href='https://$detail' >$detail <span class='dashicons dashicons-external'></a>";
 }
 
 if ( is_array( $detail ) ) {
@@ -30,8 +31,9 @@ if ( is_array( $detail ) ) {
 	$list .= "</ul>";
 	$detail = $list;
 }
+
 if (str_starts_with($detail, 'http')) {
-	$detail = sprintf('<a href="%s" target="_blank" ><span class="dashicons dashicons-external"></span></a>', $detail, $detail);
+	$detail = sprintf('<a href="%s" ><span class="dashicons dashicons-external"></span></a>', $detail, $detail);
 }
 
 // match the placeholder which is in the last set of curly braces  { The placeholder }

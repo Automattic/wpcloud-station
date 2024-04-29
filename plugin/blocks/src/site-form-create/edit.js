@@ -94,7 +94,7 @@ export default function Edit() {
 						{
 							type: 'password',
 							name: 'admin_pass',
-							label: __('Admin Password'),
+							label: __( 'Admin Password' ),
 						},
 					],
 					[
