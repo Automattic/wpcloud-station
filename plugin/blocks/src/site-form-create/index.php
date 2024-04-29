@@ -73,18 +73,20 @@ add_action( 'admin_enqueue_scripts', 'wpcloud_block_site_form_enqueue_scripts' )
  * @return string The content of the field with the PHP versions.
  */
 function wpcloud_block_form_render_field_php_version( $content ):string {
-	$options = wpcloud_block_available_php_options();
+
+	$php_versions = wpcloud_block_available_php_options();
 
 	// if for some reason we don't have any php versions, return the content as is.
-	if ( empty( $options ) ) {
+	if ( empty( $php_versions ) ) {
 		return $content;
 	}
 
-	$options = array_reduce( $options, function( $options, $version ) {
+	$options = array_reduce( array_keys($php_versions), function( $options, $key ) use ( $php_versions ) {
+
 		$options .= sprintf(
 			'<option value="%s">%s</option>',
-			$version,
-			$version
+			$key,
+			$php_versions[ $key ]
 		);
 		return $options;
 	}, '' );
@@ -100,18 +102,18 @@ add_action('wpcloud_block_form_render_field_php_version', 'wpcloud_block_form_re
  * @return string The content of the field with the data centers.
  */
 function wpcloud_block_form_render_field_data_center( $content ):string{
-	$options = wpcloud_block_available_datacenters_options();
+	$dcs = wpcloud_block_available_datacenters_options();
 
 	// if for some reason we don't have any data centers, return the content as is.
-	if ( empty( $options ) ) {
+	if ( empty( $dcs ) ) {
 		return $content;
 	}
 
-	$options = array_reduce( $options, function( $options, $city ) {
+	$options = array_reduce( array_keys( $dcs ), function( $options, $key ) use ( $dcs ){
 		$options .= sprintf(
 			'<option value="%s">%s</option>',
-			$city,
-			$city
+			$key,
+			$dcs[ $key ]
 		);
 		return $options;
 	}, '' );
