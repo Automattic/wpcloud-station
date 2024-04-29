@@ -1,12 +1,12 @@
 {
   "$schema": "https://schemas.wp.org/trunk/block.json",
   "apiVersion": 3,
-  "name": "wpcloud/site-alias-form",
+  "name": "wpcloud/site-form-add-alias",
   "version": "0.1.0",
-  "title": "Site Alias Form",
+  "title": "Add Site Alias Form",
   "category": "wpcloud",
   "icon": "feedback",
-  "description": "Site Alias Form block for WP Cloud.",
+  "description": "Add Site Alias Form block for WP Cloud.",
   "example": {},
   "supports": {
     "html": false
