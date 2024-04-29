@@ -1,10 +1,10 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./blocks/src/form-ssh-user-add/edit.js":
-/*!**********************************************!*\
-  !*** ./blocks/src/form-ssh-user-add/edit.js ***!
-  \**********************************************/
+/***/ "./blocks/src/ssh-user-add/edit.js":
+/*!*****************************************!*\
+  !*** ./blocks/src/ssh-user-add/edit.js ***!
+  \*****************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -20,7 +20,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
 /* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./editor.scss */ "./blocks/src/form-ssh-user-add/editor.scss");
+/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./editor.scss */ "./blocks/src/ssh-user-add/editor.scss");
 
 /**
  * External dependencies
@@ -50,6 +50,10 @@ function Edit() {
     ajax: true,
     wpcloudAction: 'site_ssh_user_add'
   }, [['wpcloud/form-input', {
+    type: 'text',
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('User'),
+    name: 'user'
+  }], ['wpcloud/form-input', {
     type: 'password',
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Password'),
     name: 'pass'
@@ -71,20 +75,20 @@ function Edit() {
 
 /***/ }),
 
-/***/ "./blocks/src/form-ssh-user-add/index.js":
-/*!***********************************************!*\
-  !*** ./blocks/src/form-ssh-user-add/index.js ***!
-  \***********************************************/
+/***/ "./blocks/src/ssh-user-add/index.js":
+/*!******************************************!*\
+  !*** ./blocks/src/ssh-user-add/index.js ***!
+  \******************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/blocks */ "@wordpress/blocks");
 /* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./edit */ "./blocks/src/form-ssh-user-add/edit.js");
-/* harmony import */ var _save__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./save */ "./blocks/src/form-ssh-user-add/save.js");
-/* harmony import */ var _block_json__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./block.json */ "./blocks/src/form-ssh-user-add/block.json");
-/* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./style.scss */ "./blocks/src/form-ssh-user-add/style.scss");
+/* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./edit */ "./blocks/src/ssh-user-add/edit.js");
+/* harmony import */ var _save__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./save */ "./blocks/src/ssh-user-add/save.js");
+/* harmony import */ var _block_json__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./block.json */ "./blocks/src/ssh-user-add/block.json");
+/* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./style.scss */ "./blocks/src/ssh-user-add/style.scss");
 /**
  * WordPress dependencies
  */
@@ -110,10 +114,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./blocks/src/form-ssh-user-add/save.js":
-/*!**********************************************!*\
-  !*** ./blocks/src/form-ssh-user-add/save.js ***!
-  \**********************************************/
+/***/ "./blocks/src/ssh-user-add/save.js":
+/*!*****************************************!*\
+  !*** ./blocks/src/ssh-user-add/save.js ***!
+  \*****************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -147,10 +151,10 @@ function save() {
 
 /***/ }),
 
-/***/ "./blocks/src/form-ssh-user-add/editor.scss":
-/*!**************************************************!*\
-  !*** ./blocks/src/form-ssh-user-add/editor.scss ***!
-  \**************************************************/
+/***/ "./blocks/src/ssh-user-add/editor.scss":
+/*!*********************************************!*\
+  !*** ./blocks/src/ssh-user-add/editor.scss ***!
+  \*********************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -160,10 +164,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./blocks/src/form-ssh-user-add/style.scss":
-/*!*************************************************!*\
-  !*** ./blocks/src/form-ssh-user-add/style.scss ***!
-  \*************************************************/
+/***/ "./blocks/src/ssh-user-add/style.scss":
+/*!********************************************!*\
+  !*** ./blocks/src/ssh-user-add/style.scss ***!
+  \********************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -303,14 +307,14 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 
 /***/ }),
 
-/***/ "./blocks/src/form-ssh-user-add/block.json":
-/*!*************************************************!*\
-  !*** ./blocks/src/form-ssh-user-add/block.json ***!
-  \*************************************************/
+/***/ "./blocks/src/ssh-user-add/block.json":
+/*!********************************************!*\
+  !*** ./blocks/src/ssh-user-add/block.json ***!
+  \********************************************/
 /***/ ((module) => {
 
 "use strict";
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"wpcloud/form-ssh-user-add","version":"0.1.0","title":"Add SSH User","category":"wpcloud","icon":"feedback","description":"Add a new SSH user to the site.","example":{},"supports":{"html":false},"textdomain":"wpcloud","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","viewScript":"file:./view.js"}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"wpcloud/ssh-user-add","version":"0.1.0","title":"Add SSH User","category":"wpcloud","icon":"feedback","description":"Add a new SSH user to the site.","example":{},"supports":{"html":false},"textdomain":"wpcloud","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","viewScript":"file:./view.js"}');
 
 /***/ })
 
@@ -424,8 +428,8 @@ module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/tru
 /******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
 /******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
 /******/ 		var installedChunks = {
-/******/ 			"form-ssh-user-add/index": 0,
-/******/ 			"form-ssh-user-add/style-index": 0
+/******/ 			"ssh-user-add/index": 0,
+/******/ 			"ssh-user-add/style-index": 0
 /******/ 		};
 /******/ 		
 /******/ 		// no chunk on demand loading
@@ -475,7 +479,7 @@ module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/tru
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["form-ssh-user-add/style-index"], () => (__webpack_require__("./blocks/src/form-ssh-user-add/index.js")))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["ssh-user-add/style-index"], () => (__webpack_require__("./blocks/src/ssh-user-add/index.js")))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()
