@@ -26,44 +26,32 @@ export default function Edit() {
 	const template = useMemo(
 		() => [
 			[
-				'core/group',
-				{},
 				[
+					'wpcloud/form',
+					{
+						ajax: true,
+						wpcloudAction: 'site_alias_add',
+						inline: true,
+						className: 'wpcloud-block-form--site-alias-add',
+					},
 					[
-						'core/heading',
-						{
-							level: 3,
-							content: __( 'Domains' ),
-							className: 'wpcloud-block-site-alias-heading',
-						},
-					],
-					[
-						'wpcloud/form',
-						{
-							ajax: true,
-							wpcloudAction: 'site_alias_add',
-							inline: true,
-							className: 'wpcloud-block-site-alias-form-add',
-						},
 						[
-							[
-								'wpcloud/form-input',
-								{
-									type: 'text',
-									label: __( 'Add a Domain' ),
-									name: 'site_alias',
-									placeholder: __( 'new.example.com' ),
-									required: true,
-									inline: true,
-								},
-							],
-							[
-								'wpcloud/button',
-								{
-									text: __( 'Add' ),
-									inline: true,
-								},
-							],
+							'wpcloud/form-input',
+							{
+								type: 'text',
+								label: __( 'Add a Domain' ),
+								name: 'site_alias',
+								placeholder: __( 'new.example.com' ),
+								required: true,
+								inline: true,
+							},
+						],
+						[
+							'wpcloud/button',
+							{
+								text: __( 'Add' ),
+								inline: true,
+							},
 						],
 					],
 				],
@@ -81,7 +69,7 @@ export default function Edit() {
 			{ ...innerBlocksProps }
 			className={ classNames(
 				innerBlocksProps.className,
-				'wpcloud-block-site-alias'
+				'wpcloud-block-site-alias-add'
 			) }
 		/>
 	);
