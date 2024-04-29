@@ -20,7 +20,6 @@ function wpcloud_block_add_hidden_site_alias_field( $dom, $element,  string $ali
 // Fetch the site aliases
 $siteAliases = wpcloud_get_domain_alias_list();
 
-error_log($content);
 $dom = new DOMDocument();
 $dom->loadHTML( $content );
 $xpath = new DOMXPath($dom);
@@ -38,8 +37,6 @@ foreach( $siteAliases as $alias) {
 
 	$valueDivs = $clonedForm->getElementsByTagName('div');
 	foreach ($valueDivs as $valueDiv) {
-		error_log(print_r($valueDiv, true));
-		error_log($valueDiv->getAttribute('class'));
 		if ($valueDiv->getAttribute('class') === 'wpcloud-block-site-detail__value') {
 			$valueDiv->nodeValue = $alias;
 		}
@@ -57,6 +54,4 @@ $removeForm->setAttribute('style', 'display: none;');
 wpcloud_block_add_hidden_site_alias_field( $dom, $removeForm );
 
 $modifiedHtml = $dom->saveHTML();
-error_log("\n==================================\n");
-//error_log($modifiedHtml);
 echo $modifiedHtml;

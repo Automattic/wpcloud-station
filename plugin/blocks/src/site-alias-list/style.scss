@@ -19,6 +19,7 @@
 		flex:1;
 	}
 	.wpcloud-block-form-site-alias--make-primary {
+		transition: all 0.5s ease-out;
 		.wp-element-button {
 			text-decoration: underline;
 			white-space: nowrap;
