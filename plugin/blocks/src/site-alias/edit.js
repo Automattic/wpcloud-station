@@ -1,4 +1,9 @@
 /**
+ * External dependencies
+ */
+import classNames from 'classnames';
+
+/**
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
@@ -31,62 +36,6 @@ export default function Edit() {
 							content: __( 'Domains' ),
 							className: 'wpcloud-block-site-alias-heading',
 						},
-					],
-					[
-						'core/group',
-						{
-							className: 'wpcloud-block-site-alias-list',
-						},
-						[
-							[
-								'wpcloud/site-detail',
-								{
-									label: __( 'Primary Domain' ),
-									name: 'domain_name',
-									inline: true,
-									hideLabel: true,
-									className:
-										'wpcloud-block-site-alias-list__item--primary',
-								},
-							],
-							[
-								'wpcloud/form',
-								{
-									ajax: true,
-									wpcloudAction: 'site_alias_remove',
-									inline: true,
-									className:
-										'wpcloud-block-site-alias-form-remove',
-								},
-								[
-									[
-										'wpcloud/site-detail',
-										{
-											label: __( 'Domain Alias' ),
-											name: 'site_alias',
-											inline: true,
-											hideLabel: true,
-										},
-									],
-									[
-										'wpcloud/button',
-										{
-											text: __( 'make primary' ),
-											type: 'button',
-											className:
-												'wpcloud-block-site-alias-make-primary',
-										},
-									],
-									[
-										'wpcloud/button',
-										{
-											text: __( 'remove' ),
-											icon: 'trash',
-										},
-									],
-								],
-							],
-						],
 					],
 					[
 						'wpcloud/form',
@@ -127,5 +76,13 @@ export default function Edit() {
 		template,
 	} );
 
-	return <div { ...innerBlocksProps } className="wpcloud-block-site-alias" />;
+	return (
+		<div
+			{ ...innerBlocksProps }
+			className={ classNames(
+				innerBlocksProps.className,
+				'wpcloud-block-site-alias'
+			) }
+		/>
+	);
 }
