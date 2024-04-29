@@ -25,7 +25,6 @@ export default function Edit() {
 	// @TODO: Make sure the required fields are not mutable.
 	const template = useMemo(
 		() => [
-			[
 				[
 					'wpcloud/form',
 					{
@@ -56,7 +55,6 @@ export default function Edit() {
 					],
 				],
 			],
-		],
 		[]
 	);
 
