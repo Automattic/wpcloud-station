@@ -8,12 +8,15 @@ if ( ! is_wpcloud_site_post() ) {
 	error_log("WP Cloud Site Alias Block: Not a site post.");
 	return;
 }
-function wpcloud_block_add_hidden_site_alias_field( $dom, $element,  string $alias = '' ) {
- 	$domain_input = $dom->createElement('input');
-	$domain_input->setAttribute('type', 'hidden');
-	$domain_input->setAttribute('name', 'site_alias');
-	$domain_input->setAttribute('value', $alias);
-	$element->appendChild($domain_input);
+
+if ( ! function_exists( 'wpcloud_block_add_hidden_site_alias_field' ) ) {
+	function wpcloud_block_add_hidden_site_alias_field( $dom, $element,  string $alias = '' ) {
+ 		$domain_input = $dom->createElement('input');
+		$domain_input->setAttribute('type', 'hidden');
+		$domain_input->setAttribute('name', 'site_alias');
+		$domain_input->setAttribute('value', $alias);
+		$element->appendChild($domain_input);
+	}
 }
 
 // Fetch the site aliases
@@ -24,7 +27,7 @@ $dom->loadHTML( $content );
 $xpath = new DOMXPath($dom);
 
 // Find the remove forms ( should be only one, but just in case )
-$forms = $xpath->query('//form[contains(@class, "wpcloud-block-site-alias-form-remove")]');
+$forms = $xpath->query('//form[contains(@class, "wpcloud-block-form-site-alias--remove")]');
 
 // hold on to the first one
 $removeForm = $forms[0];

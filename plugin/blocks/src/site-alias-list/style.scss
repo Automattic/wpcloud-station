@@ -1,4 +1,10 @@
-.wpcloud-block-site-alias-form-remove {
+.wpcloud-block-site-alias-list__item--primary {
+	.wpcloud-block-site-detail__value {
+		transition: all 0.5s ease-out;
+	}
+}
+
+.wpcloud-block-form-site-alias--remove {
 	transition: all 0.5s ease-out;
 	column-gap: 10px;
 
@@ -12,7 +18,8 @@
 	&:not(:first-child) {
 		flex:1;
 	}
-	.wpcloud-block-site-alias-make-primary {
+	.wpcloud-block-form-site-alias--make-primary {
+		transition: all 0.5s ease-out;
 		.wp-element-button {
 			text-decoration: underline;
 			white-space: nowrap;
@@ -29,11 +36,7 @@
 		}
 	}
 }
-.wpcloud-block-site-alias-list__item--primary {
-	.wpcloud-block-site-detail__value {
-		transition: all 0.5s ease-out;
-	}
-}
+
 // @TODO Move this into a generic style file
 .wpcloud-hide {
 	opacity: 0;

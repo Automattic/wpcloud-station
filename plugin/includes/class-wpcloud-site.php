@@ -34,7 +34,6 @@ class WPCLOUD_Site {
 		'server_pool_id',
 		'phpmyadmin_url',
 		'ssl_info',
-
 	);
 
 	private static $initial_status = 'draft';
@@ -78,6 +77,13 @@ class WPCLOUD_Site {
 		$php_version = $options['php_version'];
 		$data_center = $options['data_center'];
 		$post_name = str_replace( '.', '-', $domain );
+
+		if ( isset( $options[ 'admin_pass' ] ) && $options[ 'admin_pass' ] ) {
+			add_filter( 'wpcloud_site_create_data', function( $data ) use ( $options ) {
+				$data[ 'admin_pass' ] = $options[ 'admin_pass' ];
+				return $data;
+			} );
+		}
 
 		$post_id = wp_insert_post(
 			array(
@@ -137,8 +143,9 @@ class WPCLOUD_Site {
 		$this->details = array_intersect_key( (array) $wpcloud_site, array_flip( $detail_keys ) );
 
 		if ( array_search('geo_affinity', $detail_keys) !== false ) {
+			$data_center_cities = wpcloud_client_data_center_cities();
 			$this->details[ 'geo_affinity' ] = $wpcloud_site->extra->server_pool->geo_affinity;
-			$this->details[ 'data_center' ]  = WPCLOUD_DATA_CENTERS[ $this->details[ 'geo_affinity' ] ];
+			$this->details[ 'data_center' ]  =$data_center_cities[ $this->details[ 'geo_affinity' ] ];
 		}
 
 		$ips = wpcloud_client_domain_ip_addresses( $this->wpcloud_site_id, $this->domain );

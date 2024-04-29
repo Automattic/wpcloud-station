@@ -16,7 +16,7 @@ const Save = () => {
 			{ ...blockProps }
 			className={ classNames(
 				blockProps.className,
-				'wpcloud-block-site-alias'
+				'wpcloud-block-site-alias-add'
 			) }
 		>
 			<InnerBlocks.Content />

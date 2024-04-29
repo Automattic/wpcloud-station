@@ -54,7 +54,22 @@ function wpcloud_settings_init(): void {
 			'wpcloud_custom_data' => 'custom',
 		]
 	);
+
+	add_settings_field(
+		'wpcloud_field_default_theme',
+		__( 'Default Theme', 'wpcloud' ),
+		'wpcloud_field_input_cb',
+		'wpcloud',
+		'wpcloud_section_settings',
+		[
+			'label_for'           => 'wpcloud_default_theme',
+			'class'               => 'wpcloud_row',
+			'wpcloud_custom_data' => 'custom',
+			'description'         => __( 'The default theme to install on new sites. formats include: "themes/pub/twentytwentyfour", "themes://url", "theme://url" '),
+		]
+			);
 /*
+  Removing for the demo
 	add_settings_field(
 		'wpcloud_field_backfill',
 		__( 'Backfill (DEV ONLY)', 'wpcloud' ),

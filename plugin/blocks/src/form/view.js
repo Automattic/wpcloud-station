@@ -40,6 +40,11 @@
 					result.data,
 					form
 				);
+				wpcloud.hooks.doAction(
+					`wpcloud_form_response_${ result.data.action }`,
+					result.data,
+					form
+				);
 
 				if ( response.ok && result?.data?.redirect ) {
 					if ( result.data.redirect === 'reload' ) {

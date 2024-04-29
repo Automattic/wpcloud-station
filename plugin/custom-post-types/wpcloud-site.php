@@ -119,7 +119,18 @@ function wpcloud_on_create_site( int $post_id, WP_Post $post, bool $update ): vo
 		$data['geo_affinity'] = $data_center;
 	}
 
-	$result = wpcloud_client_site_create( $domain, $author->user_login, $author->user_email, $data );
+	$data = apply_filters( 'wpcloud_site_create_data', $data, $post_id, $post );
+
+	// check for a default theme
+	$wpcloud_settings = get_option( 'wpcloud_settings' );
+	$default_theme = $wpcloud_settings['wpcloud_default_theme'] ?? '';
+	$software = array();
+
+	if ( ! empty( $default_theme ) ) {
+		$software[ $default_theme ] = 'activate';
+	}
+
+	$result = wpcloud_client_site_create( $domain, $author->user_login, $author->user_email, $data, $software );
 
 	if ( is_wp_error( $result ) ) {
 		error_log( $result->get_error_message() );

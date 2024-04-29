@@ -4,7 +4,7 @@
  * Replace them with your own styles or remove the file completely.
  */
 
- .wpcloud-block-site-alias {
+ .wpcloud-block-site-alias-add {
 	border: 1px solid var(--wp--preset--color--contrast-2);
 	border-radius: 4px;
 	.wpcloud-block-site-alias-heading {
@@ -22,9 +22,3 @@
 		}
 	}
  }
-
-.wpcloud-block-site-alias-make-primary {
-	.wp-element-button[role="textbox"]  {
-		white-space: nowrap !important; // Gutenberg is injecting an inline style white-space: pre-wrap ; which is causing the button to wrap
-	}
-}

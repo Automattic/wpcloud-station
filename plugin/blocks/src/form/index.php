@@ -32,7 +32,7 @@ function wpcloud_form_submit_handler() {
 		'status' => 200,
 		'action' => $action,
 	);
-	error_log('wpcloud_form_process_' . $action);
+
 	$result = apply_filters( 'wpcloud_form_process_' . $action, $success_result, $data );
 
 	if ( $result[ 'success' ] === false ) {
