@@ -1,1 +1,73 @@
-(e=>{const t=document.querySelector(".wpcloud-block-site-alias-list"),o=".wpcloud-block-form-site-alias--make-primary";function a(e){e.onclick=t=>{t.preventDefault();const o=e.closest("form");o.querySelector("input[name=wpcloud_action]").value="site_alias_make_primary",o.dispatchEvent(new Event("submit"))}}function i(e,t){return()=>{e.textContent=t,e.classList.remove("wpcloud-hide"),e.ontransitionend=null}}t.querySelectorAll(o).forEach(a),e.hooks.addAction("wpcloud_form_response_site_alias_remove","site_alias_remove",(function(e,t){e.success?(t.ontransitionend=()=>{t.remove()},t.classList.add("wpcloud-hide")):alert(e.message)})),e.hooks.addAction("wpcloud_alias_added","site_alias_list",(function(i){const l=t.querySelector("form").cloneNode(!0),s=document.createElement("a");s.href=`https://${i}`,s.textContent=i,l.querySelector(".wpcloud-block-site-detail__value").appendChild(s),l.querySelector("input[name=site_alias]").value=i,a(l.querySelector(o)),e.bindFormHandler(l),t.appendChild(l),l.style.display="flex"})),e.hooks.addAction("wpcloud_form_response_site_alias_make_primary","site_alias_make_primary",(function(e,o){if(!e.success)return void alert(e.message);o.querySelector("input[name=wpcloud_action]").value="site_alias_remove";const a=t.querySelector(".wpcloud-block-site-alias-list__item--primary").querySelector(".wpcloud-block-site-detail__value"),l=o.querySelector(".wpcloud-block-site-detail__value"),s=a.textContent,n=e.site_alias,c=o.querySelector("input[name=site_alias]");c.value=s,c.name="site_alias",a.ontransitionend=i(a,n),l.ontransitionend=i(l,s),a.classList.add("wpcloud-hide"),l.classList.add("wpcloud-hide")}))})(window.wpcloud);
+/******/ (() => { // webpackBootstrap
+var __webpack_exports__ = {};
+/*!********************************************!*\
+  !*** ./blocks/src/site-alias-list/view.js ***!
+  \********************************************/
+(wpcloud => {
+  const aliasList = document.querySelector('.wpcloud-block-site-alias-list');
+  const makePrimaryButtonQuery = '.wpcloud-block-form-site-alias--make-primary';
+  function bindMakePrimaryButton(button) {
+    button.onclick = e => {
+      e.preventDefault();
+      const form = button.closest('form');
+      form.querySelector('input[name=wpcloud_action]').value = 'site_alias_make_primary';
+      form.dispatchEvent(new Event('submit'));
+    };
+  }
+  aliasList.querySelectorAll(makePrimaryButtonQuery).forEach(bindMakePrimaryButton);
+  function onSiteAliasRemove(result, form) {
+    if (!result.success) {
+      //@TODO: update how error is handled here
+      alert(result.message); // eslint-disable-line no-alert, no-undef
+      return;
+    }
+    form.ontransitionend = () => {
+      form.remove();
+    };
+    form.classList.add('wpcloud-hide');
+  }
+  function onSiteAliasAdded(alias) {
+    const newForm = aliasList.querySelector('form').cloneNode(true);
+    const anchor = document.createElement('a');
+    anchor.href = `https://${alias}`;
+    anchor.textContent = alias;
+    newForm.querySelector('.wpcloud-block-site-detail__value').appendChild(anchor);
+    newForm.querySelector('input[name=site_alias]').value = alias;
+    bindMakePrimaryButton(newForm.querySelector(makePrimaryButtonQuery));
+    wpcloud.bindFormHandler(newForm);
+    aliasList.appendChild(newForm);
+    newForm.style.display = 'flex';
+  }
+  function updateTextOnTransitionEnd(el, text) {
+    return () => {
+      el.textContent = text;
+      el.classList.remove('wpcloud-hide');
+      el.ontransitionend = null;
+    };
+  }
+  function onSiteAliasMakePrimary(result, form) {
+    if (!result.success) {
+      alert(result.message); // eslint-disable-line no-alert, no-undef
+      return;
+    }
+    form.querySelector('input[name=wpcloud_action]').value = 'site_alias_remove';
+    const primary = aliasList.querySelector('.wpcloud-block-site-alias-list__item--primary');
+    const primaryValue = primary.querySelector('.wpcloud-block-site-detail__value');
+    const aliasValue = form.querySelector('.wpcloud-block-site-detail__value');
+    const oldPrimary = primaryValue.textContent;
+    const newPrimary = result.site_alias;
+    const removeFormInput = form.querySelector('input[name=site_alias]');
+    removeFormInput.value = oldPrimary;
+    removeFormInput.name = 'site_alias';
+    primaryValue.ontransitionend = updateTextOnTransitionEnd(primaryValue, newPrimary);
+    aliasValue.ontransitionend = updateTextOnTransitionEnd(aliasValue, oldPrimary);
+    primaryValue.classList.add('wpcloud-hide');
+    aliasValue.classList.add('wpcloud-hide');
+  }
+  wpcloud.hooks.addAction('wpcloud_form_response_site_alias_remove', 'site_alias_remove', onSiteAliasRemove);
+  wpcloud.hooks.addAction('wpcloud_alias_added', 'site_alias_list', onSiteAliasAdded);
+  wpcloud.hooks.addAction('wpcloud_form_response_site_alias_make_primary', 'site_alias_make_primary', onSiteAliasMakePrimary);
+})(window.wpcloud);
+/******/ })()
+;
+//# sourceMappingURL=view.js.map

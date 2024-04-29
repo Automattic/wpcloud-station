@@ -9,12 +9,14 @@ if ( ! is_wpcloud_site_post() ) {
 	return;
 }
 
-function wpcloud_block_add_hidden_site_alias_field( $dom, $element,  string $alias = '' ) {
- 	$domain_input = $dom->createElement('input');
-	$domain_input->setAttribute('type', 'hidden');
-	$domain_input->setAttribute('name', 'site_alias');
-	$domain_input->setAttribute('value', $alias);
-	$element->appendChild($domain_input);
+if ( ! function_exists( 'wpcloud_block_add_hidden_site_alias_field' ) ) {
+	function wpcloud_block_add_hidden_site_alias_field( $dom, $element,  string $alias = '' ) {
+ 		$domain_input = $dom->createElement('input');
+		$domain_input->setAttribute('type', 'hidden');
+		$domain_input->setAttribute('name', 'site_alias');
+		$domain_input->setAttribute('value', $alias);
+		$element->appendChild($domain_input);
+	}
 }
 
 // Fetch the site aliases

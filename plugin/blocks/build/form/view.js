@@ -1,1 +1,58 @@
-(()=>{var o;(o=window.wpcloud).bindFormHandler=t=>{const e=t.querySelector('button[type="submit"]');t.addEventListener("submit",(async a=>{a.preventDefault(),e.setAttribute("disabled","disabled"),t.classList.add("is-loading"),t.classList.remove("is-error");const r=Object.fromEntries(new FormData(t).entries());r.action="wpcloud_form_submit";const d=window.location.search,i=new URLSearchParams(d).get("ref");i&&(r.redirect=i),o.hooks.doAction("wpcloud_form_submit",t);try{const a=await fetch("http://localhost:8888/wp-admin/admin-ajax.php",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:new URLSearchParams(r).toString()}),d=await a.json();if(o.hooks.doAction("wpcloud_form_response",d.data,t),o.hooks.doAction(`wpcloud_form_response_${d.data.action}`,d.data,t),a.ok&&d?.data?.redirect){if("reload"===d.data.redirect)return void window.location.reload();window.location=d.data.redirect}e.removeAttribute("disabled"),t.classList.remove("is-loading"),a.ok||t.classList.add("is-error")}catch(o){console.error(o)}}))},document.querySelectorAll("form.wpcloud-block-form[data-ajax]").forEach(o.bindFormHandler)})();
+/******/ (() => { // webpackBootstrap
+var __webpack_exports__ = {};
+/*!*********************************!*\
+  !*** ./blocks/src/form/view.js ***!
+  \*********************************/
+(wpcloud => {
+  wpcloud.bindFormHandler = form => {
+    const button = form.querySelector('button[type="submit"]');
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      button.setAttribute('disabled', 'disabled');
+      form.classList.add('is-loading');
+      form.classList.remove('is-error');
+      const formData = Object.fromEntries(new FormData(form).entries());
+      formData.action = 'wpcloud_form_submit';
+
+      // override redirect if a ref query string is present
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+      const redirect = urlParams.get('ref');
+      if (redirect) {
+        formData.redirect = redirect;
+      }
+      wpcloud.hooks.doAction('wpcloud_form_submit', form);
+      try {
+        const response = await fetch('http://localhost:8888/wp-admin/admin-ajax.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          body: new URLSearchParams(formData).toString()
+        });
+        const result = await response.json();
+        wpcloud.hooks.doAction('wpcloud_form_response', result.data, form);
+        wpcloud.hooks.doAction(`wpcloud_form_response_${result.data.action}`, result.data, form);
+        if (response.ok && result?.data?.redirect) {
+          if (result.data.redirect === 'reload') {
+            window.location.reload();
+            return;
+          }
+          window.location = result.data.redirect;
+        }
+        button.removeAttribute('disabled');
+        form.classList.remove('is-loading');
+        if (!response.ok) {
+          form.classList.add('is-error');
+        }
+      } catch (error) {
+        /* eslint-disable no-console */
+        console.error(error);
+      }
+    });
+  };
+  document.querySelectorAll('form.wpcloud-block-form[data-ajax]').forEach(wpcloud.bindFormHandler);
+})(window.wpcloud);
+/******/ })()
+;
+//# sourceMappingURL=view.js.map

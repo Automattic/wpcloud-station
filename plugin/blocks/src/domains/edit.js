@@ -26,31 +26,24 @@ export default function Edit() {
 	const template = useMemo(
 		() => [
 				[
-					'wpcloud/form',
+					'core/group',
 					{
-						ajax: true,
-						wpcloudAction: 'site_alias_add',
-						inline: true,
-						className: 'wpcloud-block-form--site-alias-add',
+						className: 'wpcloud-domains',
 					},
 					[
 						[
-							'wpcloud/form-input',
+							'core/heading',
 							{
-								type: 'text',
-								label: __( 'Add a Domain' ),
-								name: 'site_alias',
-								placeholder: __( 'example.com' ),
-								required: true,
-								inline: true,
+								level: 2,
+								className: 'wpcloud-domains__title',
+								content: __( 'Domains' ),
 							},
 						],
 						[
-							'wpcloud/button',
-							{
-								text: __( 'Add' ),
-								inline: true,
-							},
+							'wpcloud/site-form-add-alias',
+						],
+						[
+							'wpcloud/site-alias-list',
 						],
 					],
 				],
