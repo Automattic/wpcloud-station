@@ -1,0 +1,37 @@
+/*!**************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./blocks/src/components/form/style.scss ***!
+  \**************************************************************************************************************************************************************************************************************************************************************/
+/**
+ * The following styles get applied both on the front of your site
+ * and in the editor.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+.wpcloud-block-form {
+  display: flex;
+  flex-direction: column;
+}
+.wpcloud-block-form.is-inline {
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.wpcloud-block-form.is-inline .wpcloud-block-form-input__label, .wpcloud-block-form.is-inline .wpcloud-block-form-input__input, .wpcloud-block-form.is-inline .wpcloud-block-form-input__label-content {
+  margin: 0;
+}
+.wpcloud-block-form.is-inline .wpcloud-block-form-input__label {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.wpcloud-block-form.is-inline .wpcloud-block-form-input__label.is-label-inline .wpcloud-block-form-input__label-content {
+  margin-bottom: 0;
+}
+.wpcloud-block-form button {
+  width: -moz-fit-content;
+  width: fit-content;
+}
+.wpcloud-block-form.is-loading {
+  opacity: 0.4;
+}
+
+/*# sourceMappingURL=style-index.css.map*/

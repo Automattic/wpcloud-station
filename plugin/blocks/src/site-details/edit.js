@@ -1,230 +1,84 @@
 /**
+ * External dependencies
+ */
+import classNames from 'classnames';
+
+/**
  * WordPress dependencies
  */
-import { useBlockProps, useInnerBlocksProps } from '@wordpress/block-editor';
+import { __ } from '@wordpress/i18n';
+import {
+	InnerBlocks,
+	useBlockProps,
+	useInnerBlocksProps,
+	InspectorControls,
+	store as blockEditorStore,
+} from '@wordpress/block-editor';
+import { CheckboxControl, PanelBody } from '@wordpress/components';
+import { useSelect } from '@wordpress/data';
 
 /**
  * Internal dependencies
  */
 import './editor.scss';
 
-const TEMPLATE = [
-	[
-		'core/columns',
-		{
-			verticalAlignment: 'center',
-			isStackedOnMobile: true,
-			width: '100%',
-		},
-		[
-			[
-				'core/column',
-				{
-					verticalAlignment: 'top',
-				},
-				[],
-			],
-			[
-				'core/column',
-				{
-					verticalAlignment: 'top',
-				},
-				[
-					[
-						'wpcloud/site-detail',
-						{ label: 'Domain', name: 'domain_name', inline: true },
-					],
-					[
-						'wpcloud/site-detail',
-						{
-							label: 'PHP Version',
-							name: 'php_version',
-							inline: true,
-						},
-					],
-					[
-						'wpcloud/site-detail',
-						{
-							label: 'Data Center',
-							name: 'geo_affinity',
-							inline: true,
-						},
-					],
-					[
-						'wpcloud/site-detail',
-						{
-							label: 'WP Version',
-							name: 'wp_version',
-							inline: true,
-						},
-					],
-					[
-						'wpcloud/site-detail',
-						{
-							label: 'Admin Email',
-							name: 'wp_admin_email',
-							inline: true,
-						},
-					],
-					[
-						'wpcloud/site-detail',
-						{
-							label: 'Admin User',
-							name: 'wp_admin_user',
-							inline: true,
-						},
-					],
-					[
-						'wpcloud/site-detail',
-						{
-							label: 'IP Addresses',
-							name: 'ip_addresses',
-							inline: true,
-						},
-					],
-					[
-						'wpcloud/site-detail',
-						{
-							label: 'Static 404',
-							name: 'static_file_404',
-							inline: true,
-						},
-					],
-					[
-						'wpcloud/site-detail',
-						{
-							label: 'PHPMyAdmin Url ',
-							name: 'phpmyadmin_url',
-							inline: true,
-						},
-					],
-					[
-						'wpcloud/site-detail',
-						{
-							label: 'SSL Info',
-							name: 'ssl_info',
-							inline: true,
-						},
-					],
-				],
-			],
-			[
-				'core/column',
-				{
-					verticalAlignment: 'top',
-				},
-				[
-					[
-						'wpcloud/site-detail',
-						{
-							label: 'DB Charset',
-							name: 'db_charset',
-							inline: true,
-						},
-					],
-					[
-						'wpcloud/site-detail',
-						{
-							label: 'DB Collate',
-							name: 'db_collate',
-							inline: true,
-						},
-					],
-					[
-						'wpcloud/site-detail',
-						{
-							label: 'DB Password',
-							name: 'db_password',
-							inline: true,
-						},
-					],
-					[
-						'wpcloud/site-detail',
-						{
-							label: 'DB File Size',
-							name: 'db_file_size',
-							inline: true,
-						},
-					],
-					[
-						'wpcloud/site-detail',
-						{
-							label: 'SMTP Password',
-							name: 'smtp_pass',
-							inline: true,
-						},
-					],
-					[
-						'wpcloud/site-detail',
-						{
-							label: 'Server Pool ID',
-							name: 'server_pool_id',
-							inline: true,
-						},
-					],
-					[
-						'wpcloud/site-detail',
-						{
-							label: 'Atomic Client ID',
-							name: 'atomic_client_id',
-							inline: true,
-						},
-					],
-					[
-						'wpcloud/site-detail',
-						{
-							label: 'Chroot Path',
-							name: 'chroot_path',
-							inline: true,
-						},
-					],
-					[
-						'wpcloud/site-detail',
-						{
-							label: 'Chroot SSH Path',
-							name: 'chroot_ssh_path',
-							inline: true,
-						},
-					],
-					[
-						'wpcloud/site-detail',
-						{
-							label: 'Cache Prefix',
-							name: 'cache_prefix',
-							inline: true,
-						},
-					],
-					[
-						'wpcloud/site-detail',
-						{
-							label: 'Site API name',
-							name: 'site_api_key',
-							inline: true,
-						},
-					],
-				],
-			],
-			[
-				'core/column',
-				{
-					verticalAlignment: 'top',
-				},
-				[],
-			],
-		],
-	],
-];
-
-/*
+/**
  *
+ * @param {Object}  props               Component props.
+ * @param {Object}  props.attributes
+ * @param {Object}  props.setAttributes
+ * @param {number}  props.clientId
+ * @param {boolean} props.isSelected
  * @return {Element} Element to render.
  */
-export default function Edit() {
+export default function Edit( {
+	attributes,
+	setAttributes,
+} ) {
+	const { adminOnly } = attributes;
 	const blockProps = useBlockProps();
 
-	const innerBlocksProps = useInnerBlocksProps( blockProps, {
-		template: TEMPLATE,
-	} );
+	const template = [
+		[
+			'core/group',
+			{
+				className: 'wpcloud-site-detail-card',
+			},
+			[
+				['core/heading', { level: 3, className: 'wpcloud-site-detail-card__title', content: __('Site Details') }],
+				[ 'wpcloud/site-detail' ]
+			]
+		]
+	]
 
-	return <div { ...innerBlocksProps } className="wpcloud-all-site-details" />;
+	const innerBlocksProps = useInnerBlocksProps(blockProps, {
+		template
+	});
+
+	return (
+		<>
+			<InspectorControls>
+				<PanelBody title={ __( 'Form Settings' ) }>
+					<CheckboxControl
+						label={ __( 'Limit to Admins' ) }
+						checked={ adminOnly }
+						onChange={ ( newVal ) => {
+							setAttributes( {
+								adminOnly: newVal,
+							} );
+						} }
+						help={ __(
+							'Only admins will see this field. Inputs marked as admin only will appear with a dashed border in the editor'
+						) }
+					/>
+				</PanelBody>
+			</InspectorControls>
+			<div
+				{ ...innerBlocksProps }
+				className={ classNames( innerBlocksProps.className, 'wpcloud-block-site-detail-card', {
+					'is-admin-only': adminOnly,
+				} ) }
+			/>
+		</>
+	);
 }

@@ -34,6 +34,7 @@ class WPCLOUD_Site {
 		'server_pool_id',
 		'phpmyadmin_url',
 		'ssl_info',
+		'wp_admin_url'
 	);
 
 	private static $initial_status = 'draft';
