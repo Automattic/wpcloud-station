@@ -1,6 +1,18 @@
 <?php
 
 /**
+ * Add the required fields for the site alias forms.
+ *
+ * @param array $fields The form fields.
+ * @return array The form fields.
+ */
+function wpcloud_block_form_site_alias_list_fields( array $fields) {
+	return array_merge( $fields, [ 'site_alias' ]);
+}
+add_filter('wpcloud_block_form_submitted_fields_site_alias_remove', 'wpcloud_block_form_site_alias_fields' );
+add_filter('wpcloud_block_form_submitted_fields_site_alias_make_primary', 'wpcloud_block_form_site_alias_fields' );
+
+/**
  * Process the form data for removing a domain alias.
  *
  * @param array $response The response data.
