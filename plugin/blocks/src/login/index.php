@@ -1,6 +1,6 @@
 <?php
 /**
- * Add the site alias field to the form.
+ * Add the login fields to the form.
  *
  * @param array $fields The form fields.
  * @return array The form fields.
@@ -11,7 +11,7 @@ function wpcloud_block_form_login_fields( array $fields) {
 add_filter('wpcloud_block_form_submitted_fields_login', 'wpcloud_block_form_login_fields' );
 
 /**
- * Process the form data for adding a site alias.
+ * Process the form data for logn
  *
  * @param array $response The response data.
  * @param array $data The form data.

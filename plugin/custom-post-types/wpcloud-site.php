@@ -331,29 +331,27 @@ function wpcloud_get_site_detail( int|WP_Post $post, string $key, ): mixed {
 }
 
 
+function wpcloud_get_current_site_id(): int {
+	$post_id = get_the_ID();
+	if ( ! $post_id ) {
+		return 0;
+	}
+
+	$wpcloud_site_id = get_post_meta( $post_id, 'wpcloud_site_id', true );
+	if ( empty( $wpcloud_site_id ) ) {
+		return 0;
+	}
+
+	return intval( $wpcloud_site_id );
+}
+
 function wpcloud_get_domain_alias_list( int|WP_Post| null $post = null ): array {
 
-	if ( is_int( $post ) ) {
-		$post = get_post( $post );
-	}
+	$wpcloud_site_id = wpcloud_get_current_site_id();
 
-	if ( ! $post ) {
-		global $post;
-	}
-
-
-	if ( ! $post ) {
-		error_log( 'WP Cloud get domain alias list: No post found.');
+	if ( ! $wpcloud_site_id ) {
 		return array();
 	}
-
-	$wpcloud_site_id = get_post_meta( $post->ID, 'wpcloud_site_id', true );
-	if ( empty( $wpcloud_site_id ) ) {
-		error_log( 'WP Cloud get domain alias list: No site ID found.');
-		return array();
-	}
-
-	$wpcloud_site_id = intval( $wpcloud_site_id );
 
 	$result = wpcloud_client_site_domain_alias_list( $wpcloud_site_id );
 

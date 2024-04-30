@@ -20,7 +20,7 @@ if ( ! function_exists( 'wpcloud_block_add_hidden_site_alias_field' ) ) {
 }
 
 // Fetch the site aliases
-$siteAliases = wpcloud_get_domain_alias_list();
+$site_aliases = wpcloud_get_domain_alias_list();
 
 $dom = new DOMDocument();
 $dom->loadHTML( $content );
@@ -30,30 +30,30 @@ $xpath = new DOMXPath($dom);
 $forms = $xpath->query('//form[contains(@class, "wpcloud-block-form-site-alias--remove")]');
 
 // hold on to the first one
-$removeForm = $forms[0];
-$formContainer = $removeForm->parentNode;
+$remove_form = $forms[0];
+$form_container = $remove_form->parentNode;
 
-foreach( $siteAliases as $alias) {
-	$clonedForm = $removeForm->cloneNode(true);
-	$clonedForm->setAttribute('data-site-alias', $alias);
+foreach( $site_aliases as $alias) {
+	$cloned_form = $remove_form->cloneNode(true);
+	$cloned_form->setAttribute('data-site-alias', $alias);
 
-	$valueDivs = $clonedForm->getElementsByTagName('div');
-	foreach ($valueDivs as $valueDiv) {
-		if ($valueDiv->getAttribute('class') === 'wpcloud-block-site-detail__value') {
-			$valueDiv->nodeValue = $alias;
+	$value_divs = $cloned_form->getElementsByTagName('div');
+	foreach ($value_divs as $value_div) {
+		if ($value_div->getAttribute('class') === 'wpcloud-block-site-detail__value') {
+			$value_div->nodeValue = $alias;
 		}
 	}
 
-	wpcloud_block_add_hidden_site_alias_field($dom, $clonedForm, $alias);
+	wpcloud_block_add_hidden_site_alias_field($dom, $cloned_form, $alias);
 
 	// Append the cloned form node to its parent node
-	$formContainer->appendChild($clonedForm);
+	$form_container->appendChild($cloned_form);
 }
 
 // Hide the default form so we have at least one form to clone
 // add set up a hidden field for the alias
-$removeForm->setAttribute('style', 'display: none;');
-wpcloud_block_add_hidden_site_alias_field( $dom, $removeForm );
+$remove_form->setAttribute('style', 'display: none;');
+wpcloud_block_add_hidden_site_alias_field( $dom, $remove_form );
 
-$modifiedHtml = $dom->saveHTML();
-echo $modifiedHtml;
+$modified_html = $dom->saveHTML();
+echo $modified_html;

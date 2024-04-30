@@ -420,6 +420,60 @@ function wpcloud_client_datacenters_available(): array | WP_error {
 	return wpcloud_client_get( null, "get-available-datacenters/$client_name" );
 }
 
+/**
+ * Add an SSH user to a site.
+ *
+ * @param integer $wpcloud_site_id The WP Cloud Site ID.
+ * @param string  $user           The SSH user to add.
+ * @param string  $pkey           The SSH public key for the user.
+ * @param string  $pass           Optional. The SSH password for the user.
+ *
+ * @return mixed|WP_Error Response body on success. WP_Error on failure.
+ */
+function wpcloud_client_ssh_user_add( int $wpcloud_site_id, string $user, string $pkey = '', string|null $pass = null ): mixed {
+	$client_name = wpcloud_get_client_name();
+
+	$post = array(
+		'pkey' => $pkey,
+		'user' => $user,
+	);
+	if ( ! is_null( $pass ) ) {
+		$post['pass'] = $pass;
+	}
+
+	$response = wpcloud_client_post( $wpcloud_site_id, "ssh-user/$client_name/$wpcloud_site_id/add", $post );
+	if ( is_wp_error( $response ) ) {
+		return $response;
+	}
+
+	return $response;
+}
+
+/**
+ * Get a list of SSH users for a site.
+ *
+ * @param integer $wpcloud_site_id The WP Cloud Site ID.
+ *
+ * @return array|WP_Error List of SSH users. WP_Error on error.
+
+ */
+function wpcloud_client_ssh_user_list( int $wpcloud_site_id ): mixed {
+	$client_name = wpcloud_get_client_name();
+	return wpcloud_client_get( $wpcloud_site_id, "ssh-user/$client_name/$wpcloud_site_id/list" );
+}
+
+/**
+ * Remove an SSH user from a site.
+ *
+ * @param integer $wpcloud_site_id The WP Cloud Site ID.
+ * @param string  $user           The SSH user to remove.
+ *
+ * @return mixed|WP_Error Response body on success. WP_Error on failure.
+ */
+function wpcloud_client_ssh_user_remove( int $wpcloud_site_id, string $user ): mixed {
+	$client_name = wpcloud_get_client_name();
+	return wpcloud_client_post( $wpcloud_site_id, "ssh-user/$client_name/$wpcloud_site_id/remove/$user" );
+}
 
 /**
  * Get the status of a job.
@@ -511,7 +565,7 @@ function wpcloud_client_request( ?int $wpcloud_site_id, string $method, string $
 	$response_code    = wp_remote_retrieve_response_code( $response );
 	$response_body    = wp_remote_retrieve_body( $response );
 	$result           = json_decode( $response_body );
-	$response_message = $result->message;
+	$response_message = $result->message ?? '';
 
 	switch ( $response_code ) {
 		case 200:
