@@ -8,13 +8,11 @@ import classNames from 'classnames';
  */
 import { __ } from '@wordpress/i18n';
 import { useBlockProps, useInnerBlocksProps } from '@wordpress/block-editor';
-import { useMemo } from '@wordpress/element';
 
 /**
  * Internal dependencies
  */
 import './editor.scss';
-
 
 /*
  *
@@ -22,8 +20,6 @@ import './editor.scss';
  */
 export default function Edit() {
 	const blockProps = useBlockProps();
-
-
 
 	// @TODO: Make sure the required fields are not mutable.
 	const template = [
@@ -38,7 +34,7 @@ export default function Edit() {
 					'wpcloud/button',
 					{
 						className: 'wpcloud-button-site-delete',
-						text: __('Delete Site'),
+						text: __( 'Delete Site' ),
 					},
 				],
 			],
