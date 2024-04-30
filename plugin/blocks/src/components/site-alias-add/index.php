@@ -10,8 +10,6 @@ function wpcloud_block_form_site_alias_fields( array $fields) {
 	return array_merge( $fields, [ 'site_alias' ]);
 }
 add_filter('wpcloud_block_form_submitted_fields_site_alias_add', 'wpcloud_block_form_site_alias_fields' );
-add_filter('wpcloud_block_form_submitted_fields_site_alias_remove', 'wpcloud_block_form_site_alias_fields' );
-add_filter('wpcloud_block_form_submitted_fields_site_alias_make_primary', 'wpcloud_block_form_site_alias_fields' );
 
 /**
  * Process the form data for adding a site alias.

@@ -9,16 +9,6 @@ if ( ! is_wpcloud_site_post() ) {
 	return;
 }
 
-if ( ! function_exists( 'wpcloud_block_add_hidden_site_alias_field' ) ) {
-	function wpcloud_block_add_hidden_site_alias_field( $dom, $element,  string $alias = '' ) {
- 		$domain_input = $dom->createElement('input');
-		$domain_input->setAttribute('type', 'hidden');
-		$domain_input->setAttribute('name', 'site_alias');
-		$domain_input->setAttribute('value', $alias);
-		$element->appendChild($domain_input);
-	}
-}
-
 // Fetch the site aliases
 $site_aliases = wpcloud_get_domain_alias_list();
 
@@ -44,7 +34,7 @@ foreach( $site_aliases as $alias) {
 		}
 	}
 
-	wpcloud_block_add_hidden_site_alias_field($dom, $cloned_form, $alias);
+	wpcloud_block_add_hidden_site_alias_field($dom, $cloned_form, 'site_alias', $alias);
 
 	// Append the cloned form node to its parent node
 	$form_container->appendChild($cloned_form);
@@ -53,7 +43,7 @@ foreach( $site_aliases as $alias) {
 // Hide the default form so we have at least one form to clone
 // add set up a hidden field for the alias
 $remove_form->setAttribute('style', 'display: none;');
-wpcloud_block_add_hidden_site_alias_field( $dom, $remove_form );
+wpcloud_block_add_hidden_site_alias_field( $dom, $remove_form, 'site_alias' );
 
 $modified_html = $dom->saveHTML();
 echo $modified_html;

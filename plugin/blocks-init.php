@@ -17,6 +17,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
+require_once __DIR__ . '/blocks/render.php';
+
 function wpcloud_include_blocks() {
 
 	foreach( glob( __DIR__ . '/blocks/src/{*,components/*}' , GLOB_BRACE) as $block_directory ) {
@@ -53,28 +55,6 @@ add_filter( 'block_categories_all' , function( $categories ) {
 
 	return $categories;
 } );
-
-
-// Add the site id to any form that is on a site post.
-function wpcloud_block_add_site_id_hidden_field( $content ) {
-	if ( get_post_type() !== 'wpcloud_site' ) {
-		return $content;
-	}
-	$site_id = get_the_ID();
-	return wpcloud_block_form_hidden_field( 'site_id', $site_id ) . $content;
-}
-add_filter( 'wpcloud_block_form_fields', 'wpcloud_block_add_site_id_hidden_field' );
-
-
-// Allow the site id in the form if present.
-function wpcloud_block_allow_site_id_field( $fields, $post_keys ) {
-	if ( in_array( 'site_id', $post_keys ) ) {
-		return array_merge( $fields, [ 'site_id' ] );
-	}
-	return $fields;
-}
-add_filter( 'wpcloud_block_form_submitted_fields', 'wpcloud_block_allow_site_id_field', 10, 2 );
-
 
 function wpcloud_block_available_php_options(): array {
 	$php_versions = wpcloud_client_php_versions_available();

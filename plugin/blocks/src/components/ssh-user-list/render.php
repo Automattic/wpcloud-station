@@ -8,17 +8,6 @@ if ( ! is_wpcloud_site_post() ) {
 	error_log("WP Cloud Site SSH User List Block: Not a site post.");
 	return;
 }
-
-if ( ! function_exists( 'wpcloud_block_add_hidden_site_alias_field' ) ) {
-	function wpcloud_block_add_hidden_site_alias_field( $dom, $element,  string $user = '' ) {
- 		$domain_input = $dom->createElement('input');
-		$domain_input->setAttribute('type', 'hidden');
-		$domain_input->setAttribute('name', 'site_ssh_user');
-		$domain_input->setAttribute('value', $user);
-		$element->appendChild($domain_input);
-	}
-}
-
 $wpcloud_site_id = wpcloud_get_current_site_id();
 
 if ( ! $wpcloud_site_id ) {
@@ -51,7 +40,7 @@ foreach( $ssh_users as $user) {
 		}
 	}
 
-	wpcloud_block_add_hidden_site_alias_field($dom, $cloned_form, $alias);
+	wpcloud_block_add_hidden_site_alias_field($dom, $cloned_form, 'site_ssh_user', $alias );
 
 	// Append the cloned form node to its parent node
 	$form_container->appendChild($cloned_form);
@@ -60,7 +49,7 @@ foreach( $ssh_users as $user) {
 // Hide the default form so we have at least one form to clone
 // add set up a hidden field for the alias
 $remove_form->setAttribute('style', 'display: none;');
-wpcloud_block_add_hidden_site_alias_field( $dom, $remove_form );
+wpcloud_block_add_hidden_site_alias_field( $dom, $remove_form, 'site_ssh_user' );
 
 $modified_html = $dom->saveHTML();
 echo $modified_html;
