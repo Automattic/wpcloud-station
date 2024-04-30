@@ -43,7 +43,7 @@ function wpcloud_block_form__site_ssh_user_add_handler( $response, $data ) {
 	}
 
 	$response['message'] = 'SSH user added successfully.';
-	$response['users'] = $result;
+	$response['user'] = $result;
 
 	return $response;
 }
