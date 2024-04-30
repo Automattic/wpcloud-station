@@ -1,6 +1,6 @@
 /**
-* WordPress dependencies
-*/
+ * WordPress dependencies
+ */
 import { registerBlockType } from '@wordpress/blocks';
 
 /**

@@ -30,7 +30,7 @@ export default function Edit() {
 				wpcloudAction: 'site_ssh_user_add',
 			},
 			[
-					[
+				[
 					'wpcloud/form-input',
 					{
 						type: 'text',

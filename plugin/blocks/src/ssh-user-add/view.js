@@ -1,4 +1,3 @@
-
 ( ( wpcloud ) => {
 	/**
 	 * Handle the response from the site alias add form.
