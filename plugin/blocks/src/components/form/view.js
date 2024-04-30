@@ -20,6 +20,21 @@
 			if ( redirect ) {
 				formData.redirect = redirect;
 			}
+
+			// let other scripts know that the form is about to be submitted
+			let confirmed
+			confirmed = wpcloud.hooks.applyFilters(`wpcloud_form_should_submit_${formData.wpcloud_action}`, confirmed, formData);
+
+			if ( confirmed === undefined ) {
+				confirmed = wpcloud.hooks.applyFilters('wpcloud_form_should_submit', confirmed, formData);
+			}
+
+			if (confirmed === false) {
+				button.removeAttribute('disabled');
+				form.classList.remove('is-loading');
+				return;
+			}
+
 			wpcloud.hooks.doAction( 'wpcloud_form_submit', form );
 			try {
 				const response = await fetch(
@@ -69,5 +84,19 @@
 
 	document
 		.querySelectorAll( 'form.wpcloud-block-form[data-ajax]' )
-		.forEach( wpcloud.bindFormHandler );
+		.forEach(wpcloud.bindFormHandler);
+
+
+	// Default handler for destructive actions
+	// if `confirmed` is defined then we can assume some other script has already handled the confirmation.
+	wpcloud.hooks.addFilter( 'wpcloud_form_should_submit', 'wpcloud', ( confirmed, data ) => {
+
+		if (confirmed !== undefined) {
+			return confirmed;
+		}
+
+		if (data?.wpcloud_action?.match(/delete|remove/)) {
+			return confirm('Are you sure you want to delete this item?');
+		}
+	}, 20);
 } )( window.wpcloud );
