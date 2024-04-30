@@ -115,4 +115,8 @@
 		'site_alias_make_primary',
 		onSiteAliasMakePrimary
 	);
+
+	// Disable the default destructive confirmation prompt.
+	wpcloud.hooks.addFilter('wpcloud_form_should_submit_site_alias_remove', 'wpcloud', () => true );
+
 } )( window.wpcloud );

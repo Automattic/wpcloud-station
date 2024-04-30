@@ -49,7 +49,7 @@ export default function Edit() {
 				'wpcloud/form',
 				{
 					ajax: true,
-					wpcloudAction: 'create_site',
+					wpcloudAction: 'site_create',
 				},
 				[
 					[
