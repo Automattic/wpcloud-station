@@ -1,0 +1,44 @@
+/*!***********************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./blocks/src/components/ssh-user-list/style.scss ***!
+  \***********************************************************************************************************************************************************************************************************************************************************************/
+.wpcloud-block-site-alias-list__item--primary .wpcloud-block-site-detail__value {
+  transition: all 0.5s ease-out;
+}
+
+.wpcloud-block-form-site-alias--remove {
+  transition: all 0.5s ease-out;
+  -moz-column-gap: 10px;
+       column-gap: 10px;
+}
+.wpcloud-block-form-site-alias--remove .wpcloud-block-site-detail__value {
+  transition: all 0.5s ease-out;
+}
+.wpcloud-block-form-site-alias--remove span:first-child {
+  width: 100%;
+}
+.wpcloud-block-form-site-alias--remove:not(:first-child) {
+  flex: 1;
+}
+.wpcloud-block-form-site-alias--remove .wpcloud-block-form-site-alias--make-primary {
+  transition: all 0.5s ease-out;
+}
+.wpcloud-block-form-site-alias--remove .wpcloud-block-form-site-alias--make-primary .wp-element-button {
+  text-decoration: underline;
+  white-space: nowrap;
+  border: none;
+  color: #111111;
+  background: transparent;
+}
+.wpcloud-block-form-site-alias--remove .wpcloud-block-form-site-alias--make-primary .wp-element-button:focus {
+  border: none;
+  outline: none;
+}
+.wpcloud-block-form-site-alias--remove .wpcloud-block-form-site-alias--make-primary .wp-element-button:hover {
+  font-weight: 600;
+}
+
+.wpcloud-hide {
+  opacity: 0;
+}
+
+/*# sourceMappingURL=style-index.css.map*/

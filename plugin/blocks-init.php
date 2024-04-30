@@ -19,23 +19,26 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 function wpcloud_include_blocks() {
 
-	foreach( glob( __DIR__ . '/blocks/src/*' ) as $block_directory ) {
-		if ( 'components' === basename( $block_directory ) ) {
+	foreach( glob( __DIR__ . '/blocks/src/{*,components/*}' , GLOB_BRACE) as $block_directory ) {
+
+		if ( ! file_exists( $block_directory . '/block.json' ) ) {
 			continue;
 		}
 
 		try {
 			register_block_type(
-				dirname( __FILE__ ) . '/blocks/build/' . basename( $block_directory )
+				preg_replace( '/src/', 'build', $block_directory),
 			);
 		} catch ( Exception $e ) {
 			error_log( 'Error registering block: ' . $e->getMessage() );
 		}
 
+
 		if ( is_file( $block_directory . '/index.php' ) ) {
 			// If we need any server code, include a blocks/src/{block}/index.php file.
 			require_once $block_directory . '/index.php';
 		}
+
 	}
 }
 add_action( 'init', 'wpcloud_include_blocks' );

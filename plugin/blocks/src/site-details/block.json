@@ -3,7 +3,7 @@
 	"apiVersion": 3,
 	"name": "wpcloud/site-details",
 	"version": "0.1.0",
-	"title": "All Site Details",
+	"title": "Site Details",
 	"category": "wpcloud",
 	"icon": "info",
 	"description": "A block to display site details",
@@ -16,12 +16,12 @@
 	"editorStyle": "file:./index.css",
 	"style": "file:./style-index.css",
 	"allowedBlocks" : [
-		"wpcloud/site-detail-card",
-		"core/columns",
-		"core/column",
 		"core/paragraph",
-		"core/heading"
-	],
+		"core/heading",
+		"core/group",
+		"core/columns",
+		"wpcloud/site-detail"
+		],
 	"attributes" : {
 		"adminOnly": {
 			"type": "boolean",
