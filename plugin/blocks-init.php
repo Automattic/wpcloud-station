@@ -17,6 +17,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
+require_once __DIR__ . '/blocks/render.php';
+
 function wpcloud_include_blocks() {
 
 	foreach( glob( __DIR__ . '/blocks/src/{*,components/*}' , GLOB_BRACE) as $block_directory ) {
