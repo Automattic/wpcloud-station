@@ -10,6 +10,7 @@ declare( strict_types = 1 );
 /**
  * Requires
  */
+require_once plugin_dir_path( __FILE__ ) . 'controllers/class-wpcloud-webhook-controller.php';
 require_once plugin_dir_path( __FILE__ ) . 'custom-post-types/wpcloud-site.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/demo-mode.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/class-wpcloud-site.php';
@@ -30,6 +31,15 @@ function wpcloud_add_capabilities(): void {
 	$role = get_role( 'administrator' );
 	$role->add_cap( WPCLOUD_CAN_MANAGE_SITES );
 }
+
+/**
+ * Register REST API controllers.
+ */
+function wpcloud_register_controllers(): void {
+	$webhook_controller = new WPCLOUD_Webhook_Controller();
+	$webhook_controller->register_routes();
+}
+add_action( 'rest_api_init', 'wpcloud_register_controllers' );
 
 /**
  * Set up ACL for WP Cloud specific pages
