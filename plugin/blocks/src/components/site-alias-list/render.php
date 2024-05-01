@@ -17,6 +17,11 @@ if ( ! is_wpcloud_site_post() ) {
 // Fetch the site aliases
 $site_aliases = wpcloud_get_domain_alias_list();
 
+if (is_wp_error($site_aliases)) {
+	error_log("WP Cloud Site Alias Block: Error fetching site aliases.");
+	return '';
+}
+
 $dom = new DOMDocument();
 $dom->loadHTML( $content );
 $xpath = new DOMXPath($dom);

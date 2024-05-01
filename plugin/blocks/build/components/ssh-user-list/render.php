@@ -18,6 +18,11 @@ if ( ! $wpcloud_site_id ) {
 // Fetch the site ssh users
 $ssh_users = wpcloud_client_ssh_user_list( $wpcloud_site_id ) ?: [];
 
+if (is_wp_error($ssh_users)) {
+	error_log("WP Cloud Site SSH User List Block: Error fetching site ssh users.");
+	return '';
+}
+
 $dom = new DOMDocument();
 $dom->loadHTML( $content );
 $xpath = new DOMXPath($dom);
