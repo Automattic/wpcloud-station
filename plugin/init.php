@@ -16,6 +16,10 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/class-wpcloud-site.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/wpcloud-client.php';
 require_once plugin_dir_path( __FILE__ ) . 'blocks-init.php';
 
+if ( defined( 'WP_CLI' ) && WP_CLI ) {
+	require_once plugin_dir_path( __FILE__ ) . 'includes/wpcloud-cli.php';
+}
+
 if ( ! is_admin() ) {
 	require_once plugin_dir_path( __FILE__ ) . 'assets/js/build/index.asset.php';
 	add_action( 'wp_enqueue_scripts', function():void {
