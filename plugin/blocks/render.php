@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Add a hidden input field to a form DOM element.
  */
-function wpcloud_block_add_hidden_site_alias_field( DOMDocument $dom, DOMNode $form, string $name, string $value = '' ):void {
+function wpcloud_block_add_hidden_field( DOMDocument $dom, DOMNode $form, string $name, string $value = '' ):void {
  		$domain_input = $dom->createElement('input');
 		$domain_input->setAttribute('type', 'hidden');
 		$domain_input->setAttribute('name', $name);

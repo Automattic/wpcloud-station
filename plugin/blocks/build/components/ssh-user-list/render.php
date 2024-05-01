@@ -1,6 +1,6 @@
 <?php
 /**
- * Render the site alias block.
+ * Render the site ssh user block.
  *
  * @param string $content The block content.
  */
@@ -30,6 +30,7 @@ $remove_form = $forms[0];
 $form_container = $remove_form->parentNode;
 
 foreach( $ssh_users as $user) {
+	error_log(print_r($user, true));
 	$cloned_form = $remove_form->cloneNode(true);
 	$cloned_form->setAttribute('data-site-ssh-user', $user);
 
@@ -40,7 +41,7 @@ foreach( $ssh_users as $user) {
 		}
 	}
 
-	wpcloud_block_add_hidden_site_alias_field($dom, $cloned_form, 'site_ssh_user', $user );
+	wpcloud_block_add_hidden_field($dom, $cloned_form, 'site_ssh_user', $user );
 
 	// Append the cloned form node to its parent node
 	$form_container->appendChild($cloned_form);
@@ -49,7 +50,7 @@ foreach( $ssh_users as $user) {
 // Hide the default form so we have at least one form to clone
 // add set up a hidden field for the alias
 $remove_form->setAttribute('style', 'display: none;');
-wpcloud_block_add_hidden_site_alias_field( $dom, $remove_form, 'site_ssh_user' );
+wpcloud_block_add_hidden_field( $dom, $remove_form, 'site_ssh_user' );
 
 $modified_html = $dom->saveHTML();
 echo $modified_html;

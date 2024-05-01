@@ -1,4 +1,9 @@
 <?php
+
+// test setting up software
+$response = wpcloud_client_site_manage_software(wpcloud_get_current_site_id(), array('themes/pub/twentytwentytwo' => 'activate'));
+error_log(print_r($response, true));
+
 /**
  * Render the site alias block.
  *
@@ -34,7 +39,7 @@ foreach( $site_aliases as $alias) {
 		}
 	}
 
-	wpcloud_block_add_hidden_site_alias_field($dom, $cloned_form, 'site_alias', $alias);
+	wpcloud_block_add_hidden_field($dom, $cloned_form, 'site_alias', $alias);
 
 	// Append the cloned form node to its parent node
 	$form_container->appendChild($cloned_form);
@@ -43,7 +48,7 @@ foreach( $site_aliases as $alias) {
 // Hide the default form so we have at least one form to clone
 // add set up a hidden field for the alias
 $remove_form->setAttribute('style', 'display: none;');
-wpcloud_block_add_hidden_site_alias_field( $dom, $remove_form, 'site_alias' );
+wpcloud_block_add_hidden_field( $dom, $remove_form, 'site_alias' );
 
 $modified_html = $dom->saveHTML();
 echo $modified_html;
