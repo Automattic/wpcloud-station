@@ -153,7 +153,7 @@ add_action( 'wp_after_insert_post', 'wpcloud_on_create_site', 10, 3 );
  * @return WP_REST_Response The response.
  */
 function wpcloud_on_rest_prepare_site( WP_REST_Response $response, WP_Post $post ): WP_REST_Response {
-	$response->data['status'] = ( 'draft' === $post->status ) ? 'provisioning' : 'active';
+	$response->data['status'] = ( 'draft' === $post->post_status ) ? 'provisioning' : 'active';
 
 	unset( $response->data['content'] );
 	unset( $response->data['guid'] );
@@ -243,14 +243,15 @@ add_action( 'before_delete_post', 'wpcloud_on_delete_site', 10, 1 );
  *
  * @param integer $wpcloud_site_id The WP Cloud Site ID.
  *
- * @return WP_Post|WP_Error The post. WP_Error on error.
+ * @return WP_Post|null The post. Null if not found.
  */
 function wpcloud_lookup_post_by_site_id( int $wpcloud_site_id ): mixed {
 	$query = new WP_Query(
 		array(
-			'post_type' => 'wpcloud_site',
-			'meta_key' => 'wpcloud_site_id',
-			'meta_value' => $wpcloud_site_id
+			'post_type'   => 'wpcloud_site',
+			'post_status' => 'any',
+			'meta_key'    => 'wpcloud_site_id',
+			'meta_value'  => $wpcloud_site_id,
 		)
 	);
 
@@ -262,6 +263,23 @@ function wpcloud_lookup_post_by_site_id( int $wpcloud_site_id ): mixed {
 }
 
 /**
+ * Update the post status to `publish` when `site_provisioned` webhook received.
+ *
+ * @param int    $timestamp       The timestamp of the event in unix milliseconds.
+ * @param int    $wpcloud_site_id The WP Cloud Site Id.
+ * @param array  $data            An array of data sent with the event.
+ */
+function wpcloud_on_site_provisioned( int $timestamp, int $wpcloud_site_id ): void {
+	$post = wpcloud_lookup_post_by_site_id( $wpcloud_site_id );
+	if ( ! $post ) {
+		return;
+	}
+
+	wp_update_post( array( 'ID' => $post->ID, 'post_status' => 'publish' ) );
+}
+add_action( 'wpcloud_webhook_site_provisioned', 'wpcloud_on_site_provisioned', 10, 2 );
+
+/**
  * Get a site detail.
  *
  * @param int|WP_Post $post The site post or ID.
@@ -269,7 +287,6 @@ function wpcloud_lookup_post_by_site_id( int $wpcloud_site_id ): mixed {
  *
  * @return mixed The detail value. WP_Error on error.
  */
-
 function wpcloud_get_site_detail( int|WP_Post $post, string $key, ): mixed {
 	/**
 	 * Return fixture data if in demo mode.
@@ -334,7 +351,6 @@ function wpcloud_get_site_detail( int|WP_Post $post, string $key, ): mixed {
 			$result = wpcloud_client_site_details( $wpcloud_site_id, true );
 	}
 
-
 	if ( is_wp_error( $result ) ) {
 		return $result;
 	}
@@ -345,7 +361,6 @@ function wpcloud_get_site_detail( int|WP_Post $post, string $key, ): mixed {
 
 	return $result->$key;
 }
-
 
 function wpcloud_get_current_site_id(): int {
 	$post_id = get_the_ID();
@@ -362,7 +377,6 @@ function wpcloud_get_current_site_id(): int {
 }
 
 function wpcloud_get_domain_alias_list( int|WP_Post| null $post = null ): array {
-
 	$wpcloud_site_id = wpcloud_get_current_site_id();
 
 	if ( ! $wpcloud_site_id ) {
