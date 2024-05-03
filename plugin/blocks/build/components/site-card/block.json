@@ -1,0 +1,19 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "wpcloud/site-card",
+  "version": "0.1.0",
+  "title": "Site Card",
+  "category": "wpcloud",
+  "icon": "cloud",
+  "description": "Displays a thumbnail, name, and domain for a site.",
+  "example": {},
+  "supports": {
+    "html": false
+  },
+  "textdomain": "site-card",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./style-index.css",
+  "render": "file:./render.php",
+  "style": "file:./style-index.css"
+}

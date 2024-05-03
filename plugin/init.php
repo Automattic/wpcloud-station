@@ -116,3 +116,7 @@ function wpcloud_client_data_center_cities(): array  {
 		'dfw'           => __( 'Dallas, TX, USA' ),
 	);
 }
+
+function wpcloud_dashboard_get_assets_url( $url ) {
+	return plugins_url( '/assets/' . $url, __FILE__ );
+}
