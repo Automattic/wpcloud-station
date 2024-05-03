@@ -214,7 +214,7 @@ function wpcloud_client_site_details( int $wpcloud_site_id, bool $extra = false 
  * @return array|WP_Error List of domain aliases. WP_Error on error.
  */
 function wpcloud_client_site_domain_alias_add( int $wpcloud_site_id, string $domain ): mixed {
-    $client_name = wpcloud_get_client_name();
+  $client_name = wpcloud_get_client_name();
 
 	$response = wpcloud_client_get( $wpcloud_site_id, "site-alias/{$client_name}/{$wpcloud_site_id}/add/{$domain}" );
 	if ( is_wp_error( $response ) ) {

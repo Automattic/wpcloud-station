@@ -84,12 +84,28 @@ class WPCloud_CLI_Site extends WPCloud_CLI {
 
 	protected $site_id;
 
-	public function list($args) {
+	public function list($args, $switches = array()) {
+
+		$show_remote = $switches['remote'] ?? false;
+
+		if ( $show_remote ) {
+
 		$sites = wpcloud_client_site_list();
 		if ( is_wp_error( $sites ) ) {
 			WP_CLI::error( $sites->get_error_message() );
 		}
 
+		if ( isset( $switches['col'] ) ) {
+			$column = $switches['col'];
+			if ($column === 'id') {
+				$column = 'atomic_site_id';
+			}
+			$sites = array_map( function( $site ) use ( $column ) {
+				return $site->$column;
+			}, $sites );
+			self::log_result( implode( ' ', $sites) );
+			return;
+		}
 		$site_list = array_map( function( $site ) {
 			return [
 				'id' => $site->atomic_site_id,
@@ -100,7 +116,35 @@ class WPCloud_CLI_Site extends WPCloud_CLI {
 		}, $sites );
 
 		WP_CLI\Utils\format_items( 'table', $site_list, [ 'id', 'domain', 'created', 'space_used' ] );
+	} else {
+		$sites = get_posts( [
+			'post_type' => 'wpcloud_site',
+			'posts_per_page' => -1,
+			'post_status' => 'any',
+		] );
+
+		if ( isset( $switches['col'] ) ) {
+			$column = $switches['col'];
+			$sites = array_map( function( $site ) use ( $column ) {
+				return $site->$column;
+			}, $sites );
+			self::log_result( implode( ' ', $sites) );
+			return;
+		}
+
+		$site_list = array_map( function( $site ) {
+			return [
+				'wpcloud id' => get_post_meta( $site->ID, 'wpcloud_site_id', true ),
+				'id' => $site->ID,
+				'domain' => $site->post_title,
+				'created' => $site->post_date,
+				'status' => $site->post_status,
+			];
+		}, $sites );
+
+		WP_CLI\Utils\format_items( 'table', $site_list, [ 'wpcloud id', 'id', 'domain', 'created', 'status' ] );
 	}
+}
 
 	public function get( $args ) {
 		$this->set_site_id( $args );
@@ -108,11 +152,87 @@ class WPCloud_CLI_Site extends WPCloud_CLI {
 		self::log_result( $result );
 	}
 
-	public function delete($args) {
-		$this->set_site_id($args);
-		WP_CLI::confirm( 'Are you sure you want to delete this site?' );
-		$result = wpcloud_client_site_delete( $this->site_id );
-		self::log_result( $result, 'Site deleted' );
+	private function _delete(int $site_id, $remote = false, $confirmed = false ) {
+		$result = null;
+		if ( ! $confirmed ) {
+			WP_CLI::confirm( sprintf(  'Are you sure you want to delete the site %d ?', $site_id ) );
+		}
+		if ( $remote ) {
+			$result = wpcloud_client_site_delete( $site_id );
+		} else {
+			$post = $this->get_site_cpt( [ $site_id ] );
+			$result = wp_delete_post( $post->ID, true );
+		}
+		if ( is_wp_error( $result ) ) {
+			WP_CLI::warning( $result->get_error_message() );
+			return;
+		}
+
+		self::log( sprintf("%%gSite %d deleted", $site_id ) );
+	}
+
+	public function delete($args, $switches = array()) {
+		$remote = $switches['remote'] ?? false;
+		$confirmed = $switches['confirmed'] ?? false;
+
+		$delete_count = 0;
+		foreach( $args as $site_id ) {
+
+			// make sure to confirm after every 5th site
+			$pause_to_confirm  = $confirmed && $delete_count % 5 === 0 && $delete_count > 0;
+			if ( $pause_to_confirm ) {
+				WP_CLI::confirm( sprintf( 'Are you sure you want to continue deleting %d more sites?', count($args) - $delete_count ) );
+			}
+			$this->_delete( $site_id, $remote, $confirmed );
+			$delete_count++;
+		}
+		WP_CLI::success( _n( 'Site deleted', sprintf('%d sites deleted', $delete_count ), count($args) ));
+	}
+
+	public function create($args, $switches) {
+		$name = $switches['name'] ?? '';
+		$email = $switches['email'] ?? '';
+		$pass = $switches['pass'] ?? '';
+		if ( ! $name || ! $email || ! $pass ) {
+			WP_CLI::error( 'Please provide a name, email and password' );
+		}
+		$user_name = $switches['user'] ?? $email;
+
+		$dc = $switches['dc'] ?? '';
+		if ( $dc ) {
+			$datacenters = wpcloud_client_datacenters_available();
+			if ( ! in_array( $dc, $datacenters ) ) {
+				WP_CLI::error( 'Invalid datacenter' );
+			}
+		}
+
+		$php = $switches['php'] ?? '';
+		if ( $php ) {
+		 $php_versions = wpcloud_client_php_versions_available();
+		 if ( ! in_array( $php, $php_versions ) ) {
+			 WP_CLI::error( 'Invalid PHP version' );
+		 }
+		}
+
+		$user = get_user_by( 'email', $email );
+		if ( ! $user && $switches['create-user'] ) {
+			$user = wp_create_user( $email, $pass, $email );
+		}
+
+		if ( ! $user ) {
+			WP_CLI::error( 'User not found. Add --create-user flag to create the user' );
+		}
+
+		$options = array(
+			'site_owner_id' => $user->ID,
+			'site_name' => $name,
+			'data_center' => $dc,
+			'php_version' => $php,
+			'admin_pass' => $pass,
+		);
+
+		$result = WPCLoud_Site::create( $options );
+		self::log_result( $result, 'Site created');
 	}
 
 	public function domains($args) {
@@ -144,6 +264,22 @@ class WPCloud_CLI_Site extends WPCloud_CLI {
 	protected function set_site_id($args) {
 		$this->site_id = $args[0] ?? 0;
 
+		// check the local sites first
+		$site_cpt = null;
+		if ( ! is_numeric( $this->site_id ) ) {
+			$site_cpt = get_page_by_title( $this->site_id, OBJECT, 'wpcloud_site' );
+		} else {
+			$site_cpt = get_post( $this->site_id );
+		}
+
+		if ( $site_cpt && ! is_wp_error( $site_cpt ) ) {
+			$this->site_id = get_post_meta( $site_cpt->ID, 'wpcloud_site_id', true );
+
+			if ( ! $this->site_id ) {
+				WP_CLI::error( sprintf( 'Local site %s is missing a wp cloud site id'. $site_cpt->post_title ) );
+			}
+			return;
+		}
 		if ( ! is_numeric( $this->site_id ) ) {
 			$sites = wpcloud_client_site_list();
 			$site =  array_filter( $sites, function( $site ) {
@@ -160,6 +296,25 @@ class WPCloud_CLI_Site extends WPCloud_CLI {
 		if ( ! $this->site_id ) {
 			WP_CLI::error( 'Please provide a site id.' );
 		}
+	}
+
+	protected function get_site_cpt( $args ) {
+		self::set_site_id($args);
+		$query = array(
+			'post_type' => 'wpcloud_site',
+			'post_status' => 'any',
+			'meta_query' => array(
+				array(
+					'key' => 'wpcloud_site_id',
+					'value' => $this->site_id,
+				),
+			),
+		);
+		$site = get_posts( $query );
+		if ( empty( $site ) ) {
+			WP_CLI::error( 'Site not found.' );
+		}
+		return reset( $site );
 	}
 }
 
@@ -257,7 +412,7 @@ class WPCloud_CLI_Site_SSH_User extends WPCloud_CLI_Site {
 		self::log_result( $result, 'SSH user removed' );
 	}
 
-	public function list( $args ) {
+	public function list( $args, $switches = array()) {
 		$this->set_site_id($args);
 		self::log_result( wpcloud_client_ssh_user_list( $this->site_id ) );
 	}
@@ -273,15 +428,23 @@ class WPCloud_CLI_Site_SSH_User extends WPCloud_CLI_Site {
 
 class WPCloud_CLI_Client extends WPCloud_CLI {
 
-	public function get() {
+	public function get($args) {
 	 $options = get_option( 'wpcloud_settings' );
 	 $root_options = array();
 	 foreach ( $options as $key => $value ) {
 
 		 $root_options[preg_replace('/^wpcloud_/','',$key)] = $value;
 	 }
-	 self::log_result( $root_options );
 
+	 if ( isset( $args[0] ) ) {
+		 $key = $args[0];
+		 if ( isset( $root_options[$key] ) ) {
+			 self::log( $root_options[$key] );
+			 return;
+		 }
+	 } else {
+	 	self::log_result( $root_options );
+	 }
 	}
 
 	public function set( $args ) {
@@ -294,11 +457,11 @@ class WPCloud_CLI_Client extends WPCloud_CLI {
 
 		$options = get_option( 'wpcloud_settings' );
 
-		if ( "wpcloud_api_key" === $key && isset( $options[ 'wpcloud_api_key' ] ) ) {
+		if ( "api_key" === $key && isset( $options[ 'wpcloud_api_key' ] ) ) {
 			WP_CLI::confirm( 'Are you sure you want to change the API key?' );
 		}
 
-		if ( "wpcloud_client" ===  $key && isset( $options[ 'wpcloud_client' ] ) ) {
+		if ( "client" ===  $key && isset( $options[ 'wpcloud_client' ] ) ) {
 			WP_CLI::confirm( 'Are you sure you want to change the client?' );
 		}
 

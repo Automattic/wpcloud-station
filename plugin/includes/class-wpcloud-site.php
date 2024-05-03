@@ -62,6 +62,22 @@ class WPCLOUD_Site {
 		$this->error_message   = '';
 	}
 
+	/**
+	 * Create a new WPCLOUD_Site.
+	 *
+	 * example options:
+	 * $options = [
+	 * 	'site_name' => 'example',
+	 * 	'php_version' => '8.4',
+	 * 	'data_center' => 'cda',
+	 * 	'site_owner_id' => 1,
+	 * 	'admin_pass' => 'password123',
+	 * ];
+	 *
+	 * @param array $options
+	 * @return WPCLOUD_Site|WP_Error
+	 */
+
 	public static function create(array $options): mixed {
 		$author = get_user_by( 'id', $options[ 'site_owner_id' ] ?? 0 );
 
