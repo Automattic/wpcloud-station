@@ -40,7 +40,7 @@ foreach( $ssh_users as $user) {
 		}
 	}
 
-	wpcloud_block_add_hidden_site_alias_field($dom, $cloned_form, 'site_ssh_user', $alias );
+	wpcloud_block_add_hidden_site_alias_field($dom, $cloned_form, 'site_ssh_user', $user );
 
 	// Append the cloned form node to its parent node
 	$form_container->appendChild($cloned_form);
