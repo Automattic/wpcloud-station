@@ -1,9 +1,5 @@
 <?php
 
-function wpcloud_dashboard_get_assets_url( $url ) {
-	return plugins_url( '/assets/' . $url, dirname( dirname( dirname( __FILE__ ) ) ) );
-}
-
 if ( ! function_exists( 'wpcloud_dashboard_list_site_card' ) ) :
 	/**
 	 * Prints HTML with meta information for the current post-date/time.

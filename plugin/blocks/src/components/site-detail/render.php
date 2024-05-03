@@ -5,6 +5,7 @@
  * But we can still render the block in demo mode.
  */
 if ( ! is_wpcloud_site_post() ) {
+	error_log("WP Cloud Site Alias Block: Not a site post.");
 	return;
 }
 

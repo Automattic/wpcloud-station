@@ -20,7 +20,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 require_once __DIR__ . '/blocks/render.php';
 
 function wpcloud_include_blocks() {
-
 	foreach( glob( __DIR__ . '/blocks/src/{*,components/*}' , GLOB_BRACE) as $block_directory ) {
 
 		if ( ! file_exists( $block_directory . '/block.json' ) ) {
@@ -46,7 +45,6 @@ function wpcloud_include_blocks() {
 add_action( 'init', 'wpcloud_include_blocks' );
 
 add_filter( 'block_categories_all' , function( $categories ) {
-
   // Adding a new category.
 	$categories[] = array(
 		'slug'  => 'wpcloud',
