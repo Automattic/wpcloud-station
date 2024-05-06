@@ -1,22 +1,12 @@
 /**
- * Registers a new block provided a unique name and an object defining its behavior.
- *
- * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-registration/
+ * WordPress dependencies
  */
 import { registerBlockVariation } from '@wordpress/blocks';
 
 /**
- * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
- * All files containing `style` keyword are bundled together. The code used
- * gets applied both to the front of your site and to the editor.
- *
- * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
- */
-import './style.scss';
-
-/**
  * Internal dependencies
  */
+import './style.scss';
 import metadata from './block.json';
 
 registerBlockVariation( 'core/query', {
@@ -43,14 +33,42 @@ registerBlockVariation( 'core/query', {
             exclude: [],
             sticky: '',
             inherit: false,
+            status: 'any',
         },
     },
     scope: [ 'inserter' ],
-	innerBlocks: [
-		[
-			'core/post-template',
-			{},
-			[ [ 'core/post-title' ], [ 'core/post-excerpt' ] ],
+    innerBlocks: [
+        [
+            'core/post-template',
+            {},
+            [
+                ['wpcloud/site-card', {}],
+                ['core/post-author', {
+                    showAvatar: false,
+                    isLink: true,
+                    showBio: false,
+                    textAlign: 'center',
+                }],
+                ['core/post-date', {
+                    textAlign: 'center',
+                }],
+                ['wpcloud/site-detail', {
+                    name: 'php_version',
+                    label: 'PHP',
+                    hideLabel: true,
+                }],
+                ['wpcloud/site-detail', {
+                    name: 'wp_version',
+                    label: 'WP',
+                    hideLabel: true,
+                }],
+                ['wpcloud/site-detail', {
+                    name: 'ip_addresses',
+                    label: 'IP Address',
+                    hideLabel: true,
+                }],
+
+            ],
 		],
 		[ 'core/query-pagination' ],
 		[ 'core/query-no-results' ],
