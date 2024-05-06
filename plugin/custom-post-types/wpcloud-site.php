@@ -308,6 +308,7 @@ function wpcloud_get_site_detail( int|WP_Post $post, string $key, ): mixed {
 		return null;
 	}
 
+
 	$wpcloud_site_id = get_post_meta( $post->ID, 'wpcloud_site_id', true );
 	if ( empty( $wpcloud_site_id ) ) {
 		return null;
@@ -316,7 +317,6 @@ function wpcloud_get_site_detail( int|WP_Post $post, string $key, ): mixed {
 	$wpcloud_site_id = intval( $wpcloud_site_id );
 
 	$result = '';
-
 	switch ($key) {
 		case 'phpmyadmin_url':
 			$result = wpcloud_client_site_phpmyadmin_url( $wpcloud_site_id );
@@ -328,12 +328,13 @@ function wpcloud_get_site_detail( int|WP_Post $post, string $key, ): mixed {
 			return '';
 
 		case 'ip_addresses':
-			$result = wpcloud_client_site_ip_addresses( );
+			$result = wpcloud_client_site_ip_addresses( $post->post_title );
+
 			if ( is_wp_error( $result ) ) {
 				error_log( $result->get_error_message() );
 				return '';
 			}
-			return $result->ips;
+			return $result->suggested ?? $result->ips ?? '';
 
 		case 'site_name':
 			return $post->post_title;

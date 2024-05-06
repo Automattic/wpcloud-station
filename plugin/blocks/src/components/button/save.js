@@ -7,7 +7,7 @@ import { useBlockProps, InnerBlocks } from '@wordpress/block-editor';
 import { Dashicon } from '@wordpress/components';
 
 const Save = ( { attributes } ) => {
-	const { icon, text } = attributes;
+	const { icon, text, type } = attributes;
 	const blockProps = useBlockProps.save();
 	return (
 		<div
@@ -19,7 +19,7 @@ const Save = ( { attributes } ) => {
 		>
 			{ icon && (
 				<button
-					type="submit"
+					type={type}
 					className={ classNames(
 						'button',
 						'wpcloud-block-form-submit-icon-button',

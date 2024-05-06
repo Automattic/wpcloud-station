@@ -1,23 +1,15 @@
 /**
- * Retrieves the translation of text.
- *
- * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-i18n/
+ * External dependencies
  */
-import { __ } from '@wordpress/i18n';
-
+import classNames from 'classnames';
 /**
- * React hook that is used to mark the block wrapper element.
- * It provides all the necessary props like the class name.
- *
- * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
- */
+* WordPress dependencies
+*/
+import { __ } from '@wordpress/i18n';
 import { useBlockProps } from '@wordpress/block-editor';
 
 /**
- * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
- * Those files can contain any CSS code that gets applied to the editor.
- *
- * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
+ * Internal dependencies
  */
 import './style.scss';
 
@@ -29,14 +21,15 @@ import './style.scss';
  *
  * @return {Element} Element to render.
  */
-export default function Edit() {
+export default function Edit({ attributes, className }) {
+	const { placeholderThumbnail } = attributes;
 	return (
-		<div { ...useBlockProps() }>
-			<img src="/wp-content/plugins/wpcloud-dashboard/assets/images/Gravatar_filled_4.png" />
-			<h2 class="site-title">
+		<div { ...useBlockProps() } className={ classNames( useBlockProps.className, className )}>
+			<img src={ placeholderThumbnail } />
+			<h2 className="site-title">
 				<a href="#">{ __( 'Site Name', 'site-card' ) }</a>
 			</h2>
-			<h3 class="site-url">
+			<h3 className="site-url">
 				<a href="#" target="_blank">
 					<span>{ __( 'Site Domain', 'site-card' ) }</span>
 					<img src="/wp-content/plugins/wpcloud-dashboard/assets/images/external-link.svg" />
