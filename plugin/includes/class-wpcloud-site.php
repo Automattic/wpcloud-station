@@ -37,6 +37,12 @@ class WPCLOUD_Site {
 		'wp_admin_url'
 	);
 
+	const LINKABLE_DETAIL_KEYS = array(
+		'domain_name',
+		'wp_admin_url',
+		'phpmyadmin_url',
+	);
+
 	private static $initial_status = 'draft';
 
 	public int $id;
