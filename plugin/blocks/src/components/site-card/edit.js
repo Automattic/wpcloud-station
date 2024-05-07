@@ -24,7 +24,7 @@ import './style.scss';
 export default function Edit({ attributes, className }) {
 	const { placeholderThumbnail } = attributes;
 	return (
-		<div { ...useBlockProps() } className={ classNames( useBlockProps.className, className )}>
+		<div { ...useBlockProps() } className={ classNames( useBlockProps.className,'wp-block-wpcloud-site-card', className )}>
 			<img src={ placeholderThumbnail } />
 			<h2 className="site-title">
 				<a href="#">{ __( 'Site Name', 'site-card' ) }</a>

@@ -21,6 +21,12 @@ import { Spinner, ToolbarGroup } from '@wordpress/components';
 import { store as coreStore } from '@wordpress/core-data';
 import { list, grid } from '@wordpress/icons';
 
+/**
+ * Internal dependencies
+ */
+
+import './editor.scss';
+
 const TEMPLATE = [
 	[ 'core/post-title' ],
 	[ 'core/post-date' ],

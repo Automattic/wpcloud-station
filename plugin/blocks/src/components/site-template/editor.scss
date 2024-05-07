@@ -1,7 +1,21 @@
-.editor-styles-wrapper {
-	ul.wp-block-post-template {
+
+.wp-block-wpcloud-site-template {
+ 	li {
 		padding-left: 0;
 		margin-left: 0;
 		list-style: none;
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		align-items: center;
+		column-gap: 2rem;;
+		.wpcloud-block-site-list--header{
+			&:first-child{
+				width: 100%
+			}
+			&:not(:first-child){
+				display: none;
+			}
+		}
 	}
 }

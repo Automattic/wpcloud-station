@@ -11,6 +11,12 @@
   "supports": {
     "html": false
   },
+  "attributes": {
+    "placeholderThumbnail": {
+      "type": "string",
+      "default": "https://via.placeholder.com/50"
+    }
+  },
   "textdomain": "site-card",
   "editorScript": "file:./index.js",
   "editorStyle": "file:./style-index.css",

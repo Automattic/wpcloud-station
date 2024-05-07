@@ -36,10 +36,11 @@ registerBlockVariation( 'core/query', {
 	scope: [ 'inserter' ],
 	innerBlocks: [
 		[
-			'core/post-template',
+			'wpcloud/site-template',
 			{},
-			[
-				[ 'wpcloud/site-card', {} ],
+            [
+                [ 'wpcloud/site-template-header' ],
+                ['wpcloud/site-card' ],
 				[
 					'core/post-author',
 					{
@@ -78,7 +79,15 @@ registerBlockVariation( 'core/query', {
 						label: 'IP Address',
 						hideLabel: true,
 					},
-				],
+                ],
+                [
+                    'wpcloud/link',
+                    {
+                        name: 'wp_admin_url',
+                        label: 'WP Admin',
+                        style: 'button',
+                    }
+                ]
 			],
 		],
 		[ 'core/query-pagination' ],
