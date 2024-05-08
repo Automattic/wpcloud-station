@@ -35,7 +35,6 @@ $remove_form = $forms[0];
 $form_container = $remove_form->parentNode;
 
 foreach( $ssh_users as $user) {
-	error_log(print_r($user, true));
 	$cloned_form = $remove_form->cloneNode(true);
 	$cloned_form->setAttribute('data-site-ssh-user', $user);
 

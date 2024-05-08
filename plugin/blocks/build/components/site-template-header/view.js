@@ -1,1 +1,0 @@
-console.log("Hello World! (from wpcloud-site-template-header block)");

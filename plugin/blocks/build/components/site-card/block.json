@@ -17,6 +17,11 @@
       "default": "https://via.placeholder.com/50"
     }
   },
+  "usesContext": [
+    "wpcloud/layout",
+    "queryId",
+    "query"
+  ],
   "textdomain": "site-card",
   "editorScript": "file:./index.js",
   "editorStyle": "file:./style-index.css",
