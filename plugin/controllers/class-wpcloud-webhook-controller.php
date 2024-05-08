@@ -28,6 +28,7 @@ if ( ! class_exists( 'WPCLOUD_Webhook_Controller' ) ) {
 		/**
 		 * Register the routes.
 		 */
+		/*
 		public function register_routes() {
 			register_rest_route(
 				$this->namespace, '/' . $this->rest_base,
@@ -39,7 +40,7 @@ if ( ! class_exists( 'WPCLOUD_Webhook_Controller' ) ) {
 				)
 			);
 		}
-
+*/
 		/**
 		 * Post a webhook.
 		 *
