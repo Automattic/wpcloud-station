@@ -7,9 +7,7 @@ $header = $inner_blocks[0];
 if ('wpcloud/site-template-header' === $header['blockName'] )  {
 	$header = array_shift($inner_blocks);
 	$header_content = ( new WP_Block( $header ) )->render( array( 'dynamic' => false ) );
-	error_log($header_content);
 	$header_item = '<tr>' . $header_content . '</tr>';
-	error_log(print_r($inner_blocks, true));
 	$block->parsed_block['innerBlocks'] = $inner_blocks;
 	array_splice( $block->parsed_block['innerContent'], 1, 2);
 }
@@ -52,16 +50,6 @@ while ( $query->have_posts() ) {
 
 	// Get an instance of the current Post Template block.
 	$block_instance = $block->parsed_block;
-	/*
-
-	$inner_blocks = $block_instance['innerBlocks'];
-	array_shift($inner_blocks);
-	$block_instance['innerBlocks'] = $inner_blocks;
-
-	$inner_content = array_splice( $block_instance['innerContent'], 1, 2);
-
-	$block_instance['innerBlocks'] = $inner_blocks;
-	*/
 
 	// Set the block name to one that does not correspond to an existing registered block.
 	// This ensures that for the inner instances of the Post Template block, we do not render any block supports.
