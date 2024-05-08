@@ -10,10 +10,21 @@ if ( ! is_wpcloud_site_post() ) {
 
 // @TODO get real site thumbnail
 $site_thumbnail = wpcloud_dashboard_get_assets_url( '/images/Gravatar_filled_' . get_the_ID() % 5 . '.png' );
-$ex_link        = wpcloud_dashboard_get_assets_url( '/images/external-link.svg' );
+
+
+$layout = $block->context['wpcloud/layout'] ?? '';
+$wrapper = 'div';
+$classNames = '';
+if ('table' === $layout) {
+	$wrapper = 'td';
+	$classNames = 'wpcloud-block-table-cell';
+}
+
+$wrapper_attributes = $wrapper . ' ' .  get_block_wrapper_attributes( array( 'class' => trim( $classNames ) ) );
+
 ?>
 
-<div class="wp-block-wpcloud-site-card">
+<<?php echo $wrapper_attributes ?> >
 	<img src="<?php echo $site_thumbnail ?>" />
 	<h2 class="site-title">
 		<a href="<?php echo get_the_permalink() ?>"><?php echo get_post_field( 'post_name', get_post() ); ?></a>
@@ -24,4 +35,4 @@ $ex_link        = wpcloud_dashboard_get_assets_url( '/images/external-link.svg' 
 			<img src="<?php echo $ex_link ?>"/>
 		</a>
 	</h3>
-</div>
+</<?php echo $wrapper ?> >

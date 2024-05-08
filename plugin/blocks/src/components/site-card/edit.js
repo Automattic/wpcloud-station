@@ -2,6 +2,7 @@
  * External dependencies
  */
 import classNames from 'classnames';
+
 /**
 * WordPress dependencies
 */
