@@ -36,24 +36,39 @@ registerBlockVariation( 'core/query', {
 	scope: [ 'inserter' ],
 	innerBlocks: [
 		[
-			'core/post-template',
+			'wpcloud/site-template',
 			{},
 			[
-				[ 'wpcloud/site-card', {} ],
+				[ 'wpcloud/site-template-header' ],
+				[ 'wpcloud/site-card' ],
 				[
-					'core/post-author',
-					{
-						showAvatar: false,
-						isLink: true,
-						showBio: false,
-						textAlign: 'center',
-					},
+					'wpcloud/table-cell',
+					{},
+					[
+						[
+							'core/post-author',
+							{
+								showAvatar: false,
+								isLink: true,
+								showBio: false,
+								textAlign: 'center',
+							},
+						],
+					],
 				],
+
 				[
-					'core/post-date',
-					{
-						textAlign: 'center',
-					},
+					'wpcloud/table-cell',
+					{},
+					[
+						[
+							'core/post-date',
+							{
+								textAlign: 'center',
+								format: 'n/j/Y',
+							},
+						],
+					],
 				],
 				[
 					'wpcloud/site-detail',
@@ -77,6 +92,14 @@ registerBlockVariation( 'core/query', {
 						name: 'ip_addresses',
 						label: 'IP Address',
 						hideLabel: true,
+					},
+				],
+				[
+					'wpcloud/link',
+					{
+						name: 'wp_admin_url',
+						label: 'WP Admin',
+						style: 'button',
 					},
 				],
 			],

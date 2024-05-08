@@ -15,17 +15,17 @@
 	"textdomain": "form-submit-button",
 	"editorScript": "file:./index.js",
 	"style": "file:./style-index.css",
-	"attributes" : {
-		"text" : {
-			"type" : "string",
-			"default" : "Submit"
+	"attributes": {
+		"text": {
+			"type": "string",
+			"default": "Submit"
 		},
-		"icon" :{
-			"type" : "string"
+		"icon": {
+			"type": "string"
 		},
-		"type" : {
-			"type" : "string",
-			"default" : "submit"
+		"type": {
+			"type": "string",
+			"default": "submit"
 		}
 	}
 }

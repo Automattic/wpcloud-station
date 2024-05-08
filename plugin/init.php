@@ -24,7 +24,7 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
 if ( ! is_admin() ) {
 	require_once plugin_dir_path( __FILE__ ) . 'assets/js/build/index.asset.php';
 	add_action( 'wp_enqueue_scripts', function():void {
-		wp_enqueue_script( 'wpcloud', plugin_dir_url( __FILE__ ) . 'assets/js/build/index.js', array('wp-hooks' ) );
+		wp_enqueue_script( 'wpcloud', plugin_dir_url( __FILE__ ) . 'assets/js/build/index.js', array( 'wp-hooks' ) );
 	} );
 }
 
@@ -83,8 +83,6 @@ function wpcloud_verify_logged_in(): void {
 			$url = add_query_arg( array('ref' => $wp->request ), '/login' );
 			wp_redirect( $url );
    		exit();
-		} else {
-			error_log('User is logged in and can view the page.');
 		}
 	}
 }

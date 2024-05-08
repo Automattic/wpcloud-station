@@ -2,11 +2,13 @@
  * External dependencies
  */
 import classNames from 'classnames';
+
 /**
-* WordPress dependencies
-*/
+ * WordPress dependencies
+ */
 import { __ } from '@wordpress/i18n';
 import { useBlockProps } from '@wordpress/block-editor';
+import { Dashicon } from '@wordpress/components';
 
 /**
  * Internal dependencies
@@ -21,10 +23,17 @@ import './style.scss';
  *
  * @return {Element} Element to render.
  */
-export default function Edit({ attributes, className }) {
+export default function Edit( { attributes, className } ) {
 	const { placeholderThumbnail } = attributes;
 	return (
-		<div { ...useBlockProps() } className={ classNames( useBlockProps.className, className )}>
+		<div
+			{ ...useBlockProps() }
+			className={ classNames(
+				useBlockProps.className,
+				'wp-block-wpcloud-site-card',
+				className
+			) }
+		>
 			<img src={ placeholderThumbnail } />
 			<h2 className="site-title">
 				<a href="#">{ __( 'Site Name', 'site-card' ) }</a>
@@ -32,7 +41,7 @@ export default function Edit({ attributes, className }) {
 			<h3 className="site-url">
 				<a href="#" target="_blank">
 					<span>{ __( 'Site Domain', 'site-card' ) }</span>
-					<img src="/wp-content/plugins/wpcloud-dashboard/assets/images/external-link.svg" />
+				 	<Dashicon icon="external" />
 				</a>
 			</h3>
 		</div>

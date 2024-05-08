@@ -19,7 +19,7 @@ const Save = ( { attributes } ) => {
 		>
 			{ icon && (
 				<button
-					type={type}
+					type={ type }
 					className={ classNames(
 						'button',
 						'wpcloud-block-form-submit-icon-button',

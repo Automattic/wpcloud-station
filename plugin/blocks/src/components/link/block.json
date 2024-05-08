@@ -17,8 +17,8 @@
 	"style": "file:./style-index.css",
 	"render": "file:./render.php",
 	"viewScript": "file:./view.js",
-
-	"attributes" : {
+	"usesContext": [ "wpcloud/layout" ],
+	"attributes": {
 		"label": {
 			"type": "string",
 			"default": "label"
@@ -27,11 +27,11 @@
 			"type": "string",
 			"default": ""
 		},
-		"adminOnly" :{
+		"adminOnly": {
 			"type": "boolean",
 			"default": false
 		},
-		"url"	: {
+		"url": {
 			"type": "string",
 			"default": ""
 		},

@@ -117,6 +117,9 @@
 	);
 
 	// Disable the default destructive confirmation prompt.
-	wpcloud.hooks.addFilter('wpcloud_form_should_submit_site_alias_remove', 'wpcloud', () => true );
-
+	wpcloud.hooks.addFilter(
+		'wpcloud_form_should_submit_site_alias_remove',
+		'wpcloud',
+		() => true
+	);
 } )( window.wpcloud );

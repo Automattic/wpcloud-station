@@ -6,14 +6,11 @@
   "title": "Site List",
   "category": "wpcloud",
   "icon": "cloud",
-  "description": "Example block scaffolded with Create Block tool.",
+  "description": "Site List",
   "example": {},
   "supports": {
     "html": false
   },
   "textdomain": "site-list",
-  "editorScript": "file:./index.js",
-  "editorStyle": "file:./index.css",
-  "style": "file:./style-index.css",
-  "viewScript": "file:./view.js"
+  "editorScript": "file:./index.js"
 }

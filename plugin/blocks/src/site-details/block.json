@@ -15,14 +15,14 @@
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",
 	"style": "file:./style-index.css",
-	"allowedBlocks" : [
+	"allowedBlocks": [
 		"core/paragraph",
 		"core/heading",
 		"core/group",
 		"core/columns",
 		"wpcloud/site-detail"
-		],
-	"attributes" : {
+	],
+	"attributes": {
 		"adminOnly": {
 			"type": "boolean",
 			"default": false
