@@ -20,6 +20,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 require_once __DIR__ . '/blocks/render.php';
 
 function wpcloud_include_blocks() {
+	// for some reason wp-env doesn't support GLOB_BRACE when starting up.
+	if (! defined('GLOB_BRACE')) {
+		define('GLOB_BRACE', 0);
+	}
 	foreach( glob( __DIR__ . '/blocks/src/{*,components/*}' , GLOB_BRACE) as $block_directory ) {
 
 		if ( ! file_exists( $block_directory . '/block.json' ) ) {
