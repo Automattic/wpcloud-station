@@ -11,7 +11,6 @@ if ( ! is_wpcloud_site_post() ) {
 // @TODO get real site thumbnail
 $site_thumbnail = wpcloud_dashboard_get_assets_url( '/images/Gravatar_filled_' . get_the_ID() % 5 . '.png' );
 
-
 $layout = $block->context['wpcloud/layout'] ?? '';
 $wrapper = 'div';
 $classNames = '';
@@ -32,7 +31,7 @@ $wrapper_attributes = $wrapper . ' ' .  get_block_wrapper_attributes( array( 'cl
 	<h3 class="site-url">
 		<a href="https://<?php echo get_the_title() ?>" target="_blank">
 			<span><?php echo get_the_title() ?></span>
-			<img src="<?php echo $ex_link ?>"/>
+			<span className="dashicons dashicons-external" ></span>
 		</a>
 	</h3>
 </<?php echo $wrapper ?> >
