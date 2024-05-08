@@ -2,9 +2,23 @@
 if ( $attributes['adminOnly'] && ! current_user_can( 'manage_options' ) ) {
 	return;
 }
+
+$wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'wpcloud-block-link' ) );
+
+error_log($wrapper_attributes);
+
+$layout = $block->context['wpcloud/layout'] ?? '';
+error_log(print_r($layout, true));
+$wrapper = 'div';
+
+if ('table' === $layout) {
+	$wrapper = 'td';
+}
+
+error_log('link wrapper = '. $wrapper);
 // If there is a custom url just return the content.
 if ( $attributes['url'] ) {
-	echo $content;
+	printf('<%1$s class="%2%s">%3$s</%1$s>', $wrapper, $wrapper_attributes, $content);
 	return;
 }
 
@@ -16,4 +30,6 @@ if ( 'wp_admin_url' === $attributes['name'] ) {
 	$url = wpcloud_get_site_detail( get_the_ID(), $attributes['name'] );
 }
 $replacement = '$1' . $url . '$3';
-echo preg_replace($pattern, $replacement, $content);
+$new_link = preg_replace($pattern, $replacement, $content);
+
+printf('<%1$s class="%2$s">%3$s</%1$s>', $wrapper, $wrapper_attributes, $new_link);

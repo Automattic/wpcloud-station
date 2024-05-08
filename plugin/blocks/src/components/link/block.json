@@ -17,7 +17,7 @@
 	"style": "file:./style-index.css",
 	"render": "file:./render.php",
 	"viewScript": "file:./view.js",
-
+	"usesContext": [ "wpcloud/layout" ],
 	"attributes" : {
 		"label": {
 			"type": "string",
