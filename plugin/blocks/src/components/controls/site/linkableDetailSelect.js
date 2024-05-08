@@ -4,8 +4,8 @@
 import { __ } from '@wordpress/i18n';
 import { SelectControl } from '@wordpress/components';
 
-export const formatDisplayName = (name = '') => {
-	const words = name.replace(/–|-|_/g, ' ');
+export const formatDisplayName = ( name = '' ) => {
+	const words = name.replace( /–|-|_/g, ' ' );
 	if ( ! words.includes( ' ' ) ) {
 		return name;
 	}
@@ -17,26 +17,31 @@ export const formatDisplayName = (name = '') => {
 		.replace( /\bphp\b/i, 'PHP' );
 };
 
-export default function LinkableDetailSelect({ attributes, setAttributes, onChange, help }) {
+export default function LinkableDetailSelect( {
+	attributes,
+	setAttributes,
+	onChange,
+	help,
+} ) {
 	const linkableSiteDetails = window.wpcloud?.linkableSiteDetails || [];
-	const options = [ ' ' ].concat(linkableSiteDetails);
+	const options = [ ' ' ].concat( linkableSiteDetails );
 	const { name } = attributes;
 	return (
 		<SelectControl
-			label={__('Select a site detail link')}
-			value={name}
-			options={options.map((detailKey) => ({
+			label={ __( 'Select a site detail link' ) }
+			value={ name }
+			options={ options.map( ( detailKey ) => ( {
 				value: detailKey,
-				label: formatDisplayName(detailKey),
-			}))}
-			onChange={(newName) => {
-				setAttributes({
+				label: formatDisplayName( detailKey ),
+			} ) ) }
+			onChange={ ( newName ) => {
+				setAttributes( {
 					name: newName,
-					label: formatDisplayName(newName),
-				});
-				onChange && onChange(newName);
-			}}
-			help={help || __('Select a site detail link to display')}
+					label: formatDisplayName( newName ),
+				} );
+				onChange && onChange( newName );
+			} }
+			help={ help || __( 'Select a site detail link to display' ) }
 		/>
 	);
-};
+}

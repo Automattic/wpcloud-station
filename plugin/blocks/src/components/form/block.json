@@ -28,7 +28,7 @@
 		"wpcloudAction": {
 			"type": "string"
 		},
-		"inline" : {
+		"inline": {
 			"type": "boolean",
 			"default": false
 		},
@@ -37,13 +37,14 @@
 		}
 	},
 	"allowedBlocks": [
-		 "wpcloud/site-detail",
-			"core/paragraph",
-			"core/heading",
-			"core/group",
-			"core/image",
-			"core/columns",
-			"core/grid",
-			"wpcloud/form-input",
-			"wpcloud/button" ]
+		"wpcloud/site-detail",
+		"core/paragraph",
+		"core/heading",
+		"core/group",
+		"core/image",
+		"core/columns",
+		"core/grid",
+		"wpcloud/form-input",
+		"wpcloud/button"
+	]
 }
