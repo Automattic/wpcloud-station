@@ -14,7 +14,7 @@ if ('table' === $layout) {
 
 // If there is a custom url just return the content.
 if ( $attributes['url'] ) {
-	printf('<%1$s class="%2%s">%3$s</%1$s>', $wrapper, $wrapper_attributes, $content);
+	printf('<%1$s %2%s>%3$s</%1$s>', $wrapper, $wrapper_attributes, $content);
 	return;
 }
 
@@ -28,4 +28,4 @@ if ( 'wp_admin_url' === $attributes['name'] ) {
 $replacement = '$1' . $url . '$3';
 $new_link = preg_replace($pattern, $replacement, $content);
 
-printf('<%1$s class="%2$s">%3$s</%1$s>', $wrapper, $wrapper_attributes, $new_link);
+printf('<%1$s %2$s>%3$s</%1$s>', $wrapper, $wrapper_attributes, $new_link);
