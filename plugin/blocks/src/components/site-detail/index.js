@@ -33,4 +33,5 @@ registerBlockType( metadata.name, {
 	 */
 	edit: Edit,
 	save,
+	usesContext: [ 'wpcloud/layout' ],
 } );

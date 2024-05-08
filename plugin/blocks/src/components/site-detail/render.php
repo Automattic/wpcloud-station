@@ -40,4 +40,17 @@ if (str_starts_with($detail, 'http')) {
 // match the placeholder which is in the last set of curly braces  { The placeholder }
 $regex = '/\{[^{}]*\}(?=[^{}]*$)/';
 
-echo preg_replace($regex, $detail, $content);
+$detail = preg_replace($regex, $detail, $content);
+
+
+$layout = $block->context['wpcloud/layout'] ?? '';
+
+if ('table' === $layout) {
+	$wrapper = 'td';
+	$wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'wpcloud-block-table-cell' ) );
+} else {
+	$wrapper = 'div';
+	$wrapper_attributes = get_block_wrapper_attributes();
+}
+
+printf('<%1$s %2$s>%3$s</%1$s>', $wrapper, $wrapper_attributes, $detail);

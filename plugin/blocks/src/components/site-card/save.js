@@ -4,10 +4,12 @@
 import classNames from 'classnames';
 
 /**
-*	WordPress dependencies
-*/
+ *	WordPress dependencies
+ */
 import { __ } from '@wordpress/i18n';
 import { useBlockProps } from '@wordpress/block-editor';
+import { Dashicon } from '@wordpress/components';
+
 
 /**
  * The save function defines the way in which the different attributes should
@@ -18,19 +20,26 @@ import { useBlockProps } from '@wordpress/block-editor';
  *
  * @return {Element} Element to render.
  */
-export default function save({ attributes, className }) {
+export default function save( { attributes, className } ) {
 	const { placeholderThumbnail } = attributes;
 	const blockProps = useBlockProps.save();
 	return (
-		<div { ...blockProps } className={ classNames( blockProps.className,'wp-block-wpcloud-site-card', className )}>
+		<div
+			{ ...blockProps }
+			className={ classNames(
+				blockProps.className,
+				'wp-block-wpcloud-site-card',
+				className
+			) }
+		>
 			<img src={ placeholderThumbnail } />
 			<h2 className="site-title">
 				<a href="#">{ __( 'Site Name', 'site-card' ) }</a>
 			</h2>
 			<h3 className="site-url">
-				<a href="#" target="_blank">
+				<a href="#" target="_blank" rel="noopener">
 					<span>{ __( 'Site Domain', 'site-card' ) }</span>
-					<span className="dashicons dashicons-external" />
+					<Dashicon icon="external" />
 				</a>
 			</h3>
 		</div>

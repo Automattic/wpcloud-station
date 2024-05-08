@@ -4,8 +4,6 @@
 import { registerBlockType } from '@wordpress/blocks';
 import { InnerBlocks } from '@wordpress/block-editor';
 
-
-
 /**
  * Internal dependencies
  */
@@ -28,5 +26,5 @@ registerBlockType( metadata.name, {
 	/**
 	 * @see ./save.js
 	 */
-	save
+	save,
 } );

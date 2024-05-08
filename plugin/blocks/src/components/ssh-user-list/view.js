@@ -41,6 +41,9 @@
 	);
 
 	// Disable the confirmation dialog for removing SSH users.
-	wpcloud.hooks.addFilter('wpcloud_form_should_submit_site_ssh_user_remove', 'wpcloud', () => true);
-
+	wpcloud.hooks.addFilter(
+		'wpcloud_form_should_submit_site_ssh_user_remove',
+		'wpcloud',
+		() => true
+	);
 } )( window.wpcloud );
