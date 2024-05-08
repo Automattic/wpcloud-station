@@ -22,14 +22,81 @@ export default function Edit() {
 	const blockProps = useBlockProps();
 
 	const template = [
-		[ 'core/heading', { level: 2, content: __( 'Site', 'wpcloud' ) } ],
-		[ 'core/heading', { level: 2, content: __( 'Owner', 'wpcloud' ) } ],
-		[ 'core/heading', { level: 2, content: __( 'Created', 'wpcloud' ) } ],
-		[ 'core/heading', { level: 2, content: __( 'PHP', 'wpcloud' ) } ],
-		[ 'core/heading', { level: 2, content: __( 'WP Version', 'wpcloud' ) } ],
-		[ 'core/heading', { level: 2, content: __( 'IP', 'wpcloud' ) } ],
-		[ 'core/heading', { level: 2, content: __( 'Actions', 'wpcloud' ) } ],
+		[
+			'wpcloud/table-cell',
+			{ isHeader: true },
+			[
+				[
+					'core/heading',
+					{ level: 2, content: __('Site', 'wpcloud') },
+				],
+			],
+		],
+
+
+		[
+			'wpcloud/table-cell',
+			{ isHeader: true },
+			[
+				[
+					'core/heading',
+					{ level: 2, content: __('Owner', 'wpcloud') },
+				],
+			],
+		],
+		[
+			'wpcloud/table-cell',
+			{ isHeader: true },
+			[
+				[
+					'core/heading',
+					{ level: 2, content: __( 'Created', 'wpcloud' ) },
+				],
+			],
+		],
+		[
+			'wpcloud/table-cell',
+			{ isHeader: true },
+			[
+				[
+					'core/heading',
+					{ level: 2, content: __( 'PHP', 'wpcloud' ) },
+				],
+			],
+		],
+
+		[
+			'wpcloud/table-cell',
+			{ isHeader: true },
+			[
+				[
+					'core/heading',
+					{ level: 2, content: __( 'WP Version', 'wpcloud' ) },
+				],
+			],
+		],
+
+		[
+			'wpcloud/table-cell',
+			{ isHeader: true },
+			[
+				[
+					'core/heading',
+					{ level: 2, content: __( 'IP', 'wpcloud' ) },
+				],
+			],
+		],
+		[
+			'wpcloud/table-cell',
+			{ isHeader: true },
+			[[
+				'core/heading',
+				{ level: 2, content: __('Actions', 'wpcloud') },
+			]
+			],
+		],
 	];
+
 
 	const innerBlocksProps = useInnerBlocksProps( blockProps, {
 		template,

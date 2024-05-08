@@ -10,16 +10,15 @@ import { memo, useMemo, useState } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import {
-	BlockControls,
 	BlockContextProvider,
 	__experimentalUseBlockPreview as useBlockPreview,
 	useBlockProps,
 	useInnerBlocksProps,
 	store as blockEditorStore,
 } from '@wordpress/block-editor';
-import { Spinner, ToolbarGroup } from '@wordpress/components';
+import { Spinner } from '@wordpress/components';
 import { store as coreStore } from '@wordpress/core-data';
-import { list, grid } from '@wordpress/icons';
+
 
 /**
  * Internal dependencies
@@ -35,7 +34,7 @@ const TEMPLATE = [
 
 function PostTemplateInnerBlocks() {
 	const innerBlocksProps = useInnerBlocksProps(
-		{ className: 'wp-block-post' },
+		{ className: 'wpcloud-site' },
 		{ template: TEMPLATE, __unstableDisableLayoutClassNames: true }
 	);
 	return <li { ...innerBlocksProps } />;
@@ -50,7 +49,7 @@ function PostTemplateBlockPreview( {
 	const blockPreviewProps = useBlockPreview( {
 		blocks,
 		props: {
-			className: 'wp-block-post',
+			className: 'wpcloud-site',
 		},
 	} );
 
@@ -69,7 +68,6 @@ function PostTemplateBlockPreview( {
 			// eslint-disable-next-line jsx-a11y/no-noninteractive-element-to-interactive-role
 			role="button"
 			onClick={ handleOnClick }
-			onKeyPress={ handleOnClick }
 			style={ style }
 		/>
 	);
@@ -78,7 +76,6 @@ function PostTemplateBlockPreview( {
 const MemoizedPostTemplateBlockPreview = memo( PostTemplateBlockPreview );
 
 export default function PostTemplateEdit( {
-	setAttributes,
 	clientId,
 	context: {
 		query: {
@@ -105,10 +102,7 @@ export default function PostTemplateEdit( {
 		templateSlug,
 		previewPostType,
 	},
-	attributes: { layout },
-	__unstableLayoutClassNames,
 } ) {
-	const { type: layoutType, columnCount = 3 } = layout || {};
 	const [ activeBlockContextId, setActiveBlockContextId ] = useState();
 	const { posts, blocks } = useSelect(
 		( select ) => {
@@ -223,12 +217,7 @@ export default function PostTemplateEdit( {
 		[ posts ]
 	);
 
-	const blockProps = useBlockProps( {
-		className: classnames( __unstableLayoutClassNames, {
-			[ `columns-${ columnCount }` ]:
-				layoutType === 'grid' && columnCount, // Ensure column count is flagged via classname for backwards compatibility.
-		} ),
-	} );
+	const blockProps = useBlockProps();
 
 	if ( ! posts ) {
 		return (
@@ -242,40 +231,12 @@ export default function PostTemplateEdit( {
 		return <p { ...blockProps }> { __( 'No results found.' ) }</p>;
 	}
 
-	const setDisplayLayout = ( newDisplayLayout ) =>
-		setAttributes( {
-			layout: { ...layout, ...newDisplayLayout },
-		} );
-
-	const displayLayoutControls = [
-		{
-			icon: list,
-			title: __( 'List view' ),
-			onClick: () => setDisplayLayout( { type: 'default' } ),
-			isActive: layoutType === 'default' || layoutType === 'constrained',
-		},
-		{
-			icon: grid,
-			title: __( 'Grid view' ),
-			onClick: () =>
-				setDisplayLayout( {
-					type: 'grid',
-					columnCount,
-				} ),
-			isActive: layoutType === 'grid',
-		},
-	];
-
 	// To avoid flicker when switching active block contexts, a preview is rendered
 	// for each block context, but the preview for the active block context is hidden.
 	// This ensures that when it is displayed again, the cached rendering of the
 	// block preview is used, instead of having to re-render the preview from scratch.
 	return (
 		<>
-			<BlockControls>
-				<ToolbarGroup controls={ displayLayoutControls } />
-			</BlockControls>
-
 			<ul { ...blockProps }>
 				{ blockContexts &&
 					blockContexts.map( ( blockContext ) => (

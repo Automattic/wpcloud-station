@@ -15,6 +15,15 @@
 		"previewPostType",
 		"enhancedPagination"
 	],
+	"providesContext": {
+		"wpcloud/layout": "layout"
+	},
+	"attributes": {
+		"layout": {
+			"type": "string",
+			"default": "table"
+		}
+	},
 	"supports": {
 		"reusable": false,
 		"html": false,
