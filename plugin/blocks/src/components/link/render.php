@@ -2,20 +2,16 @@
 if ( $attributes['adminOnly'] && ! current_user_can( 'manage_options' ) ) {
 	return;
 }
-
-$wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'wpcloud-block-link' ) );
-
-error_log($wrapper_attributes);
-
 $layout = $block->context['wpcloud/layout'] ?? '';
-error_log(print_r($layout, true));
-$wrapper = 'div';
 
 if ('table' === $layout) {
 	$wrapper = 'td';
+	$wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'wpcloud-block-link wpcloud-block-table-cell' ) );
+} else {
+	$wrapper = 'div';
+	$wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'wpcloud-block-link' ) );
 }
 
-error_log('link wrapper = '. $wrapper);
 // If there is a custom url just return the content.
 if ( $attributes['url'] ) {
 	printf('<%1$s class="%2%s">%3$s</%1$s>', $wrapper, $wrapper_attributes, $content);
