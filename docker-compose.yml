@@ -30,7 +30,6 @@ services:
       - wp_data:/var/www/html
       - ./plugin:/var/www/html/wp-content/plugins/wpcloud-dashboard
       - ./themes/block:/var/www/html/wp-content/themes/wpcloud-dashboard-block
-      - ./themes/classic:/var/www/html/wp-content/themes/wpcloud-dashboard-classic
     ports:
       - 8282:80
     restart: always
