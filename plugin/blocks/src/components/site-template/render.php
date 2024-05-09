@@ -27,7 +27,6 @@ if ( $use_global_query ) {
 	 * Otherwise, the main query loop has not started yet and this block is responsible for doing so.
 	 */
 	if ( in_the_loop() ) {
-
 		$query = clone $wp_query;
 		$query->rewind_posts();
 	} else {
