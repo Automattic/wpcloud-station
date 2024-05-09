@@ -1,7 +1,10 @@
 /*
-Theme Name: WP Cloud Dashboard
+Theme Name: WP Cloud Station
 Theme URI: https://wp.cloud
 Author: Automattic Inc
 Author URI: https://automattic.com
-Text Domain: wpcloud-dashboard
+Text Domain: wpcloud-station
 */
+#wpadminbar {
+	display: none;
+}

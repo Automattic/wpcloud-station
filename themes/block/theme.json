@@ -1,8 +1,175 @@
 {
-  "$schema": "https://schemas.wp.org/trunk/theme.json",
+	"$schema": "https://schemas.wp.org/wp/6.5/theme.json",
   "version": 2,
-  "settings": {
-  },
-  "styles": {
-  }
+	"settings": {
+		"color": {
+			"palette": [
+				{
+					"color": "#ffffff",
+					"name": "Foreground Primary",
+					"slug": "wpcloud-foreground-primary"
+				},
+				{
+					"color": "#bababa",
+					"name": "Foreground Secondary",
+					"slug": "wpcloud-foreground-secondary"
+				},
+				{
+					"color": "#555555",
+					"name": "Foreground Tertiary",
+					"slug": "wpcloud-foreground-tertiary"
+				},
+				{
+					"color": "#f72b00",
+					"name": "Accent Primary",
+					"slug": "wpcloud-accent-primary"
+				},
+				{
+					"color": "#1a1515",
+					"name": "Background Primary",
+					"slug": "wpcloud-background-primary"
+				},
+				{
+					"color": "#2c2828",
+					"name": "Background Secondary",
+					"slug": "wpcloud-background-secondary"
+				},
+				{
+					"color": "#3c3838",
+					"name": "Background Tertiary",
+					"slug": "wpcloud-background-tertiary"
+				}
+			]
+		},
+    "typography": {
+      "dropCap": false,
+      "fluid": true,
+      "fontFamilies": [
+        {
+          "fontFamily": "Inter, sans-serif",
+          "name": "Inter",
+          "slug": "primary",
+          "fontFace" : [
+            {
+              "fontDisplay": "block",
+              "fontFamily": "Inter",
+              "fontStyle": "normal",
+              "fontWeight": 400,
+              "src": ["file:./assets/fonts/Inter-Regular.woff2"]
+            },
+            {
+              "fontDisplay": "block",
+              "fontFamily": "Inter-Medium",
+              "fontStyle": "normal",
+              "fontWeight": 500,
+              "src": ["file:./assets/fonts/Inter-Medium.woff2"]
+             }
+          ]
+        },
+        {
+					"fontFamily": "-apple-system,BlinkMacSystemFont,\"Segoe UI\",Roboto,Oxygen-Sans,Ubuntu,Cantarell,\"Helvetica Neue\",sans-serif",
+					"name": "System Font",
+					"slug": "system-font"
+				}
+      ],
+      "fontSizes": [
+        {
+          "name": "Title Large",
+          "size": "2rem",
+          "fluid": {
+            "max": "2rem",
+            "min": "1.5rem"
+          },
+          "slug": "title-large"
+        },
+        {
+          "name": "Title Medium",
+          "size": "1.5rem",
+          "fluid": {
+            "max": "1.5rem",
+            "min": "1.25rem"
+          },
+          "slug": "title-medium"
+        },
+        {
+          "name": "Title Small",
+          "size": "1.25rem",
+          "fluid": {
+            "max": "1.25rem",
+            "min": "1rem"
+          },
+          "slug": "title-small"
+        },
+        {
+          "name": "Body Large",
+          "size": "1.25rem",
+          "fluid": {
+            "max": "1.25rem",
+            "min": "1rem"
+          },
+          "slug": "body-large"
+        },
+        {
+          "name": "Body Medium",
+          "size": "1rem",
+          "fluid": {
+            "max": "1rem",
+            "min": "0.875rem"
+          },
+          "slug": "body-medium"
+        },
+        {
+          "name": "Body Small",
+          "size": "0.875rem",
+          "fluid": {
+            "max": "0.875rem",
+            "min": "0.75rem"
+          },
+          "slug": "body-small"
+        },
+        {
+          "name": "Small Caps",
+          "size": "0.75rem",
+          "fluid": {
+            "max": "0.75rem",
+            "min": "0.625rem"
+          },
+          "slug": "small-caps"
+        },
+        {
+          "name": "Small Print",
+          "size": "0.625rem",
+          "fluid" : {
+            "max": "0.625rem",
+            "min": "0.5rem"
+          },
+          "slug": "small-print"
+        }
+      ]
+    }
+	},
+	"styles": {
+    "blocks": {
+      "wpcloud/form-input": {
+        "color": {
+          "text": "var(--wp--preset--color--wpcloud-foreground-primary)"
+        }
+      },
+      "wpcloud/site-detail": {}
+
+    },
+		"color": {
+			"background": "var(--wp--preset--color--wpcloud-background-primary)",
+			"text": "var(--wp--preset--color--white)"
+		},
+		"elements": {
+			"link": {
+				"color": {
+					"text": "var(--wp--preset--color--white)"
+				}
+			}
+		}
+	}
+
+
 }

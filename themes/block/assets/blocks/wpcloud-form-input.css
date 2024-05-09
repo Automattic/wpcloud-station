@@ -1,0 +1,17 @@
+/*
+Theme Name: WP Cloud Station
+Theme URI: https://wp.cloud
+Author: Automattic Inc
+Author URI: https://automattic.com
+Text Domain: wpcloud-dashboard
+*/
+.wp-block-wpcloud-form-input {
+	input, select {
+		background-color: var(--wp--preset--color--wpcloud-background-primary);
+		 color-scheme: dark;
+	}
+	input:focus, select:focus {
+		background-color: var(--wp--preset--color--wpcloud-background-secondary);
+		outline: none;
+	}
+}
