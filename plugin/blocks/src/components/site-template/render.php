@@ -34,6 +34,15 @@ if ( $use_global_query ) {
 	}
 } else {
 	$query_args = build_query_vars_from_query_block( $block, $page );
+
+	// Add in some special handling for the site template block
+	$query_args['post_status'] = 'any';
+
+	// Limit the query to the current user if they are not an admin.
+	if ( ! current_user_can( 'manage_options' ) ) {
+		$query_args['author__in'] = array ( get_current_user_id() );
+	}
+
 	$query      = new WP_Query( $query_args );
 }
 
