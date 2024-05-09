@@ -9,7 +9,6 @@ $response = wpcloud_client_site_manage_software(wpcloud_get_current_site_id(), a
  * @param string $content The block content.
  */
 if ( ! is_wpcloud_site_post() ) {
-	error_log("WP Cloud Site Alias Block: Not a site post.");
 	return;
 }
 
