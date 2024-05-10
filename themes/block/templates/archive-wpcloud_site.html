@@ -1,4 +1,24 @@
-<!-- wp:template-part {"slug":"header","tagName":"header","area":"header"} /-->
+<!-- wp:template-part {"slug":"header","area":"uncategorized"} /-->
+
+<!-- wp:columns -->
+<div class="wp-block-columns"><!-- wp:column {"width":"25%"} -->
+<div class="wp-block-column" style="flex-basis:25%"></div>
+<!-- /wp:column -->
+
+<!-- wp:column {"width":"1222px"} -->
+<div class="wp-block-column" style="flex-basis:1222px"><!-- wp:group {"layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"space-between"}} -->
+<div class="wp-block-group"><!-- wp:heading -->
+<h2 class="wp-block-heading">Sites</h2>
+<!-- /wp:heading -->
+
+<!-- wp:wpcloud/link {"label":"Add Site","url":"/add-site","style":"button"} -->
+<a class="wp-block-wpcloud-link" href="/add-site" target="_self" rel="noopener" data-name="name">Add Site</a>
+<!-- /wp:wpcloud/link --></div>
+<!-- /wp:group -->
+
+<!-- wp:spacer {"height":"43px"} -->
+<div style="height:43px" aria-hidden="true" class="wp-block-spacer"></div>
+<!-- /wp:spacer -->
 
 <!-- wp:query {"queryId":2,"query":{"perPage":10,"pages":0,"offset":0,"postType":"wpcloud_site","order":"desc","orderBy":"date","author":"","search":"","exclude":[],"sticky":"","inherit":false,"status":"any"},"namespace":"wpcloud/site-list"} -->
 <div class="wp-block-query"><!-- wp:wpcloud/site-template -->
@@ -51,11 +71,11 @@
 <!-- /wp:wpcloud/site-card -->
 
 <!-- wp:wpcloud/table-cell -->
-<td class="wp-block-wpcloud-table-cell"><!-- wp:post-author {"textAlign":"center","showAvatar":false,"showBio":false,"isLink":true} /--></td>
+<td class="wp-block-wpcloud-table-cell"><!-- wp:post-author {"textAlign":"left","showAvatar":false,"showBio":false,"isLink":true} /--></td>
 <!-- /wp:wpcloud/table-cell -->
 
 <!-- wp:wpcloud/table-cell -->
-<td class="wp-block-wpcloud-table-cell"><!-- wp:post-date {"textAlign":"center","format":"n/j/Y"} /--></td>
+<td class="wp-block-wpcloud-table-cell"><!-- wp:post-date {"textAlign":"left","format":"n/j/Y"} /--></td>
 <!-- /wp:wpcloud/table-cell -->
 
 <!-- wp:wpcloud/site-detail {"label":"PHP","name":"php_version","hideLabel":true} -->
@@ -70,7 +90,7 @@
 <div class="wp-block-wpcloud-site-detail wpcloud-block-site-detail"><div class="wpcloud-block-site-detail__value">{ IP Address }</div></div>
 <!-- /wp:wpcloud/site-detail -->
 
-<!-- wp:wpcloud/link {"label":"WP Admin","name":"wp_admin_url","style":"button"} -->
+<!-- wp:wpcloud/link {"label":"WP Admin","name":"wp_admin_url","style":"text"} -->
 <a class="wp-block-wpcloud-link" href="" target="_self" rel="noopener" data-name="name">WP Admin</a>
 <!-- /wp:wpcloud/link -->
 <!-- /wp:wpcloud/site-template -->
@@ -88,4 +108,10 @@
 <p></p>
 <!-- /wp:paragraph -->
 <!-- /wp:query-no-results --></div>
-<!-- /wp:query -->
+<!-- /wp:query --></div>
+<!-- /wp:column -->
+
+<!-- wp:column {"width":"25%"} -->
+<div class="wp-block-column" style="flex-basis:25%"></div>
+<!-- /wp:column --></div>
+<!-- /wp:columns -->
