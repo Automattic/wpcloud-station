@@ -1,0 +1,34 @@
+/*
+Theme Name: WP Cloud Station
+Theme URI: https://wp.cloud
+Author: Automattic Inc
+Author URI: https://automattic.com
+Text Domain: wpcloud-dashboard
+*/
+
+.wp-block-wpcloud-site-template {
+
+	width: 100%;
+	border-collapse: collapse;
+
+	th {
+		font-size: var(--wp--preset--font-size--small-caps);
+		color: var(--wp--preset--color--wpcloud-foreground-secondary);
+		text-transform: uppercase;
+		h2 {
+				font-weight: 400;
+		}
+	}
+	th, td {
+		text-align: left;
+	}
+
+	tr {
+		vertical-align: middle;
+		border-bottom: 1px solid var(--wp--preset--color--wpcloud-border-primary);
+	}
+
+	.wpcloud-block-site-detail {
+		margin-top: 0;
+	}
+}

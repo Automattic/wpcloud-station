@@ -6,11 +6,12 @@ Author URI: https://automattic.com
 Text Domain: wpcloud-dashboard
 */
 .wp-block-wpcloud-form-input {
-	input, select {
+	input, select, textarea {
 		background-color: var(--wp--preset--color--wpcloud-background-primary);
 		 color-scheme: dark;
+		 border-radius: 2px;
 	}
-	input:focus, select:focus {
+	input:focus, select:focus, textarea:focus {
 		background-color: var(--wp--preset--color--wpcloud-background-secondary);
 		outline: none;
 	}

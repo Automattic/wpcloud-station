@@ -38,7 +38,12 @@
 					"color": "#3c3838",
 					"name": "Background Tertiary",
 					"slug": "wpcloud-background-tertiary"
-				}
+				},
+        {
+         	"color": "#3c3838",
+					"name": "Border Primary",
+					"slug": "wpcloud-border-primary"
+        }
 			]
 		},
     "typography": {
@@ -56,14 +61,21 @@
               "fontStyle": "normal",
               "fontWeight": 400,
               "src": ["file:./assets/fonts/Inter-Regular.woff2"]
-            },
+            }
+          ]
+        },
+        {
+          "fontFamily": "Inter, sans-serif",
+          "name": "Inter",
+          "slug": "medium",
+          "fontFace" : [
             {
               "fontDisplay": "block",
               "fontFamily": "Inter-Medium",
               "fontStyle": "normal",
               "fontWeight": 500,
               "src": ["file:./assets/fonts/Inter-Medium.woff2"]
-             }
+            }
           ]
         },
         {
@@ -166,7 +178,15 @@
 			"link": {
 				"color": {
 					"text": "var(--wp--preset--color--white)"
-				}
+				},
+        "typography": {
+          "textDecoration": "none"
+        },
+        ":hover": {
+          "typography": {
+            "textDecoration": "underline"
+          }
+        }
 			}
 		}
 	}
