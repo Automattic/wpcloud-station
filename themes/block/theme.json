@@ -1,8 +1,239 @@
 {
-  "$schema": "https://schemas.wp.org/trunk/theme.json",
-  "version": 2,
-  "settings": {
-  },
-  "styles": {
-  }
+	"$schema": "https://schemas.wp.org/wp/6.6/theme.json",
+	"settings": {
+		"color": {
+			"palette": [
+				{
+					"color": "#ffffff",
+					"name": "Foreground Primary",
+					"slug": "wpcloud-foreground-primary"
+				},
+				{
+					"color": "#bababa",
+					"name": "Foreground Secondary",
+					"slug": "wpcloud-foreground-secondary"
+				},
+				{
+					"color": "#555555",
+					"name": "Foreground Tertiary",
+					"slug": "wpcloud-foreground-tertiary"
+				},
+				{
+					"color": "#f72b00",
+					"name": "Accent Primary",
+					"slug": "wpcloud-accent-primary"
+				},
+				{
+					"color": "#1a1515",
+					"name": "Background Primary",
+					"slug": "wpcloud-background-primary"
+				},
+				{
+					"color": "#2c2828",
+					"name": "Background Secondary",
+					"slug": "wpcloud-background-secondary"
+				},
+				{
+					"color": "#3c3838",
+					"name": "Background Tertiary",
+					"slug": "wpcloud-background-tertiary"
+				},
+				{
+					"color": "#3c3838",
+					"name": "Border Primary",
+					"slug": "wpcloud-border-primary"
+				},
+				{
+					"color": "#ffffff",
+					"name": "Foreground Primary",
+					"slug": "custom-foreground-primary"
+				},
+				{
+					"color": "#bababa",
+					"name": "Foreground Secondary",
+					"slug": "custom-foreground-secondary"
+				},
+				{
+					"color": "#555555",
+					"name": "Foreground Tertiary",
+					"slug": "custom-foreground-tertiary"
+				},
+				{
+					"color": "#f72b00",
+					"name": "Accent Primary",
+					"slug": "custom-accent-primary"
+				},
+				{
+					"color": "#1a1515",
+					"name": "Background Primary",
+					"slug": "custom-background-primary"
+				},
+				{
+					"color": "#2c2828",
+					"name": "Background Secondary",
+					"slug": "custom-background-secondary"
+				},
+				{
+					"color": "#3c3838",
+					"name": "Background Tertiary",
+					"slug": "custom-background-tertiary"
+				}
+			]
+		},
+		"typography": {
+			"dropCap": false,
+			"fluid": true,
+			"fontFamilies": [
+				{
+					"fontFace": [
+						{
+							"fontDisplay": "block",
+							"fontFamily": "Inter",
+							"fontStyle": "normal",
+							"fontWeight": 400,
+							"src": [
+								"file:./assets/fonts/Inter-Regular.woff2"
+							]
+						},
+						{
+							"fontDisplay": "block",
+							"fontFamily": "Inter-Medium",
+							"fontStyle": "normal",
+							"fontWeight": 500,
+							"src": [
+								"file:./assets/fonts/Inter-Medium.woff2"
+							]
+						}
+					],
+					"fontFamily": "Inter, sans-serif",
+					"name": "Inter",
+					"slug": "primary"
+				},
+				{
+					"fontFamily": "-apple-system,BlinkMacSystemFont,\"Segoe UI\",Roboto,Oxygen-Sans,Ubuntu,Cantarell,\"Helvetica Neue\",sans-serif",
+					"name": "System Font",
+					"slug": "system-font"
+				}
+			],
+			"fontSizes": [
+				{
+					"fluid": {
+						"max": "2rem",
+						"min": "1.5rem"
+					},
+					"name": "Title Large",
+					"size": "2rem",
+					"slug": "title-large"
+				},
+				{
+					"fluid": {
+						"max": "1.5rem",
+						"min": "1.25rem"
+					},
+					"name": "Title Medium",
+					"size": "1.5rem",
+					"slug": "title-medium"
+				},
+				{
+					"fluid": {
+						"max": "1.25rem",
+						"min": "1rem"
+					},
+					"name": "Title Small",
+					"size": "1.25rem",
+					"slug": "title-small"
+				},
+				{
+					"fluid": {
+						"max": "1.25rem",
+						"min": "1rem"
+					},
+					"name": "Body Large",
+					"size": "1.25rem",
+					"slug": "body-large"
+				},
+				{
+					"fluid": {
+						"max": "1rem",
+						"min": "0.875rem"
+					},
+					"name": "Body Medium",
+					"size": "1rem",
+					"slug": "body-medium"
+				},
+				{
+					"fluid": {
+						"max": "0.875rem",
+						"min": "0.75rem"
+					},
+					"name": "Body Small",
+					"size": "0.875rem",
+					"slug": "body-small"
+				},
+				{
+					"fluid": {
+						"max": "0.75rem",
+						"min": "0.625rem"
+					},
+					"name": "Small Caps",
+					"size": "0.75rem",
+					"slug": "small-caps"
+				},
+				{
+					"fluid": {
+						"max": "0.625rem",
+						"min": "0.5rem"
+					},
+					"name": "Small Print",
+					"size": "0.625rem",
+					"slug": "small-print"
+				}
+			]
+		}
+	},
+	"styles": {
+		"blocks": {
+			"wpcloud/form-input": {
+				"color": {
+					"text": "var(--wp--preset--color--wpcloud-foreground-primary)"
+				}
+			},
+			"wpcloud/site-detail": []
+		},
+		"color": {
+			"background": "var(--wp--preset--color--wpcloud-background-primary)",
+			"text": "var(--wp--preset--color--white)"
+		},
+		"elements": {
+			"button": {
+				"color": {
+					"background": "var(--wp--preset--color--wpcloud-accent-primary)",
+					"text": "var(--wp--preset--color--wpcloud-foreground-primary)"
+				},
+				"typography": {
+					"fontFamily": "var(--wp--preset--font-family--primary)",
+					"textTransform": "uppercase"
+				}
+			},
+			"link": {
+				":hover": {
+					"typography": {
+						"textDecoration": "underline"
+					}
+				},
+				"color": {
+					"text": "var(--wp--preset--color--white)"
+				},
+				"typography": {
+					"fontFamily": "var(--wp--preset--font-family--primary)",
+					"textDecoration": "none"
+				}
+			}
+		},
+		"typography": {
+			"fontFamily": "var(--wp--preset--font-family--primary)",
+			"fontSize": "var(--wp--preset--font-size--body-medium)"
+		}
+	},
+	"version": 2
 }

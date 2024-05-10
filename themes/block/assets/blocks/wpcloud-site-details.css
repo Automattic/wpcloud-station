@@ -1,0 +1,23 @@
+/*
+Theme Name: WP Cloud Station
+Theme URI: https://wp.cloud
+Author: Automattic Inc
+Author URI: https://automattic.com
+Text Domain: wpcloud-dashboard
+*/
+.wpcloud-block-site-detail-card {
+	margin-top:24px;
+	padding: 24px 32px 32px;
+	border: 1px solid var(--wp--preset--color--wpcloud-border-primary);
+	border-radius: 10px;
+	max-width: 550px;
+	h1, h2, h3, h4, h5, h6 {
+		margin-top: 0;
+		font-size: var(--wp--preset--font-size--title-small);
+	}
+
+	button {
+		background-color: transparent;
+		border: 1px solid var(--wp--preset--color--wpcloud-accent-primary);
+	}
+}

@@ -45,7 +45,6 @@ export default function Edit( { attributes, setAttributes } ) {
 						content: __( 'Site Details' ),
 					},
 				],
-				[ 'wpcloud/site-detail' ],
 			],
 		],
 	];

@@ -4,6 +4,7 @@
 // if it is, capture and remove it and add back in later
 $inner_blocks = $block->parsed_block['innerBlocks'];
 $header = $inner_blocks[0];
+$header_content = '';
 if ('wpcloud/site-template-header' === $header['blockName'] )  {
 	$header = array_shift($inner_blocks);
 	$header_content = ( new WP_Block( $header ) )->render( array( 'dynamic' => false ) );

@@ -3,8 +3,5 @@ Theme Name: WP Cloud Station
 Theme URI: https://wp.cloud
 Author: Automattic Inc
 Author URI: https://automattic.com
-Text Domain: wpcloud-station
+Text Domain: wpcloud-dashboard
 */
-#wpadminbar {
-	display: none;
-}
