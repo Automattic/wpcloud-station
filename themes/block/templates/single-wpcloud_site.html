@@ -1,8 +1,8 @@
 <!-- wp:template-part {"slug":"header","tagName":"header","area":"header"} /-->
 
 <!-- wp:columns -->
-<div class="wp-block-columns"><!-- wp:column {"width":"33.33%"} -->
-<div class="wp-block-column" style="flex-basis:33.33%"><!-- wp:columns -->
+<div class="wp-block-columns"><!-- wp:column {"width":"22.22%"} -->
+<div class="wp-block-column" style="flex-basis:22.22%"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"width":"33.33%"} -->
 <div class="wp-block-column" style="flex-basis:33.33%"></div>
 <!-- /wp:column -->
@@ -33,11 +33,15 @@
 <!-- /wp:columns --></div>
 <!-- /wp:column -->
 
-<!-- wp:column {"width":"66.66%"} -->
-<div class="wp-block-column" style="flex-basis:66.66%"><!-- wp:group {"className":"wpcloud-site-card\u002d\u002dcurrent","layout":{"type":"flex","orientation":"vertical"}} -->
+<!-- wp:column {"width":"44.45%"} -->
+<div class="wp-block-column" style="flex-basis:44.45%"><!-- wp:group {"className":"wpcloud-site-card\u002d\u002dcurrent","layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"space-between","verticalAlignment":"top"}} -->
 <div class="wp-block-group wpcloud-site-card--current"><!-- wp:wpcloud/site-card -->
 <div class="wp-block-wpcloud-site-card wp-block-wpcloud-site-card"><img src="https://via.placeholder.com/50"/><h2 class="site-title"><a href="#">Site Name</a></h2><h3 class="site-url"><a href="#" target="_blank" rel="noopener"><span>Site Domain</span><span class="dashicon dashicons dashicons-external"></span></a></h3></div>
-<!-- /wp:wpcloud/site-card --></div>
+<!-- /wp:wpcloud/site-card -->
+
+<!-- wp:wpcloud/link {"label":"\u0026lt; Sites","url":"/sites"} -->
+<a class="wp-block-wpcloud-link" href="/sites" target="_self" rel="noopener" data-name="name">&lt; Sites</a>
+<!-- /wp:wpcloud/link --></div>
 <!-- /wp:group -->
 
 <!-- wp:columns -->
@@ -186,8 +190,28 @@
 <!-- /wp:wpcloud/site-alias-list --></div>
 <!-- /wp:group --></div>
 <!-- /wp:wpcloud/site-domains --></div>
-<!-- /wp:wpcloud/site-details --></div>
+<!-- /wp:wpcloud/site-details -->
+
+<!-- wp:spacer {"height":"47px","width":"0px","style":{"layout":[]}} -->
+<div style="height:47px;width:0px" aria-hidden="true" class="wp-block-spacer"></div>
+<!-- /wp:spacer -->
+
+<!-- wp:group {"layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"right"}} -->
+<div class="wp-block-group"><!-- wp:wpcloud/site-delete -->
+<div class="wpcloud-block-site-delete wp-block-wpcloud-site-delete"><!-- wp:wpcloud/form {"ajax":true,"wpcloudAction":"site_delete"} -->
+<form class="wp-block-wpcloud-form wpcloud-block-form" enctype="text/plain"><!-- wp:wpcloud/button {"text":"Delete Site","className":"wpcloud-button-site-delete"} -->
+<div class="wp-block-wpcloud-button wpcloud-button-site-delete"><!-- wp:button {"tagName":"button","type":"submit"} -->
+<div class="wp-block-button"><button type="submit" class="wp-block-button__link wp-element-button">Delete Site</button></div>
+<!-- /wp:button --></div>
+<!-- /wp:wpcloud/button --></form>
+<!-- /wp:wpcloud/form --></div>
+<!-- /wp:wpcloud/site-delete --></div>
+<!-- /wp:group --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
+<!-- /wp:column -->
+
+<!-- wp:column {"width":"20%"} -->
+<div class="wp-block-column" style="flex-basis:20%"></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns -->
