@@ -3,9 +3,17 @@
  * @package wpcloud-dashboard
  */
 
- declare( strict_types = 1 );
+declare( strict_types = 1 );
 
-add_action( 'admin_init', 'wpcloud_settings_init' );
+function wpcloud_admin_get_available_themes() {
+	return array(
+		'themes/twentytwentyfour'  => __( 'Twenty Twenty Four', 'wpcloud' ),
+		'themes/twentytwentythree' => __( 'Twenty Twenty Three', 'wpcloud' ),
+		'themes/twentytwentytwo'   => __( 'Twenty Twenty Two', 'wpcloud' ),
+		'themes/twentytwentyone'   => __( 'Twenty Twenty One', 'wpcloud' ),
+	);
+}
+
 function wpcloud_settings_init(): void {
 	register_setting( 'wpcloud', 'wpcloud_settings' );
 
@@ -58,16 +66,17 @@ function wpcloud_settings_init(): void {
 	add_settings_field(
 		'wpcloud_field_default_theme',
 		__( 'Default Theme', 'wpcloud' ),
-		'wpcloud_field_input_cb',
+		'wpcloud_field_select_cb',
 		'wpcloud',
 		'wpcloud_section_settings',
 		[
 			'label_for'           => 'wpcloud_default_theme',
 			'class'               => 'wpcloud_row',
 			'wpcloud_custom_data' => 'custom',
-			'description'         => __( 'The default theme to install on new sites. formats include: "themes/pub/twentytwentyfour", "themes://url", "theme://url" '),
+			'description'         => __( 'The default theme to install on new sites." '),
+			'items'               => wpcloud_admin_get_available_themes(),
 		]
-			);
+	);
 /*
   Removing for the demo
 	add_settings_field(
@@ -84,8 +93,8 @@ function wpcloud_settings_init(): void {
 		);
 		*/
 }
+add_action( 'admin_init', 'wpcloud_settings_init' );
 
-add_action( 'admin_menu', 'wpcloud_options_page' );
 function wpcloud_options_page(): void {
     add_menu_page(
         'WP Cloud',
@@ -97,25 +106,25 @@ function wpcloud_options_page(): void {
         20
     );
 
-		add_submenu_page(
-			'wpcloud',
-			'New Site',
-			'Add Site',
-			'manage_options',
-			'wpcloud_admin_new_site',
-			'wpcloud_admin_new_site_controller',
-		);
+	add_submenu_page(
+		'wpcloud',
+		'New Site',
+		'Add Site',
+		'manage_options',
+		'wpcloud_admin_new_site',
+		'wpcloud_admin_new_site_controller',
+	);
 
-		add_submenu_page(
-			'wpcloud',
-			'Settings',
-			'Settings',
-			'manage_options',
-			'wpcloud_admin_settings',
-			'wpcloud_admin_options_controller',
-		);
+	add_submenu_page(
+		'wpcloud',
+		'Settings',
+		'Settings',
+		'manage_options',
+		'wpcloud_admin_settings',
+		'wpcloud_admin_options_controller',
+	);
 }
-
+add_action( 'admin_menu', 'wpcloud_options_page' );
 
 function wpcloud_get_action() {
 	$action = '';
@@ -123,25 +132,6 @@ function wpcloud_get_action() {
 		$action = sanitize_text_field( wp_unslash( $_REQUEST[ 'action' ] ) );
 	}
 	return $action;
-}
-
-function wpcloud_section_options_cb( array $args ): void {
-	?>
-	<p id="<?php echo esc_attr( $args['id'] ); ?>"><?php esc_html_e( '.', 'wpcloud' ); ?></p>
-	<?php
-}
-
-function wpcloud_field_domain_cb( array $args ): void {
-	$options = get_option( 'wpcloud_settings' );
-	// output the field
-	?>
-	<input
-		type="text"
-		id="<?php echo esc_attr( $args['label_for'] ); ?>"
-		name="wpcloud_settings[<?php echo esc_attr( $args['label_for'] ); ?>]"
-		value="<?php echo isset( $options[ $args['label_for'] ] ) ? esc_attr( $options[ $args['label_for'] ] ) : ''; ?>"
-	>
-	<?php
 }
 
 function wpcloud_field_input_cb( array $args ): void {
@@ -154,6 +144,27 @@ function wpcloud_field_input_cb( array $args ): void {
 		name="wpcloud_settings[<?php echo esc_attr( $args['label_for'] ); ?>]"
 		value="<?php echo isset( $options[ $args['label_for'] ] ) ? esc_attr( $options[ $args['label_for'] ] ) : ''; ?>"
 	>
+	<?php
+}
+
+function wpcloud_field_select_cb( array $args ): void {
+	$options   = get_option( 'wpcloud_settings' );
+	$label_for = esc_attr( $args['label_for'] );
+	$name      = "wpcloud_settings[$label_for]";
+	$value     = isset( $options[ $label_for ] ) ? esc_attr( $options[ $label_for ] ) : '';
+	$items     = $args['items'];
+
+	// output the field
+	?>
+	<select name="<?php echo $name; ?>" id="<?php echo $label_for; ?>">
+		<option value=''></option>
+	<?php
+	foreach( $items as $item_value => $item_label ) {
+		$selected = $item_value === $value ? 'selected' : '';
+		echo "<option value='$item_value' $selected>$item_label</option>";
+	}
+	?>
+	</select>
 	<?php
 }
 
