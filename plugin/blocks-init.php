@@ -59,24 +59,20 @@ add_filter( 'block_categories_all' , function( $categories ) {
 } );
 
 function wpcloud_block_available_php_options(): array {
-	$php_versions = wpcloud_client_php_versions_available();
+	$php_versions = wpcloud_client_php_versions_available( true );
 	if ( is_wp_error( $php_versions) ) {
 		error_log( 'WP Cloud: ' . $php_versions->get_error_message() );
 		return [];
 	}
-	return array_reduce( $php_versions, function( $versions, $version ) {
-			$versions[ $version ] = $version;
-			return $versions;
-		}, [] );
+	return $php_versions;
 }
 
 function wpcloud_block_available_datacenters_options(): array {
-	$data_centers = array( ' ' => __( 'No Preference' ) );
-	$available_data_centers  = wpcloud_client_datacenters_available();
+	$available_data_centers  = wpcloud_client_data_centers_available( true );
 	if ( is_wp_error( $available_data_centers ) ) {
 		error_log( 'WP Cloud: ' . $available_data_centers->get_error_message() );
-	} else {
-		$data_centers += array_intersect_key( wpcloud_client_data_center_cities(), array_flip( $available_data_centers ) );
+		return array( '' => __( 'No Preference' ) );
 	}
-	return $data_centers;
+
+	return $available_data_centers;
 }
