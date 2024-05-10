@@ -1,0 +1,46 @@
+on:
+  release:
+    types: [created]
+
+name: Upload Release Assets
+
+jobs:
+  build:
+    name: Upload Release Asset
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+      - name: Build project # This would actually build your project, using zip for an example artifact
+        run: |
+          pushd ./plugin && zip -r ../plugin.zip . && popd
+          pushd ./theme && zip -r ../theme.zip . && popd
+      - name: Get release
+        id: get_release
+        uses: bruceadams/get-release@v1.3.2
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: Upload Plugin Artifact
+        id: upload-plugin-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{steps.get_release.outputs.upload_url }}
+          asset_path: ./plugin.zip
+          asset_name: wpcloud-station-plugin.zip
+          asset_content_type: application/zip
+
+      - name: Upload Theme Artifact
+        id: upload-theme-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{steps.get_release.outputs.upload_url }}
+          asset_path: ./theme.zip
+          asset_name: wpcloud-station-theme.zip
+          asset_content_type: application/zip
