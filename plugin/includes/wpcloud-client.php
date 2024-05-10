@@ -403,21 +403,72 @@ function wpcloud_client_site_ssl_retry( int $wpcloud_site_id, string $domain ): 
 /**
  * Get PHP versions available for the client.
  *
- * @return array|WP_Error List of PHP versions available. WP_Error on error.
+ * @param $descending Optional. True to sort in descending order. Default: false.
+ *
+ * @return array|WP_Error Array of PHP versions available. WP_Error on error.
  */
-function wpcloud_client_php_versions_available(): array | WP_error {
+function wpcloud_client_php_versions_available( bool $descending = false ): array | WP_error {
 	$client_name = wpcloud_get_client_name();
-	return wpcloud_client_get( null, "get-php-versions/$client_name" );
+	$response = wpcloud_client_get( null, "get-php-versions/$client_name" );
+	if ( is_wp_error( $response ) ) {
+		return $response;
+	}
+
+	$result = array_reduce(
+		$response,
+		function( $versions, $version ) {
+			$versions[ $version ] = $version;
+			return $versions;
+		},
+		[]
+	);
+
+	if ( $descending ) {
+		arsort( $result );
+	}
+
+	return $result;
+}
+
+/*
+* Data center labels. These are used to display the data center in the UI.
+* Call wpcloud_client_data_centers_available() to get actual data centers available
+ *
+ * @return array Array of data center codes and names. WP_Error on error.
+*/
+function wpcloud_client_data_center_mapping(): array  {
+	return 	array(
+		'ams' => __( 'Amsterdam, NL' ),
+		'bur' => __( 'Los Angeles, CA' ),
+		'dca' => __( 'Washington, D.C., USA' ),
+		'dfw' => __( 'Dallas, TX, USA' ),
+	);
 }
 
 /*
  * Get available datacenters for the client.
  *
+ * @param bool $include_no_preference Optional. True to include an option for No Preference. Default: false.
+ *
  * @return array|WP_Error List of datacenters available. WP_Error on error.
  */
-function wpcloud_client_datacenters_available(): array | WP_error {
+function wpcloud_client_data_centers_available( bool $include_no_preference = false ): array | WP_error {
 	$client_name = wpcloud_get_client_name();
-	return wpcloud_client_get( null, "get-available-datacenters/$client_name" );
+	$response = wpcloud_client_get( null, "get-available-datacenters/$client_name" );
+	if ( is_wp_error( $response ) ) {
+		return $response;
+	}
+
+	$result = array_intersect_key( wpcloud_client_data_center_mapping(), array_flip( $response ) );
+
+	if ( $include_no_preference ) {
+		$result = array(
+			'' => __( 'No Preference' ),
+			...$result
+		);
+	}
+
+	return $result;
 }
 
 /**

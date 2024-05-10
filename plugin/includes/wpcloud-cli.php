@@ -200,7 +200,7 @@ class WPCloud_CLI_Site extends WPCloud_CLI {
 
 		$dc = $switches['dc'] ?? '';
 		if ( $dc ) {
-			$datacenters = wpcloud_client_datacenters_available();
+			$datacenters = wpcloud_client_data_centers_available();
 			if ( ! in_array( $dc, $datacenters ) ) {
 				WP_CLI::error( 'Invalid datacenter' );
 			}
@@ -498,7 +498,7 @@ class WPCloud_CLI_Client extends WPCloud_CLI {
 		self::log( '%GPHP Versions:');
 		self::log_result( wpcloud_client_php_versions_available() );
 		self::log( '%GData centers:');
-		self::log_result( wpcloud_client_datacenters_available() );
+		self::log_result( wpcloud_client_data_centers_available() );
 	}
 }
 
