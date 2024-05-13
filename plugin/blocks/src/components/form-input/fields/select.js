@@ -24,7 +24,7 @@ export default function SelectField( {
 			<select
 				className={ classNames(
 					className,
-					'wpcloud-dashboard-form-input__select',
+					'wpcloud-station-form-input__select',
 					colorProps.className,
 					borderProps.className
 				) }

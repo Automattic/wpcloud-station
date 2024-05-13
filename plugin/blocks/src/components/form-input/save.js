@@ -42,7 +42,7 @@ function renderSelect(
 	return (
 		<select
 			className={ classNames(
-				'wpcloud-dashboard-form-input__select',
+				'wpcloud-station-form-input__select',
 				inputClasses
 			) }
 			style={ inputStyle }

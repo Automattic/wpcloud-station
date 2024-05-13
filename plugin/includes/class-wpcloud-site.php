@@ -2,7 +2,7 @@
 /**
  * WP Cloud Site.
  *
- * @package wpcloud-dashboard
+ * @package wpcloud-station
  */
 
 declare( strict_types = 1 );

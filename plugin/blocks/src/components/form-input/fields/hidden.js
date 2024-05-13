@@ -19,7 +19,7 @@ function Hidden( { value, onChange, className, styleProps } ) {
 				type="hidden"
 				className={ classNames(
 					className,
-					'wpcloud-dashboard-form-input__hidden',
+					'wpcloud-station-form-input__hidden',
 					colorProps.className,
 					borderProps.className
 				) }

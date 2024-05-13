@@ -1,15 +1,15 @@
 <?php
 /**
- * Plugin Name:     WP Cloud Dashboard
- * Plugin URI:      https://github.com/Automattic/wpcloud-dashboard/wpcloud-dashboard
+ * Plugin Name:     WP Cloud Station
+ * Plugin URI:      https://github.com/Automattic/wpcloud-station
  * Description:     Dashboard for managing your WP Cloud services.
  * Author:          Automattic Inc.
  * Author URI:      https://wp.cloud/
- * Text Domain:     wp-cloud-dashboard
+ * Text Domain:     wpcloud
  * Domain Path:     /languages
  * Version:         0.1.0
  *
- * @package        wpcloud-dashboard
+ * @package        wpcloud-station
  */
 
 /**
