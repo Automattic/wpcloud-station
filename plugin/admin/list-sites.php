@@ -1,6 +1,6 @@
 <?php
 /**
- * @package wpcloud-dashboard
+ * @package wpcloud-station
  */
 	if ( ! defined( 'ABSPATH' ) ) {
 		exit;

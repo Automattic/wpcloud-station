@@ -2,7 +2,7 @@
 /**
  * Class SampleTest
  *
- * @package Wp_Cloud_Dashboard
+ * @package wpcloud-station
  */
 
 /**

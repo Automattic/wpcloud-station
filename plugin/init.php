@@ -2,7 +2,7 @@
 /**
  * Plugin instantiation.
  *
- * @package wpcloud-dashboard
+ * @package wpcloud-station
  */
 
 declare( strict_types = 1 );
@@ -101,6 +101,6 @@ if ( is_admin() ) {
 	require_once plugin_dir_path( __FILE__ ) . 'admin/init.php';
 }
 
-function wpcloud_dashboard_get_assets_url( $url ) {
+function wpcloud_station_get_assets_url( $url ) {
 	return plugins_url( '/assets/' . $url, __FILE__ );
 }

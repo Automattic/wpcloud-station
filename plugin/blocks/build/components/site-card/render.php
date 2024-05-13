@@ -9,7 +9,7 @@ if ( ! is_wpcloud_site_post() ) {
 }
 
 // @TODO get real site thumbnail
-$site_thumbnail = wpcloud_dashboard_get_assets_url( '/images/Gravatar_filled_' . get_the_ID() % 5 . '.png' );
+$site_thumbnail = wpcloud_station_get_assets_url( '/images/Gravatar_filled_' . get_the_ID() % 5 . '.png' );
 
 $layout = $block->context['wpcloud/layout'] ?? '';
 $wrapper = 'div';
