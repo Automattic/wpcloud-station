@@ -124,7 +124,7 @@ function wpcloud_on_create_site( int $post_id, WP_Post $post, bool $update ): vo
 	// check for a default theme
 	$wpcloud_settings = get_option( 'wpcloud_settings' );
 	$default_theme = $wpcloud_settings['wpcloud_default_theme'] ?? '';
-	$software = array();
+	$software = $wpcloud_settings['software'] ?? array();
 
 	if ( ! empty( $default_theme ) ) {
 		$software[ $default_theme ] = 'activate';
