@@ -15,7 +15,7 @@ require_once plugin_dir_path( __FILE__ ) . 'custom-post-types/wpcloud-site.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/demo-mode.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/class-wpcloud-site.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/wpcloud-client.php';
-require_once plugin_dir_path( __FILE__ ) . 'blocks-init.php';
+require_once plugin_dir_path( __FILE__ ) . 'blocks/init.php';
 
 if ( defined( 'WP_CLI' ) && WP_CLI ) {
 	require_once plugin_dir_path( __FILE__ ) . 'includes/wpcloud-cli.php';
