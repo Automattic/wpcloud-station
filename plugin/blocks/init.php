@@ -17,12 +17,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-require_once __DIR__ . '/blocks/render.php';
+require_once plugin_dir_path( __FILE__ ) . 'render.php';
 
 function wpcloud_include_blocks() {
 	// for some reason wp-env doesn't support GLOB_BRACE when starting up.
 	if (! defined('GLOB_BRACE')) {
-		define('GLOB_BRACE', 0);
+		define('GLOB_BRACE', 1024);
 	}
 	foreach( glob( __DIR__ . '/blocks/src/{*,components/*}' , GLOB_BRACE) as $block_directory ) {
 

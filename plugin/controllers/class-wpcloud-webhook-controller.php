@@ -28,7 +28,6 @@ if ( ! class_exists( 'WPCLOUD_Webhook_Controller' ) ) {
 		/**
 		 * Register the routes.
 		 */
-		/*
 		public function register_routes() {
 			register_rest_route(
 				$this->namespace, '/' . $this->rest_base,
@@ -36,11 +35,11 @@ if ( ! class_exists( 'WPCLOUD_Webhook_Controller' ) ) {
 					array(
 						'methods'  => WP_REST_Server::CREATABLE,
 						'callback' => array( $this, 'post_webhook' ),
+						'permission_callback' => '__return_true',
 					),
 				)
 			);
 		}
-*/
 		/**
 		 * Post a webhook.
 		 *
