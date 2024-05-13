@@ -28,7 +28,7 @@ services:
     image: wordpress:latest
     volumes:
       - wp_data:/var/www/html
-      - ./plugin:/var/www/html/wp-content/plugins/wpcloud-dashboard
+      - ./plugin:/var/www/html/wp-content/plugins/wpcloud-station
       - ./theme:/var/www/html/wp-content/themes/wpcloud-station
     ports:
       - 8282:80

@@ -14,8 +14,34 @@ function wpcloud_admin_get_available_themes() {
 	);
 }
 
+function wpcloud_admin_get_available_plugins() {
+	return array(
+		'plugins/classic-editor'             => __( 'Classic Editor', 'wpcloud' ),
+		'plugins/crowdsignal-forms'          => __( 'CrowSignal Forms', 'wpcloud' ),
+		'plugins/mailpoet'                   => __( 'MailPoet', 'wpcloud' ),
+		'plugins/polldaddy'                  => __( 'Poll Daddy', 'wpcloud' ),
+		'plugins/woocommerce'                => __( 'WooCommerce', 'wpcloud' ),
+		'plugins/-bookings'                  => __( 'WooCommerce Bookings', 'wpcloud' ),
+		'plugins/woocommerce-payments'       => __( 'WooCommerce Payments', 'wpcloud' ),
+		'plugins/woocommerce-subscriptions' => __( 'WooCommerce Subscriptions', 'wpcloud' ),
+		'plugins/wordpress-seo'              => __( 'WordPress SEO', 'wpcloud' ),
+	);
+}
+
+function wpcloud_settings_sanitize( $input ) {
+	$input['software'] = array_filter( $input['software'] );
+
+	if ( empty( $input['software'] ) ) {
+		unset( $input['software'] );
+	}
+
+	$input = array_filter( $input );
+
+	return $input;
+}
+
 function wpcloud_settings_init(): void {
-	register_setting( 'wpcloud', 'wpcloud_settings' );
+	register_setting( 'wpcloud', 'wpcloud_settings', 'wpcloud_settings_sanitize' );
 
 	add_settings_section(
 		'wpcloud_section_settings',
@@ -75,6 +101,21 @@ function wpcloud_settings_init(): void {
 			'wpcloud_custom_data' => 'custom',
 			'description'         => __( 'The default theme to install on new sites." '),
 			'items'               => wpcloud_admin_get_available_themes(),
+		]
+	);
+
+	add_settings_field(
+		'wpcloud_field_plugins',
+		__( 'Default Plugins', 'wpcloud' ),
+		'wpcloud_field_software_cb',
+		'wpcloud',
+		'wpcloud_section_settings',
+		[
+			'label_for'           => 'software',
+			'class'               => 'wpcloud_row',
+			'wpcloud_custom_data' => 'custom',
+			'description'         => __( 'Plugins available to installed or activated with new installs." '),
+			'items'               => wpcloud_admin_get_available_plugins(),
 		]
 	);
 /*
@@ -166,6 +207,34 @@ function wpcloud_field_select_cb( array $args ): void {
 	?>
 	</select>
 	<?php
+}
+
+function wpcloud_field_software_cb( array $args ): void {
+	$options   = get_option( 'wpcloud_settings' );
+	$label_for = esc_attr( $args['label_for'] );
+	$items     = $args['items'];
+
+	// output the field
+	echo "<table>";
+	foreach( $items as $item_value => $item_label ) {
+		$name = "wpcloud_settings[$label_for][$item_value]";
+		$value     = isset( $options[ "software" ][ $item_value ] ) ? esc_attr( $options[ "software" ][ $item_value ] ) : '';
+		?>
+		<tr>
+			<td style="padding: 5px;">
+				<label><?php echo $item_label; ?></label>
+			</td>
+			<td style="padding: 5px;">
+				<select name="<?php echo $name; ?>" id="<?php echo $name; ?>">
+					<option value=""></option>
+					<option value="install" <?php echo ($value === 'install') ? 'selected' : ''; ?>>Install</option>
+					<option value="activate" <?php echo ($value === 'activate') ? 'selected' : ''; ?>>Activate</option>
+				</select>
+			</td>
+		</tr>
+		<?php
+	}
+	echo "</table>";
 }
 
 function site_created__success( int $wpcloud_site_id ): void {
