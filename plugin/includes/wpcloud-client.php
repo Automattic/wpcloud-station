@@ -19,7 +19,7 @@ function wpcloud_get_client_name(): mixed {
 		return null;
 	}
 
-    return $wpcloud_settings['wpcloud_client'];
+	return $wpcloud_settings['wpcloud_client'] ?? null;
 }
 
 /**
@@ -34,7 +34,7 @@ function wpcloud_get_client_api_key(): mixed {
 		return null;
 	}
 
-    return $wpcloud_settings['wpcloud_api_key'];
+	return  $wpcloud_settings['wpcloud_api_key'] ?? null;
 }
 
 /**
