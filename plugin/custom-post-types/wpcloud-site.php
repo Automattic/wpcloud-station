@@ -82,7 +82,15 @@ function wpcloud_site_get_default_domain( string $domain = '' ): string {
 	$default_domain = $settings['wpcloud_domain'] ?? '';
 
 	if ( WPCLOUD_DEMO_DOMAIN == $default_domain ) {
-		return wpcloud_generate_demo_subdomain();
+		// Try to generate a unique subdomain without a time stamp 5 times.
+		// If that fails, try again with a time stamp for 5 more times.
+		$attempts = 0;
+		do {
+			$attempts++;
+			$add_time = $attempts > 5;
+			$domain = wpcloud_generate_demo_subdomain( $add_time );
+		} while ( $attempts < 10 && ! wpcloud_client_domain_validate( null, $domain) );
+		return $domain;
 	}
 
 	if ( $default_domain ) {
@@ -92,7 +100,7 @@ function wpcloud_site_get_default_domain( string $domain = '' ): string {
 	return $domain;
 }
 
-function wpcloud_generate_demo_subdomain(): string {
+function wpcloud_generate_demo_subdomain(bool $add_time = false): string {
 
 	$adjectives = array(
 		"sunny",
@@ -321,7 +329,11 @@ function wpcloud_generate_demo_subdomain(): string {
 
 	[ $a1, $a2 ] = array_rand( $adjectives, 2);
 	$s1 = array_rand( $space_terms, 1);
-	$subdomain = array( $adjectives[$a1],$adjectives[$a2], $space_terms[$s1] );
+	if ( $add_time ) {
+		$subdomain = array( $adjectives[$a1],$adjectives[$a2], $space_terms[$s1], time('i'), time('s') );
+	} else {
+		$subdomain = array( $adjectives[$a1],$adjectives[$a2], $space_terms[$s1] );
+	}
 
 	return implode( '-', $subdomain ) . '.' . WPCLOUD_DEMO_DOMAIN;
 }
