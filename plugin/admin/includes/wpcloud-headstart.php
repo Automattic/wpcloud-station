@@ -9,7 +9,7 @@
  declare( strict_types = 1 );
 
 if ( ! defined( 'WP_CLOUD_STATION_REPO' ) ) {
-	define( 'WP_CLOUD_STATION_REPO', 'https://github.com/jhnstn/wpcloud-station-fork' );
+	define( 'WP_CLOUD_STATION_REPO', 'https://github.com/automattic/wpcloud-station' );
 }
 
 require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader-skin.php';
