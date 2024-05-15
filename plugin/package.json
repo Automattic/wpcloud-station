@@ -6,13 +6,13 @@
 	"license": "GPL-2.0-or-later",
 	"main": "build/index.js",
 	"scripts": {
-		"build": "wp-scripts build --webpack-src-dir=blocks/src/ --output-path=blocks/build/",
+		"build": "wp-scripts build --webpack-src-dir=blocks/src/ --output-path=blocks/build/ --webpack-copy-php",
 		"format": "wp-scripts format",
 		"lint:css": "wp-scripts lint-style ./blocks/src/**/*.css",
 		"lint:js": "wp-scripts lint-js ./blocks/src/**/*.js",
 		"packages-update": "wp-scripts packages-update",
 		"plugin-zip": "wp-scripts plugin-zip",
-		"start": "wp-scripts start --webpack-src-dir=blocks/src/ --output-path=blocks/build/",
+		"start": "wp-scripts start --webpack-src-dir=blocks/src/ --output-path=blocks/build/ --webpack-copy-php",
 		"build:frontend": "wp-scripts build --webpack-src-dir=assets/js/src --output-path=assets/js/build",
 		"start:frontend": "wp-scripts start --webpack-src-dir=assets/js/src --output-path=assets/js/build/index.js"
 	},
