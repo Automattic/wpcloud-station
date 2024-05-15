@@ -16,6 +16,9 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/demo-mode.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/class-wpcloud-site.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/wpcloud-client.php';
 require_once plugin_dir_path( __FILE__ ) . 'blocks/init.php';
+if ( is_admin() ) {
+	require_once plugin_dir_path( __FILE__ ) . 'admin/init.php';
+}
 
 if ( defined( 'WP_CLI' ) && WP_CLI ) {
 	require_once plugin_dir_path( __FILE__ ) . 'includes/wpcloud-cli.php';
@@ -96,10 +99,6 @@ function wpcloud_init(): void {
 	wpcloud_setup_acl();
 }
 add_action( 'init', 'wpcloud_init' );
-
-if ( is_admin() ) {
-	require_once plugin_dir_path( __FILE__ ) . 'admin/init.php';
-}
 
 function wpcloud_station_get_assets_url( $url ) {
 	return plugins_url( '/assets/' . $url, __FILE__ );
