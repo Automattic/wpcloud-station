@@ -16,7 +16,7 @@ jobs:
           ref: ${{ github.ref }}
       - name: Build project # This would actually build your project, using zip for an example artifact
         run: |
-          pushd ./plugin && zip -r ../plugin.zip . -x@.distignore popd
+          pushd ./plugin && zip -r ../plugin.zip . -x@.distignore && popd
           pushd ./theme && zip -r ../theme.zip . && popd
       - name: Get release
         id: get_release
