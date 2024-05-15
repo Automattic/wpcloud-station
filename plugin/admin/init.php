@@ -5,6 +5,8 @@
 
 declare( strict_types = 1 );
 
+require_once plugin_dir_path( __FILE__ ) . 'includes/wpcloud-headstart.php';
+
 function wpcloud_admin_get_available_themes() {
 	return array(
 		'themes/twentytwentyfour'  => __( 'Twenty Twenty Four', 'wpcloud' ),
@@ -29,7 +31,7 @@ function wpcloud_admin_get_available_plugins() {
 }
 
 function wpcloud_settings_sanitize( $input ) {
-	$input['software'] = array_filter( $input['software'] );
+	$input['software'] = array_filter( $input['software'] ?? []);
 
 	if ( empty( $input['software'] ) ) {
 		unset( $input['software'] );
@@ -99,7 +101,7 @@ function wpcloud_settings_init(): void {
 			'label_for'           => 'wpcloud_default_theme',
 			'class'               => 'wpcloud_row',
 			'wpcloud_custom_data' => 'custom',
-			'description'         => __( 'The default theme to install on new sites." '),
+			'description'         => __( 'The default theme to install on new sites.'),
 			'items'               => wpcloud_admin_get_available_themes(),
 		]
 	);
@@ -114,7 +116,7 @@ function wpcloud_settings_init(): void {
 			'label_for'           => 'software',
 			'class'               => 'wpcloud_row',
 			'wpcloud_custom_data' => 'custom',
-			'description'         => __( 'Plugins available to installed or activated with new installs." '),
+			'description'         => __( 'Plugins available to install or activate with new installs. '),
 			'items'               => wpcloud_admin_get_available_plugins(),
 		]
 	);
@@ -133,6 +135,26 @@ function wpcloud_settings_init(): void {
 		]
 		);
 		*/
+
+		$options = get_option( 'wpcloud_settings' ) ?? [];
+		$was_headstart = isset( $options[ 'wpcloud_headstart' ] );
+		error_log( 'Headstart: ' . print_r( $was_headstart, true ) );
+		add_settings_field(
+			'wpcloud_field_headstart',
+			__( 'Headstart Set Up', 'wpcloud' ),
+			'wpcloud_field_input_cb',
+			'wpcloud',
+			'wpcloud_section_settings',
+			[
+				'label_for'         => 'wpcloud_headstart',
+				'class'             => 'wpcloud_row',
+				'type'              => 'checkbox',
+				'wpcloud_custom_data' => 'custom',
+				'description'         => __( 'Run the headstart script to setup the demo site. This can only be ran when saving the API credentials for the first time.' ),
+				'checked' => ! $was_headstart,
+				'disabled' => $was_headstart,
+			]
+		);
 }
 add_action( 'admin_init', 'wpcloud_settings_init' );
 
@@ -176,16 +198,30 @@ function wpcloud_get_action() {
 }
 
 function wpcloud_field_input_cb( array $args ): void {
+	$label = $args['label_for'] ?? '';
 	$options = get_option( 'wpcloud_settings' );
+	$value = $options[ $label ] ?? '';
+	$type = $args['type'] ?? 'text';
+	$checked = $args[ 'checked' ] ?? false;
 	// output the field
+	if ( 'checkbox' === $type ) {
+		$value = '1';
+	}
+	$disabled = $args['disabled'] ?? false;
 	?>
 	<input
-		type="text"
+		type="<?php echo $type ?>"
 		id="<?php echo esc_attr( $args['label_for'] ); ?>"
 		name="wpcloud_settings[<?php echo esc_attr( $args['label_for'] ); ?>]"
-		value="<?php echo isset( $options[ $args['label_for'] ] ) ? esc_attr( $options[ $args['label_for'] ] ) : ''; ?>"
+		value="<?php echo $value ?>"
+		<?php if ( 'checkbox' === $type && $checked ) { echo ' checked '; } ?>
+		<?php if ( $disabled ) { echo ' disabled '; } ?>
 	>
+	<?php if ( isset( $args['description'] ) ) { ?>
+		<td><p class="setting-description"><?php echo esc_html( $args['description'] ); ?></p></td>
 	<?php
+	}
+
 }
 
 function wpcloud_field_select_cb( array $args ): void {
@@ -206,7 +242,11 @@ function wpcloud_field_select_cb( array $args ): void {
 	}
 	?>
 	</select>
+	<?php if ( isset( $args['description'] ) ) { ?>
+		<td><p class="setting-description"><?php echo esc_html( $args['description'] ); ?></p></td>
 	<?php
+		 }
+
 }
 
 function wpcloud_field_software_cb( array $args ): void {
@@ -232,9 +272,15 @@ function wpcloud_field_software_cb( array $args ): void {
 				</select>
 			</td>
 		</tr>
-		<?php
+
+
+	<?php
 	}
 	echo "</table>";
+	if ( isset( $args['description'] ) ) { ?>
+		<td><p class="setting-description"><?php echo esc_html( $args['description'] ); ?></p></td>
+	<?php
+	}
 }
 
 function site_created__success( int $wpcloud_site_id ): void {
