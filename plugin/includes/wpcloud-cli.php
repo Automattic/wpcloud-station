@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/wpcloud-client.php';
+require_once __DIR__ . '/../admin/includes/wpcloud-headstart.php';
 
 class WPCloud_CLI {
 	protected static function log( string $message ):void {
@@ -89,62 +90,60 @@ class WPCloud_CLI_Site extends WPCloud_CLI {
 		$show_remote = $switches['remote'] ?? false;
 
 		if ( $show_remote ) {
-
-		$sites = wpcloud_client_site_list();
-		if ( is_wp_error( $sites ) ) {
-			WP_CLI::error( $sites->get_error_message() );
-		}
-
-		if ( isset( $switches['col'] ) ) {
-			$column = $switches['col'];
-			if ($column === 'id') {
-				$column = 'atomic_site_id';
+			$sites = wpcloud_client_site_list();
+			if ( is_wp_error( $sites ) ) {
+				WP_CLI::error( $sites->get_error_message() );
 			}
-			$sites = array_map( function( $site ) use ( $column ) {
-				return $site->$column;
+			if ( isset( $switches['col'] ) ) {
+				$column = $switches['col'];
+				if ($column === 'id') {
+					$column = 'atomic_site_id';
+				}
+				$sites = array_map( function( $site ) use ( $column ) {
+					return $site->$column;
+				}, $sites );
+				self::log_result( implode( ' ', $sites) );
+				return;
+			}
+			$site_list = array_map( function( $site ) {
+				return [
+					'id' => $site->atomic_site_id,
+					'domain' => $site->domain_name,
+					'created' => $site->created,
+					'space_used' => self::human_filesize( $site->space_used ),
+				];
 			}, $sites );
-			self::log_result( implode( ' ', $sites) );
-			return;
-		}
-		$site_list = array_map( function( $site ) {
-			return [
-				'id' => $site->atomic_site_id,
-				'domain' => $site->domain_name,
-				'created' => $site->created,
-				'space_used' => self::human_filesize( $site->space_used ),
-			];
-		}, $sites );
 
-		WP_CLI\Utils\format_items( 'table', $site_list, [ 'id', 'domain', 'created', 'space_used' ] );
-	} else {
-		$sites = get_posts( [
-			'post_type' => 'wpcloud_site',
-			'posts_per_page' => -1,
-			'post_status' => 'any',
-		] );
+				WP_CLI\Utils\format_items( 'table', $site_list, [ 'id', 'domain', 'created', 'space_used' ] );
+		} else {
+			$sites = get_posts( [
+				'post_type' => 'wpcloud_site',
+				'posts_per_page' => -1,
+				'post_status' => 'any',
+			] );
 
-		if ( isset( $switches['col'] ) ) {
-			$column = $switches['col'];
-			$sites = array_map( function( $site ) use ( $column ) {
-				return $site->$column;
+			if ( isset( $switches['col'] ) ) {
+				$column = $switches['col'];
+				$sites = array_map( function( $site ) use ( $column ) {
+					return $site->$column;
+				}, $sites );
+				self::log_result( implode( ' ', $sites) );
+				return;
+			}
+
+			$site_list = array_map( function( $site ) {
+				return [
+					'wpcloud id' => get_post_meta( $site->ID, 'wpcloud_site_id', true ),
+					'id' => $site->ID,
+					'domain' => $site->post_title,
+					'created' => $site->post_date,
+					'status' => $site->post_status,
+				];
 			}, $sites );
-			self::log_result( implode( ' ', $sites) );
-			return;
+
+			WP_CLI\Utils\format_items( 'table', $site_list, [ 'wpcloud id', 'id', 'domain', 'created', 'status' ] );
 		}
-
-		$site_list = array_map( function( $site ) {
-			return [
-				'wpcloud id' => get_post_meta( $site->ID, 'wpcloud_site_id', true ),
-				'id' => $site->ID,
-				'domain' => $site->post_title,
-				'created' => $site->post_date,
-				'status' => $site->post_status,
-			];
-		}, $sites );
-
-		WP_CLI\Utils\format_items( 'table', $site_list, [ 'wpcloud id', 'id', 'domain', 'created', 'status' ] );
 	}
-}
 
 	public function get( $args ) {
 		$this->set_site_id( $args );
@@ -499,6 +498,39 @@ class WPCloud_CLI_Client extends WPCloud_CLI {
 		self::log_result( wpcloud_client_php_versions_available() );
 		self::log( '%GData centers:');
 		self::log_result( wpcloud_client_data_centers_available() );
+	}
+
+	public function headstart($args, $switches ) {
+
+
+		$client = $switches['client'] ?? '';
+		$key = $switches['key'] ?? '';
+		$force = $switches['force'] ?? false;
+
+		$result = wpcloud_headstart( $client, $key, $force, new WPCloud_CLI_Skin());
+		if ( is_wp_error( $result ) ) {
+			WP_CLI::error( $result->get_error_message() );
+		}
+		WP_CLI::success( 'Headstart installed' );
+	}
+}
+
+class WPCloud_CLI_Skin extends WP_Upgrader_Skin {
+	public function feedback($string, ...$args)
+	{
+		WP_CLI::log( $string );
+		return '';
+	}
+	public function header()
+	{
+		// Silence is golden.
+		return '';
+	}
+
+	public function footer()
+	{
+		// Silence is golden.
+		return '';
 	}
 }
 
