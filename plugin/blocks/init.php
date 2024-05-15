@@ -7,8 +7,8 @@ require_once plugin_dir_path( __FILE__ ) . 'render.php';
 
 function wpcloud_include_blocks() {
 	$block_directories = array_merge(
-		glob( __DIR__ . '/src/*' ),
-		glob( __DIR__ . '/src/components/*' )
+		glob( __DIR__ . '/build/*' ),
+		glob( __DIR__ . '/build/components/*' )
 	);
 
 	foreach( $block_directories as $block_directory ) {
@@ -17,9 +17,7 @@ function wpcloud_include_blocks() {
 		}
 
 		try {
-			register_block_type(
-				preg_replace( '/src/', 'build', $block_directory),
-			);
+			register_block_type( $block_directory );
 		} catch ( Exception $e ) {
 			error_log( 'Error registering block: ' . $e->getMessage() );
 		}
