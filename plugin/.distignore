@@ -35,9 +35,10 @@ README.md
 webpack.config.js
 wp-cli.local.yml
 yarn.lock
-tests
+tests*
 vendor
 node_modules
 *.sql
 *.tar.gz
 *.zip
+blocks/src*
