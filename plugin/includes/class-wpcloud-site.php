@@ -99,7 +99,7 @@ class WPCLOUD_Site {
 		$domain = wpcloud_site_get_default_domain( $options['site_name'] );
 		$php_version = $options['php_version'];
 		$data_center = $options['data_center'];
-		$post_name = str_replace( '.', '-', $domain );
+		$post_name = $options['site_name'];
 
 		if ( isset( $options[ 'admin_pass' ] ) && $options[ 'admin_pass' ] ) {
 			add_filter( 'wpcloud_site_create_data', function( $data ) use ( $options ) {
@@ -118,7 +118,7 @@ class WPCLOUD_Site {
 				'meta_input' => array(
 					'php_version' => $php_version,
 					'data_center' => $data_center,
-					'site_name' => $options[ 'site_name' ],
+					'initial_domain' => $domain,
 				)
 			)
 		);

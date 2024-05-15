@@ -81,11 +81,261 @@ function wpcloud_site_get_default_domain( string $domain = '' ): string {
 	$settings       = get_option( 'wpcloud_settings' );
 	$default_domain = $settings['wpcloud_domain'] ?? '';
 
+	if ( WPCLOUD_DEMO_DOMAIN == $default_domain ) {
+		// Try to generate a unique subdomain without a time stamp 5 times.
+		// If that fails, try again with a time stamp for 5 more times.
+		$attempts = 0;
+		do {
+			$attempts++;
+			$add_time = $attempts > 5;
+			$domain = wpcloud_generate_demo_subdomain( $add_time );
+		} while ( $attempts < 10 && ! wpcloud_client_domain_validate( null, $domain) );
+		return $domain;
+	}
+
 	if ( $default_domain ) {
 		$domain .= ".{$default_domain}";
 	}
 
 	return $domain;
+}
+
+function wpcloud_generate_demo_subdomain(bool $add_time = false): string {
+
+	$adjectives = array(
+		"sunny",
+		"breezy",
+		"clear",
+		"calm",
+		"mild",
+		"gentle",
+		"happy",
+		"jolly",
+		"lively",
+		"merry",
+		"peaceful",
+		"quiet",
+		"soft",
+		"blithe",
+		"light",
+		"warm",
+		"joyous",
+		"serene",
+		"tranquil",
+		"nimbus",
+		"mellow",
+		"spry",
+		"chilly",
+		"bright",
+		"crisp",
+		"dewy",
+		"hazy",
+		"radiant",
+		"sleek",
+		"whimsy",
+		"zesty",
+		"stellar",
+		"celestial",
+		"cosmic",
+		"galactic",
+		"nebular",
+		"astral",
+		"lunar",
+		"solar",
+		"cometary",
+		"planetary",
+		"asteroidal",
+		"meteoric",
+		"vibrant",
+		"ethereal",
+		"luminous",
+		"glowing",
+		"shining",
+		"gleaming",
+		"brilliant",
+		"sparkling",
+		"dazzling",
+		"twinkling",
+		"lustrous",
+		"prismatic",
+		"iridescent",
+		"beaming",
+		"glistering",
+		"glistening",
+		"refulgent",
+		"lucent",
+		"splendorous",
+		"radiating",
+		"illumined",
+	);
+
+	$space_terms = array(
+		'eclipse',
+		'mercury',
+		'venus',
+		'earth',
+		'mars',
+		'jupiter',
+		'saturn',
+		'neptune',
+		'pluto',
+		'sun',
+		'moon',
+		'phobos',
+		'deimos',
+		'io',
+		'europa',
+		'ganymede',
+		'callisto',
+		'titan',
+		'rhea',
+		'mimas',
+		'oberon',
+		'miranda',
+		'triton',
+		'charon',
+		'ceres',
+		'vesta',
+		'pallas',
+		'hygiea',
+		'eris',
+		'haumea',
+		'makemake',
+		'sedna',
+		'quaoar',
+		'varuna',
+		'bennu',
+		'halley',
+		'borrelly',
+		'catalina',
+		'lovejoy',
+		'ison',
+		'wirtanen',
+		'atlas',
+		'tuttle',
+		'linear',
+		'kohoutek',
+		'encke',
+		'lemmon',
+		'garradd',
+		'andromeda',
+		'aegaeon',
+		'alphonsus',
+		'anthe',
+		'ariel',
+		'astraea',
+		'bellona',
+		'calypso',
+		'dione',
+		'euporie',
+		'haoma',
+		'hector',
+		'hyperion',
+		'iotaeon',
+		'janus',
+		'jarnsaxa',
+		'jotun',
+		'kiviuq',
+		'kronos',
+		'metis',
+		'mneme',
+		'narvi',
+		'pan',
+		'pandora',
+		'phoebe',
+		'pori',
+		'psamathe',
+		'psyche',
+		'rheia',
+		'silvanus',
+		'skoll',
+		'styx',
+		'tarvos',
+		'telesto',
+		'tethys',
+		'thrymr',
+		'umbriel',
+		'ymir',
+		'planet',
+		'star',
+		'asteroid',
+		'comet',
+		'nebula',
+		'galaxy',
+		'quasar',
+		'cosmos',
+		'universe',
+		'meteor',
+		'exoplanet',
+		'pulsar',
+		'station',
+		'rover',
+		'lander',
+		'capsule',
+		'telescope',
+		'radio',
+		'orbiter',
+		'rocket',
+		'sunspot',
+		'cluster',
+		'enceladus',
+		'lapetus',
+		'amalthea',
+		'epimetheus',
+		'helene',
+		'iapetus',
+		'proteus',
+		'nereid',
+		'larissa',
+		'galatea',
+		'despina',
+		'thalassa',
+		'naiad',
+		'halimede',
+		'salacia',
+		'hydra',
+		'kerberos',
+		'elara',
+		'himalia',
+		'sinope',
+		'lysithea',
+		'carpo',
+		'cyllene',
+		'harpalyke',
+		'kore',
+		'orthosie',
+		'pasithee',
+		'callirrhoe',
+		'mets',
+		'taygete',
+		'thyone',
+		'herse',
+		'aoede',
+		'kallichore',
+		'kalyke',
+		'margaret',
+		'carme',
+		'kale',
+		'cyllarus',
+		'eupheme',
+		'aitne',
+		'sponde',
+		'autonoe',
+		'eurydome',
+		'sao',
+		'althaea',
+		'eliel',
+	);
+
+	[ $a1, $a2 ] = array_rand( $adjectives, 2);
+	$s1 = array_rand( $space_terms, 1);
+	if ( $add_time ) {
+		$subdomain = array( $adjectives[$a1],$adjectives[$a2], $space_terms[$s1], time('i'), time('s') );
+	} else {
+		$subdomain = array( $adjectives[$a1],$adjectives[$a2], $space_terms[$s1] );
+	}
+
+	return implode( '-', $subdomain ) . '.' . WPCLOUD_DEMO_DOMAIN;
 }
 
 /**
@@ -105,12 +355,12 @@ function wpcloud_on_create_site( int $post_id, WP_Post $post, bool $update ): vo
 
 	$data        = array();
 	$author      = get_user_by( 'id', $post->post_author );
-	$domain      = $post->post_title;
+	$domain      = get_post_meta( $post_id, 'initial_domain', true );
 	$php_version = get_post_meta( $post_id, 'php_version', true );
 	$data_center = get_post_meta( $post_id, 'data_center', true );
-	$post_name   = str_replace( '.', '-', $domain );
+	//$post_name   = str_replace( '.', '-', $domain );
 
-	wp_update_post( array( 'ID' => $post_id, 'post_name' => $post_name ) );
+//	wp_update_post( array( 'ID' => $post_id, 'post_name' => $post_name ) );
 
 	if ( ! empty( $php_version ) ) {
 		$data['php_version'] = $php_version;

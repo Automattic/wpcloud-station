@@ -120,25 +120,9 @@ function wpcloud_settings_init(): void {
 			'items'               => wpcloud_admin_get_available_plugins(),
 		]
 	);
-/*
-  Removing for the demo
-	add_settings_field(
-		'wpcloud_field_backfill',
-		__( 'Backfill (DEV ONLY)', 'wpcloud' ),
-		'wpcloud_field_input_cb',
-		'wpcloud',
-		'wpcloud_section_settings',
-		[
-			'label_for'         => 'wpcloud_backfill',
-			'class'             => 'wpcloud_row',
-			'wpcloud_custom_data' => 'custom',
-		]
-		);
-		*/
 
 		$options = get_option( 'wpcloud_settings' ) ?? [];
 		$was_headstart = isset( $options[ 'wpcloud_headstart' ] );
-		error_log( 'Headstart: ' . print_r( $was_headstart, true ) );
 		add_settings_field(
 			'wpcloud_field_headstart',
 			__( 'Headstart Set Up', 'wpcloud' ),
