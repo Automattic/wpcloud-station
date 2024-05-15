@@ -16,16 +16,15 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
-
 require_once plugin_dir_path( __FILE__ ) . 'render.php';
 
 function wpcloud_include_blocks() {
-	// for some reason wp-env doesn't support GLOB_BRACE when starting up.
-	if (! defined('GLOB_BRACE')) {
-		define('GLOB_BRACE', 1024);
-	}
-	foreach( glob( __DIR__ . '/blocks/src/{*,components/*}' , GLOB_BRACE) as $block_directory ) {
+	$block_directories = array_merge(
+		glob( __DIR__ . '/src/*' ),
+		glob( __DIR__ . '/src/components/*' )
+	);
 
+	foreach( $block_directories as $block_directory ) {
 		if ( ! file_exists( $block_directory . '/block.json' ) ) {
 			continue;
 		}
@@ -38,12 +37,10 @@ function wpcloud_include_blocks() {
 			error_log( 'Error registering block: ' . $e->getMessage() );
 		}
 
-
 		if ( is_file( $block_directory . '/index.php' ) ) {
 			// If we need any server code, include a blocks/src/{block}/index.php file.
 			require_once $block_directory . '/index.php';
 		}
-
 	}
 }
 add_action( 'init', 'wpcloud_include_blocks' );
