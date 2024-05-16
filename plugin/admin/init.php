@@ -25,7 +25,7 @@ function wpcloud_admin_get_available_plugins() {
 		'plugins/woocommerce'                => __( 'WooCommerce', 'wpcloud' ),
 		'plugins/-bookings'                  => __( 'WooCommerce Bookings', 'wpcloud' ),
 		'plugins/woocommerce-payments'       => __( 'WooCommerce Payments', 'wpcloud' ),
-		'plugins/woocommerce-subscriptions' => __( 'WooCommerce Subscriptions', 'wpcloud' ),
+		'plugins/woocommerce-subscriptions'  => __( 'WooCommerce Subscriptions', 'wpcloud' ),
 		'plugins/wordpress-seo'              => __( 'WordPress SEO', 'wpcloud' ),
 	);
 }
@@ -121,24 +121,23 @@ function wpcloud_settings_init(): void {
 		]
 	);
 
-		$options = get_option( 'wpcloud_settings' ) ?? [];
-		$was_headstart = isset( $options[ 'wpcloud_headstart' ] );
-		add_settings_field(
-			'wpcloud_field_headstart',
-			__( 'Headstart Set Up', 'wpcloud' ),
-			'wpcloud_field_input_cb',
-			'wpcloud',
-			'wpcloud_section_settings',
-			[
-				'label_for'         => 'wpcloud_headstart',
-				'class'             => 'wpcloud_row',
-				'type'              => 'checkbox',
-				'wpcloud_custom_data' => 'custom',
-				'description'         => __( 'Run the headstart script to setup the demo site. This can only be ran when saving the API credentials for the first time.' ),
-				'checked' => ! $was_headstart,
-				'disabled' => $was_headstart,
-			]
-		);
+	$allow_headstart = get_option('wpcloud_settings') ===  null;
+	add_settings_field(
+		'wpcloud_field_headstart',
+		__( 'Headstart Set Up', 'wpcloud' ),
+		'wpcloud_field_input_cb',
+		'wpcloud',
+		'wpcloud_section_settings',
+		[
+			'label_for'         => 'wpcloud_headstart',
+			'class'             => 'wpcloud_row',
+			'type'              => 'checkbox',
+			'wpcloud_custom_data' => 'custom',
+			'description'         => __( 'Run the headstart script to setup the demo site. This can only be ran when saving WP Cloud setting for the first time.' ),
+			'checked' => $allow_headstart,
+			'disabled' => ! $allow_headstart,
+		]
+	);
 }
 add_action( 'admin_init', 'wpcloud_settings_init' );
 
