@@ -76,14 +76,12 @@ function wpcloud_headstart(string $client='', string $key='', bool $force = fals
 	$installed = $up_grader->install( $package );
 	if ( is_wp_error( $installed ) ) {
 		$headstartSkin->feedback( $installed->get_error_message() );
-		return false;
 	}
 
 	if ( $installed ) {
 		switch_theme( 'wpcloud-station-theme' );
 	} else {
 		$headstartSkin->feedback( 'Failed to install theme.' );
-		return false;
 	}
 
 	// Configure permalinks
