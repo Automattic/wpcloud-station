@@ -183,7 +183,8 @@ function wpcloud_get_action() {
 function wpcloud_field_input_cb( array $args ): void {
 	$label = $args['label_for'] ?? '';
 	$options = get_option( 'wpcloud_settings' );
-	$value = $options[ $label ] ?? '';
+	$default = $args[ 'default' ] ?? '';
+	$value = $options[ $label ] ?? $default;
 	$type = $args['type'] ?? 'text';
 	$checked = $args[ 'checked' ] ?? false;
 	// output the field
@@ -204,14 +205,14 @@ function wpcloud_field_input_cb( array $args ): void {
 		<td><p class="setting-description"><?php echo esc_html( $args['description'] ); ?></p></td>
 	<?php
 	}
-
 }
 
 function wpcloud_field_select_cb( array $args ): void {
 	$options   = get_option( 'wpcloud_settings' );
 	$label_for = esc_attr( $args['label_for'] );
 	$name      = "wpcloud_settings[$label_for]";
-	$value     = isset( $options[ $label_for ] ) ? esc_attr( $options[ $label_for ] ) : '';
+	$default   = $args[ 'default' ] ?? '';
+	$value     = esc_attr( $options[ $label_for ] ?? $default );
 	$items     = $args['items'];
 
 	// output the field
