@@ -5,6 +5,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( '-1' );
 }
 
+wp_enqueue_script( 'user-profile' );
+
 function print_users_select( WPCloud_Site $wpcloud_site, array $filter = array() ): void {
 	$users = array_reduce( get_users($filter) , function ( $users, $user ) {
 		$users[$user->ID] = $user->display_name;
@@ -62,12 +64,44 @@ function print_form_select_row( string $label, string $name, array $options, mix
 			?>
 			<table class="form-table" role="presentation">
 				<tbody>
-					<input type="hidden" name="action" value="<?php echo $wpcloud_site->id ? 'edit' : 'create' ?>">
+
 					<input type="hidden" name="wpcloud_site[id]" value="<?php echo esc_attr( $wpcloud_site->id ); ?>" >
 					<input type="hidden" name="wpcloud_site[post_type]" value="wpcloud_site" >
 					<input type="hidden" name="wpcloud_site[status]" value="draft" >
-					<?php print_users_select ($wpcloud_site ); ?>
 					<?php print_form_input_row( 'Name', 'wpcloud_site[post_title]', $wpcloud_site->name ); ?>
+					<?php print_users_select ($wpcloud_site ); ?>
+					<tr class="form-field form-required user-pass1-wrap">
+						<th scope="row">
+							<label for="pass1">
+								<?php _e( 'Password' ); ?>
+								<span class="description hide-if-js"><?php _e( '(required)' ); ?></span>
+							</label>
+						</th>
+						<td>
+							<input type="hidden" value=" " /><!-- #24364 workaround -->
+							<button type="button" class="button wp-generate-pw hide-if-no-js"><?php _e( 'Generate password' ); ?></button>
+							<div class="wp-pwd">
+								<?php $initial_password = wp_generate_password( 24 ); ?>
+								<div class="password-input-wrapper">
+									<input type="password" name="pass1" id="pass1" class="regular-text" autocomplete="new-password" spellcheck="false" data-reveal="1" data-pw="<?php echo esc_attr( $initial_password ); ?>" aria-describedby="pass-strength-result" />
+									<div style="display:none" id="pass-strength-result" aria-live="polite"></div>
+								</div>
+								<button type="button" class="button wp-hide-pw hide-if-no-js" data-toggle="0" aria-label="<?php esc_attr_e( 'Hide password' ); ?>">
+									<span class="dashicons dashicons-hidden" aria-hidden="true"></span>
+									<span class="text"><?php _e( 'Hide' ); ?></span>
+								</button>
+							</div>
+						</td>
+					</tr>
+					<tr class="pw-weak">
+						<th><?php _e( 'Confirm Password' ); ?></th>
+						<td>
+							<label>
+								<input type="checkbox" name="pw_weak" class="pw-checkbox" />
+								<?php _e( 'Confirm use of weak password' ); ?>
+							</label>
+						</td>
+					</tr>
 					<?php print_form_select_row( 'PHP Version', 'wpcloud_site[meta_input][php_version]', wpcloud_client_php_versions_available( true ), $wpcloud_site->php_version ); ?>
 					<?php print_form_select_row( 'Datacenter', 'wpcloud_site[meta_input][data_center]', wpcloud_client_data_centers_available( true ), $wpcloud_site->data_center ); ?>
 					</tbody>
