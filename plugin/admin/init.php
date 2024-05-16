@@ -85,9 +85,11 @@ function wpcloud_settings_init(): void {
 		'wpcloud',
 		'wpcloud_section_settings',
 		[
-			'label_for'         => 'wpcloud_domain',
-			'class'             => 'wpcloud_row',
+			'label_for'           => 'wpcloud_domain',
+			'class'               => 'wpcloud_row',
 			'wpcloud_custom_data' => 'custom',
+			'default'             => WPCLOUD_DEMO_DOMAIN,
+			'description'         => __( 'The default domain to use for new sites. Each site will use this root domain with the site name as the subdomain. If using the default WP Cloud demo domain, a unique subdomain will be generated for each site.' ),
 		]
 	);
 
@@ -123,7 +125,10 @@ function wpcloud_settings_init(): void {
 		]
 	);
 
-	$allow_headstart = get_option('wpcloud_settings') ===  null;
+	// Only allow headstart if no settings have been saved yet
+	// headstart is might make unwanted changes if there are existing settings.
+	// It can be forced to run via the cli command `wp wpcloud client headstart`
+	$allow_headstart = empty( get_option( 'wpcloud_settings' ) );
 	add_settings_field(
 		'wpcloud_field_headstart',
 		__( 'Headstart Set Up', 'wpcloud' ),
