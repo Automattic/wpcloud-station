@@ -51,6 +51,18 @@ function wpcloud_settings_init(): void {
 		null,
 		'wpcloud'
 	);
+	add_settings_field(
+		'wpcloud_field_client',
+		__( 'Client Name', 'wpcloud' ),
+		'wpcloud_field_input_cb',
+		'wpcloud',
+		'wpcloud_section_settings',
+		[
+			'label_for'         => 'wpcloud_client',
+			'class'             => 'wpcloud_row',
+			'wpcloud_custom_data' => 'custom',
+		]
+	);
 
 	add_settings_field(
 		'wpcloud_field_api_key',
@@ -65,18 +77,6 @@ function wpcloud_settings_init(): void {
 		]
 	);
 
-	add_settings_field(
-		'wpcloud_field_client',
-		__( 'Client Name', 'wpcloud' ),
-		'wpcloud_field_input_cb',
-		'wpcloud',
-		'wpcloud_section_settings',
-		[
-			'label_for'         => 'wpcloud_client',
-			'class'             => 'wpcloud_row',
-			'wpcloud_custom_data' => 'custom',
-		]
-	);
 
 	add_settings_field(
 		'wpcloud_field_domain',
