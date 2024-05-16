@@ -21,7 +21,7 @@ function wpcloud_admin_get_available_plugins() {
 		'plugins/classic-editor'             => __( 'Classic Editor', 'wpcloud' ),
 		'plugins/crowdsignal-forms'          => __( 'CrowSignal Forms', 'wpcloud' ),
 		'plugins/mailpoet'                   => __( 'MailPoet', 'wpcloud' ),
-		'plugins/polldaddy'                  => __( 'Poll Daddy', 'wpcloud' ),
+		'plugins/polldaddy'                  => __( 'Crowdsignal', 'wpcloud' ),
 		'plugins/woocommerce'                => __( 'WooCommerce', 'wpcloud' ),
 		'plugins/-bookings'                  => __( 'WooCommerce Bookings', 'wpcloud' ),
 		'plugins/woocommerce-payments'       => __( 'WooCommerce Payments', 'wpcloud' ),
