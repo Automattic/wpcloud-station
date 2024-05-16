@@ -149,15 +149,24 @@ function wpcloud_settings_init(): void {
 add_action( 'admin_init', 'wpcloud_settings_init' );
 
 function wpcloud_options_page(): void {
-    add_menu_page(
-        'WP Cloud',
-        'WP Cloud',
-        'manage_options',
-        'wpcloud',
-        'wpcloud_admin_controller',
-        '',
-        20
-    );
+	add_menu_page(
+		'WP Cloud',
+		'WP Cloud',
+		'manage_options',
+		'wpcloud',
+		'wpcloud_admin_controller',
+		'',
+		20
+	);
+
+	add_submenu_page(
+		'wpcloud',
+		'All Sites',
+		'All Sites',
+		'manage_options',
+		'wpcloud',
+		'wpcloud_admin_controller',
+	);
 
 	add_submenu_page(
 		'wpcloud',
@@ -311,7 +320,7 @@ function wpcloud_admin_controller(): void {
 			break;
 
 		case 'edit':
-			$site = WPCloud_Site::find( intval( $_GET[ 'post' ] ) );
+			$site = get_post( intval( $_GET[ 'post' ] ) );
 			wpcloud_admin_site_form( $site );
 			return;
 
@@ -335,11 +344,23 @@ function wpcloud_admin_list_sites(): void {
 	require_once  plugin_dir_path(__FILE__) . '/includes/class-wpcloud-site-list.php';
 	$wpcloud_site_list = new WPCLOUD_Site_List();
 	$wpcloud_site_list->prepare_items();
+	$confirm_delete_message = __( 'Are you sure you want to delete this site?', 'wpcloud' );
 	?>
 	<div class="wrap">
 		<h1 class="wp-heading-inline"><?php echo esc_html( get_admin_page_title() ); ?></h1>
 		<?php $wpcloud_site_list->display(); ?>
 	</div>
+	<script type="text/javascript" >
+	(() => {
+		document.querySelectorAll('.delete').forEach((el) => {
+			el.addEventListener('click', (e) => {
+				if (!confirm('<?php echo $confirm_delete_message; ?>')) {
+					e.preventDefault();
+				}
+			});
+		});
+	})();
+	</script>
 	<?php
 }
 
