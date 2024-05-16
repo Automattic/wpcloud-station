@@ -67,7 +67,7 @@ function print_form_select_row( string $label, string $name, array $options, mix
 					<input type="hidden" name="wpcloud_site[post_type]" value="wpcloud_site" >
 					<input type="hidden" name="wpcloud_site[status]" value="draft" >
 					<?php print_users_select ($wpcloud_site ); ?>
-					<?php print_form_input_row( 'Name', 'wpcloud_site[post_title]', $wpcloud_site->name, '.' . wpcloud_site_get_default_domain() ); ?>
+					<?php print_form_input_row( 'Name', 'wpcloud_site[post_title]', $wpcloud_site->name ); ?>
 					<?php print_form_select_row( 'PHP Version', 'wpcloud_site[meta_input][php_version]', wpcloud_client_php_versions_available( true ), $wpcloud_site->php_version ); ?>
 					<?php print_form_select_row( 'Datacenter', 'wpcloud_site[meta_input][data_center]', wpcloud_client_data_centers_available( true ), $wpcloud_site->data_center ); ?>
 					</tbody>
