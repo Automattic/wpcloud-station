@@ -4,14 +4,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 $client_ips = null;
 $ip_request = wpcloud_client_site_ip_addresses();
-if ( is_wp_error( $ip_request ) ) {
-	error_log( 'WP Cloud Site Detail Block: ' . $ip_request->get_error_message() );
-} else {
+if ( ! is_wp_error( $ip_request ) ) {
 	$client_ips = $ip_request->ips;
 }
 
 ?>
-<div class="wrap">
+<style>
+	.wp-cloud-settings {
+		.description {
+			width: 400px;
+		}
+	}
+</style>
+<div class="wrap wp-cloud-settings">
 	<h1>WP Cloud</h1>
 	<form action="options.php" method="post">
 			<?php
@@ -21,12 +26,26 @@ if ( is_wp_error( $ip_request ) ) {
 			?>
 	</form>
 <h2>Details</h2>
-	<?php if ( $client_ips ) : ?>
-	<h3>IP Addresses</h3>
-	<ul>
-		<?php foreach ( $client_ips as $ip ) : ?>
-			<li><b><?php echo esc_html( $ip ); ?></b></li>
-		<?php endforeach; ?>
-	</ul>
-	<?php endif; ?>
-</div>
+<table class="form-table" role="presentation">
+	<tbody>
+		<?php if ( $client_ips ) : ?>
+		<tr class="wpcloud_row">
+			<th scope="row">
+				<label for="wpcloud_api_key">WP Cloud IP Address Range</label>
+			</th>
+			<td>
+			<?php foreach ( $client_ips as $ip ) : ?>
+				<?php echo esc_html( $ip ); ?>
+			<?php endforeach; ?>
+			</td>
+		</tr>
+		<?php endif; ?>
+			<tr class="wpcloud_row">
+			<th scope="row">
+				<label for="wpcloud_api_key">Server IP Address</label>
+			</th>
+			<td>
+			<?php echo $_SERVER['SERVER_ADDR']; ?>
+			</td>
+		</tr>
+</tbody></table>

@@ -21,11 +21,11 @@ function wpcloud_admin_get_available_plugins() {
 		'plugins/classic-editor'             => __( 'Classic Editor', 'wpcloud' ),
 		'plugins/crowdsignal-forms'          => __( 'CrowSignal Forms', 'wpcloud' ),
 		'plugins/mailpoet'                   => __( 'MailPoet', 'wpcloud' ),
-		'plugins/polldaddy'                  => __( 'Poll Daddy', 'wpcloud' ),
+		'plugins/polldaddy'                  => __( 'Crowdsignal', 'wpcloud' ),
 		'plugins/woocommerce'                => __( 'WooCommerce', 'wpcloud' ),
 		'plugins/-bookings'                  => __( 'WooCommerce Bookings', 'wpcloud' ),
 		'plugins/woocommerce-payments'       => __( 'WooCommerce Payments', 'wpcloud' ),
-		'plugins/woocommerce-subscriptions' => __( 'WooCommerce Subscriptions', 'wpcloud' ),
+		'plugins/woocommerce-subscriptions'  => __( 'WooCommerce Subscriptions', 'wpcloud' ),
 		'plugins/wordpress-seo'              => __( 'WordPress SEO', 'wpcloud' ),
 	);
 }
@@ -51,20 +51,6 @@ function wpcloud_settings_init(): void {
 		null,
 		'wpcloud'
 	);
-
-	add_settings_field(
-		'wpcloud_field_api_key',
-		__( 'API Key', 'wpcloud' ),
-		'wpcloud_field_input_cb',
-		'wpcloud',
-		'wpcloud_section_settings',
-		[
-			'label_for'         => 'wpcloud_api_key',
-			'class'             => 'wpcloud_row',
-			'wpcloud_custom_data' => 'custom',
-		]
-	);
-
 	add_settings_field(
 		'wpcloud_field_client',
 		__( 'Client Name', 'wpcloud' ),
@@ -79,18 +65,35 @@ function wpcloud_settings_init(): void {
 	);
 
 	add_settings_field(
+		'wpcloud_field_api_key',
+		__( 'API Key', 'wpcloud' ),
+		'wpcloud_field_input_cb',
+		'wpcloud',
+		'wpcloud_section_settings',
+		[
+			'label_for'         => 'wpcloud_api_key',
+			'class'             => 'wpcloud_row',
+			'wpcloud_custom_data' => 'custom',
+		]
+	);
+
+
+	add_settings_field(
 		'wpcloud_field_domain',
 		__( 'Domain', 'wpcloud' ),
 		'wpcloud_field_input_cb',
 		'wpcloud',
 		'wpcloud_section_settings',
 		[
-			'label_for'         => 'wpcloud_domain',
-			'class'             => 'wpcloud_row',
+			'label_for'           => 'wpcloud_domain',
+			'class'               => 'wpcloud_row',
 			'wpcloud_custom_data' => 'custom',
+			'default'             => WPCLOUD_DEMO_DOMAIN,
+			'description'         => __( 'The default domain to use for new sites. Each site will use this root domain with the site name as the subdomain. If using the default WP Cloud demo domain, a unique subdomain will be generated for each site.' ),
 		]
 	);
 
+	$themes = wpcloud_admin_get_available_themes();
 	add_settings_field(
 		'wpcloud_field_default_theme',
 		__( 'Default Theme', 'wpcloud' ),
@@ -102,7 +105,8 @@ function wpcloud_settings_init(): void {
 			'class'               => 'wpcloud_row',
 			'wpcloud_custom_data' => 'custom',
 			'description'         => __( 'The default theme to install on new sites.'),
-			'items'               => wpcloud_admin_get_available_themes(),
+			'items'               => $themes,
+			'default'             => array_keys( $themes )[0],
 		]
 	);
 
@@ -121,37 +125,48 @@ function wpcloud_settings_init(): void {
 		]
 	);
 
-		$options = get_option( 'wpcloud_settings' ) ?? [];
-		$was_headstart = isset( $options[ 'wpcloud_headstart' ] );
-		add_settings_field(
-			'wpcloud_field_headstart',
-			__( 'Headstart Set Up', 'wpcloud' ),
-			'wpcloud_field_input_cb',
-			'wpcloud',
-			'wpcloud_section_settings',
-			[
-				'label_for'         => 'wpcloud_headstart',
-				'class'             => 'wpcloud_row',
-				'type'              => 'checkbox',
-				'wpcloud_custom_data' => 'custom',
-				'description'         => __( 'Run the headstart script to setup the demo site. This can only be ran when saving the API credentials for the first time.' ),
-				'checked' => ! $was_headstart,
-				'disabled' => $was_headstart,
-			]
-		);
+	// Only allow headstart if no settings have been saved yet
+	// headstart is might make unwanted changes if there are existing settings.
+	// It can be forced to run via the cli command `wp wpcloud client headstart`
+	$allow_headstart = empty( get_option( 'wpcloud_settings' ) );
+	add_settings_field(
+		'wpcloud_field_headstart',
+		__( 'Headstart Set Up', 'wpcloud' ),
+		'wpcloud_field_input_cb',
+		'wpcloud',
+		'wpcloud_section_settings',
+		[
+			'label_for'         => 'wpcloud_headstart',
+			'class'             => 'wpcloud_row',
+			'type'              => 'checkbox',
+			'wpcloud_custom_data' => 'custom',
+			'description'         => __( 'Run the headstart script to setup the demo site. This can only be ran when saving WP Cloud setting for the first time.' ),
+			'checked' => $allow_headstart,
+			'disabled' => ! $allow_headstart,
+		]
+	);
 }
 add_action( 'admin_init', 'wpcloud_settings_init' );
 
 function wpcloud_options_page(): void {
-    add_menu_page(
-        'WP Cloud',
-        'WP Cloud',
-        'manage_options',
-        'wpcloud',
-        'wpcloud_admin_controller',
-        '',
-        20
-    );
+	add_menu_page(
+		'WP Cloud',
+		'WP Cloud',
+		'manage_options',
+		'wpcloud',
+		'wpcloud_admin_controller',
+		'',
+		20
+	);
+
+	add_submenu_page(
+		'wpcloud',
+		'All Sites',
+		'All Sites',
+		'manage_options',
+		'wpcloud',
+		'wpcloud_admin_controller',
+	);
 
 	add_submenu_page(
 		'wpcloud',
@@ -184,7 +199,8 @@ function wpcloud_get_action() {
 function wpcloud_field_input_cb( array $args ): void {
 	$label = $args['label_for'] ?? '';
 	$options = get_option( 'wpcloud_settings' );
-	$value = $options[ $label ] ?? '';
+	$default = $args[ 'default' ] ?? '';
+	$value = $options[ $label ] ?? $default;
 	$type = $args['type'] ?? 'text';
 	$checked = $args[ 'checked' ] ?? false;
 	// output the field
@@ -202,17 +218,17 @@ function wpcloud_field_input_cb( array $args ): void {
 		<?php if ( $disabled ) { echo ' disabled '; } ?>
 	>
 	<?php if ( isset( $args['description'] ) ) { ?>
-		<td><p class="setting-description"><?php echo esc_html( $args['description'] ); ?></p></td>
+		<p class="description"><?php echo esc_html( $args['description'] ); ?></p>
 	<?php
 	}
-
 }
 
 function wpcloud_field_select_cb( array $args ): void {
 	$options   = get_option( 'wpcloud_settings' );
 	$label_for = esc_attr( $args['label_for'] );
 	$name      = "wpcloud_settings[$label_for]";
-	$value     = isset( $options[ $label_for ] ) ? esc_attr( $options[ $label_for ] ) : '';
+	$default   = $args[ 'default' ] ?? '';
+	$value     = esc_attr( $options[ $label_for ] ?? $default );
 	$items     = $args['items'];
 
 	// output the field
@@ -227,10 +243,9 @@ function wpcloud_field_select_cb( array $args ): void {
 	?>
 	</select>
 	<?php if ( isset( $args['description'] ) ) { ?>
-		<td><p class="setting-description"><?php echo esc_html( $args['description'] ); ?></p></td>
+		<p class="description"><?php echo esc_html( $args['description'] ); ?></p>
 	<?php
-		 }
-
+	}
 }
 
 function wpcloud_field_software_cb( array $args ): void {
@@ -256,13 +271,11 @@ function wpcloud_field_software_cb( array $args ): void {
 				</select>
 			</td>
 		</tr>
-
-
 	<?php
 	}
 	echo "</table>";
 	if ( isset( $args['description'] ) ) { ?>
-		<td><p class="setting-description"><?php echo esc_html( $args['description'] ); ?></p></td>
+		<p class="description"><?php echo esc_html( $args['description'] ); ?></p>
 	<?php
 	}
 }
@@ -307,7 +320,7 @@ function wpcloud_admin_controller(): void {
 			break;
 
 		case 'edit':
-			$site = WPCloud_Site::find( intval( $_GET[ 'post' ] ) );
+			$site = get_post( intval( $_GET[ 'post' ] ) );
 			wpcloud_admin_site_form( $site );
 			return;
 
@@ -331,11 +344,23 @@ function wpcloud_admin_list_sites(): void {
 	require_once  plugin_dir_path(__FILE__) . '/includes/class-wpcloud-site-list.php';
 	$wpcloud_site_list = new WPCLOUD_Site_List();
 	$wpcloud_site_list->prepare_items();
+	$confirm_delete_message = __( 'Are you sure you want to delete this site?', 'wpcloud' );
 	?>
 	<div class="wrap">
 		<h1 class="wp-heading-inline"><?php echo esc_html( get_admin_page_title() ); ?></h1>
 		<?php $wpcloud_site_list->display(); ?>
 	</div>
+	<script type="text/javascript" >
+	(() => {
+		document.querySelectorAll('.delete').forEach((el) => {
+			el.addEventListener('click', (e) => {
+				if (!confirm('<?php echo $confirm_delete_message; ?>')) {
+					e.preventDefault();
+				}
+			});
+		});
+	})();
+	</script>
 	<?php
 }
 
