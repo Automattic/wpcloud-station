@@ -91,6 +91,7 @@ function wpcloud_settings_init(): void {
 		]
 	);
 
+	$themes = wpcloud_admin_get_available_themes();
 	add_settings_field(
 		'wpcloud_field_default_theme',
 		__( 'Default Theme', 'wpcloud' ),
@@ -102,7 +103,8 @@ function wpcloud_settings_init(): void {
 			'class'               => 'wpcloud_row',
 			'wpcloud_custom_data' => 'custom',
 			'description'         => __( 'The default theme to install on new sites.'),
-			'items'               => wpcloud_admin_get_available_themes(),
+			'items'               => $themes,
+			'default'             => array_keys( $themes )[0],
 		]
 	);
 
@@ -229,8 +231,7 @@ function wpcloud_field_select_cb( array $args ): void {
 	<?php if ( isset( $args['description'] ) ) { ?>
 		<td><p class="setting-description"><?php echo esc_html( $args['description'] ); ?></p></td>
 	<?php
-		 }
-
+	}
 }
 
 function wpcloud_field_software_cb( array $args ): void {
@@ -305,17 +306,6 @@ function wpcloud_admin_controller(): void {
 				});
 			}
 			break;
-
-		case 'edit':
-			$site = WPCloud_Site::find( intval( $_GET[ 'post' ] ) );
-			wpcloud_admin_site_form( $site );
-			return;
-
-		case 'view':
-			$view_site = wpcloud_admin_view_site();
-			if ( ! is_wp_error( $view_site ) ) {
-				return;
-			}
 	}
 
 	wpcloud_admin_list_sites();
