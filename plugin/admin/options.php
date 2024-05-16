@@ -4,14 +4,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 $client_ips = null;
 $ip_request = wpcloud_client_site_ip_addresses();
-if ( is_wp_error( $ip_request ) ) {
-	error_log( 'WP Cloud Site Detail Block: ' . $ip_request->get_error_message() );
-} else {
+if ( ! is_wp_error( $ip_request ) ) {
 	$client_ips = $ip_request->ips;
 }
 
 ?>
-<div class="wrap">
+<style>
+	.wp-cloud-settings {
+		.description {
+			width: 400px;
+		}
+	}
+</style>
+<div class="wrap wp-cloud-settings">
 	<h1>WP Cloud</h1>
 	<form action="options.php" method="post">
 			<?php

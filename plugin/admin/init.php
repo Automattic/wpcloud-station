@@ -209,7 +209,7 @@ function wpcloud_field_input_cb( array $args ): void {
 		<?php if ( $disabled ) { echo ' disabled '; } ?>
 	>
 	<?php if ( isset( $args['description'] ) ) { ?>
-		<td><p class="setting-description"><?php echo esc_html( $args['description'] ); ?></p></td>
+		<p class="description"><?php echo esc_html( $args['description'] ); ?></p>
 	<?php
 	}
 }
@@ -234,7 +234,7 @@ function wpcloud_field_select_cb( array $args ): void {
 	?>
 	</select>
 	<?php if ( isset( $args['description'] ) ) { ?>
-		<td><p class="setting-description"><?php echo esc_html( $args['description'] ); ?></p></td>
+		<p class="description"><?php echo esc_html( $args['description'] ); ?></p>
 	<?php
 	}
 }
@@ -262,13 +262,11 @@ function wpcloud_field_software_cb( array $args ): void {
 				</select>
 			</td>
 		</tr>
-
-
 	<?php
 	}
 	echo "</table>";
 	if ( isset( $args['description'] ) ) { ?>
-		<td><p class="setting-description"><?php echo esc_html( $args['description'] ); ?></p></td>
+		<p class="description"><?php echo esc_html( $args['description'] ); ?></p>
 	<?php
 	}
 }
@@ -311,6 +309,17 @@ function wpcloud_admin_controller(): void {
 				});
 			}
 			break;
+
+		case 'edit':
+			$site = WPCloud_Site::find( intval( $_GET[ 'post' ] ) );
+			wpcloud_admin_site_form( $site );
+			return;
+
+		case 'view':
+			$view_site = wpcloud_admin_view_site();
+			if ( ! is_wp_error( $view_site ) ) {
+				return;
+			}
 	}
 
 	wpcloud_admin_list_sites();
