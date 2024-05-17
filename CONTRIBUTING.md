@@ -21,6 +21,24 @@ We provide a development setup for both WP-Env and Docker.
 7. Save your WP Cloud Client Name and API Key, as well as a default primary Domain.
 8. Make note of your IP Address at the bottom and contact your WP Cloud representative to add the IP's.
 
-## WP-Env
+## wp-Env
 
-Coming soon.
+[wp-env](https://www.npmjs.com/package/@wordpress/env) lets you easily set up a local WordPress environment for building and testing plugins and themes. It's simple to install and requires no configuration.
+
+Please read through the above documentation for how to get started.
+
+```sh
+cd /path/to/wpcloud-station
+npm -g i @wordpress/env
+wp-env start
+```
+
+## XDebug
+
+Debugging is included with the wp-env setup. A default `launch.json` for VS Code is included with the repository.
+
+To get started with debugging, see the above wp-env documentation, install the [XDebug](https://marketplace.visualstudio.com/items?itemName=felixfbecker.php-debug) extension in VS Code, and start wp-env with xdebug:
+
+```sh
+wp-env start --xdebug
+```
