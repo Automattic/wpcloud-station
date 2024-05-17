@@ -428,22 +428,22 @@ class WPCloud_CLI_Site_SSH_User extends WPCloud_CLI_Site {
 class WPCloud_CLI_Client extends WPCloud_CLI {
 
 	public function get($args) {
-	 $options = get_option( 'wpcloud_settings' );
-	 $root_options = array();
-	 foreach ( $options as $key => $value ) {
+		$options = get_option( 'wpcloud_settings' );
+		$root_options = array();
+		foreach ( $options as $key => $value ) {
 
-		 $root_options[preg_replace('/^wpcloud_/','',$key)] = $value;
-	 }
+			$root_options[preg_replace('/^wpcloud_/','',$key)] = $value;
+		}
 
-	 if ( isset( $args[0] ) ) {
-		 $key = $args[0];
-		 if ( isset( $root_options[$key] ) ) {
-			 self::log( $root_options[$key] );
-			 return;
-		 }
-	 } else {
-	 	self::log_result( $root_options );
-	 }
+		if ( isset( $args[0] ) ) {
+			$key = $args[0];
+			if ( isset( $root_options[$key] ) ) {
+				self::log( $root_options[$key] );
+				return;
+			}
+		} else {
+			self::log_result( $root_options );
+		}
 	}
 
 	public function set( $args ) {
@@ -475,10 +475,10 @@ class WPCloud_CLI_Client extends WPCloud_CLI {
 			WP_CLI::error( 'Invalid option' );
 		}
 
-		$key = preg_replace('/^(wpcloud_)?/','wpcloud_', $key);
+		$key = preg_replace( '/^(wpcloud_)?/', 'wpcloud_', $key );
 
 		if ( ! $value ) {
-			unset($options[$key]);
+			unset( $options[$key] );
 		} else {
 			$options[$key] = $value;
 		}

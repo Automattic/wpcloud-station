@@ -3,7 +3,7 @@
  * Plugin Name:     WP Cloud Station
  * Plugin URI:      https://github.com/Automattic/wpcloud-station
  * Description:     Dashboard for managing your WP Cloud services.
- * Author:          Automattic Inc.
+ * Author:          Automattic
  * Author URI:      https://wp.cloud/
  * Text Domain:     wpcloud
  * Domain Path:     /languages

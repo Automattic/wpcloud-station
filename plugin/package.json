@@ -1,9 +1,9 @@
 {
 	"name": "wpcloud-station-blocks",
-	"version": "0.1.0",
-	"description": "Example block scaffolded with Create Block tool.",
-	"author": "The WordPress Contributors",
-	"license": "GPL-2.0-or-later",
+	"version": "1.0.0",
+	"description": "WP Cloud Station blocks.",
+	"author": "Automattic",
+	"license": "GPL-3.0-or-later",
 	"main": "build/index.js",
 	"scripts": {
 		"build": "wp-scripts build --webpack-src-dir=blocks/src/ --output-path=blocks/build/ --webpack-copy-php",
