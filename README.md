@@ -32,7 +32,7 @@ Issues and feature requests can be submitted in [GitHub Issues](https://github.c
 
 ## Contribute
 
-We welcome contributions from the community. If you would like to contribute, please see [Contibuting](https://github.com/Automattic/wpcloud-station/blob/trunk/CONTRIBUTING.md).
+We welcome contributions from the community. If you would like to contribute, please see [Contributing](https://github.com/Automattic/wpcloud-station/blob/trunk/CONTRIBUTING.md).
 
 [Code of Conduct](https://github.com/Automattic/wpcloud-station/blob/trunk/CODE-OF-CONDUCT.md)
 
