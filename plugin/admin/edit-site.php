@@ -64,7 +64,7 @@ function print_form_select_row( string $label, string $name, array $options, mix
 			?>
 			<table class="form-table" role="presentation">
 				<tbody>
-
+					<input type="hidden" name="action" value="<?php echo $wpcloud_site->id ? 'edit' : 'create' ?>">
 					<input type="hidden" name="wpcloud_site[id]" value="<?php echo esc_attr( $wpcloud_site->id ); ?>" >
 					<input type="hidden" name="wpcloud_site[post_type]" value="wpcloud_site" >
 					<input type="hidden" name="wpcloud_site[status]" value="draft" >
