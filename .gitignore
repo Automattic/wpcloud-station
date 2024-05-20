@@ -7,5 +7,3 @@ node_modules/
 *.sql
 *.tar.gz
 *.zip
-yarn.lock
-package-lock.json
