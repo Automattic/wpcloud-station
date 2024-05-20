@@ -4,6 +4,7 @@
 import { __ } from '@wordpress/i18n';
 import { SelectControl } from '@wordpress/components';
 
+/*
 export const formatDisplayName = ( name = '' ) => {
 	const words = name.replace( /–|-|_/g, ' ' );
 	if ( ! words.includes( ' ' ) ) {
@@ -16,7 +17,7 @@ export const formatDisplayName = ( name = '' ) => {
 		.replace( /\bapi\b/i, 'API' )
 		.replace( /\bphp\b/i, 'PHP' );
 };
-
+*/
 export default function LinkableDetailSelect( {
 	attributes,
 	setAttributes,
@@ -24,7 +25,10 @@ export default function LinkableDetailSelect( {
 	help,
 } ) {
 	const linkableSiteDetails = window.wpcloud?.linkableSiteDetails || [];
-	const options = [ ' ' ].concat( linkableSiteDetails );
+	let options = [];
+	for ( const [ key, value ] of Object.entries( linkableSiteDetails ) ) {
+		options.push( { value: key, label: value } );
+	}
 	const { name } = attributes;
 	return (
 		<SelectControl
@@ -37,7 +41,7 @@ export default function LinkableDetailSelect( {
 			onChange={ ( newName ) => {
 				setAttributes( {
 					name: newName,
-					label: formatDisplayName( newName ),
+					label: linkableSiteDetails[ newName ] || newName,
 				} );
 				onChange && onChange( newName );
 			} }
