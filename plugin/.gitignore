@@ -31,3 +31,5 @@ node_modules/
 
 # asset source maps
 *.map
+
+build/
