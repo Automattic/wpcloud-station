@@ -16,6 +16,10 @@
 		"build:frontend": "wp-scripts build --webpack-src-dir=assets/js/src --output-path=assets/js/build",
 		"start:frontend": "wp-scripts start --webpack-src-dir=assets/js/src --output-path=assets/js/build/index.js"
 	},
+	"engines": {
+		"node": ">=20.10.0",
+		"npm": ">=10.2.3"
+	},
 	"devDependencies": {
 		"@wordpress/scripts": "^27.6.0"
 	},
@@ -23,4 +27,5 @@
 		"classnames": "^2.5.1",
 		"remove-accents": "^0.5.0"
 	}
+
 }
