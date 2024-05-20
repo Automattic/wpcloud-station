@@ -24,10 +24,9 @@
 			"default": ""
 		},
 		"label": {
-			"type": "rich-text",
+			"type": "string",
 			"default": "Label",
-			"selector": ".wpcloud-block-form-input__label-content",
-			"source": "rich-text"
+			"selector": ".wpcloud-block-form-input__label-content"
 		},
 		"inlineLabel": {
 			"type": "boolean",
