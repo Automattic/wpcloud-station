@@ -1,1 +1,0 @@
-(()=>{var s;(s=window.wpcloud).hooks.addAction("wpcloud_form_response_site_ssh_user_add","site_ssh_user_add",(function(d){d.success?s.hooks.doAction("wpcloud_site_ssh_user_added",d.user):alert(d.message)}))})();
