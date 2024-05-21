@@ -1,37 +1,40 @@
 
-.wpcloud-block-site-detail {
-	display: flex;
-	flex-direction: column;
-	gap: 0.25em;
+.wp-block-wpcloud-more-menu {
+	position: relative;
 
-	&.is-inline {
-		flex-direction: row;
-		gap: 0.5em;
-		justify-content: flex-start;
-		align-items: baseline;
+	.wpcloud-more-menu__nav {
+		display: none;
+		position: absolute;
+		top: 0;
+		z-index: 100;
+		background-color: var(--wp--preset--color--wpcloud-background-primary);
+		border: 1px solid var(--wp--preset--color--wpcloud-border-primary);
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+		margin: 0;
+		border: 1px solid var(--wp--preset--color--wpcloud-border-primary);
 
-		.wpcloud-block-site-detail__label-content {
-			margin-bottom: 0.5em;
+		min-width: 200px;
+		* {
+			border-bottom: 1px solid var(--wp--preset--color--wpcloud-border-primary);
+		}
+		&:hover {
+			display: block;
+		}
+		&:hover + .wpcloud-more-menu__nav {
+			display: none;
 		}
 	}
-}
-
-.wpcloud-block-site-detail__title {
-	margin-bottom: 0.5em;
-
-	h4 {
-		margin: 0;
+	.wpcloud-more-menu__button {
+		svg {
+			fill: var(--wp--preset--color--wpcloud-foreground-primary);
+		}
+		background: none;
+		border: none;
+		&:hover + .wpcloud-more-menu__nav {
+			display: block;
+		}
+		&:hover {
+			display: none;
+		}
 	}
-}
-
-.wpcloud-block-site-detail__title-content {
-	width: fit-content;
-	margin: 0;
-}
-
-
-// @TODO This should go in a generic style file
-.dashicons-external{
-	text-decoration: none;
-	vertical-align: bottom;
 }
