@@ -31,7 +31,7 @@ import './editor.scss';
  * @return {Element} Element to render.
  */
 export default function Edit({ attributes, setAttributes, className }) {
-	const { adminOnly, showMenu } = attributes;
+	const { showMenu } = attributes;
 	const blockProps = useBlockProps();
 	const innerBlocksProps = useInnerBlocksProps(blockProps, {
 		renderAppender: InnerBlocks.ButtonBlockAppender,
@@ -48,18 +48,6 @@ export default function Edit({ attributes, setAttributes, className }) {
 							showMenu: newVal,
 						});
 					}}
-				/>
-				<ToggleControl
-					label={__('Limit to Admins')}
-					checked={adminOnly}
-					onChange={(newVal) => {
-						setAttributes({
-							adminOnly: newVal,
-						});
-					}}
-					help={__(
-						'Only admins will see this field. Inputs marked as admin only will appear with a dashed border in the editor'
-					)}
 				/>
 			</PanelBody>
 		</InspectorControls>
@@ -84,9 +72,6 @@ export default function Edit({ attributes, setAttributes, className }) {
 						innerBlocksProps.className,
 						className,
 						'wpcloud-block-more-menu',
-						{
-							'is-admin-only': adminOnly,
-						}
 					)}
 					/>)}
 			</div>

@@ -7,7 +7,6 @@ import classNames from 'classnames';
  * WordPress dependencies
  */
 import { InnerBlocks, useBlockProps } from '@wordpress/block-editor';
-import { Button } from '@wordpress/components';
 import { Icon, moreVertical } from '@wordpress/icons'
 
 export default function save() {

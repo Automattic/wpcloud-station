@@ -6,7 +6,7 @@
 	"title": "More Menu",
 	"category": "wpcloud",
 	"icon": "menu",
-	"description": "The Site Detail block displays a name-value pair for a site detail. The gray italic text is just a placeholder for the actual site detail value.",
+	"description": "Display a menu with more options",
 	"example": {},
 	"supports": {
 		"html": false
@@ -16,10 +16,6 @@
 	"editorStyle": "file:./index.css",
 	"style": "file:./style-index.css",
 	"attributes": {
-		"adminOnly": {
-			"type": "boolean",
-			"default": false
-		},
 		"showMenu" :{
 			"type": "boolean",
 			"default": true
