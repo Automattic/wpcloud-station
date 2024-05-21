@@ -1,33 +1,9 @@
-/**
- * External dependencies
- */
-import classNames from 'classnames';
 
-/**
- * WordPress dependencies
- */
-import { __ } from '@wordpress/i18n';
+function Hidden({ attributes }) {
 
-const controls = <></>;
-
-function Hidden( { value, onChange, className, styleProps } ) {
-	const { colorProps, borderProps } = styleProps;
+	const { name } = attributes;
 	return (
-		<>
-			{ controls }
-			<input
-				type="hidden"
-				className={ classNames(
-					className,
-					'wpcloud-station-form-input__hidden',
-					colorProps.className,
-					borderProps.className
-				) }
-				aria-label={ __( 'Value' ) }
-				value={ value }
-				onChange={ ( event ) => onChange( event.target.value ) }
-			/>
-		</>
+		<span className="wpcloud-block-form-input--hidden">{ `{ ${name} } `}</span>
 	);
 }
 
