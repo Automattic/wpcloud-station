@@ -1,0 +1,40 @@
+
+.wp-block-wpcloud-more-menu {
+	position: relative;
+
+	.wpcloud-more-menu__nav {
+		display: none;
+		position: absolute;
+		top: 0;
+		z-index: 100;
+		background-color: var(--wp--preset--color--wpcloud-background-primary);
+		border: 1px solid var(--wp--preset--color--wpcloud-border-primary);
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+		margin: 0;
+		border: 1px solid var(--wp--preset--color--wpcloud-border-primary);
+
+		min-width: 200px;
+		* {
+			border-bottom: 1px solid var(--wp--preset--color--wpcloud-border-primary);
+		}
+		&:hover {
+			display: block;
+		}
+		&:hover + .wpcloud-more-menu__nav {
+			display: none;
+		}
+	}
+	.wpcloud-more-menu__button {
+		svg {
+			fill: var(--wp--preset--color--wpcloud-foreground-primary);
+		}
+		background: none;
+		border: none;
+		&:hover + .wpcloud-more-menu__nav {
+			display: block;
+		}
+		&:hover {
+			display: none;
+		}
+	}
+}
