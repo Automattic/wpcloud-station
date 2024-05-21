@@ -17,6 +17,4 @@ function wpcloud_station_enqueue_block_styles() {
 add_filter( 'show_admin_bar', '__return_false' );
 
 
-add_action( 'pre_get_posts', function($query) {
-	//error_log(print_r($query->query, true));
-});
+add_action( 'wp_enqueue_scripts', fn() => wp_enqueue_style( 'dashicons' ) );

@@ -21,7 +21,7 @@ import { PanelBody, ToggleControl } from '@wordpress/components';
 import DetailSelectControl from '../controls/site/detailSelect';
 
 function SiteDetailBlock( { attributes, setAttributes, className } ) {
-	const { label, adminOnly, inline, hideLabel } = attributes;
+	const { label, adminOnly, inline, hideLabel, refreshLink } = attributes;
 	const blockProps = useBlockProps();
 
 	const controls = (
@@ -49,6 +49,18 @@ function SiteDetailBlock( { attributes, setAttributes, className } ) {
 						} }
 						help={ __(
 							'Only show the value of the site detail. The label will be hidden.'
+						) }
+					/>
+					<ToggleControl
+						label={ __( 'Refresh linked details' ) }
+						checked={ refreshLink }
+						onChange={ ( newVal ) => {
+							setAttributes( {
+								refreshLink: newVal,
+							} );
+						} }
+						help={ __(
+							'Refresh urls on site detail links. A new link will be generated when clicked.'
 						) }
 					/>
 					<ToggleControl

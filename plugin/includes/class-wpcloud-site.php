@@ -9,38 +9,10 @@ declare( strict_types = 1 );
 
 class WPCLOUD_Site {
 
-	const DETAIL_KEYS = array(
-		'site_name', // only used locally
-		'site_owner_id', // only used locally
-		'domain_name',
-		'wp_admin_email',
-		'wp_admin_user',
-		'smtp_pass',
-		'geo_affinity',
-		'data_center',  // We advertise this as data center but it maps to geo_affinity
-		'ip_addresses',
-		'wp_version',
-		'php_version',
-		'static_file_404',
-		'db_password',
-		'db_charset',
-		'db_collate',
-		'cache_prefix',
-		'chroot_path',
-		'chroot_ssh_path',
-		'site_api_key',
-		'atomic_site_id',
-		'atomic_client_id',
-		'server_pool_id',
-		'phpmyadmin_url',
-		'ssl_info',
-		'wp_admin_url'
-	);
-
 	const LINKABLE_DETAIL_KEYS = array(
 		'domain_name',
 		'wp_admin_url',
-		'phpmyadmin_url',
+		'phpmyadmin_url'
 	);
 
 	private static $initial_status = 'draft';
@@ -210,6 +182,59 @@ class WPCLOUD_Site {
 			self::backfill_from_host( $results->posts );
 		}
 		return array_map( self::class . '::from_post', $results->posts );
+	}
+
+	public static function get_detail_options(): array {
+		return array(
+			'site_name' => __('Site Name'), // only used locally
+			'site_owner_id' => __( 'Site Owner ID' ), // only used locally
+			'domain_name' => __( 'Domain Name' ),
+			'wp_admin_email' => __( 'Admin Email' ),
+			'wp_admin_user'	=> __( 'Admin User' ),
+			'smtp_pass'	=> __( 'SMTP Password' ),
+			'geo_affinity' => __( 'Geo Affinity' ),
+			'data_center' => __( 'Data Center'),  // We advertise this as data center but it maps to geo_affinity
+			'ip_addresses' => __( 'IP Addresses' ),
+			'wp_version' => __( 'WP Version' ),
+			'php_version' => __( 'PHP Version' ),
+			'static_file_404' => __( 'Static File 404' ),
+			'db_password' => __( 'DB Password' ),
+			'db_charset' => __( 'DB Charset' ),
+			'db_collate' => __( 'DB Collate' ),
+			'cache_prefix' => __( 'Cache Prefix' ),
+			'chroot_path' => __( 'Chroot Path' ),
+			'chroot_ssh_path' => __( 'Chroot SSH Path' ),
+			'site_api_key' => __( 'Site API Key' ),
+			'atomic_site_id' => __( 'Atomic Site ID' ),
+			'atomic_client_id' => __( 'Atomic Client ID' ),
+			'server_pool_id' => __( 'Server Pool ID' ),
+			'phpmyadmin_url' => __( 'phpMyAdmin URL' ),
+			'ssl_info' => __( 'SSL Info' ),
+			'wp_admin_url' => __( 'WP Admin URL' ),
+		);
+	}
+
+	public static function get_linkable_detail_options(): array {
+		return array_intersect_key( self::get_detail_options(),  array_flip( self::LINKABLE_DETAIL_KEYS ) );
+	}
+
+	public static function refresh_linkable_detail($post_id, $detail): string {
+		// If the detail is unknown let the filter `wpcloud_refresh_link` handle it.
+		if ( ! in_array( $detail, self::LINKABLE_DETAIL_KEYS ) ) {
+			return '';
+		}
+
+		switch($detail) {
+			case 'phpmyadmin_url':
+				$site_id = get_post_meta( $post_id, 'wpcloud_site_id', true );
+				$phpmyadmin_url = wpcloud_client_site_phpmyadmin_url( (int) $site_id );
+				if ( is_wp_error( $phpmyadmin_url ) ) {
+					error_log( 'Error fetching phpMyAdmin URL: ' . $phpmyadmin_url->get_error_message() );
+					return '';
+				}
+				return $phpmyadmin_url;
+		}
+		return '';
 	}
 
 	private static function backfill_from_host(array $local_sites): void {

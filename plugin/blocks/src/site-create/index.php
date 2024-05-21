@@ -59,10 +59,10 @@ function wpcloud_block_site_form_enqueue_scripts() {
 	wp_add_inline_script(
 		'wpcloud-blocks-site-form',
 		'window.wpcloud = window.wpcloud ?? {};' .
-		 'wpcloud.siteDetailKeys=' . json_encode( WPCloud_Site::DETAIL_KEYS ) . ';' .
+		 'wpcloud.siteDetails=' . json_encode( WPCloud_Site::get_detail_options() ) . ';' .
 		 'wpcloud.phpVersions=' . json_encode( wpcloud_block_available_php_options() ) . ';' .
 		 'wpcloud.dataCenters=' . json_encode( wpcloud_block_available_datacenters_options() ) . ';' .
-		 'wpcloud.linkableSiteDetails=' . json_encode( WPCloud_Site::LINKABLE_DETAIL_KEYS ) . ';'
+		 'wpcloud.linkableSiteDetails=' . json_encode( WPCloud_Site::get_linkable_detail_options() ) . ';'
 	);
 }
 add_action( 'admin_enqueue_scripts', 'wpcloud_block_site_form_enqueue_scripts' );

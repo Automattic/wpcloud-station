@@ -20,4 +20,10 @@ Text Domain: wpcloud-station
 		background-color: transparent;
 		border: 1px solid var(--wp--preset--color--wpcloud-accent-primary);
 	}
+
+	.dashicons {
+		&.dashicons-external:before {
+			content: "\f504";
+		}
+	}
 }

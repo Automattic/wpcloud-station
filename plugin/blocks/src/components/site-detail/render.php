@@ -33,14 +33,24 @@ if ( is_array( $detail ) ) {
 }
 
 if (str_starts_with($detail, 'http')) {
-	$detail = sprintf('<a href="%s" ><span class="dashicons dashicons-external"></span></a>', $detail, $detail);
+	$label = $attributes['label'] ?? '';
+	$link_text = $detail;
+	if ( $attributes[ 'hideLabel' ] ) {
+		$link_text = $label;
+	}
+	$data = '';
+	if ( $attributes[ 'refreshLink' ] ) {
+		$nonce = wp_create_nonce( 'wpcloud_refresh_link' );
+		// @ TODO add the refresh rate to the block attributes
+		$data = "data-nonce=$nonce data-refresh-rate='10000' data-site-detail=$name data-site-id=" . get_the_ID();
+	}
+	$detail = sprintf('<a href="%s" %s >%s<span class="dashicons dashicons-external"></span></a>', $detail, $data, $link_text);
 }
 
 // match the placeholder which is in the last set of curly braces  { The placeholder }
 $regex = '/\{[^{}]*\}(?=[^{}]*$)/';
 
 $detail = preg_replace($regex, $detail, $content);
-
 
 $layout = $block->context['wpcloud/layout'] ?? '';
 

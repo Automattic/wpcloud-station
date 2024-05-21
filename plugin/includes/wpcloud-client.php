@@ -573,8 +573,8 @@ function wpcloud_client_post( ?int $wpcloud_site_id, string $path, array $body =
  * @return mixed|WP_Error Response body on success. WP_Error on failure.
  */
 function wpcloud_client_request( ?int $wpcloud_site_id, string $method, string $path, array $body = array() ): mixed {
-    $api_key     = wpcloud_get_client_api_key();
-    $client_name = wpcloud_get_client_name();
+	$api_key     = wpcloud_get_client_api_key();
+	$client_name = wpcloud_get_client_name();
 
 	if ( empty( $api_key ) ) {
 		return new WP_Error( 'unauthorized', 'Please provide a WP Cloud API Key in Settings', array( 'status' => 401 ) );

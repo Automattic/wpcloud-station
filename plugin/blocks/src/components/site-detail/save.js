@@ -8,7 +8,7 @@ import classNames from 'classnames';
  */
 import { RichText, useBlockProps } from '@wordpress/block-editor';
 export default function save( { attributes, className } ) {
-	const { label, inline, adminOnly, hideLabel } = attributes;
+	const { label, inline, adminOnly, hideLabel, refreshLink } = attributes;
 	const blockProps = useBlockProps.save();
 	return (
 		<div
@@ -20,6 +20,7 @@ export default function save( { attributes, className } ) {
 				{
 					'is-inline': inline,
 					'is-admin-only': adminOnly,
+					'refresh-link': refreshLink,
 				}
 			) }
 		>

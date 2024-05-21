@@ -38,6 +38,10 @@
 		"hideLabel": {
 			"type": "boolean",
 			"default": false
+		},
+		"refreshLink": {
+			"type": "boolean",
+			"default": false
 		}
 	}
 }
