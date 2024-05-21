@@ -650,3 +650,49 @@ function is_wpcloud_site_post() {
 	}
 	return get_post_type() === 'wpcloud_site';
 }
+
+function wpcloud_backfill() {
+	$owner_id = get_current_user_id();
+	$sites    = wpcloud_client_site_list( 'wp_version', 'php_version' );
+
+
+	// remove the create site action
+	remove_action( 'save_post_wpcloud_site', 'wpcloud_on_create_site', 10, 3 );
+
+	foreach( $sites as $site ) {
+		$post = wpcloud_lookup_post_by_site_id( (int) $site->atomic_site_id );
+
+		// If a post for the site already exists
+		// continue to the next site
+		if ( $post ) {
+			continue;
+		}
+
+		$site_details = wpcloud_client_site_details( (int) $site->atomic_site_id, true );
+		$data_center  = $site_details->extra->server_pool->geo_affinity;
+		$post_name    = str_replace( '.', '-', $site->domain_name );
+
+		$post_data = array(
+			'post_name'   => $post_name,
+			'post_title'  => $site->domain_name,
+			'post_type'   => 'wpcloud_site',
+			'post_status' => 'publish',
+			'post_author' => $owner_id,
+			'meta_input'  => array(
+				'wpcloud_site_id' => $site->atomic_site_id,
+				'initial_domain'  => $site->domain_name,
+				'php_version'     => $site->php_version,
+				'data_center'     => $data_center,
+			),
+		);
+
+		$post = wp_insert_post( $post_data, true, false );
+
+		if ( is_wp_error( $post ) ) {
+			error_log( 'Error creating site post: ' . $post->get_error_message() );
+			continue;
+		}
+
+		wp_set_post_tags( $post, array( 'backfill' ), true );
+	}
+}

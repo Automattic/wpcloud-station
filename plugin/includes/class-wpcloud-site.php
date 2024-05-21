@@ -179,7 +179,7 @@ class WPCLOUD_Site {
 			return $results;
 		}
 		if ( $backfill_from_host ) {
-			self::backfill_from_host( $results->posts );
+			wpcloud_backfill();
 		}
 		return array_map( self::class . '::from_post', $results->posts );
 	}
@@ -235,44 +235,6 @@ class WPCLOUD_Site {
 				return $phpmyadmin_url;
 		}
 		return '';
-	}
-
-	private static function backfill_from_host(array $local_sites): void {
-		$remote_sites = self::fetch_all();
-		if ( is_wp_error( $remote_sites ) ) {
-			return;
-		}
-
-		$remote_ids = array_map( fn($remote_site) => $remote_site->atomic_site_id ,$remote_sites );
-		$local_ids = array_map( function( $site ) {
-			$wpcloud_id = get_post_meta( $site->ID, 'wpcloud_id', true );
-			return $wpcloud_id ? intval( $wpcloud_id ) : 0;
-		}, $local_sites );
-
-		$missing_ids = array_diff( $remote_ids, $local_ids );
-		$missing_sites = array_filter( $remote_sites, fn( $site ) => in_array( $site->atomic_site_id, $missing_ids ) );
-
-		$owner_id = get_current_user_id();
-
-		// remove the create site action
-		remove_action( 'save_post_wpcloud_site', 'wpcloud_on_create_site', 10, 3 );
-
-		foreach ( $missing_sites as $site ) {
-
-			$post = wp_insert_post(
-				array(
-					'post_title'  => $site->domain_name,
-					'post_type'   => 'wpcloud_site',
-					'post_status' => self::$initial_status,
-					'post_author' => $owner_id,
-				)
-			);
-			if ( is_wp_error( $post ) ) {
-				error_log( 'Error creating site post: ' . $post->get_error_message() );
-				continue;
-			}
-			wp_set_post_tags( $post, array( 'backfill' ), true );
-		}
 	}
 
 	private static function fetch_all(): mixed {
