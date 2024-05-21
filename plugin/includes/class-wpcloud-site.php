@@ -218,6 +218,25 @@ class WPCLOUD_Site {
 		return array_intersect_key( self::get_detail_options(),  array_flip( self::LINKABLE_DETAIL_KEYS ) );
 	}
 
+	public static function refresh_linkable_detail($post_id, $detail): string {
+		// If the detail is unknown let the filter `wpcloud_refresh_link` handle it.
+		if ( ! in_array( $detail, self::LINKABLE_DETAIL_KEYS ) ) {
+			return '';
+		}
+
+		switch($detail) {
+			case 'phpmyadmin_url':
+				$site_id = get_post_meta( $post_id, 'wpcloud_site_id', true );
+				$phpmyadmin_url = wpcloud_client_site_phpmyadmin_url( (int) $site_id );
+				if ( is_wp_error( $phpmyadmin_url ) ) {
+					error_log( 'Error fetching phpMyAdmin URL: ' . $phpmyadmin_url->get_error_message() );
+					return '';
+				}
+				return $phpmyadmin_url;
+		}
+		return '';
+	}
+
 	private static function backfill_from_host(array $local_sites): void {
 		$remote_sites = self::fetch_all();
 		if ( is_wp_error( $remote_sites ) ) {
