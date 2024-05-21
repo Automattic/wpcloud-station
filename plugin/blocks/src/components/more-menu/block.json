@@ -1,0 +1,33 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "wpcloud/more-menu",
+	"version": "0.1.0",
+	"title": "More Menu",
+	"category": "wpcloud",
+	"icon": "menu",
+	"description": "The Site Detail block displays a name-value pair for a site detail. The gray italic text is just a placeholder for the actual site detail value.",
+	"example": {},
+	"supports": {
+		"html": false
+	},
+	"textdomain": "site-detail",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"viewScript": "file:./view.js",
+	"attributes": {
+		"adminOnly": {
+			"type": "boolean",
+			"default": false
+		},
+		"title": {
+			"type": "string",
+			"default": "Menu"
+		},
+		"hideTitle": {
+			"type": "boolean",
+			"default": false
+		}
+	}
+}
