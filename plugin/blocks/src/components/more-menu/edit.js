@@ -11,10 +11,12 @@ import {
 	useBlockProps,
 	useInnerBlocksProps,
 	InspectorControls,
-	RichText,
 	InnerBlocks
 } from '@wordpress/block-editor';
-import { CheckboxControl, PanelBody } from '@wordpress/components';
+import { ToggleControl, PanelBody, Button } from '@wordpress/components';
+import { Icon, moreVertical } from '@wordpress/icons'
+
+
 
 /**
  * Internal dependencies
@@ -28,33 +30,56 @@ import './editor.scss';
  * @param {Object} props.setAttributes
  * @return {Element} Element to render.
  */
-export default function Edit( { attributes, setAttributes, className } ) {
-	const { adminOnly } = attributes;
+export default function Edit({ attributes, setAttributes, className }) {
+	const { adminOnly, showMenu } = attributes;
 	const blockProps = useBlockProps();
-	const innerBlocksProps = useInnerBlocksProps( blockProps, {
+	const innerBlocksProps = useInnerBlocksProps(blockProps, {
 		renderAppender: InnerBlocks.ButtonBlockAppender,
-	} );
+	});
+
+	const controls = (
+		<InspectorControls>
+			<PanelBody title={__('Form Settings')}>
+				<ToggleControl
+					label={__('Show Menu')}
+					checked={showMenu}
+					onChange={(newVal) => {
+						setAttributes({
+							showMenu: newVal,
+						});
+					}}
+				/>
+				<ToggleControl
+					label={__('Limit to Admins')}
+					checked={adminOnly}
+					onChange={(newVal) => {
+						setAttributes({
+							adminOnly: newVal,
+						});
+					}}
+					help={__(
+						'Only admins will see this field. Inputs marked as admin only will appear with a dashed border in the editor'
+					)}
+				/>
+			</PanelBody>
+		</InspectorControls>
+	);
 
 	return (
 		<>
-			<InspectorControls>
-				<PanelBody title={ __( 'Form Settings' ) }>
-					<CheckboxControl
-						label={ __( 'Limit to Admins' ) }
-						checked={ adminOnly }
-						onChange={ ( newVal ) => {
-							setAttributes( {
-								adminOnly: newVal,
-							} );
-						} }
-						help={ __(
-							'Only admins will see this field. Inputs marked as admin only will appear with a dashed border in the editor'
-						) }
-					/>
-				</PanelBody>
-			</InspectorControls>
-			<div
-					{ ...innerBlocksProps }
+			{controls}
+			<div className={classNames( className, 'wpcloud-more-menu-wrapper' )}>
+			{ ! showMenu && (
+					<button className="wpcloud-more-menu__button" onClick={() => {
+						setAttributes({
+							showMenu: true,
+						});
+
+					}}><Icon icon={moreVertical} /></button>
+			)}
+			{showMenu && (
+				<div
+					{...innerBlocksProps}
 					className={ classNames(
 						innerBlocksProps.className,
 						className,
@@ -62,7 +87,9 @@ export default function Edit( { attributes, setAttributes, className } ) {
 						{
 							'is-admin-only': adminOnly,
 						}
-				) } />
+					)}
+					/>)}
+			</div>
 		</>
 	);
 }
