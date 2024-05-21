@@ -17,11 +17,11 @@ import {
 import { PanelBody, TextControl, ToggleControl, SelectControl } from '@wordpress/components';
 import { useRef, useCallback } from '@wordpress/element';
 
-/**
- *
+/*
  * Internal dependencies
  */
-import { Text, Select } from './fields';
+import DetailSelectControl from '../controls/site/detailSelect';
+import { Text, Select, Hidden } from './fields';
 
 function InputFieldBlock( { attributes, setAttributes, className } ) {
 	const { type, inlineLabel, label, adminOnly, required, name, hideLabel } =
@@ -48,12 +48,24 @@ function InputFieldBlock( { attributes, setAttributes, className } ) {
 		text: Text,
 		email: Text,
 		password: Text,
-		hidden: Text,
+		hidden: Hidden,
 		textarea: Text,
 		select: Select,
 	};
 
-	const InputTag = inputTags[ type ] ? inputTags[ type ] : Text;
+	const selectTypeOptions = [
+		{ value: 'text', label: __( 'Text' ) },
+		{ value: 'email', label: __( 'Email' ) },
+		{ value: 'password', label: __( 'Password' ) },
+		{ value: 'hidden', label: __( 'Hidden' ) },
+		{ value: 'textarea', label: __('Textarea') },
+		// @TODO Implement select block to allow setting the select options. For now it's only available in block templates.
+		// { value: 'select', label: __( 'Select' ) },
+	];
+
+	const InputTag = inputTags[type] ? inputTags[type] : Text;
+
+	const showLabel = !( hideLabel || 'hidden' === type );
 
 	const controls = (
 		<>
@@ -67,6 +79,19 @@ function InputFieldBlock( { attributes, setAttributes, className } ) {
 						}
 						help={ __( 'The name attribute of the input field' ) }
 					/>
+					<SelectControl
+						label={ __( 'Input Type' ) }
+						value={ type }
+						options={ selectTypeOptions }
+						onChange={ ( newType ) => {
+							setAttributes( { type: newType } );
+						} }
+					/>
+					<DetailSelectControl
+						attributes={ attributes }
+						setAttributes={setAttributes}
+					/>
+
 					{ 'checkbox' !== type && (
 						<>
 							<ToggleControl
@@ -124,7 +149,7 @@ function InputFieldBlock( { attributes, setAttributes, className } ) {
 					'is-admin-only': adminOnly,
 				} ) }
 			>
-				{ ! hideLabel && (
+				{ showLabel && (
 					<RichText
 						tagName="span"
 						className="wpcloud-block-form-input__label-content"
@@ -141,10 +166,11 @@ function InputFieldBlock( { attributes, setAttributes, className } ) {
 				) }
 				<InputTag
 					attributes={ attributes }
-					onPlaceholderChange={ updatePlaceholder }
+					onPlaceholderChange={updatePlaceholder}
 					onValueChange={ updateValue }
 					className={ className }
-					styleProps={ { colorProps, borderProps } }
+					styleProps={{ colorProps, borderProps }}
+					isSelected={ blockProps.isSelected }
 				/>
 			</span>
 		</div>
