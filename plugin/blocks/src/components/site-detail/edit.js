@@ -103,6 +103,7 @@ function SiteDetailBlock( { attributes, setAttributes, className } ) {
 					{
 						'is-inline': inline,
 						'is-admin-only': adminOnly,
+						'copy-to-clipboard': showCopyButton,
 					}
 				) }
 			>
@@ -127,11 +128,17 @@ function SiteDetailBlock( { attributes, setAttributes, className } ) {
 						/>
 					</div>
 				) }
-				<div className={ 'wpcloud-block-site-detail__value' }>
-					{`{ ${label} }`}
-					{ showCopyButton && (
-						<Icon className="wpcloud-copy-to-clipboard" icon={ copySmall } />
-					)}
+
+				<div className={ classNames(
+					'wpcloud-block-site-detail__value-container',
+					{
+						'copy-to-clipboard': showCopyButton,
+					}
+					) }>
+					<div className={ 'wpcloud-block-site-detail__value' }>
+						{`{ ${label} }`}
+					</div>
+					{showCopyButton && (<Icon className="wpcloud-copy-to-clipboard" icon={copySmall} />)}
 				</div>
 			</div>
 		</span>
