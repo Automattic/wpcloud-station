@@ -37,8 +37,6 @@ export default function Edit({ attributes, setAttributes, className, clientId })
 	const isChildSelected = useSelect( ( select ) =>
 			select( 'core/block-editor' ).hasSelectedInnerBlock( clientId )
 	);
-
-	console.log(isChildSelected);
 	const innerBlocksProps = useInnerBlocksProps(blockProps, {
 		renderAppender: isChildSelected ? undefined : InnerBlocks.ButtonBlockAppender,
 	});
