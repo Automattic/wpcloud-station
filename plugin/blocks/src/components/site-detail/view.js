@@ -1,5 +1,33 @@
-(() => {
-	const refreshLinks = document.querySelectorAll('.wpcloud-block-site-detail.refresh-link a');
+((wpcloud) => {
+
+	const onCopyToClipboard = async (e) => {
+		const detail = e.currentTarget.closest('.wpcloud-block-site-detail');
+		const value = detail.querySelector('.wpcloud-block-site-detail__value');
+		const listValue = value.querySelector('.wpcloud_block_site_detail__value__list');
+
+		let text = '';
+		if (listValue) {
+			listValue.querySelectorAll('li').forEach((li) => {
+				text += li.innerText + '\n';
+			});
+		} else {
+			text = value.innerText;
+		}
+		try {
+			await navigator.clipboard.writeText(text);
+			alert('Copied to clipboard');
+  	} catch (error) {
+    	console.error(error.message);
+  	}
+	}
+
+	// Bind the onCopyToClipboard function to the wpcloud object
+	// for dynamically created elements
+	wpcloud.copyToClipboard = wpcloud?.onCopyToClipboard || onCopyToClipboard;
+
+	document.querySelectorAll('.wpcloud-block-site-detail .copy-to-clipboard').forEach((element) => {
+		element.addEventListener('click', wpcloud.copyToClipboard);
+	});
 
 	async function refreshHref(e) {
 		const link = e.currentTarget;
@@ -34,7 +62,7 @@
 		link.href = result.data.url;
 	}
 
-	refreshLinks.forEach(async (link) => {
+	document.querySelectorAll('.wpcloud-block-site-detail.refresh-link a').forEach(async (link) => {
 		const refreshRate = link.dataset.refreshRate || 15000;
 		setTimeout(() => {
 			link.dataset.refresh = 'true';
@@ -55,4 +83,4 @@
 		});
 	});
 
-})();
+})(window.wpcloud);
