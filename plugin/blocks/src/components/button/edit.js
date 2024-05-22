@@ -17,8 +17,7 @@ import { PanelBody, TextControl, ToggleControl } from '@wordpress/components';
 import './editor.scss';
 
 const Edit = ( { attributes, setAttributes, className } ) => {
-	const { text, icon, type, asButton } = attributes;
-	console.log(attributes);
+	const { text, asButton } = attributes;
 
 	const controls = (
 		<>
@@ -32,16 +31,6 @@ const Edit = ( { attributes, setAttributes, className } ) => {
 								asButton: newVal,
 							});
 						}}
-					/>
-					<TextControl
-						label={ __( 'icon' ) }
-						value={ icon }
-						onChange={ ( newValue ) =>
-							setAttributes( { icon: newValue } )
-						}
-						help={ __(
-							'Setting an icon will override the text label.'
-						) }
 					/>
 				</PanelBody>
 			</InspectorControls>

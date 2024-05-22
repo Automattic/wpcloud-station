@@ -5,9 +5,8 @@ import classNames from 'classnames';
 
 import { useBlockProps, RichText } from '@wordpress/block-editor';
 
-
 const Save = ( { attributes, className} ) => {
-	const { icon, text, type, asButton } = attributes;
+	const { text, type, asButton } = attributes;
 	const blockProps = useBlockProps.save();
 	return (
 		<div
