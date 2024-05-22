@@ -212,6 +212,7 @@ class WPCLOUD_Site {
 			'phpmyadmin_url' => __( 'phpMyAdmin URL' ),
 			'ssl_info' => __( 'SSL Info' ),
 			'wp_admin_url' => __( 'WP Admin URL' ),
+			'site_ssh_user' => __( 'Site SSH User' ),
 		);
 	}
 
