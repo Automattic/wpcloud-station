@@ -5,3 +5,9 @@
 		border: 2px dashed var(--wp--preset--color--contrast-2);
 	}
 }
+.wpcloud-block-form-input--hidden {
+	color: #999;
+	font-style: italic;
+	width: fit-content;
+	text-wrap: nowrap;
+}

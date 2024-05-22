@@ -3,35 +3,38 @@
  */
 import classNames from 'classnames';
 
-import { useBlockProps, InnerBlocks } from '@wordpress/block-editor';
-import { Dashicon } from '@wordpress/components';
+import { useBlockProps, RichText } from '@wordpress/block-editor';
 
-const Save = ( { attributes } ) => {
-	const { icon, text, type } = attributes;
+const Save = ( { attributes, className} ) => {
+	const { text, type, asButton } = attributes;
 	const blockProps = useBlockProps.save();
 	return (
 		<div
-			className={ classNames(
-				'wpcloud-block-form-submit-wrapper',
-				blockProps.className
-			) }
 			{ ...blockProps }
-		>
-			{ icon && (
+			className={classNames(
+				className,
+				blockProps.className,
+				'wpcloud-block-form-submit',
+				{
+					'wp-block-button': asButton,
+				}
+			) }>
 				<button
-					type={ type }
+					type={type}
 					className={ classNames(
-						'button',
-						'wpcloud-block-form-submit-icon-button',
-						blockProps.className
+						'wpcloud-block-form-submit-button',
+						{
+							'wp-block-button__link': asButton,
+							'wp-element-button': asButton,
+							'as-text': !asButton,
+						}
 					) }
-					{ ...blockProps }
-					aria-label={ text }
+					aria-label={text}
 				>
-					<Dashicon icon={ icon } />
-				</button>
-			) }
-			<InnerBlocks.Content />
+				<RichText.Content
+					value={ text }
+				/>
+			</button>
 		</div>
 	);
 };

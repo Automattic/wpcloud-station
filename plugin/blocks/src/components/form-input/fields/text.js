@@ -11,11 +11,9 @@ import { __ } from '@wordpress/i18n';
 export default function TextField( {
 	attributes,
 	className,
-	styleProps = {},
 	onPlaceholderChange,
 } ) {
 	const { placeholder, required, type } = attributes;
-	const { borderProps, colorProps } = styleProps;
 
 	const controls = <></>;
 
@@ -28,8 +26,6 @@ export default function TextField( {
 				className={ classNames(
 					className,
 					'wpcloud-block-form-input__input',
-					colorProps.className,
-					borderProps.className
 				) }
 				aria-label={ __( 'Optional placeholder text' ) }
 				placeholder={
@@ -40,10 +36,6 @@ export default function TextField( {
 					onPlaceholderChange( event.target.value )
 				}
 				aria-required={ required }
-				style={ {
-					...borderProps.style,
-					...colorProps.style,
-				} }
 			/>
 		</>
 	);

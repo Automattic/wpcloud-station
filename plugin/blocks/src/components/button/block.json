@@ -3,7 +3,7 @@
 	"apiVersion": 3,
 	"name": "wpcloud/button",
 	"version": "0.1.0",
-	"title": "WP Cloud Form Submit Button",
+	"title": "Submit Button",
 	"category": "wpcloud",
 	"icon": "button",
 	"description": "WP Cloud from submit button.",
@@ -14,6 +14,7 @@
 	},
 	"textdomain": "form-submit-button",
 	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
 	"style": "file:./style-index.css",
 	"attributes": {
 		"text": {
@@ -26,6 +27,10 @@
 		"type": {
 			"type": "string",
 			"default": "submit"
+		},
+		"asButton": {
+			"type": "boolean",
+			"default": true
 		}
 	}
 }
