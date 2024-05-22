@@ -17,20 +17,6 @@ const Save = ( { attributes } ) => {
 			) }
 			{ ...blockProps }
 		>
-			{ icon && (
-				<button
-					type={ type }
-					className={ classNames(
-						'button',
-						'wpcloud-block-form-submit-icon-button',
-						blockProps.className
-					) }
-					{ ...blockProps }
-					aria-label={ text }
-				>
-					<Dashicon icon={ icon } />
-				</button>
-			) }
 			<InnerBlocks.Content />
 		</div>
 	);

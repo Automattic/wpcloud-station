@@ -14,6 +14,7 @@
 	},
 	"textdomain": "form-submit-button",
 	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
 	"style": "file:./style-index.css",
 	"attributes": {
 		"text": {
@@ -26,6 +27,10 @@
 		"type": {
 			"type": "string",
 			"default": "submit"
+		},
+		"asButton": {
+			"type": "boolean",
+			"default": true
 		}
 	}
 }

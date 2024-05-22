@@ -9,28 +9,30 @@ import classNames from 'classnames';
 import { __ } from '@wordpress/i18n';
 import {
 	useBlockProps,
+	RichText,
 	useInnerBlocksProps,
 	InspectorControls,
 } from '@wordpress/block-editor';
-import { PanelBody, TextControl, Dashicon } from '@wordpress/components';
+import { PanelBody, TextControl, ToggleControl } from '@wordpress/components';
+
+import './editor.scss';
 
 const Edit = ( { attributes, setAttributes } ) => {
-	const { text, icon, type } = attributes;
-	const template = [
-		[
-			'core/button',
-			{
-				text: text || __( 'Submit' ),
-				tagName: 'button',
-				type,
-			},
-		],
-	];
+	const { text, icon, type, displayButton } = attributes;
 
 	const controls = (
 		<>
 			<InspectorControls>
-				<PanelBody title={ __( 'Settings' ) }>
+				<PanelBody title={__('Settings')}>
+					<ToggleControl
+						label={__('Display as Button')}
+						checked={displayButton}
+						onChange={(newVal) => {
+							setAttributes({
+								displayButton: newVal,
+							});
+						}}
+					/>
 					<TextControl
 						label={ __( 'icon' ) }
 						value={ icon }
@@ -38,7 +40,7 @@ const Edit = ( { attributes, setAttributes } ) => {
 							setAttributes( { icon: newValue } )
 						}
 						help={ __(
-							'Replace the button text with a Dashicon. See https://developer.wordpress.org/resource/dashicons/ for available icons.'
+							'Setting an icon will override the text label.'
 						) }
 					/>
 				</PanelBody>
@@ -47,11 +49,7 @@ const Edit = ( { attributes, setAttributes } ) => {
 	);
 
 	const blockProps = useBlockProps();
-	const innerBlocksProps = useInnerBlocksProps( blockProps, {
-		template,
-	} );
 
-	if ( icon ) {
 		return (
 			<>
 				{ controls }
@@ -61,28 +59,26 @@ const Edit = ( { attributes, setAttributes } ) => {
 					className={ classNames(
 						'button',
 						'wpcloud-block-form-submit-icon-button',
+						'wp-block-button__link',
 						blockProps.className
 					) }
 					{ ...blockProps }
 					aria-label={ text }
 				>
-					<Dashicon icon={ icon } />
+				<RichText
+					value={ text }
+					onChange={ ( newVal ) => {
+						setAttributes( { text: newVal} );
+					} }
+					placeholder={__('label')}
+					className={classNames(
+						'wpcloud-block-form-submit-content',
+						'wp-block-button__link',
+						'wp-element-button'
+					)}
+				/>
 				</button>
 			</>
 		);
-	}
-
-	return (
-		<>
-			{ controls }
-			<div
-				className={ classNames(
-					'wpcloud-block-form-submit-wrapper',
-					innerBlocksProps.className
-				) }
-				{ ...innerBlocksProps }
-			/>
-		</>
-	);
 };
 export default Edit;
