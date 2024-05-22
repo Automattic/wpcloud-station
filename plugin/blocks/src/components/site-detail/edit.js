@@ -121,8 +121,8 @@ function SiteDetailBlock( { attributes, setAttributes, className } ) {
 								'wpcloud-block-site-detail__title-content'
 							}
 							value={ label }
-							onChange={ ( newTitle ) => {
-								setAttributes( { label: newTitle } );
+							onChange={ ( newVal ) => {
+								setAttributes( { label: newVal, metadata: { name: newVal } } );
 							} }
 							placeholder={ __( 'label' ) }
 						/>

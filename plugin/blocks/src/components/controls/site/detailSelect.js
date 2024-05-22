@@ -21,10 +21,12 @@ export default function DetailSelect( {
 			label={ __( 'Select a site detail' ) }
 			value={ name }
 			options={ options }
-			onChange={ ( newName ) => {
+			onChange={(newName) => {
+				const label = siteDetailKeys[newName] || newName;
 				setAttributes( {
 					name: newName,
-					label: siteDetailKeys[newName] || newName,
+					label,
+					metadata: { name: label },
 				} );
 				onChange && onChange( newName );
 			} }
