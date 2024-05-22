@@ -11,11 +11,9 @@ import { __ } from '@wordpress/i18n';
 export default function SelectField( {
 	attributes,
 	className,
-	styleProps = {},
 	onValueChange,
 } ) {
 	const { value, options } = attributes;
-	const { borderProps, colorProps } = styleProps;
 
 	const controls = <></>;
 	return (
@@ -25,16 +23,10 @@ export default function SelectField( {
 				className={ classNames(
 					className,
 					'wpcloud-station-form-input__select',
-					colorProps.className,
-					borderProps.className
 				) }
 				aria-label={ __( 'Select' ) }
 				value={ value }
 				onChange={ ( event ) => onValueChange( event.target.value ) }
-				style={ {
-					...borderProps.style,
-					...colorProps.style,
-				} }
 			>
 				{ options.map( ( option ) => (
 					<option key={ option.value } value={ option.value }>

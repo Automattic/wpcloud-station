@@ -11,8 +11,6 @@ import {
 	InspectorControls,
 	RichText,
 	useBlockProps,
-	__experimentalUseBorderProps as useBorderProps, // eslint-disable-line @wordpress/no-unsafe-wp-apis
-	__experimentalUseColorProps as useColorProps, // eslint-disable-line @wordpress/no-unsafe-wp-apis
 } from '@wordpress/block-editor';
 import { PanelBody, TextControl, ToggleControl, SelectControl } from '@wordpress/components';
 import { useRef, useCallback } from '@wordpress/element';
@@ -23,17 +21,15 @@ import { useRef, useCallback } from '@wordpress/element';
 import DetailSelectControl from '../controls/site/detailSelect';
 import { Text, Select, Hidden } from './fields';
 
-function InputFieldBlock( { attributes, setAttributes, className } ) {
+function InputFieldBlock({ attributes, setAttributes, className, context }) {
+	const { 'wpcloud-form/isActive': isFormActive } = context;
+
 	const { type, inlineLabel, label, adminOnly, required, name, hideLabel } =
 		attributes;
-	const blockProps = useBlockProps();
-	const ref = useRef();
 
-	const borderProps = useBorderProps( attributes );
-	const colorProps = useColorProps( attributes );
-	if ( ref.current ) {
-		ref.current.focus();
-	}
+
+
+	const blockProps = useBlockProps();
 
 	const updatePlaceholder = useCallback(
 		( placeholder ) => setAttributes( { placeholder } ),
@@ -140,6 +136,10 @@ function InputFieldBlock( { attributes, setAttributes, className } ) {
 		</>
 	);
 
+	if ( !isFormActive && 'hidden' === type ) {
+		return null;
+	}
+
 	return (
 		<div { ...blockProps }>
 			{ controls }
@@ -169,7 +169,6 @@ function InputFieldBlock( { attributes, setAttributes, className } ) {
 					onPlaceholderChange={updatePlaceholder}
 					onValueChange={ updateValue }
 					className={ className }
-					styleProps={{ colorProps, borderProps }}
 					isSelected={ blockProps.isSelected }
 				/>
 			</span>

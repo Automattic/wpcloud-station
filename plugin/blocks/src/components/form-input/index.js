@@ -36,4 +36,5 @@ registerBlockType( metadata.name, {
 	 * @see ./save.js
 	 */
 	save,
+	usesContext: [ 'wpcloud-form/isActive' ],
 } );
