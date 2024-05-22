@@ -4,6 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 require_once plugin_dir_path( __FILE__ ) . 'render.php';
+require_once plugin_dir_path( __DIR__ ) . 'lib/html5.php';
 
 function wpcloud_include_blocks() {
 	$block_directories = array_merge(
