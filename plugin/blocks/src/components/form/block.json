@@ -34,6 +34,10 @@
 		},
 		"redirect": {
 			"type": "string"
+		},
+		"active":{
+			"type":"boolean",
+			"default":false
 		}
 	},
 	"allowedBlocks": [
@@ -46,5 +50,8 @@
 		"core/grid",
 		"wpcloud/form-input",
 		"wpcloud/button"
-	]
+	],
+	"providesContext": {
+		"wpcloud-form/isActive": "active"
+	}
 }

@@ -6,6 +6,7 @@ import classNames from 'classnames';
 /**
  * WordPress dependencies
  */
+import { useEffect } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import {
 	InnerBlocks,
@@ -36,13 +37,17 @@ export default function Edit( {
 	setAttributes,
 	clientId,
 	isSelected,
-} ) {
+}) {
 	const { action, ajax, wpcloudAction, inline, redirect } = attributes;
 	const blockProps = useBlockProps();
 
 	const isChildSelected = useSelect( ( select ) =>
 		select( 'core/block-editor' ).hasSelectedInnerBlock( clientId )
 	);
+
+	useEffect( () => {
+		setAttributes({ active: isSelected || isChildSelected });
+	}, [ isSelected, isChildSelected ] )
 
 	const { hasInnerBlocks } = useSelect(
 		( select ) => {
