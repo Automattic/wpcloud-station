@@ -7,7 +7,7 @@ import { useBlockProps, RichText } from '@wordpress/block-editor';
 
 
 const Save = ( { attributes, className} ) => {
-	const { icon, text, type } = attributes;
+	const { icon, text, type, asButton } = attributes;
 	const blockProps = useBlockProps.save();
 	return (
 		<div
@@ -16,14 +16,19 @@ const Save = ( { attributes, className} ) => {
 				className,
 				blockProps.className,
 				'wpcloud-block-form-submit',
-				'wp-block-button',
+				{
+					'wp-block-button': asButton,
+				}
 			) }>
 				<button
 					type={type}
 					className={ classNames(
-						'wpcloud-block-form-submit-icon-button',
-						'wp-block-button__link',
-						'wp-element-button'
+						'wpcloud-block-form-submit-button',
+						{
+							'wp-block-button__link': asButton,
+							'wp-element-button': asButton,
+							'as-text': !asButton,
+						}
 					) }
 					aria-label={text}
 				>

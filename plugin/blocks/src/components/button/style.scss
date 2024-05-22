@@ -7,7 +7,10 @@
 		color: var(--wp--preset--color--base);
 	}
 }
-	.wp-block-wpcloud-button {
+	.wpcloud-block-form-submit-button {
 		background: none;
 		border: none;
+		&.as-text {
+			color: var(--wp--preset--color--base)
+		}
 	}
