@@ -42,6 +42,10 @@
 		"refreshLink": {
 			"type": "boolean",
 			"default": false
+		},
+		"showCopyButton": {
+			"type": "boolean",
+			"default": false
 		}
 	}
 }

@@ -35,3 +35,10 @@
 	text-decoration: none;
 	vertical-align: bottom;
 }
+.wpcloud-block-site-detail__value {
+	display: flex;
+	.wpcloud-copy-to-clipboard {
+		margin-left: 5px;
+		fill: var(--wp--preset--color--foreground-primary, '#FFFFFF');
+	}
+}

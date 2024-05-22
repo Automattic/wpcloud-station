@@ -13,15 +13,17 @@ import {
 	useBlockProps,
 } from '@wordpress/block-editor';
 import { PanelBody, ToggleControl } from '@wordpress/components';
+import { Icon, copySmall } from '@wordpress/icons'
 
 /**
  *
  * Internal dependencies
  */
 import DetailSelectControl from '../controls/site/detailSelect';
+import './editor.scss';
 
 function SiteDetailBlock( { attributes, setAttributes, className } ) {
-	const { label, adminOnly, inline, hideLabel, refreshLink } = attributes;
+	const { label, adminOnly, inline, hideLabel, refreshLink, showCopyButton } = attributes;
 	const blockProps = useBlockProps();
 
 	const controls = (
@@ -50,6 +52,18 @@ function SiteDetailBlock( { attributes, setAttributes, className } ) {
 						help={ __(
 							'Only show the value of the site detail. The label will be hidden.'
 						) }
+					/>
+					<ToggleControl
+						label={__('Add Copy to Clipboard button')}
+						checked={showCopyButton}
+						onChange={(newVal) => {
+							setAttributes({
+								showCopyButton: newVal,
+							});
+						}}
+						help={__(
+							'Add a button to copy the value of the site detail to the clipboard.'
+						)}
 					/>
 					<ToggleControl
 						label={ __( 'Refresh linked details' ) }
@@ -114,7 +128,10 @@ function SiteDetailBlock( { attributes, setAttributes, className } ) {
 					</div>
 				) }
 				<div className={ 'wpcloud-block-site-detail__value' }>
-					{ `{ ${ label } }` }
+					{`{ ${label} }`}
+					{ showCopyButton && (
+						<Icon className="wpcloud-copy-to-clipboard" icon={ copySmall } />
+					)}
 				</div>
 			</div>
 		</span>
