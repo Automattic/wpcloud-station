@@ -1,5 +1,5 @@
 
-.wpcloud-block-site-detail {
+.wpcloud-lock-site-detail {
 	display: flex;
 	flex-direction: column;
 	gap: 0.25em;
@@ -29,7 +29,6 @@
 	margin: 0;
 }
 
-
 // @TODO This should go in a generic style file
 .dashicons-external{
 	text-decoration: none;
@@ -38,8 +37,16 @@
 .wpcloud-block-site-detail__value-container {
 	display: flex;
 	align-items: center;
+	&.copy-to-clipboard:hover {
+		font-weight: bold;
+		.wpcloud-copy-to-clipboard {
+			background-color: var(--wp--preset--color--accent-primary, '#0073AA');
+		}
+	}
 
 	.wpcloud-copy-to-clipboard {
+
+		border-radius: 4px;
 		margin-left: 5px;
 		fill: var(--wp--preset--color--foreground-primary, '#FFFFFF');
 	}
