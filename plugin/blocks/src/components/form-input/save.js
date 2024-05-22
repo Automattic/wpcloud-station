@@ -100,7 +100,7 @@ function renderField( attributes ) {
 		: renderText( attributes, inputClasses, inputStyle );
 }
 
-export default function save({ attributes }) {
+export default function save( { attributes } ) {
 	const { type, label, name, value, inlineLabel } = attributes;
 	const blockProps = useBlockProps.save();
 

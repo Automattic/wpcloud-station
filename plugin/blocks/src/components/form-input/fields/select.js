@@ -22,7 +22,7 @@ export default function SelectField( {
 			<select
 				className={ classNames(
 					className,
-					'wpcloud-station-form-input__select',
+					'wpcloud-station-form-input__select'
 				) }
 				aria-label={ __( 'Select' ) }
 				value={ value }

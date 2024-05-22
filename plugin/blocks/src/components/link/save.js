@@ -17,9 +17,7 @@ export default function save( { attributes } ) {
 			data-name="name"
 		>
 			{ label }
-			{ externalLink && (
-				<Dashicon icon="external" />
-			) }
+			{ externalLink && <Dashicon icon="external" /> }
 		</a>
 	);
 }

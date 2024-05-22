@@ -1,24 +1,37 @@
 ( ( wpcloud ) => {
-
-	const updateSshUserInputs = (sshUserRow) => {
-		const sshUserInputs = sshUserRow.querySelectorAll('form input[name=site_ssh_user]');
+	const updateSshUserInputs = ( sshUserRow ) => {
+		const sshUserInputs = sshUserRow.querySelectorAll(
+			'form input[name=site_ssh_user]'
+		);
 		const sshUserName = sshUserRow.dataset.siteSshUser;
-		sshUserInputs.forEach((input) => {
+		sshUserInputs.forEach( ( input ) => {
 			input.value = sshUserName;
-		});
-	}
+		} );
+	};
 
-	const sshUserList = document.querySelector('.wp-block-wpcloud-ssh-user-list');
+	const sshUserList = document.querySelector(
+		'.wp-block-wpcloud-ssh-user-list'
+	);
 
-	sshUserList.querySelectorAll( '.wpcloud-block-site-ssh-user--row:not([style*="display:none"])' ).forEach( updateSshUserInputs );
+	sshUserList
+		.querySelectorAll(
+			'.wpcloud-block-site-ssh-user--row:not([style*="display:none"])'
+		)
+		.forEach( updateSshUserInputs );
 
-	function onSshUserAdded({ user }) {
-		const newRow = sshUserList.querySelector('.wpcloud-block-site-ssh-user--row[style*="display:none"]').cloneNode(true);
+	function onSshUserAdded( { user } ) {
+		const newRow = sshUserList
+			.querySelector(
+				'.wpcloud-block-site-ssh-user--row[style*="display:none"]'
+			)
+			.cloneNode( true );
 		newRow.dataset.siteSshUser = user;
-		newRow.querySelector('.wpcloud-block-site-detail__value').textContent = user;
-		updateSshUserInputs(newRow);
+		newRow.querySelector(
+			'.wpcloud-block-site-detail__value'
+		).textContent = user;
+		updateSshUserInputs( newRow );
 		newRow.style.display = 'flex';
-		sshUserList.appendChild(newRow);
+		sshUserList.appendChild( newRow );
 	}
 
 	function onSshUserRemove( result, form ) {
@@ -27,7 +40,7 @@
 			return;
 		}
 
-		const row = form.closest('.wpcloud-block-site-ssh-user--row')
+		const row = form.closest( '.wpcloud-block-site-ssh-user--row' );
 
 		row.ontransitionend = () => {
 			row.remove();

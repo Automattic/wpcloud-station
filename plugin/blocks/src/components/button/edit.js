@@ -22,15 +22,15 @@ const Edit = ( { attributes, setAttributes, className } ) => {
 	const controls = (
 		<>
 			<InspectorControls>
-				<PanelBody title={__('Settings')}>
+				<PanelBody title={ __( 'Settings' ) }>
 					<ToggleControl
-						label={__('Display as Button')}
-						checked={asButton}
-						onChange={(newVal) => {
-							setAttributes({
+						label={ __( 'Display as Button' ) }
+						checked={ asButton }
+						onChange={ ( newVal ) => {
+							setAttributes( {
 								asButton: newVal,
-							});
-						}}
+							} );
+						} }
 					/>
 				</PanelBody>
 			</InspectorControls>
@@ -38,35 +38,37 @@ const Edit = ( { attributes, setAttributes, className } ) => {
 	);
 
 	const blockProps = useBlockProps();
-		return (
-			<>
-				{controls}
-				<div { ...blockProps } 			className={classNames(
+	return (
+		<>
+			{ controls }
+			<div
+				{ ...blockProps }
+				className={ classNames(
 					className,
 					blockProps.className,
 					'wpcloud-block-form-submit',
 					{
 						'wp-block-button': asButton,
 					}
-				)}
-				>
-						<RichText
-							value={text}
-							onChange={(newVal) => {
-								setAttributes({ text: newVal });
-							}}
-							placeholder={__('submit')}
-							className={classNames(
-								'wpcloud-block-form-submit-button',
-								{
-									'wp-block-button__link': asButton,
-									'wp-element-button': asButton,
-									'as-text': !asButton,
-								}
-							)}
-						/>
-				</div>
-			</>
-		);
+				) }
+			>
+				<RichText
+					value={ text }
+					onChange={ ( newVal ) => {
+						setAttributes( { text: newVal } );
+					} }
+					placeholder={ __( 'submit' ) }
+					className={ classNames(
+						'wpcloud-block-form-submit-button',
+						{
+							'wp-block-button__link': asButton,
+							'wp-element-button': asButton,
+							'as-text': ! asButton,
+						}
+					) }
+				/>
+			</div>
+		</>
+	);
 };
 export default Edit;

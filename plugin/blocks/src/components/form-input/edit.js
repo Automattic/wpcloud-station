@@ -12,7 +12,12 @@ import {
 	RichText,
 	useBlockProps,
 } from '@wordpress/block-editor';
-import { PanelBody, TextControl, ToggleControl, SelectControl } from '@wordpress/components';
+import {
+	PanelBody,
+	TextControl,
+	ToggleControl,
+	SelectControl,
+} from '@wordpress/components';
 import { useRef, useCallback } from '@wordpress/element';
 
 /*
@@ -21,13 +26,11 @@ import { useRef, useCallback } from '@wordpress/element';
 import DetailSelectControl from '../controls/site/detailSelect';
 import { Text, Select, Hidden } from './fields';
 
-function InputFieldBlock({ attributes, setAttributes, className, context }) {
+function InputFieldBlock( { attributes, setAttributes, className, context } ) {
 	const { 'wpcloud-form/isActive': isFormActive } = context;
 
 	const { type, inlineLabel, label, adminOnly, required, name, hideLabel } =
 		attributes;
-
-
 
 	const blockProps = useBlockProps();
 
@@ -54,14 +57,14 @@ function InputFieldBlock({ attributes, setAttributes, className, context }) {
 		{ value: 'email', label: __( 'Email' ) },
 		{ value: 'password', label: __( 'Password' ) },
 		{ value: 'hidden', label: __( 'Hidden' ) },
-		{ value: 'textarea', label: __('Textarea') },
+		{ value: 'textarea', label: __( 'Textarea' ) },
 		// @TODO Implement select block to allow setting the select options. For now it's only available in block templates.
 		// { value: 'select', label: __( 'Select' ) },
 	];
 
-	const InputTag = inputTags[type] ? inputTags[type] : Text;
+	const InputTag = inputTags[ type ] ? inputTags[ type ] : Text;
 
-	const showLabel = !( hideLabel || 'hidden' === type );
+	const showLabel = ! ( hideLabel || 'hidden' === type );
 
 	const controls = (
 		<>
@@ -85,7 +88,7 @@ function InputFieldBlock({ attributes, setAttributes, className, context }) {
 					/>
 					<DetailSelectControl
 						attributes={ attributes }
-						setAttributes={setAttributes}
+						setAttributes={ setAttributes }
 					/>
 
 					{ 'checkbox' !== type && (
@@ -136,7 +139,7 @@ function InputFieldBlock({ attributes, setAttributes, className, context }) {
 		</>
 	);
 
-	if ( !isFormActive && 'hidden' === type ) {
+	if ( ! isFormActive && 'hidden' === type ) {
 		return null;
 	}
 
@@ -166,7 +169,7 @@ function InputFieldBlock({ attributes, setAttributes, className, context }) {
 				) }
 				<InputTag
 					attributes={ attributes }
-					onPlaceholderChange={updatePlaceholder}
+					onPlaceholderChange={ updatePlaceholder }
 					onValueChange={ updateValue }
 					className={ className }
 					isSelected={ blockProps.isSelected }

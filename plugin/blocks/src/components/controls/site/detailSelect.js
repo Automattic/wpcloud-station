@@ -11,8 +11,8 @@ export default function DetailSelect( {
 } ) {
 	const siteDetailKeys = window.wpcloud?.siteDetails || {};
 	let options = [];
-	for (const [key, value] of Object.entries(siteDetailKeys)) {
-		options.push({ value: key, label: value });
+	for ( const [ key, value ] of Object.entries( siteDetailKeys ) ) {
+		options.push( { value: key, label: value } );
 	}
 
 	const { name } = attributes;
@@ -21,8 +21,8 @@ export default function DetailSelect( {
 			label={ __( 'Select a site detail' ) }
 			value={ name }
 			options={ options }
-			onChange={(newName) => {
-				const label = siteDetailKeys[newName] || newName;
+			onChange={ ( newName ) => {
+				const label = siteDetailKeys[ newName ] || newName;
 				setAttributes( {
 					name: newName,
 					label,

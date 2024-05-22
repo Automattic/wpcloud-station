@@ -14,9 +14,8 @@ import {
 	InnerBlocks,
 } from '@wordpress/block-editor';
 import { ToggleControl, PanelBody } from '@wordpress/components';
-import { Icon, moreVertical } from '@wordpress/icons'
+import { Icon, moreVertical } from '@wordpress/icons';
 import { useSelect } from '@wordpress/data';
-
 
 /**
  * Internal dependencies
@@ -30,28 +29,35 @@ import './editor.scss';
  * @param {Object} props.setAttributes
  * @return {Element} Element to render.
  */
-export default function Edit({ attributes, setAttributes, className, clientId }) {
+export default function Edit( {
+	attributes,
+	setAttributes,
+	className,
+	clientId,
+} ) {
 	const { showMenu } = attributes;
 	const blockProps = useBlockProps();
 
 	const isChildSelected = useSelect( ( select ) =>
-			select( 'core/block-editor' ).hasSelectedInnerBlock( clientId )
+		select( 'core/block-editor' ).hasSelectedInnerBlock( clientId )
 	);
-	const innerBlocksProps = useInnerBlocksProps(blockProps, {
-		renderAppender: isChildSelected ? undefined : InnerBlocks.ButtonBlockAppender,
-	});
+	const innerBlocksProps = useInnerBlocksProps( blockProps, {
+		renderAppender: isChildSelected
+			? undefined
+			: InnerBlocks.ButtonBlockAppender,
+	} );
 
 	const controls = (
 		<InspectorControls>
-			<PanelBody title={__('Form Settings')}>
+			<PanelBody title={ __( 'Form Settings' ) }>
 				<ToggleControl
-					label={__('Show Menu')}
-					checked={showMenu}
-					onChange={(newVal) => {
-						setAttributes({
+					label={ __( 'Show Menu' ) }
+					checked={ showMenu }
+					onChange={ ( newVal ) => {
+						setAttributes( {
 							showMenu: newVal,
-						});
-					}}
+						} );
+					} }
 				/>
 			</PanelBody>
 		</InspectorControls>
@@ -59,25 +65,35 @@ export default function Edit({ attributes, setAttributes, className, clientId })
 
 	return (
 		<>
-			{controls}
-			<div className={classNames( className, 'wpcloud-more-menu-wrapper' )}>
-			{ ! showMenu && (
-					<button className="wpcloud-more-menu__button" onClick={() => {
-						setAttributes({
-							showMenu: true,
-						});
-
-					}}><Icon icon={moreVertical} /></button>
-			)}
-			{showMenu && (
-				<div
-					{...innerBlocksProps}
-					className={ classNames(
-						innerBlocksProps.className,
-						className,
-						'wpcloud-block-more-menu',
-					)}
-					/>)}
+			{ controls }
+			<div
+				className={ classNames(
+					className,
+					'wpcloud-more-menu-wrapper'
+				) }
+			>
+				{ ! showMenu && (
+					<button
+						className="wpcloud-more-menu__button"
+						onClick={ () => {
+							setAttributes( {
+								showMenu: true,
+							} );
+						} }
+					>
+						<Icon icon={ moreVertical } />
+					</button>
+				) }
+				{ showMenu && (
+					<div
+						{ ...innerBlocksProps }
+						className={ classNames(
+							innerBlocksProps.className,
+							className,
+							'wpcloud-block-more-menu'
+						) }
+					/>
+				) }
 			</div>
 		</>
 	);
