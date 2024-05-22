@@ -4,6 +4,9 @@
  *
  * @param string $content The block content.
  */
+
+
+
 if ( ! is_wpcloud_site_post() ) {
 	error_log("WP Cloud Site SSH User List Block: Not a site post.");
 	return;
@@ -23,38 +26,42 @@ if (is_wp_error($ssh_users)) {
 	return '';
 }
 
-$dom = new DOMDocument();
-$dom->loadHTML( $content );
+$html5 = new Masterminds\HTML5(['disable_html_ns' => true]);
+
+$dom = $html5->loadHTML( $content );
 $xpath = new DOMXPath($dom);
 
-// Find the remove forms ( should be only one, but just in case )
-$forms = $xpath->query('//form[contains(@class, "wpcloud-block-site-ssh-user--remove")]');
+// Find the row ( should be only one, but just in case )
+$rows = $xpath->query('//div[contains(@class, "wp-block-group wpcloud-block-site-ssh-user--row")]');
 
 // hold on to the first one
-$remove_form = $forms[0];
-$form_container = $remove_form->parentNode;
+if ( ! $rows ) {
+	error_log("WP Cloud Site SSH User List Block: No row found.");
+	return '';
+}
+
+$row = $rows[0];
+$list = $row->parentNode;
 
 foreach( $ssh_users as $user) {
-	$cloned_form = $remove_form->cloneNode(true);
-	$cloned_form->setAttribute('data-site-ssh-user', $user);
+	// add data attribute for the forms to use
+	$new_row = $row->cloneNode(true);
+	$new_row->setAttribute('data-site-ssh-user', $user);
 
-	$value_divs = $cloned_form->getElementsByTagName('div');
-	foreach ($value_divs as $value_div) {
-		if ($value_div->getAttribute('class') === 'wpcloud-block-site-detail__value') {
-			$value_div->nodeValue = $user;
-		}
+	// Update the site detail
+	$value_query = './/div[contains(concat(" ", normalize-space(@class), " "), " wpcloud-block-site-detail__value ")]';
+	$value_node = $xpath->query($value_query, $new_row)[0];
+	if ( $value_node ) {
+		$value_node->textContent = $user;
 	}
 
-	wpcloud_block_add_hidden_field($dom, $cloned_form, 'site_ssh_user', $user );
-
 	// Append the cloned form node to its parent node
-	$form_container->appendChild($cloned_form);
+	$list->appendChild($new_row);
 }
 
 // Hide the default form so we have at least one form to clone
-// add set up a hidden field for the alias
-$remove_form->setAttribute('style', 'display: none;');
-wpcloud_block_add_hidden_field( $dom, $remove_form, 'site_ssh_user' );
+
+$row->setAttribute('style', 'display:none;');
 
 $modified_html = $dom->saveHTML();
 echo $modified_html;

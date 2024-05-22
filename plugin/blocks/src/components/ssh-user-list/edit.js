@@ -22,39 +22,54 @@ export default function Edit() {
 	const blockProps = useBlockProps();
 
 	const template = [
-		[
-			'core/group',
+		[ 'core/group',
 			{
-				className: 'wpcloud-block-site-ssh-user-list',
+				className: 'wpcloud-block-site-ssh-user--row',
+				layout: {
+					type: "flex",
+					flexWrap: "nowrap"
+				},
+				metadata: {
+					name: "SSH User Row"
+				}
 			},
 			[
-				[
-					'wpcloud/form',
-					{
-						ajax: true,
-						wpcloudAction: 'site_ssh_user_remove',
-						inline: true,
-						className: 'wpcloud-block-site-ssh-user--remove',
-					},
-					[
-						[
-							'wpcloud/site-detail',
+				[ 'wpcloud/site-detail',
 							{
 								label: __( 'SSH User' ),
 								name: 'ssh_user',
 								inline: true,
 								hideLabel: true,
+								showCopyButton: true,
 							},
-						],
-						[
-							'wpcloud/button',
-							{
-								text: __( 'remove' ),
-								icon: 'trash',
-							},
-						],
-					],
 				],
+				[ 'wpcloud/more-menu',
+					{},
+					[
+						[ 'wpcloud/form',
+						{
+							ajax: true,
+							wpcloudAction: 'site_ssh_user_remove',
+							inline: true,
+							className: 'wpcloud-block-site-ssh-user--remove',
+						},
+						[
+							[ 'wpcloud/form-input',
+								{
+									type: 'hidden',
+									name: 'ssh_user',
+								},
+							],
+							[ 'wpcloud/button',
+								{
+									text: __( 'remove' ),
+									icon: 'trash',
+								},
+							],
+						],
+						],
+					]
+				]
 			],
 		],
 	];
@@ -69,7 +84,7 @@ export default function Edit() {
 				{ ...innerBlocksProps }
 				className={ classNames(
 					innerBlocksProps.className,
-					'wpcloud-block-site-ssh-user-list'
+					'wpcloud-block-site-ssh-user'
 				) }
 			/>
 		</div>
