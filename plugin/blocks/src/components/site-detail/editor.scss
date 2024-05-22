@@ -18,3 +18,7 @@
 	width: fit-content;
 	text-wrap: nowrap;
 }
+
+.wpcloud-copy-to-clipboard {
+	fill: var(--wp--preset--color--foreground-primary, '#FFFFFF');
+}

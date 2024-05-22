@@ -189,6 +189,7 @@ class WPCLOUD_Site {
 			'site_name' => __('Site Name'), // only used locally
 			'site_owner_id' => __( 'Site Owner ID' ), // only used locally
 			'domain_name' => __( 'Domain Name' ),
+			'domain_alias' => __( 'Domain Alias' ),
 			'wp_admin_email' => __( 'Admin Email' ),
 			'wp_admin_user'	=> __( 'Admin User' ),
 			'smtp_pass'	=> __( 'SMTP Password' ),

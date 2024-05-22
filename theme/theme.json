@@ -46,37 +46,42 @@
 				{
 					"color": "#ffffff",
 					"name": "Foreground Primary",
-					"slug": "custom-foreground-primary"
+					"slug": "foreground-primary"
 				},
 				{
 					"color": "#bababa",
 					"name": "Foreground Secondary",
-					"slug": "custom-foreground-secondary"
+					"slug": "foreground-secondary"
 				},
 				{
 					"color": "#555555",
 					"name": "Foreground Tertiary",
-					"slug": "custom-foreground-tertiary"
-				},
-				{
-					"color": "#f72b00",
-					"name": "Accent Primary",
-					"slug": "custom-accent-primary"
+					"slug": "foreground-tertiary"
 				},
 				{
 					"color": "#1a1515",
 					"name": "Background Primary",
-					"slug": "custom-background-primary"
+					"slug": "background-primary"
 				},
 				{
 					"color": "#2c2828",
 					"name": "Background Secondary",
-					"slug": "custom-background-secondary"
+					"slug": "background-secondary"
 				},
 				{
 					"color": "#3c3838",
 					"name": "Background Tertiary",
-					"slug": "custom-background-tertiary"
+					"slug": "background-tertiary"
+				},
+				{
+					"color": "#f72b00",
+					"name": "Accent Primary",
+					"slug": "accent-primary"
+				},
+				{
+					"color": "#3c3838",
+					"name": "Border Primary",
+					"slug": "border-primary"
 				}
 			]
 		},
