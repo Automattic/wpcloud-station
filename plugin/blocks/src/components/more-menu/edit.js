@@ -11,11 +11,11 @@ import {
 	useBlockProps,
 	useInnerBlocksProps,
 	InspectorControls,
-	InnerBlocks
+	InnerBlocks,
 } from '@wordpress/block-editor';
-import { ToggleControl, PanelBody, Button } from '@wordpress/components';
+import { ToggleControl, PanelBody } from '@wordpress/components';
 import { Icon, moreVertical } from '@wordpress/icons'
-
+import { useSelect } from '@wordpress/data';
 
 
 /**
@@ -30,11 +30,17 @@ import './editor.scss';
  * @param {Object} props.setAttributes
  * @return {Element} Element to render.
  */
-export default function Edit({ attributes, setAttributes, className }) {
+export default function Edit({ attributes, setAttributes, className, clientId }) {
 	const { showMenu } = attributes;
 	const blockProps = useBlockProps();
+
+	const isChildSelected = useSelect( ( select ) =>
+			select( 'core/block-editor' ).hasSelectedInnerBlock( clientId )
+	);
+
+	console.log(isChildSelected);
 	const innerBlocksProps = useInnerBlocksProps(blockProps, {
-		renderAppender: InnerBlocks.ButtonBlockAppender,
+		renderAppender: isChildSelected ? undefined : InnerBlocks.ButtonBlockAppender,
 	});
 
 	const controls = (
