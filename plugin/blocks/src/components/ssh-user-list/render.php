@@ -4,9 +4,6 @@
  *
  * @param string $content The block content.
  */
-
-
-
 if ( ! is_wpcloud_site_post() ) {
 	error_log("WP Cloud Site SSH User List Block: Not a site post.");
 	return;
@@ -26,8 +23,7 @@ if (is_wp_error($ssh_users)) {
 	return '';
 }
 
-$html5 = new Masterminds\HTML5(['disable_html_ns' => true]);
-
+$html5 = new Masterminds\HTML5( [ 'disable_html_ns' => true ] );
 $dom = $html5->loadHTML( $content );
 $xpath = new DOMXPath($dom);
 

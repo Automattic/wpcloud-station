@@ -138,9 +138,9 @@ class WPCLOUD_Site {
 		$this->details = array_intersect_key( (array) $wpcloud_site, array_flip( $detail_keys ) );
 
 		if ( array_search('geo_affinity', $detail_keys) !== false ) {
-			$data_center_cities = wpcloud_client_data_center_cities();
+			$data_center_cities = wpcloud_client_data_centers_available();
 			$this->details[ 'geo_affinity' ] = $wpcloud_site->extra->server_pool->geo_affinity;
-			$this->details[ 'data_center' ]  =$data_center_cities[ $this->details[ 'geo_affinity' ] ];
+			$this->details[ 'data_center' ] = $data_center_cities[ $this->details[ 'geo_affinity' ] ];
 		}
 
 		$ips = wpcloud_client_domain_ip_addresses( $this->wpcloud_site_id, $this->domain );
@@ -237,15 +237,5 @@ class WPCLOUD_Site {
 				return $phpmyadmin_url;
 		}
 		return '';
-	}
-
-	private static function fetch_all(): mixed {
-		$sites = wpcloud_client_site_list();
-		if ( is_wp_error( $sites ) ) {
-			error_log( 'Error fetching sites: ' . $sites->get_error_message() );
-			return $sites;
-		}
-		return $sites;
-		//return array_reduce( $sites, fn( $indexed, $site ) => $indexed + [ $site->atomic_site_id => (array) $site ], array() );
 	}
 }
