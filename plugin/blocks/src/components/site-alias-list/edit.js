@@ -26,52 +26,123 @@ export default function Edit() {
 			'core/group',
 			{
 				className: 'wpcloud-block-site-alias-list',
+				metadata: {
+					name: 'Site Alias List',
+				}
 			},
 			[
-				[
-					'wpcloud/site-detail',
+				[ 'core/group',
 					{
-						label: __( 'Primary Domain' ),
-						name: 'domain_name',
-						inline: true,
-						hideLabel: true,
-						className:
-							'wpcloud-block-site-alias-list__item--primary',
-					},
-				],
-				[
-					'wpcloud/form',
-					{
-						ajax: true,
-						wpcloudAction: 'site_alias_remove',
-						inline: true,
-						className: 'wpcloud-block-form-site-alias--remove',
+						metadata: { name: 'Primary Domain Row' },
+						className: 'wpcloud-block-site-alias-list__row--primary',
+						layout: { type:"flex", flexWrap:"nowrap", justifyContent:"space-between"}
 					},
 					[
-						[
-							'wpcloud/site-detail',
+						[ 'wpcloud/site-detail',
 							{
-								label: __( 'Domain Alias' ),
-								name: 'site_alias',
+								label: __( 'Primary Domain' ),
+								name: 'domain_name',
 								inline: true,
 								hideLabel: true,
+								className: 'wpcloud-block-site-alias-list__item--primary',
+								metadata: {
+									name: __( 'Primary Domain' ),
+								}
+							}
+						],
+						['core/paragraph', {
+							metadata:{"name":"Primary Domain Badge"},
+							content: __( 'Primary' ),
+							className: 'wpcloud-block-site-alias-list__item--primary-badge'
+						}]
+					]
+				],
+				[ 'core/group',
+					{
+						className: 'wpcloud-block-site-alias-list--row',
+						layout: {
+							type: 'flex',
+							flexWrap: 'wrap',
+							justifyContent:"space-between"
+						},
+						metadata: {
+							name: 'Alias Row',
+						},
+					},
+					[
+						[ 'wpcloud/site-detail',
+							{
+								label: __( 'Alias' ),
+								name: 'alias',
+								inline: true,
+								hideLabel: true,
+								metadata: {
+									name: __( 'Site Alias' ),
+								},
 							},
 						],
-						[
-							'wpcloud/button',
+
+						[ 'wpcloud/more-menu',
 							{
-								text: __( 'make primary' ),
-								type: 'button',
-								className:
-									'wpcloud-block-form-site-alias--make-primary',
+								showMenu: false,
 							},
-						],
-						[
-							'wpcloud/button',
-							{
-								text: __( 'remove' ),
-								icon: 'trash',
-							},
+							[
+								[ 'core/heading',
+									{
+										level: 3,
+										className: 'wpcloud-site-list-menu__title',
+										content: __( 'Site Details' ),
+									},
+								],
+								[ 'wpcloud/form',
+									{
+										ajax: true,
+										wpcloudAction: 'site_alias_make_primary',
+										inline: true,
+										className:
+											'wpcloud-block-site-alias-list--remove',
+									},
+									[
+										['wpcloud/icon', { icon: 'starEmpty' }],
+										['wpcloud/form-input',
+											{
+												type: 'hidden',
+												name: 'site_alias',
+											},
+										],
+										['wpcloud/button',
+											{
+												text: __('Make Primary'),
+												asButton: false,
+											},
+										],
+									],
+								],
+								[ 'wpcloud/form',
+									{
+										ajax: true,
+										wpcloudAction: 'site_alias_make_primary',
+										inline: true,
+										className:
+											'wpcloud-block-site-alias-list--remove',
+									},
+									[
+										['wpcloud/icon', { icon: 'trash' }],
+										['wpcloud/form-input',
+											{
+												type: 'hidden',
+												name: 'site_alias',
+											},
+										],
+										['wpcloud/button',
+											{
+												text: __('Remove Domain'),
+												asButton: false,
+											},
+										],
+									],
+								],
+							],
 						],
 					],
 				],

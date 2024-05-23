@@ -1,5 +1,5 @@
 
-.wpcloud-lock-site-detail {
+.wpcloud-block-site-detail {
 	display: flex;
 	flex-direction: column;
 	gap: 0.25em;
@@ -9,6 +9,7 @@
 		gap: 0.5em;
 		justify-content: flex-start;
 		align-items: baseline;
+		margin-top: 0;
 
 		.wpcloud-block-site-detail__label-content {
 			margin-bottom: 0.5em;
