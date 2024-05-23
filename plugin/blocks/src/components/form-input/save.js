@@ -101,7 +101,7 @@ function renderField( attributes ) {
 }
 
 export default function save( { attributes } ) {
-	const { type, label, name, value, inlineLabel } = attributes;
+	const { type, label, name, value, inlineLabel, hideLabel } = attributes;
 	const blockProps = useBlockProps.save();
 
 	if ( 'hidden' === type ) {
@@ -116,9 +116,11 @@ export default function save( { attributes } ) {
 					'is-label-inline': inlineLabel,
 				} ) }
 			>
+				{ ! hideLabel && (
 				<span className="wpcloud-block-form-input__label-content">
 					<RichText.Content value={ label } />
 				</span>
+				) }
 				{ renderField( attributes ) }
 			</label>
 			{ /* eslint-enable jsx-a11y/label-has-associated-control */ }
