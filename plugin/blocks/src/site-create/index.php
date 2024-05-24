@@ -39,8 +39,12 @@ add_filter('wpcloud_form_process_site_create', 'wpcloud_block_form_site_create_h
 
 function wpcloud_block_form_render_field_site_owner_id( $content ) {
 	$users = get_users();
-	$options = '';
+	$current_user = wp_get_current_user();
+	$options = '<option value="' . $current_user->ID . '">' . $current_user->display_name . '</option>';
 	foreach ( $users as $user ) {
+		if ( $user->ID === $current_user->ID ) {
+			continue;
+		}
 		$options .= sprintf(
 			'<option value="%d">%s</option>',
 			$user->ID,

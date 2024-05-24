@@ -89,14 +89,7 @@ export default function Edit() {
 							required: true,
 						},
 					],
-					[
-						'wpcloud/form-input',
-						{
-							type: 'password',
-							name: 'admin_pass',
-							label: __( 'Admin Password' ),
-						},
-					],
+
 					[
 						'wpcloud/form-input',
 						{
@@ -105,6 +98,14 @@ export default function Edit() {
 							label: __( 'Owner' ),
 							adminOnly: true,
 							options: [ { value: '1', label: 'Site Owner' } ],
+						},
+					],
+					[
+						'wpcloud/form-input',
+						{
+							type: 'password',
+							name: 'admin_pass',
+							label: __( 'WP Admin Password' ),
 						},
 					],
 					[
