@@ -14,9 +14,13 @@ Text Domain: wpcloud-station
 	th {
 		font-size: var(--wp--preset--font-size--small-caps);
 		color: var(--wp--preset--color--wpcloud-foreground-secondary);
+
 		text-transform: uppercase;
 		h2 {
 				font-weight: 400;
+		}
+		svg {
+			fill: var(--wp--preset--color--wpcloud-foreground-secondary);
 		}
 	}
 	th, td {
