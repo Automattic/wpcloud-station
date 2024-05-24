@@ -60,6 +60,8 @@ switch (true) {
 		}
 		$detail = sprintf('<a href="%s" %s >%s<span class="dashicons dashicons-external"></span></a>', $value, $data, $link_text);
 		break;
+	case $name === 'wp_version':
+		$value = ucfirst( $value );
 	default:
 		$detail = $value;
 }
