@@ -20,6 +20,10 @@
 		"icon": {
 			"type": "string",
 			"default": "wordpress"
+		},
+		"size": {
+			"type": "string",
+			"default": "24"
 		}
 	}
 }

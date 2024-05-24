@@ -12,7 +12,7 @@ import {
 	RichText,
 	useBlockProps,
 } from '@wordpress/block-editor';
-import { PanelBody, SelectControl } from '@wordpress/components';
+import { PanelBody, SelectControl, TextControl } from '@wordpress/components';
 import * as icons from '@wordpress/icons';
 
 const Icon = icons.Icon;
@@ -26,7 +26,7 @@ const iconOptions = Object.keys( icons ).map( ( key ) =>
  * Internal dependencies
  */
 export default function ( { attributes, setAttributes, className } ) {
-	const { icon } = attributes;
+	const { icon, size } = attributes;
 	const blockProps = useBlockProps();
 
 	const controls = (
@@ -40,6 +40,14 @@ export default function ( { attributes, setAttributes, className } ) {
 						setAttributes( { icon: newVal } );
 					} }
 				/>
+				<TextControl
+					label={__('size')}
+					value={size}
+					onChange={(newVal) => {
+						setAttributes({size: newVal})
+					}}
+				/>
+
 			</PanelBody>
 		</InspectorControls>
 	);
@@ -54,7 +62,8 @@ export default function ( { attributes, setAttributes, className } ) {
 					className,
 					'wpcloud-block-icon'
 				) }
-				icon={ icons[ icon ] }
+				icon={icons[icon] }
+				size={ size || 24 }
 			/>
 		</>
 	);
