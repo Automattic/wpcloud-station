@@ -11,7 +11,7 @@ import * as icons from '@wordpress/icons';
 const { Icon } = icons;
 
 export default function save( { attributes, className } ) {
-	const { icon } = attributes;
+	const { icon, size } = attributes;
 	const blockProps = useBlockProps.save();
 
 	return (
@@ -23,6 +23,7 @@ export default function save( { attributes, className } ) {
 				'wpcloud-block-icon'
 			) }
 			icon={ icons[ icon ] }
+			size={ size }
 		/>
 	);
 }
