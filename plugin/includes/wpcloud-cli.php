@@ -387,7 +387,25 @@ class WPCloud_CLI_Site_SSH_User extends WPCloud_CLI_Site {
 
 	protected $user;
 
-	public function add($args, $options ) {
+	/**
+ 	* Add a new SSH user.
+ 	*
+ 	* ## OPTIONS
+ 	*
+ 	* <id>
+ 	* : The site id.
+	*
+	* <user>
+	* : The user name.
+ 	*
+ 	* [--pass=<pass>]
+ 	* : The password for the user.
+ 	*
+ 	* [--pub_key=<pub_key>]
+ 	* : The public key for the user.
+ 	*
+ 	*/
+ 	public function add($args, $options ) {
 		$this->set_site_id($args);
 		$this->set_user($args);
 
