@@ -78,6 +78,11 @@ function SiteDetailBlock( { attributes, setAttributes, className } ) {
 							'Refresh urls on site detail links. A new link will be generated when clicked.'
 						) }
 					/>
+					{
+						// @TODO add refresh rate when refresh is enabled
+						// @TODO add option to show external link icon
+					}
+
 					<ToggleControl
 						label={ __( 'Limit to Admins' ) }
 						checked={ adminOnly }
