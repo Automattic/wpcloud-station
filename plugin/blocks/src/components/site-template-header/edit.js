@@ -69,8 +69,12 @@ export default function Edit() {
 			{ isHeader: true },
 			[
 				[
+					'wpcloud/icon',
+					{ icon: 'wordpress', size: 24 },
+				],
+				[
 					'core/heading',
-					{ level: 2, content: __( 'WP Version', 'wpcloud' ) },
+					{ level: 2, content: __( 'Version', 'wpcloud' ) },
 				],
 			],
 		],
