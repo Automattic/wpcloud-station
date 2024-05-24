@@ -2,6 +2,8 @@
 if ( $attributes['adminOnly'] && ! current_user_can( 'manage_options' ) ) {
 	return;
 }
+
+
 $layout = $block->context['wpcloud/layout'] ?? '';
 
 $classes = array( 'wpcloud-block-link' );

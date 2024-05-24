@@ -8,67 +8,176 @@ import classNames from 'classnames';
  */
 import { __ } from '@wordpress/i18n';
 import {
-	useBlockProps,
-	RichText,
 	InspectorControls,
+	RichText,
+	useBlockProps,
+	InnerBlocks,
 } from '@wordpress/block-editor';
-import { PanelBody, TextControl, ToggleControl } from '@wordpress/components';
+import {
+	PanelBody,
+	ToggleControl,
+	TextControl,
+	SelectControl,
+} from '@wordpress/components';
 
-import './editor.scss';
+/**
+ *
+ * Internal dependencies
+ */
+import LinkableDetailSelectControl from '../controls/site/linkableDetailSelect';
 
-const Edit = ( { attributes, setAttributes, className } ) => {
-	const { text, asButton } = attributes;
+function ButtonBlock( { attributes, setAttributes, className } ) {
+	const { kind, style, adminOnly, target, icon, url, label, action } =
+		attributes;
+	const blockProps = useBlockProps();
+	/**
+	 *
+	 * 1. General link
+	 * 2. Site Detail ? ( would need the refresh option )
+	 * 3. Fire action for JS to pick up
+	 *
+	 */
+
+	const updateAttribute = ( key ) => ( val ) => {
+		setAttributes( { [ key ]: val } );
+	};
+
+	const LinkControls = (
+		<>
+			<TextControl
+				label={ __( 'Custom URL' ) }
+				value={ url }
+				onChange={ updateAttribute( 'url' ) }
+				help={ __(
+					'Add a custom URL for this link. Just use the path for internal links i.e. `/sites` '
+				) }
+			/>
+			<ToggleControl
+				label={ __( 'Open in new tab' ) }
+				checked={ target === '_blank' }
+				onChange={ ( newVal ) =>
+					setAttributes( {
+						target: newVal ? '_blank' : '_self',
+					} )
+				}
+			/>
+		</>
+	);
+
+	const DetailControls = (
+		<>
+			<LinkableDetailSelectControl
+				attributes={ attributes }
+				setAttributes={ setAttributes }
+				help={ __(
+					'Select a site detail to link to. Leave blank if using a custom URL.'
+				) }
+			/>
+		</>
+	);
+
+	const ActionControls = (
+		<>
+			{ /* @TODO: add list of available actions */ }
+			<TextControl
+				label={ __( 'Action' ) }
+				value={ action }
+				onChange={ updateAttribute( 'action' ) }
+				help={ __(
+					'Add an action for this link. This will be used to trigger JS actions'
+				) }
+			/>
+		</>
+	);
 
 	const controls = (
 		<>
 			<InspectorControls>
-				<PanelBody title={ __( 'Settings' ) }>
+				<PanelBody label={ __( 'Settings' ) }>
+					<SelectControl
+						label={ __( 'Button Type' ) }
+						value={ kind }
+						options={ [
+							{ label: __( 'Link' ), value: 'link' },
+							{ label: __( 'Detail' ), value: 'detail' },
+							{ label: __( 'Action' ), value: 'action' },
+						] }
+						onChange={ updateAttribute( 'kind' ) }
+					/>
+					<SelectControl
+						label={ __( 'Button Style' ) }
+						value={ style }
+						options={ [
+							{ label: __( 'Text' ), value: 'text' },
+							{ label: __( 'Button' ), value: 'button' },
+						] }
+						onChange={ updateAttribute( 'style' ) }
+					/>
+
 					<ToggleControl
-						label={ __( 'Display as Button' ) }
-						checked={ asButton }
+						label={ __( 'Icon' ) }
+						checked={ icon }
+						onChange={ updateAttribute( 'icon' ) }
+						help={ __( 'Add Icon to the button' ) }
+					/>
+					<ToggleControl
+						label={ __( 'Limit to Admins' ) }
+						checked={ adminOnly }
 						onChange={ ( newVal ) => {
 							setAttributes( {
-								asButton: newVal,
+								adminOnly: newVal,
 							} );
 						} }
+						help={ __(
+							'Only admins will see this field. Inputs marked as admin only will appear with a dashed border in the editor'
+						) }
 					/>
+				</PanelBody>
+				<PanelBody label={ __( 'Button Config' ) }>
+					{ 'link'   === kind && LinkControls }
+					{ 'detail' === kind && DetailControls }
+					{ 'action' === kind && ActionControls }
 				</PanelBody>
 			</InspectorControls>
 		</>
 	);
 
-	const blockProps = useBlockProps();
 	return (
 		<>
 			{ controls }
 			<div
 				{ ...blockProps }
 				className={ classNames(
-					className,
 					blockProps.className,
-					'wpcloud-block-form-submit',
+					className,
+					'wpcloud-block-button',
 					{
-						'wp-block-button': asButton,
+						'is-admin-only': adminOnly,
 					}
 				) }
+				data-name={ attributes.name }
 			>
-				<RichText
-					value={ text }
-					onChange={ ( newVal ) => {
-						setAttributes( { text: newVal } );
-					} }
-					placeholder={ __( 'submit' ) }
+				<span
 					className={ classNames(
-						'wpcloud-block-form-submit-button',
-						{
-							'wp-block-button__link': asButton,
-							'wp-element-button': asButton,
-							'as-text': ! asButton,
-						}
+						'wpcloud-block-button__content',
+						{ 'wp-block-button__link': style === 'button' }
+					)}
+				>
+					<RichText
+						className={ 'wpcloud-block-button__label' }
+						value={ label }
+						onChange={ updateAttribute( 'label' ) }
+						placeholder={ __( 'Button' ) }
+					/>
+					{ icon && (
+						<div className="wpcloud-block-button__icon">
+							<InnerBlocks allowedBlocks={ [ 'wpcloud/icon' ] } />
+						</div>
 					) }
-				/>
+				</span>
 			</div>
 		</>
 	);
-};
-export default Edit;
+}
+
+export default ButtonBlock;

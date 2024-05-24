@@ -1,36 +1,64 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
-	"name": "wpcloud/button",
+	"name": "wpcloud/link",
 	"version": "0.1.0",
-	"title": "Submit Button",
+	"title": "WP Cloud Button",
 	"category": "wpcloud",
 	"icon": "button",
-	"description": "WP Cloud from submit button.",
-	"ancestor": [ "wpcloud/form" ],
-	"example": {},
+	"description": "WP Cloud Actionable button",
 	"supports": {
 		"html": false
 	},
-	"textdomain": "form-submit-button",
+	"textdomain": "wpcloud",
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",
 	"style": "file:./style-index.css",
+	"render": "file:./render.php",
+	"viewScript": "file:./view.js",
+	"usesContext": [ "wpcloud/layout" ],
 	"attributes": {
-		"text": {
-			"type": "string",
-			"default": "Submit"
+		"kind": {
+			"type" : "string",
+			"default": "link"
 		},
-		"icon": {
+		"style": {
+			"type": "string",
+			"default": "button"
+		},
+		"label": {
 			"type": "string"
 		},
-		"type": {
-			"type": "string",
-			"default": "submit"
-		},
-		"asButton": {
+		"adminOnly": {
 			"type": "boolean",
-			"default": true
+			"default": false
+		},
+		"icon": {
+			"type": "boolean",
+			"default": false
+		},
+
+		"url": {
+			"type": "string",
+			"default": ""
+		},
+		"target": {
+			"type": "string",
+			"default": "_self"
+		},
+
+		"action": {
+			"type": "string",
+			"default": ""
+		},
+
+		"name": {
+			"type": "string",
+			"default": ""
+		},
+		"refresh": {
+			"type": "boolean",
+			"default": false
 		}
 	}
 }

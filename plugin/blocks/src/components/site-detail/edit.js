@@ -66,18 +66,7 @@ function SiteDetailBlock( { attributes, setAttributes, className } ) {
 							'Add a button to copy the value of the site detail to the clipboard.'
 						) }
 					/>
-					<ToggleControl
-						label={ __( 'Refresh linked details' ) }
-						checked={ refreshLink }
-						onChange={ ( newVal ) => {
-							setAttributes( {
-								refreshLink: newVal,
-							} );
-						} }
-						help={ __(
-							'Refresh urls on site detail links. A new link will be generated when clicked.'
-						) }
-					/>
+
 					{
 						// @TODO add refresh rate when refresh is enabled
 						// @TODO add option to show external link icon

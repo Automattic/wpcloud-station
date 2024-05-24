@@ -41,13 +41,12 @@ export default function ( { attributes, setAttributes, className } ) {
 					} }
 				/>
 				<TextControl
-					label={__('size')}
-					value={size}
-					onChange={(newVal) => {
-						setAttributes({size: newVal})
-					}}
+					label={ __( 'size' ) }
+					value={ size }
+					onChange={ ( newVal ) => {
+						setAttributes( { size: newVal } );
+					} }
 				/>
-
 			</PanelBody>
 		</InspectorControls>
 	);
@@ -62,7 +61,7 @@ export default function ( { attributes, setAttributes, className } ) {
 					className,
 					'wpcloud-block-icon'
 				) }
-				icon={icons[icon] }
+				icon={ icons[ icon ] }
 				size={ size || 24 }
 			/>
 		</>

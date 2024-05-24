@@ -1,16 +1,6 @@
-
-.wpcloud-form-submit-wrapper {
-
-	button:disabled {
-		background-color: var(--wp--preset--color--contrast-2);
-		border-color: var(--wp--preset--color--contrast-2);
-		color: var(--wp--preset--color--base);
-	}
+.wpcloud-block-button {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: fit-content;
 }
-	.wpcloud-block-form-submit-button {
-		background: none;
-		border: none;
-		&.as-text {
-			color: var(--wp--preset--color--base)
-		}
-	}

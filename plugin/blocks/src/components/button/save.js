@@ -3,35 +3,28 @@
  */
 import classNames from 'classnames';
 
-import { useBlockProps, RichText } from '@wordpress/block-editor';
+/**
+ * WordPress dependencies
+ */
+import { InnerBlocks, useBlockProps, RichText } from '@wordpress/block-editor';
 
-const Save = ( { attributes, className } ) => {
-	const { text, type, asButton } = attributes;
+export default function save( { attributes, className } ) {
+	const { label, style } = attributes;
 	const blockProps = useBlockProps.save();
+
 	return (
 		<div
 			{ ...blockProps }
 			className={ classNames(
-				className,
 				blockProps.className,
-				'wpcloud-block-form-submit',
-				{
-					'wp-block-button': asButton,
-				}
+				className,
+				'wpcloud-block-button'
 			) }
 		>
-			<button
-				type={ type }
-				className={ classNames( 'wpcloud-block-form-submit-button', {
-					'wp-block-button__link': asButton,
-					'wp-element-button': asButton,
-					'as-text': ! asButton,
-				} ) }
-				aria-label={ text }
-			>
-				<RichText.Content value={ text } />
-			</button>
+			<span className={ 'wpcloud-block-button--label' }>
+				<RichText.Content value={ label } />
+			</span>
+			<InnerBlocks.Content />
 		</div>
 	);
-};
-export default Save;
+}

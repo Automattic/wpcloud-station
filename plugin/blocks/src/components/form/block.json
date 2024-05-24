@@ -49,7 +49,7 @@
 		"core/columns",
 		"core/grid",
 		"wpcloud/form-input",
-		"wpcloud/button"
+		"wpcloud/form-submit-button"
 	],
 	"providesContext": {
 		"wpcloud-form/isActive": "active"
