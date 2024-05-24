@@ -1,8 +1,4 @@
-.wpcloud-block-site-alias-list__item--primary {
-	.wpcloud-block-site-detail__value {
-		transition: all 0.5s ease-out;
-	}
-}
+
 
 .wpcloud-block-form-site-alias--remove {
 	transition: all 0.5s ease-out;
@@ -36,8 +32,10 @@
 		}
 	}
 }
-
-// @TODO Move this into a generic style file
+.wpcloud-block-site-ssh-user--row {
+	transition: all 0.5s ease-out;
+}
+//TODO Move this into a generic style file
 .wpcloud-hide {
 	opacity: 0;
 }

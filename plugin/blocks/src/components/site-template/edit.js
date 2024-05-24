@@ -19,7 +19,6 @@ import {
 import { Spinner } from '@wordpress/components';
 import { store as coreStore } from '@wordpress/core-data';
 
-
 /**
  * Internal dependencies
  */

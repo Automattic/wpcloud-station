@@ -41,7 +41,7 @@ export default function Edit( { attributes, className } ) {
 			<h3 className="site-url">
 				<a href="#" target="_blank">
 					<span>{ __( 'Site Domain', 'site-card' ) }</span>
-				 	<Dashicon icon="external" />
+					<Dashicon icon="external" />
 				</a>
 			</h3>
 		</div>

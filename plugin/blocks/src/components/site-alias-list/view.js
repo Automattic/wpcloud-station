@@ -3,22 +3,25 @@
 		'.wpcloud-block-site-alias-list'
 	);
 
-	const makePrimaryButtonQuery =
-		'.wpcloud-block-form-site-alias--make-primary';
-
-	function bindMakePrimaryButton( button ) {
-		button.onclick = ( e ) => {
-			e.preventDefault();
-			const form = button.closest( 'form' );
-			form.querySelector( 'input[name=wpcloud_action]' ).value =
-				'site_alias_make_primary';
-			form.dispatchEvent( new Event( 'submit' ) );
-		};
-	}
-
+	// Find each row in the alias list and get the data-site-alias attribute
 	aliasList
-		.querySelectorAll( makePrimaryButtonQuery )
-		.forEach( bindMakePrimaryButton );
+		.querySelectorAll(
+			'.wpcloud-block-site-alias-list--row:not([style*="display:none"]'
+		)
+		.forEach( ( row ) => {
+			const alias = row.dataset.siteAlias;
+			if ( ! alias ) {
+				// eslint-disable-next-line no-console
+				console.error(
+					'Missing data-site-alias attribute on alias list row'
+				);
+				return;
+			}
+
+			row.querySelectorAll( 'input[name=site_alias]' ).forEach(
+				( input ) => ( input.value = alias )
+			);
+		} );
 
 	function onSiteAliasRemove( result, form ) {
 		if ( ! result.success ) {
@@ -27,32 +30,49 @@
 			return;
 		}
 
-		form.ontransitionend = () => {
-			form.remove();
+		const row = form.closest( '.wpcloud-block-site-alias-list--row' );
+
+		row.ontransitionend = () => {
+			row.remove();
 		};
 
-		form.classList.add( 'wpcloud-hide' );
+		row.classList.add( 'wpcloud-hide' );
 	}
 
 	function onSiteAliasAdded( alias ) {
-		const newForm = aliasList.querySelector( 'form' ).cloneNode( true );
-		newForm.querySelector(
+		const newRow = aliasList
+			.querySelector(
+				'.wpcloud-block-site-alias-list--row[style*="display:none"]'
+			)
+			.cloneNode( true );
+
+		newRow.dataset.siteAlias = alias;
+
+		newRow.querySelector(
 			'.wpcloud-block-site-detail__value'
 		).textContent = alias;
 
-		newForm.querySelector( 'input[name=site_alias]' ).value = alias;
-		bindMakePrimaryButton(
-			newForm.querySelector( makePrimaryButtonQuery )
-		);
-		wpcloud.bindFormHandler( newForm );
+		// Set up the new forms
+		newRow.querySelectorAll( 'form' ).forEach( ( form ) => {
+			form.querySelector( 'input[name=site_alias]' ).value = alias;
+			wpcloud.bindFormHandler( form );
+		} );
 
-		aliasList.appendChild( newForm );
-		newForm.style.display = 'flex';
+		aliasList.appendChild( newRow );
+		newRow.classList.add( 'wpcloud-hide' );
+		newRow.style.display = 'flex';
+		newRow.ontransitionend = () => {
+			newRow.classList.remove( 'wpcloud-hide' );
+			newRow.ontransitionend = null;
+		};
 	}
 
 	function updateTextOnTransitionEnd( el, text ) {
 		return () => {
-			el.textContent = text;
+			console.log( el );
+			const a = el.querySelector( 'a' );
+			a.href = `https://${ text }`;
+			a.textContent = text;
 			el.classList.remove( 'wpcloud-hide' );
 			el.ontransitionend = null;
 		};
@@ -64,38 +84,43 @@
 			return;
 		}
 
-		form.querySelector( 'input[name=wpcloud_action]' ).value =
-			'site_alias_remove';
-
+		const newPrimary = result.site_alias;
+		const alias = form.closest( '.wpcloud-block-site-alias-list--row' );
 		const primary = aliasList.querySelector(
 			'.wpcloud-block-site-alias-list__item--primary'
 		);
-		const primaryValue = primary.querySelector(
+		const oldPrimary = primary.dataset.domainName;
+
+		// swap the data sets
+		primary.dataset.domainName = newPrimary;
+		alias.dataset.siteAlias = oldPrimary;
+
+		// update alias form inputs
+		alias
+			.querySelectorAll( 'input[name=site_alias]' )
+			.forEach( ( input ) => ( input.value = oldPrimary ) );
+
+		// swap the values
+		const primaryValueNode = primary.querySelector(
 			'.wpcloud-block-site-detail__value'
 		);
-
-		const aliasValue = form.querySelector(
-			'.wpcloud-block-site-detail__value'
-		);
-
-		const oldPrimary = primaryValue.textContent;
-		const newPrimary = result.site_alias;
-
-		const removeFormInput = form.querySelector( 'input[name=site_alias]' );
-		removeFormInput.value = oldPrimary;
-		removeFormInput.name = 'site_alias';
-
-		primaryValue.ontransitionend = updateTextOnTransitionEnd(
-			primaryValue,
+		primaryValueNode.ontransitionend = updateTextOnTransitionEnd(
+			primaryValueNode,
 			newPrimary
 		);
-		aliasValue.ontransitionend = updateTextOnTransitionEnd(
-			aliasValue,
+
+		const aliasValueNode = alias.querySelector(
+			'.wpcloud-block-site-detail__value'
+		);
+		console.log( alias );
+		console.log( aliasValueNode );
+		aliasValueNode.ontransitionend = updateTextOnTransitionEnd(
+			aliasValueNode,
 			oldPrimary
 		);
 
-		primaryValue.classList.add( 'wpcloud-hide' );
-		aliasValue.classList.add( 'wpcloud-hide' );
+		primaryValueNode.classList.add( 'wpcloud-hide' );
+		aliasValueNode.classList.add( 'wpcloud-hide' );
 	}
 
 	wpcloud.hooks.addAction(

@@ -26,7 +26,7 @@ function wpcloud_block_form__site_ssh_user_add_handler( $response, $data ) {
 		return $response;
 	}
 
-	// Generate a random username if one is not provided.
+	// Use current user if user is not set
 	if ( ! isset( $data['user'] ) ) {
 		$user = wp_get_current_user();
 		$data[ 'user' ] = $user->user_login;

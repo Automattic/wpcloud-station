@@ -12,54 +12,74 @@ if ( ! is_wpcloud_site_post() ) {
 if ( $attributes[ 'adminOnly' ] && ! current_user_can( 'manage_options' ) ) {
 	return;
 }
+
+// Grab the detail name and value
 $name = $attributes[ 'name' ] ?? '';
-$detail = wpcloud_get_site_detail( get_the_ID(), $name ) ?? '';
-if ( is_wp_error( $detail ) ) {
-	error_log( 'WP Cloud Site Detail Block: ' . $detail->get_error_message() );
+$value = wpcloud_get_site_detail( get_the_ID(), $name ) ?? '';
+$detail = '';
+
+if ( is_wp_error( $value ) ) {
+	error_log( 'WP Cloud Site Detail Block: ' . $value->get_error_message() );
 	return '' ;
 }
 
-if ( $name === 'domain_name' || $name === 'site_url') {
-	$detail = "<a href='https://$detail' >$detail <span class='dashicons dashicons-external'></a>";
-}
+switch (true) {
+	case is_array( $value ):
 
-if ( is_array( $detail ) ) {
-	$list = "<ul class='wpcloud_block_site_detail__value__list'>";
-	foreach ( $detail as $key => $value ) {
-		$list .= "<li>$value</li>";
-	}
-	$list .= "</ul>";
-	$detail = $list;
-}
+		$detail = "<ul class='wpcloud_block_site_detail__value__list'>";
+		foreach ( $value as $key => $li ) {
+			$detail .= "<li>$li</li>";
+		}
+		$detail .= "</ul>";
+		break;
 
-if (str_starts_with($detail, 'http')) {
-	$label = $attributes['label'] ?? '';
-	$link_text = $detail;
-	if ( $attributes[ 'hideLabel' ] ) {
-		$link_text = $label;
-	}
-	$data = '';
-	if ( $attributes[ 'refreshLink' ] ) {
-		$nonce = wp_create_nonce( 'wpcloud_refresh_link' );
-		// @ TODO add the refresh rate to the block attributes
-		$data = "data-nonce=$nonce data-refresh-rate='10000' data-site-detail=$name data-site-id=" . get_the_ID();
-	}
-	$detail = sprintf('<a href="%s" %s >%s<span class="dashicons dashicons-external"></span></a>', $detail, $data, $link_text);
-}
+	case $name === 'domain_name' || $name === 'site_url':
+		$detail = sprintf('<a href="https://%s">%s<span class="dashicons dashicons-external"></span></a>', $value, $value);
+		break;
 
+	case str_starts_with( $value, 'http' ):
+		$label = $attributes['label'] ?? '';
+		$link_text = $value;
+
+		if ( $attributes[ 'hideLabel' ] ) {
+			$link_text = $label;
+		}
+
+		$data = '';
+		if ( $attributes[ 'refreshLink' ] ) {
+			$nonce = wp_create_nonce( 'wpcloud_refresh_link' );
+			// @TODO add the refresh rate to the block attributes
+			$refresh_rate = $attributes[ 'refreshRate' ] ?? 10000;
+			$data = sprintf(
+				"data-nonce=%s data-refresh-rate='%s' data-site-detail=%s data-site-id=%s",
+				$nonce,
+				$refresh_rate,
+				$name,
+				get_the_ID()
+			);
+		}
+		$detail = sprintf('<a href="%s" %s >%s<span class="dashicons dashicons-external"></span></a>', $value, $data, $link_text);
+		break;
+	default:
+		$detail = $value;
+}
 // match the placeholder which is in the last set of curly braces  { The placeholder }
 $regex = '/\{[^{}]*\}(?=[^{}]*$)/';
+$detail = preg_replace( $regex, $detail, $content );
 
-$detail = preg_replace($regex, $detail, $content);
+$data_name = "data-" . preg_replace('/_/', '-', $name );
+if (is_array($value)) {
+	$value = implode(',', $value);
+}
+$node_attributes = array ( $data_name => $value );
 
 $layout = $block->context['wpcloud/layout'] ?? '';
-
 if ('table' === $layout) {
+	$node_attributes['class'] = 'wpcloud-block-table-cell';
 	$wrapper = 'td';
-	$wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'wpcloud-block-table-cell' ) );
 } else {
 	$wrapper = 'div';
-	$wrapper_attributes = get_block_wrapper_attributes();
 }
 
-printf('<%1$s %2$s>%3$s</%1$s>', $wrapper, $wrapper_attributes, $detail);
+$wrapper_attributes = get_block_wrapper_attributes( $node_attributes );
+printf( '<%1$s %2$s>%3$s</%1$s>', $wrapper, $wrapper_attributes, $detail );

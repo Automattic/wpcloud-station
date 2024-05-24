@@ -398,7 +398,7 @@ class WPCloud_CLI_Site_SSH_User extends WPCloud_CLI_Site {
 			$pass = null;
 		}
 
-		$result = wpcloud_client_ssh_user_add( $this->site_id, $this->user, $key, $pass);
+		$result = wpcloud_client_ssh_user_add( $this->site_id, uniqid( $this->user ), $key, $pass);
 		self::log_result( $result, 'SSH user added' );
 
 	}

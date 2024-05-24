@@ -25,7 +25,7 @@ export default function TextField( {
 				type={ 'textarea' === type ? undefined : type }
 				className={ classNames(
 					className,
-					'wpcloud-block-form-input__input',
+					'wpcloud-block-form-input__input'
 				) }
 				aria-label={ __( 'Optional placeholder text' ) }
 				placeholder={

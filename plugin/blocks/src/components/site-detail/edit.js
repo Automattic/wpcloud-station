@@ -13,7 +13,7 @@ import {
 	useBlockProps,
 } from '@wordpress/block-editor';
 import { PanelBody, ToggleControl } from '@wordpress/components';
-import { Icon, copySmall } from '@wordpress/icons'
+import { Icon, copySmall } from '@wordpress/icons';
 
 /**
  *
@@ -23,7 +23,8 @@ import DetailSelectControl from '../controls/site/detailSelect';
 import './editor.scss';
 
 function SiteDetailBlock( { attributes, setAttributes, className } ) {
-	const { label, adminOnly, inline, hideLabel, refreshLink, showCopyButton } = attributes;
+	const { label, adminOnly, inline, hideLabel, refreshLink, showCopyButton } =
+		attributes;
 	const blockProps = useBlockProps();
 
 	const controls = (
@@ -54,16 +55,16 @@ function SiteDetailBlock( { attributes, setAttributes, className } ) {
 						) }
 					/>
 					<ToggleControl
-						label={__('Add Copy to Clipboard button')}
-						checked={showCopyButton}
-						onChange={(newVal) => {
-							setAttributes({
+						label={ __( 'Add Copy to Clipboard button' ) }
+						checked={ showCopyButton }
+						onChange={ ( newVal ) => {
+							setAttributes( {
 								showCopyButton: newVal,
-							});
-						}}
-						help={__(
+							} );
+						} }
+						help={ __(
 							'Add a button to copy the value of the site detail to the clipboard.'
-						)}
+						) }
 					/>
 					<ToggleControl
 						label={ __( 'Refresh linked details' ) }
@@ -77,6 +78,11 @@ function SiteDetailBlock( { attributes, setAttributes, className } ) {
 							'Refresh urls on site detail links. A new link will be generated when clicked.'
 						) }
 					/>
+					{
+						// @TODO add refresh rate when refresh is enabled
+						// @TODO add option to show external link icon
+					 }
+
 					<ToggleControl
 						label={ __( 'Limit to Admins' ) }
 						checked={ adminOnly }
@@ -121,24 +127,34 @@ function SiteDetailBlock( { attributes, setAttributes, className } ) {
 								'wpcloud-block-site-detail__title-content'
 							}
 							value={ label }
-							onChange={ ( newTitle ) => {
-								setAttributes( { label: newTitle } );
+							onChange={ ( newVal ) => {
+								setAttributes( {
+									label: newVal,
+									metadata: { name: newVal },
+								} );
 							} }
 							placeholder={ __( 'label' ) }
 						/>
 					</div>
 				) }
 
-				<div className={ classNames(
-					'wpcloud-block-site-detail__value-container',
-					{
-						'copy-to-clipboard': showCopyButton,
-					}
-					) }>
+				<div
+					className={ classNames(
+						'wpcloud-block-site-detail__value-container',
+						{
+							'copy-to-clipboard': showCopyButton,
+						}
+					) }
+				>
 					<div className={ 'wpcloud-block-site-detail__value' }>
-						{`{ ${label} }`}
+						{ `{ ${ label } }` }
 					</div>
-					{showCopyButton && (<Icon className="wpcloud-copy-to-clipboard" icon={copySmall} />)}
+					{ showCopyButton && (
+						<Icon
+							className="wpcloud-copy-to-clipboard"
+							icon={ copySmall }
+						/>
+					) }
 				</div>
 			</div>
 		</span>

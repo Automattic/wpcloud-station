@@ -1,18 +1,39 @@
 ( ( wpcloud ) => {
+	const updateSshUserInputs = ( sshUserRow ) => {
+		const sshUserInputs = sshUserRow.querySelectorAll(
+			'form input[name=site_ssh_user]'
+		);
+		const sshUserName = sshUserRow.dataset.siteSshUser;
+		sshUserInputs.forEach( ( input ) => {
+			input.value = sshUserName;
+		} );
+	};
+
 	const sshUserList = document.querySelector(
-		'.wpcloud-block-site-ssh-user-list'
+		'.wp-block-wpcloud-ssh-user-list'
 	);
 
+	sshUserList
+		.querySelectorAll(
+			'.wpcloud-block-site-ssh-user--row:not([style*="display:none"])'
+		)
+		.forEach( updateSshUserInputs );
+
 	function onSshUserAdded( { user } ) {
-		const newForm = sshUserList.querySelector( 'form' ).cloneNode( true );
-		newForm.querySelector(
+		const newRow = sshUserList
+			.querySelector(
+				'.wpcloud-block-site-ssh-user--row[style*="display:none"]'
+			)
+			.cloneNode( true );
+		newRow.dataset.siteSshUser = user;
+		newRow.querySelector(
 			'.wpcloud-block-site-detail__value'
 		).textContent = user;
-		newForm.querySelector( 'input[name=site_ssh_user]' ).value = user;
-		wpcloud.bindFormHandler( newForm );
+		updateSshUserInputs( newRow );
+		newRow.style.display = 'flex';
+		sshUserList.appendChild( newRow );
 
-		sshUserList.appendChild( newForm );
-		newForm.style.display = 'flex';
+		// @TODO - update the forms once they are added.
 	}
 
 	function onSshUserRemove( result, form ) {
@@ -21,11 +42,11 @@
 			return;
 		}
 
-		form.ontransitionend = () => {
-			form.remove();
-		};
+		const row = form.closest( '.wpcloud-block-site-ssh-user--row' );
 
-		form.classList.add( 'wpcloud-hide' );
+		row.ontransitionend = row.remove;
+
+		row.classList.add( 'wpcloud-hide' );
 	}
 
 	wpcloud.hooks.addAction(

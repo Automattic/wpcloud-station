@@ -37,7 +37,7 @@ export default function Edit( {
 	setAttributes,
 	clientId,
 	isSelected,
-}) {
+} ) {
 	const { action, ajax, wpcloudAction, inline, redirect } = attributes;
 	const blockProps = useBlockProps();
 
@@ -46,8 +46,8 @@ export default function Edit( {
 	);
 
 	useEffect( () => {
-		setAttributes({ active: isSelected || isChildSelected });
-	}, [ isSelected, isChildSelected ] )
+		setAttributes( { active: isSelected || isChildSelected } );
+	}, [ isSelected, isChildSelected ] );
 
 	const { hasInnerBlocks } = useSelect(
 		( select ) => {

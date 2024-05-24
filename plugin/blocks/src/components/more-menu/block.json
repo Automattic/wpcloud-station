@@ -16,7 +16,7 @@
 	"editorStyle": "file:./index.css",
 	"style": "file:./style-index.css",
 	"attributes": {
-		"showMenu" :{
+		"showMenu": {
 			"type": "boolean",
 			"default": true
 		}

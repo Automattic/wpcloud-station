@@ -28,11 +28,10 @@ export default function Edit() {
 			[
 				[
 					'core/heading',
-					{ level: 2, content: __('Site', 'wpcloud') },
+					{ level: 2, content: __( 'Site', 'wpcloud' ) },
 				],
 			],
 		],
-
 
 		[
 			'wpcloud/table-cell',
@@ -40,7 +39,7 @@ export default function Edit() {
 			[
 				[
 					'core/heading',
-					{ level: 2, content: __('Owner', 'wpcloud') },
+					{ level: 2, content: __( 'Owner', 'wpcloud' ) },
 				],
 			],
 		],
@@ -89,14 +88,14 @@ export default function Edit() {
 		[
 			'wpcloud/table-cell',
 			{ isHeader: true },
-			[[
-				'core/heading',
-				{ level: 2, content: __('Actions', 'wpcloud') },
-			]
+			[
+				[
+					'core/heading',
+					{ level: 2, content: __( 'Actions', 'wpcloud' ) },
+				],
 			],
 		],
 	];
-
 
 	const innerBlocksProps = useInnerBlocksProps( blockProps, {
 		template,
