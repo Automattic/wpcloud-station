@@ -14,6 +14,10 @@ import {
 } from '@wordpress/block-editor';
 import { CheckboxControl, PanelBody } from '@wordpress/components';
 
+/**
+ * Internal dependencies
+ */
+import './editor.scss';
 
 /**
  *

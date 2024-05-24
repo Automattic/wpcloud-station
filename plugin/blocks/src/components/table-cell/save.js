@@ -16,7 +16,9 @@ export default function save( { attributes, className } ) {
 			{ ...blockProps }
 			className={ classNames( blockProps.className, className ) }
 		>
+			<div className="wpcloud-block-table-cell--wrapper" >
 			<InnerBlocks.Content />
+			</div>
 		</Cell>
 	);
 }
