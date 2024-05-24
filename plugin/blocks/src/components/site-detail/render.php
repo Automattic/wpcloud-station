@@ -23,10 +23,6 @@ if ( is_wp_error( $value ) ) {
 	return '' ;
 }
 
-if ( $name === 'domain_name' || $name === 'site_url' ) {
-	$value = 'https://' . $value;
-}
-
 switch (true) {
 	case is_array( $value ):
 
@@ -35,6 +31,10 @@ switch (true) {
 			$detail .= "<li>$li</li>";
 		}
 		$detail .= "</ul>";
+		break;
+
+	case $name === 'domain_name' || $name === 'site_url':
+		$detail = sprintf('<a href="https://%s">%s<span class="dashicons dashicons-external"></span></a>', $value, $value);
 		break;
 
 	case str_starts_with( $value, 'http' ):
