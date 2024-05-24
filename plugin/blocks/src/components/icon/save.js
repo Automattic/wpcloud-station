@@ -16,13 +16,13 @@ export default function save( { attributes, className } ) {
 
 	return (
 		<Icon
-				{ ...blockProps }
-				className={ classNames(
-					blockProps.className,
-					className,
-					'wpcloud-block-icon',
-				) }
-				icon={ icons[ icon ] }
-			/>
+			{ ...blockProps }
+			className={ classNames(
+				blockProps.className,
+				className,
+				'wpcloud-block-icon'
+			) }
+			icon={ icons[ icon ] }
+		/>
 	);
 }

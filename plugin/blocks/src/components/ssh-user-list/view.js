@@ -31,7 +31,7 @@
 		).textContent = user;
 		updateSshUserInputs( newRow );
 		newRow.style.display = 'flex';
-		sshUserList.appendChild(newRow);
+		sshUserList.appendChild( newRow );
 
 		// @TODO - update the forms once they are added.
 	}

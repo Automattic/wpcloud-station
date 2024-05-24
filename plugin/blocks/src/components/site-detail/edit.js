@@ -81,7 +81,7 @@ function SiteDetailBlock( { attributes, setAttributes, className } ) {
 					{
 						// @TODO add refresh rate when refresh is enabled
 						// @TODO add option to show external link icon
-					}
+					 }
 
 					<ToggleControl
 						label={ __( 'Limit to Admins' ) }

@@ -117,9 +117,9 @@ export default function save( { attributes } ) {
 				} ) }
 			>
 				{ ! hideLabel && (
-				<span className="wpcloud-block-form-input__label-content">
-					<RichText.Content value={ label } />
-				</span>
+					<span className="wpcloud-block-form-input__label-content">
+						<RichText.Content value={ label } />
+					</span>
 				) }
 				{ renderField( attributes ) }
 			</label>
