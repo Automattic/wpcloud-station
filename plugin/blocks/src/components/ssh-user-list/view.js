@@ -31,7 +31,9 @@
 		).textContent = user;
 		updateSshUserInputs( newRow );
 		newRow.style.display = 'flex';
-		sshUserList.appendChild( newRow );
+		sshUserList.appendChild(newRow);
+
+		// @TODO - update the forms once they are added.
 	}
 
 	function onSshUserRemove( result, form ) {
@@ -42,9 +44,7 @@
 
 		const row = form.closest( '.wpcloud-block-site-ssh-user--row' );
 
-		row.ontransitionend = () => {
-			row.remove();
-		};
+		row.ontransitionend = row.remove;
 
 		row.classList.add( 'wpcloud-hide' );
 	}
