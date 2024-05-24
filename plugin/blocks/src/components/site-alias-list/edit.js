@@ -59,7 +59,7 @@ export default function Edit() {
 				],
 				[ 'core/group',
 					{
-						className: 'wpcloud-block-site-alias-list--row',
+						className: 'wpcloud-block-site-alias-list--row wpcloud-block-dynamic-row',
 						layout: {
 							type: 'flex',
 							flexWrap: 'wrap',
