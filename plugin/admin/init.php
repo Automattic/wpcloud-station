@@ -170,15 +170,6 @@ function wpcloud_options_page(): void {
 
 	add_submenu_page(
 		'wpcloud',
-		'New Site',
-		'Add Site',
-		'manage_options',
-		'wpcloud_admin_new_site',
-		'wpcloud_admin_new_site_controller',
-	);
-
-	add_submenu_page(
-		'wpcloud',
 		'Settings',
 		'Settings',
 		'manage_options',
@@ -301,41 +292,7 @@ function wpcloud_admin_controller(): void {
 		return;
 	}
 
-	switch ( wpcloud_get_action() ) {
-		case 'create':
-			$wpcloud_site_id = wpcloud_admin_create_site();
-			if ( is_wp_error( $wpcloud_site_id ) ) {
-				add_action( 'admin_notices', function() use ( $wpcloud_site_id ): void {
-					?>
-					<div class="notice notice-error is-dismissible">
-						<p><?php echo esc_html( $wpcloud_site_id->get_error_message() ); ?></p>
-					</div>
-					<?php
-				});
-			} else {
-				add_action( 'admin_notices', function() use ( $wpcloud_site_id ): void {
-					site_created__success( $wpcloud_site_id );
-				});
-			}
-			break;
-
-		case 'edit':
-			$site = get_post( intval( $_GET[ 'post' ] ) );
-			wpcloud_admin_site_form( $site );
-			return;
-
-		case 'view':
-			$view_site = wpcloud_admin_view_site();
-			if ( ! is_wp_error( $view_site ) ) {
-				return;
-			}
-	}
-
 	wpcloud_admin_list_sites();
-}
-
-function wpcloud_admin_new_site_controller(): void {
-	wpcloud_admin_site_form( null );
 }
 
 function wpcloud_admin_list_sites(): void {
@@ -362,48 +319,6 @@ function wpcloud_admin_list_sites(): void {
 	})();
 	</script>
 	<?php
-}
-
-function wpcloud_admin_view_site(): mixed  {
-	$wpcloud_site = WPCloud_Site::find( intval( $_GET[ 'post' ] ) );
-	if ( ! $wpcloud_site ) {
-		return new WP_Error( 'not_found', __( 'Site not found.' ) );
-	}
-	if ( is_wp_error( $wpcloud_site ) ) {
-		return $wpcloud_site;
-	}
-
-	$set_details = $wpcloud_site->set_client_details();
-
-	if ( is_wp_error( $set_details ) ) {
-		return new WP_Error( 'not_found', __( 'Unable to fetch WP Cloud site details' ) );
-	}
-
-	require_once  plugin_dir_path(__FILE__) . 'view-site.php';
-
-	return null;
-}
-
-function wpcloud_admin_site_form( ?WPCLOUD_Site $site ): void {
-	$wpcloud_site = $site ?? new WPCloud_Site();
-
-	require_once  plugin_dir_path(__FILE__) . 'edit-site.php';
-}
-
-function wpcloud_admin_create_site(): mixed {
-	check_admin_referer( 'wpcloud-admin-site-form' );
-	if ( ! isset( $_POST['wpcloud_site'] ) ) {
-		return new WP_Error( 'no-data', __( 'No data found', 'wpcloud' ) );
-	}
-
-	$_POST['wpcloud_site']['post_title'] = wpcloud_site_get_default_domain( $_POST['wpcloud_site']['post_title'] );
-
-	$post = wp_insert_post( $_POST['wpcloud_site'] );
-	if ( is_wp_error( $post ) ) {
-		error_log( $post->get_error_message() );
-	}
-
-	return $post;
 }
 
 function wpcloud_admin_options_controller(): void {

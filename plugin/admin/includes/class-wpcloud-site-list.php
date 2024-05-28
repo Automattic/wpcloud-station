@@ -41,7 +41,7 @@ class WPCLOUD_Site_List extends WP_List_Table {
 	public function get_columns() {
 		$columns = array(
 			'select' => '<input type="checkbox" />',
-			'domain' => __( 'Domain', 'wpcloud' ),
+			'name' => __( 'Name', 'wpcloud' ),
 			'owner' => __( 'Owner', 'wpcloud' ),
 			'status' => __( 'Status', 'wpcloud'),
 			'created' => __( 'Created', 'wpcloud' ),
@@ -55,30 +55,14 @@ class WPCLOUD_Site_List extends WP_List_Table {
 		return $item->ID;
 	}
 
-	public function column_domain( $item ) {
-		$edit_link = add_query_arg(
-			array(
-				'post' => absint( $item->ID ),
-				'action' => 'edit',
-			),
-			menu_page_url( 'wpcloud_admin_new_site', false )
-		);
-
-		$view_link = add_query_arg(
-			array(
-				'post' => absint( $item->ID ),
-				'action' => 'view',
-			),
-			menu_page_url( 'wpcloud', false )
-		);
-
+	public function column_name( $item ) {
+		$domain = wpcloud_get_site_detail( $item->ID, 'domain_name' );
 		$actions = array(
-			'edit' => sprintf( __( '<a href="%s">Edit</a>' ), $edit_link ),
-			'view' => sprintf( __( '<a href="%s">View</a>' ), $view_link ),
+			'edit' => sprintf( __( '<a href="%s">Edit</a>' ), get_permalink($item) ),
 			'delete' => sprintf( __( '<a href="%s">Delete</a>' ), get_delete_post_link( $item->ID, '', true ) ),
 		);
 
-		return sprintf( '<a href="https://%1$s" target="_blank">%1s</a> %2$s', $item->post_name, $this->row_actions( $actions ) );
+		return sprintf( '<a href="https://%1$s" target="_blank">%1s</a> %2$s', $domain, $this->row_actions( $actions ) );
 	}
 
 	public function column_status( $item ) {
