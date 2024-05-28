@@ -3,4 +3,10 @@
 	align-items: center;
 	justify-content: center;
 	width: fit-content;
+	border-radius: 9999px;
+	&.is-secondary:not(.is-text) {
+		background-color: var(--wp--preset--color--background-primary);
+		border: 2px solid var(--wp--preset--color--accent-primary);
+		padding: 0.667em 1.333em;
+	}
 }

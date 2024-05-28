@@ -25,18 +25,12 @@ import {
  * Internal dependencies
  */
 import LinkableDetailSelectControl from '../controls/site/linkableDetailSelect';
+import './editor.scss';
 
 function ButtonBlock( { attributes, setAttributes, className } ) {
 	const { type, style, adminOnly, target, addIcon, iconOnly, url, label, action, isPrimary } =
 		attributes;
 	const blockProps = useBlockProps();
-	/**
-	 *
-	 * 1. General link
-	 * 2. Site Detail ? ( would need the refresh option )
-	 * 3. Fire action for JS to pick up
-	 *
-	 */
 
 	const updateAttribute = ( key ) => ( val ) => {
 		setAttributes( { [ key ]: val } );
@@ -166,7 +160,8 @@ function ButtonBlock( { attributes, setAttributes, className } ) {
 					'wpcloud-block-button',
 					{
 						'is-admin-only': adminOnly,
-						'is-primary': isPrimary,
+						'is-secondary': !isPrimary,
+						'is-text': style === 'text',
 					}
 				) }
 				data-name={ attributes.name }

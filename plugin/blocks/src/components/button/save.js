@@ -19,14 +19,11 @@ export default function save( { attributes, className } ) {
 				blockProps.className,
 				className,
 				'wpcloud-block-button',
-				{
-					'is-primary': isPrimary
-				}
 			) }
 		>
 
 			{!iconOnly && (
-				<span className={'wpcloud-block-button--label'}>
+				<span className={'wpcloud-block-button__label'}>
 					<RichText.Content value={label} />
 				</span>
 			)}

@@ -8,7 +8,7 @@ import { InnerBlocks } from '@wordpress/block-editor';
  * Internal dependencies
  */
 import './style.scss';
-import './editor.scss';
+
 
 /**
  * Internal dependencies
