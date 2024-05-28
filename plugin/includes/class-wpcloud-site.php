@@ -15,8 +15,6 @@ class WPCLOUD_Site {
 		'phpmyadmin_url'
 	);
 
-	private static $initial_status = 'draft';
-
 	public int $id;
 	public string $name;
 	public string $php_version;
@@ -53,7 +51,7 @@ class WPCLOUD_Site {
 	 * ];
 	 *
 	 * @param array $options
-	 * @return WPCLOUD_Site|WP_Error
+	 * @return WP_Post|WP_Error
 	 */
 
 	public static function create(array $options): mixed {
@@ -99,89 +97,7 @@ class WPCLOUD_Site {
 			return $post_id;
 		}
 
-		return self::from_post( get_post( $post_id ) );
-	}
-
-	/**
-	 * Create a new WPCLOUD_Site from a WP_Post object.
-	 * @param WP_Post $post
-	 * @return WPCLOUD_Site
-	 */
-	public static function from_post( WP_Post $post, bool $fetch_details = false ): self {
-		$site = new self();
-		$site->id = $post->ID;
-		$site->name = $post->post_title;
-		$site->php_version = get_post_meta( $post->ID, 'php_version', true );
-		$site->data_center = get_post_meta( $post->ID, 'data_center', true );
-		$site->status = $post->post_status;
-		$site->owner_id = intval( $post->post_author );
-		$site->domain = $post->post_title;
-		$site->wpcloud_site_id = intval( get_post_meta( $post->ID, 'wpcloud_site_id', true ) );
-		$site->error_message = get_post_meta( $post->ID, 'wpcloud_site_error', true );
-
-		if ( $fetch_details && $site->wpcloud_site_id ) {
-			$site->set_client_details();
-		}
-		return $site;
-	}
-
-	/**
-	 * @return mixed
-	 */
-	public function set_client_details(array $detail_keys = array() ): mixed {
-		$wpcloud_site = wpcloud_client_site_details( $this->wpcloud_site_id, true );
-		if ( is_wp_error( $wpcloud_site ) ) {
-			return $wpcloud_site;
-		}
-		$detail_keys = array_unique( array_merge( $detail_keys, self::DETAIL_KEYS ) );
-
-		$this->details = array_intersect_key( (array) $wpcloud_site, array_flip( $detail_keys ) );
-
-		if ( array_search('geo_affinity', $detail_keys) !== false ) {
-			$data_center_cities = wpcloud_client_data_centers_available();
-			$this->details[ 'geo_affinity' ] = $wpcloud_site->extra->server_pool->geo_affinity;
-			$this->details[ 'data_center' ] = $data_center_cities[ $this->details[ 'geo_affinity' ] ];
-		}
-
-		$ips = wpcloud_client_domain_ip_addresses( $this->wpcloud_site_id, $this->domain );
-
-		if ( is_wp_error( $ips ) ) {
-			error_log( 'Error while fetching WP Cloud Site IP addresses: ' . $ips->get_error_message() );
-			return $ips;
-		} else {
-				$this->details[ 'ip_addresses' ] = $ips->suggested ?? $ips->ips;
-		}
-
-		return true;
-	}
-
-	public static function find( int $site_id ): mixed {
-		$site = get_post( $site_id );
-		if ( ! $site ) {
-			return new WP_Error( 'not_found', __( 'Site not found.' ) );
-		}
-		return self::from_post( $site );
-	}
-
-	public static function find_all(string $owner_id, array $query = array(), bool $backfill_from_host = false ): mixed {
-		$defaults = array(
-			'post_type' => 'wpcloud_site',
-			'posts_per_page' => -1,
-			'orderby' => 'title',
-			'order' => 'ASC',
-			// 'author' => $owner_id,
-		);
-
-		$query = wp_parse_args( $query, $defaults );
-
-		$results = new WP_Query( $query );
-		if ( is_wp_error( $results ) ) {
-			return $results;
-		}
-		if ( $backfill_from_host ) {
-			wpcloud_backfill();
-		}
-		return array_map( self::class . '::from_post', $results->posts );
+		return get_post( $post_id );
 	}
 
 	public static function get_detail_options(): array {
