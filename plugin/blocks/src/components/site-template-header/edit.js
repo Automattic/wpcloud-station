@@ -68,10 +68,7 @@ export default function Edit() {
 			'wpcloud/table-cell',
 			{ isHeader: true },
 			[
-				[
-					'wpcloud/icon',
-					{ icon: 'wordpress', size: 24 },
-				],
+				[ 'wpcloud/icon', { icon: 'wordpress', size: 24 } ],
 				[
 					'core/heading',
 					{ level: 2, content: __( 'Version', 'wpcloud' ) },

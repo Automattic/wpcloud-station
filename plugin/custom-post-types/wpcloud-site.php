@@ -610,6 +610,18 @@ function wpcloud_get_site_detail( int|WP_Post $post, string $key, ): mixed {
 	return $result->$key;
 }
 
+/**
+ * Check if a site detail should be refreshed.
+ * @param string $key The detail key.
+ * @return bool True if the detail should be refreshed.
+ */
+function wpcloud_should_refresh_detail( string $key ): bool {
+	$refresh_keys = array(
+		'phpmyadmin_url',
+	);
+
+	return in_array( $key, $refresh_keys, true );
+}
 function wpcloud_get_current_site_id(): int {
 	$post_id = get_the_ID();
 	if ( ! $post_id ) {

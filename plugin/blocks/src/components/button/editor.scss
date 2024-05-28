@@ -1,0 +1,21 @@
+.wpcloud-block-button {
+	&.is-secondary:not(.is-text) {
+		border: none;
+		padding: 0;
+		.wpcloud-block-button__content {
+			background-color: var(--wp--preset--color--background-primary);
+			border: 2px solid var(--wp--preset--color--accent-primary);
+			padding: 0.667em 1.333em;
+		}
+		.wpcloud-block-button__label {
+			border: none;
+		}
+	}
+
+	.wpcloud-block-button__content {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: fit-content;
+	}
+}

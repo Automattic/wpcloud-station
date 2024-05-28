@@ -1,0 +1,5 @@
+
+.wpcloud-site-list-menu__title {
+	text-transform: uppercase;
+	font-size: var(--wp--preset--font-size--small-caps);
+}
