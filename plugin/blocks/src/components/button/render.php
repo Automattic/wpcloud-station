@@ -18,7 +18,11 @@ if( 'button' === $style ) {
 }
 
 switch ($type) {
+
 	case 'link':
+		$classes[] = 'wpcloud-block-button__link';
+		$url = $attributes['url'] ?? '/';
+		break;
 
 	case 'action':
 		if (  isset( $attributes['action'] ) ) {
@@ -28,10 +32,12 @@ switch ($type) {
 		break;
 
 	case 'detail':
+		error_log('detail ' .  $attributes['name']);
 		$classes[] = 'wpcloud-block-button__detail';
 		$detail = wpcloud_get_site_detail( get_the_ID(), $attributes['name'] );
 		$button_attributes[ 'data-wpcloud-detail' ] = $attributes['name'];
 		$url = 'https://' . $detail;
+		error_log($url);
 
 		if ( wpcloud_should_refresh_detail( $attributes['name'] ) ) {
 			$nonce = wp_create_nonce( 'wpcloud_refresh_link' );
@@ -63,15 +69,16 @@ if ( $url ) {
 
 	if ($span) {
 		$span_wrapper = $span->parentNode;
+
 	  $anchor = $dom->createElement('a');
 	  $anchor->setAttribute('href', $url);
+		$anchor->appendChild($span);
 
 		// if there are multiple children, insert the anchor before the first child.
 		if ( $span_wrapper->childNodes->length > 1 ) {
 			$span_wrapper->insertBefore($anchor, $span_wrapper->childNodes[0]);
 		} else {
-	  	$anchor->appendChild($span);
-			$span_wrapper->appendChild($anchor);
+	  	$span_wrapper->appendChild($anchor);
 		}
 	}
 	$content = $dom->saveHTML();
