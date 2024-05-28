@@ -18,16 +18,24 @@ class WPCLOUD_Site_List extends WP_List_Table {
 		$hidden = array();
 		$sortable = $this->get_sortable_columns();
 
+		$defaults = array(
+			'posts_per_page' => 20,
+			'post_type' => 'wpcloud_site',
+			'post_status' => 'any',
+			'orderby' => 'id',
+			'order' => 'asc',
+		);
+
+		$options = wp_parse_args( $options, $defaults );
+
 		$this->_column_headers = array( $columns, $hidden, $sortable );
+		$results = new WP_Query( $options );
 
-		$should_backfill = get_option( 'wpcloud_settings', array() )['wpcloud_backfill'] ?? false;
-
-		$sites = WPCLOUD_Site::find_all(owner_id: get_current_user_id(), query: $options, backfill_from_host: $should_backfill);
-		if ( is_wp_error( $sites ) ) {
-			error_log( $sites->get_error_message() );
-			$sites = array();
+		if ( is_wp_error( $results ) ) {
+			error_log( $results->get_error_message() );
 		}
-		$this->items = array_map( fn($site) => (array) $site, $sites );
+
+		$this->items = $results->posts; //array_map( fn($site) => (array) $site, $sites );
 	}
 
 	public function get_columns() {
@@ -44,13 +52,13 @@ class WPCLOUD_Site_List extends WP_List_Table {
 	}
 
 	public function column_id( $item ) {
-		return $item['id'];
+		return $item->ID;
 	}
 
 	public function column_domain( $item ) {
 		$edit_link = add_query_arg(
 			array(
-				'post' => absint( $item[ 'id' ] ),
+				'post' => absint( $item->ID ),
 				'action' => 'edit',
 			),
 			menu_page_url( 'wpcloud_admin_new_site', false )
@@ -58,7 +66,7 @@ class WPCLOUD_Site_List extends WP_List_Table {
 
 		$view_link = add_query_arg(
 			array(
-				'post' => absint( $item[ 'id' ] ),
+				'post' => absint( $item->ID ),
 				'action' => 'view',
 			),
 			menu_page_url( 'wpcloud', false )
@@ -67,41 +75,36 @@ class WPCLOUD_Site_List extends WP_List_Table {
 		$actions = array(
 			'edit' => sprintf( __( '<a href="%s">Edit</a>' ), $edit_link ),
 			'view' => sprintf( __( '<a href="%s">View</a>' ), $view_link ),
-			'delete' => sprintf( __( '<a href="%s">Delete</a>' ), get_delete_post_link( $item[ 'id' ], '', true ) ),
+			'delete' => sprintf( __( '<a href="%s">Delete</a>' ), get_delete_post_link( $item->ID, '', true ) ),
 		);
 
-		return sprintf( '<a href="https://%1$s" target="_blank">%1s</a> %2$s', $item['domain'], $this->row_actions( $actions ) );
+		return sprintf( '<a href="https://%1$s" target="_blank">%1s</a> %2$s', $item->post_name, $this->row_actions( $actions ) );
 	}
 
 	public function column_status( $item ) {
-		if ( 'publish' === $item['status'] ) {
-			return '<span style="color:green;">Active</span>';
-		}
-		if ( 'draft' === $item['status'] ) {
-			return '<span style="color:orange;">Provisioning</span>';
-		}
+		return $item->post_status;
 	}
 
 	public function column_select( $item ) {
 		return sprintf(
 			'<input type="checkbox" name="site[]" value="%s" />',
-			$item['id']
+			$item->ID
 		);
 	}
 
 	public function column_created( $item ) {
-		$dt = get_post_datetime($item['id']);
+		$dt = get_post_datetime($item->ID);
 		return $dt->format('Y-m-d H:i:s');
 	}
 
 	public function column_owner( $item ) {
-		$owner_id = get_post_field( 'post_author', $item['id'] );
+		$owner_id = get_post_field( 'post_author', $item->ID );
 		$owner = get_userdata( $owner_id );
 		return $owner->display_name;
 	}
 
 	public function column_tags( $item ) {
-		$tags = get_the_tags( $item['id'] );
+		$tags = get_the_tags( $item->ID );
 		if ( ! $tags ) {
 			return '';
 		}
