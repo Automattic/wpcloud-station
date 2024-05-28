@@ -27,7 +27,7 @@ import {
 import LinkableDetailSelectControl from '../controls/site/linkableDetailSelect';
 
 function ButtonBlock( { attributes, setAttributes, className } ) {
-	const { kind, style, adminOnly, target, icon, url, label, action } =
+	const { type, style, adminOnly, target, addIcon, iconOnly, url, label, action, isPrimary } =
 		attributes;
 	const blockProps = useBlockProps();
 	/**
@@ -96,13 +96,13 @@ function ButtonBlock( { attributes, setAttributes, className } ) {
 				<PanelBody label={ __( 'Settings' ) }>
 					<SelectControl
 						label={ __( 'Button Type' ) }
-						value={ kind }
+						value={ type }
 						options={ [
 							{ label: __( 'Link' ), value: 'link' },
 							{ label: __( 'Detail' ), value: 'detail' },
 							{ label: __( 'Action' ), value: 'action' },
 						] }
-						onChange={ updateAttribute( 'kind' ) }
+						onChange={ updateAttribute( 'type' ) }
 					/>
 					<SelectControl
 						label={ __( 'Button Style' ) }
@@ -111,15 +111,28 @@ function ButtonBlock( { attributes, setAttributes, className } ) {
 							{ label: __( 'Text' ), value: 'text' },
 							{ label: __( 'Button' ), value: 'button' },
 						] }
-						onChange={ updateAttribute( 'style' ) }
+						onChange={updateAttribute('style')}
 					/>
-
 					<ToggleControl
-						label={ __( 'Icon' ) }
-						checked={ icon }
-						onChange={ updateAttribute( 'icon' ) }
+						label={ __( 'Primary Button' ) }
+						checked={ isPrimary }
+						onChange={ updateAttribute( 'isPrimary' ) }
+						help={ __( 'Use the primary button style if enabled. Otherwise use secondary button style' ) }
+					/>
+					<ToggleControl
+						label={ __( 'Add Icon' ) }
+						checked={ addIcon }
+						onChange={ updateAttribute( 'addIcon' ) }
 						help={ __( 'Add Icon to the button' ) }
 					/>
+
+					 <ToggleControl
+						label={__('Icon Only')}
+						checked={ iconOnly }
+						onChange={updateAttribute('iconOnly')}
+						help={__('Only show the icon, no text label')}
+					/>
+
 					<ToggleControl
 						label={ __( 'Limit to Admins' ) }
 						checked={ adminOnly }
@@ -134,9 +147,9 @@ function ButtonBlock( { attributes, setAttributes, className } ) {
 					/>
 				</PanelBody>
 				<PanelBody label={ __( 'Button Config' ) }>
-					{ 'link'   === kind && LinkControls }
-					{ 'detail' === kind && DetailControls }
-					{ 'action' === kind && ActionControls }
+					{ 'link'   === type && LinkControls }
+					{ 'detail' === type && DetailControls }
+					{ 'action' === type && ActionControls }
 				</PanelBody>
 			</InspectorControls>
 		</>
@@ -153,6 +166,7 @@ function ButtonBlock( { attributes, setAttributes, className } ) {
 					'wpcloud-block-button',
 					{
 						'is-admin-only': adminOnly,
+						'is-primary': isPrimary,
 					}
 				) }
 				data-name={ attributes.name }
@@ -163,13 +177,15 @@ function ButtonBlock( { attributes, setAttributes, className } ) {
 						{ 'wp-block-button__link': style === 'button' }
 					)}
 				>
-					<RichText
-						className={ 'wpcloud-block-button__label' }
-						value={ label }
-						onChange={ updateAttribute( 'label' ) }
-						placeholder={ __( 'Button' ) }
+
+					{ !iconOnly && (<RichText
+						className={'wpcloud-block-button__label'}
+						value={label}
+						onChange={updateAttribute('label')}
+						placeholder={__('Button')}
 					/>
-					{ icon && (
+					)}
+					{ addIcon && (
 						<div className="wpcloud-block-button__icon">
 							<InnerBlocks allowedBlocks={ [ 'wpcloud/icon' ] } />
 						</div>

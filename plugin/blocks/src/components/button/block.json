@@ -18,7 +18,7 @@
 	"viewScript": "file:./view.js",
 	"usesContext": [ "wpcloud/layout" ],
 	"attributes": {
-		"kind": {
+		"type": {
 			"type" : "string",
 			"default": "link"
 		},
@@ -29,14 +29,23 @@
 		"label": {
 			"type": "string"
 		},
+		"isPrimary": {
+			"type": "boolean",
+			"default": true
+		},
 		"adminOnly": {
 			"type": "boolean",
 			"default": false
 		},
-		"icon": {
+		"addIcon": {
 			"type": "boolean",
 			"default": false
 		},
+		"iconOnly": {
+			"type": "boolean",
+			"default": false
+		},
+
 
 		"url": {
 			"type": "string",
