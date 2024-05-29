@@ -1,0 +1,12 @@
+.wpcloud-block-expanding-section {
+
+	.wpcloud-block-expanding-section__content {
+		max-height: 100vh;
+  	overflow: hidden;
+		transition: max-height 0.75s ease-in;
+		background-color: var(--wp--preset--color--wpcloud-background-secondary);
+	}
+	&.is-closed .wpcloud-block-expanding-section__content {
+		max-height: 0px;
+	}
+}
