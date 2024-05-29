@@ -106,7 +106,7 @@ export default function Edit() {
 								[
 									'core/heading',
 									{
-										level: 3,
+										level: 4,
 										className:
 											'wpcloud-site-list-menu__title',
 										content: __( 'Site Details' ),

@@ -1,6 +1,12 @@
 
 .wpcloud-more-menu-wrapper {
 	position: relative;
+	button {
+		border: none;
+		svg {
+			fill: var(--wp--preset--color--wpcloud-foreground-secondary);
+		}
+	}
 }
 
 .wpcloud-block-more-menu {
