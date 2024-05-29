@@ -58,7 +58,7 @@ switch (true) {
 				get_the_ID()
 			);
 		}
-		$detail = sprintf('<a href="%s" %s >%s<span class="dashicons dashicons-external"></span></a>', $value, $data, $link_text);
+		$detail = sprintf('<a href="%s" %s >%s</span></a>', $value, $data, $link_text);
 		break;
 	case $name === 'wp_version':
 		$value = ucfirst( $value );
@@ -69,6 +69,7 @@ switch (true) {
 $regex = '/\{[^{}]*\}(?=[^{}]*$)/';
 $detail = preg_replace( $regex, $detail, $content );
 
+// @TODO Probably should skip the data attribute if this is part of a dynamic list like the domain aliases.
 $data_name = "data-" . preg_replace('/_/', '-', $name );
 if (is_array($value)) {
 	$value = implode(',', $value);
