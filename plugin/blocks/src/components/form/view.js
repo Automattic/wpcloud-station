@@ -90,9 +90,24 @@
 		} );
 	};
 
+	// Fill in any missing hidden inputs closest data attribute
+	document.querySelectorAll( 'form.wpcloud-block-form' ).forEach( ( form ) => {
+		const emptyHiddenInputs = form.querySelectorAll( 'input[type="hidden"][value=""]' );
+		emptyHiddenInputs.forEach( ( input ) => {
+			const dataName = `data-${input.name}`.replace(/_/g, '-');
+			const closestData = input.closest( `[${dataName}]` );
+			if ( closestData ) {
+				input.value = closestData.getAttribute( dataName );
+			}
+		});
+	} );
+
+	// Bind form handlers to all forms with the `data-ajax` attribute
 	document
 		.querySelectorAll( 'form.wpcloud-block-form[data-ajax]' )
-		.forEach( wpcloud.bindFormHandler );
+		.forEach(wpcloud.bindFormHandler);
+
+
 
 	// Default handler for destructive actions
 	// if `confirmed` is defined then we can assume some other script has already handled the confirmation.
