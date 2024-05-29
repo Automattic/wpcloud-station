@@ -40,7 +40,7 @@ switch ($type) {
 			break;
 		}
 		$button_attributes[ 'data-wpcloud-detail' ] = $attributes['name'];
-		$url = 'https://' . $detail;
+		$url = $detail;
 
 		if ( wpcloud_should_refresh_detail( $attributes['name'] ) ) {
 			$nonce = wp_create_nonce( 'wpcloud_refresh_link' );
