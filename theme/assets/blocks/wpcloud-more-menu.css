@@ -1,5 +1,11 @@
+.wpcloud-more-menu__nav {
+	 h4 {
+		text-transform: uppercase;
+		font-size: var(--wp--preset--font-size--small-caps);
+	}
 
-.wpcloud-site-list-menu__title {
-	text-transform: uppercase;
-	font-size: var(--wp--preset--font-size--small-caps);
+	.wp-block-wpcloud-form {
+		justify-content: space-between;
+		font-size: var(--wp--preset--font-size--body-medium);
+	}
 }

@@ -11,6 +11,7 @@
 		background: none;
 		border: none;
 		&.as-text {
-			color: var(--wp--preset--color--base)
+			color: var(--wp--preset--color--base);
+			border: none;
 		}
 	}

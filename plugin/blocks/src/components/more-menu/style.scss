@@ -12,7 +12,7 @@
 
 		margin: 0;
 		padding: 16px 24px;
-		min-width: 200px;
+		min-width: 138px;
 
 		background-color: var(--wp--preset--color--background-secondary);
 		box-shadow: 0px 2px 10px 0px #00000040;
@@ -35,7 +35,7 @@
 	}
 	.wpcloud-more-menu__button {
 		svg {
-			fill: var(--wp--preset--color--wpcloud-foreground-primary);
+			fill: var(--wp--preset--color--wpcloud-foreground-secondary);
 		}
 		background: none;
 		border: none;

@@ -5,6 +5,10 @@ Author: Automattic
 Author URI: https://automattic.com
 Text Domain: wpcloud
 */
-#wpadminbar {
-	display: none;
+body {
+	background-color: red !important;
+}
+
+.wpcloud-more-menu__nav {
+	width : 138px;
 }
