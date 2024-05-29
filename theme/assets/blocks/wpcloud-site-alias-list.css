@@ -1,0 +1,8 @@
+
+.wpcloud-block-site-alias-list__item--primary-badge {
+	border: 1px solid var(--wp--preset--color--foreground-tertiary);
+	border-radius: 2px;
+	font-size: var(--wp--preset--font-size--body-small);
+	color: var(--wp--preset--color--foreground-primary);
+	padding: 3px 10px;
+}

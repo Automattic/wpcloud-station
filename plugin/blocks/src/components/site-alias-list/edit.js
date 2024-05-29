@@ -36,7 +36,7 @@ export default function Edit() {
 					{
 						metadata: { name: 'Primary Domain Row' },
 						className:
-							'wpcloud-block-site-alias-list__row--primary',
+							'wpcloud-block-site-alias-list__row wpcloud-block-site-alias-list__row--primary',
 						layout: {
 							type: 'flex',
 							flexWrap: 'nowrap',
@@ -73,7 +73,7 @@ export default function Edit() {
 					'core/group',
 					{
 						className:
-							'wpcloud-block-site-alias-list--row wpcloud-block-dynamic-row',
+							'wpcloud-block-site-alias-list__row wpcloud-block-dynamic-row',
 						layout: {
 							type: 'flex',
 							flexWrap: 'wrap',
