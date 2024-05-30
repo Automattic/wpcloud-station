@@ -22,7 +22,6 @@ import './editor.scss';
 export default function Edit() {
 	const blockProps = useBlockProps();
 
-	// @TODO: Make sure the required fields are not mutable.
 	const template = useMemo(
 		() => [
 			[
@@ -30,7 +29,6 @@ export default function Edit() {
 				{
 					ajax: true,
 					wpcloudAction: 'site_alias_add',
-					inline: true,
 					className: 'wpcloud-block-form--site-alias-add',
 				},
 				[
@@ -42,14 +40,13 @@ export default function Edit() {
 							name: 'site_alias',
 							placeholder: __( 'example.com' ),
 							required: true,
-							inline: true,
 						},
 					],
 					[
 						'wpcloud/button',
 						{
-							text: __( 'Add' ),
-							inline: true,
+							label: __( 'Add' ),
+							type: 'submit',
 						},
 					],
 				],

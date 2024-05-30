@@ -8,9 +8,10 @@
 			alert( result.message ); // eslint-disable-line no-alert, no-undef
 			return;
 		}
+		console.log( 'Alias added:', result.site_alias );
 		// @TODO: do something with the success ?
 		const newAliasInput = document.querySelector(
-			'.wpcloud-block-site-alias-form-add input[name=site_alias]'
+			'.wpcloud-block-form--site-alias-add input[name=site_alias]'
 		);
 		if ( newAliasInput ) {
 			newAliasInput.value = '';

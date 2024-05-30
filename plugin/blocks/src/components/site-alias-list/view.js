@@ -40,11 +40,14 @@
 	}
 
 	function onSiteAliasAdded( alias ) {
-		const newRow = aliasList
+		const row = aliasList
 			.querySelector(
 				'.wpcloud-block-site-alias-list--row[style*="display:none"]'
 			)
-			.cloneNode( true );
+		if (!row) {
+			return;
+			}
+		const newRow = row.cloneNode(true);
 
 		newRow.dataset.siteAlias = alias;
 
