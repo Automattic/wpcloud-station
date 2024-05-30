@@ -9,7 +9,7 @@ import classNames from 'classnames';
 import { InnerBlocks, useBlockProps, RichText } from '@wordpress/block-editor';
 
 export default function save( { attributes, className } ) {
-	const { label, isPrimary, iconOnly } = attributes;
+	const { label, iconOnly } = attributes;
 	const blockProps = useBlockProps.save();
 
 	return (
@@ -17,7 +17,6 @@ export default function save( { attributes, className } ) {
 			{ ...blockProps }
 			className={ classNames(
 				blockProps.className,
-				className,
 				'wpcloud-block-button',
 			) }
 		>

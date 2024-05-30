@@ -45,8 +45,6 @@
 			"type": "boolean",
 			"default": false
 		},
-
-
 		"url": {
 			"type": "string",
 			"default": ""
@@ -55,12 +53,10 @@
 			"type": "string",
 			"default": "_self"
 		},
-
 		"action": {
 			"type": "string",
 			"default": ""
 		},
-
 		"name": {
 			"type": "string",
 			"default": ""

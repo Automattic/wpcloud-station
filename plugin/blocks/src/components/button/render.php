@@ -50,6 +50,11 @@ switch ($type) {
 		}
 		break;
 
+	 case 'submit':
+		$classes[] = 'wpcloud-block-button__submit';
+		$button_attributes['type'] = 'submit';
+		break;
+
 	default:
 		$url = $attributes['url'] ?? '/';
 }
@@ -58,8 +63,11 @@ switch ($type) {
 if ('table' === $layout) {
 	$wrapper = 'td';
 	$classes[] = 'wpcloud-block-table-cell';
+} elseif( 'submit' === $type ) {
+	$wrapper = 'button';
 } else {
 	$wrapper = 'div';
+
 }
 
 $button_attributes['class'] = implode( ' ', $classes );
