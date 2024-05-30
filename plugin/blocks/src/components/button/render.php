@@ -55,6 +55,9 @@ switch ($type) {
 	 case 'submit':
 		$classes[] = 'wpcloud-block-button__submit';
 		$button_attributes['type'] = 'submit';
+		if ( isset( $attributes['action'] ) ) {
+			$button_attributes['data-wpcloud-action'] = $attributes['action'];
+		}
 		break;
 
 	default:

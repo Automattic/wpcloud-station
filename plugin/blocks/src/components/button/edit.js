@@ -145,6 +145,7 @@ function ButtonBlock( { attributes, setAttributes, className } ) {
 					{ 'link'   === type && LinkControls }
 					{ 'detail' === type && DetailControls }
 					{ 'action' === type && ActionControls }
+					{ 'submit' === type && ActionControls }
 				</PanelBody>
 			</InspectorControls>
 		</>
