@@ -1,0 +1,12 @@
+.wpcloud-block-expanding-section__header-wrapper {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.5s ease-out;
+
+	&.is-open {
+		grid-template-rows: 1fr;
+	}
+ .wpcloud-block-expanding-section__header {
+		overflow: hidden;
+ }
+}

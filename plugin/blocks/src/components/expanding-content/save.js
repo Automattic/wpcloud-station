@@ -8,7 +8,7 @@ import classNames from 'classnames';
  */
 import { InnerBlocks, useBlockProps } from '@wordpress/block-editor';
 
-const Save = () => {
+const Save = ({ attributes }) => {
 	const blockProps = useBlockProps.save();
 
 	return (
@@ -16,10 +16,14 @@ const Save = () => {
 			{ ...blockProps }
 			className={ classNames(
 				blockProps.className,
-				'wpcloud-block-expanding-section'
+				'wpcloud-block-expanding-section__content-wrapper', {
+					'is-open': attributes.openOnLoad,
+				}
 			) }
 		>
-			<InnerBlocks.Content />
+			<div className="wpcloud-block-expanding-section__content">
+				<InnerBlocks.Content />
+				</div>
 		</div>
 	);
 };

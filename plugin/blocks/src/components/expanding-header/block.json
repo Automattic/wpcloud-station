@@ -1,12 +1,12 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
-	"name": "wpcloud/expanding-section",
+	"name": "wpcloud/expanding-header",
 	"version": "0.1.0",
-	"title": "Expanding Section",
+	"title": "Expanding Section Header",
 	"category": "wpcloud",
 	"icon": "list-view",
-	"description": "Expanding section",
+	"description": "Expanding section header",
 	"example": {},
 	"supports": {
 		"html": false
@@ -16,26 +16,15 @@
 	"editorStyle": "file:./index.css",
 	"style": "file:./style-index.css",
 	"viewScript": "file:./view.js",
-	"attributes": {
-		"clickToToggle": {
+	"ancestor": ["wpcloud/expanding-section"],
+	"attributes" : {
+		"hideOnOpen": {
 			"type": "boolean",
 			"default": false
-		},
-		"hideHeader": {
-			"type": "boolean",
-			"default": true
 		},
 		"openOnLoad": {
 			"type": "boolean",
 			"default": false
 		}
-	},
-	"providesContext": {
-		"wpcloud-expanding-section/openOnLoad": "openOnLoad",
-		"wpcloud-expanding-section/hideHeader": "hideHeader"
-	},
-	"allowedBlocks": [
-		"wpcloud/expanding-section-header",
-		"wpcloud/expanding-section-content"
-	]
+	}
 }

@@ -37,11 +37,6 @@ export default function Edit( {
 	const { clickToToggle, hideHeader, openOnLoad } = attributes;
 	const blockProps = useBlockProps();
 
-	const isChildSelected = useSelect( ( select ) =>
-		select( 'core/block-editor' ).hasSelectedInnerBlock( clientId )
-	);
-
-
 	const controls = (
 		<InspectorControls>
 			<PanelBody title={ __( 'Form Settings' ) }>
@@ -78,71 +73,11 @@ export default function Edit( {
 	);
 
 	const template = [
-		[
-			'core/group',
-			{
-				metadata: { name: 'Expandable header' },
-				className:
-					'wpcloud-block-expanding-section__header',
-				layout: {
-					type: 'flex',
-					flexWrap: 'nowrap',
-					justifyContent: 'space-between',
-				},
-			},
-			[
-				[
-					'core/heading',
-					{
-						content: __( 'Hello' ),
-						level: 3,
-					},
-				],
-				[
-					'wpcloud/button',
-					{
-						label: __( 'Open' ),
-						action: 'wpcloud_expanding_section_toggle',
-						className: 'wpcloud-block-expanding-section__toggle--open',
-						type: 'action'
-					},
-			 	]
-			]
-		],
-		[
-			'core/group',
-			{
-				metadata: { name: 'Expandable content' },
-				className:
-					'wpcloud-block-expanding-section__content',
-				layout: {
-					type: "constrained"
-				}
-			},
-			[
-				[
-					'core/paragraph',
-					{
-						content: 'Content goes here'
-					}
-				],
-				[
-					'wpcloud/button',
-					{
-						label: __( 'Close' ),
-						action: 'wpcloud_expanding_section_toggle',
-						className: 'wpcloud-block-expanding-section__toggle--close',
-						type:'action'
-					},
-				]
-			]
-		],
+		[ 'wpcloud/expanding-header' ],
+		[ 'wpcloud/expanding-content' ],
 	];
 
 	const innerBlocksProps = useInnerBlocksProps( blockProps, {
-		renderAppender: isChildSelected
-			? undefined
-			: InnerBlocks.ButtonBlockAppender,
 		template,
 	} );
 
@@ -153,8 +88,8 @@ export default function Edit( {
 				{ ...innerBlocksProps }
 				className={ classNames(
 					className,
-					'wpcloud-block-expanding-section', {
-					}
+					'wpcloud-block-expanding-section',
+					innerBlocksProps.className,
 				) }
 			/>
 		</>
