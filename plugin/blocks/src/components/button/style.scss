@@ -9,4 +9,13 @@
 		border: 2px solid var(--wp--preset--color--accent-primary);
 		padding: 0.667em 1.333em;
 	}
+	&.wpcloud-block-button__text {
+		border: none;
+		background: transparent;
+		color: var(--wp--preset--color--foreground-primary);
+		padding: 0;
+	}
+	.wpcloud-block-button__label {
+		cursor: pointer;
+	}
 }

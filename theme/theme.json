@@ -154,7 +154,7 @@
 						"min": "1rem"
 					},
 					"name": "Body Large",
-					"size": "1.25rem",
+					"size": "1rem",
 					"slug": "body-large"
 				},
 				{
@@ -163,7 +163,7 @@
 						"min": "0.875rem"
 					},
 					"name": "Body Medium",
-					"size": "1rem",
+					"size": "0.875rem",
 					"slug": "body-medium"
 				},
 				{
@@ -172,7 +172,7 @@
 						"min": "0.75rem"
 					},
 					"name": "Body Small",
-					"size": "0.875rem",
+					"size": "0.75rem",
 					"slug": "body-small"
 				},
 				{

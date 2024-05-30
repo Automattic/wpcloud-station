@@ -589,7 +589,7 @@ function wpcloud_client_request( ?int $wpcloud_site_id, string $method, string $
 
 	$args = array(
 		'redirection' => 0,
-		'timeout'     => 5,
+		'timeout'     => 10,
 		'body'        => $body,
 		'headers'     => array(
 			'auth'       => $api_key,

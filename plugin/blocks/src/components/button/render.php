@@ -15,6 +15,8 @@ $url = '';
 if( 'button' === $style ) {
 	$classes[] = 'wp-block-button__link wp-element-button';
 	$classes[] = $attributes['isPrimary'] ?? true ? 'is-primary' : 'is-secondary';
+} else {
+	$classes[] = 'wpcloud-block-button__text';
 }
 
 switch ($type) {
