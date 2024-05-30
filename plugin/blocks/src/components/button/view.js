@@ -8,6 +8,7 @@
 		if (action) {
 			button.addEventListener('click', (event) => {
 				event.preventDefault();
+				event.stopPropagation();
 				wpcloud.hooks.doAction(action, button);
 			});
 		}
