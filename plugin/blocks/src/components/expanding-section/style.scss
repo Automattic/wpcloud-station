@@ -1,4 +1,7 @@
 .wpcloud-block-expanding-section {
-	background-color: var(--wp--preset--color--background-secondary);
-	padding: 15px;
+
+	.wpcloud-block-expanding-section__content {
+		background-color: var(--wp--preset--color--background-secondary);
+		border-radius: 5px;
+	}
 }

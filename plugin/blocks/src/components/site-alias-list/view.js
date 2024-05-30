@@ -2,26 +2,12 @@
 	const aliasList = document.querySelector(
 		'.wpcloud-block-site-alias-list'
 	);
-
-	// Find each row in the alias list and get the data-site-alias attribute
-	aliasList
-		.querySelectorAll(
-			'.wpcloud-block-site-alias-list--row:not([style*="display:none"]'
-		)
-		.forEach( ( row ) => {
-			const alias = row.dataset.siteAlias;
-			if ( ! alias ) {
-				// eslint-disable-next-line no-console
-				console.error(
-					'Missing data-site-alias attribute on alias list row'
-				);
-				return;
-			}
-
-			row.querySelectorAll( 'input[name=site_alias]' ).forEach(
-				( input ) => ( input.value = alias )
-			);
-		} );
+	const primary = aliasList.querySelector(
+		'.wpcloud-block-site-alias-list__item--primary'
+	);
+	const primaryValueNode = primary.querySelector(
+		'.wpcloud-block-site-detail__value'
+	);
 
 	function onSiteAliasRemove( result, form ) {
 		if ( ! result.success ) {
@@ -30,7 +16,7 @@
 			return;
 		}
 
-		const row = form.closest( '.wpcloud-block-site-alias-list--row' );
+		const row = form.closest( '.wpcloud-block-site-alias-list__row' );
 
 		row.ontransitionend = () => {
 			row.remove();
@@ -40,11 +26,14 @@
 	}
 
 	function onSiteAliasAdded( alias ) {
-		const newRow = aliasList
+		const row = aliasList
 			.querySelector(
-				'.wpcloud-block-site-alias-list--row[style*="display:none"]'
+				'.wpcloud-block-site-alias-list__row[style*="display:none"]'
 			)
-			.cloneNode( true );
+		if (!row) {
+			return;
+			}
+		const newRow = row.cloneNode(true);
 
 		newRow.dataset.siteAlias = alias;
 
@@ -67,16 +56,6 @@
 		};
 	}
 
-	function updateTextOnTransitionEnd( el, text ) {
-		return () => {
-			const a = el.querySelector( 'a' );
-			a.href = `https://${ text }`;
-			a.textContent = text;
-			el.classList.remove( 'wpcloud-hide' );
-			el.ontransitionend = null;
-		};
-	}
-
 	function onSiteAliasMakePrimary( result, form ) {
 		if ( ! result.success ) {
 			alert( result.message ); // eslint-disable-line no-alert, no-undef
@@ -84,10 +63,8 @@
 		}
 
 		const newPrimary = result.site_alias;
-		const alias = form.closest( '.wpcloud-block-site-alias-list--row' );
-		const primary = aliasList.querySelector(
-			'.wpcloud-block-site-alias-list__item--primary'
-		);
+		const alias = form.closest('.wpcloud-block-site-alias-list__row');
+
 		const oldPrimary = primary.dataset.domainName;
 
 		// swap the data sets
@@ -99,25 +76,20 @@
 			.querySelectorAll( 'input[name=site_alias]' )
 			.forEach( ( input ) => ( input.value = oldPrimary ) );
 
-		// swap the values
-		const primaryValueNode = primary.querySelector(
-			'.wpcloud-block-site-detail__value'
-		);
-		primaryValueNode.ontransitionend = updateTextOnTransitionEnd(
-			primaryValueNode,
-			newPrimary
-		);
-
 		const aliasValueNode = alias.querySelector(
 			'.wpcloud-block-site-detail__value'
 		);
-		aliasValueNode.ontransitionend = updateTextOnTransitionEnd(
-			aliasValueNode,
-			oldPrimary
-		);
 
-		primaryValueNode.classList.add( 'wpcloud-hide' );
-		aliasValueNode.classList.add( 'wpcloud-hide' );
+		primaryValueNode.classList.remove('is-pending');
+		aliasValueNode.classList.remove('is-pending');
+
+		const primaryAnchor = primaryValueNode.querySelector('a');
+		primaryAnchor.href = `https://${newPrimary}`;
+		primaryAnchor.textContent = newPrimary;
+
+		const aliasAnchor = aliasValueNode.querySelector('a');
+		aliasAnchor.href = `https://${oldPrimary}`;
+		aliasAnchor.textContent = oldPrimary;
 	}
 
 	wpcloud.hooks.addAction(
@@ -136,6 +108,28 @@
 		'wpcloud_form_response_site_alias_make_primary',
 		'site_alias_make_primary',
 		onSiteAliasMakePrimary
+	);
+
+	wpcloud.hooks.addAction(
+		'wpcloud_button_alias_request_make_primary',
+		'site_alias_list',
+		(button) => {
+			// find the alias attached to the button
+			const aliasRow = button.closest('.wpcloud-block-site-alias-list__row');
+			const alias = aliasRow.querySelector('.wpcloud-block-site-detail__value');
+			alias.classList.toggle('is-pending');
+			primaryValueNode.classList.toggle('is-pending');
+		}
+	);
+
+	wpcloud.hooks.addAction(
+		'wpcloud_button_alias_request_remove',
+		'site_alias_list',
+		(button) => {
+			const aliasRow = button.closest('.wpcloud-block-site-alias-list__row');
+			const alias = aliasRow.querySelector('.wpcloud-block-site-detail__value');
+			alias.classList.toggle('is-pending');
+		}
 	);
 
 	// Disable the default destructive confirmation prompt.

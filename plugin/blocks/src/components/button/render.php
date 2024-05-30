@@ -15,6 +15,8 @@ $url = '';
 if( 'button' === $style ) {
 	$classes[] = 'wp-block-button__link wp-element-button';
 	$classes[] = $attributes['isPrimary'] ?? true ? 'is-primary' : 'is-secondary';
+} else {
+	$classes[] = 'wpcloud-block-button__text';
 }
 
 switch ($type) {
@@ -50,6 +52,14 @@ switch ($type) {
 		}
 		break;
 
+	 case 'submit':
+		$classes[] = 'wpcloud-block-button__submit';
+		$button_attributes['type'] = 'submit';
+		if ( isset( $attributes['action'] ) ) {
+			$button_attributes['data-wpcloud-action'] = $attributes['action'];
+		}
+		break;
+
 	default:
 		$url = $attributes['url'] ?? '/';
 }
@@ -58,8 +68,11 @@ switch ($type) {
 if ('table' === $layout) {
 	$wrapper = 'td';
 	$classes[] = 'wpcloud-block-table-cell';
+} elseif( 'submit' === $type ) {
+	$wrapper = 'button';
 } else {
 	$wrapper = 'div';
+
 }
 
 $button_attributes['class'] = implode( ' ', $classes );

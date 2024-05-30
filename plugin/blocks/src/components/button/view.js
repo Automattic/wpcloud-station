@@ -7,8 +7,13 @@
 
 		if (action) {
 			button.addEventListener('click', (event) => {
-				event.preventDefault();
-				event.stopPropagation();
+				const type = button.attributes.type?.value;
+
+				// Let submit buttons emit the event and let the form handle it.
+				if (type !== 'submit') {
+					event.preventDefault();
+					event.stopPropagation();
+				}
 				wpcloud.hooks.doAction(action, button);
 			});
 		}

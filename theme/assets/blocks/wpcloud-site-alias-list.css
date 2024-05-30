@@ -6,3 +6,19 @@
 	color: var(--wp--preset--color--foreground-primary);
 	padding: 3px 10px;
 }
+.wpcloud-block-site-alias-list__row {
+	.wpcloud-site-list-menu__title {
+		margin: 4px 0;
+	}
+	.wpcloud-block-button__label {
+		/* @TODO font-size--body-medium seems stuck at 16 px but should be 14px */
+		font-size: var(--wp--preset--font-size--body-medium-, .875rem);
+	}
+	.wpcloud-more-menu__nav {
+		width: 186px;
+		padding: 16px 24px 8px 24px;
+		.wpcloud-block-form {
+			gap: 16px;
+		}
+	}
+}

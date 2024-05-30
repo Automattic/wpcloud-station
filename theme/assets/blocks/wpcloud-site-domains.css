@@ -5,3 +5,13 @@ Author: Automattic Inc
 Author URI: https://automattic.com
 Text Domain: wpcloud-station
 */
+
+.wpcloud-domains {
+	.wpcloud-block-form-input__label {
+		gap: 16px;
+	}
+	.wpcloud-block-button__action.wpcloud-site-alias-add__cancel {
+		position: absolute;
+		right:16px;
+	}
+}

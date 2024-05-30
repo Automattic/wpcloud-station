@@ -109,7 +109,7 @@ export default function Edit() {
 										level: 4,
 										className:
 											'wpcloud-site-list-menu__title',
-										content: __( 'Site Details' ),
+										content: __( 'Domain Options' ),
 									},
 								],
 								[
@@ -120,7 +120,7 @@ export default function Edit() {
 											'site_alias_make_primary',
 										inline: true,
 										className:
-											'wpcloud-block-site-alias-list--remove',
+											'wpcloud-block-site-alias-list--make-primary',
 									},
 									[
 										[
@@ -137,8 +137,9 @@ export default function Edit() {
 										[
 											'wpcloud/button',
 											{
-												text: __( 'Make Primary' ),
-												asButton: false,
+												label: __( 'Make Primary' ),
+												style: 'text',
+												type: 'submit'
 											},
 										],
 									],
@@ -148,7 +149,7 @@ export default function Edit() {
 									{
 										ajax: true,
 										wpcloudAction:
-											'site_alias_make_primary',
+											'site_alias_remove',
 										inline: true,
 										className:
 											'wpcloud-block-site-alias-list--remove',
@@ -165,8 +166,9 @@ export default function Edit() {
 										[
 											'wpcloud/button',
 											{
-												text: __( 'Remove Domain' ),
-												asButton: false,
+												label: __( 'Remove Domain' ),
+												style: 'text',
+												type: 'submit'
 											},
 										],
 									],

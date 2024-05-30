@@ -95,7 +95,7 @@ registerBlockVariation( 'core/query', {
 					},
 				],
 				[
-					'wpcloud/link',
+					'wpcloud/button',
 					{
 						name: 'wp_admin_url',
 						label: 'WP Admin',

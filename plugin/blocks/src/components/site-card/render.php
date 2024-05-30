@@ -20,6 +20,7 @@ if ('table' === $layout) {
 }
 
 $wrapper_attributes = $wrapper . ' ' .  get_block_wrapper_attributes( array( 'class' => trim( $classNames ) ) );
+$domain = wpcloud_get_site_detail( get_the_ID(), 'domain_name' );
 
 ?>
 
@@ -29,8 +30,8 @@ $wrapper_attributes = $wrapper . ' ' .  get_block_wrapper_attributes( array( 'cl
 		<a href="<?php echo get_the_permalink() ?>"><?php echo get_post_field( 'post_name', get_post() ); ?></a>
 	</h2>
 	<h3 class="site-url">
-		<a href="https://<?php echo get_the_title() ?>" target="_blank">
-			<span><?php echo get_the_title() ?></span>
+		<a href="https://<?php echo $domain ?>" target="_blank">
+			<span><?php echo $domain ?></span>
 			<span className="dashicons dashicons-external" ></span>
 		</a>
 	</h3>

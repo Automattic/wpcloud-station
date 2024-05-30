@@ -6,7 +6,6 @@ Author URI: https://automattic.com
 Text Domain: wpcloud-station
 */
 .wpcloud-block-site-detail-card {
-	margin-top:24px;
 	padding: 24px 32px 32px;
 	border: 1px solid var(--wp--preset--color--wpcloud-border-primary);
 	border-radius: 10px;

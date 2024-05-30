@@ -94,7 +94,8 @@ function ButtonBlock( { attributes, setAttributes, className } ) {
 						options={ [
 							{ label: __( 'Link' ), value: 'link' },
 							{ label: __( 'Detail' ), value: 'detail' },
-							{ label: __( 'Action' ), value: 'action' },
+							{ label: __('Action'), value: 'action' },
+							{ label: __( 'Submit' ), value: 'submit' },
 						] }
 						onChange={ updateAttribute( 'type' ) }
 					/>
@@ -144,6 +145,7 @@ function ButtonBlock( { attributes, setAttributes, className } ) {
 					{ 'link'   === type && LinkControls }
 					{ 'detail' === type && DetailControls }
 					{ 'action' === type && ActionControls }
+					{ 'submit' === type && ActionControls }
 				</PanelBody>
 			</InspectorControls>
 		</>
@@ -156,7 +158,6 @@ function ButtonBlock( { attributes, setAttributes, className } ) {
 				{ ...blockProps }
 				className={ classNames(
 					blockProps.className,
-					className,
 					'wpcloud-block-button',
 					{
 						'is-admin-only': adminOnly,
