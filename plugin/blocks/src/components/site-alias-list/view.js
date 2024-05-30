@@ -69,7 +69,6 @@
 
 	function updateTextOnTransitionEnd( el, text ) {
 		return () => {
-			console.log( el );
 			const a = el.querySelector( 'a' );
 			a.href = `https://${ text }`;
 			a.textContent = text;
@@ -112,8 +111,6 @@
 		const aliasValueNode = alias.querySelector(
 			'.wpcloud-block-site-detail__value'
 		);
-		console.log( alias );
-		console.log( aliasValueNode );
 		aliasValueNode.ontransitionend = updateTextOnTransitionEnd(
 			aliasValueNode,
 			oldPrimary
