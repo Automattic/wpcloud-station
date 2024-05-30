@@ -1,6 +1,4 @@
 ((wpcloud) => {
-
-	console.log('hi from domains index.js');
 	wpcloud.hooks.addAction('wpcloud_form_response_site_alias_add', 'site_alias_add', (result) => {
 		if (!result.success) {
 			alert(result.message); // eslint-disable-line no-alert, no-undef
