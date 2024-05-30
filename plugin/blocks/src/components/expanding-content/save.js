@@ -22,7 +22,9 @@ const Save = ({ attributes }) => {
 			) }
 		>
 			<div className="wpcloud-block-expanding-section__content">
-				<InnerBlocks.Content />
+				<div className="wpcloud-block-expanding-section__content-inner">
+					<InnerBlocks.Content />
+				</div>
 				</div>
 		</div>
 	);
