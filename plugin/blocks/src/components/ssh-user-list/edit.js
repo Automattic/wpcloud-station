@@ -25,7 +25,7 @@ export default function Edit() {
 		[
 			'core/group',
 			{
-				className: 'wpcloud-block-site-ssh-user--row',
+				className: 'wpcloud-block-ssh-user-list__row',
 				layout: {
 					type: 'flex',
 					flexWrap: 'nowrap',
@@ -47,10 +47,19 @@ export default function Edit() {
 				],
 				[
 					'wpcloud/more-menu',
-					{},
+					{
+						showMenu: false,
+					},
 					[
-						[
-							'wpcloud/form',
+						[ 'core/heading',
+							{
+								level: 4,
+								className:
+									'wpcloud-site-list-menu__title',
+								content: __( 'SSH User Options' ),
+							},
+						],
+						[ 'wpcloud/form',
 							{
 								ajax: true,
 								wpcloudAction: 'site_ssh_user_remove',
@@ -59,6 +68,7 @@ export default function Edit() {
 									'wpcloud-block-site-ssh-user--remove',
 							},
 							[
+								[ 'wpcloud/icon', { icon: 'trash' } ],
 								[
 									'wpcloud/form-input',
 									{
@@ -69,13 +79,36 @@ export default function Edit() {
 								[
 									'wpcloud/button',
 									{
-										text: __( 'remove' ),
-										icon: 'trash',
+										label: __( 'Remove' ),
+										type: 'submit',
+										style: 'text'
 									},
-								],
+
+								]
 							],
 						],
-					],
+						[ 'core/group',
+							{
+								layout: {
+									type: 'flex',
+									flexWrap: 'wrap',
+									justifyContent: 'space-between',
+								}
+							},
+							[
+								[ 'wpcloud/icon', { icon: 'update' } ],
+								[
+									'wpcloud/button',
+									{
+										label: __( 'Update' ),
+										action: 'wpcloud_ssh_user_update',
+										type: 'action',
+										style: 'text'
+									},
+								]
+							]
+						]
+					]
 				],
 			],
 		],
@@ -86,7 +119,7 @@ export default function Edit() {
 	} );
 
 	return (
-		<div className="wpcloud-block-site-ssh-user-list--wrapper">
+		<div className="wpcloud-block-ssh-user-list">
 			<div
 				{ ...innerBlocksProps }
 				className={ classNames(

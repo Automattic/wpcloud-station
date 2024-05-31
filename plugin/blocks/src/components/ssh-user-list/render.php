@@ -28,7 +28,7 @@ $dom = $html5->loadHTML( $content );
 $xpath = new DOMXPath($dom);
 
 // Find the row ( should be only one, but just in case )
-$rows = $xpath->query('//div[contains(@class, "wp-block-group wpcloud-block-site-ssh-user--row")]');
+$rows = $xpath->query('//div[contains(@class, "wp-block-group wpcloud-block-ssh-user-list__row")]');
 
 // hold on to the first one
 if ( ! $rows ) {

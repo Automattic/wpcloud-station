@@ -57,7 +57,8 @@ export default function Edit() {
 				[
 					'wpcloud/button',
 					{
-						text: __( 'Add' ),
+						label: __('Add'),
+						type: 'submit',
 					},
 				],
 			],

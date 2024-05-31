@@ -15,14 +15,14 @@
 
 	sshUserList
 		.querySelectorAll(
-			'.wpcloud-block-site-ssh-user--row:not([style*="display:none"])'
+			'.wpcloud-block-ssh-user-list__row:not([style*="display:none"])'
 		)
 		.forEach( updateSshUserInputs );
 
 	function onSshUserAdded( { user } ) {
 		const newRow = sshUserList
 			.querySelector(
-				'.wpcloud-block-site-ssh-user--row[style*="display:none"]'
+				'.wpcloud-block-ssh-user-list__row[style*="display:none"]'
 			)
 			.cloneNode( true );
 		newRow.dataset.siteSshUser = user;
@@ -42,7 +42,7 @@
 			return;
 		}
 
-		const row = form.closest( '.wpcloud-block-site-ssh-user--row' );
+		const row = form.closest( '.wpcloud-block-ssh-user-list__row' );
 
 		row.ontransitionend = row.remove;
 

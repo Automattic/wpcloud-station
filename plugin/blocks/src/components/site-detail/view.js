@@ -1,6 +1,9 @@
 ( ( wpcloud ) => {
 	const onCopyToClipboard = async ( e ) => {
-		const detail = e.currentTarget.closest('.wpcloud-block-site-detail');
+		const detail = e.currentTarget.closest('.wpcloud-block-site-detail__wrapper');
+		const name = detail.dataset.siteDetail;
+		const pattern = detail.dataset.clipboardPattern;
+
 		const isObscured = detail.querySelector('.is-obscured');
 		if (isObscured) {
 			return true;
@@ -17,12 +20,16 @@
 			listValue.querySelectorAll( 'li' ).forEach( ( li ) => {
 				text += li.innerText + '\n';
 			} );
+		} else if (pattern) {
+			const re = new RegExp( `{${name}}`, 'g' );
+			text = pattern.replace( re, value.innerText );
 		} else {
 			text = value.innerText;
 		}
+
 		try {
 			await navigator.clipboard.writeText( text );
-			alert( 'Copied to clipboard' );
+			//alert( 'Copied to clipboard' );
 		} catch ( error ) {
 			console.error( error.message );
 		}

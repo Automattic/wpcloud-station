@@ -7,6 +7,10 @@ Text Domain: wpcloud-station
 */
 
 .wpcloud-domains {
+  border: 1px solid var(--wp--preset--color--border-primary);
+  border-radius: 10px;
+  padding: 24px 32px 32px;
+
 	.wpcloud-domains__title {
 		margin-top:0;
 	}

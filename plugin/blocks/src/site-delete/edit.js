@@ -31,10 +31,11 @@ export default function Edit() {
 			},
 			[
 				[
-					'wpcloud/form-submit-button',
+					'wpcloud/button',
 					{
 						className: 'wpcloud-button-site-delete',
-						text: __( 'Delete Site' ),
+						label: __('Delete Site'),
+						type: 'submit',
 					},
 				],
 			],

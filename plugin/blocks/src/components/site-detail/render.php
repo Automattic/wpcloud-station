@@ -12,7 +12,6 @@ if ( ! is_wpcloud_site_post() ) {
 if ( $attributes[ 'adminOnly' ] && ! current_user_can( 'manage_options' ) ) {
 	return;
 }
-
 // Grab the detail name and value
 $name = $attributes[ 'name' ] ?? '';
 $value = wpcloud_get_site_detail( get_the_ID(), $name ) ?? '';
@@ -34,7 +33,7 @@ switch (true) {
 		break;
 
 	case $name === 'domain_name' || $name === 'site_url':
-		$detail = sprintf('<a href="https://%s">%s<span class="dashicons dashicons-external"></span></a>', $value, $value);
+		$detail = sprintf('<a href="https://%s">%s</a>', $value, $value);
 		break;
 
 	case str_starts_with( $value, 'http' ):
@@ -46,22 +45,25 @@ switch (true) {
 		}
 
 		$data = '';
-		$detail = sprintf('<a href="%s" %s >%s</span></a>', $value, $data, $link_text);
+		$detail = sprintf('<a href="%s" %s >%s</a>', $value, $data, $link_text);
 		break;
 	case $name === 'wp_version':
 		$value = ucfirst( $value );
-		/*
-	case $attributes[ 'obscureValue' ]:
-		$detail = '********';
-		$node_attributes[ 'data-hidden-value' ] = $value;
-		break;
-		*/
+
+	case $name === 'ssh_user':
+		//@TODO: Generalize the copy to clipboard pattern, just not how to handle alternatives like with ssh vs sftp
+
+		//@TODO Switch this to sftp once we have that added to the site settings
+		$node_attributes['data-clipboard-pattern'] = "ssh -v {ssh_user}@ssh.atomicsites.net";
+
 	default:
 		$detail = $value;
 }
 // match the placeholder which is in the last set of curly braces  { The placeholder }
 $regex = '/\{[^{}]*\}(?=[^{}]*$)/';
 $detail = preg_replace( $regex, $detail, $content );
+
+$node_attributes['data-site-detail'] = $name;
 
 if ($value !== '') {
 	$data_name = "data-" . preg_replace('/_/', '-', $name );
@@ -73,9 +75,10 @@ if ($value !== '') {
 
 $layout = $block->context['wpcloud/layout'] ?? '';
 if ('table' === $layout) {
-	$node_attributes['class'] = 'wpcloud-block-table-cell';
+	$node_attributes['class'] = 'wpcloud-block-table-cell wpcloud-block-site-detail__wrapper';
 	$wrapper = 'td';
 } else {
+	$node_attributes['class'] = 'wpcloud-block-site-detail__wrapper';
 	$wrapper = 'div';
 }
 
