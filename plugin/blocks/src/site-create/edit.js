@@ -206,11 +206,11 @@ export default function Edit() {
 						'wpcloud/form-input',
 						{
 							type: 'checkbox',
-							name: 'toc',
+							name: 'tos',
 							label: __(
 								'Any <a href="https://en.wikipedia.org/wiki/Terms_of_service">terms and conditions</a> that we might need to add.'
 							),
-							metadata: { name: 'TOC' },
+							metadata: { name: 'TOS' },
 						},
 					],
 					[
