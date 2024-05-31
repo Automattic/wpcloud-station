@@ -46,7 +46,7 @@
 			wpcloud.hooks.doAction( 'wpcloud_form_submit', form );
 			try {
 				const response = await fetch(
-					'http://localhost:8888/wp-admin/admin-ajax.php',
+					'/wp-admin/admin-ajax.php',
 					{
 						method: 'POST',
 						headers: {
