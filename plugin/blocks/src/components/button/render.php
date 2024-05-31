@@ -64,15 +64,7 @@ switch ($type) {
 }
 
 
-if ('table' === $layout) {
-	$wrapper = 'td';
-	$classes[] = 'wpcloud-block-table-cell';
-} elseif( 'submit' === $type ) {
-	$wrapper = 'button';
-} else {
-	$wrapper = 'div';
 
-}
 
 $button_attributes['class'] = implode( ' ', $classes );
 
@@ -100,4 +92,15 @@ if ( $url ) {
 }
 $wrapper_attributes = get_block_wrapper_attributes( $button_attributes );
 
-printf('<%1$s %2$s>%3$s</%1$s>', $wrapper, $wrapper_attributes, $content);
+if ( 'button' === $style ) {
+	$wrapper = 'button';
+} else {
+	$wrapper = 'div';
+}
+
+if ('table' === $layout) {
+	$classes[] = 'wpcloud-block-table-cell';
+	printf('<td class="wp-block-wpcloud-table-cell"><%1$s %2$s>%3$s</%1$s></td>', $wrapper, $wrapper_attributes, $content);
+} else {
+	printf('<%1$s %2$s>%3$s</%1$s>', $wrapper, $wrapper_attributes, $content);
+}
