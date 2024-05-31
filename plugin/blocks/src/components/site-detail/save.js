@@ -7,10 +7,10 @@ import classNames from 'classnames';
  * WordPress dependencies
  */
 import { RichText, useBlockProps } from '@wordpress/block-editor';
-import { Icon, copySmall } from '@wordpress/icons';
+import { Icon, copySmall, seen } from '@wordpress/icons';
 
 export default function save( { attributes, className } ) {
-	const { label, inline, adminOnly, hideLabel, refreshLink, showCopyButton } =
+	const { label, inline, adminOnly, hideLabel, obscureValue, revealButton , showCopyButton } =
 		attributes;
 	const blockProps = useBlockProps.save();
 	return (
@@ -23,7 +23,6 @@ export default function save( { attributes, className } ) {
 				{
 					'is-inline': inline,
 					'is-admin-only': adminOnly,
-					'refresh-link': refreshLink,
 				}
 			) }
 		>
@@ -46,12 +45,19 @@ export default function save( { attributes, className } ) {
 					'wpcloud-block-site-detail__value-container',
 					{
 						'copy-to-clipboard': showCopyButton,
+						'is-obscured': obscureValue,
 					}
 				) }
 			>
 				<div className={ 'wpcloud-block-site-detail__value' }>
 					{ `{ ${ label } }` }
 				</div>
+				{ ( obscureValue && revealButton ) && (
+					<Icon
+						className="wpcloud-reveal-value"
+						icon={seen}
+					/>
+				) }
 				{ showCopyButton && (
 					<Icon
 						className="wpcloud-copy-to-clipboard"

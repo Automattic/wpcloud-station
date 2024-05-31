@@ -22,7 +22,7 @@ if ( is_wp_error( $value ) ) {
 	error_log( 'WP Cloud Site Detail Block: ' . $value->get_error_message() );
 	return '' ;
 }
-
+$node_attributes = array();
 switch (true) {
 	case is_array( $value ):
 
@@ -46,22 +46,16 @@ switch (true) {
 		}
 
 		$data = '';
-		if ( $attributes[ 'refreshLink' ] ) {
-			$nonce = wp_create_nonce( 'wpcloud_refresh_link' );
-			// @TODO add the refresh rate to the block attributes
-			$refresh_rate = $attributes[ 'refreshRate' ] ?? 10000;
-			$data = sprintf(
-				"data-nonce=%s data-refresh-rate='%s' data-site-detail=%s data-site-id=%s",
-				$nonce,
-				$refresh_rate,
-				$name,
-				get_the_ID()
-			);
-		}
 		$detail = sprintf('<a href="%s" %s >%s</span></a>', $value, $data, $link_text);
 		break;
 	case $name === 'wp_version':
 		$value = ucfirst( $value );
+		/*
+	case $attributes[ 'obscureValue' ]:
+		$detail = '********';
+		$node_attributes[ 'data-hidden-value' ] = $value;
+		break;
+		*/
 	default:
 		$detail = $value;
 }
@@ -69,12 +63,13 @@ switch (true) {
 $regex = '/\{[^{}]*\}(?=[^{}]*$)/';
 $detail = preg_replace( $regex, $detail, $content );
 
-// @TODO Probably should skip the data attribute if this is part of a dynamic list like the domain aliases.
-$data_name = "data-" . preg_replace('/_/', '-', $name );
-if (is_array($value)) {
-	$value = implode(',', $value);
+if ($value !== '') {
+	$data_name = "data-" . preg_replace('/_/', '-', $name );
+	if ( is_array( $value ) ) {
+		$value = implode( ',', $value );
+		}
+	$node_attributes[ $data_name ]= $value;
 }
-$node_attributes = array ( $data_name => $value );
 
 $layout = $block->context['wpcloud/layout'] ?? '';
 if ('table' === $layout) {

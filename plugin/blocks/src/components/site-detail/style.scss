@@ -38,15 +38,22 @@
 .wpcloud-block-site-detail__value-container {
 	display: flex;
 	align-items: center;
-	&.copy-to-clipboard:hover {
-		font-weight: bold;
-		.wpcloud-copy-to-clipboard {
-			background-color: var(--wp--preset--color--accent-primary, '#0073AA');
+	&.is-obscured {
+		.wpcloud-block-site-detail__value, .wpcloud-copy-to-clipboard {
+			display: none;
+		}
+		&:before{
+			content: '**********'
 		}
 	}
-
-	.wpcloud-copy-to-clipboard {
-
+	.wpcloud-copy-to-clipboard:hover {
+			background-color: var(--wp--preset--color--accent-primary, '#0073AA');
+		}
+	.wpcloud-reveal-value:hover {
+		font-weight: bold;
+		background-color: var(--wp--preset--color--accent-primary, '#0073AA');
+	}
+	.wpcloud-copy-to-clipboard, .wpcloud-reveal-value {
 		border-radius: 4px;
 		margin-left: 5px;
 		fill: var(--wp--preset--color--foreground-primary, '#FFFFFF');

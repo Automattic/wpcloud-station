@@ -25,4 +25,18 @@ Text Domain: wpcloud-station
 			content: "\f504";
 		}
 	}
+	.wp-block-wpcloud-site-detail[data-db-pass] {
+		.wpcloud-block-site-detail__value {
+			font-size: var(--wp--preset--font-size--body-small);
+		}
+	}
+
+	.wpcloud-block-button {
+		.wpcloud_php_myadmin_button {
+			.wpcloud-block-button__label {
+				text-transform: none;
+				font-size: var(--wp--preset--font-size--body-medium);
+			}
+		}
+	}
 }

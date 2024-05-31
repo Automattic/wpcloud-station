@@ -13,7 +13,7 @@ import {
 	useBlockProps,
 } from '@wordpress/block-editor';
 import { PanelBody, ToggleControl } from '@wordpress/components';
-import { Icon, copySmall } from '@wordpress/icons';
+import { Icon, copySmall, seen } from '@wordpress/icons';
 
 /**
  *
@@ -23,7 +23,7 @@ import DetailSelectControl from '../controls/site/detailSelect';
 import './editor.scss';
 
 function SiteDetailBlock( { attributes, setAttributes, className } ) {
-	const { label, adminOnly, inline, hideLabel, refreshLink, showCopyButton } =
+	const { label, adminOnly, inline, hideLabel, obscureValue, showCopyButton, revealButton } =
 		attributes;
 	const blockProps = useBlockProps();
 
@@ -66,9 +66,29 @@ function SiteDetailBlock( { attributes, setAttributes, className } ) {
 							'Add a button to copy the value of the site detail to the clipboard.'
 						) }
 					/>
-
+					<ToggleControl
+						label={ __( 'Obscure value' ) }
+						checked={ obscureValue }
+						onChange={ ( newVal ) => {
+							setAttributes( {
+								obscureValue: newVal,
+							} );
+						} }
+						help={ __(
+							'Show the detail value as asterisks like "********". If copy to clipboard is enabled the value will be copied as plain text.'
+						) }
+					/>
+					{obscureValue && (
+						<ToggleControl
+							label={__('Add reveal button')}
+							checked={revealButton}
+							onChange={(newVal) => {
+								setAttributes({
+									revealButton: newVal,
+								});
+							}}
+						/>)}
 					{
-						// @TODO add refresh rate when refresh is enabled
 						// @TODO add option to show external link icon
 					 }
 
@@ -88,6 +108,8 @@ function SiteDetailBlock( { attributes, setAttributes, className } ) {
 			</InspectorControls>
 		</>
 	);
+
+	const valueText = obscureValue ? '********' : label;
 
 	return (
 		<span { ...blockProps }>
@@ -136,8 +158,14 @@ function SiteDetailBlock( { attributes, setAttributes, className } ) {
 					) }
 				>
 					<div className={ 'wpcloud-block-site-detail__value' }>
-						{ `{ ${ label } }` }
+						{ `{ ${ valueText } }` }
 					</div>
+					{ ( obscureValue && revealButton ) && (
+						<Icon
+							className="wpcloud-reveal-value"
+							icon={seen}
+						/>
+					) }
 					{ showCopyButton && (
 						<Icon
 							className="wpcloud-copy-to-clipboard"

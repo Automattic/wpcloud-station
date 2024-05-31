@@ -39,13 +39,17 @@
 			"type": "boolean",
 			"default": false
 		},
-		"refreshLink": {
-			"type": "boolean",
-			"default": false
-		},
 		"showCopyButton": {
 			"type": "boolean",
 			"default": false
+		},
+		"obscureValue": {
+			"type": "boolean",
+			"default": false
+		},
+		"revealButton": {
+			"type": "boolean",
+			"default": true
 		}
 	}
 }
