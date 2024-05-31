@@ -115,7 +115,7 @@ class WPCLOUD_Site {
 			'wp_version' => __( 'WP Version' ),
 			'php_version' => __( 'PHP Version' ),
 			'static_file_404' => __( 'Static File 404' ),
-			'db_password' => __( 'DB Password' ),
+			'db_pass' => __( 'DB Password' ),
 			'db_charset' => __( 'DB Charset' ),
 			'db_collate' => __( 'DB Collate' ),
 			'cache_prefix' => __( 'Cache Prefix' ),
