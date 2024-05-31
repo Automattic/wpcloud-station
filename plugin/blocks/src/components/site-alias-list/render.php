@@ -1,8 +1,4 @@
 <?php
-
-// test setting up software
-$response = wpcloud_client_site_manage_software(wpcloud_get_current_site_id(), array('themes/pub/twentytwentytwo' => 'activate'));
-
 /**
  * Render the site alias block.
  *
