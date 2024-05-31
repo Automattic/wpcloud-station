@@ -26,7 +26,7 @@
 		"label": {
 			"type": "string",
 			"default": "Label",
-			"selector": ".wpcloud-block-form-input__label-content"
+			"selector": ".wpcloud-block-form-input__label-text"
 		},
 		"inlineLabel": {
 			"type": "boolean",

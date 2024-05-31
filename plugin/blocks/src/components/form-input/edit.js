@@ -11,6 +11,7 @@ import {
 	InspectorControls,
 	RichText,
 	useBlockProps,
+	InnerBlocks,
 } from '@wordpress/block-editor';
 import {
 	PanelBody,
@@ -18,7 +19,7 @@ import {
 	ToggleControl,
 	SelectControl,
 } from '@wordpress/components';
-import { useRef, useCallback } from '@wordpress/element';
+import { useCallback } from '@wordpress/element';
 
 /*
  * Internal dependencies
@@ -50,6 +51,7 @@ function InputFieldBlock( { attributes, setAttributes, className, context } ) {
 		hidden: Hidden,
 		textarea: Text,
 		select: Select,
+		checkbox: Text,
 	};
 
 	const selectTypeOptions = [
@@ -58,6 +60,7 @@ function InputFieldBlock( { attributes, setAttributes, className, context } ) {
 		{ value: 'password', label: __( 'Password' ) },
 		{ value: 'hidden', label: __( 'Hidden' ) },
 		{ value: 'textarea', label: __( 'Textarea' ) },
+		{ value: 'checkbox', label: __( 'Checkbox' )}
 		// @TODO Implement select block to allow setting the select options. For now it's only available in block templates.
 		// { value: 'select', label: __( 'Select' ) },
 	];
@@ -152,20 +155,22 @@ function InputFieldBlock( { attributes, setAttributes, className, context } ) {
 					'is-admin-only': adminOnly,
 				} ) }
 			>
-				{ showLabel && (
-					<RichText
-						tagName="span"
-						className="wpcloud-block-form-input__label-content"
-						value={ label }
-						onChange={ ( newLabel ) =>
-							setAttributes( { label: newLabel } )
-						}
-						aria-label={
-							label ? __( 'Label' ) : __( 'Empty label' )
-						}
-						data-empty={ label ? false : true }
-						placeholder={ __( 'Type the label for this input' ) }
-					/>
+				{showLabel && (
+					<span className="wpcloud-block-form-input__label-content">
+						<RichText
+							tagName="span"
+							className="wpcloud-block-form-input__label-text"
+							value={ label }
+							onChange={ ( newLabel ) =>
+								setAttributes( { label: newLabel } )
+							}
+							aria-label={
+								label ? __( 'Label' ) : __( 'Empty label' )
+							}
+							data-empty={ label ? false : true }
+						/>
+						<InnerBlocks allowedBlocks={ [ 'core/paragraph', 'core/heading', 'wpcloud/icon', 'wpcloud/button', 'wpcloud/expanding-section' ] } />
+					</span>
 				) }
 				<InputTag
 					attributes={ attributes }
