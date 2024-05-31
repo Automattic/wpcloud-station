@@ -7,11 +7,44 @@ Text Domain: wpcloud-station
 */
 
 .wpcloud-domains {
+	.wpcloud-domains__title {
+		margin-top:0;
+	}
+
 	.wpcloud-block-form-input__label {
 		gap: 16px;
 	}
 	.wpcloud-block-button__action.wpcloud-site-alias-add__cancel {
 		position: absolute;
 		right:16px;
+	}
+
+	.wpcloud_ip_address_info {
+		.wpcloud_expanding_section_header_chevron {
+			transition: transform 0.5s ease-in-out;
+		}
+		&.is-open {
+			.wpcloud-block-expanding-section__header {
+				border-radius: 5px 5px 0 0;
+				.wpcloud_expanding_section_header_chevron {
+					transform: rotate(90deg);
+				}
+			}
+		}
+		.wpcloud-block-expanding-section__header {
+			background: var(--wp--preset--color--background-secondary);
+			padding: 5px 16px;
+			border-radius: 5px;
+			.wp-block-heading {
+				flex: 2;
+			}
+		}
+		.wpcloud-block-expanding-section__content {
+			border-radius: 0 0 5px 5px;
+		}
+
+		.wpcloud-block-site-detail {
+			margin:0;
+		}
 	}
 }
