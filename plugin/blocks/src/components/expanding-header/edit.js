@@ -30,7 +30,8 @@ import './editor.scss';
 export default function Edit({
 	setAttributes,
 	clientId,
-	context
+	context,
+	isSelected
 } ) {
 	const blockProps = useBlockProps();
 
@@ -82,7 +83,7 @@ export default function Edit({
 	];
 
 	const innerBlocksProps = useInnerBlocksProps( blockProps, {
-		renderAppender: isChildSelected
+		renderAppender: isChildSelected || !isSelected
 			? undefined
 			: InnerBlocks.ButtonBlockAppender,
 		template,

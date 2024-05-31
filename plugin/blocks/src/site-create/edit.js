@@ -31,18 +31,9 @@ function formatOptions( data ) {
 export default function Edit() {
 	const blockProps = useBlockProps();
 
-	const phpVersionOptions = useMemo(
-		() => window.wpcloud?.phpVersions,
-		[],
-		[]
-	);
-	const dataCenterOptions = useMemo(
-		() => window.wpcloud?.dataCenters,
-		[],
-		[]
-	);
+	const phpVersionOptions = window.wpcloud?.phpVersions;
+	const dataCenterOptions = window.wpcloud?.dataCenters;
 
-	// @TODO: Make sure the required fields are not mutable.
 	const template = useMemo(
 		() => [
 			[
@@ -63,11 +54,111 @@ export default function Edit() {
 						'wpcloud/form-input',
 						{
 							type: 'text',
-							label: __( 'Name' ),
+							label: '',
 							name: 'site_name',
 							placeholder: __( 'Enter site name' ),
 							required: true,
+							metadata: { name: 'Site Name' },
 						},
+						[
+							[
+								'wpcloud/expanding-section',
+								{
+									clickToToggle: true,
+									hideHeader: false,
+									openOnLoad: true,
+								},
+								[
+									[
+										'wpcloud/expanding-header',
+										{
+											metadata: {
+												name: 'Site name label',
+											},
+											openOnLoad: true,
+										},
+										[
+											[
+												'core/group',
+												{
+													metadata: { name: 'label' },
+													className:
+														'wpcloud-block-expanding-section__header',
+													layout: {
+														type: 'flex',
+														flexWrap: 'nowrap',
+														justifyContent: 'left',
+													},
+												},
+												[
+													[
+														'core/paragraph',
+														{
+															content:
+																__( 'Name' ),
+														},
+													],
+													[
+														'wpcloud/button',
+														{
+															type: 'action',
+															style: 'text',
+															label: 'Open',
+															addIcon: true,
+															iconOnly: true,
+															action: 'wpcloud_expanding_section_toggle',
+															className:
+																'wpcloud-block-expanding-section__toggle--open',
+														},
+														[
+															[
+																'wpcloud/icon',
+																{
+																	icon: 'info',
+																},
+															],
+														],
+													],
+												],
+											],
+										],
+									],
+									[
+										'wpcloud/expanding-content',
+										{
+											metadata: {
+												name: 'Site name info',
+											},
+											openOnLoad: true,
+										},
+										[
+											[
+												'core/group',
+												{
+													metadata: {
+														name: 'content',
+													},
+													className:
+														'wpcloud-block-expanding-section__content',
+													layout: {
+														type: 'constrained',
+													},
+												},
+												[
+													[
+														'core/paragraph',
+														{
+															content:
+																'We’ll choose a temporary domain for you to get your started. You’ll be able to change this later.',
+														},
+													],
+												],
+											],
+										],
+									],
+								],
+							],
+						],
 					],
 					[
 						'wpcloud/form-input',
@@ -76,7 +167,7 @@ export default function Edit() {
 							label: __( 'PHP Version' ),
 							name: 'php_version',
 							options: formatOptions( phpVersionOptions ),
-							required: true,
+							metadata: { name: 'PHP Version' },
 						},
 					],
 					[
@@ -86,7 +177,7 @@ export default function Edit() {
 							name: 'data_center',
 							label: __( 'Data Center' ),
 							options: formatOptions( dataCenterOptions ),
-							required: true,
+							metadata: { name: 'Data Center' },
 						},
 					],
 
@@ -98,6 +189,7 @@ export default function Edit() {
 							label: __( 'Owner' ),
 							adminOnly: true,
 							options: [ { value: '1', label: 'Site Owner' } ],
+							metadata: { name: 'Owner' },
 						},
 					],
 					[
@@ -106,12 +198,27 @@ export default function Edit() {
 							type: 'password',
 							name: 'admin_pass',
 							label: __( 'WP Admin Password' ),
+							placeholder: __( '••••••••' ),
+							metadata: { name: 'WP Admin Password' },
+						},
+					],
+					[
+						'wpcloud/form-input',
+						{
+							type: 'checkbox',
+							name: 'toc',
+							label: __(
+								'Any <a href="https://en.wikipedia.org/wiki/Terms_of_service">terms and conditions</a> that we might need to add.'
+							),
+							metadata: { name: 'TOC' },
 						},
 					],
 					[
 						'wpcloud/button',
 						{
-							text: __( 'Create Site' ),
+							label: __( 'Create Site' ),
+							type: 'submit',
+							metadata: { name: 'Create Site Button' },
 						},
 					],
 				],

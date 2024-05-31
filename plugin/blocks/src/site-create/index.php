@@ -31,7 +31,7 @@ function wpcloud_block_form_site_create_handler( $response, $data ) {
 
 	$response['message'] = 'Site request successful.';
 	$response['post_id'] = $site->ID;
-	$response['redirect'] = get_post_permalink($site->ID);
+	$response['redirect'] = '/sites';
 
 	return $response;
 }

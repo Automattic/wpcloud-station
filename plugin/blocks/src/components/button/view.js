@@ -34,7 +34,7 @@
 		formData.append( '_wpnonce', button.dataset.nonce );
 		formData.append( 'site_detail', button.dataset.wpcloudDetail );
 		const response = await fetch(
-			'http://localhost:8888/wp-admin/admin-ajax.php',
+			'/wp-admin/admin-ajax.php',
 			{
 				method: 'POST',
 				headers: {

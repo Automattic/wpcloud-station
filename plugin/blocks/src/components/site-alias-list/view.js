@@ -47,9 +47,14 @@
 			wpcloud.bindFormHandler( form );
 		} );
 
-		aliasList.appendChild( newRow );
-		newRow.classList.add( 'wpcloud-hide' );
+		// @TODO the new row does not have an anchor tag
+		//newRow.querySelector( 'a' ).href = `https://${alias}`;
+		aliasList.appendChild(newRow);
+		// @TODO need to figure out the old fade effect for the new row
+		//newRow.classList.add( 'wpcloud-hide' );
 		newRow.style.display = 'flex';
+		newRow.classList.add( 'wpcloud-block-site-alias-list__row--new' );
+
 		newRow.ontransitionend = () => {
 			newRow.classList.remove( 'wpcloud-hide' );
 			newRow.ontransitionend = null;
@@ -126,6 +131,7 @@
 		'wpcloud_button_alias_request_remove',
 		'site_alias_list',
 		(button) => {
+			console.log('remove alias request');
 			const aliasRow = button.closest('.wpcloud-block-site-alias-list__row');
 			const alias = aliasRow.querySelector('.wpcloud-block-site-detail__value');
 			alias.classList.toggle('is-pending');

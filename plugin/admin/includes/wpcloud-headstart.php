@@ -107,15 +107,15 @@ function wpcloud_headstart(string $client='', string $key='', bool $force = fals
 <!-- wp:wpcloud/login -->
 <div class="wpcloud-login-form wp-block-wpcloud-login"><!-- wp:wpcloud/form {"ajax":true,"wpcloudAction":"login","redirect":"/sites"} -->
 <form class="wp-block-wpcloud-form wpcloud-block-form" enctype="text/plain"><!-- wp:wpcloud/form-input {"name":"log"} -->
-<div class="wp-block-wpcloud-form-input"><label class="wpcloud-block-form-input__label"><span class="wpcloud-block-form-input__label-content">Username or Email Address</span><input class="wpcloud-block-form-input__input" type="text" name="log" required aria-required="true"/></label></div>
+<div class="wp-block-wpcloud-form-input"><label class="wpcloud-block-form-input__label"><span class="wpcloud-block-form-input__label-text">Username or Email Address</span><input class="wpcloud-block-form-input__input" type="text" name="log" required aria-required="true"/></label></div>
 <!-- /wp:wpcloud/form-input -->
 
 <!-- wp:wpcloud/form-input {"type":"password","name":"pwd"} -->
-<div class="wp-block-wpcloud-form-input"><label class="wpcloud-block-form-input__label"><span class="wpcloud-block-form-input__label-content">Password</span><input class="wpcloud-block-form-input__input" type="password" name="pwd" required aria-required="true"/></label></div>
+<div class="wp-block-wpcloud-form-input"><label class="wpcloud-block-form-input__label"><span class="wpcloud-block-form-input__label-text">Password</span><input class="wpcloud-block-form-input__input" type="password" name="pwd" required aria-required="true"/></label></div>
 <!-- /wp:wpcloud/form-input -->
 
 <!-- wp:wpcloud/form-input {"type":"checkbox","name":"rememberme"} -->
-<div class="wp-block-wpcloud-form-input"><label class="wpcloud-block-form-input__label"><span class="wpcloud-block-form-input__label-content">Remember Me</span><input class="wpcloud-block-form-input__input" type="checkbox" name="rememberme" aria-required="false"/></label></div>
+<div class="wp-block-wpcloud-form-input"><label class="wpcloud-block-form-input__label"><span class="wpcloud-block-form-input__label-text">Remember Me</span><input class="wpcloud-block-form-input__input" type="checkbox" name="rememberme" aria-required="false"/></label></div>
 <!-- /wp:wpcloud/form-input -->
 
 <!-- wp:wpcloud/button {"text":"Login In"} -->
@@ -149,23 +149,23 @@ LOGIN;
 <!-- /wp:heading -->
 
 <!-- wp:wpcloud/form-input {"name":"site_name"} -->
-<div class="wp-block-wpcloud-form-input"><label class="wpcloud-block-form-input__label"><span class="wpcloud-block-form-input__label-content">Name</span><input class="wpcloud-block-form-input__input" type="text" name="site_name" required aria-required="true" placeholder="Enter site name"/></label></div>
+<div class="wp-block-wpcloud-form-input"><label class="wpcloud-block-form-input__label"><span class="wpcloud-block-form-input__label-text">Name</span><input class="wpcloud-block-form-input__input" type="text" name="site_name" required aria-required="true" placeholder="Enter site name"/></label></div>
 <!-- /wp:wpcloud/form-input -->
 
 <!-- wp:wpcloud/form-input {"type":"select","name":"php_version","options":[]} -->
-<div class="wp-block-wpcloud-form-input"><label class="wpcloud-block-form-input__label"><span class="wpcloud-block-form-input__label-content">PHP Version</span><select class="wpcloud-station-form-input__select wpcloud-block-form-input__input" name="php_version" required aria-required="true"></select></label></div>
+<div class="wp-block-wpcloud-form-input"><label class="wpcloud-block-form-input__label"><span class="wpcloud-block-form-input__label-text">PHP Version</span><select class="wpcloud-station-form-input__select wpcloud-block-form-input__input" name="php_version" required aria-required="true"></select></label></div>
 <!-- /wp:wpcloud/form-input -->
 
 <!-- wp:wpcloud/form-input {"type":"select","name":"data_center","options":[{"value":"No Preference","label":"No Preference"}]} -->
-<div class="wp-block-wpcloud-form-input"><label class="wpcloud-block-form-input__label"><span class="wpcloud-block-form-input__label-content">Data Center</span><select class="wpcloud-station-form-input__select wpcloud-block-form-input__input" name="data_center" required aria-required="true"><option value="No Preference">No Preference</option></select></label></div>
+<div class="wp-block-wpcloud-form-input"><label class="wpcloud-block-form-input__label"><span class="wpcloud-block-form-input__label-text">Data Center</span><select class="wpcloud-station-form-input__select wpcloud-block-form-input__input" name="data_center" required aria-required="true"><option value="No Preference">No Preference</option></select></label></div>
 <!-- /wp:wpcloud/form-input -->
 
 <!-- wp:wpcloud/form-input {"type":"password","name":"admin_pass"} -->
-<div class="wp-block-wpcloud-form-input"><label class="wpcloud-block-form-input__label"><span class="wpcloud-block-form-input__label-content">Admin Password</span><input class="wpcloud-block-form-input__input" type="password" name="admin_pass" aria-required="false"/></label></div>
+<div class="wp-block-wpcloud-form-input"><label class="wpcloud-block-form-input__label"><span class="wpcloud-block-form-input__label-text">Admin Password</span><input class="wpcloud-block-form-input__input" type="password" name="admin_pass" aria-required="false"/></label></div>
 <!-- /wp:wpcloud/form-input -->
 
 <!-- wp:wpcloud/form-input {"type":"select","name":"site_owner_id","adminOnly":true,"options":[{"value":"1","label":"Site Owner"}]} -->
-<div class="wp-block-wpcloud-form-input"><label class="wpcloud-block-form-input__label"><span class="wpcloud-block-form-input__label-content">Owner</span><select class="wpcloud-station-form-input__select wpcloud-block-form-input__input" name="site_owner_id" aria-required="false"><option value="1">Site Owner</option></select></label></div>
+<div class="wp-block-wpcloud-form-input"><label class="wpcloud-block-form-input__label"><span class="wpcloud-block-form-input__label-text">Owner</span><select class="wpcloud-station-form-input__select wpcloud-block-form-input__input" name="site_owner_id" aria-required="false"><option value="1">Site Owner</option></select></label></div>
 <!-- /wp:wpcloud/form-input -->
 
 <!-- wp:wpcloud/button {"text":"Create Site"} -->

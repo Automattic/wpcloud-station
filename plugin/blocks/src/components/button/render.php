@@ -63,9 +63,6 @@ switch ($type) {
 		$url = $attributes['url'] ?? '/';
 }
 
-
-
-
 $button_attributes['class'] = implode( ' ', $classes );
 
 if ( $url ) {
@@ -92,7 +89,7 @@ if ( $url ) {
 }
 $wrapper_attributes = get_block_wrapper_attributes( $button_attributes );
 
-if ( 'button' === $style ) {
+if ( 'button' === $style || 'submit' === $type ) {
 	$wrapper = 'button';
 } else {
 	$wrapper = 'div';

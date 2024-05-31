@@ -10,6 +10,7 @@ import removeAccents from 'remove-accents';
 import {
 	RichText,
 	useBlockProps,
+	InnerBlocks,
 	__experimentalGetBorderClassesAndStyles as getBorderClassesAndStyles, // eslint-disable-line @wordpress/no-unsafe-wp-apis
 	__experimentalGetColorClassesAndStyles as getColorClassesAndStyles, // eslint-disable-line @wordpress/no-unsafe-wp-apis
 } from '@wordpress/block-editor';
@@ -118,7 +119,10 @@ export default function save( { attributes } ) {
 			>
 				{ ! hideLabel && (
 					<span className="wpcloud-block-form-input__label-content">
-						<RichText.Content value={ label } />
+						<span className="wpcloud-block-form-input__label-text">
+							<RichText.Content value={label} />
+						</span>
+						<InnerBlocks.Content />
 					</span>
 				) }
 				{ renderField( attributes ) }
