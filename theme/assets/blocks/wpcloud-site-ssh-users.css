@@ -16,7 +16,10 @@ Text Domain: wpcloud-station
 	.wpcloud-block-site-ssh-user-list--wrapper {
 		margin-top: 20px;
 	}
-
+.wpcloud-block-button__action.wpcloud-ssh-user-add__cancel {
+		position: absolute;
+		right:16px;
+	}
 	.wpcloud_ssh_connection_info {
 		.wpcloud_expanding_section_header_chevron {
 			transition: transform 0.5s ease-in-out;
