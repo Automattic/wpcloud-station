@@ -34,7 +34,7 @@ export default function Edit( { className } ) {
 					{
 						level: 3,
 						className: 'wpcloud-domains__title',
-						content: __('Domains'),
+						content: __( 'Domains' ),
 					},
 				],
 				[
@@ -53,7 +53,7 @@ export default function Edit( { className } ) {
 									{
 										type: 'action',
 										action: 'wpcloud_expanding_section_toggle',
-										label: __('Add Domain'),
+										label: __( 'Add Domain' ),
 										isPrimary: false,
 									},
 								],
@@ -66,7 +66,7 @@ export default function Edit( { className } ) {
 								[
 									'wpcloud/button',
 									{
-										label: __('Cancel'),
+										label: __( 'Cancel' ),
 										action: 'wpcloud_expanding_section_toggle',
 										style: 'text',
 										type: 'action',
@@ -75,12 +75,12 @@ export default function Edit( { className } ) {
 									},
 								],
 
-								['wpcloud/site-alias-add'],
+								[ 'wpcloud/site-alias-add' ],
 							],
 						],
 					],
 				],
-				['wpcloud/site-alias-list'],
+				[ 'wpcloud/site-alias-list' ],
 			],
 		],
 	];
