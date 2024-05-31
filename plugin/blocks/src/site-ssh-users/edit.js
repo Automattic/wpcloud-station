@@ -8,7 +8,7 @@ import classNames from 'classnames';
  */
 import { __ } from '@wordpress/i18n';
 import { useBlockProps, useInnerBlocksProps } from '@wordpress/block-editor';
-import { useMemo } from '@wordpress/element';
+
 
 /**
  * Internal dependencies
@@ -23,29 +23,64 @@ export default function Edit() {
 	const blockProps = useBlockProps();
 
 	// @TODO: Make sure the required fields are not mutable.
-	const template = useMemo(
-		() => [
+	const template = [
+		[
+			'core/group',
+			{
+				className: 'wpcloud-ssh-users',
+			},
 			[
-				'core/group',
-				{
-					className: 'wpcloud-domains',
-				},
 				[
-					[
-						'core/heading',
-						{
-							level: 3,
-							className: 'wpcloud-ssh-users__title',
-							content: __( 'SSH Users' ),
-						},
-					],
-					[ 'wpcloud/ssh-user-list' ],
-					[ 'wpcloud/ssh-user-add' ],
+					'core/heading',
+					{
+						level: 3,
+						className: 'wpcloud-ssh-users__title',
+						content: __('SSH Users'),
+					},
 				],
+				[ 'wpcloud/expanding-section',
+					{
+						hideHeader: true,
+						className: 'wpcloud-ssh-user-form--expanding-section',
+						metadata: { name: 'SSH User Form' }
+					},
+					[
+						[ 'wpcloud/expanding-header', {},
+							[
+								['wpcloud/button',
+									{
+										type: 'action',
+										action: 'wpcloud_expanding_section_toggle',
+										label: __('Add SSH User'),
+										isPrimary: false
+									}
+								]
+							]
+						],
+						['wpcloud/expanding-content',
+							{},
+							[
+								[
+									'wpcloud/button',
+									{
+										label: __( 'Cancel' ),
+										action: 'wpcloud_expanding_section_toggle',
+										style: 'text',
+										type: 'action',
+										className:
+											'wpcloud-site-alias-add__cancel',
+									},
+								],
+								[ 'wpcloud/ssh-user-add']
+							]
+						]
+					]
+				],
+				[ 'core/spacer', { height: '30px' } ],
+				['wpcloud/ssh-user-list'],
 			],
 		],
-		[]
-	);
+	];
 
 	const innerBlocksProps = useInnerBlocksProps( blockProps, {
 		template,
