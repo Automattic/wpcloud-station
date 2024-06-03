@@ -3,14 +3,14 @@
 	position: relative;
 	button {
 		border: none;
+		background: none;
 		svg {
-			fill: var(--wp--preset--color-foreground-secondary);
+			fill: var(--wp--preset--color--foreground-secondary, --wp--preset--color--black);
 		}
 	}
 }
 
 .wpcloud-block-more-menu {
 	position: absolute;
-	background-color: var(--wp--preset--color-background-primary);
-	border: 1px solid var(--wp--preset--color-border-primary);
+	border: 1px solid var(--wp--preset--color--border-primary,--wp--preset--color--black);
 }
