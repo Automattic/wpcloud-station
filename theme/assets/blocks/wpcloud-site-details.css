@@ -15,7 +15,7 @@ Text Domain: wpcloud-station
 		font-size: var(--wp--preset--font-size--title-small);
 	}
 
-	button {
+	button:not(.is-primary) {
 		background-color: transparent;
 		border: 1px solid var(--wp--preset--color--wpcloud-accent-primary);
 	}
