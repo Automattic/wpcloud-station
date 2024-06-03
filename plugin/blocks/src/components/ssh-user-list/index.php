@@ -6,7 +6,7 @@
  * @return array The form fields.
  */
 function wpcloud_block_form_site_ssh_user_remove_fields( array $fields) {
-	return array_merge( $fields, [ 'site_ssh_user' ] );
+	return array_merge( $fields, [ 'ssh_user' ] );
 }
 add_filter('wpcloud_block_form_submitted_fields_site_ssh_user_remove', 'wpcloud_block_form_site_ssh_user_remove_fields' );
 
@@ -26,7 +26,7 @@ function wpcloud_block_form__site_ssh_user_remove_handler( $response, $data ) {
 		return $response;
 	}
 
-	$user = sanitize_user( $data[ 'site_ssh_user' ] );
+	$user = sanitize_user( $data[ 'ssh_user' ] );
 	$result = wpcloud_client_ssh_user_remove( $wpcloud_site_id, $user );
 
 	if ( is_wp_error( $result ) ) {

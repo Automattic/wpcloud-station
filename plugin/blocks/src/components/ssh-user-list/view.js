@@ -1,7 +1,7 @@
 ( ( wpcloud ) => {
 	const updateSshUserInputs = ( sshUserRow ) => {
 		const sshUserInputs = sshUserRow.querySelectorAll(
-			'form input[name=site_ssh_user]'
+			'form input[name=ssh_user]'
 		);
 		const sshUserName = sshUserRow.dataset.siteSshUser;
 		sshUserInputs.forEach( ( input ) => {
