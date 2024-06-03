@@ -1,0 +1,11 @@
+.wpcloud-block-button {
+	color: var(--wp--preset--color--foreground-primary);
+	a:where(:not(.wp-element-button)) {
+		color: var(--wp--preset--color--foreground-primary);
+	}
+	&.is-secondary {
+	 	&, * {
+			background: none;
+		}
+	}
+}

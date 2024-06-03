@@ -23,6 +23,13 @@ Text Domain: wpcloud-station
 		right:16px;
 	}
 
+	.wpcloud-site-alias-add--expanding-section {
+		.wpcloud-block-expanding-section__header {
+			background: none;
+			padding: 0;
+		}
+	}
+
 	.wpcloud_ip_address_info {
 		.wpcloud_expanding_section_header_chevron {
 			transition: transform 0.5s ease-in-out;
@@ -36,9 +43,6 @@ Text Domain: wpcloud-station
 			}
 		}
 		.wpcloud-block-expanding-section__header {
-			background: var(--wp--preset--color--background-secondary);
-			padding: 5px 16px;
-			border-radius: 5px;
 			.wp-block-heading {
 				flex: 2;
 			}

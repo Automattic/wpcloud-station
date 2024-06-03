@@ -10,9 +10,10 @@ Text Domain: wpcloud-station
 
 	.site-title {
 		margin-top: 5px;
+
 		a {
 			font-size: var(--wp--preset--font-size--body-medium);
-			color: var(--wp--preset--color-foreground-primary);
+			color: var(--wp--preset--color--foreground-primary);
 			line-height: 10px;
 			font-weight: 400;
 		}
@@ -21,7 +22,7 @@ Text Domain: wpcloud-station
 		margin-top: 5px;
 		a {
 			font-size: var(--wp--preset--font-size--body-small);
-			color: var(--wp--preset--color-foreground-secondary);
+			color: var(--wp--preset--color--foreground-secondary);
 			font-weight: 400;
 			line-height: 10px;
 		}
