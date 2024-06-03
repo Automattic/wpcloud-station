@@ -7,7 +7,7 @@ Text Domain: wpcloud-station
 */
 .wpcloud-block-site-detail-card {
 	padding: 24px 32px 32px;
-	border: 1px solid var(--wp--preset--color--wpcloud-border-primary);
+	border: 1px solid var(--wp--preset--color-border-primary);
 	border-radius: 10px;
 	max-width: 550px;
 	h1, h2, h3, h4, h5, h6 {
@@ -17,7 +17,7 @@ Text Domain: wpcloud-station
 
 	button:not(.is-primary) {
 		background-color: transparent;
-		border: 1px solid var(--wp--preset--color--wpcloud-accent-primary);
+		border: 1px solid var(--wp--preset--color-accent-primary);
 	}
 
 	.dashicons {

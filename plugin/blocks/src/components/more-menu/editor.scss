@@ -4,13 +4,13 @@
 	button {
 		border: none;
 		svg {
-			fill: var(--wp--preset--color--wpcloud-foreground-secondary);
+			fill: var(--wp--preset--color-foreground-secondary);
 		}
 	}
 }
 
 .wpcloud-block-more-menu {
 	position: absolute;
-	background-color: var(--wp--preset--color--wpcloud-background-primary);
-	border: 1px solid var(--wp--preset--color--wpcloud-border-primary);
+	background-color: var(--wp--preset--color-background-primary);
+	border: 1px solid var(--wp--preset--color-border-primary);
 }

@@ -200,20 +200,20 @@
 		"blocks": {
 			"wpcloud/form-input": {
 				"color": {
-					"text": "var(--wp--preset--color--wpcloud-foreground-primary)"
+					"text": "var(--wp--preset--color-foreground-primary)"
 				}
 			},
 			"wpcloud/site-detail": []
 		},
 		"color": {
-			"background": "var(--wp--preset--color--wpcloud-background-primary)",
+			"background": "var(--wp--preset--color-background-primary)",
 			"text": "var(--wp--preset--color--white)"
 		},
 		"elements": {
 			"button": {
 				"color": {
-					"background": "var(--wp--preset--color--wpcloud-accent-primary)",
-					"text": "var(--wp--preset--color--wpcloud-foreground-primary)"
+					"background": "var(--wp--preset--color-accent-primary)",
+					"text": "var(--wp--preset--color-foreground-primary)"
 				},
 				"typography": {
 					"fontFamily": "var(--wp--preset--font-family--primary)",
