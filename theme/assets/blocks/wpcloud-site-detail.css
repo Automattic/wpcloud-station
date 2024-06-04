@@ -6,14 +6,18 @@ Author URI: https://automattic.com
 Text Domain: wpcloud
 */
 .wpcloud-block-site-detail {
+
+	a {
+		color: var(--wp--preset--color-foreground-primary);
+	}
 	margin-top: 24px;
 	.wpcloud-block-site-detail__title-content {
-		color: var(--wp--preset--color--wpcloud-foreground-secondary);
+		color: var(--wp--preset--color--foreground-secondary);
 		font-size: var(--wp--preset--font-size--body-small);
 	}
 
 	.wpcloud-block-site-detail__value {
-		color: var(--wp--preset--color--wpcloud-foreground-primary);
+		/* color: var(--wp--preset--color-foreground-primary);*/
 		font-size: var(--wp--preset--font-size--body-medium);
 	}
 

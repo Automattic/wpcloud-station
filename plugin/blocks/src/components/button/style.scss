@@ -5,8 +5,8 @@
 	width: fit-content;
 	border-radius: 9999px;
 	&.is-secondary:not(.is-text) {
-		background-color: var(--wp--preset--color--background-primary);
-		border: 2px solid var(--wp--preset--color--accent-primary);
+		background: transparent;
+		border: 2px solid;
 		padding: 0.667em 1.333em;
 	}
 	&.wpcloud-block-button__text {
@@ -17,5 +17,8 @@
 	}
 	.wpcloud-block-button__label {
 		cursor: pointer;
+	}
+	a:where(:not(.wp-element-button)) {
+		color: unset;
 	}
 }

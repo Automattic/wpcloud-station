@@ -30,11 +30,13 @@ import './editor.scss';
 export default function Edit({
 	setAttributes,
 	clientId,
-	context
+	context,
+	className
 } ) {
 	const blockProps = useBlockProps();
 
 	const openOnLoadCxt = context['wpcloud-expanding-section/openOnLoad'];
+	const hideContent = context['wpcloud-expanding-section/hideContent'];
 
 	useEffect(() => {
 		setAttributes({ openOnLoad: openOnLoadCxt});
@@ -81,7 +83,14 @@ export default function Edit({
 
 	return (
 		<div
-			{ ...innerBlocksProps }
+			{...innerBlocksProps}
+			className={classNames(
+				className,
+				'wpcloud-block-expanding-section__content',
+				innerBlocksProps.className, {
+					'is-hidden': hideContent,
+				}
+			)}
 		/>
 	);
 }

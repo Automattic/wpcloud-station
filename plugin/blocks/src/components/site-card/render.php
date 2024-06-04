@@ -21,6 +21,10 @@ if ('table' === $layout) {
 
 $wrapper_attributes = $wrapper . ' ' .  get_block_wrapper_attributes( array( 'class' => trim( $classNames ) ) );
 $domain = wpcloud_get_site_detail( get_the_ID(), 'domain_name' );
+if (is_wp_error($domain)) {
+	error_log('Error getting domain name: ' . $domain->get_error_message());
+	$domain = '';
+}
 
 ?>
 

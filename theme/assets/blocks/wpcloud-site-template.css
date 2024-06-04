@@ -13,14 +13,14 @@ Text Domain: wpcloud-station
 
 	th {
 		font-size: var(--wp--preset--font-size--small-caps);
-		color: var(--wp--preset--color--wpcloud-foreground-secondary);
+		color: var(--wp--preset--color-foreground-secondary);
 
 		text-transform: uppercase;
 		h2 {
 				font-weight: 400;
 		}
 		svg {
-			fill: var(--wp--preset--color--wpcloud-foreground-secondary);
+			fill: currentColor;
 		}
 	}
 	th, td {
@@ -29,7 +29,7 @@ Text Domain: wpcloud-station
 
 	tr {
 		vertical-align: middle;
-		border-bottom: 1px solid var(--wp--preset--color--wpcloud-border-primary);
+		border-bottom: 1px solid var(--wp--preset--color-border-primary);
 	}
 
 	.wpcloud-block-site-detail {

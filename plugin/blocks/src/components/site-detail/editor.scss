@@ -13,12 +13,13 @@
 }
 
 .wpcloud-block-site-detail__value {
-	color: #999;
-	font-style: italic;
+  color: var(--wp--preset--color--foreground-primary);
 	width: fit-content;
 	text-wrap: nowrap;
 }
 
-.wpcloud-copy-to-clipboard {
-	fill: var(--wp--preset--color--foreground-primary, '#FFFFFF');
+.wpcloud-block-site-detail__value-container {
+	svg {
+		fill: currentColor;
+	}
 }

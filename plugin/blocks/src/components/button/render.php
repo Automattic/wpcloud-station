@@ -22,7 +22,7 @@ if( 'button' === $style ) {
 switch ($type) {
 
 	case 'link':
-		$classes[] = 'wpcloud-block-button__link';
+		$classes[] = 'wpcloud-block-button__link wp-element-button';
 		$url = $attributes['url'] ?? '/';
 		break;
 

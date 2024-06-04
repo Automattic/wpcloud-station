@@ -3,14 +3,25 @@
 	position: relative;
 	button {
 		border: none;
+		background: none;
 		svg {
-			fill: var(--wp--preset--color--wpcloud-foreground-secondary);
+			fill: currentColor;
 		}
 	}
 }
 
-.wpcloud-block-more-menu {
-	position: absolute;
-	background-color: var(--wp--preset--color--wpcloud-background-primary);
-	border: 1px solid var(--wp--preset--color--wpcloud-border-primary);
+.wpcloud-block-more-menu__content {
+	position: absolute !important;
+	z-index: 10;
+	top: 0;
+	right: 0;
+	border: 1px solid var(--wp--preset--color--border-primary,--wp--preset--color--black);
+	border-radius: 4px;
+	padding: 5px;
+	&.hide-menu {
+		display: none;
+	}
+	min-width: 180px;
+	background-color: var(--wp--preset--color--background-secondary, #FFFFFF );
+
 }

@@ -1,0 +1,14 @@
+.wpcloud-block-expanding-section {
+  .wpcloud-block-expanding-section__header{
+  	background: var(--wp--preset--color--background-secondary);
+    padding: 5px 16px;
+    border-radius: 5px;
+  }
+	.wpcloud-block-expanding-section__content {
+		border-radius: 5px;
+		background: var(--wp--preset--color--background-secondary);
+		.wpcloud-block-expanding-section__content-inner {
+			padding: 5px 16px;
+		}
+	}
+}

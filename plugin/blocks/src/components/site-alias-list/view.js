@@ -131,7 +131,6 @@
 		'wpcloud_button_alias_request_remove',
 		'site_alias_list',
 		(button) => {
-			console.log('remove alias request');
 			const aliasRow = button.closest('.wpcloud-block-site-alias-list__row');
 			const alias = aliasRow.querySelector('.wpcloud-block-site-detail__value');
 			alias.classList.toggle('is-pending');

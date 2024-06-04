@@ -63,7 +63,7 @@ export default function Edit( {
 	const innerBlocksProps = useInnerBlocksProps( blockProps, {
 		renderAppender:
 			! hasInnerBlocks || isSelected || isChildSelected
-				? InnerBlocks.ButtonBlockAppender
+				? InnerBlocks.DefaultBlockAppender
 				: undefined,
 		template: hasInnerBlocks ? undefined : [ [ 'wpcloud/form-input' ] ],
 	} );
