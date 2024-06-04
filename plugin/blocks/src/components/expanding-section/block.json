@@ -28,11 +28,16 @@
 		"openOnLoad": {
 			"type": "boolean",
 			"default": false
+		},
+		"hideContent": {
+			"type": "boolean",
+			"default": true
 		}
 	},
 	"providesContext": {
 		"wpcloud-expanding-section/openOnLoad": "openOnLoad",
-		"wpcloud-expanding-section/hideHeader": "hideHeader"
+		"wpcloud-expanding-section/hideHeader": "hideHeader",
+		"wpcloud-expanding-section/hideContent": "hideContent"
 	},
 	"allowedBlocks": [
 		"wpcloud/expanding-section-header",

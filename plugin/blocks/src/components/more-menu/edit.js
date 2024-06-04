@@ -16,6 +16,7 @@ import {
 import { ToggleControl, PanelBody } from '@wordpress/components';
 import { Icon, moreVertical } from '@wordpress/icons';
 import { useSelect } from '@wordpress/data';
+import { useEffect } from '@wordpress/element';
 
 /**
  * Internal dependencies
@@ -34,6 +35,7 @@ export default function Edit( {
 	setAttributes,
 	className,
 	clientId,
+	isSelected
 } ) {
 	const { showMenu } = attributes;
 	const blockProps = useBlockProps();
@@ -41,10 +43,16 @@ export default function Edit( {
 	const isChildSelected = useSelect( ( select ) =>
 		select( 'core/block-editor' ).hasSelectedInnerBlock( clientId )
 	);
+	const shouldShowMenu = isSelected || isChildSelected;
+	console.log('showMenu', showMenu);
+	useEffect(() => {
+		setAttributes( { showMenu: shouldShowMenu } );
+	}, [ shouldShowMenu, setAttributes ]);
+
 	const innerBlocksProps = useInnerBlocksProps( blockProps, {
 		renderAppender: isChildSelected
 			? undefined
-			: InnerBlocks.ButtonBlockAppender,
+			: InnerBlocks.DefaultBlockAppender,
 	} );
 
 	const controls = (
@@ -65,14 +73,13 @@ export default function Edit( {
 
 	return (
 		<>
-			{ controls }
+			{controls}
 			<div
 				className={ classNames(
 					className,
 					'wpcloud-more-menu-wrapper'
 				) }
 			>
-				{ ! showMenu && (
 					<button
 						className="wpcloud-more-menu__button"
 						onClick={ () => {
@@ -83,17 +90,17 @@ export default function Edit( {
 					>
 						<Icon icon={ moreVertical } />
 					</button>
-				) }
-				{ showMenu && (
 					<div
 						{ ...innerBlocksProps }
 						className={ classNames(
 							innerBlocksProps.className,
 							className,
-							'wpcloud-block-more-menu'
+							'wpcloud-block-more-menu__content',
+							{
+								'hide-menu': ! showMenu,
+							}
 						) }
 					/>
-				) }
 			</div>
 		</>
 	);

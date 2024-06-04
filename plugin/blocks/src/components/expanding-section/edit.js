@@ -11,8 +11,8 @@ import {
 	useBlockProps,
 	useInnerBlocksProps,
 	InspectorControls,
-	InnerBlocks,
 } from '@wordpress/block-editor';
+import { useEffect } from '@wordpress/element';
 import { ToggleControl, PanelBody } from '@wordpress/components';
 import { useSelect } from '@wordpress/data';
 
@@ -33,9 +33,18 @@ export default function Edit( {
 	setAttributes,
 	className,
 	clientId,
+	isSelected,
 } ) {
-	const { clickToToggle, hideHeader, openOnLoad } = attributes;
+	const { clickToToggle, hideHeader, openOnLoad, hideContent } = attributes;
 	const blockProps = useBlockProps();
+
+	const isChildSelected = useSelect( ( select ) =>
+		select( 'core/block-editor' ).hasSelectedInnerBlock( clientId, true )
+	);
+	useEffect(() => {
+
+		setAttributes({ hideContent: ! ( isSelected || isChildSelected ) });
+	}, [ isChildSelected, setAttributes, isSelected ]);
 
 	const controls = (
 		<InspectorControls>

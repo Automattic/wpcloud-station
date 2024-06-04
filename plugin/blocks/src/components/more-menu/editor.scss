@@ -10,7 +10,18 @@
 	}
 }
 
-.wpcloud-block-more-menu {
-	position: absolute;
+.wpcloud-block-more-menu__content {
+	position: absolute !important;
+	z-index: 10;
+	top: 0;
+	right: 0;
 	border: 1px solid var(--wp--preset--color--border-primary,--wp--preset--color--black);
+	border-radius: 4px;
+	padding: 5px;
+	&.hide-menu {
+		display: none;
+	}
+	min-width: 180px;
+	background-color: var(--wp--preset--color--background-secondary, #FFFFFF );
+
 }

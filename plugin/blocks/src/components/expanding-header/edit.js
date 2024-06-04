@@ -31,7 +31,8 @@ export default function Edit({
 	setAttributes,
 	clientId,
 	context,
-	isSelected
+	isSelected,
+	className
 } ) {
 	const blockProps = useBlockProps();
 
@@ -41,7 +42,6 @@ export default function Edit({
 
 	const hideOnOpenCxt = context['wpcloud-expanding-section/hideHeader'];
 	const openOnLoadCxt = context['wpcloud-expanding-section/openOnLoad'];
-
 
 	useEffect(() => {
 		setAttributes({ hideOnOpen: hideOnOpenCxt, openOnLoad: openOnLoadCxt});
@@ -92,6 +92,11 @@ export default function Edit({
 	return (
 		<div
 			{...innerBlocksProps}
+			className={ classNames(
+				className,
+				'wpcloud-block-expanding-section__header',
+				innerBlocksProps.className,
+			)}
 		/>
 	);
 }

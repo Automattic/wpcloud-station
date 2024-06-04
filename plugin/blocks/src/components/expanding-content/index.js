@@ -17,7 +17,7 @@ import './style.scss';
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-registration/
  */
 registerBlockType( metadata.name, {
-	usesContext: [ 'wpcloud-expanding-section/openOnLoad' ],
+	usesContext: [ 'wpcloud-expanding-section/openOnLoad', 'wpcloud-expanding-section/hideContent' ],
 	edit,
 	save,
 } );
