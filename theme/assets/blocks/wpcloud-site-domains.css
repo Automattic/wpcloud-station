@@ -28,6 +28,7 @@ Text Domain: wpcloud-station
 			background: none;
 			padding: 0;
 		}
+
 	}
 
 	.wpcloud_ip_address_info {
@@ -53,6 +54,9 @@ Text Domain: wpcloud-station
 
 		.wpcloud-block-site-detail {
 			margin:0;
+		}
+		svg {
+			fill: currentColor;
 		}
 	}
 }

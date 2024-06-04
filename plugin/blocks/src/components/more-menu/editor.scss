@@ -5,7 +5,7 @@
 		border: none;
 		background: none;
 		svg {
-			fill: var(--wp--preset--color--foreground-secondary, --wp--preset--color--black);
+			fill: currentColor;
 		}
 	}
 }

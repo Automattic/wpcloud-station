@@ -34,7 +34,7 @@
 	}
 	.wpcloud-more-menu__button {
 		svg {
-			fill: var(--wp--preset--color--foreground-secondary, --wp--preset--color--black);
+			fill: currentColor;
 		}
 		background: none;
 		border: none;

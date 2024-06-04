@@ -20,7 +20,7 @@ Text Domain: wpcloud-station
 				font-weight: 400;
 		}
 		svg {
-			fill: var(--wp--preset--color--foreground-secondary);
+			fill: currentColor;
 		}
 	}
 	th, td {
