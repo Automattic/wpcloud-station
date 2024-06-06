@@ -98,7 +98,9 @@ export default function Edit( {
 				className={ classNames(
 					className,
 					'wpcloud-block-expanding-section',
-					innerBlocksProps.className,
+					innerBlocksProps.className, {
+						'hide-header': hideHeader,
+					}
 				) }
 			/>
 		</>

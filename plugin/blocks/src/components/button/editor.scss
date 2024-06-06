@@ -1,7 +1,12 @@
 .wpcloud-block-button {
-	&.is-secondary:not(.is-text) {
+	&.is-secondary {
+		.wpcloud-block-button__content {
+			background: none;
+		}
+		&:not(.is-text) {
 		border: none;
 		padding:0;
+	}
 	}
 
 	.wpcloud-block-button__content {

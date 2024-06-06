@@ -1,9 +1,11 @@
 
 .wpcloud-block-expanding-section {
 	padding: 5px;
-	.wpcloud-block-expanding-section__header {
-		padding: 0 15px;
+	&.hide-header .wpcloud-block-expanding-section__content {
+		background-color: var(--wp--preset--color--background-secondary);
+		border-radius: 5px;
 	}
+
 	.wpcloud-block-expanding-section__content {
 		padding: 5px;
 
