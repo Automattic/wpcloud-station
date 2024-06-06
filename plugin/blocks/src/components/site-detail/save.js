@@ -18,7 +18,6 @@ export default function save( { attributes, className } ) {
 			{ ...blockProps }
 			className={ classNames(
 				className,
-				blockProps.className,
 				'wpcloud-block-site-detail',
 				{
 					'is-inline': inline,

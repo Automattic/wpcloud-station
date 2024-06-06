@@ -37,9 +37,11 @@
 		}
 	}
 	.wpcloud-ssh-user-form--expanding-section {
+		/*
 		.wpcloud-block-expanding-section__header {
 			background: none;
 			padding: 0;
 		}
+		*/
 	}
 }

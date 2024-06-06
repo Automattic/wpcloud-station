@@ -27,7 +27,7 @@ import {
 import LinkableDetailSelectControl from '../controls/site/linkableDetailSelect';
 import './editor.scss';
 
-function ButtonBlock( { attributes, setAttributes, className } ) {
+function ButtonBlock( { attributes, setAttributes } ) {
 	const { type, style, adminOnly, target, addIcon, iconOnly, url, label, action, isPrimary } =
 		attributes;
 	const blockProps = useBlockProps();

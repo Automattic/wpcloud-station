@@ -10,6 +10,7 @@ import { InnerBlocks, useBlockProps } from '@wordpress/block-editor';
 
 const Save = ({ attributes }) => {
 	const blockProps = useBlockProps.save();
+	const { openOnLoad, hideHeader } = attributes;
 
 	return (
 		<div
@@ -17,7 +18,8 @@ const Save = ({ attributes }) => {
 			className={ classNames(
 				blockProps.className,
 				'wpcloud-block-expanding-section__content-wrapper', {
-					'is-open': attributes.openOnLoad,
+					'is-open': openOnLoad,
+					'hide-header': hideHeader,
 				}
 			) }
 		>

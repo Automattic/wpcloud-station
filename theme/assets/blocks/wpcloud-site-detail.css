@@ -1,17 +1,40 @@
-/*
-Theme Name: WP Cloud Station
-Theme URI: https://wp.cloud
-Author: Automattic Inc
-Author URI: https://automattic.com
-Text Domain: wpcloud
-*/
-.wpcloud-block-site-detail {
+& {
+	display: flex;
+	flex-direction: column;
+	gap: 0.25em;
+
+	&.is-inline {
+		flex-direction: row;
+		gap: 0.5em;
+		justify-content: flex-start;
+		align-items: baseline;
+		margin-top: 0;
+
+		.wpcloud-block-site-detail__label-content {
+			margin-bottom: 0.5em;
+		}
+	}
 
 	a {
 		color: var(--wp--preset--color-foreground-primary);
 	}
-	margin-top: 24px;
+
+	svg {
+		fill: currentColor;
+	}
+
+	.wpcloud-block-site-detail__title {
+		margin-top: var(--wp--preset--spacing--50);
+		margin-bottom: var(--wp--preset--spacing--20);
+
+		h4 {
+			margin: 0;
+		}
+	}
+
 	.wpcloud-block-site-detail__title-content {
+		width: fit-content;
+		margin: 0;
 		color: var(--wp--preset--color--foreground-secondary);
 		font-size: var(--wp--preset--font-size--body-small);
 	}
@@ -25,5 +48,29 @@ Text Domain: wpcloud
 		list-style: none;
 		padding: 0;
 		margin: 0;
+	}
+
+	.wpcloud-block-site-detail__value-container {
+		display: flex;
+		align-items: center;
+		&.is-obscured {
+			.wpcloud-block-site-detail__value, .wpcloud-copy-to-clipboard {
+				display: none;
+			}
+			&:before{
+				content: '•••••••••';
+			}
+		}
+		.wpcloud-copy-to-clipboard:hover {
+				background-color: var(--wp--preset--color--background-secondary);
+			}
+		.wpcloud-reveal-value:hover {
+			font-weight: bold;
+			background-color: var(--wp--preset--color--background-secondary);
+		}
+		.wpcloud-copy-to-clipboard, .wpcloud-reveal-value {
+			border-radius: 4px;
+			margin-left: 5px;
+		}
 	}
 }

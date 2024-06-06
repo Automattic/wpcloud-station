@@ -1,11 +1,4 @@
-/*
-Theme Name: WP Cloud Station
-Theme URI: https://wp.cloud
-Author: Automattic Inc
-Author URI: https://automattic.com
-Text Domain: wpcloud-station
-*/
-.wp-block-wpcloud-site-card {
+& {
 	margin: 7px 0;
 
 	.site-title {
@@ -27,26 +20,26 @@ Text Domain: wpcloud-station
 			line-height: 10px;
 		}
 	}
-}
 
-.wpcloud-site-card--current {
-	.wp-block-wpcloud-site-card {
+	&.wpcloud-site-card--current {
+
 		grid-template-columns: 56px 1fr;
 		grid-template-rows: repeat(2, 28px);
-	}
-	img {
-		width: 56px;
-	}
-	.site-title {
-		a {
-			font-size: var(--wp--preset--font-size--title-medium);
-			font-weight: 500;
-		}
-	}
 
-	.site-url {
-		a {
-			font-size: var(--wp--preset--font-size--body-medium);
+		img {
+			width: 56px;
+		}
+		.site-title {
+			a {
+				font-size: var(--wp--preset--font-size--title-medium);
+				font-weight: 500;
+			}
+		}
+
+		.site-url {
+			a {
+				font-size: var(--wp--preset--font-size--body-medium);
+			}
 		}
 	}
 }

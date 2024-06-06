@@ -35,14 +35,14 @@ export default function Edit( {
 	clientId,
 	isSelected,
 } ) {
-	const { clickToToggle, hideHeader, openOnLoad, hideContent } = attributes;
+	const { clickToToggle, hideHeader, openOnLoad } = attributes;
 	const blockProps = useBlockProps();
 
 	const isChildSelected = useSelect( ( select ) =>
 		select( 'core/block-editor' ).hasSelectedInnerBlock( clientId, true )
 	);
-	useEffect(() => {
 
+	useEffect(() => {
 		setAttributes({ hideContent: ! ( isSelected || isChildSelected ) });
 	}, [ isChildSelected, setAttributes, isSelected ]);
 

@@ -14,11 +14,14 @@
 	"textdomain": "wpcloud",
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",
-	"style": "file:./style-index.css",
 	"viewScript": "file:./view.js",
 	"ancestor": ["wpcloud/expanding-section"],
 	"attributes" :{
 		"openOnLoad": {
+			"type": "boolean",
+			"default": false
+		},
+		"hideHeader": {
 			"type": "boolean",
 			"default": false
 		}

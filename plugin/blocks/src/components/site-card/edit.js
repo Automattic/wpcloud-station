@@ -25,11 +25,12 @@ import './style.scss';
  */
 export default function Edit( { attributes, className } ) {
 	const { placeholderThumbnail } = attributes;
+	const blockProps = useBlockProps();
 	return (
 		<div
-			{ ...useBlockProps() }
+			{ ...blockProps }
 			className={ classNames(
-				useBlockProps.className,
+				blockProps.className,
 				'wp-block-wpcloud-site-card',
 				className
 			) }

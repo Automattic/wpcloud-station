@@ -1,20 +1,27 @@
-.wpcloud-more-menu__nav {
-	padding-bottom: 8px;
-	form {
-		height: 56px;
-	}
-	button {
-		font-family: var(--wp--preset--font-family--primary);
-	}
-	 h4 {
-		text-transform: uppercase;
-		font-size: var(--wp--preset--font-size--small-caps);
-		margin: 0;
-		letter-spacing: 2px;
-	}
+& {
+	.wpcloud-more-menu__nav {
+		padding-bottom: 8px;
+		right: 0;
+		background-color: var(--wp--preset--color--background-secondary);
 
-	.wp-block-wpcloud-form {
-		justify-content: space-between;
-		font-size: var(--wp--preset--font-size--body-medium);
+		form {
+			height: 56px;
+		}
+
+		button {
+			font-family: var(--wp--preset--font-family--primary);
+		}
+
+		h4 {
+			text-transform: uppercase;
+			font-size: var(--wp--preset--font-size--small-caps);
+			margin: 0;
+			letter-spacing: 2px;
+		}
+
+		.wp-block-wpcloud-form {
+			justify-content: space-between;
+			font-size: var(--wp--preset--font-size--body-medium);
+		}
 	}
 }

@@ -1,45 +1,46 @@
+& {
+	.wpcloud-block-site-alias-list__row  {
+		margin:0;
+		transition: all 1.5s ease-out;
 
-.wpcloud-block-site-alias-list__item--primary-badge {
-	border: 1px solid var(--wp--preset--color--foreground-tertiary);
-	border-radius: 2px;
-	font-size: var(--wp--preset--font-size--body-small);
-	color: var(--wp--preset--color--foreground-primary);
-	padding: 3px 10px;
-}
-.wpcloud-block-site-alias-list__row {
-	transition: all 1.5s ease-out;
-	.wpcloud-site-list-menu__title {
-		margin: 4px 0;
-	}
-	.wpcloud-block-button__label {
-		/* @TODO font-size--body-medium seems stuck at 16 px but should be 14px */
-		font-size: var(--wp--preset--font-size--body-medium-, .875rem);
-	}
-	.wpcloud-more-menu__nav {
-		width: 186px;
-		padding: 16px 24px 8px 24px;
-		.wpcloud-block-form {
-			gap: 16px;
+		.wpcloud-site-list-menu__title {
+			margin: 4px 0;
+		}
+		.wpcloud-block-button__label {
+			/* @TODO font-size--body-medium seems stuck at 16 px but should be 14px */
+			font-size: var(--wp--preset--font-size--body-medium, .875rem);
+		}
+
+		.wpcloud-more-menu__nav {
+			width: 186px;
+			padding: 16px 24px 8px 24px;
+			.wpcloud-block-form {
+				gap: 16px;
+			}
 		}
 	}
-}
-
-.wpcloud-block-site-alias-list__item--primary, .wpcloud-block-site-alias-list__row {
-	.wpcloud-block-site-detail__value {
-		transition: all 0.5s ease-out;
-		&.is-pending {
-			animation: opacityPulse 3s ease-out infinite;
-			opacity: 0;
-		}
-	}
-}
-
-.wpcloud-block-site-alias-list {
-	margin-top: 20px;
 	.wpcloud-block-site-alias-list__row, .wpcloud-block-site-alias-list__row--primary {
 		padding: 20px 0;
 		&:not(:last-child) {
 			border-bottom: 1px solid var(--wp--preset--color--background-tertiary);
+		}
+	}
+
+	.wpcloud-block-site-alias-list__item--primary-badge {
+		border: 1px solid var(--wp--preset--color--foreground-tertiary);
+		border-radius: 2px;
+		font-size: var(--wp--preset--font-size--body-small);
+		color: var(--wp--preset--color--foreground-primary);
+		padding: 3px 10px;
+	}
+
+	.wpcloud-block-site-alias-list__item--primary, .wpcloud-block-site-alias-list__row {
+		.wpcloud-block-site-detail__value {
+			transition: all 0.5s ease-out;
+			&.is-pending {
+				animation: opacityPulse 3s ease-out infinite;
+				opacity: 0;
+			}
 		}
 	}
 }
