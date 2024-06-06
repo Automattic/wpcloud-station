@@ -3,46 +3,7 @@
 	position: relative;
 
 	.wpcloud-more-menu__nav {
-		position: absolute;
-		top: 0;
-		z-index: 10;
 
-		display: none;
-		flex-direction: column;
-
-		margin: 0;
-		padding: 16px 24px;
-		min-width: 138px;
-
-		box-shadow: 0px 2px 10px 0px #00000040;
-		border-radius: 10px;
-
-		&:hover {
-			display: flex;
-		}
-		&:hover + .wpcloud-more-menu__nav {
-			opacity: 0.3;
-		}
-
-		.wpcloud-block-form.is-inline {
-			justify-content: unset;
-		}
-
-		.wpcloud-site-list-menu__title {
-			text-align: center;
-		}
 	}
-	.wpcloud-more-menu__button {
-		svg {
-			fill: currentColor;
-		}
-		background: none;
-		border: none;
-		&:hover + .wpcloud-more-menu__nav {
-			display: flex;
-		}
-		&:hover {
-			opacity: 0.3;
-		}
-	}
+
 }

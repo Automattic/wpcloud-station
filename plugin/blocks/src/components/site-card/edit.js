@@ -13,7 +13,7 @@ import { Dashicon } from '@wordpress/components';
 /**
  * Internal dependencies
  */
-import './style.scss';
+import './editor.scss';
 
 /**
  * The edit function describes the structure of your block in the context of the

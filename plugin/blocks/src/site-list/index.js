@@ -6,7 +6,6 @@ import { registerBlockVariation } from '@wordpress/blocks';
 /**
  * Internal dependencies
  */
-import './style.scss';
 import metadata from './block.json';
 
 registerBlockVariation( 'core/query', {
