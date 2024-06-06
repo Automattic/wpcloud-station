@@ -14,7 +14,6 @@
 	"textdomain": "site-detail",
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",
-	"style": "file:./style-index.css",
 	"attributes": {
 		"showMenu": {
 			"type": "boolean",

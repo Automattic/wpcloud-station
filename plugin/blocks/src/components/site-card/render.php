@@ -11,13 +11,8 @@ if ( ! is_wpcloud_site_post() ) {
 // @TODO get real site thumbnail
 $site_thumbnail = wpcloud_station_get_assets_url( '/images/Gravatar_filled_' . get_the_ID() % 5 . '.png' );
 
-$layout = $block->context['wpcloud/layout'] ?? '';
 $wrapper = 'div';
-$classNames = '';
-if ('table' === $layout) {
-	$wrapper = 'td';
-	$classNames = 'wpcloud-block-table-cell';
-}
+$classNames = $attributes['className'] ?? '';
 
 $wrapper_attributes = $wrapper . ' ' .  get_block_wrapper_attributes( array( 'class' => trim( $classNames ) ) );
 $domain = wpcloud_get_site_detail( get_the_ID(), 'domain_name' );

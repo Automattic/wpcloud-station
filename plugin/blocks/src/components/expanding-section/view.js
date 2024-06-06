@@ -6,7 +6,7 @@
 				return;
 			}
 			event.preventDefault();
-			section.classList.toggle('is-open');
+			section.classList.toggle('section-toggled');
 			wpcloud.hooks.doAction('wpcloud_expanding_section_toggle', section);
 		});
 	});

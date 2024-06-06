@@ -36,10 +36,11 @@ export default function Edit({
 	const blockProps = useBlockProps();
 
 	const openOnLoadCxt = context['wpcloud-expanding-section/openOnLoad'];
+	const hideHeaderCxt = context['wpcloud-expanding-section/hideHeader'];
 	const hideContent = context['wpcloud-expanding-section/hideContent'];
 
 	useEffect(() => {
-		setAttributes({ openOnLoad: openOnLoadCxt});
+		setAttributes({ openOnLoad: openOnLoadCxt, hideHeader: hideHeaderCxt });
 	}, [ openOnLoadCxt ] );
 
 	const isChildSelected = useSelect( ( select ) =>

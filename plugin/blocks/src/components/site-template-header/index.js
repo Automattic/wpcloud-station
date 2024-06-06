@@ -10,7 +10,6 @@ import { registerBlockType, registerBlockVariation } from '@wordpress/blocks';
 import Edit from './edit';
 import save from './save';
 import metadata from './block.json';
-import './style.scss';
 
 registerBlockVariation( 'core/list', {
 	name: 'wpcloud/site-list-columns',

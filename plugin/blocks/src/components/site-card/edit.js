@@ -13,7 +13,7 @@ import { Dashicon } from '@wordpress/components';
 /**
  * Internal dependencies
  */
-import './style.scss';
+import './editor.scss';
 
 /**
  * The edit function describes the structure of your block in the context of the
@@ -25,11 +25,12 @@ import './style.scss';
  */
 export default function Edit( { attributes, className } ) {
 	const { placeholderThumbnail } = attributes;
+	const blockProps = useBlockProps();
 	return (
 		<div
-			{ ...useBlockProps() }
+			{ ...blockProps }
 			className={ classNames(
-				useBlockProps.className,
+				blockProps.className,
 				'wp-block-wpcloud-site-card',
 				className
 			) }

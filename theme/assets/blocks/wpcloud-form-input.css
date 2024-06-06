@@ -1,19 +1,67 @@
-/*
-Theme Name: WP Cloud Station
-Theme URI: https://wp.cloud
-Author: Automattic Inc
-Author URI: https://automattic.com
-Text Domain: wpcloud-station
-*/
 .wp-block-wpcloud-form-input {
-	input[type="text"], select, textarea {
+	input[type="text"], input[type="password"], select, textarea {
 		background-color: var(--wp--preset--color--background-primary);
 		border-radius: 2px;
 		border: 1px solid var(--wp--preset--color--foreground-tertiary);
 		color: var(--wp--preset--color--foreground-primary);
 	}
 	input:focus, select:focus, textarea:focus {
-		background-color: var(--wp--preset--color--background-secondary);
 		outline: none;
 	}
+
+	.wpcloud-block-form-input__label {
+		display: flex;
+		flex-direction: column;
+		gap: 0.25em;
+		margin-bottom: 0.5em;
+
+		&.is-label-inline {
+			flex-direction: row;
+			gap: 0.5em;
+			align-items: center;
+
+			.wpcloud-block-form-input__label-text {
+				margin-bottom: 0.5em;
+				width: fit-content;
+			}
+		}
+
+		&:has(input[type="checkbox"]) {
+			width: fit-content;
+			flex-direction: row-reverse;
+		}
+	}
+
+	.wpcloud-block-form-input__input {
+		padding: 0 0.5em;
+		font-size: 1em;
+		margin-bottom: 0.5em;
+
+		&[type="text"],
+		&[type="password"],
+		&[type="date"],
+		&[type="datetime"],
+		&[type="datetime-local"],
+		&[type="email"],
+		&[type="month"],
+		&[type="number"],
+		&[type="search"],
+		&[type="tel"],
+		&[type="time"],
+		&[type="url"],
+		&[type="week"] {
+			min-height: 2em;
+			line-height: 2;
+			border: 1px solid;
+		}
+	}
+
+	textarea.wpcloud-block-form-input__input {
+		min-height: 10em;
+	}
+
+	.wpcloud-station-form-input__select {
+		padding: 9px;
+	}
+
 }

@@ -17,10 +17,9 @@
 			"default": "https://via.placeholder.com/50"
 		}
 	},
-	"usesContext": [ "wpcloud/layout", "queryId", "query" ],
+	"usesContext": [ "queryId", "query" ],
 	"textdomain": "site-card",
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./style-index.css",
-	"render": "file:./render.php",
-	"style": "file:./style-index.css"
+	"render": "file:./render.php"
 }

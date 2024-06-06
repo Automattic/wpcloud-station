@@ -1,7 +1,33 @@
-.wpcloud-block-button {
-	&.is-secondary {
-	 	&, * {
-			background: none;
-		}
+.wp-block-wpcloud-button {
+	width: fit-content;
+	max-height: 38px;
+	display: flex;
+	align-items: center;
+
+	.wpcloud-block-button__content {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: fit-content;
+	}
+
+	&.is-secondary:not(.is-text) {
+		background: transparent;
+		border: 2px solid;
+	}
+
+	&.wpcloud-block-button__text {
+		border: none;
+		background: transparent;
+		color: var(--wp--preset--color--foreground-primary);
+		padding: 0;
+	}
+
+	.wpcloud-block-button__label {
+		cursor: pointer;
+	}
+
+	a:where(:not(.wp-element-button)) {
+		color: unset;
 	}
 }

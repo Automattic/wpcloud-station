@@ -1,0 +1,24 @@
+.wp-block-wpcloud-expanding-content {
+	&.wpcloud-block-expanding-section__content-wrapper {
+  	display: grid;
+  	grid-template-rows: 0fr;
+  	transition: all 0.5s ease-out;
+
+		&.section-toggled {
+			grid-template-rows: 1fr;
+		}
+
+		.wpcloud-block-expanding-section__content {
+			overflow: hidden;
+  		min-height: 0;
+ 		}
+	}
+
+	&.is-open:not(.hide-header) {
+		border-top-left-radius: 0;
+		border-top-right-radius: 0;
+	}
+	.wpcloud-block-expanding-section__content-inner {
+		padding: 5px 16px;
+	}
+}

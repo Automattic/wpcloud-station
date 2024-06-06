@@ -1,12 +1,31 @@
-/*
-Theme Name: WP Cloud Station
-Theme URI: https://wp.cloud
-Author: Automattic Inc
-Author URI: https://automattic.com
-Text Domain: wpcloud-station
-*/
 .wp-block-wpcloud-site-card {
+	display: grid;
+	grid-template-columns: 40px 1fr;
+	grid-template-rows: repeat(2, 20px);
+	grid-column-gap: 12px;
 	margin: 7px 0;
+
+	img {
+		grid-area: 1 / 1 / 3 / 2;
+		border-radius: 4px;
+	}
+
+	h2,
+	h3 {
+		line-height: 0;
+	}
+
+	h2 {
+		margin: 0;
+		padding: 0;
+		grid-area: 1 / 2 / 2 / 3;
+	}
+
+	h3 {
+		margin: 0;
+		padding: 0;
+		grid-area: 2 / 2 / 3 / 3;
+	}
 
 	.site-title {
 		margin-top: 5px;
@@ -27,26 +46,26 @@ Text Domain: wpcloud-station
 			line-height: 10px;
 		}
 	}
-}
 
-.wpcloud-site-card--current {
-	.wp-block-wpcloud-site-card {
+	&.wpcloud-site-card--current {
+
 		grid-template-columns: 56px 1fr;
 		grid-template-rows: repeat(2, 28px);
-	}
-	img {
-		width: 56px;
-	}
-	.site-title {
-		a {
-			font-size: var(--wp--preset--font-size--title-medium);
-			font-weight: 500;
-		}
-	}
 
-	.site-url {
-		a {
-			font-size: var(--wp--preset--font-size--body-medium);
+		img {
+			width: 56px;
+		}
+		.site-title {
+			a {
+				font-size: var(--wp--preset--font-size--title-medium);
+				font-weight: 500;
+			}
+		}
+
+		.site-url {
+			a {
+				font-size: var(--wp--preset--font-size--body-medium);
+			}
 		}
 	}
 }

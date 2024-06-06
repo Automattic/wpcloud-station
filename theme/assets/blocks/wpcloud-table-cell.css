@@ -1,0 +1,7 @@
+.wp-block-wpcloud-table-cell {
+	.wpcloud-block-table-cell--wrapper {
+		display: flex;
+		align-items: center;
+		justify-content: left;
+	}
+}

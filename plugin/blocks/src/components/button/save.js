@@ -16,8 +16,7 @@ export default function save( { attributes, className } ) {
 		<div
 			{ ...blockProps }
 			className={ classNames(
-				blockProps.className,
-				'wpcloud-block-button',
+				'wpcloud-block-button__content',
 			) }
 		>
 

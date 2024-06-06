@@ -1,23 +1,14 @@
-/*
-Theme Name: WP Cloud Station
-Theme URI: https://wp.cloud
-Author: Automattic Inc
-Author URI: https://automattic.com
-Text Domain: wpcloud-station
-*/
-
 .wp-block-wpcloud-site-template {
-
 	width: 100%;
 	border-collapse: collapse;
 
 	th {
-		font-size: var(--wp--preset--font-size--small-caps);
 		color: var(--wp--preset--color-foreground-secondary);
-
-		text-transform: uppercase;
+		border: none;
 		h2 {
 				font-weight: 400;
+				font-size: var(--wp--preset--font-size--small-caps);
+				text-transform: uppercase;
 		}
 		svg {
 			fill: currentColor;
