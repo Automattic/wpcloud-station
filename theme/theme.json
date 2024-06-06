@@ -256,8 +256,7 @@
         },
         "border": {
           "radius": "999px"
-        },
-        "css": "& {\n\twidth: fit-content;\n\tmax-height: 38px;\n\tdisplay: flex;\n\talign-items: center;\n}\n\n& .wpcloud-block-button__content {\n\tdisplay: flex;\n\talign-items: center;\n\tjustify-content: center;\n\twidth: fit-content;\n}\n\n&.is-secondary:not(.is-text) {\n\tbackground: transparent;\n\tborder: 2px solid;\n}\n\n&.wpcloud-block-button__text {\n\tborder: none;\n\tbackground: transparent;\n\tcolor: var(--wp--preset--color--foreground-primary);\n\tpadding: 0;\n}\n\n& .wpcloud-block-button__label {\n\tcursor: pointer;\n}\n\n& a:where(:not(.wp-element-button)) {\n\tcolor: unset;\n}"
+        }
       },
       "wpcloud/expanding-section": {
         "color": {
@@ -271,32 +270,27 @@
       "wpcloud/expanding-header": {
         "color": {
           "text": "var(--wp--preset--color--foreground-primary)"
-        },
-        "css": "&.wpcloud-block-expanding-section__header-wrapper {\n\tdisplay: grid;\n\ttransition: grid-template-rows 0.5s ease-out;\n\tgrid-template-rows: 1fr;\n\tborder-top-left-radius: 5px;\n\tborder-top-right-radius: 5px;\n}\n\n&.wpcloud-block-expanding-section__header-wrapper.has-bottom-radius {\n\tborder-bottom-left-radius: 5px;\n\tborder-bottom-right-radius: 5px;\n}\n\n&.wpcloud-block-expanding-section__header-wrapper.hide-on-open.section-toggled {\n\t  \tgrid-template-rows: 0fr;\n}\n\n&.wpcloud-block-expanding-section__header-wrapper .wpcloud-block-expanding-section__header {\n\toverflow: hidden;\n \t}\n&.hide-on-open .wpcloud-block-expanding-section__header{\n\tpadding: 0;\n}\n& .wpcloud-block-expanding-section__header {\n\tpadding: var(--wp--preset--spacing--30) var(--wp--preset--spacing--50);\n}\n& .wpcloud-block-expanding-section__header .wp-block-heading {\n\tflex: 2;\n}\n& .wpcloud_expanding_section_header_chevron {\n\ttransition: transform 0.5s ease-in-out;\n}\n&.section-toggled .wpcloud_expanding_section_header_chevron {\n\ttransform: rotate(90deg);\n}"
+        }
       },
       "wpcloud/expanding-content": {
         "color": {
           "text": "var(--wp--preset--color--foreground-primary)"
-        },
-        "css": "&.wpcloud-block-expanding-section__content-wrapper {\n  \tdisplay: grid;\n  \tgrid-template-rows: 0fr;\n  \ttransition: all 0.5s ease-out;\n}\n\n&.wpcloud-block-expanding-section__content-wrapper.section-toggled {\n\tgrid-template-rows: 1fr;\n}\n\n&.wpcloud-block-expanding-section__content-wrapper .wpcloud-block-expanding-section__content {\n\toverflow: hidden;\n  \tmin-height: 0;\n \t}\n&.is-open:not(.hide-header) {\n\tborder-top-left-radius: 0;\n\tborder-top-right-radius: 0;\n}\n& .wpcloud-block-expanding-section__content-inner {\n\tpadding: 5px 16px;\n}\n"
+        }
       },
       "wpcloud/form-input": {
         "color": {
           "text": "var(--wp--preset--color--foreground-primary)"
-        },
-        "css": "& input[type=\"text\"] {\n\tbackground-color: var(--wp--preset--color--background-primary);\n\tborder-radius: 2px;\n\tborder: 1px solid var(--wp--preset--color--foreground-tertiary);\n\tcolor: var(--wp--preset--color--foreground-primary);\n}\n& select {\n\tbackground-color: var(--wp--preset--color--background-primary);\n\tborder-radius: 2px;\n\tborder: 1px solid var(--wp--preset--color--foreground-tertiary);\n\tcolor: var(--wp--preset--color--foreground-primary);\n}\n& textarea {\n\tbackground-color: var(--wp--preset--color--background-primary);\n\tborder-radius: 2px;\n\tborder: 1px solid var(--wp--preset--color--foreground-tertiary);\n\tcolor: var(--wp--preset--color--foreground-primary);\n}\n& input:focus {\n\tbackground-color: var(--wp--preset--color--background-secondary);\n\toutline: none;\n}\n& select:focus {\n\tbackground-color: var(--wp--preset--color--background-secondary);\n\toutline: none;\n}\n& textarea:focus {\n\tbackground-color: var(--wp--preset--color--background-secondary);\n\toutline: none;\n}"
+        }
       },
       "wpcloud/more-menu": {
         "color": {
           "text": "var(--wp--preset--color--foreground-primary)"
-        },
-        "css": "& .wpcloud-more-menu__nav {\n\tpadding-bottom: 8px;\n\tright: 0;\n\tbackground-color: var(--wp--preset--color--background-secondary);\n}\n\n& .wpcloud-more-menu__nav form {\n\theight: 56px;\n}\n\n& .wpcloud-more-menu__nav button {\n\tfont-family: var(--wp--preset--font-family--primary);\n}\n\n& .wpcloud-more-menu__nav h4 {\n\ttext-transform: uppercase;\n\tfont-size: var(--wp--preset--font-size--small-caps);\n\tmargin: 0;\n\tletter-spacing: 2px;\n}\n\n& .wpcloud-more-menu__nav .wp-block-wpcloud-form {\n\tjustify-content: space-between;\n\tfont-size: var(--wp--preset--font-size--body-medium);\n}"
+        }
       },
       "wpcloud/site-alias-list": {
         "color": {
           "text": "var(--wp--preset--color--foreground-primary)"
-        },
-        "css": "& .wpcloud-block-site-alias-list__row  {\n\tmargin:0;\n\ttransition: all 1.5s ease-out;\n}\n\n& .wpcloud-block-site-alias-list__row .wpcloud-site-list-menu__title {\n\tmargin: 4px 0;\n}\n\n& .wpcloud-block-site-alias-list__row .wpcloud-block-button__label {\n\t/* @TODO font-size--body-medium seems stuck at 16 px but should be 14px */\n\tfont-size: var(--wp--preset--font-size--body-medium, .875rem);\n}\n\n& .wpcloud-block-site-alias-list__row .wpcloud-more-menu__nav {\n\twidth: 186px;\n\tpadding: 16px 24px 8px 24px;\n}\n\n& .wpcloud-block-site-alias-list__row .wpcloud-more-menu__nav .wpcloud-block-form {\n\tgap: 16px;\n}\n& .wpcloud-block-site-alias-list__row {\n\tpadding: 20px 0;\n}\n& .wpcloud-block-site-alias-list__row:not(:last-child) {\n\tborder-bottom: 1px solid var(--wp--preset--color--background-tertiary);\n}\n& .wpcloud-block-site-alias-list__row--primary {\n\tpadding: 20px 0;\n}\n& .wpcloud-block-site-alias-list__row--primary:not(:last-child) {\n\tborder-bottom: 1px solid var(--wp--preset--color--background-tertiary);\n}\n& .wpcloud-block-site-alias-list__item--primary-badge {\n\tborder: 1px solid var(--wp--preset--color--foreground-tertiary);\n\tborder-radius: 2px;\n\tfont-size: var(--wp--preset--font-size--body-small);\n\tcolor: var(--wp--preset--color--foreground-primary);\n\tpadding: 3px 10px;\n}\n& .wpcloud-block-site-alias-list__item--primary .wpcloud-block-site-detail__value {\n\ttransition: all 0.5s ease-out;\n}\n& .wpcloud-block-site-alias-list__item--primary .wpcloud-block-site-detail__value.is-pending {\n\tanimation: opacityPulse 3s ease-out infinite;\n\topacity: 0;\n}\n& .wpcloud-block-site-alias-list__row .wpcloud-block-site-detail__value {\n\ttransition: all 0.5s ease-out;\n}\n& .wpcloud-block-site-alias-list__row .wpcloud-block-site-detail__value.is-pending {\n\tanimation: opacityPulse 3s ease-out infinite;\n\topacity: 0;\n}"
+        }
       },
       "wpcloud/site-card": {
         "color": {
@@ -306,14 +300,12 @@
           "margin": {
             "top": "var(--wp--preset--spacing--30)"
           }
-        },
-        "css": "& {\n\tmargin: 7px 0;\n}\n\n& .site-title {\n\tmargin-top: 5px;\n}\n\n& .site-title a {\n\tfont-size: var(--wp--preset--font-size--body-medium);\n\tcolor: var(--wp--preset--color--foreground-primary);\n\tline-height: 10px;\n\tfont-weight: 400;\n}\n\n& .site-url {\n\tmargin-top: 5px;\n}\n\n& .site-url a {\n\tfont-size: var(--wp--preset--font-size--body-small);\n\tcolor: var(--wp--preset--color--foreground-secondary);\n\tfont-weight: 400;\n\tline-height: 10px;\n}\n\n&.wpcloud-site-card--current {\n\n\tgrid-template-columns: 56px 1fr;\n\tgrid-template-rows: repeat(2, 28px);\n}\n\n&.wpcloud-site-card--current img {\n\twidth: 56px;\n}\n\n&.wpcloud-site-card--current .site-title a {\n\tfont-size: var(--wp--preset--font-size--title-medium);\n\tfont-weight: 500;\n}\n\n&.wpcloud-site-card--current .site-url a {\n\tfont-size: var(--wp--preset--font-size--body-medium);\n}\n"
+        }
       },
       "wpcloud/site-detail": {
         "color": {
           "text": "var(--wp--preset--color--foreground-primary)"
-        },
-        "css": "& {\n\tdisplay: flex;\n\tflex-direction: column;\n\tgap: 0.25em;\n}\n\n&.is-inline {\n\tflex-direction: row;\n\tgap: 0.5em;\n\tjustify-content: flex-start;\n\talign-items: baseline;\n\tmargin-top: 0;\n}\n\n&.is-inline .wpcloud-block-site-detail__label-content {\n\tmargin-bottom: 0.5em;\n}\n\n& a {\n\tcolor: var(--wp--preset--color-foreground-primary);\n}\n\n& svg {\n\tfill: currentColor;\n}\n\n& .wpcloud-block-site-detail__title {\n\tmargin-top: var(--wp--preset--spacing--50);\n\tmargin-bottom: var(--wp--preset--spacing--20);\n}\n\n& .wpcloud-block-site-detail__title h4 {\n\tmargin: 0;\n}\n\n& .wpcloud-block-site-detail__title-content {\n\twidth: fit-content;\n\tmargin: 0;\n\tcolor: var(--wp--preset--color--foreground-secondary);\n\tfont-size: var(--wp--preset--font-size--body-small);\n}\n\n& .wpcloud-block-site-detail__value {\n\t/* color: var(--wp--preset--color-foreground-primary);*/\n\tfont-size: var(--wp--preset--font-size--body-medium);\n}\n\n& .wpcloud_block_site_detail__value__list {\n\tlist-style: none;\n\tpadding: 0;\n\tmargin: 0;\n}\n\n& .wpcloud-block-site-detail__value-container {\n\tdisplay: flex;\n\talign-items: center;\n}\n\n& .wpcloud-block-site-detail__value-container.is-obscured .wpcloud-block-site-detail__value {\n\tdisplay: none;\n}\n\n& .wpcloud-block-site-detail__value-container.is-obscured .wpcloud-copy-to-clipboard {\n\tdisplay: none;\n}\n\n& .wpcloud-block-site-detail__value-container.is-obscured:before{\n\tcontent: '•••••••••';\n}\n\n& .wpcloud-block-site-detail__value-container .wpcloud-copy-to-clipboard:hover {\n\tbackground-color: var(--wp--preset--color--background-secondary);\n}\n\n& .wpcloud-block-site-detail__value-container .wpcloud-reveal-value:hover {\n\tfont-weight: bold;\n\tbackground-color: var(--wp--preset--color--background-secondary);\n}\n\n& .wpcloud-block-site-detail__value-container .wpcloud-copy-to-clipboard {\n\tborder-radius: 4px;\n\tmargin-left: 5px;\n}\n\n& .wpcloud-block-site-detail__value-container .wpcloud-reveal-value {\n\tborder-radius: 4px;\n\tmargin-left: 5px;\n}"
+        }
       },
       "wpcloud/site-details": {
         "color": {
@@ -355,8 +347,7 @@
             "bottom": "var(--wp--preset--spacing--40)",
             "left": "var(--wp--preset--spacing--60)"
           }
-        },
-        "css": "& .wpcloud-site-alias-add--expanding-section {\n\tbackground: none;\n }\n& .wpcloud-site-alias-add--expanding-section X.wpcloud-block-expanding-section__header-wrapper {\n\tbackground: none;\n\tpadding: 0;\n}\n& .wpcloud-site-alias-add--expanding-section X.wpcloud-block-expanding-section__header {\n\tbackground: none;\n\tpadding: 0;\n}\n& .wpcloud-site-alias-add--expanding-section .wpcloud-block-expanding-section__content-wrapper {\n\tbackground-color: var(--wp--preset--color--background-secondary);\n\tborder-radius: 5px;\n}"
+        }
       },
       "wpcloud/site-ssh-users": {
         "color": {
@@ -366,8 +357,7 @@
       "wpcloud/site-template": {
         "color": {
           "text": "var(--wp--preset--color--foreground-primary)"
-        },
-        "css": "& {\n\twidth: 100%;\n\tborder-collapse: collapse;\n}\n\n& th {\n\tcolor: var(--wp--preset--color-foreground-secondary);\n\tborder: none;\n}\n\n& th h2 {\n\tfont-weight: 400;\n\tfont-size: var(--wp--preset--font-size--small-caps);\n\ttext-transform: uppercase;\n}\n\n& th svg {\n\tfill: currentColor;\n}\n\n& th {\n\ttext-align: left;\n}\n\n& td {\n\ttext-align: left;\n}\n\n& tr {\n\tvertical-align: middle;\n\tborder-bottom: 1px solid var(--wp--preset--color-border-primary);\n}\n\n& .wpcloud-block-site-detail {\n\tmargin-top: 0;\n}"
+        }
       },
       "wpcloud/ssh-user-list": {
         "color": {
@@ -396,8 +386,7 @@
         "typography": {
           "fontFamily": "var(--wp--preset--font-family--primary)",
           "fontSize": "var(--wp--preset--font-size--body-medium)"
-        },
-        "css": "& .wpcloud-block-table-cell--wrapper {\n\tdisplay: flex;\n\talign-items: center;\n\tjustify-content: left;\n}"
+        }
       }
     }
   }
