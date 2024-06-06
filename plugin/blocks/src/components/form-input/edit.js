@@ -24,6 +24,7 @@ import { useCallback } from '@wordpress/element';
 /*
  * Internal dependencies
  */
+import './editor.scss';
 import DetailSelectControl from '../controls/site/detailSelect';
 import { Text, Select, Hidden } from './fields';
 
