@@ -1,4 +1,4 @@
-.wp-block-wpcloud-form {
+& {
 	display: flex;
 	flex-direction: column;
 	&.is-inline {
