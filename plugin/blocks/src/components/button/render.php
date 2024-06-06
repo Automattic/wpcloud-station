@@ -3,7 +3,6 @@ if ( $attributes['adminOnly'] && ! current_user_can( 'manage_options' ) ) {
 	return;
 }
 
-$layout = $block->context['wpcloud/layout'] ?? '';
 
 $classes = array( 'wpcloud-block-button' );
 $button_attributes = array();
@@ -95,9 +94,4 @@ if ( 'button' === $style || 'submit' === $type ) {
 	$wrapper = 'div';
 }
 
-if ('table' === $layout) {
-	$classes[] = 'wpcloud-block-table-cell';
-	printf('<td class="wp-block-wpcloud-table-cell"><%1$s %2$s>%3$s</%1$s></td>', $wrapper, $wrapper_attributes, $content);
-} else {
-	printf('<%1$s %2$s>%3$s</%1$s>', $wrapper, $wrapper_attributes, $content);
-}
+printf('<%1$s %2$s>%3$s</%1$s>', $wrapper, $wrapper_attributes, $content);

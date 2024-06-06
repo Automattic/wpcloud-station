@@ -72,15 +72,9 @@ if ($value !== '') {
 		}
 	$node_attributes[ $data_name ]= $value;
 }
+$wrapper = 'div';
 
-$layout = $block->context['wpcloud/layout'] ?? '';
-if ('table' === $layout) {
-	$node_attributes['class'] = 'wpcloud-block-table-cell wpcloud-block-site-detail__wrapper';
-	$wrapper = 'td';
-} else {
-	$node_attributes['class'] = 'wpcloud-block-site-detail__wrapper';
-	$wrapper = 'div';
-}
+$node_attributes['class'] = 'wpcloud-block-site-detail__wrapper';
 
 $wrapper_attributes = get_block_wrapper_attributes( $node_attributes );
 printf( '<%1$s %2$s>%3$s</%1$s>', $wrapper, $wrapper_attributes, $detail );
