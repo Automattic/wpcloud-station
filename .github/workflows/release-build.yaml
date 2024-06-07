@@ -15,7 +15,7 @@ jobs:
         with:
           ref: ${{ github.ref }}
 
-      - name: Setup Node.js
+      - name: Setup Node for plugin
         uses: actions/setup-node@v2
         with:
           node-version: '20.11'
@@ -27,6 +27,15 @@ jobs:
       - name: Build plugin
         working-directory: './plugin'
         run:  zip -r ../plugin.zip . -x@.distignore
+
+      - name: Setup Node for theme
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20.11'
+          cache: 'npm'
+          cache-dependency-path: './theme'
+      - working-directory: './theme'
+        run: npm ci && npm run build:css
 
       - name: Build Theme
         working-directory: './theme'
