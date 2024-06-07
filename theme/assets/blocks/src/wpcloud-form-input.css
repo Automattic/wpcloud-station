@@ -1,4 +1,4 @@
-.wp-block-wpcloud-form-input {
+& {
 	input[type="text"], input[type="password"], select, textarea {
 		background-color: var(--wp--preset--color--background-primary);
 		border-radius: 2px;

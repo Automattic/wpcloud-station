@@ -1,0 +1,29 @@
+{
+  "name": "wp-cloud-station-theme",
+  "version": "1.0.0",
+  "description": "\"WP Cloud Station Theme\"",
+  "main": "index.js",
+  "bin": {
+    "buildThemeCss": "bin/build-theme-css.js"
+  },
+  "scripts": {
+    "build:css": "node bin/build-theme-css.js wpcloud",
+    "watch:css": "onchange 'src/**/*.css' -- npm run build:css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Automattic/wpcloud-station.git"
+  },
+  "author": "Automattic Inc",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Automattic/wpcloud-station/issues"
+  },
+  "homepage": "https://github.com/Automattic/wpcloud-station#readme",
+  "devDependencies": {
+    "onchange": "^7.1.0",
+    "postcss": "^8.4.38",
+    "postcss-expand-selectors": "^2.0.0",
+    "postcss-nested": "^6.0.1"
+  }
+}

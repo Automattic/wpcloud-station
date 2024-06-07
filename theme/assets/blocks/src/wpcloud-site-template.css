@@ -1,4 +1,4 @@
-.wp-block-wpcloud-site-template {
+& {
 	width: 100%;
 	border-collapse: collapse;
 
@@ -8,7 +8,7 @@
 		h2 {
 				font-weight: 400;
 				font-size: var(--wp--preset--font-size--small-caps);
-				text-transform: uppercase;
+				text-transform: lowercase;
 		}
 		svg {
 			fill: currentColor;

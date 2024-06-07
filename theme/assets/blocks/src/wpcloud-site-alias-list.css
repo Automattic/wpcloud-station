@@ -1,4 +1,4 @@
-.wp-block-wpcloud-site-alias-list {
+& {
 	.wpcloud-block-site-alias-list__row  {
 		margin:0;
 		transition: all 1.5s ease-out;

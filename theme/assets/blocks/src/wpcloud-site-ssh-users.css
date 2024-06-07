@@ -1,0 +1,29 @@
+& {
+  border: 1px solid var(--wp--preset--color--border-primary);
+  border-radius: 10px;
+  padding: 24px 32px 32px;
+
+	.wpcloud-ssh-users__title {
+		margin-top:0;
+	}
+	.wpcloud-block-site-ssh-user-list--wrapper {
+		margin-top: 20px;
+	}
+	.wpcloud-block-button__action.wpcloud-ssh-user-add__cancel {
+		position: absolute;
+		right:16px;
+	}
+	.wpcloud_ssh_connection_info {
+		.wpcloud_expanding_section_header_chevron {
+			transition: transform 0.5s ease-in-out;
+		}
+
+		.wpcloud-block-expanding-section__content {
+			border-radius: 0 0 5px 5px;
+		}
+
+		.wpcloud-block-site-detail {
+			margin:0;
+		}
+	}
+}
