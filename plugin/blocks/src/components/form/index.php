@@ -6,21 +6,29 @@ function wpcloud_block_form_hidden_field( $name, $value ) {
 
 function wpcloud_form_submit_handler() {
 	check_ajax_referer( 'wpcloud_form' );
-	$action = $_POST[ 'wpcloud_action' ] ?? '';
+	$action = trim($_POST[ 'wpcloud_action' ] ?? '');
+
+	$post_data = $_POST;
+
+	if ( isset($post_data[ 'site_id' ]) ) {
+		$post_data[ 'wpcloud_site_id' ] = get_post_meta($post_data[ 'site_id' ], 'wpcloud_site_id', true);
+	}
 
 	// Get the form fields.
 	$fields = apply_filters( 'wpcloud_block_form_submitted_fields', array(
 		'wpcloud_action',
 		'redirect',
-	), array_keys( $_POST ) );
-	$fields = apply_filters( 'wpcloud_block_form_submitted_fields_' . $action , $fields, array_keys( $_POST ) );
+		'wpcloud_site_id',
+	), array_keys( $post_data ) );
 
+
+	$fields = apply_filters( 'wpcloud_block_form_submitted_fields_' . $action , $fields, array_keys( $post_data ) );
 
 	// Get the form data.
 	$data = array();
 	foreach ( $fields as $field ) {
-		if ( isset( $_POST[ $field ] ) ) {
-			$data[ $field ] = sanitize_text_field( wp_unslash( $_POST[ $field ] ) );
+		if ( isset( $post_data[ $field ] ) ) {
+			$data[ $field ] = sanitize_text_field( wp_unslash( $post_data[ $field ] ) );
 		}
 	}
 
