@@ -1,7 +1,7 @@
 ( ( wpcloud ) => {
 	const updateSshUserInputs = ( sshUserRow ) => {
 		const sshUserInputs = sshUserRow.querySelectorAll(
-			'form input[name=site_ssh_user]'
+			'form input[name=ssh_user]'
 		);
 		const sshUserName = sshUserRow.dataset.siteSshUser;
 		sshUserInputs.forEach( ( input ) => {
@@ -31,9 +31,11 @@
 		).textContent = user;
 		updateSshUserInputs( newRow );
 		newRow.style.display = 'flex';
-		sshUserList.appendChild( newRow );
+		sshUserList.appendChild(newRow);
 
-		// @TODO - update the forms once they are added.
+		newRow.querySelectorAll('.wpcloud-block-form').forEach(wpcloud.bindFormHandler);
+		newRow.querySelectorAll('.wpcloud-block-button').forEach(wpcloud.bindButtonHandler);
+		newRow.classList.add('wpcloud-block-ssh-user-list__row--new');
 	}
 
 	function onSshUserRemove( result, form ) {

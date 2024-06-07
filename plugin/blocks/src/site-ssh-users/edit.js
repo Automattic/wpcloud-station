@@ -9,7 +9,6 @@ import classNames from 'classnames';
 import { __ } from '@wordpress/i18n';
 import { useBlockProps, useInnerBlocksProps } from '@wordpress/block-editor';
 
-
 /**
  * Internal dependencies
  */
@@ -35,29 +34,34 @@ export default function Edit() {
 					{
 						level: 3,
 						className: 'wpcloud-ssh-users__title',
-						content: __('SSH Users'),
+						content: __( 'SSH Users' ),
 					},
 				],
-				[ 'wpcloud/expanding-section',
+				[
+					'wpcloud/expanding-section',
 					{
 						hideHeader: true,
 						className: 'wpcloud-ssh-user-form--expanding-section',
-						metadata: { name: 'SSH User Form' }
+						metadata: { name: 'SSH User Form' },
 					},
 					[
-						[ 'wpcloud/expanding-header', {},
+						[
+							'wpcloud/expanding-header',
+							{},
 							[
-								['wpcloud/button',
+								[
+									'wpcloud/button',
 									{
 										type: 'action',
 										action: 'wpcloud_expanding_section_toggle',
-										label: __('Add SSH User'),
-										isPrimary: false
-									}
-								]
-							]
+										label: __( 'Add SSH User' ),
+										isPrimary: false,
+									},
+								],
+							],
 						],
-						['wpcloud/expanding-content',
+						[
+							'wpcloud/expanding-content',
 							{},
 							[
 								[
@@ -71,13 +75,13 @@ export default function Edit() {
 											'wpcloud-site-alias-add__cancel',
 									},
 								],
-								[ 'wpcloud/ssh-user-add']
-							]
-						]
-					]
+								[ 'wpcloud/ssh-user-form' ],
+							],
+						],
+					],
 				],
 				[ 'core/spacer', { height: '30px' } ],
-				['wpcloud/ssh-user-list'],
+				[ 'wpcloud/ssh-user-list' ],
 			],
 		],
 	];

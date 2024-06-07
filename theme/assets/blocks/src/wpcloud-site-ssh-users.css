@@ -3,6 +3,14 @@
   border-radius: 10px;
   padding: 24px 32px 32px;
 
+	.wpcloud-ssh-user-form--expanding-section {
+		background: none;
+		.wpcloud-block-expanding-section__content-wrapper {
+			background-color: var(--wp--preset--color--background-secondary);
+			border-radius: 5px;
+		}
+ }
+
 	.wpcloud-ssh-users__title {
 		margin-top:0;
 	}

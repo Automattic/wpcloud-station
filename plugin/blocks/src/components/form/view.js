@@ -43,7 +43,11 @@
 				return;
 			}
 
-			wpcloud.hooks.doAction( 'wpcloud_form_submit', form );
+			const action = formData.wpcloud_action;
+			wpcloud.hooks.doAction('wpcloud_form_submit', form, action );
+			if ( action ) {
+				wpcloud.hooks.doAction(`wpcloud_form_submit_${ action }`, form, action );
+			}
 			try {
 				const response = await fetch(
 					'/wp-admin/admin-ajax.php',

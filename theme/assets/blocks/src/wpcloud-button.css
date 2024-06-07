@@ -13,7 +13,7 @@
 
 	&.is-secondary:not(.is-text) {
 		background: transparent;
-		border: 2px solid;
+		border: 2px solid var(--wp--preset--color--accent-primary);
 	}
 
 	&.wpcloud-block-button__text {

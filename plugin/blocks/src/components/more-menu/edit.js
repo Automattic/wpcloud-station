@@ -44,7 +44,6 @@ export default function Edit( {
 		select( 'core/block-editor' ).hasSelectedInnerBlock( clientId )
 	);
 	const shouldShowMenu = isSelected || isChildSelected;
-	console.log('showMenu', showMenu);
 	useEffect(() => {
 		setAttributes( { showMenu: shouldShowMenu } );
 	}, [ shouldShowMenu, setAttributes ]);

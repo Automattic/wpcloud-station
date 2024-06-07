@@ -1,6 +1,7 @@
 & {
 	position: relative;
 	.wpcloud-more-menu__button {
+		color: var(--wp--preset--color--foreground-secondary);
 		svg {
 			fill: currentColor;
 		}
@@ -16,13 +17,16 @@
 	.wpcloud-more-menu__nav {
 		position: absolute;
 		top: 0;
+		right: 0;
 		z-index: 10;
+
+		background-color: var(--wp--preset--color--background-secondary);
 
 		display: none;
 		flex-direction: column;
 
 		margin: 0;
-		padding: 16px 24px;
+		padding: 16px 24px 8px;
 		min-width: 138px;
 
 		box-shadow: 0px 2px 10px 0px #00000040;
@@ -43,12 +47,10 @@
 			text-align: center;
 		}
 
-		padding-bottom: 8px;
-		right: 0;
-		background-color: var(--wp--preset--color--background-secondary);
-
-		form {
+		.wpcloud-more-menu__row {
+			gap: 16px;
 			height: 56px;
+			justify-content: unset;
 		}
 
 		button {
@@ -67,4 +69,6 @@
 			font-size: var(--wp--preset--font-size--body-medium);
 		}
 	}
+
+
 }
