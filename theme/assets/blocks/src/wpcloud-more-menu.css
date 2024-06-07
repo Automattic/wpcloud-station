@@ -47,14 +47,10 @@
 			text-align: center;
 		}
 
-
-
 		.wpcloud-more-menu__row {
 			gap: 16px;
-		}
-
-		form {
 			height: 56px;
+			justify-content: unset;
 		}
 
 		button {
