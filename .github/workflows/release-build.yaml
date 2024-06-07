@@ -30,7 +30,7 @@ jobs:
 
       - name: Build Theme
         working-directory: './theme'
-        run: zip -r ../theme.zip .
+        run: zip -r ../theme.zip . -x@.distignore
 
       - name: Get release
         id: get_release
