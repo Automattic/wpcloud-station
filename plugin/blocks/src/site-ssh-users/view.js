@@ -21,9 +21,12 @@
 			const wpCloudAction = form.querySelector('input[name="wpcloud_action"]');
 			wpCloudAction.value = 'wpcloud_ssh_user_update';
 
-			// Open the form section.
-			const openFormButton = sshUserContainer.querySelector('[data-wpcloud-action="wpcloud_expanding_section_toggle"]');
-			wpcloud.hooks.doAction('wpcloud_expanding_section_toggle', openFormButton);
+			// Open the form section if it's not open already.
+			const section = form.closest('.wpcloud-ssh-user-form--expanding-section');
+			if (!section.classList.contains('is-open')) {
+				const openFormButton = sshUserContainer.querySelector('[data-wpcloud-action="wpcloud_expanding_section_toggle"]');
+				wpcloud.hooks.doAction('wpcloud_expanding_section_toggle', openFormButton);
+			}
 		}
 	);
 
