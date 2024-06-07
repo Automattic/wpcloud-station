@@ -120,7 +120,7 @@ export default function Edit() {
 											'site_alias_make_primary',
 										inline: true,
 										className:
-											'wpcloud-block-site-alias-list--make-primary',
+											'wpcloud-block-site-alias-list--make-primary wpcloud-more-menu__row',
 									},
 									[
 										[
@@ -152,7 +152,7 @@ export default function Edit() {
 											'site_alias_remove',
 										inline: true,
 										className:
-											'wpcloud-block-site-alias-list--remove',
+											'wpcloud-block-site-alias-list--remove wpcloud-more-menu__row',
 									},
 									[
 										[ 'wpcloud/icon', { icon: 'trash' } ],

@@ -29,6 +29,7 @@ export default function Edit() {
 				layout: {
 					type: 'flex',
 					flexWrap: 'nowrap',
+					justifyContent: 'space-between',
 				},
 				metadata: {
 					name: 'SSH User Row',
@@ -59,13 +60,34 @@ export default function Edit() {
 								content: __( 'SSH User Options' ),
 							},
 						],
+						[ 'core/group',
+							{
+								className: 'wpcloud-more-menu__row',
+								layout: {
+									type: 'flex',
+									flexWrap: 'wrap'
+								}
+							},
+							[
+								[ 'wpcloud/icon', { icon: 'update' } ],
+								[
+									'wpcloud/button',
+									{
+										label: __( 'Update User' ),
+										action: 'wpcloud_ssh_user_update_button_click',
+										type: 'action',
+										style: 'text'
+									},
+								]
+							]
+						],
 						[ 'wpcloud/form',
 							{
 								ajax: true,
 								wpcloudAction: 'site_ssh_user_remove',
 								inline: true,
 								className:
-									'wpcloud-block-site-ssh-user--remove',
+									'wpcloud-block-site-ssh-user--remove wpcloud-more-menu__row',
 							},
 							[
 								[ 'wpcloud/icon', { icon: 'trash' } ],
@@ -79,34 +101,13 @@ export default function Edit() {
 								[
 									'wpcloud/button',
 									{
-										label: __( 'Remove' ),
+										label: __( 'Remove User' ),
 										type: 'submit',
 										style: 'text'
 									},
 
 								]
 							],
-						],
-						[ 'core/group',
-							{
-								layout: {
-									type: 'flex',
-									flexWrap: 'wrap',
-									justifyContent: 'space-between',
-								}
-							},
-							[
-								[ 'wpcloud/icon', { icon: 'update' } ],
-								[
-									'wpcloud/button',
-									{
-										label: __( 'Update' ),
-										action: 'wpcloud_ssh_user_update',
-										type: 'action',
-										style: 'text'
-									},
-								]
-							]
 						]
 					]
 				],

@@ -4,6 +4,7 @@
 	button {
 		border: none;
 		background: none;
+		color: var(--wp--preset--color--foreground-secondary);
 		svg {
 			fill: currentColor;
 		}
@@ -23,5 +24,14 @@
 	}
 	min-width: 180px;
 	background-color: var(--wp--preset--color--background-secondary, #FFFFFF );
+	.wpcloud-site-list-menu__title {
+		text-align: center;
+	}
+}
 
+.wpcloud-more-menu__row {
+	gap: 16px;
+	height: 56px;
+	justify-content: unset !important;
+	padding: 10px;
 }
