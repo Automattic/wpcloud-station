@@ -38,7 +38,7 @@ export default function Edit( {
 	clientId,
 	isSelected,
 } ) {
-	const { action, ajax, wpcloudAction, inline, redirect } = attributes;
+	const { action, ajax, wpcloudAction, inline, redirect, submitOnChange } = attributes;
 	const blockProps = useBlockProps();
 
 	const isChildSelected = useSelect( ( select ) =>
@@ -92,7 +92,7 @@ export default function Edit( {
 
 					<ToggleControl
 						label={ __( 'Enable AJAX' ) }
-						checked={ attributes.ajax }
+						checked={ ajax }
 						onChange={ ( newValue ) =>
 							setAttributes( { ajax: newValue } )
 						}
@@ -100,6 +100,17 @@ export default function Edit( {
 							'Enable AJAX form submission for a smoother experience.'
 						) }
 					/>
+					{ ajax && (
+						<ToggleControl
+							label={__('Submit on Change')}
+							checked={submitOnChange}
+							onChange={(newValue) =>
+								setAttributes({ submitOnChange: newValue })
+							}
+							help={__(
+								'Submits the form when a field is changed. Does not apply to text inputs'
+							)}
+						/>)}
 					<TextControl
 						label={ __( 'Redirect' ) }
 						value={ redirect }
