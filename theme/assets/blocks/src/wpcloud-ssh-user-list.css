@@ -1,13 +1,16 @@
 & {
-	.wpcloud-block-ssh-user-list__row {
+	.wpcloud-block-ssh-user-list__row  {
+		margin:0;
 		transition: all 1.5s ease-out;
+
 		.wpcloud-site-list-menu__title {
 			margin: 4px 0;
 		}
 		.wpcloud-block-button__label {
 			/* @TODO font-size--body-medium seems stuck at 16 px but should be 14px */
-			font-size: var(--wp--preset--font-size--body-medium-, .875rem);
+			font-size: var(--wp--preset--font-size--body-medium, .875rem);
 		}
+
 		.wpcloud-more-menu__nav {
 			width: 186px;
 			padding: 16px 24px 8px 24px;
@@ -16,63 +19,10 @@
 			}
 		}
 	}
-
-	.wpcloud-block-ssh-user-list__row {
-		.wpcloud-block-site-detail__value {
-			transition: all 0.5s ease-out;
-			&.is-pending {
-				animation: opacityPulse 3s ease-out infinite;
-				opacity: 0;
-			}
+	.wpcloud-block-ssh-user-list__row, .wpcloud-block-ssh-user-list__row--primary {
+		padding: 20px 0;
+		&:not(:last-child) {
+			border-bottom: 1px solid var(--wp--preset--color--background-tertiary);
 		}
-	}
-
-	.wpcloud-block-ssh-user-list {
-		margin-top: 20px;
-		.wpcloud-block-ssh-user-list__row {
-			padding: 20px 0;
-			&:not(:last-child) {
-				border-bottom: 1px solid var(--wp--preset--color--background-tertiary);
-			}
-		}
-	}
-
-	.wpcloud-block-form-site-alias--remove {
-		transition: all 0.5s ease-out;
-		column-gap: 10px;
-
-		.wpcloud-block-site-detail__value {
-			transition: all 0.5s ease-out;
-		}
-
-		span:first-child {
-			width: 100%;
-		}
-		&:not(:first-child) {
-			flex:1;
-		}
-		.wpcloud-block-form-site-alias--make-primary {
-			transition: all 0.5s ease-out;
-			.wp-element-button {
-				text-decoration: underline;
-				white-space: nowrap;
-				border: none;
-				background: transparent;
-				&:focus {
-					border: none;
-					outline: none;
-				}
-				&:hover {
-					font-weight: 600;
-				}
-			}
-		}
-	}
-	.wpcloud-block-ssh-user-list__row {
-		transition: all 0.5s ease-out;
-	}
-	/* TODO Move this into a generic style file */
-	.wpcloud-hide {
-		opacity: 0;
 	}
 }

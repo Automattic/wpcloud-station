@@ -1,10 +1,6 @@
 & {
  .wpcloud-site-alias-add--expanding-section {
 		background: none;
-		X.wpcloud-block-expanding-section__header-wrapper, X.wpcloud-block-expanding-section__header {
-			background: none;
-			padding: 0;
-		}
 		.wpcloud-block-expanding-section__content-wrapper {
 			background-color: var(--wp--preset--color--background-secondary);
 			border-radius: 5px;
