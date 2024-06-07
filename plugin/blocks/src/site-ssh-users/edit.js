@@ -71,7 +71,7 @@ export default function Edit() {
 											'wpcloud-site-alias-add__cancel',
 									},
 								],
-								[ 'wpcloud/ssh-user-add']
+								[ 'wpcloud/ssh-user-form']
 							]
 						]
 					]
