@@ -2,7 +2,8 @@
 
 	// Bind clicks to any action buttons
 	const buttons = document.querySelectorAll('.wp-block-wpcloud-button');
-	buttons.forEach((button) => {
+
+	function bindClick(button) {
 		const action = button.dataset.wpcloudAction;
 
 		if (action) {
@@ -17,7 +18,9 @@
 				wpcloud.hooks.doAction(action, button);
 			});
 		}
-	});
+	}
+	wpcloud.bindButtonHandler = bindClick;
+	buttons.forEach(bindClick);
 
 	async function refreshHref( e ) {
 		const link = e.currentTarget;
