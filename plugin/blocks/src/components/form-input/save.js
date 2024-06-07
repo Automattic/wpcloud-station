@@ -40,6 +40,9 @@ function renderSelect(
 	inputClasses,
 	inputStyle
 ) {
+	if ( ! options || ! options.length ) {
+		return null;
+	}
 	return (
 		<select
 			className={ classNames(

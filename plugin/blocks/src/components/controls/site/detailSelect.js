@@ -8,10 +8,16 @@ export default function DetailSelect( {
 	attributes,
 	setAttributes,
 	onChange,
-} ) {
+}) {
+	const { type } = attributes;
+	const selectableDetailTypes = window.wpcloud?.selectableDetails || ['wp_version', 'php_version', 'data_center' ];
+
 	const siteDetailKeys = window.wpcloud?.siteDetails || {};
 	let options = [];
-	for ( const [ key, value ] of Object.entries( siteDetailKeys ) ) {
+	for (const [key, value] of Object.entries(siteDetailKeys)) {
+		if ('select' === type && ! selectableDetailTypes.includes( key ) ) {
+			continue;
+		}
 		options.push( { value: key, label: value } );
 	}
 
