@@ -7,6 +7,8 @@ if ( $attributes['adminOnly'] && ! current_user_can( 'manage_options' ) ) {
 $classes = array( 'wpcloud-block-button' );
 $button_attributes = array();
 
+$button_attributes['data-original-label'] = $attributes['label'] ?? '';
+
 $type  = $attributes['type'] ?? 'link';
 $style = $attributes['style'] ?? '';
 $url = '';

@@ -8,6 +8,7 @@ $fields .= wpcloud_block_form_hidden_field( 'action', 'wpcloud_block_form_submit
 
 if ( isset( $attributes[ 'wpcloudAction' ] ) && $attributes[ 'wpcloudAction' ] ) {
 	$fields .= wpcloud_block_form_hidden_field( 'wpcloud_action', $attributes[ 'wpcloudAction' ] );
+	$processed_content->set_attribute( 'data-original-action', $attributes[ 'wpcloudAction' ] );
 }
 
 if ( isset( $attributes[ 'redirect' ] ) ) {
