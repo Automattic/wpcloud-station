@@ -19,13 +19,14 @@
 	"attributes": {
 		"ajax": {
 			"type": "boolean",
-			"default": false
+			"default": true
 		},
 		"action": {
 			"type": "string"
 		},
 		"wpcloudAction": {
-			"type": "string"
+			"type": "string",
+			"default": " "
 		},
 		"inline": {
 			"type": "boolean",
@@ -35,6 +36,10 @@
 			"type": "string"
 		},
 		"active": {
+			"type": "boolean",
+			"default": false
+		},
+		"submitOnChange": {
 			"type": "boolean",
 			"default": false
 		}

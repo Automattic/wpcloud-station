@@ -5,7 +5,7 @@
 	"version": "0.1.0",
 	"title": "Icon",
 	"category": "wpcloud",
-	"icon": "image",
+	"icon": "star-filled",
 	"description": "Render a WordPress Icon. See https://wordpress.github.io/gutenberg/?path=/story/icons-icon--library",
 	"example": {},
 	"supports": {

@@ -4,7 +4,7 @@
 
 		form.addEventListener( 'submit', async ( e ) => {
 			e.preventDefault();
-			button.setAttribute( 'disabled', 'disabled' );
+			button && button.setAttribute( 'disabled', 'disabled' );
 			form.classList.add( 'is-loading' );
 			form.classList.remove( 'is-error' );
 
@@ -81,7 +81,7 @@
 					window.location = result.data.redirect;
 				}
 
-				button.removeAttribute( 'disabled' );
+				button && button.removeAttribute( 'disabled' );
 				form.classList.remove( 'is-loading' );
 
 				if ( ! response.ok ) {
@@ -91,7 +91,19 @@
 				/* eslint-disable no-console */
 				console.error( error );
 			}
-		} );
+		});
+
+		const submitOnChange = form.dataset.submitOnChange;
+		if ( submitOnChange ) {
+			form.querySelectorAll('input, select').forEach((input) => {
+				if (input.type === 'text') {
+					return;
+				}
+				input.addEventListener('change', () => {
+					form.dispatchEvent(new Event('submit'));
+				});
+			});
+		}
 	};
 
 	// Fill in any missing hidden inputs closest data attribute

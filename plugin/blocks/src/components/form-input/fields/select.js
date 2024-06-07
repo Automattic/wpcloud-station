@@ -13,12 +13,14 @@ export default function SelectField( {
 	className,
 	onValueChange,
 } ) {
-	const { value, options } = attributes;
+	const { name, value } = attributes;
+	let { options } = attributes;
 
-	const controls = <></>;
+	if (!options) {
+		options = [{ label: `{ ${name} } `, value: '' }];
+	}
+
 	return (
-		<>
-			{ controls }
 			<select
 				className={ classNames(
 					className,
@@ -34,6 +36,5 @@ export default function SelectField( {
 					</option>
 				) ) }
 			</select>
-		</>
 	);
 }

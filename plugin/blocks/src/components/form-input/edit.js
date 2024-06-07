@@ -55,19 +55,17 @@ function InputFieldBlock( { attributes, setAttributes, className, context } ) {
 		checkbox: Text,
 	};
 
-	const selectTypeOptions = [
+	const typeOptions = [
 		{ value: 'text', label: __( 'Text' ) },
 		{ value: 'email', label: __( 'Email' ) },
 		{ value: 'password', label: __( 'Password' ) },
 		{ value: 'hidden', label: __( 'Hidden' ) },
 		{ value: 'textarea', label: __( 'Textarea' ) },
-		{ value: 'checkbox', label: __( 'Checkbox' )}
-		// @TODO Implement select block to allow setting the select options. For now it's only available in block templates.
-		// { value: 'select', label: __( 'Select' ) },
+		{ value: 'checkbox', label: __( 'Checkbox' )},
+		{ value: 'select', label: __( 'Select' ) },
 	];
 
 	const InputTag = inputTags[ type ] ? inputTags[ type ] : Text;
-
 	const showLabel = ! ( hideLabel || 'hidden' === type );
 
 	const controls = (
@@ -85,11 +83,12 @@ function InputFieldBlock( { attributes, setAttributes, className, context } ) {
 					<SelectControl
 						label={ __( 'Input Type' ) }
 						value={ type }
-						options={ selectTypeOptions }
+						options={ typeOptions }
 						onChange={ ( newType ) => {
 							setAttributes( { type: newType } );
 						} }
 					/>
+
 					<DetailSelectControl
 						attributes={ attributes }
 						setAttributes={ setAttributes }

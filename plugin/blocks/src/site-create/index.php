@@ -65,6 +65,7 @@ function wpcloud_block_site_form_enqueue_scripts() {
 		'window.wpcloud = window.wpcloud ?? {};' .
 		 'wpcloud.siteDetails=' . json_encode( WPCloud_Site::get_detail_options() ) . ';' .
 		 'wpcloud.phpVersions=' . json_encode( wpcloud_block_available_php_options() ) . ';' .
+		 'wpcloud.wpVersions=' . json_encode( wpcloud_block_available_wp_versions() ) . ';' .
 		 'wpcloud.dataCenters=' . json_encode( wpcloud_block_available_datacenters_options() ) . ';' .
 		 'wpcloud.linkableSiteDetails=' . json_encode( WPCloud_Site::get_linkable_detail_options() ) . ';'
 	);

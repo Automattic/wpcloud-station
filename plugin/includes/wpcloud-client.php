@@ -527,6 +527,30 @@ function wpcloud_client_ssh_user_remove( int $wpcloud_site_id, string $user ): m
 }
 
 /**
+ *
+ * Update site meta.
+ *
+ * Also handles updates for the WordPress version via the `site-wordpress-version` endpoint.
+ *
+ * @param integer $wpcloud_site_id The WP Cloud Site ID.
+ * @param string  $key            The meta key to update.
+ * @param string|null $value       The value to set. If null, the key will be removed.
+ *
+ * @return mixed|WP_Error Response body on success. WP_Error on failure.
+ */
+function wpcloud_client_update_site_meta( int $wpcloud_site_id, string $key, string|null $value): mixed {
+	$endpoint = "site-meta/$wpcloud_site_id/$key/update";
+	if ( "wp_version" === $key ) {
+		$endpoint =  "site-wordpress-version/$wpcloud_site_id/$value";
+	}
+	if ( is_null($value) ) {
+		$endpoint = "site-meta/$wpcloud_site_id/$key/remove";
+
+	}
+	return wpcloud_client_post( $wpcloud_site_id, $endpoint, array("value" => $value) );
+}
+
+/**
  * Get the status of a job.
  *
  * @param integer $job_id The job id for which to get the status.
