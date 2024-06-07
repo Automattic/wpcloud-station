@@ -40,8 +40,8 @@ function renderSelect(
 	inputClasses,
 	inputStyle
 ) {
-	if ( ! options || ! options.length ) {
-		return null;
+	if ( ! options ) {
+		options = [ { label: `{ ${ name } }`, value: '' } ];
 	}
 	return (
 		<select
