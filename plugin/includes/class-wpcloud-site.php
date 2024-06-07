@@ -132,6 +132,38 @@ class WPCLOUD_Site {
 		);
 	}
 
+	/**
+	 * Get the meta keys for a WPCLOUD_Site.
+	 *
+	 * see https://wp.cloud/apidocs-webhost/#api-Sites-site-meta
+	 * if a key is false, it is only used for getting the value
+	 * @return array
+	 */
+	public static function get_meta_fields(): array {
+		return [
+			// db_charset and db_collate should be paired
+			"db_charset" => [ "latin1 "=> "latin1", "utf8" => "utf8", "utf8mb4" => "utf8mb4" ],
+			"db_collate" => [ "latin1_swedish_ci" => "latin1_swedish_ci", "utf8_general_ci" => "utf8_general_ci", "utf8mb4_unicode_ci" => "utf8mb4_unicode_ci" ],
+			"suspended" => [ "404" => "404", "410" => "410", "451" => "451", "480" => "480" ],
+			"suspend_after" => [], // unix timestamp
+			"php_version" => wpcloud_client_php_versions_available(),
+			"wp_version" => [ "latest" => __("latest"), "previous" => __("previous"), "beta" => __("beta") ],
+			"do_not_delete" => [ 0 => "false", 1 => "true" ], // truthy enables do_not_delete
+			"space_used" => false, // get only
+			"db_file_size" => false, // get only
+			"space_quota" => [], // integer + unit ie. 100M,
+			"max_space_quota" => false,
+			"photon_subsizes" => [ "0", "1", "deleted"],
+			"privacy_model" => [ "wp_uploads" ] ,
+			"geo_affinity" => wpcloud_client_data_centers_available(),
+			"static_file_404" => ["lightweight", "wordpress"],
+			"default_php_conns" => range(2,10),
+			"burst_php_conns" => [0 => "disabled", 1 => "enabled"],
+			"php_fs_permissions" => [ "rw" => __( "Read/Write"), "ro" => __( "Read Only"), "loggedin" => __("Read only unless logged into WordPress") ],
+			"canonicalize_aliases" => [ 0 => "false", 1 => "true" ],
+		];
+	}
+
 	public static function get_linkable_detail_options(): array {
 		return array_intersect_key( self::get_detail_options(),  array_flip( self::LINKABLE_DETAIL_KEYS ) );
 	}
