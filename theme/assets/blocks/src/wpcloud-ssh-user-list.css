@@ -1,7 +1,8 @@
 & {
 	.wpcloud-block-ssh-user-list__row  {
 		margin:0;
-		transition: all 1.5s ease-out;
+		transition: all 1s ease-out;
+		height: auto;
 
 		.wpcloud-site-list-menu__title {
 			margin: 4px 0;
