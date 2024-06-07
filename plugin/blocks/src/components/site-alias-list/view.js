@@ -47,11 +47,15 @@
 			wpcloud.bindFormHandler( form );
 		} );
 
-		// @TODO the new row does not have an anchor tag
-		//newRow.querySelector( 'a' ).href = `https://${alias}`;
+
+		const aliasValueNode = newRow.querySelector('.wpcloud-block-site-detail__value');
+		const anchor = document.createElement('a');
+		anchor.href = `https://${alias}`;
+		anchor.textContent = alias;
+		aliasValueNode.textContent = '';
+		aliasValueNode.appendChild(anchor);
 		aliasList.appendChild(newRow);
-		// @TODO need to figure out the old fade effect for the new row
-		//newRow.classList.add( 'wpcloud-hide' );
+
 		newRow.style.display = 'flex';
 		newRow.classList.add( 'wpcloud-block-site-alias-list__row--new' );
 
@@ -115,17 +119,26 @@
 		onSiteAliasMakePrimary
 	);
 
-	wpcloud.hooks.addAction(
-		'wpcloud_button_alias_request_make_primary',
-		'site_alias_list',
-		(button) => {
-			// find the alias attached to the button
-			const aliasRow = button.closest('.wpcloud-block-site-alias-list__row');
-			const alias = aliasRow.querySelector('.wpcloud-block-site-detail__value');
-			alias.classList.toggle('is-pending');
+	function setPending( form, action ) {
+		const aliasRow = form.closest('.wpcloud-block-site-alias-list__row');
+		const alias = aliasRow.querySelector('.wpcloud-block-site-detail__value');
+		alias.classList.toggle('is-pending');
+
+		if (action === 'site_alias_make_primary') {
 			primaryValueNode.classList.toggle('is-pending');
 		}
+	}
+	wpcloud.hooks.addAction(
+		'wpcloud_form_submit_site_alias_make_primary',
+		'site_alias_list',
+		setPending
 	);
+
+	wpcloud.hooks.addAction(
+		'wpcloud_form_submit_site_alias_remove',
+		'site_alias_list',
+		setPending
+	)
 
 	wpcloud.hooks.addAction(
 		'wpcloud_button_alias_request_remove',
