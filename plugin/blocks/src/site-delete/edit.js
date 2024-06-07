@@ -34,7 +34,7 @@ export default function Edit() {
 					'wpcloud/button',
 					{
 						className: 'wpcloud-button-site-delete',
-						label: __('Delete Site'),
+						label: __( 'Delete Site' ),
 						type: 'submit',
 					},
 				],
