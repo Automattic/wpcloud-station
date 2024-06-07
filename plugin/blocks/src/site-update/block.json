@@ -1,0 +1,16 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "wpcloud/site-update",
+	"version": "0.1.0",
+	"title": "Update Site Block",
+	"category": "wpcloud",
+	"icon": "feedback",
+	"description": "Handle site updates",
+	"example": {},
+	"supports": {
+		"html": false
+	},
+	"textdomain": "wpcloud",
+	"editorScript": "file:./index.js"
+}
