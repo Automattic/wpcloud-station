@@ -34,11 +34,14 @@ if ( 'select' === $type && in_array( $name, $dynamic_select_options ) ) {
 			$options = array();
 	}
 
+	$current_value = wpcloud_get_site_detail(get_the_ID(), $name);
+
 	$options_html = '';
 	foreach ( $options as $value => $label ) {
 		$options_html .= sprintf(
-			'<option value="%s">%s</option>',
+			'<option value="%s" %s>%s</option>',
 			esc_attr( $value ),
+			selected( $current_value, $value, false ),
 			esc_html( $label )
 		);
 	}

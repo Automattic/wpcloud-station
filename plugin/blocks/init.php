@@ -61,5 +61,5 @@ function wpcloud_block_available_datacenters_options(): array {
 }
 
 function wpcloud_block_available_wp_versions(): array {
-	return array( __( "latest" ), __( "previous" ), _( "beta" ) );
+	return array( "latest" => __( "latest" ), "previous" => __( "previous" ), "beta" => _( "beta" ) );
 }
