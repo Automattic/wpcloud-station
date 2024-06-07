@@ -39,7 +39,7 @@ async function main() {
 	}
 
 	for (const block of blocks) {
-		const cssFile = join(__dirname, '..', 'src', 'blocks', `${block.replace('/', '-')}.css`);
+		const cssFile = join(__dirname, '..', 'assets', 'blocks', 'src', `${block.replace('/', '-')}.css`);
 		if (!fs.existsSync(cssFile)) {
 			// if the block _had_ a style sheet then remove the css key
 			if (theme.styles.blocks[block].css) {
