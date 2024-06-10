@@ -9,26 +9,27 @@ export default function DetailSelect( {
 	setAttributes,
 	onChange,
 }) {
-	const { type } = attributes;
-	const selectableDetailTypes = window.wpcloud?.selectableDetails || ['wp_version', 'php_version', 'data_center' ];
+	const { context, name } = attributes;
 
-	const siteDetailKeys = window.wpcloud?.siteDetails || {};
-	let options = [];
-	for (const [key, value] of Object.entries(siteDetailKeys)) {
-		if ('select' === type && ! selectableDetailTypes.includes( key ) ) {
-			continue;
-		}
+	let options = [{ value: '', label: '-'}];
+	let optionData = {};
+	if ('input' === context) {
+		optionData = window.wpcloud?.siteMetaFields || {};
+	} else {
+		optionData = window.wpcloud?.siteDetails || {};
+	}
+
+	for (const [key, value] of Object.entries(optionData)) {
 		options.push( { value: key, label: value } );
 	}
 
-	const { name } = attributes;
 	return (
 		<SelectControl
 			label={ __( 'Select a site detail' ) }
 			value={ name }
 			options={ options }
 			onChange={ ( newName ) => {
-				const label = siteDetailKeys[ newName ] || newName;
+				const label = optionData[ newName ] || newName;
 				setAttributes( {
 					name: newName,
 					label,

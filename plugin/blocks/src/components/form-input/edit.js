@@ -90,7 +90,7 @@ function InputFieldBlock( { attributes, setAttributes, className, context } ) {
 					/>
 
 					<DetailSelectControl
-						attributes={ attributes }
+						attributes={{ context: 'input' }}
 						setAttributes={ setAttributes }
 					/>
 
