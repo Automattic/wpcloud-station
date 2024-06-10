@@ -63,3 +63,18 @@ function wpcloud_block_available_datacenters_options(): array {
 function wpcloud_block_available_wp_versions(): array {
 	return array( "latest" => __( "latest" ), "previous" => __( "previous" ), "beta" => _( "beta" ) );
 }
+
+function wpcloud_block_admin_enqueue_scripts() {
+	wp_register_script( 'wpcloud-blocks-site-form', '',);
+	wp_enqueue_script( 'wpcloud-blocks-site-form' );
+	wp_add_inline_script(
+		'wpcloud-blocks-site-form',
+		'window.wpcloud = window.wpcloud ?? {};' .
+		 'wpcloud.siteDetails=' . json_encode( WPCloud_Site::get_detail_options() ) . ';' .
+		 'wpcloud.phpVersions=' . json_encode( wpcloud_block_available_php_options() ) . ';' .
+		 'wpcloud.wpVersions=' . json_encode( wpcloud_block_available_wp_versions() ) . ';' .
+		 'wpcloud.dataCenters=' . json_encode( wpcloud_block_available_datacenters_options() ) . ';' .
+		 'wpcloud.linkableSiteDetails=' . json_encode( WPCloud_Site::get_linkable_detail_options() ) . ';'
+	);
+}
+add_action( 'admin_enqueue_scripts', 'wpcloud_block_admin_enqueue_scripts' );
