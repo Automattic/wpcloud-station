@@ -1,109 +1,109 @@
-( ( wpcloud ) => {
-	wpcloud.bindFormHandler = ( form ) => {
-		const button = form.querySelector( 'button[type="submit"]' );
+((wpcloud) => {
 
-		form.addEventListener( 'submit', async ( e ) => {
-			e.preventDefault();
-			button && button.setAttribute( 'disabled', 'disabled' );
-			form.classList.add( 'is-loading' );
-			form.classList.remove( 'is-error' );
+	async function submitFormData(form, data) {
+		form.classList.add('is-loading');
+		form.classList.remove('is-error');
 
-			const formData = Object.fromEntries(
-				new FormData( form ).entries()
-			);
-			formData.action = 'wpcloud_form_submit';
 
-			// override redirect if a ref query string is present
-			const queryString = window.location.search;
-			const urlParams = new URLSearchParams( queryString );
-			const redirect = urlParams.get( 'ref' );
-			if ( redirect ) {
-				formData.redirect = redirect;
-			}
 
-			// let other scripts know that the form is about to be submitted
-			let confirmed;
-			confirmed = wpcloud.hooks.applyFilters(
-				`wpcloud_form_should_submit_${ formData.wpcloud_action }`,
-				confirmed,
-				formData
-			);
-
-			if ( confirmed === undefined ) {
-				confirmed = wpcloud.hooks.applyFilters(
-					'wpcloud_form_should_submit',
-					confirmed,
-					formData
-				);
-			}
-
-			if ( confirmed === false ) {
-				button.removeAttribute( 'disabled' );
-				form.classList.remove( 'is-loading' );
-				return;
-			}
-
-			const action = formData.wpcloud_action;
-			wpcloud.hooks.doAction('wpcloud_form_submit', form, action );
-			if ( action ) {
-				wpcloud.hooks.doAction(`wpcloud_form_submit_${ action }`, form, action );
-			}
-			try {
-				const response = await fetch(
-					'/wp-admin/admin-ajax.php',
-					{
-						method: 'POST',
-						headers: {
-							'Content-Type': 'application/x-www-form-urlencoded',
-						},
-						body: new URLSearchParams( formData ).toString(),
-					}
-				);
-
-				const result = await response.json();
-
-				wpcloud.hooks.doAction(
-					'wpcloud_form_response',
-					result.data,
-					form
-				);
-				wpcloud.hooks.doAction(
-					`wpcloud_form_response_${ result.data.action }`,
-					result.data,
-					form
-				);
-
-				if ( response.ok && result?.data?.redirect ) {
-					if ( result.data.redirect === 'reload' ) {
-						window.location.reload();
-						return;
-					}
-					window.location = result.data.redirect;
-				}
-
-				button && button.removeAttribute( 'disabled' );
-				form.classList.remove( 'is-loading' );
-
-				if ( ! response.ok ) {
-					form.classList.add( 'is-error' );
-				}
-			} catch ( error ) {
-				/* eslint-disable no-console */
-				console.error( error );
-			}
+		// make sure the hidden input is in the form data
+		form.querySelectorAll('input[type="hidden"]').forEach((input) => {
+			data[input.name] = input.value;
 		});
 
-		const submitOnChange = form.dataset.submitOnChange;
-		if ( submitOnChange ) {
-			form.querySelectorAll('input, select').forEach((input) => {
-				if (input.type === 'text') {
+		data.action = 'wpcloud_form_submit';
+		// override redirect if a ref query string is present
+		const queryString = window.location.search;
+		const urlParams = new URLSearchParams(queryString);
+		const redirect = urlParams.get('ref');
+		if (redirect) {
+			data.redirect = redirect;
+		}
+
+		// let other scripts know that the form is about to be submitted
+		let confirmed;
+		confirmed = wpcloud.hooks.applyFilters(
+			`wpcloud_form_should_submit_${data.wpcloud_action}`,
+			confirmed,
+			data
+		);
+
+		if (confirmed === undefined) {
+			confirmed = wpcloud.hooks.applyFilters(
+				'wpcloud_form_should_submit',
+				confirmed,
+				data
+			);
+		}
+
+		if (confirmed === false) {
+			button.removeAttribute('disabled');
+			form.classList.remove('is-loading');
+			return;
+		}
+
+		const action = data.wpcloud_action;
+		wpcloud.hooks.doAction('wpcloud_form_submit', form, action);
+		if (action) {
+			wpcloud.hooks.doAction(`wpcloud_form_submit_${action}`, form, action);
+		}
+		try {
+			const response = await fetch(
+				'/wp-admin/admin-ajax.php',
+				{
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/x-www-form-urlencoded',
+					},
+					body: new URLSearchParams(data).toString(),
+				}
+			);
+
+			const result = await response.json();
+
+			wpcloud.hooks.doAction(
+				'wpcloud_form_response',
+				result.data,
+				form
+			);
+			wpcloud.hooks.doAction(
+				`wpcloud_form_response_${result.data.action}`,
+				result.data,
+				form
+			);
+
+			if (response.ok && result?.data?.redirect) {
+				if (result.data.redirect === 'reload') {
+					window.location.reload();
 					return;
 				}
-				input.addEventListener('change', () => {
-					form.dispatchEvent(new Event('submit'));
-				});
-			});
+				window.location = result.data.redirect;
+			}
+
+			button && button.removeAttribute('disabled');
+			form.classList.remove('is-loading');
+
+			if (!response.ok) {
+				form.classList.add('is-error');
+			}
+		} catch (error) {
+			/* eslint-disable no-console */
+			console.error(error);
 		}
+	}
+
+
+	wpcloud.bindFormHandler = (form) => {
+		const button = form.querySelector('button[type="submit"]');
+
+		form.addEventListener('submit', async (e) => {
+			e.preventDefault();
+			button && button.setAttribute('disabled', 'disabled');
+
+			const data = Object.fromEntries(new FormData(form));
+
+			await submitFormData(form, data);
+		});
 	};
 
 	// Fill in any missing hidden inputs closest data attribute
@@ -122,7 +122,6 @@
 	document
 		.querySelectorAll( 'form.wpcloud-block-form[data-ajax]' )
 		.forEach(wpcloud.bindFormHandler);
-
 
 
 	// Default handler for destructive actions
