@@ -64,7 +64,7 @@ function renderSelect(
 }
 
 function renderText(
-	{ type, name, label, required, placeholder },
+	{ type, name, label, required, placeholder, uniqueId },
 	inputClasses,
 	inputStyle
 ) {
@@ -77,7 +77,8 @@ function renderText(
 			required={ required }
 			aria-required={ required }
 			placeholder={ placeholder || undefined }
-			style={ inputStyle }
+			style={inputStyle}
+			id={ uniqueId }
 		/>
 	);
 }
@@ -107,22 +108,29 @@ function renderField( attributes ) {
 		: renderText( attributes, inputClasses, inputStyle );
 }
 
+
 export default function save( { attributes } ) {
-	const { type, label, name, value, inlineLabel, hideLabel } = attributes;
+	const { type, label, name, value, inlineLabel, hideLabel, displayAsToggle, uniqueId } = attributes;
 	const blockProps = useBlockProps.save();
 
 	if ( 'hidden' === type ) {
 		return <input type={ type } name={ name } value={ value } />;
 	}
 
+	const inputField = renderField( attributes );
+
 	return (
 		<div { ...blockProps }>
-			{ /* eslint-disable jsx-a11y/label-has-associated-control */ }
+			{ /* eslint-disable jsx-a11y/label-has-associated-control */}
+			{ displayAsToggle && inputField }
 			<label
 				className={ classNames( 'wpcloud-block-form-input__label', {
 					'is-label-inline': inlineLabel,
-				} ) }
+					'is-toggle': displayAsToggle
+				})}
+				for={ uniqueId }
 			>
+				{ displayAsToggle && (<span className="toggle-container"></span>)}
 				{ ! hideLabel && (
 					<span className="wpcloud-block-form-input__label-content">
 						<span className="wpcloud-block-form-input__label-text">
@@ -131,7 +139,7 @@ export default function save( { attributes } ) {
 						<InnerBlocks.Content />
 					</span>
 				) }
-				{ renderField( attributes ) }
+				{ ! displayAsToggle && inputField }
 			</label>
 			{ /* eslint-enable jsx-a11y/label-has-associated-control */ }
 		</div>

@@ -19,7 +19,7 @@ import {
 	ToggleControl,
 	SelectControl,
 } from '@wordpress/components';
-import { useCallback } from '@wordpress/element';
+import { useCallback, useEffect } from '@wordpress/element';
 
 /*
  * Internal dependencies
@@ -28,11 +28,15 @@ import './editor.scss';
 import DetailSelectControl from '../controls/site/detailSelect';
 import { Text, Select, Hidden } from './fields';
 
-function InputFieldBlock( { attributes, setAttributes, className, context } ) {
+function InputFieldBlock( { attributes, setAttributes, className, context, clientId } ) {
 	const { 'wpcloud-form/isActive': isFormActive } = context;
 
 	const { type, inlineLabel, label, adminOnly, required, name, hideLabel, displayAsToggle } =
 		attributes;
+
+	useEffect(() => {
+		setAttributes({ uniqueId: `${clientId}-${name}`})
+	}, [clientId, setAttributes, name]);
 
 	const blockProps = useBlockProps();
 
@@ -182,7 +186,8 @@ function InputFieldBlock( { attributes, setAttributes, className, context } ) {
 						/>
 						<InnerBlocks allowedBlocks={ [ 'core/paragraph', 'core/heading', 'wpcloud/icon', 'wpcloud/button', 'wpcloud/expanding-section' ] } />
 					</span>
-				) }
+				)}
+				{ displayAsToggle && ( <span className="toggle-container"></span> ) }
 				<InputTag
 					attributes={ attributes }
 					onPlaceholderChange={ updatePlaceholder }

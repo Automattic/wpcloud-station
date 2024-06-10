@@ -13,6 +13,7 @@
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",
 	"render": "file:./render.php",
+	"style": "file:./style-index.css",
 	"attributes": {
 		"type": {
 			"type": "string",
@@ -76,6 +77,10 @@
 		"displayAsToggle": {
 			"type": "boolean",
 			"default": false
+		},
+		"uniqueId": {
+			"type": "string",
+			"default": ""
 		}
 	},
 
