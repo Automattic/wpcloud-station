@@ -72,6 +72,10 @@
 			"selector": "input",
 			"source": "attribute",
 			"attribute": "value"
+		},
+		"displayAsToggle": {
+			"type": "boolean",
+			"default": false
 		}
 	},
 

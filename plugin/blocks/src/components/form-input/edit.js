@@ -31,7 +31,7 @@ import { Text, Select, Hidden } from './fields';
 function InputFieldBlock( { attributes, setAttributes, className, context } ) {
 	const { 'wpcloud-form/isActive': isFormActive } = context;
 
-	const { type, inlineLabel, label, adminOnly, required, name, hideLabel } =
+	const { type, inlineLabel, label, adminOnly, required, name, hideLabel, displayAsToggle } =
 		attributes;
 
 	const blockProps = useBlockProps();
@@ -115,7 +115,18 @@ function InputFieldBlock( { attributes, setAttributes, className, context } ) {
 								} }
 							/>
 						</>
-					) }
+					)}
+					{'checkbox' == type && (
+						<ToggleControl
+							label={__('Display as Toggle')}
+							checked={displayAsToggle}
+							onChange={(newVal) => {
+								setAttributes({
+									displayAsToggle: newVal,
+								});
+							}}
+						/>
+					)}
 					<ToggleControl
 						label={ __( 'Limit to Admins' ) }
 						checked={ adminOnly }
@@ -176,7 +187,7 @@ function InputFieldBlock( { attributes, setAttributes, className, context } ) {
 					attributes={ attributes }
 					onPlaceholderChange={ updatePlaceholder }
 					onValueChange={ updateValue }
-					className={ className }
+					className={classNames( className, { 'is-toggle': displayAsToggle } ) }
 					isSelected={ blockProps.isSelected }
 				/>
 			</span>

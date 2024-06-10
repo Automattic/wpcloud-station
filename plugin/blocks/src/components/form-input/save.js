@@ -83,7 +83,7 @@ function renderText(
 }
 
 function renderField( attributes ) {
-	const { type } = attributes;
+	const { type, displayAsToggle } = attributes;
 
 	const borderProps = getBorderClassesAndStyles( attributes );
 	const colorProps = getColorClassesAndStyles( attributes );
@@ -96,7 +96,10 @@ function renderField( attributes ) {
 	const inputClasses = classNames(
 		'wpcloud-block-form-input__input',
 		colorProps.className,
-		borderProps.className
+		borderProps.className,
+		{
+			'is-toggle': displayAsToggle,
+		}
 	);
 
 	return 'select' === type
