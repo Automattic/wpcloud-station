@@ -4,8 +4,6 @@
 		form.classList.add('is-loading');
 		form.classList.remove('is-error');
 
-
-
 		// make sure the hidden input is in the form data
 		form.querySelectorAll('input[type="hidden"]').forEach((input) => {
 			data[input.name] = input.value;
@@ -79,8 +77,9 @@
 				}
 				window.location = result.data.redirect;
 			}
-
-			button && button.removeAttribute('disabled');
+			form.querySelectorAll('button[type="submit"]').forEach((button) => {
+				button.removeAttribute('disabled');
+			});
 			form.classList.remove('is-loading');
 
 			if (!response.ok) {
@@ -94,17 +93,33 @@
 
 
 	wpcloud.bindFormHandler = (form) => {
-		const button = form.querySelector('button[type="submit"]');
+
 
 		form.addEventListener('submit', async (e) => {
+			const button = form.querySelector('button[type="submit"]');
 			e.preventDefault();
-			button && button.setAttribute('disabled', 'disabled');
+			button.setAttribute('disabled', 'disabled');
 
 			const data = Object.fromEntries(new FormData(form));
 
 			await submitFormData(form, data);
 		});
+
+		// Bind submit on change inputs
+		const submitOnChange = form.getAttribute('data-submit-on-change');
+		if (submitOnChange) {
+			form.querySelectorAll('input, select').forEach((input) => {
+				if (input.type === 'text') {
+					return;
+				}
+				input.addEventListener('change', () => {
+					const data = { [input.name]: input.value };
+					submitFormData(form, data);
+				});
+			});
+		}
 	};
+
 
 	// Fill in any missing hidden inputs closest data attribute
 	document.querySelectorAll( 'form.wpcloud-block-form' ).forEach( ( form ) => {
