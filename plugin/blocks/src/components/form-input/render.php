@@ -18,40 +18,39 @@ if ( ! $allowed ) {
 $content = apply_filters( 'wpcloud_block_form_render_field_' . $name, $content, $attributes, $block );
 $content = apply_filters( 'wpcloud_block_form_render_field', $content, $attributes, $block );
 
-$dynamic_select_options = array( 'php_version', 'data_center', 'wp_version' );
-if ( 'select' === $type && in_array( $name, $dynamic_select_options ) ) {
-	switch( $name ) {
-		case 'php_version':
-			$options = wpcloud_block_available_php_options();
-			break;
-		case 'data_center':
-			$options = wpcloud_block_available_datacenters_options();
-			break;
-		case 'wp_version':
-			$options = wpcloud_block_available_wp_versions();
-			break;
-		default:
-			$options = array();
-	}
-
+$site_meta_options = WPCloud_Site::get_meta_options();
+if ( array_key_exists($name, $site_meta_options) ) {
 	$current_value = wpcloud_get_site_detail(get_the_ID(), $name);
 	if ( is_wp_error( $current_value ) ) {
 		error_log( 'WP Cloud: ' . $current_value->get_error_message() );
 		$current_value = '';
 	}
 
-	$options_html = '';
-	foreach ( $options as $value => $label ) {
-		$options_html .= sprintf(
-			'<option value="%s" %s>%s</option>',
-			esc_attr( $value ),
-			selected( $current_value, $value, false ),
-			esc_html( $label )
-		);
+	if ( 'select' === $type ) {
+		$options = $site_meta_options[$name]['options'];
+
+		$options_html = '';
+		foreach ( $options as $value => $label ) {
+			$options_html .= sprintf(
+				'<option value="%s" %s>%s</option>',
+				esc_attr( $value ),
+				selected( $current_value, $value, false ),
+				esc_html( $label )
+			);
+		}
+
+		$regex = '/(<select[^>]*>)(?:\s*<option[^>]*>.*?<\/option>)*\s*(<\/select>)/';
+		$content = preg_replace($regex, '$1' . $options_html . '$2', $content);
+	} else {
+		if ( 'checkbox' === $type ) {
+			if ( $current_value ) {
+				error_log('current value: ' . $current_value . ' ' . $name );
+				$content = preg_replace('/(<input .*)\/>/', '$1 checked />', $content, 1);
+			}
+		} else {
+			$regex = '/(<input[^>]*>)/';
+			$content = preg_replace($regex, '$1' . $current_value, $content);
+		}
 	}
-
-	$regex = '/(<select[^>]*>)(?:\s*<option[^>]*>.*?<\/option>)*\s*(<\/select>)/';
-	$content = preg_replace($regex, '$1' . $options_html . '$2', $content);
 }
-
 echo $content;

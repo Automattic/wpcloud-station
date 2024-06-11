@@ -3,7 +3,7 @@
 	"apiVersion": 3,
 	"name": "wpcloud/form",
 	"version": "0.1.0",
-	"title": "WP Cloud Form",
+	"title": "Form",
 	"category": "wpcloud",
 	"icon": "feedback",
 	"description": "WP Cloud Form",
@@ -36,10 +36,6 @@
 			"type": "string"
 		},
 		"active": {
-			"type": "boolean",
-			"default": false
-		},
-		"submitOnChange": {
 			"type": "boolean",
 			"default": false
 		}

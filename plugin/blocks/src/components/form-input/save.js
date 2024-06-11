@@ -84,7 +84,7 @@ function renderText(
 }
 
 function renderField( attributes ) {
-	const { type, displayAsToggle } = attributes;
+	const { type, displayAsToggle, submitOnChange } = attributes;
 
 	const borderProps = getBorderClassesAndStyles( attributes );
 	const colorProps = getColorClassesAndStyles( attributes );
@@ -100,6 +100,7 @@ function renderField( attributes ) {
 		borderProps.className,
 		{
 			'is-toggle': displayAsToggle,
+			'submit-on-change': submitOnChange
 		}
 	);
 
@@ -126,7 +127,7 @@ export default function save( { attributes } ) {
 			<label
 				className={ classNames( 'wpcloud-block-form-input__label', {
 					'is-label-inline': inlineLabel,
-					'is-toggle': displayAsToggle
+					'is-toggle': displayAsToggle,
 				})}
 				for={ uniqueId }
 			>

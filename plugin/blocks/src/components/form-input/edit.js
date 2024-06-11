@@ -97,7 +97,18 @@ function InputFieldBlock( { attributes, setAttributes, className, context, clien
 						attributes={{ context: 'input' }}
 						setAttributes={ setAttributes }
 					/>
-
+					{'textarea' !== type && 'text' !== type && (
+						<ToggleControl
+							label={__('Submit on Change')}
+							checked={attributes.submitOnChange}
+							onChange={(newVal) => {
+								setAttributes({
+									submitOnChange: newVal,
+								});
+							}}
+							help={__('Submit the input on change instead of on submit. The parent form must be set to ajax.')}
+						/>
+					)}
 					{ 'checkbox' !== type && (
 						<>
 							<ToggleControl

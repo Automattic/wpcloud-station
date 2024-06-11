@@ -3,7 +3,7 @@
 	"apiVersion": 3,
 	"name": "wpcloud/form-input",
 	"version": "0.1.0",
-	"title": "WP Cloud Form Input",
+	"title": "Form Input",
 	"category": "wpcloud",
 	"icon": "forms",
 	"description": "WP Cloud Form Input block.",
@@ -81,6 +81,10 @@
 		"uniqueId": {
 			"type": "string",
 			"default": ""
+		},
+		"submitOnChange": {
+			"type": "boolean",
+			"default": false
 		}
 	},
 

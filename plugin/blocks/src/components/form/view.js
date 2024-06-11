@@ -93,32 +93,34 @@
 
 
 	wpcloud.bindFormHandler = (form) => {
-
-
 		form.addEventListener('submit', async (e) => {
 			const button = form.querySelector('button[type="submit"]');
 			e.preventDefault();
 			button.setAttribute('disabled', 'disabled');
 
+			// Ignore the submit on change inputs
+			const altForm = form.cloneNode(true);
+			altForm.querySelectorAll('.submit-on-change').forEach( input => input.remove() );
 			const data = Object.fromEntries(new FormData(form));
 
 			await submitFormData(form, data);
 		});
 
 		// Bind submit on change inputs
-		const submitOnChange = form.getAttribute('data-submit-on-change');
-		if (submitOnChange) {
-			form.querySelectorAll('input, select').forEach((input) => {
-				if (input.type === 'text') {
-					return;
+		form.querySelectorAll('.submit-on-change').forEach((input) => {
+			if (input.type === 'text') {
+				return;
+			}
+
+			input.addEventListener('change', () => {
+				const data = { [input.name]: input.value };
+				if (input.type === 'checkbox') {
+					data[input.name] = input.checked ? 1 : 0;
 				}
-				input.addEventListener('change', () => {
-					const data = { [input.name]: input.value };
-					submitFormData(form, data);
-				});
+				submitFormData(form, data);
 			});
-		}
-	};
+		});
+	}
 
 
 	// Fill in any missing hidden inputs closest data attribute
