@@ -527,6 +527,7 @@ function wpcloud_client_ssh_user_remove( int $wpcloud_site_id, string $user ): m
 }
 
 function wpcloud_client_site_meta_keys(): array {
+	// @TODO move the labels to WPCLOUD_Site::get_meta_fields()
 	return [
 		"db_charset" => __( 'DB Charset' ),
 		"db_collate" => __( 'DB Collate' ),
