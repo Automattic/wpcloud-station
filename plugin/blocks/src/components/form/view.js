@@ -101,7 +101,7 @@
 			// Ignore the submit on change inputs
 			const altForm = form.cloneNode(true);
 			altForm.querySelectorAll('.submit-on-change').forEach( input => input.remove() );
-			const data = Object.fromEntries(new FormData(form));
+			const data = Object.fromEntries(new FormData(altForm));
 
 			await submitFormData(form, data);
 		});
