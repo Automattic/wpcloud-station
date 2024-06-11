@@ -17,21 +17,28 @@ function wpcloud_block_form_site_update_handler($response, $data) {
 	}, ARRAY_FILTER_USE_BOTH );
 
 	foreach ( $site_meta as $key => $value) {
-		// canonicalize_aliases doesn't like "truthy" values
-		if ( 'canonical_aliases'  === $key ) {
-			$value = $value ? "true" : "false";
-		}
 
-		// @TODO might have to do a similar check for other meta fields
-		if ( 'suspend_after' === $key ) {
-			$current_suspend_value = wpcloud_get_site_detail( $data['site_id'], 'suspend_after');
-			if ( is_null( $current_suspend_value ) ) {
-				$current_suspend_value = '';
+		switch ( $key ) {
+			case 'canonical_aliases':
+				// canonicalize_aliases doesn't like "truthy" values
+				$value = $value ? "true" : "false";
+				break;
+
+			case 'suspend_after':
+				// Don't set the suspend_after value if it's the same as the current value or is not set.
+				$current_suspend_value = wpcloud_get_site_detail( $data['site_id'], 'suspend_after');
+				if ( is_null( $current_suspend_value ) ) {
+					$current_suspend_value = '';
+				}
+				if ( ! is_null( $current_suspend_value ) && $value === $current_suspend_value ) {
+					continue;
+				}
+
+			case 'space_quota':
+				$value = intval( $value ) .'G';
+				break;
+
 			}
-			if ( ! is_null( $current_suspend_value ) && $value === $current_suspend_value ) {
-				continue;
-			}
-		}
 
 		$result = wpcloud_client_update_site_meta( $data['wpcloud_site_id'], $key, $value );
 		if ( is_wp_error( $result ) ) {
