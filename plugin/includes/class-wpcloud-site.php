@@ -190,7 +190,7 @@ class WPCLOUD_Site {
 				],
 			"suspended" => [
 				'type' => 'select',
-				'options' => ["404" => "404", "410" => "410", "451" => "451", "480" => "480" ],
+				'options' => ["404" => __("404 - Not Found "), "410" => __( "410 - Gone" ), "451" => __( "451 - Unavailable For Legal Reasons" ), "480" => __( "480 - Temporarily Unavailable" ) ],
 				'default' => '480',
 				'hint' => __('Suspends a site. The value is the HTTP 4xx status code the site will respond with. The supported statuses are "404", "410", "451", and "480".'),
 				],

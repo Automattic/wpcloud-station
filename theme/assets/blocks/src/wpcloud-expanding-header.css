@@ -25,6 +25,9 @@
 	}
 	.wpcloud-block-expanding-section__header {
 		padding: var(--wp--preset--spacing--30) var(--wp--preset--spacing--50);
+		display: flex;
+		align-items: center;
+		gap: 12px;
 		.wp-block-heading {
 			flex: 2;
 		}

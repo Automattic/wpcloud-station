@@ -2,6 +2,7 @@
    position : relative ;
    display : inline-block;
    width : 40px;
+   min-width: 40px;
    height : 20px;
    background-color: var(--wp--preset--color--background-secondary,#474444);
    border-radius: 20px;
@@ -20,7 +21,7 @@
    }
 }
 input.is-toggle:checked + label .toggle-container::after {
-  left : 16px;
+  left : 20px;
 }
 input.is-toggle:checked + label .toggle-container {
   background-color: var(--wp--preset--color--accent-primary, #7983ff );
@@ -31,5 +32,4 @@ input.is-toggle {
 }
 .wp-block-wpcloud-form-input .wpcloud-block-form-input__label.is-toggle {
    flex-direction: row;
-   align-items: center;
 }

@@ -35,6 +35,10 @@ if ( 'select' === $type && in_array( $name, $dynamic_select_options ) ) {
 	}
 
 	$current_value = wpcloud_get_site_detail(get_the_ID(), $name);
+	if ( is_wp_error( $current_value ) ) {
+		error_log( 'WP Cloud: ' . $current_value->get_error_message() );
+		$current_value = '';
+	}
 
 	$options_html = '';
 	foreach ( $options as $value => $label ) {

@@ -15,16 +15,49 @@ const metaOptions = window.wpcloud?.siteMetaOptions || {};
 function addInputTemplate(name, label) {
 	let options = metaOptions[name]?.options;
 
+	// If there is hin text we will use that as the label
+
+	const hintText = metaOptions[name]?.hint;
+	let hint = null;
+	if ( hintText ) {
+		hint = ['wpcloud/expanding-section',
+			{
+				metadata: {
+					name: `${name} hint`,
+				},
+				clickToToggle: true,
+				hideHeader: false,
+
+			},
+			[
+				['wpcloud/expanding-header', {}, [
+					[ 'core/paragraph', { content: label }],
+					['wpcloud/icon', { icon: 'info' }]
+				]],
+				['wpcloud/expanding-content', {}, [
+					['core/paragraph', {
+						content: hintText,
+					}],
+				]],
+			]
+		];
+	}
+
 	const type = metaOptions[name]?.type || 'text';
+
+	const inputAttributes = {
+		type,
+		name,
+		label: '',
+		meta: { name: label },
+	};
 	const input = [
 		'wpcloud/form-input',
-		{
-			type,
-			name,
-			label,
-			meta: { name: label },
-		},
 	];
+
+	if (!hint) {
+		inputAttributes.label = label;
+	}
 
 	if (type === 'select') {
 		let optionData = [];
@@ -38,35 +71,14 @@ function addInputTemplate(name, label) {
 				optionData.push({ value: key, label: value });
 			}
 		}
-		input[1].options = optionData;
+		inputAttributes.options = optionData;
 	}
 
-	const hintText = metaOptions[name]?.hint;
-	if (hintText) {
-		const hint = ['wpcloud/expanding-section',
-			{
-				metadata: {
-					name: `${name} hint`,
-				},
-				clickToToggle: true,
-				hideHeader: false,
-
-			},
-			[
-				['wpcloud/expanding-header', {}, [
-					['wpcloud/icon', { icon: 'info' }],
-				]],
-				['wpcloud/expanding-content', {}, [
-					['core/paragraph', {
-						content: hintText,
-					}],
-				]],
-			]
-		];
-		input.push([ hint ]);
+	input.push(inputAttributes);
+	if (hint) {
+		input.push([hint]);
 	}
 
-	console.log("input", input);
 	return input
 }
 
