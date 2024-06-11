@@ -138,32 +138,10 @@ class WPCLOUD_Site {
 /**
 	 * Get the meta keys for a WPCLOUD_Site.
 	 *
-	 * see https://wp.cloud/apidocs-webhost/#api-Sites-site-meta
-	 * if a key is false, it is only used for getting the value
 	 * @return array
 	 */
 	public static function get_meta_fields(): array {
-		return [
-			// db_charset and db_collate should be paired
-			"db_charset" => __( 'DB Charset' ),
-			"db_collate" => __( 'DB Collate' ),
-			"suspended" => __( 'Suspended Status Code' ),
-			"suspend_after" => __( 'Suspend After' ),
-			"php_version" => __( 'PHP Version' ),
-			"wp_version" => __( 'WP Version' ),
-			"do_not_delete" => __( 'Do Not Delete' ),
-			"db_file_size" => __( 'DB File Size' ),
-			"space_quota" => __( 'Space Quota' ),
-			"max_space_quota" => __( 'Max Space Quota' ),
-			"photon_subsizes" => __( 'Photon Subsizes' ),
-			"privacy_model" => __( 'Privacy Model' ),
-			"geo_affinity" => __( 'Geo Affinity' ),
-			"static_file_404" => __( 'Static File 404' ),
-			"default_php_conns" => __( 'Default PHP Connections' ),
-			"burst_php_conns" => __( 'Burst PHP Connections' ),
-			"php_fs_permissions" => __( 'PHP FS Permissions' ),
-			"canonicalize_aliases" => __( 'Canonicalize Aliases')
-		];
+		return wpcloud_client_site_meta_keys();
 	}
 
 	/**
@@ -197,7 +175,7 @@ class WPCLOUD_Site {
 			"suspend_after" => [
 				'type' => 'text',
 				'options' => null,
-				'default' => 0,
+				'default' => false,
 				'hint' => __( 'Suspends a site after a specified time. The value is a unix Timestamp.' ),
 				],
 			"php_version" => [
@@ -223,21 +201,20 @@ class WPCLOUD_Site {
 			"space_quota" => [
 				'type' => 'text',
 				'default' => 0,
-				'hint' => __('Sets the space quota for a site. Value must be an integer followed by a size specifier like "200G". 0 means unlimited.'),
+				'hint' => __('Sets the space quota for a site. Value must be an integer followed by a size specifier like "200G".'),
 				],
 
 			"photon_subsizes" => [
-				'type' => 'select',
-				'options' => [ "0" => __( "disabled" ), "1" => __( "enabled" ), "deleted" => __( "deleted" )],
-				'default' => '0',
-				'hint' => __('controls whether WP skips generating intermediate image files when an image is uploaded. The platform is able to satisfy requests for intermediate image files whether or not they exist, so sites can save disk space by not creating them. When the a site web server receives a request for a non-existent intermediate image file, it proxies the request to Photon which responds with the intermediate image size. Can be set to "0" or "1" or deleted.'),
+				'type' => 'checkbox',
+				'default' => false,
+				'hint' => __('Controls whether WP skips generating intermediate image files when an image is uploaded. The platform is able to satisfy requests for intermediate image files whether or not they exist, so sites can save disk space by not creating them. When the a site web server receives a request for a non-existent intermediate image file, it proxies the request to Photon which responds with the intermediate image size.'),
 				],
 
 			"privacy_model" => [
 				'type' => 'select',
 				'options' => [ "wp_uploads" => "WP Uploads" ],
 				'default' => 'wp_uploads',
-				'hint' => __( 'facilitates protection of site assets. May be set to "wp_uploads" to block logged-out requests for WP uploads. If set, an AT_PRIVACY_MODEL constant will be defined in the PHP environment. Use the "site-wordpress-version" endpoint to set "wp_version".' )
+				'hint' => __( 'Facilitates protection of site assets. May be set to "wp_uploads" to block logged-out requests for WP uploads. If set, an AT_PRIVACY_MODEL constant will be defined in the PHP environment. Use the "site-wordpress-version" endpoint to set "wp_version".' )
 				],
 
 			"geo_affinity" =>  [
@@ -258,25 +235,25 @@ class WPCLOUD_Site {
 				'type' => 'select',
 				'options' => range(2,10),
 				'default' => 0,
-				'hint' => __( 'may be used to either limit allowed concurrent PHP connections or to increase the default number of concurrent connections a site can use if the web server has spare PHP connections capacity. Clients may set any value for a site between 2 and 10; the platform has more leeway if needed.' ),
+				'hint' => __( 'May be used to either limit allowed concurrent PHP connections or to increase the default number of concurrent connections a site can use if the web server has spare PHP connections capacity. Clients may set any value for a site between 2 and 10; the platform has more leeway if needed.' ),
 				],
 
 			"burst_php_conns" => [
 				'type' => 'checkbox',
-				'default' => 0,
+				'default' => false,
 				'hint' => __( 'Enable burst for sites with fewer than 10 default_php_conns. 0 or absent when default_php_conns < 10 means burst is disabled, 1 means burst is enabled.'),
 			],
 
 			"php_fs_permissions" => [
 				'type' => 'select',
-				'options' => [ "rw" => __( "Read/Write"), "ro" => __( "Read Only"), "loggedin" => __("Read only unless logged into WordPress") ],
-				'default' => 'rw',
+				'options' => [ "RW" => __( "Read/Write"), "RO" => __( "Read Only"), "LOGGEDIN" => __("Read only unless logged into WordPress") ],
+				'default' => 'RW',
 				'hint' => __( 'Sets the PHP file system permissions. May be set to `Read/Write`, `Read Only`, or `Logged in` for read only unless logged into WordPress.' ),
 				],
 
 			"canonicalize_aliases" => [
 				'type' => 'checkbox',
-				'default' => 0,
+				'default' => true,
 				'hint' => __( 'May be used to change whether a sites domain aliases redirect (default, "true") to the sites primary domain name or are served directly (when set to "false")' ),
 			],
 		];
