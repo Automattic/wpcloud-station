@@ -537,7 +537,7 @@ function wpcloud_client_site_meta_keys(): array {
 		"do_not_delete" => __( 'Do Not Delete' ),
 		"db_file_size" => __( 'DB File Size' ),
 		"space_quota" => __( 'Space Quota' ),
-		"max_space_quota" => __( 'Max Space Quota' ),
+		"max_space_quota" => __( 'Max Space Quota (Gigabytes)' ),
 		"photon_subsizes" => __( 'Photon Subsizes' ),
 		"privacy_model" => __( 'Privacy Model' ),
 		"geo_affinity" => __( 'Geo Affinity' ),
@@ -574,6 +574,29 @@ function wpcloud_client_update_site_meta( int $wpcloud_site_id, string $key, str
 
 	}
 	return wpcloud_client_post( $wpcloud_site_id, $endpoint, array("value" => $value) );
+}
+
+/**
+ * Get site meta.
+ *
+ * @param integer $wpcloud_site_id The WP Cloud Site ID.
+ * @param string  $key            The meta key to get.
+ *
+ * @return mixed|WP_Error Response body on success. WP_Error on failure.
+ */
+function wpcloud_client_get_site_meta( int $wpcloud_site_id, string $key): object {
+	if ( ! array_key_exists( $key, wpcloud_client_site_meta_keys() ) ) {
+		return new WP_Error( 'bad_request', 'Invalid meta key', array( 'status' => 400 ) );
+	}
+
+	$endpoint = "site-meta/$wpcloud_site_id/$key/get";
+	$result = wpcloud_client_get( $wpcloud_site_id, $endpoint );
+
+	// Normalize the result to be an object with the key as the property.
+	if ( ! is_object( $result ) ) {
+		$result = (object) array( $key => $result );
+	}
+	return $result;
 }
 
 /**

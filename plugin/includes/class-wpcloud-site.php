@@ -201,7 +201,7 @@ class WPCLOUD_Site {
 			"space_quota" => [
 				'type' => 'text',
 				'default' => 0,
-				'hint' => __('Sets the space quota for a site. Value must be an integer followed by a size specifier like "200G".'),
+				'hint' => __('Sets the space quota for a site. Values should be in gigabytes.'),
 				],
 
 			"photon_subsizes" => [
