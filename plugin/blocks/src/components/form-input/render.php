@@ -25,6 +25,9 @@ if ( array_key_exists($name, $site_meta_options) ) {
 		error_log( 'WP Cloud: ' . $current_value->get_error_message() );
 		$current_value = '';
 	}
+	if ( ! $current_value ) {
+		$current_value = $site_meta_options[$name]['default'] ?? '';
+	}
 
 	if ( 'select' === $type ) {
 		$options = $site_meta_options[$name]['options'];
@@ -42,14 +45,13 @@ if ( array_key_exists($name, $site_meta_options) ) {
 		$regex = '/(<select[^>]*>)(?:\s*<option[^>]*>.*?<\/option>)*\s*(<\/select>)/';
 		$content = preg_replace($regex, '$1' . $options_html . '$2', $content);
 	} else {
+		$regex = '/(<input .*)\/>/';
 		if ( 'checkbox' === $type ) {
 			if ( $current_value ) {
-				error_log('current value: ' . $current_value . ' ' . $name );
-				$content = preg_replace('/(<input .*)\/>/', '$1 checked />', $content, 1);
+				$content = preg_replace( $regex, '$1 checked />', $content, 1 );
 			}
 		} else {
-			$regex = '/(<input[^>]*>)/';
-			$content = preg_replace($regex, '$1' . $current_value, $content);
+			$content = preg_replace( $regex, '$1 value="' . $current_value . '" />', $content, 1 );
 		}
 	}
 }
