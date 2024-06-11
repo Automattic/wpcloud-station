@@ -30,11 +30,7 @@ export default function SelectField( {
 				value={ value }
 				onChange={ ( event ) => onValueChange( event.target.value ) }
 			>
-				{ options.map( ( option ) => (
-					<option key={ option.value } value={ option.value }>
-						{ option.label }
-					</option>
-				) ) }
+			{ options.map( ( option, index ) => ( <option key={ index } value={ option.value }>{ option.label }</option> ) ) }
 			</select>
 	);
 }

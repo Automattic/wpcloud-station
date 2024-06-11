@@ -526,6 +526,29 @@ function wpcloud_client_ssh_user_remove( int $wpcloud_site_id, string $user ): m
 	return wpcloud_client_post( $wpcloud_site_id, "ssh-user/$client_name/$wpcloud_site_id/remove/$user" );
 }
 
+function wpcloud_client_site_meta_keys(): array {
+	// @TODO move the labels to WPCLOUD_Site::get_meta_fields()
+	return [
+		"db_charset" => __( 'DB Charset' ),
+		"db_collate" => __( 'DB Collate' ),
+		"suspended" => __( 'Suspended Status Code' ),
+		"suspend_after" => __( 'Suspend After' ),
+		"php_version" => __( 'PHP Version' ),
+		"wp_version" => __( 'WP Version' ),
+		"do_not_delete" => __( 'Do Not Delete' ),
+		"db_file_size" => __( 'DB File Size' ),
+		"space_quota" => __( 'Space Quota' ),
+		"max_space_quota" => __( 'Max Space Quota (Gigabytes)' ),
+		"photon_subsizes" => __( 'Photon Subsizes' ),
+		"privacy_model" => __( 'Privacy Model' ),
+		"geo_affinity" => __( 'Geo Affinity' ),
+		"static_file_404" => __( 'Static File 404' ),
+		"default_php_conns" => __( 'Default PHP Connections' ),
+		"burst_php_conns" => __( 'Burst PHP Connections' ),
+		"php_fs_permissions" => __( 'PHP FS Permissions' ),
+		"canonicalize_aliases" => __( 'Canonicalize Aliases')
+	];
+}
 /**
  *
  * Update site meta.
@@ -539,6 +562,10 @@ function wpcloud_client_ssh_user_remove( int $wpcloud_site_id, string $user ): m
  * @return mixed|WP_Error Response body on success. WP_Error on failure.
  */
 function wpcloud_client_update_site_meta( int $wpcloud_site_id, string $key, string|null $value): mixed {
+	if ( ! array_key_exists( $key, wpcloud_client_site_meta_keys() ) ) {
+		return new WP_Error( 'bad_request', 'Invalid meta key', array( 'status' => 400 ) );
+	}
+
 	$endpoint = "site-meta/$wpcloud_site_id/$key/update";
 	if ( "wp_version" === $key ) {
 		$endpoint =  "site-wordpress-version/$wpcloud_site_id/$value";
@@ -548,6 +575,29 @@ function wpcloud_client_update_site_meta( int $wpcloud_site_id, string $key, str
 
 	}
 	return wpcloud_client_post( $wpcloud_site_id, $endpoint, array("value" => $value) );
+}
+
+/**
+ * Get site meta.
+ *
+ * @param integer $wpcloud_site_id The WP Cloud Site ID.
+ * @param string  $key            The meta key to get.
+ *
+ * @return mixed|WP_Error Response body on success. WP_Error on failure.
+ */
+function wpcloud_client_get_site_meta( int $wpcloud_site_id, string $key): object {
+	if ( ! array_key_exists( $key, wpcloud_client_site_meta_keys() ) ) {
+		return new WP_Error( 'bad_request', 'Invalid meta key', array( 'status' => 400 ) );
+	}
+
+	$endpoint = "site-meta/$wpcloud_site_id/$key/get";
+	$result = wpcloud_client_get( $wpcloud_site_id, $endpoint );
+
+	// Normalize the result to be an object with the key as the property.
+	if ( ! is_object( $result ) ) {
+		$result = (object) array( $key => $result );
+	}
+	return $result;
 }
 
 /**

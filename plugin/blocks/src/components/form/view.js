@@ -1,110 +1,127 @@
-( ( wpcloud ) => {
-	wpcloud.bindFormHandler = ( form ) => {
-		const button = form.querySelector( 'button[type="submit"]' );
+((wpcloud) => {
 
-		form.addEventListener( 'submit', async ( e ) => {
-			e.preventDefault();
-			button && button.setAttribute( 'disabled', 'disabled' );
-			form.classList.add( 'is-loading' );
-			form.classList.remove( 'is-error' );
+	async function submitFormData(form, data) {
+		form.classList.add('is-loading');
+		form.classList.remove('is-error');
 
-			const formData = Object.fromEntries(
-				new FormData( form ).entries()
-			);
-			formData.action = 'wpcloud_form_submit';
+		// make sure the hidden input is in the form data
+		form.querySelectorAll('input[type="hidden"]').forEach((input) => {
+			data[input.name] = input.value;
+		});
 
-			// override redirect if a ref query string is present
-			const queryString = window.location.search;
-			const urlParams = new URLSearchParams( queryString );
-			const redirect = urlParams.get( 'ref' );
-			if ( redirect ) {
-				formData.redirect = redirect;
-			}
+		data.action = 'wpcloud_form_submit';
+		// override redirect if a ref query string is present
+		const queryString = window.location.search;
+		const urlParams = new URLSearchParams(queryString);
+		const redirect = urlParams.get('ref');
+		if (redirect) {
+			data.redirect = redirect;
+		}
 
-			// let other scripts know that the form is about to be submitted
-			let confirmed;
+		// let other scripts know that the form is about to be submitted
+		let confirmed;
+		confirmed = wpcloud.hooks.applyFilters(
+			`wpcloud_form_should_submit_${data.wpcloud_action}`,
+			confirmed,
+			data
+		);
+
+		if (confirmed === undefined) {
 			confirmed = wpcloud.hooks.applyFilters(
-				`wpcloud_form_should_submit_${ formData.wpcloud_action }`,
+				'wpcloud_form_should_submit',
 				confirmed,
-				formData
+				data
+			);
+		}
+
+		if (confirmed === false) {
+			button.removeAttribute('disabled');
+			form.classList.remove('is-loading');
+			return;
+		}
+
+		const action = data.wpcloud_action;
+		wpcloud.hooks.doAction('wpcloud_form_submit', form, action);
+		if (action) {
+			wpcloud.hooks.doAction(`wpcloud_form_submit_${action}`, form, action);
+		}
+		try {
+			const response = await fetch(
+				'/wp-admin/admin-ajax.php',
+				{
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/x-www-form-urlencoded',
+					},
+					body: new URLSearchParams(data).toString(),
+				}
 			);
 
-			if ( confirmed === undefined ) {
-				confirmed = wpcloud.hooks.applyFilters(
-					'wpcloud_form_should_submit',
-					confirmed,
-					formData
-				);
-			}
+			const result = await response.json();
 
-			if ( confirmed === false ) {
-				button.removeAttribute( 'disabled' );
-				form.classList.remove( 'is-loading' );
+			wpcloud.hooks.doAction(
+				'wpcloud_form_response',
+				result.data,
+				form
+			);
+			wpcloud.hooks.doAction(
+				`wpcloud_form_response_${result.data.action}`,
+				result.data,
+				form
+			);
+
+			if (response.ok && result?.data?.redirect) {
+				if (result.data.redirect === 'reload') {
+					window.location.reload();
+					return;
+				}
+				window.location = result.data.redirect;
+			}
+			form.querySelectorAll('button[type="submit"]').forEach((button) => {
+				button.removeAttribute('disabled');
+			});
+			form.classList.remove('is-loading');
+
+			if (!response.ok) {
+				form.classList.add('is-error');
+			}
+		} catch (error) {
+			/* eslint-disable no-console */
+			console.error(error);
+		}
+	}
+
+
+	wpcloud.bindFormHandler = (form) => {
+		form.addEventListener('submit', async (e) => {
+			const button = form.querySelector('button[type="submit"]');
+			e.preventDefault();
+			button.setAttribute('disabled', 'disabled');
+
+			// Ignore the submit on change inputs
+			const altForm = form.cloneNode(true);
+			altForm.querySelectorAll('.submit-on-change').forEach( input => input.remove() );
+			const data = Object.fromEntries(new FormData(altForm));
+
+			await submitFormData(form, data);
+		});
+
+		// Bind submit on change inputs
+		form.querySelectorAll('.submit-on-change').forEach((input) => {
+			if (input.type === 'text') {
 				return;
 			}
 
-			const action = formData.wpcloud_action;
-			wpcloud.hooks.doAction('wpcloud_form_submit', form, action );
-			if ( action ) {
-				wpcloud.hooks.doAction(`wpcloud_form_submit_${ action }`, form, action );
-			}
-			try {
-				const response = await fetch(
-					'/wp-admin/admin-ajax.php',
-					{
-						method: 'POST',
-						headers: {
-							'Content-Type': 'application/x-www-form-urlencoded',
-						},
-						body: new URLSearchParams( formData ).toString(),
-					}
-				);
-
-				const result = await response.json();
-
-				wpcloud.hooks.doAction(
-					'wpcloud_form_response',
-					result.data,
-					form
-				);
-				wpcloud.hooks.doAction(
-					`wpcloud_form_response_${ result.data.action }`,
-					result.data,
-					form
-				);
-
-				if ( response.ok && result?.data?.redirect ) {
-					if ( result.data.redirect === 'reload' ) {
-						window.location.reload();
-						return;
-					}
-					window.location = result.data.redirect;
+			input.addEventListener('change', () => {
+				const data = { [input.name]: input.value };
+				if (input.type === 'checkbox') {
+					data[input.name] = input.checked ? 1 : 0;
 				}
-
-				button && button.removeAttribute( 'disabled' );
-				form.classList.remove( 'is-loading' );
-
-				if ( ! response.ok ) {
-					form.classList.add( 'is-error' );
-				}
-			} catch ( error ) {
-				/* eslint-disable no-console */
-				console.error( error );
-			}
-		});
-
-		const submitOnChange = form.dataset.submitOnChange;
-		if ( submitOnChange ) {
-			form.querySelectorAll('input, select').forEach((input) => {
-				if (input.type === 'text') {
-					return;
-				}
-				input.addEventListener('change', () => {
-					form.dispatchEvent(new Event('submit'));
-				});
+				submitFormData(form, data);
 			});
-		}
-	};
+		});
+	}
+
 
 	// Fill in any missing hidden inputs closest data attribute
 	document.querySelectorAll( 'form.wpcloud-block-form' ).forEach( ( form ) => {
@@ -122,7 +139,6 @@
 	document
 		.querySelectorAll( 'form.wpcloud-block-form[data-ajax]' )
 		.forEach(wpcloud.bindFormHandler);
-
 
 
 	// Default handler for destructive actions

@@ -129,38 +129,133 @@ class WPCLOUD_Site {
 			'ssl_info' => __( 'SSL Info' ),
 			'wp_admin_url' => __( 'WP Admin URL' ),
 			'site_ssh_user' => __( 'Site SSH User' ),
+
+			// These are read only meta fields
+			'max_space_quota' => __( 'Max Space Quota' ),
+			"space_used" => __( 'Space Used' ),
 		);
+	}
+/**
+	 * Get the meta keys for a WPCLOUD_Site.
+	 *
+	 * @return array
+	 */
+	public static function get_meta_fields(): array {
+		return wpcloud_client_site_meta_keys();
 	}
 
 	/**
-	 * Get the meta keys for a WPCLOUD_Site.
+	 * Get the options for modifiable site meta for a WPCLOUD_Site.
 	 *
 	 * see https://wp.cloud/apidocs-webhost/#api-Sites-site-meta
 	 * if a key is false, it is only used for getting the value
 	 * @return array
 	 */
-	public static function get_meta_fields(): array {
+	public static function get_meta_options(): array {
 		return [
-			// db_charset and db_collate should be paired
-			"db_charset" => [ "latin1 "=> "latin1", "utf8" => "utf8", "utf8mb4" => "utf8mb4" ],
-			"db_collate" => [ "latin1_swedish_ci" => "latin1_swedish_ci", "utf8_general_ci" => "utf8_general_ci", "utf8mb4_unicode_ci" => "utf8mb4_unicode_ci" ],
-			"suspended" => [ "404" => "404", "410" => "410", "451" => "451", "480" => "480" ],
-			"suspend_after" => [], // unix timestamp
-			"php_version" => wpcloud_client_php_versions_available(),
-			"wp_version" => [ "latest" => __("latest"), "previous" => __("previous"), "beta" => __("beta") ],
-			"do_not_delete" => [ 0 => "false", 1 => "true" ], // truthy enables do_not_delete
-			"space_used" => false, // get only
-			"db_file_size" => false, // get only
-			"space_quota" => [], // integer + unit ie. 100M,
-			"max_space_quota" => false,
-			"photon_subsizes" => [ "0", "1", "deleted"],
-			"privacy_model" => [ "wp_uploads" ] ,
-			"geo_affinity" => wpcloud_client_data_centers_available(),
-			"static_file_404" => ["lightweight", "wordpress"],
-			"default_php_conns" => range(2,10),
-			"burst_php_conns" => [0 => "disabled", 1 => "enabled"],
-			"php_fs_permissions" => [ "rw" => __( "Read/Write"), "ro" => __( "Read Only"), "loggedin" => __("Read only unless logged into WordPress") ],
-			"canonicalize_aliases" => [ 0 => "false", 1 => "true" ],
+			// db_charset and db_collate should be paired ?
+			"db_charset" => [
+				'type' => 'select',
+				'options' => [ "latin1 "=> "latin1", "utf8" => "utf8", "utf8mb4" => "utf8mb4" ],
+				'default' => 'utf8mb4',
+				'hint' => '',
+				],
+			"db_collate" => [
+				'type' => 'select',
+				'options' => [ "latin1_swedish_ci" => "latin1_swedish_ci", "utf8_general_ci" => "utf8_general_ci", "utf8mb4_unicode_ci" => "utf8mb4_unicode_ci" ],
+				'default' => 'utf8mb4_unicode_ci',
+				'hint' => '',
+				],
+			"suspended" => [
+				'type' => 'select',
+				'options' => ["404" => __("404 - Not Found "), "410" => __( "410 - Gone" ), "451" => __( "451 - Unavailable For Legal Reasons" ), "480" => __( "480 - Temporarily Unavailable" ) ],
+				'default' => '480',
+				'hint' => __('Suspends a site. The value is the HTTP 4xx status code the site will respond with. The supported statuses are "404", "410", "451", and "480".'),
+				],
+			"suspend_after" => [
+				'type' => 'text',
+				'options' => null,
+				'default' => false,
+				'hint' => __( 'Suspends a site after a specified time. The value is a unix Timestamp.' ),
+				],
+			"php_version" => [
+				'type' => 'select',
+				'options' => wpcloud_client_php_versions_available(),
+				'default' => '',
+				'hint' => 'Sets the sites PHP version.',
+				],
+
+			"wp_version" => [
+				'type' => 'select',
+				'options' =>  [ "latest" => __("latest"), "previous" => __("previous"), "beta" => __("beta") ],
+				'default' => 'latest',
+				'hint' => 'Sets the sites WordPress version.',
+				],
+
+			"do_not_delete" => [
+				'type' => 'checkbox',
+				'default' => false,
+				'hint' => __( 'Prevent a site from begin deleted. This can be useful in some cases. For example, you might wish to preserve a site while it is being reviewed for Terms of Service violations.'),
+				],
+
+			"space_quota" => [
+				'type' => 'text',
+				'default' => 0,
+				'hint' => __('Sets the space quota for a site. Values should be in gigabytes.'),
+				],
+
+			"photon_subsizes" => [
+				'type' => 'checkbox',
+				'default' => false,
+				'hint' => __('Controls whether WP skips generating intermediate image files when an image is uploaded. The platform is able to satisfy requests for intermediate image files whether or not they exist, so sites can save disk space by not creating them. When the a site web server receives a request for a non-existent intermediate image file, it proxies the request to Photon which responds with the intermediate image size.'),
+				],
+
+			"privacy_model" => [
+				'type' => 'select',
+				'options' => [ "wp_uploads" => "WP Uploads" ],
+				'default' => 'wp_uploads',
+				'hint' => __( 'Facilitates protection of site assets. May be set to "wp_uploads" to block logged-out requests for WP uploads. If set, an AT_PRIVACY_MODEL constant will be defined in the PHP environment. Use the "site-wordpress-version" endpoint to set "wp_version".' )
+				],
+
+			"geo_affinity" =>  [
+				'type' => 'select',
+				'options' => wpcloud_client_data_centers_available(),
+				'default' => '',
+				'hint' => __('Sets the sites geo affinity.'),
+				],
+
+			"static_file_404" => [
+				'type' => 'select',
+				'options' => [ "lightweight" => __( 'Lightweight' ), "wordpress" => __( 'WordPress' )],
+				'default' => 'wordpress',
+				'hint' => __( 'Set how a site responds to requests for non-existent static files. May be set to "lightweight" for simple, fast web server 404s. May be set to "wordpress" to delegate such requests to WordPress. The current default is "wordpress".' ),
+				],
+
+			"default_php_conns" => [
+				'type' => 'select',
+				'options' => range(2,10),
+				'default' => 0,
+				'hint' => __( 'May be used to either limit allowed concurrent PHP connections or to increase the default number of concurrent connections a site can use if the web server has spare PHP connections capacity. Clients may set any value for a site between 2 and 10; the platform has more leeway if needed.' ),
+				],
+
+			"burst_php_conns" => [
+				'type' => 'checkbox',
+				'default' => false,
+				'hint' => __( 'Enable burst for sites with fewer than 10 default_php_conns. 0 or absent when default_php_conns < 10 means burst is disabled, 1 means burst is enabled.'),
+			],
+
+			"php_fs_permissions" => [
+				'type' => 'select',
+				'options' => [ "RW" => __( "Read/Write"), "RO" => __( "Read Only"), "LOGGEDIN" => __("Read only unless logged into WordPress") ],
+				'default' => 'RW',
+				'hint' => __( 'Sets the PHP file system permissions. May be set to `Read/Write`, `Read Only`, or `Logged in` for read only unless logged into WordPress.' ),
+				],
+
+			"canonicalize_aliases" => [
+				'type' => 'checkbox',
+				'default' => true,
+				'hint' => __( 'May be used to change whether a sites domain aliases redirect (default, "true") to the sites primary domain name or are served directly (when set to "false")' ),
+			],
 		];
 	}
 

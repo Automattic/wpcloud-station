@@ -595,16 +595,30 @@ function wpcloud_get_site_detail( int|WP_Post $post, string $key, ): mixed {
 
 			return 'https://' . $result->domain_name . '/wp-admin';
 
+		case 'space_quota':
+			$result = wpcloud_client_get_site_meta( $wpcloud_site_id, 'space_quota' );
+			if ( is_wp_error( $result ) ) {
+				error_log( $result->get_error_message() );
+				return '';
+			}
+
+			// make the size human readable
+			$bytes = (float) $result->space_quota;
+			$i = floor(log($bytes, 1024));
+			$gigs = round($bytes / pow(1024, $i), 2);
+			return $gigs .'G';
+
+
 		case 'data_center':
 			$key = 'geo_affinity';
 		default:
 			$result = wpcloud_client_site_details( $wpcloud_site_id, true );
 	}
 
+
 	if ( is_wp_error( $result ) ) {
 		return $result;
 	}
-
 	if ('geo_affinity' === $key) {
 		return $result->extra->server_pool->geo_affinity;
 	}
