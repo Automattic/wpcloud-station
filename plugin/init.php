@@ -15,6 +15,7 @@ require_once plugin_dir_path( __FILE__ ) . 'custom-post-types/wpcloud-site.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/demo-mode.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/class-wpcloud-site.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/wpcloud-client.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/wpcloud-cache.php';
 require_once plugin_dir_path( __FILE__ ) . 'blocks/init.php';
 if ( is_admin() ) {
 	require_once plugin_dir_path( __FILE__ ) . 'admin/init.php';
