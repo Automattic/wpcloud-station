@@ -61,7 +61,8 @@ export default function Edit() {
 				[
 					'wpcloud/button',
 					{
-						text: __( 'Login In' ),
+						type: 'submit',
+						label: __( 'Login In' ),
 					},
 				],
 			],

@@ -7,6 +7,9 @@
 
 declare( strict_types = 1 );
 
+// Cache singleton for common client requests.
+$_WPCLOUD_client_cache = new stdClass();
+
 /**
  * Get WP Cloud Client Name from settings.
  *
@@ -195,11 +198,15 @@ function wpcloud_client_site_delete( int $wpcloud_site_id ): mixed {
  *
  * @return object|WP_Error Site details. WP_Error on error.
  */
-function wpcloud_client_site_details( int $wpcloud_site_id, bool $extra = false ): mixed {
+function wpcloud_client_site_details( int $wpcloud_site_id, bool $extra = false , bool $use_cache = true): mixed {
 	$path = "get-site/{$wpcloud_site_id}";
 
 	if ( $extra ) {
 		$path .= '/extra';
+	}
+
+	if ( $use_cache ) {
+		return wpcloud_client_get_through_cache( $wpcloud_site_id, fn() => wpcloud_client_get( $wpcloud_site_id, $path ) );
 	}
 
 	return wpcloud_client_get( $wpcloud_site_id, $path );
@@ -407,27 +414,31 @@ function wpcloud_client_site_ssl_retry( int $wpcloud_site_id, string $domain ): 
  *
  * @return array|WP_Error Array of PHP versions available. WP_Error on error.
  */
-function wpcloud_client_php_versions_available( bool $descending = false ): array | WP_error {
-	$client_name = wpcloud_get_client_name();
-	$response = wpcloud_client_get( null, "get-php-versions/$client_name" );
-	if ( is_wp_error( $response ) ) {
-		return $response;
-	}
+function wpcloud_client_php_versions_available( bool $descending = false , bool $use_cache = true ): stdClass | WP_error {
+	$get_php_version = function() use ( $descending ) {
+		$client_name = wpcloud_get_client_name();
+		$response = wpcloud_client_get( null, "get-php-versions/$client_name" );
+		if ( is_wp_error( $response ) ) {
+			return $response;
+		}
 
-	$result = array_reduce(
-		$response,
-		function( $versions, $version ) {
-			$versions[ $version ] = $version;
-			return $versions;
-		},
-		[]
-	);
+		$result = array_reduce(
+			$response,
+			function( $versions, $version ) {
+				$versions[ $version ] = $version;
+				return $versions;
+			},
+			[]
+		);
 
-	if ( $descending ) {
-		arsort( $result );
-	}
+		if ( $descending ) {
+			arsort( $result );
+		}
 
-	return $result;
+		return (object) $result;
+	};
+
+	return $use_cache ? wpcloud_client_get_through_cache( 0, $get_php_version, 'php_versions' ) : $get_php_version();
 }
 
 /*
@@ -452,23 +463,27 @@ function wpcloud_client_data_center_mapping(): array  {
  *
  * @return array|WP_Error List of datacenters available. WP_Error on error.
  */
-function wpcloud_client_data_centers_available( bool $include_no_preference = false ): array | WP_error {
-	$client_name = wpcloud_get_client_name();
-	$response = wpcloud_client_get( null, "get-available-datacenters/$client_name" );
-	if ( is_wp_error( $response ) ) {
-		return $response;
-	}
+function wpcloud_client_data_centers_available( bool $include_no_preference = false, bool $use_cache = true ): stdClass | WP_error {
+	$get_data_centers = function() use ( $include_no_preference ) {
+		$client_name = wpcloud_get_client_name();
+		$response = wpcloud_client_get( null, "get-available-datacenters/$client_name" );
+		if ( is_wp_error( $response ) ) {
+			return $response;
+		}
 
-	$result = array_intersect_key( wpcloud_client_data_center_mapping(), array_flip( $response ) );
+		$result = array_intersect_key( wpcloud_client_data_center_mapping(), array_flip( $response ) );
 
-	if ( $include_no_preference ) {
-		$result = array(
-			'' => __( 'No Preference' ),
-			...$result
-		);
-	}
+		if ( $include_no_preference ) {
+			$result = array(
+				'' => __( 'No Preference' ),
+				...$result
+			);
+		}
 
-	return $result;
+		return (object) $result;
+	};
+
+	return $use_cache ? wpcloud_client_get_through_cache( 0, $get_data_centers, 'data_centers' ) : $get_data_centers();
 }
 
 /**
@@ -583,21 +598,25 @@ function wpcloud_client_update_site_meta( int $wpcloud_site_id, string $key, str
  * @param integer $wpcloud_site_id The WP Cloud Site ID.
  * @param string  $key            The meta key to get.
  *
- * @return mixed|WP_Error Response body on success. WP_Error on failure.
+ * @return stdClass | WP_Error Response body on success. WP_Error on failure.
  */
-function wpcloud_client_get_site_meta( int $wpcloud_site_id, string $key): object {
-	if ( ! array_key_exists( $key, wpcloud_client_site_meta_keys() ) ) {
-		return new WP_Error( 'bad_request', 'Invalid meta key', array( 'status' => 400 ) );
-	}
+function wpcloud_client_get_site_meta( int $wpcloud_site_id, string $key, bool $use_cache = true ): stdClass | WP_Error {
+	$get_meta = function() use ( $wpcloud_site_id, $key ) {
+		if ( ! array_key_exists( $key, wpcloud_client_site_meta_keys() ) ) {
+			return new WP_Error( 'bad_request', 'Invalid meta key', array( 'status' => 400 ) );
+		}
 
-	$endpoint = "site-meta/$wpcloud_site_id/$key/get";
-	$result = wpcloud_client_get( $wpcloud_site_id, $endpoint );
+		$endpoint = "site-meta/$wpcloud_site_id/$key/get";
+		$result = wpcloud_client_get( $wpcloud_site_id, $endpoint );
 
-	// Normalize the result to be an object with the key as the property.
-	if ( ! is_object( $result ) ) {
-		$result = (object) array( $key => $result );
-	}
-	return $result;
+		// Normalize the result to be an object with the key as the property.
+		if ( ! is_object( $result ) ) {
+			$result = (object) array( $key => $result );
+		}
+		return $result;
+	};
+
+	return $use_cache ? wpcloud_client_get_through_cache( $wpcloud_site_id, $get_meta, $key ) : $get_meta();
 }
 
 /**
@@ -772,4 +791,49 @@ function wpcloud_client_request( ?int $wpcloud_site_id, string $method, string $
 	}
 
 	return $result;
+}
+
+/**
+ * Read through cache.
+ *
+ * @param int $wpcloud_site_id The site ID.
+ * @param callable $call_client The client function to call if the cache is empty.
+ * @param string $key The key to get from the cache.
+ * @return stdClass | WP_Error The result of the client function or WP_Error if the client function fails.
+ */
+function wpcloud_client_get_through_cache(int $wpcloud_site_id, callable $call_client, $key =''): stdClass | WP_Error {
+
+	// check if the client cache is enabled
+	$is_enabled = get_option( 'wpcloud_settings',[] )[ 'client_cache' ] ?? false;
+	if ( ! $is_enabled ) {
+		return $call_client();
+	}
+	global $_WPCLOUD_client_cache;
+	$cached = $_WPCLOUD_client_cache->$wpcloud_site_id ?? null;
+
+	$cache_hit = $cached && ( ! $key || ( $key && isset( $cached?->$key ) ) );
+
+	if ( $cache_hit ) {
+		return  $key ? $cached->$key : $cached;
+	}
+
+	$cache_item = $call_client();
+	if ( is_wp_error( $cache_item ) ) {
+		return $cache_item;
+	}
+
+	// If we are not looking for a key we can cache the whole result and return it.
+	if ( ! $key ) {
+		$_WPCLOUD_client_cache->$wpcloud_site_id  = $cache_item;
+		return $cache_item;
+	}
+
+	// If the cache was completely empty we need to create the object to cache the key.
+	if ( is_null( $cached ) ) {
+		$_WPCLOUD_client_cache->$wpcloud_site_id = new stdClass();
+	}
+
+	$_WPCLOUD_client_cache->$wpcloud_site_id->$key = $cache_item;
+
+	return $cache_item;
 }

@@ -575,7 +575,13 @@ function wpcloud_get_site_detail( int|WP_Post $post, string $key, ): mixed {
 			return '';
 
 		case 'ip_addresses':
-			$result = wpcloud_client_site_ip_addresses( $post->post_title );
+			$details = wpcloud_client_site_details( $wpcloud_site_id );
+			if ( is_wp_error( $details ) ) {
+				error_log( $details->get_error_message() );
+				return '';
+			}
+			$domain = $details->domain_name;
+			$result = wpcloud_client_site_ip_addresses( $domain );
 
 			if ( is_wp_error( $result ) ) {
 				error_log( $result->get_error_message() );

@@ -47,7 +47,7 @@ function wpcloud_block_available_php_options(): array {
 		error_log( 'WP Cloud: ' . $php_versions->get_error_message() );
 		return [];
 	}
-	return $php_versions;
+	return (array) $php_versions;
 }
 
 function wpcloud_block_available_datacenters_options(): array {
@@ -57,7 +57,7 @@ function wpcloud_block_available_datacenters_options(): array {
 		return array( '' => __( 'No Preference' ) );
 	}
 
-	return $available_data_centers;
+	return (array) $available_data_centers;
 }
 
 function wpcloud_block_available_wp_versions(): array {
