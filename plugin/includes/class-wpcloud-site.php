@@ -180,7 +180,7 @@ class WPCLOUD_Site {
 				],
 			"php_version" => [
 				'type' => 'select',
-				'options' => wpcloud_client_php_versions_available(),
+				'options' => wpcloud_cached_php_versions_available(),
 				'default' => '',
 				'hint' => 'Sets the sites PHP version.',
 				],
@@ -219,7 +219,7 @@ class WPCLOUD_Site {
 
 			"geo_affinity" =>  [
 				'type' => 'select',
-				'options' => wpcloud_client_data_centers_available(),
+				'options' => wpcloud_cached_data_centers_available(),
 				'default' => '',
 				'hint' => __('Sets the sites geo affinity.'),
 				],

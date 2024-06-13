@@ -42,16 +42,16 @@ add_filter( 'block_categories_all' , function( $categories ) {
 } );
 
 function wpcloud_block_available_php_options(): array {
-	$php_versions = wpcloud_client_php_versions_available( true );
+	$php_versions = wpcloud_cached_php_versions_available( true );
 	if ( is_wp_error( $php_versions) ) {
 		error_log( 'WP Cloud: ' . $php_versions->get_error_message() );
 		return [];
 	}
-	return $php_versions;
+	return (array) $php_versions;
 }
 
 function wpcloud_block_available_datacenters_options(): array {
-	$available_data_centers  = wpcloud_client_data_centers_available( true );
+	$available_data_centers  = wpcloud_cached_data_centers_available( true );
 	if ( is_wp_error( $available_data_centers ) ) {
 		error_log( 'WP Cloud: ' . $available_data_centers->get_error_message() );
 		return array( '' => __( 'No Preference' ) );

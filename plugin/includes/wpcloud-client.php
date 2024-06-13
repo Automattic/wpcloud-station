@@ -407,7 +407,7 @@ function wpcloud_client_site_ssl_retry( int $wpcloud_site_id, string $domain ): 
  *
  * @return array|WP_Error Array of PHP versions available. WP_Error on error.
  */
-function wpcloud_client_php_versions_available( bool $descending = false ): array | WP_error {
+function wpcloud_client_php_versions_available( bool $descending = false ): stdClass | WP_error {
 	$client_name = wpcloud_get_client_name();
 	$response = wpcloud_client_get( null, "get-php-versions/$client_name" );
 	if ( is_wp_error( $response ) ) {
@@ -427,7 +427,7 @@ function wpcloud_client_php_versions_available( bool $descending = false ): arra
 		arsort( $result );
 	}
 
-	return $result;
+	return (object) $result;
 }
 
 /*
@@ -452,7 +452,7 @@ function wpcloud_client_data_center_mapping(): array  {
  *
  * @return array|WP_Error List of datacenters available. WP_Error on error.
  */
-function wpcloud_client_data_centers_available( bool $include_no_preference = false ): array | WP_error {
+function wpcloud_client_data_centers_available( bool $include_no_preference = false ): stdClass | WP_error {
 	$client_name = wpcloud_get_client_name();
 	$response = wpcloud_client_get( null, "get-available-datacenters/$client_name" );
 	if ( is_wp_error( $response ) ) {
@@ -468,7 +468,7 @@ function wpcloud_client_data_centers_available( bool $include_no_preference = fa
 		);
 	}
 
-	return $result;
+	return (object) $result;
 }
 
 /**
