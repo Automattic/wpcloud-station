@@ -19,6 +19,10 @@
 		border-top-right-radius: 0;
 	}
 	.wpcloud-block-expanding-section__content-inner {
-		padding: 5px 16px;
+		padding: 1rem;
+	}
+	.wp-block-wpcloud-form {
+		margin-top: 0;
+
 	}
 }
