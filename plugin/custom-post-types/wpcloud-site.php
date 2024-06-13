@@ -575,13 +575,13 @@ function wpcloud_get_site_detail( int|WP_Post $post, string $key, ): mixed {
 			return '';
 
 		case 'ip_addresses':
-			$details = wpcloud_cached_site_details( $wpcloud_site_id );
+			$details = wpcloud_client_site_details( $wpcloud_site_id );
 			if ( is_wp_error( $details ) ) {
 				error_log( $details->get_error_message() );
 				return '';
 			}
 			$domain = $details->domain_name;
-			$result = wpcloud_cached_site_ip_addresses( $wpcloud_site_id, $domain );
+			$result = wpcloud_client_site_ip_addresses( $domain );
 
 			if ( is_wp_error( $result ) ) {
 				error_log( $result->get_error_message() );
@@ -593,8 +593,7 @@ function wpcloud_get_site_detail( int|WP_Post $post, string $key, ): mixed {
 			return $post->post_title;
 
 		case 'wp_admin_url':
-			$result = wpcloud_cached_site_details( $wpcloud_site_id, true );
-			error_log( print_r( $result, true ) );
+			$result = wpcloud_client_site_details( $wpcloud_site_id, true );
 			if ( is_wp_error( $result ) ) {
 				error_log( $result->get_error_message() );
 				return '';
@@ -603,7 +602,7 @@ function wpcloud_get_site_detail( int|WP_Post $post, string $key, ): mixed {
 			return 'https://' . $result->domain_name . '/wp-admin';
 
 		case 'space_quota':
-			$result = wpcloud_cached_get_site_meta( $wpcloud_site_id, 'space_quota' );
+			$result = wpcloud_client_get_site_meta( $wpcloud_site_id, 'space_quota' );
 			if ( is_wp_error( $result ) ) {
 				error_log( $result->get_error_message() );
 				return '';
@@ -619,7 +618,7 @@ function wpcloud_get_site_detail( int|WP_Post $post, string $key, ): mixed {
 		case 'data_center':
 			$key = 'geo_affinity';
 		default:
-			$result = wpcloud_cached_site_details( $wpcloud_site_id, true );
+			$result = wpcloud_client_site_details( $wpcloud_site_id, true );
 	}
 
 
