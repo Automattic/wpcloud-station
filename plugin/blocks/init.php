@@ -57,7 +57,7 @@ function wpcloud_block_available_datacenters_options(): array {
 		return array( '' => __( 'No Preference' ) );
 	}
 
-	return $available_data_centers;
+	return (array) $available_data_centers;
 }
 
 function wpcloud_block_available_wp_versions(): array {
