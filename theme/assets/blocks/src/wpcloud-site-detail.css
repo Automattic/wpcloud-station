@@ -2,6 +2,7 @@
 	display: flex;
 	flex-direction: column;
 	gap: 0.25em;
+	margin-top: 1rem;
 
 	&.is-inline {
 		flex-direction: row;
@@ -24,12 +25,7 @@
 	}
 
 	.wpcloud-block-site-detail__title {
-		margin-top: var(--wp--preset--spacing--50);
-		margin-bottom: var(--wp--preset--spacing--20);
-
-		h4 {
-			margin: 0;
-		}
+		margin-bottom: var(--wp--preset--spacing--30);
 	}
 
 	.wpcloud-block-site-detail__title-content {
@@ -37,6 +33,7 @@
 		margin: 0;
 		color: var(--wp--preset--color--foreground-secondary);
 		font-size: var(--wp--preset--font-size--body-small);
+		font-weight: normal;;
 	}
 
 	.wpcloud-block-site-detail__value {

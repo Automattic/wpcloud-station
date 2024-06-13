@@ -25,11 +25,16 @@
 	}
 	.wpcloud-block-expanding-section__header {
 		padding: var(--wp--preset--spacing--30) var(--wp--preset--spacing--50);
+		color: var(--wp--preset--color--foreground-secondary);
 		display: flex;
 		align-items: center;
 		gap: 12px;
 		.wp-block-heading {
 			flex: 2;
+		}
+		.wp-block-heading {
+			margin: 8px 0;
+			text-transform: none;
 		}
 	}
 	.wpcloud_expanding_section_header_chevron {

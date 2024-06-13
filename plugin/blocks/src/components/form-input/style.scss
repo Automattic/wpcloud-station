@@ -25,6 +25,7 @@ input.is-toggle:checked + label .toggle-container::after {
 }
 input.is-toggle:checked + label .toggle-container {
   background-color: var(--wp--preset--color--accent-primary, #7983ff );
+  border: none;
 }
 
 input.is-toggle {
