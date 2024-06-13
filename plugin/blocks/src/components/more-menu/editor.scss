@@ -1,10 +1,11 @@
 
 .wpcloud-more-menu-wrapper {
 	position: relative;
-	button {
+	div {
 		border: none;
 		background: none;
 		color: var(--wp--preset--color--foreground-secondary);
+		background-color: var(--wp--preset--color--background-secondary, #FFFFFF );
 		svg {
 			fill: currentColor;
 		}
@@ -22,10 +23,14 @@
 	&.hide-menu {
 		display: none;
 	}
+	width: fit-content;
 	min-width: 180px;
 	background-color: var(--wp--preset--color--background-secondary, #FFFFFF );
 	.wpcloud-site-list-menu__title {
 		text-align: center;
+	}
+	p {
+		max-width: 360px;
 	}
 }
 

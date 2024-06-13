@@ -18,6 +18,10 @@
 		"showMenu": {
 			"type": "boolean",
 			"default": false
+		},
+		"icon":{
+			"type": "string",
+			"default": "moreVertical"
 		}
 	}
 }

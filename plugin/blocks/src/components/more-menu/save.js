@@ -7,9 +7,10 @@ import classNames from 'classnames';
  * WordPress dependencies
  */
 import { InnerBlocks, useBlockProps } from '@wordpress/block-editor';
-import { Icon, moreVertical } from '@wordpress/icons';
+import * as icons from '@wordpress/icons';
+const { Icon } = icons;
 
-export default function save() {
+export default function save({ attributes: { icon } }) {
 	const blockProps = useBlockProps.save();
 	return (
 		<div
@@ -20,7 +21,7 @@ export default function save() {
 			) }
 		>
 			<button className="wpcloud-more-menu__button">
-				<Icon icon={ moreVertical } />
+				<Icon icon={ icons[icon] } />
 			</button>
 			<nav className="wpcloud-more-menu__nav is-closed">
 				<InnerBlocks.Content />

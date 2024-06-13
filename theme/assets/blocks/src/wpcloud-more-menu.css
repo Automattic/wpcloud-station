@@ -20,14 +20,16 @@
 		right: 0;
 		z-index: 10;
 
+		width: fit-content;
+		min-width: 180px;
+
 		background-color: var(--wp--preset--color--background-secondary);
 
 		display: none;
 		flex-direction: column;
 
 		margin: 0;
-		padding: 16px 24px 8px;
-		min-width: 138px;
+		padding: 8px 16px;
 
 		box-shadow: 0px 2px 10px 0px #00000040;
 		border-radius: 10px;
@@ -68,7 +70,10 @@
 			justify-content: space-between;
 			font-size: var(--wp--preset--font-size--body-medium);
 		}
+
+		p {
+			max-width: 360px;
+			width: fit-content;
+		}
 	}
-
-
 }
