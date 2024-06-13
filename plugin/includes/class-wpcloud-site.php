@@ -115,7 +115,7 @@ class WPCLOUD_Site {
 			'wp_version' => __( 'WP Version' ),
 			'php_version' => __( 'PHP Version' ),
 			'static_file_404' => __( 'Static File 404' ),
-			'db_pass' => __( 'DB Password' ),
+			// 'db_pass' => __( 'DB Password' ),
 			'db_charset' => __( 'DB Charset' ),
 			'db_collate' => __( 'DB Collate' ),
 			'cache_prefix' => __( 'Cache Prefix' ),
@@ -160,24 +160,28 @@ class WPCLOUD_Site {
 				'default' => 'utf8mb4',
 				'hint' => '',
 				],
+
 			"db_collate" => [
 				'type' => 'select',
 				'options' => [ "latin1_swedish_ci" => "latin1_swedish_ci", "utf8_general_ci" => "utf8_general_ci", "utf8mb4_unicode_ci" => "utf8mb4_unicode_ci" ],
 				'default' => 'utf8mb4_unicode_ci',
 				'hint' => '',
 				],
+
 			"suspended" => [
 				'type' => 'select',
 				'options' => ["404" => __("404 - Not Found "), "410" => __( "410 - Gone" ), "451" => __( "451 - Unavailable For Legal Reasons" ), "480" => __( "480 - Temporarily Unavailable" ) ],
 				'default' => '480',
 				'hint' => __('Suspends a site. The value is the HTTP 4xx status code the site will respond with. The supported statuses are "404", "410", "451", and "480".'),
 				],
+
 			"suspend_after" => [
 				'type' => 'text',
 				'options' => null,
 				'default' => false,
 				'hint' => __( 'Suspends a site after a specified time. The value is a unix Timestamp.' ),
 				],
+
 			"php_version" => [
 				'type' => 'select',
 				'options' => wpcloud_client_php_versions_available(),
@@ -215,13 +219,6 @@ class WPCLOUD_Site {
 				'options' => [ "wp_uploads" => "WP Uploads" ],
 				'default' => 'wp_uploads',
 				'hint' => __( 'Facilitates protection of site assets. May be set to "wp_uploads" to block logged-out requests for WP uploads. If set, an AT_PRIVACY_MODEL constant will be defined in the PHP environment. Use the "site-wordpress-version" endpoint to set "wp_version".' )
-				],
-
-			"geo_affinity" =>  [
-				'type' => 'select',
-				'options' => wpcloud_client_data_centers_available(),
-				'default' => '',
-				'hint' => __('Sets the sites geo affinity.'),
 				],
 
 			"static_file_404" => [

@@ -556,7 +556,6 @@ function wpcloud_client_site_meta_keys(): array {
 		"max_space_quota" => __( 'Max Space Quota (Gigabytes)' ),
 		"photon_subsizes" => __( 'Photon Subsizes' ),
 		"privacy_model" => __( 'Privacy Model' ),
-		"geo_affinity" => __( 'Geo Affinity' ),
 		"static_file_404" => __( 'Static File 404' ),
 		"default_php_conns" => __( 'Default PHP Connections' ),
 		"burst_php_conns" => __( 'Burst PHP Connections' ),
