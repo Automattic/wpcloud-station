@@ -135,7 +135,7 @@ function wpcloud_settings_init(): void {
 			'label_for'           => 'client_cache',
 			'class'               => 'wpcloud_row',
 			'wpcloud_custom_data' => 'custom',
-			'description'         => __( 'Enable caching of client requests to reduce the number of requests to the WP Cloud API and speed up page loads. The cache is stored in memory per request.'),
+			'description'         => __( 'Enable caching of common client requests to reduce the number of requests to the WP Cloud API and speed up page loads. The cache is stored in memory per request.'),
 			'type'                => 'checkbox',
 			'checked'             => get_option( 'wpcloud_settings',[] )[ 'client_cache' ] ?? false,
 		]
