@@ -20,6 +20,11 @@ $_WPCLOUD_client_cache = new stdClass();
  * @return WP_Error|array The result of the client function or WP_Error if the client function fails.
  */
 function wpcloud_cache_get_through(int $wpcloud_site_id, callable $call_client, $key =''): mixed {
+
+	$is_enabled = get_option( 'wpcloud_settings',[] )[ 'client_cache' ] ?? false;
+	if ( ! $is_enabled ) {
+		return $call_client();
+	}
 	global $_WPCLOUD_client_cache;
 	$cached = $_WPCLOUD_client_cache->$wpcloud_site_id ?? null;
 
