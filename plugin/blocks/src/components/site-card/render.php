@@ -8,14 +8,23 @@ if ( ! is_wpcloud_site_post() ) {
 	return;
 }
 
+
+
 // @TODO get real site thumbnail
 $site_thumbnail = wpcloud_station_get_assets_url( '/images/Gravatar_filled_' . get_the_ID() % 5 . '.png' );
 
 $wrapper = 'div';
 $classNames = $attributes['className'] ?? '';
+$post_in_loop_id = get_the_ID();
+$post_id = get_queried_object_id();
+if ( $post_in_loop_id === $post_id ) {
+	$classNames .= ' is-current';
+}
+
 
 $wrapper_attributes = $wrapper . ' ' .  get_block_wrapper_attributes( array( 'class' => trim( $classNames ) ) );
-$domain = wpcloud_get_site_detail( get_the_ID(), 'domain_name' );
+
+$domain = wpcloud_get_site_detail( $post_in_loop_id, 'domain_name' );
 if (is_wp_error($domain)) {
 	error_log('Error getting domain name: ' . $domain->get_error_message());
 	$domain = '';
