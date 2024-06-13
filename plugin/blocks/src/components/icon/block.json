@@ -22,8 +22,8 @@
 			"default": "wordpress"
 		},
 		"size": {
-			"type": "integer",
-			"default": 24
+			"type": "string",
+			"default": "24"
 		}
 	}
 }
