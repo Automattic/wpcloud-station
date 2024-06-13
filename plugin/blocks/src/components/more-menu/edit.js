@@ -13,7 +13,7 @@ import {
 	InspectorControls,
 	InnerBlocks,
 } from '@wordpress/block-editor';
-import { ToggleControl, PanelBody } from '@wordpress/components';
+import { ToggleControl, PanelBody, SelectControl } from '@wordpress/components';
 import * as icons from '@wordpress/icons';
 import { useSelect } from '@wordpress/data';
 import { useEffect } from '@wordpress/element';
@@ -38,7 +38,7 @@ export default function Edit( {
 	clientId,
 	isSelected
 } ) {
-	const { showMenu, icon } = attributes;
+	const { showMenu, icon, position } = attributes;
 	const blockProps = useBlockProps();
 
 	const isChildSelected = useSelect( ( select ) =>
@@ -68,9 +68,24 @@ export default function Edit( {
 						} );
 					} }
 				/>
+				<SelectControl
+					label={__('Position')}
+					value={position}
+					options={[
+						{ label: 'Left', value: 'left' },
+						{ label: 'Right', value: 'right' },
+					] }
+					onChange={(newVal) => {
+						setAttributes({ position: newVal });
+					}}
+					hint={__('Select the position of the menu')}
+				/>
+
 			</PanelBody>
 		</InspectorControls>
 	);
+
+	const positionCss = position === 'left' ? { right: 0} : {left: 0};
 
 	return (
 		<>
@@ -100,7 +115,8 @@ export default function Edit( {
 							{
 								'hide-menu': ! showMenu,
 							}
-						) }
+						)}
+					style={positionCss}
 					/>
 			</div>
 		</>

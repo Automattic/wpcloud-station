@@ -1,11 +1,10 @@
 
 .wpcloud-more-menu-wrapper {
 	position: relative;
-	div {
+	.wpcloud-more-menu__button {
 		border: none;
 		background: none;
 		color: var(--wp--preset--color--foreground-secondary);
-		background-color: var(--wp--preset--color--background-secondary, #FFFFFF );
 		svg {
 			fill: currentColor;
 		}
