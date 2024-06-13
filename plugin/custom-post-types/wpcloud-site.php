@@ -648,6 +648,11 @@ function wpcloud_should_refresh_detail( string $key ): bool {
 
 	return in_array( $key, $refresh_keys, true );
 }
+
+/**
+ * Get the current site ID.
+ * @return int The site ID.
+ */
 function wpcloud_get_current_site_id(): int {
 	$post_id = get_the_ID();
 	if ( ! $post_id ) {

@@ -1,7 +1,7 @@
 
 .wpcloud-more-menu-wrapper {
 	position: relative;
-	button {
+	.wpcloud-more-menu__button {
 		border: none;
 		background: none;
 		color: var(--wp--preset--color--foreground-secondary);
@@ -22,10 +22,14 @@
 	&.hide-menu {
 		display: none;
 	}
+	width: fit-content;
 	min-width: 180px;
 	background-color: var(--wp--preset--color--background-secondary, #FFFFFF );
 	.wpcloud-site-list-menu__title {
 		text-align: center;
+	}
+	p {
+		max-width: 360px;
 	}
 }
 

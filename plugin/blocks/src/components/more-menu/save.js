@@ -7,10 +7,13 @@ import classNames from 'classnames';
  * WordPress dependencies
  */
 import { InnerBlocks, useBlockProps } from '@wordpress/block-editor';
-import { Icon, moreVertical } from '@wordpress/icons';
+import * as icons from '@wordpress/icons';
+const { Icon } = icons;
 
-export default function save() {
+export default function save({ attributes }) {
+	const { icon, position } = attributes;
 	const blockProps = useBlockProps.save();
+	const positionCss = position == 'left' ? {right: 0} : {left: 0};
 	return (
 		<div
 			{ ...blockProps }
@@ -20,9 +23,12 @@ export default function save() {
 			) }
 		>
 			<button className="wpcloud-more-menu__button">
-				<Icon icon={ moreVertical } />
+				<Icon icon={ icons[icon] } />
 			</button>
-			<nav className="wpcloud-more-menu__nav is-closed">
+			<nav
+				className="wpcloud-more-menu__nav is-closed"
+				style={ positionCss }
+			>
 				<InnerBlocks.Content />
 			</nav>
 		</div>

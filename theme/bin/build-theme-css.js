@@ -36,6 +36,8 @@ async function main() {
 	const filters = process.argv.slice(2).filter(arg => !arg.startsWith('-'));
 	if (filters.length > 0) {
 		blocks = Object.keys(blocks).filter(block => filters.find(filter => block.startsWith(filter)));
+	} else {
+		blocks = Object.keys(blocks);
 	}
 
 	for (const block of blocks) {

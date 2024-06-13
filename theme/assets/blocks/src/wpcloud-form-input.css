@@ -36,6 +36,12 @@
 			.toggle-container {
 				margin-right: 6px;
 			}
+			&:checked + label .toggle-container {
+				border: none;
+			}
+			&:checked {
+				background-color: blue;
+			}
 		}
 		.wpcloud-block-expanding-section {
 			background: none;

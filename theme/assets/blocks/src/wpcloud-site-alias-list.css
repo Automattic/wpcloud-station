@@ -21,8 +21,11 @@
 	}
 	.wpcloud-block-site-alias-list__row, .wpcloud-block-site-alias-list__row--primary {
 		padding: 20px 0;
-		&:not(:last-child) {
-			border-bottom: 1px solid var(--wp--preset--color--background-tertiary);
+		&:not(:first-child) {
+			border-top: 1px solid var(--wp--preset--color--background-tertiary);
+		}
+		&:last-child {
+			padding-bottom: 0;
 		}
 	}
 

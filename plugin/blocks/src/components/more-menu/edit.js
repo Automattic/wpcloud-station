@@ -13,14 +13,15 @@ import {
 	InspectorControls,
 	InnerBlocks,
 } from '@wordpress/block-editor';
-import { ToggleControl, PanelBody } from '@wordpress/components';
-import { Icon, moreVertical } from '@wordpress/icons';
+import { ToggleControl, PanelBody, SelectControl } from '@wordpress/components';
+import * as icons from '@wordpress/icons';
 import { useSelect } from '@wordpress/data';
 import { useEffect } from '@wordpress/element';
-
+const Icon = icons.Icon;
 /**
  * Internal dependencies
  */
+import IconSelect from '../controls/iconSelect.js';
 import './editor.scss';
 
 /**
@@ -37,7 +38,7 @@ export default function Edit( {
 	clientId,
 	isSelected
 } ) {
-	const { showMenu } = attributes;
+	const { showMenu, icon, position } = attributes;
 	const blockProps = useBlockProps();
 
 	const isChildSelected = useSelect( ( select ) =>
@@ -56,7 +57,8 @@ export default function Edit( {
 
 	const controls = (
 		<InspectorControls>
-			<PanelBody title={ __( 'Form Settings' ) }>
+			<PanelBody title={__('Form Settings')}>
+				<IconSelect { ...{ attributes, setAttributes } } />
 				<ToggleControl
 					label={ __( 'Show Menu' ) }
 					checked={ showMenu }
@@ -66,9 +68,24 @@ export default function Edit( {
 						} );
 					} }
 				/>
+				<SelectControl
+					label={__('Position')}
+					value={position}
+					options={[
+						{ label: 'Left', value: 'left' },
+						{ label: 'Right', value: 'right' },
+					] }
+					onChange={(newVal) => {
+						setAttributes({ position: newVal });
+					}}
+					hint={__('Select the position of the menu')}
+				/>
+
 			</PanelBody>
 		</InspectorControls>
 	);
+
+	const positionCss = position === 'left' ? { right: 0} : {left: 0};
 
 	return (
 		<>
@@ -79,7 +96,7 @@ export default function Edit( {
 					'wpcloud-more-menu-wrapper'
 				) }
 			>
-					<button
+					<div
 						className="wpcloud-more-menu__button"
 						onClick={ () => {
 							setAttributes( {
@@ -87,8 +104,8 @@ export default function Edit( {
 							} );
 						} }
 					>
-						<Icon icon={ moreVertical } />
-					</button>
+						<Icon icon={ icons[icon] } />
+					</div>
 					<div
 						{ ...innerBlocksProps }
 						className={ classNames(
@@ -98,7 +115,8 @@ export default function Edit( {
 							{
 								'hide-menu': ! showMenu,
 							}
-						) }
+						)}
+					style={positionCss}
 					/>
 			</div>
 		</>

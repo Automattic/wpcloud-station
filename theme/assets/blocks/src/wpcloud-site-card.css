@@ -47,10 +47,14 @@
 		}
 	}
 
-	&.wpcloud-site-card--current {
+	&.wpcloud-site-card--primary {
 
 		grid-template-columns: 56px 1fr;
 		grid-template-rows: repeat(2, 28px);
+
+		h2 {
+			align-self: center;
+		}
 
 		img {
 			width: 56px;
@@ -68,4 +72,6 @@
 			}
 		}
 	}
+
+
 }

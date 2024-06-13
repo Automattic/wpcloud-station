@@ -25,5 +25,8 @@
 		&:not(:last-child) {
 			border-bottom: 1px solid var(--wp--preset--color--background-tertiary);
 		}
+		&:last-child {
+			padding-bottom: 0;
+		}
 	}
 }

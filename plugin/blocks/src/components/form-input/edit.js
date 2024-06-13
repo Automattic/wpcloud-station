@@ -195,7 +195,7 @@ function InputFieldBlock( { attributes, setAttributes, className, context, clien
 							}
 							data-empty={ label ? false : true }
 						/>
-						<InnerBlocks allowedBlocks={ [ 'core/paragraph', 'core/heading', 'wpcloud/icon', 'wpcloud/button', 'wpcloud/expanding-section' ] } />
+						<InnerBlocks allowedBlocks={ [ 'core/paragraph', 'core/heading', 'wpcloud/icon', 'wpcloud/button', 'wpcloud/expanding-section', 'core/group', 'wpcloud/more-menu'] } />
 					</span>
 				)}
 				{ displayAsToggle && ( <span className="toggle-container"></span> ) }

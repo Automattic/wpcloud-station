@@ -9,22 +9,21 @@ import classNames from 'classnames';
 import { __ } from '@wordpress/i18n';
 import {
 	InspectorControls,
-	RichText,
 	useBlockProps,
 } from '@wordpress/block-editor';
-import { PanelBody, SelectControl, TextControl } from '@wordpress/components';
+import { PanelBody,TextControl } from '@wordpress/components';
 import * as icons from '@wordpress/icons';
 
 const Icon = icons.Icon;
 
-const iconOptions = Object.keys( icons ).map( ( key ) =>
-	key === 'Icon' ? { label: '', key: '' } : { label: key, value: key }
-);
 
 /**
  *
  * Internal dependencies
  */
+
+import IconSelect from '../controls/iconSelect.js';
+
 export default function ( { attributes, setAttributes, className } ) {
 	const { icon, size } = attributes;
 	const blockProps = useBlockProps();
@@ -32,14 +31,7 @@ export default function ( { attributes, setAttributes, className } ) {
 	const controls = (
 		<InspectorControls>
 			<PanelBody label={ __( 'Settings' ) }>
-				<SelectControl
-					label={ __( 'Icon' ) }
-					value={ icon }
-					options={ iconOptions }
-					onChange={ ( newVal ) => {
-						setAttributes( { icon: newVal } );
-					} }
-				/>
+				<IconSelect { ...{ attributes, setAttributes } } />
 				<TextControl
 					label={ __( 'size' ) }
 					value={ size }

@@ -3,11 +3,14 @@
 	border-collapse: collapse;
 
 	th {
-		color: var(--wp--preset--color-foreground-secondary);
+		color: var(--wp--preset--color--foreground-secondary);
 		border: none;
+		padding-top: 13px;
+		padding-bottom: 18px;
 		h2 {
 				font-weight: 400;
 				font-size: var(--wp--preset--font-size--small-caps);
+				color: var(--wp--preset--color--foreground-secondary);
 				text-transform: uppercase;
 		}
 		svg {

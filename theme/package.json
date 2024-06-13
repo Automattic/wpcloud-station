@@ -7,7 +7,7 @@
     "buildThemeCss": "bin/build-theme-css.js"
   },
   "scripts": {
-    "build:css": "node bin/build-theme-css.js wpcloud",
+    "build:css": "node bin/build-theme-css.js",
     "watch:css": "onchange 'assets/blocks/src/*.css' -- npm run build:css"
   },
   "repository": {
