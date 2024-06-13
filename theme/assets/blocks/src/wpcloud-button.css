@@ -3,6 +3,7 @@
 	max-height: 38px;
 	display: flex;
 	align-items: center;
+	letter-spacing: 0.03rem;
 
 	.wpcloud-block-button__content {
 		display: flex;
@@ -21,6 +22,15 @@
 		background: transparent;
 		color: var(--wp--preset--color--foreground-primary);
 		padding: 0;
+		.wpcloud-block-icon {
+			padding-left: 4px;
+		}
+	}
+	&:not(.wpcloud-block-button__text) {
+		max-height: 32px;
+		.wpcloud-block-icon {
+			padding-left: 8px;
+		}
 	}
 
 	.wpcloud-block-button__label {
