@@ -1,18 +1,18 @@
 .toggle-container {
    position : relative ;
    display : inline-block;
-   width : 40px;
-   min-width: 40px;
-   height : 20px;
+   width : 36px;
+   min-width: 36px;
+   height : 18px;
    background-color: var(--wp--preset--color--background-secondary,#474444);
-   border-radius: 20px;
+   border-radius: 18px;
    border: 1px solid  var(--wp--preset--color--foreground-primary);
 
    &::after {
       content: '';
       position: absolute;
-      width: 18px;
-      height: 18px;
+      width: 16px;
+      height: 16px;
       border-radius: 50%;
       background-color: var(--wp--preset--color--foreground-primary,#FFFFFF);
       top: 1px;
@@ -21,7 +21,7 @@
    }
 }
 input.is-toggle:checked + label .toggle-container::after {
-  left : 20px;
+  left : 18px;
 }
 input.is-toggle:checked + label .toggle-container {
   background-color: var(--wp--preset--color--accent-primary, #7983ff );
