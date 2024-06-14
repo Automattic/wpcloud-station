@@ -118,10 +118,13 @@ export default function save( { attributes } ) {
 		return <input type={ type } name={ name } value={ value } />;
 	}
 
-	const inputField = renderField( attributes );
+	const inputField = renderField(attributes);
+	const typeClass = displayAsToggle ? 'wpcloud-block-form--input--toggle' :  `wpcloud-block-form--input--${type}`;
 
 	return (
-		<div { ...blockProps }>
+		<div {...blockProps}
+			className={ classNames( 'wpcloud-block-form--input', blockProps.className, typeClass ) }
+		>
 			{ /* eslint-disable jsx-a11y/label-has-associated-control */}
 			{ displayAsToggle && inputField }
 			<label

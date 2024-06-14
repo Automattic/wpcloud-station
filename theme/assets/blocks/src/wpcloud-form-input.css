@@ -33,14 +33,18 @@
 		}
 
 		&.is-toggle {
+			align-items: center;
+			padding: 1rem 0;
+			margin:0;
 			.toggle-container {
 				margin-right: 6px;
 			}
 		}
+
 		.wpcloud-block-expanding-section {
 			background: none;
 			.wpcloud-block-expanding-section__header {
-				gap: 6px;
+				gap: 4px;
 				color: var(--wp--preset--color--foreground-secondary);
 				.wp-block-heading {
 					flex: unset;
@@ -52,6 +56,7 @@
 				padding: 0;
 				* {
 					margin:0;
+					padding:0;
 				}
 			}
 			.wpcloud-block-expanding-section__content {

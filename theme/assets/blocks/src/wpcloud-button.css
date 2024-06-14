@@ -3,7 +3,7 @@
 	max-height: 38px;
 	display: flex;
 	align-items: center;
-	letter-spacing: 0.03rem;
+	letter-spacing: 0.125rem;
 
 	.wpcloud-block-button__content {
 		display: flex;
