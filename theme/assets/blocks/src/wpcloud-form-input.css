@@ -36,12 +36,6 @@
 			.toggle-container {
 				margin-right: 6px;
 			}
-			&:checked + label .toggle-container {
-				border: none;
-			}
-			&:checked {
-				background-color: blue;
-			}
 		}
 		.wpcloud-block-expanding-section {
 			background: none;
@@ -88,7 +82,6 @@
 		&[type="week"] {
 			min-height: 2em;
 			line-height: 2;
-			border: 1px solid;
 		}
 	}
 
