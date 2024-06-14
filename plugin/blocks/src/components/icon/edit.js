@@ -11,7 +11,7 @@ import {
 	InspectorControls,
 	useBlockProps,
 } from '@wordpress/block-editor';
-import { PanelBody,TextControl } from '@wordpress/components';
+import { PanelBody } from '@wordpress/components';
 import * as icons from '@wordpress/icons';
 
 const Icon = icons.Icon;
@@ -22,23 +22,16 @@ const Icon = icons.Icon;
  * Internal dependencies
  */
 
-import IconSelect from '../controls/iconSelect.js';
+import IconControl from '../controls/iconControl.js';
 
 export default function ( { attributes, setAttributes, className } ) {
-	const { icon, size } = attributes;
+	const { icon, iconSize } = attributes;
 	const blockProps = useBlockProps();
 
 	const controls = (
 		<InspectorControls>
 			<PanelBody label={ __( 'Settings' ) }>
-				<IconSelect { ...{ attributes, setAttributes } } />
-				<TextControl
-					label={ __( 'size' ) }
-					value={ size }
-					onChange={ ( newVal ) => {
-						setAttributes( { size: newVal } );
-					} }
-				/>
+				<IconControl { ...{ attributes, setAttributes } } />
 			</PanelBody>
 		</InspectorControls>
 	);
@@ -54,7 +47,7 @@ export default function ( { attributes, setAttributes, className } ) {
 					'wpcloud-block-icon'
 				) }
 				icon={ icons[ icon ] }
-				size={ size || 24 }
+				size={ iconSize}
 			/>
 		</>
 	);

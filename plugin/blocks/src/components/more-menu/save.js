@@ -11,7 +11,7 @@ import * as icons from '@wordpress/icons';
 const { Icon } = icons;
 
 export default function save({ attributes }) {
-	const { icon, position } = attributes;
+	const { icon, iconSize, position } = attributes;
 	const blockProps = useBlockProps.save();
 	const positionCss = position == 'left' ? {right: 0} : {left: 0};
 	return (
@@ -23,7 +23,7 @@ export default function save({ attributes }) {
 			) }
 		>
 			<button className="wpcloud-more-menu__button">
-				<Icon icon={ icons[icon] } />
+				<Icon icon={icons[icon]} size={iconSize} />
 			</button>
 			<nav
 				className="wpcloud-more-menu__nav is-closed"

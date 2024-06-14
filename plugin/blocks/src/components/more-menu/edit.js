@@ -21,7 +21,7 @@ const Icon = icons.Icon;
 /**
  * Internal dependencies
  */
-import IconSelect from '../controls/iconSelect.js';
+import IconControl from '../controls/iconControl.js';
 import './editor.scss';
 
 /**
@@ -38,7 +38,7 @@ export default function Edit( {
 	clientId,
 	isSelected
 } ) {
-	const { showMenu, icon, position } = attributes;
+	const { showMenu, icon, iconSize, position } = attributes;
 	const blockProps = useBlockProps();
 
 	const isChildSelected = useSelect( ( select ) =>
@@ -58,7 +58,7 @@ export default function Edit( {
 	const controls = (
 		<InspectorControls>
 			<PanelBody title={__('Form Settings')}>
-				<IconSelect { ...{ attributes, setAttributes } } />
+				<IconControl { ...{ attributes, setAttributes } } />
 				<ToggleControl
 					label={ __( 'Show Menu' ) }
 					checked={ showMenu }
@@ -104,7 +104,7 @@ export default function Edit( {
 							} );
 						} }
 					>
-						<Icon icon={ icons[icon] } />
+					<Icon icon={icons[icon]} size={iconSize} />
 					</div>
 					<div
 						{ ...innerBlocksProps }
