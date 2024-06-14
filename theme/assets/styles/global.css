@@ -1,17 +1,22 @@
 @keyframes pulsate {
-    0% {-webkit-transform: scale(0.1, 0.1); opacity: 0.0;}
-    50% {opacity: 1.0;}
-    100% {-webkit-transform: scale(1.2, 1.2); opacity: 0.0;}
+	0% {-webkit-transform: scale(0.1, 0.1); opacity: 0.0;}
+	50% {opacity: 1.0;}
+	100% {-webkit-transform: scale(1.2, 1.2); opacity: 0.0;}
 }
 
 @keyframes opacityPulse {
-    0% {opacity: 0.0;}
-    50% {opacity: 1.0;}
-    100% {opacity: 0.0;}
+	0% {opacity: 0.0;}
+	50% {opacity: 1.0;}
+	100% {opacity: 0.0;}
 }
 
 .wpcloud-hide {
-    opacity: 0;
-    height: 0 !important;
-    padding: 0 !important;
+	opacity: 0;
+	height: 0 !important;
+	padding: 0 !important;
+}
+
+.wp-block-heading a:hover {
+	text-decoration: none;
+	color: var(--wp--preset--color--accent-primary);
 }

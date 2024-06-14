@@ -4,4 +4,10 @@
 		align-items: center;
 		justify-content: left;
 	}
+
+
+.wp-block-wpcloud-site-detail, .wpcloud-block-site-detail {
+		margin-top: 0;
+		padding: 0;
+	}
 }

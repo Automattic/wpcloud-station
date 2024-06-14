@@ -3,7 +3,14 @@
 	max-height: 38px;
 	display: flex;
 	align-items: center;
-	letter-spacing: 0.03rem;
+	letter-spacing: 0.125rem;
+
+	a:hover {
+		text-decoration: none;
+	}
+	&:hover {
+		filter: brightness(80%);
+	}
 
 	.wpcloud-block-button__content {
 		display: flex;
@@ -15,6 +22,10 @@
 	&.is-secondary:not(.is-text) {
 		background: transparent;
 		border: 2px solid var(--wp--preset--color--accent-primary);
+		&:hover {
+			border-color: var(--wp--preset--color--foreground-primary);
+			filter: none;
+		}
 	}
 
 	&.wpcloud-block-button__text {

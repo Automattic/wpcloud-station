@@ -24,4 +24,9 @@
 	&.is-loading {
 		opacity: 0.4;
 	}
+
+	.wpcloud-block-form--input--toggle + .wpcloud-block-form--input--toggle  {
+		border-top: 1px solid var(--wp--preset--color--border-primary);
+	}
+
 }

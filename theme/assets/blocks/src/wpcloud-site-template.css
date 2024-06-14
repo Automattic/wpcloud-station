@@ -24,9 +24,16 @@
 	tr {
 		vertical-align: middle;
 		border-bottom: 1px solid var(--wp--preset--color-border-primary);
+		&:hover {
+			background-color: var(--wp--preset--color--background-secondary);
+		}
 	}
 
 	.wpcloud-block-site-detail {
 		margin-top: 0;
+	}
+	.wp-block-post-author__content a:hover {
+		text-decoration: none;
+		color: var(--wp--preset--color--accent-primary);
 	}
 }
