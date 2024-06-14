@@ -44,22 +44,24 @@ function renderSelect(
 		options = [ { label: `{ ${ name } }`, value: '' } ];
 	}
 	return (
-		<select
-			className={ classNames(
-				'wpcloud-station-form-input__select',
-				inputClasses
-			) }
-			style={ inputStyle }
-			name={ name || getNameFromLabel( label ) }
-			required={ required }
-			aria-required={ required }
-		>
-			{ options.map( ( option ) => (
-				<option key={ option.value } value={ option.value }>
-					{ option.label }
-				</option>
-			) ) }
-		</select>
+		<div class="wpcloud-form-input--select--wrapper">
+			<select
+				className={ classNames(
+					'wpcloud-station-form-input__select',
+					inputClasses
+				) }
+				style={ inputStyle }
+				name={ name || getNameFromLabel( label ) }
+				required={ required }
+				aria-required={ required }
+			>
+				{ options.map( ( option ) => (
+					<option key={ option.value } value={ option.value }>
+						{ option.label }
+					</option>
+				) ) }
+			</select>
+		</div>
 	);
 }
 
@@ -118,12 +120,11 @@ export default function save( { attributes } ) {
 		return <input type={ type } name={ name } value={ value } />;
 	}
 
-	const inputField = renderField(attributes);
-	const typeClass = displayAsToggle ? 'wpcloud-block-form--input--toggle' :  `wpcloud-block-form--input--${type}`;
+	const inputField = renderField( attributes );
 
 	return (
 		<div {...blockProps}
-			className={ classNames( 'wpcloud-block-form--input', blockProps.className, typeClass ) }
+			className={ classNames( 'wpcloud-block-form--input', blockProps.className, `wpcloud-block-form--input--${(displayAsToggle ? 'toggle' : type)}` ) }
 		>
 			{ /* eslint-disable jsx-a11y/label-has-associated-control */}
 			{ displayAsToggle && inputField }

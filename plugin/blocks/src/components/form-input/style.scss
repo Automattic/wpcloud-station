@@ -34,3 +34,6 @@ input.is-toggle {
 .wp-block-wpcloud-form-input .wpcloud-block-form-input__label.is-toggle {
    flex-direction: row;
 }
+.wpcloud-form-input--select--input select {
+   width: 100%;
+}
