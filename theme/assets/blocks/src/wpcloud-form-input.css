@@ -12,7 +12,7 @@
 	.wpcloud-block-form-input__label {
 		display: flex;
 		flex-direction: column;
-		gap: 0.25em;
+		gap: 1rem;
 		margin-bottom: 0.5em;
 		color: var(--wp--preset--color--foreground-secondary);
 
@@ -36,9 +36,6 @@
 			align-items: center;
 			padding: 1rem 0;
 			margin:0;
-			.toggle-container {
-				margin-right: 6px;
-			}
 		}
 
 		.wpcloud-block-expanding-section {

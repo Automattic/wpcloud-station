@@ -25,8 +25,8 @@
 		opacity: 0.4;
 	}
 
-	.wpcloud-block-form--input--toggle:has( + .wpcloud-block-form--input--toggle ) {
-		border-bottom: 1px solid var(--wp--preset--color--border-primary);
+	.wpcloud-block-form--input--toggle + .wpcloud-block-form--input--toggle  {
+		border-top: 1px solid var(--wp--preset--color--border-primary);
 	}
 
 }

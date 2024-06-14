@@ -14,6 +14,10 @@
 			opacity: 0.3;
 		}
 	}
+	button {
+		display: flex;
+		padding: 0;
+	}
 	.wpcloud-more-menu__nav {
 		position: absolute;
 		top: 0;
@@ -29,10 +33,10 @@
 		flex-direction: column;
 
 		margin: 0;
-		padding: 8px 16px;
+		padding: 16px;
 
 		box-shadow: 0px 2px 10px 0px #00000040;
-		border-radius: 10px;
+		border-radius: 5px;
 
 		&:hover {
 			display: flex;
@@ -45,18 +49,19 @@
 			justify-content: unset;
 		}
 
-		.wpcloud-site-list-menu__title {
-			text-align: center;
-		}
-
 		.wpcloud-more-menu__row {
 			gap: 16px;
-			height: 56px;
+			padding: 16px 0;
+			margin-top:0;
 			justify-content: unset;
 		}
 
 		button {
 			font-family: var(--wp--preset--font-family--primary);
+		}
+
+ 		.wpcloud-block-button__label {
+			text-transform: none;
 		}
 
 		h4 {
@@ -74,6 +79,7 @@
 		p {
 			max-width: 360px;
 			width: fit-content;
+			margin: 0;
 		}
 	}
 }
