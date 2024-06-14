@@ -592,6 +592,24 @@ function wpcloud_client_update_site_meta( int $wpcloud_site_id, string $key, str
 }
 
 /**
+ * Delete site meta.
+ *
+ * @param integer $wpcloud_site_id The WP Cloud Site ID.
+ * @param string  $key            The meta key to delete.
+ *
+ * @return mixed|WP_Error Response body on success. WP_Error on failure.
+
+ */
+function wpcloud_client_delete_site_meta( int $wpcloud_site_id, string $key): mixed {
+	if ( ! array_key_exists( $key, wpcloud_client_site_meta_keys() ) ) {
+		return new WP_Error( 'bad_request', 'Invalid meta key', array( 'status' => 400 ) );
+	}
+
+	$endpoint = "site-meta/$wpcloud_site_id/$key/remove";
+	return wpcloud_client_post( $wpcloud_site_id, $endpoint );
+}
+
+/**
  * Get site meta.
  *
  * @param integer $wpcloud_site_id The WP Cloud Site ID.

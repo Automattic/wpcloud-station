@@ -40,7 +40,8 @@ function wpcloud_block_form_site_update_handler($response, $data) {
 
 			}
 
-		$result = wpcloud_client_update_site_meta( $data['wpcloud_site_id'], $key, $value );
+		$result = $value ? wpcloud_client_update_site_meta( $data['wpcloud_site_id'], $key, $value ) : wpcloud_client_delete_site_meta( $data['wpcloud_site_id'], $key );
+
 		if ( is_wp_error( $result ) ) {
 			$response['success'] = false;
 			$response['message'] = $result->get_error_message();

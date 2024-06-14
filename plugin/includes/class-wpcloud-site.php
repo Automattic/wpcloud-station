@@ -170,9 +170,9 @@ class WPCLOUD_Site {
 
 			"suspended" => [
 				'type' => 'select',
-				'options' => ["404" => __("404 - Not Found "), "410" => __( "410 - Gone" ), "451" => __( "451 - Unavailable For Legal Reasons" ), "480" => __( "480 - Temporarily Unavailable" ) ],
-				'default' => '480',
-				'hint' => __('Suspends a site. The value is the HTTP 4xx status code the site will respond with. The supported statuses are "404", "410", "451", and "480".'),
+				'options' => [ '' => __( ' ' ),"404" => __("404 - Not Found "), "410" => __( "410 - Gone" ), "451" => __( "451 - Unavailable For Legal Reasons" ), "480" => __( "480 - Temporarily Unavailable" ) ],
+				'default' => '',
+				'hint' => __('Suspends a site. The value is the HTTP 4xx status code the site will respond with. The supported statuses are "404", "410", "451", and "480". Leave blank to unsuspend the site.'),
 				],
 
 			"suspend_after" => [
@@ -216,8 +216,8 @@ class WPCLOUD_Site {
 
 			"privacy_model" => [
 				'type' => 'select',
-				'options' => [ "wp_uploads" => "WP Uploads" ],
-				'default' => 'wp_uploads',
+				'options' => [ '' => '', "wp_uploads" => __( "WP Uploads" )],
+				'default' => '',
 				'hint' => __( 'Facilitates protection of site assets. May be set to "wp_uploads" to block logged-out requests for WP uploads. If set, an AT_PRIVACY_MODEL constant will be defined in the PHP environment. Use the "site-wordpress-version" endpoint to set "wp_version".' )
 				],
 
