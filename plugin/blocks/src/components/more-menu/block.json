@@ -23,6 +23,10 @@
 			"type": "string",
 			"default": "moreVertical"
 		},
+		"iconSize": {
+			"type": "string",
+			"default": "24"
+		},
 		"position":{
 			"type": "string",
 			"default": "right"
