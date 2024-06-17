@@ -24,8 +24,7 @@
 	.wpcloud-block-form-input__label {
 		display: flex;
 		flex-direction: column;
-		gap: 1rem;
-		margin-bottom: 0.5em;
+		gap: 0.25rem 1rem;
 		color: var(--wp--preset--color--foreground-secondary);
 
 		&.is-label-inline {
