@@ -36,7 +36,7 @@
 			line-height: 10px;
 			font-weight: 400;
 			&:hover {
-				filter: brightness(80%);
+				color: var(--wp--preset--color--accent-primary);
 				text-decoration: none;
 			}
 		}
