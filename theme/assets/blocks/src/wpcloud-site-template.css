@@ -21,10 +21,14 @@
 		text-align: left;
 	}
 
+
 	tr {
 		vertical-align: middle;
 		border-bottom: 1px solid var(--wp--preset--color-border-primary);
-		&:hover {
+		td:first-child, th {
+			padding-left: 0.5rem;
+		}
+		&:not(thead tr):hover {
 			background-color: var(--wp--preset--color--background-secondary);
 		}
 	}
