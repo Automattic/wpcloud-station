@@ -246,7 +246,7 @@
     },
     "blocks": {
       "core/query": {
-        "css": "&.wpcloud-site-list--sidebar {\n\tmax-width: 400px;\n};\n&.wpcloud-site-list--sidebar .wp-block-wpcloud-site-card {\n\tmargin: 0;\n\tpadding: 11px 16px;\n\tborder-bottom: 1px solid var(--wp--preset--color--border-primary);\n};\n&.wpcloud-site-list--sidebar .wp-block-wpcloud-site-card.is-current {\n\tbackground-color: var(--wp--preset--color--background-secondary);\n}"
+        "css": "&.wpcloud-site-list--sidebar {\n\tmax-width: 400px;\n}\n&.wpcloud-site-list--sidebar .wp-block-wpcloud-site-card + .wp-block-wpcloud-site-card {\n\tborder-top: 1px solid var(--wp--preset--color--border-primary);\n}\n&.wpcloud-site-list--sidebar .wp-block-wpcloud-site-card {\n\tmargin: 0;\n\tpadding: 11px 16px;\n}\n&.wpcloud-site-list--sidebar .wp-block-wpcloud-site-card.is-current {\n\tbackground-color: var(--wp--preset--color--background-secondary);\n}\n&.wpcloud-site-list--sidebar .wp-block-wpcloud-site-card:hover {\n\tbackground-color: var(--wp--preset--color--background-secondary);\n}"
       },
       "wpcloud/button": {
         "color": {
