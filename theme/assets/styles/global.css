@@ -20,3 +20,10 @@
 	text-decoration: none;
 	color: var(--wp--preset--color--accent-primary);
 }
+
+/* @TODO: figure out how to add template part styles */
+.wpcloud-footer {
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+}
