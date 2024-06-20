@@ -21,9 +21,51 @@
 	color: var(--wp--preset--color--accent-primary);
 }
 
-/* @TODO: figure out how to add template part styles */
+/* footer styles */
 .wpcloud-footer {
 	position: fixed;
 	bottom: 0;
 	width: 100%;
+	z-index: -1;
+}
+
+
+/**
+ * Site View
+ */
+@media ( width > 360px ) {
+	div.wpcloud-site-view--sidebar {
+		min-width: 360px;
+	}
+}
+
+@media( width <= 1252px) {
+	.wp-block-columns {
+		flex-wrap: wrap !important;
+	}
+	.wp-block-columns:not(.is-not-stacked-on-mobile)>.wp-block-column:not(.wpcloud-site-view--details):not(.wpcloud-site-view--sidebar) {
+    flex-basis:100% !important;
+  }
+	div.wpcloud-site-view--details {
+		flex-basis: 50% !important;
+	}
+	div.wpcloud-site-view--sidebar {
+		flex-basis: 360px !important;
+		margin-left: 16px;
+	}
+}
+
+@media ( width < 782px ) {
+	div.wpcloud-site-view--content, div.wpcloud-site-view--content--spacer {
+		gap: 0;
+		margin-top: 0;
+	}
+	.wpcloud-site-view--sidebar {
+		display: none;
+	}
+	div.wpcloud-site-view--details {
+		margin-left: 16px;
+		margin-right: 16px;
+		min-width: 300px;
+	}
 }

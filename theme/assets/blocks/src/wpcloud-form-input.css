@@ -1,6 +1,9 @@
 & {
 	input, textarea, .wpcloud-form-input--select--wrapper  {
 		background-color: var(--wp--preset--color--background-primary);
+		&:autofill, &:-webkit-autofill {
+			background-color: var(--wp--preset--color--background-primary);
+		}
 		border-radius: 2px;
 		border: 1px solid var(--wp--preset--color--foreground-tertiary);
 		color: var(--wp--preset--color--foreground-primary);

@@ -46,6 +46,7 @@
 
 	.wpcloud-block-button__label {
 		cursor: pointer;
+		text-wrap: nowrap;
 	}
 
 	a:where(:not(.wp-element-button)) {

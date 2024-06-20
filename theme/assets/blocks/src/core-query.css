@@ -1,12 +1,19 @@
 & {
 	&.wpcloud-site-list--sidebar {
-		max-width: 400px;
 		.wp-block-wpcloud-site-card + .wp-block-wpcloud-site-card {
 			border-top: 1px solid var(--wp--preset--color--border-primary);
 		}
 		.wp-block-wpcloud-site-card {
 			margin: 0;
 			padding: 11px 16px;
+
+			a span {
+				white-space: nowrap;
+  			overflow: hidden;
+  			text-overflow: ellipsis;
+				width: 98%;
+				display: inline-block;
+			}
 
 			&.is-current {
 				background-color: var(--wp--preset--color--background-secondary);

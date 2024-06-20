@@ -1,0 +1,6 @@
+& {
+	position: relative;
+	.wp-block-heading {
+		text-wrap: nowrap;
+	}
+}
