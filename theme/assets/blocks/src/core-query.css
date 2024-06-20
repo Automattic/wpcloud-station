@@ -7,20 +7,22 @@
 			margin: 0;
 			padding: 11px 16px;
 
-			a span {
-				white-space: nowrap;
-  			overflow: hidden;
-  			text-overflow: ellipsis;
-				width: 98%;
-				display: inline-block;
-			}
-
 			&.is-current {
 				background-color: var(--wp--preset--color--background-secondary);
 			}
 			&:hover {
 				background-color: var(--wp--preset--color--background-secondary);
 			}
+		}
+	}
+
+	.wp-block-wpcloud-site-card {
+		a span {
+			white-space: nowrap;
+ 			overflow: hidden;
+ 			text-overflow: ellipsis;
+			width: 98%;
+			display: inline-block;
 		}
 	}
 }
