@@ -33,6 +33,9 @@
 			padding-left: 0.5rem;
 		}
 		&:not(thead tr):hover {
+			.wp-block-wpcloud-site-card {
+				background-color: var(--wp--preset--color--background-secondary);
+			}
 			background-color: var(--wp--preset--color--background-secondary);
 		}
 	}
