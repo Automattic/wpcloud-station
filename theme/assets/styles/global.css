@@ -21,9 +21,118 @@
 	color: var(--wp--preset--color--accent-primary);
 }
 
-/* @TODO: figure out how to add template part styles */
+/* footer styles */
 .wpcloud-footer {
 	position: fixed;
 	bottom: 0;
 	width: 100%;
+	z-index: -1;
+}
+
+/**
+ * Page Layout
+ */
+.wpcloud-page--spacer--top {
+	height: 0px !important;
+	padding-bottom: 5vw;
+}
+
+@media( width < 782px ) {
+	div.wpcloud-page--content {
+		padding-left: 16px;
+		padding-right: 16px;
+		margin-top: 0;
+	}
+}
+.wp-block-heading.wpcloud-page--login--header {
+	text-wrap: wrap;
+}
+
+/**
+ * Site View
+ */
+@media ( width > 360px ) {
+	div.wpcloud-site-view--sidebar {
+		min-width: 360px;
+	}
+}
+
+@media( width <= 1252px ) {
+	.wpcloud-site-view--content {
+		.wp-block-columns {
+			flex-wrap: wrap !important;
+		}
+		.wp-block-columns:not(.is-not-stacked-on-mobile)>.wp-block-column:not(.wpcloud-site-view--details):not(.wpcloud-site-view--sidebar) {
+			flex-basis:100% !important;
+		}
+		div.wpcloud-site-view--details {
+			flex-basis: 50% !important;
+		}
+		div.wpcloud-site-view--sidebar {
+			flex-basis: 360px !important;
+			margin-left: 16px;
+		}
+	}
+}
+
+@media( width < 782px ) {
+	div.wpcloud-site-view--content, div.wpcloud-site-view--content--spacer {
+		gap: 0;
+		margin-top: 0;
+	}
+	.wpcloud-site-view--sidebar {
+		display: none;
+	}
+	div.wpcloud-site-view--details {
+		margin-left: 16px;
+		margin-right: 16px;
+		min-width: 300px;
+	}
+}
+
+/**
+ * Site List
+ */
+@media( width <= 1222px ) {
+	div.wpcloud-site-list--content {
+		padding-left: 16px;
+		padding-right: 16px;
+	}
+}
+
+@media( width <= 884px ) {
+	div.wpcloud-site-list--content {
+		tr th:nth-child(2), tr td:nth-child(2) {
+			display: none;
+		}
+	}
+}
+
+@media( width <= 806px ) {
+	div.wpcloud-site-list--content {
+		tr th:nth-child(3), tr td:nth-child(3),
+		tr th:nth-child(4), tr td:nth-child(4),
+		tr th:nth-child(5), tr td:nth-child(5) {
+			display: none;
+		}
+	}
+}
+
+@media( width <= 589px ) {
+	div.wpcloud-site-list--content {
+		tr th:nth-child(6), tr td:nth-child(6) {
+			display: none;
+		}
+	}
+}
+
+@media( width <= 475px ) {
+	div.wpcloud-site-list--content {
+		thead, tr td:nth-child(7) {
+			display: none;
+		}
+		.wp-block-wpcloud-site-card {
+			width: 100%;
+		}
+	}
 }

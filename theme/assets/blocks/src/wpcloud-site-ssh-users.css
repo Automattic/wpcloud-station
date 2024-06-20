@@ -2,6 +2,7 @@
   border: 1px solid var(--wp--preset--color--border-primary);
   border-radius: 10px;
   padding: 24px 32px 32px;
+	background: var(--wp--preset--color--background-primary);
 
 	.wpcloud-ssh-user-form--expanding-section {
 		background: none;

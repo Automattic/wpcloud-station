@@ -1,6 +1,8 @@
 & {
 	width: 100%;
 	border-collapse: collapse;
+	max-width: 1222px;
+	background: var(--wp--preset--color--background-primary);
 
 	th {
 		color: var(--wp--preset--color--foreground-secondary);
@@ -20,15 +22,20 @@
 	th, td {
 		text-align: left;
 	}
-
+	tr:last-child td {
+		border-bottom: none;
+	}
 
 	tr {
 		vertical-align: middle;
-		border-bottom: 1px solid var(--wp--preset--color-border-primary);
-		td:first-child, th {
+
+		td:first-child, th:first-child {
 			padding-left: 0.5rem;
 		}
 		&:not(thead tr):hover {
+			.wp-block-wpcloud-site-card {
+				background-color: var(--wp--preset--color--background-secondary);
+			}
 			background-color: var(--wp--preset--color--background-secondary);
 		}
 	}
