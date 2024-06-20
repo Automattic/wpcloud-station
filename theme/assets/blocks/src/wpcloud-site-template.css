@@ -9,16 +9,19 @@
 		border: none;
 		padding-top: 13px;
 		padding-bottom: 18px;
-		h2 {
-				font-weight: 400;
-				font-size: var(--wp--preset--font-size--small-caps);
-				color: var(--wp--preset--color--foreground-secondary);
-				text-transform: uppercase;
+
+		h2.wp-block-heading {
+			font-weight: 400;
+			font-size: var(--wp--preset--font-size--small-caps);
+			color: var(--wp--preset--color--foreground-secondary);
+			text-transform: uppercase;
+			letter-spacing: 0.0625rem;
 		}
 		svg {
 			fill: currentColor;
 		}
 	}
+
 	th, td {
 		text-align: left;
 	}
