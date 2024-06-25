@@ -91,7 +91,6 @@
 		}
 	}
 
-
 	wpcloud.bindFormHandler = (form) => {
 		form.addEventListener('submit', async (e) => {
 			const button = form.querySelector('button[type="submit"]');
@@ -121,7 +120,6 @@
 			});
 		});
 	}
-
 
 	// Fill in any missing hidden inputs closest data attribute
 	document.querySelectorAll( 'form.wpcloud-block-form' ).forEach( ( form ) => {

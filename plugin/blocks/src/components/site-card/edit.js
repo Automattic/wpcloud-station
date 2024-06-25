@@ -14,6 +14,7 @@ import { Dashicon } from '@wordpress/components';
  * Internal dependencies
  */
 import './editor.scss';
+import { Placeholder } from './placeholder.js';
 
 /**
  * The edit function describes the structure of your block in the context of the
@@ -23,9 +24,15 @@ import './editor.scss';
  *
  * @return {Element} Element to render.
  */
-export default function Edit( { attributes, className } ) {
-	const { placeholderThumbnail } = attributes;
+export default function Edit( { className, context } ) {
+
 	const blockProps = useBlockProps();
+	const {
+		postId,
+		postTitle,
+		primaryDomain
+	} = context;
+
 	return (
 		<div
 			{ ...blockProps }
@@ -35,14 +42,16 @@ export default function Edit( { attributes, className } ) {
 				className
 			) }
 		>
-			<img src={ placeholderThumbnail } />
+			<Placeholder
+				postId={postId}
+				name={postTitle}
+			/>
 			<h2 className="site-title">
-				<a href="#">{ __( 'Site Name', 'site-card' ) }</a>
+				<a href="#" target="_blank">{postTitle}</a>
 			</h2>
 			<h3 className="site-url">
 				<a href="#" target="_blank">
-					<span>{ __( 'Site Domain', 'site-card' ) }</span>
-					<Dashicon icon="external" />
+					<span>{ primaryDomain }</span>
 				</a>
 			</h3>
 		</div>
