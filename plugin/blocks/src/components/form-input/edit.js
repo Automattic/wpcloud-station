@@ -26,7 +26,7 @@ import { useCallback, useEffect } from '@wordpress/element';
  */
 import './editor.scss';
 import DetailSelectControl from '../controls/site/detailSelect';
-import { Text, Select, Hidden } from './fields';
+import { Text, Select, Hidden, Password } from './fields';
 
 function InputFieldBlock( { attributes, setAttributes, className, context, clientId } ) {
 	const { 'wpcloud-form/isActive': isFormActive } = context;
@@ -52,7 +52,7 @@ function InputFieldBlock( { attributes, setAttributes, className, context, clien
 	const inputTags = {
 		text: Text,
 		email: Text,
-		password: Text,
+		password: Password,
 		hidden: Hidden,
 		textarea: Text,
 		select: Select,

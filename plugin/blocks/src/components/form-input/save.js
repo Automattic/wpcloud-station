@@ -16,6 +16,13 @@ import {
 } from '@wordpress/block-editor';
 import { __unstableStripHTML as stripHTML } from '@wordpress/dom'; // eslint-disable-line @wordpress/no-unsafe-wp-apis
 
+
+/**
+ * Internal dependencies
+ */
+
+import Password from './fields/password';
+
 /**
  * Get the name attribute from a content string.
  *
@@ -105,6 +112,9 @@ function renderField( attributes ) {
 			'submit-on-change': submitOnChange
 		}
 	);
+	if ('password' === type) {
+		return <Password attributes={attributes} className={inputClasses} />;
+	}
 
 	return 'select' === type
 		? renderSelect( attributes, inputClasses, inputStyle )

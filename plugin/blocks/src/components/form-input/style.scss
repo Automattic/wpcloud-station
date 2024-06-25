@@ -1,24 +1,24 @@
 .toggle-container {
-   position : relative ;
-   display : inline-block;
-   width : 36px;
-   min-width: 36px;
-   height : 18px;
-   background-color: var(--wp--preset--color--background-secondary,#474444);
-   border-radius: 18px;
-   border: 1px solid  var(--wp--preset--color--foreground-primary);
+	position : relative ;
+	display : inline-block;
+	width : 36px;
+	min-width: 36px;
+	height : 18px;
+	background-color: var(--wp--preset--color--background-secondary,#474444);
+	border-radius: 18px;
+	border: 1px solid  var(--wp--preset--color--foreground-primary);
 
-   &::after {
-      content: '';
-      position: absolute;
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      background-color: var(--wp--preset--color--foreground-primary,#FFFFFF);
-      top: 1px;
-      left: 1px;
-      transition: all 0.3s;
-   }
+	&::after {
+		content: '';
+		position: absolute;
+		width: 16px;
+		height: 16px;
+		border-radius: 50%;
+		background-color: var(--wp--preset--color--foreground-primary,#FFFFFF);
+		top: 1px;
+		left: 1px;
+		transition: all 0.3s;
+	}
 }
 input.is-toggle:checked + label .toggle-container::after {
   left : 18px;
@@ -29,11 +29,39 @@ input.is-toggle:checked + label .toggle-container {
 }
 
 input.is-toggle {
-   display: none;
+	display: none;
 }
 .wp-block-wpcloud-form-input .wpcloud-block-form-input__label.is-toggle {
-   flex-direction: row;
+	flex-direction: row;
 }
 .wpcloud-form-input--select--input select {
-   width: 100%;
+	width: 100%;
+}
+.wpcloud-block-form-input--password {
+	display: flex;
+	.wpcloud-block-form-input__input {
+		flex:2;
+		border-top-right-radius: 0;
+		border-bottom-right-radius: 0;
+	}
+	.wpcloud-block-form-input--toggle-hidden {
+		fill: var(--wp--preset--color--foreground-primary, '#000000');
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		min-height: 2em;
+		line-height: 2;
+		margin-bottom: 0.5em;
+		border-radius: 2px;
+		border: 1px solid var(--wp--preset--color--foreground-tertiary, '#000000');
+		width: 2rem;
+		border-left: none;
+		border-top-left-radius: 0;
+		border-bottom-left-radius: 0;
+		background-color: var(--wp--preset--color--background-primary, '#FFFFFF');
+		&:hover {
+			cursor: pointer;
+			background-color: var(--wp--preset--color--background-secondary, '#FFFFFF');
+		}
+	}
 }
