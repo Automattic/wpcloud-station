@@ -14,6 +14,7 @@
 	"editorStyle": "file:./index.css",
 	"render": "file:./render.php",
 	"style": "file:./style-index.css",
+	"viewScript": "file:./view.js",
 	"attributes": {
 		"type": {
 			"type": "string",
@@ -51,7 +52,8 @@
 			"type": "string",
 			"selector": ".wpcloud-block-form-input__input",
 			"source": "attribute",
-			"attribute": "placeholder"
+			"attribute": "placeholder",
+			"default":"Optional placeholder..."
 		},
 		"options": {
 			"type": "array",

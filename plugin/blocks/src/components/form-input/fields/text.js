@@ -28,10 +28,7 @@ export default function TextField( {
 					'wpcloud-block-form-input__input'
 				) }
 				aria-label={ __( 'Optional placeholder text' ) }
-				placeholder={
-					placeholder ? undefined : __( 'Optional placeholder…' )
-				}
-				value={ placeholder }
+				placeholder={ placeholder }
 				onChange={ ( event ) =>
 					onPlaceholderChange( event.target.value )
 				}
