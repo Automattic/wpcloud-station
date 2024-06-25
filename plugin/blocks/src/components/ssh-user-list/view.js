@@ -6,7 +6,8 @@
 		const sshUserName = sshUserRow.dataset.siteSshUser;
 		sshUserInputs.forEach( ( input ) => {
 			input.value = sshUserName;
-		} );
+		});
+
 	};
 
 	const sshUserList = document.querySelector(
