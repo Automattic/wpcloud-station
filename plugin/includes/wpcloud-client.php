@@ -573,23 +573,24 @@ function wpcloud_client_site_set_access_type( int $wpcloud_site_id, string $acce
 function wpcloud_client_site_meta_keys(): array {
 	// @TODO move the labels to WPCLOUD_Site::get_meta_fields()
 	return [
-		"db_charset" => __( 'DB Charset' ),
-		"db_collate" => __( 'DB Collate' ),
-		"suspended" => __( 'Suspended Status Code' ),
-		"suspend_after" => __( 'Suspend After' ),
-		"php_version" => __( 'PHP Version' ),
-		"wp_version" => __( 'WP Version' ),
-		"do_not_delete" => __( 'Do Not Delete' ),
-		"db_file_size" => __( 'DB File Size' ),
-		"space_quota" => __( 'Space Quota' ),
-		"max_space_quota" => __( 'Max Space Quota (Gigabytes)' ),
-		"photon_subsizes" => __( 'Photon Subsizes' ),
-		"privacy_model" => __( 'Privacy Model' ),
-		"static_file_404" => __( 'Static File 404' ),
-		"default_php_conns" => __( 'Default PHP Connections' ),
-		"burst_php_conns" => __( 'Burst PHP Connections' ),
-		"php_fs_permissions" => __( 'PHP FS Permissions' ),
-		"canonicalize_aliases" => __( 'Canonicalize Aliases')
+		"db_charset"           => __( 'DB Charset' ),
+		"db_collate"           => __( 'DB Collate' ),
+		"suspended"            => __( 'Suspended Status Code' ),
+		"suspend_after"        => __( 'Suspend After' ),
+		"php_version"          => __( 'PHP Version' ),
+		"wp_version"           => __( 'WP Version' ),
+		"do_not_delete"        => __( 'Do Not Delete' ),
+		"db_file_size"         => __( 'DB File Size' ),
+		"space_quota"          => __( 'Space Quota' ),
+		"max_space_quota"      => __( 'Max Space Quota (Gigabytes)' ),
+		"photon_subsizes"      => __( 'Photon Subsizes' ),
+		"privacy_model"        => __( 'Privacy Model' ),
+		"static_file_404"      => __( 'Static File 404' ),
+		"default_php_conns"    => __( 'Default PHP Connections' ),
+		"burst_php_conns"      => __( 'Burst PHP Connections' ),
+		"php_fs_permissions"   => __( 'PHP FS Permissions' ),
+		"canonicalize_aliases" => __( 'Canonicalize Aliases'),
+		"ssh_port"             => __( 'SSH Port' ),
 	];
 }
 /**

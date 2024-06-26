@@ -253,6 +253,11 @@ class WPCLOUD_Site {
 				'default' => true,
 				'hint' => __( 'May be used to change whether a sites domain aliases redirect (default, "true") to the sites primary domain name or are served directly (when set to "false")' ),
 			],
+			"site_access_with_ssh" => [
+				'type' => 'checkbox',
+				'default' => false,
+				'hint' => __( 'Site access is via SFTP by default. Enabling allows access via SSH' ),
+			],
 		];
 	}
 
