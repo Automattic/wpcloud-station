@@ -615,8 +615,14 @@ function wpcloud_get_site_detail( int|WP_Post $post, string $key, ): mixed {
 			return $gigs .'G';
 
 		case 'site_access_with_ssh':
-			// @TODO: not sure how we can tell if the site is using ssh or sftp
-			return true;
+			$result = wpcloud_client_get_site_meta( $wpcloud_site_id, 'ssh_port' );
+			if ( is_wp_error( $result ) ) {
+				error_log( $result->get_error_message() );
+				return '';
+			}
+			$ssh_port = $result->ssh_port ?? -1;
+			// @TODO: Confirm that this is always the case, it appears that the port will be 2223 for ssh and 2221 for sftp
+			return  $ssh_port == 2223;
 
 		case 'data_center':
 			$key = 'geo_affinity';
