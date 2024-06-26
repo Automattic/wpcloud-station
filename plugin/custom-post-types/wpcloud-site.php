@@ -614,6 +614,9 @@ function wpcloud_get_site_detail( int|WP_Post $post, string $key, ): mixed {
 			$gigs = round($bytes / pow(1024, $i), 2);
 			return $gigs .'G';
 
+		case 'site_access_with_ssh':
+			// @TODO: not sure how we can tell if the site is using ssh or sftp
+			return true;
 
 		case 'data_center':
 			$key = 'geo_affinity';

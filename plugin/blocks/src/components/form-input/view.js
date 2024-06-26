@@ -1,6 +1,5 @@
 (() => {
 	const passwordToggle = document.querySelectorAll('.wpcloud-block-form-input--toggle-hidden');
-	console.log(passwordToggle);
 	passwordToggle.forEach((toggle) => {
 		toggle.addEventListener('click', () => {
 			const input = toggle.closest('.wpcloud-block-form-input--password').querySelector('.wpcloud-block-form-input__input');
@@ -15,5 +14,4 @@
 			}
 		});
 	});
-
 })();

@@ -5,10 +5,11 @@
  * @param array $fields The form fields.
  * @return array The form fields.
  */
-function wpcloud_block_form_site_ssh_user_add_fields( array $fields) {
+function wpcloud_block_form_site_ssh_user_fields( array $fields) {
 	return array_merge( $fields, [ 'pass', 'pkey', 'user' ] );
 }
-add_filter('wpcloud_block_form_submitted_fields_site_ssh_user_add', 'wpcloud_block_form_site_ssh_user_add_fields' );
+add_filter( 'wpcloud_block_form_submitted_fields_site_ssh_user_add', 'wpcloud_block_form_site_ssh_user_fields' );
+add_filter( 'wpcloud_block_form_submitted_fields_site_ssh_user_update', 'wpcloud_block_form_site_ssh_user_fields' );
 
 /**
  * Process the form data for add ssh user
@@ -17,7 +18,7 @@ add_filter('wpcloud_block_form_submitted_fields_site_ssh_user_add', 'wpcloud_blo
  * @param array $data The form data.
  * @return array The response data.
  */
-function wpcloud_block_form__site_ssh_user_add_handler( $response, $data ) {
+function wpcloud_block_form_site_ssh_user_add_handler( $response, $data ) {
 	$wpcloud_site_id = get_post_meta( $data['site_id'], 'wpcloud_site_id', true );
 
 	if ( ! $wpcloud_site_id ) {
@@ -47,4 +48,29 @@ function wpcloud_block_form__site_ssh_user_add_handler( $response, $data ) {
 
 	return $response;
 }
-add_filter('wpcloud_form_process_site_ssh_user_add', 'wpcloud_block_form__site_ssh_user_add_handler', 10, 2);
+add_filter('wpcloud_form_process_site_ssh_user_add', 'wpcloud_block_form_site_ssh_user_add_handler', 10, 2);
+
+
+function wpcloud_block_form_site_ssh_user_update_handler( $response, $data) {
+	$wpcloud_site_id = get_post_meta( $data['site_id'], 'wpcloud_site_id', true );
+
+	if ( ! $wpcloud_site_id ) {
+		$response['message'] = 'Site not found.';
+		$response['status'] = 400;
+		return $response;
+	}
+	$result = wpcloud_client_ssh_user_update( $wpcloud_site_id, $data['user'], $data['pkey'], $data['pass'] );
+
+	if ( is_wp_error( $result ) ) {
+		$response['success'] = false;
+		$response['message'] = $result->get_error_message();
+		$response['status'] = 400;
+		return $response;
+	}
+
+	$response['message'] = 'SSH user updated successfully.';
+	$response['user'] = $result;
+
+	return $response;
+}
+add_filter('wpcloud_form_process_site_ssh_user_update', 'wpcloud_block_form_site_ssh_user_update_handler', 10, 2);
