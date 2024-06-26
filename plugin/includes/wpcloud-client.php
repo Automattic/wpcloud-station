@@ -559,6 +559,17 @@ function wpcloud_client_ssh_user_update( int $wpcloud_site_id, string $user, str
 	return $response;
 }
 
+function wpcloud_client_ssh_disconnect_all_users( int $wpcloud_site_id): mixed {
+	$client_name = wpcloud_get_client_name();
+	return wpcloud_client_post( $wpcloud_site_id, "ssh-disconnect-all-users/$client_name/$wpcloud_site_id" );
+}
+
+function wpcloud_client_site_set_access_type( int $wpcloud_site_id, string $access_type): mixed {
+	$client_name = wpcloud_get_client_name();
+	return wpcloud_client_post( $wpcloud_site_id, "site-set-access-type/$client_name/$wpcloud_site_id/$access_type" );
+}
+
+
 function wpcloud_client_site_meta_keys(): array {
 	// @TODO move the labels to WPCLOUD_Site::get_meta_fields()
 	return [
