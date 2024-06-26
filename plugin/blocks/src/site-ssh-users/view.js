@@ -18,6 +18,7 @@
 			);
 			const nameInput = form.querySelector( 'input[name="user"]' );
 			nameInput.value = sshUserName;
+			nameInput.readOnly = true;
 
 			const submit = form.querySelector( 'button[type="submit"]' );
 			submit.querySelector( '.wpcloud-block-button__label' ).textContent =
@@ -26,7 +27,7 @@
 			const wpCloudAction = form.querySelector(
 				'input[name="wpcloud_action"]'
 			);
-			wpCloudAction.value = 'wpcloud_ssh_user_update';
+			wpCloudAction.value = 'site_ssh_user_update';
 
 			// Open the form section if it's not open already.
 			const section = form.closest(
@@ -70,9 +71,9 @@
 			input.value = '';
 		} );
 
-		const originalLabel = form.dataset.originalLabel;
+		const submit = form.querySelector( 'button[type="submit"]' );
+		const originalLabel = submit?.dataset.originalLabel;
 		if ( originalLabel ) {
-			const submit = form.querySelector( 'button[type="submit"]' );
 			submit.querySelector( '.wpcloud-block-button__label' ).textContent =
 				originalLabel;
 		}

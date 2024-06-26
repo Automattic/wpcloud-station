@@ -541,6 +541,24 @@ function wpcloud_client_ssh_user_remove( int $wpcloud_site_id, string $user ): m
 	return wpcloud_client_post( $wpcloud_site_id, "ssh-user/$client_name/$wpcloud_site_id/remove/$user" );
 }
 
+function wpcloud_client_ssh_user_update( int $wpcloud_site_id, string $user, string $pkey = '', string|null $pass = null) : mixed {
+	$client_name = wpcloud_get_client_name();
+
+	$post = array(
+		'pkey' => $pkey,
+	);
+	if ( ! is_null( $pass ) ) {
+		$post['pass'] = $pass;
+	}
+
+	$response = wpcloud_client_post( $wpcloud_site_id, "ssh-user/$client_name/$wpcloud_site_id/update/$user", $post );
+	if ( is_wp_error( $response ) ) {
+		return $response;
+	}
+
+	return $response;
+}
+
 function wpcloud_client_site_meta_keys(): array {
 	// @TODO move the labels to WPCLOUD_Site::get_meta_fields()
 	return [
