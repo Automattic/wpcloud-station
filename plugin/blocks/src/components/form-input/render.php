@@ -19,6 +19,12 @@ $content = apply_filters( 'wpcloud_block_form_render_field_' . $name, $content, 
 $content = apply_filters( 'wpcloud_block_form_render_field', $content, $attributes, $block );
 
 $site_meta_options = WPCloud_Site::get_meta_options();
+//add in site ssh connection
+$site_meta_options['site_access_with_ssh'] = [
+	'label' => 'Access with SSH',
+	'type' => 'checkbox',
+	'default' => true,
+];
 if ( array_key_exists($name, $site_meta_options) ) {
 	$current_value = wpcloud_get_site_detail(get_the_ID(), $name);
 	if ( is_wp_error( $current_value ) ) {
