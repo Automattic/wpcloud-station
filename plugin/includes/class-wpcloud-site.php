@@ -66,22 +66,37 @@ class WPCLOUD_Site {
 			return new WP_Error( 'unauthorized', __( 'You are not authorized to create a site.', 'wpcloud' ) );
 		}
 
-		$domain = wpcloud_site_get_default_domain( $options['site_name'] );
 		$php_version = $options['php_version'];
 		$data_center = $options['data_center'];
-		$post_name = $options['site_name'];
+		$site_name   = $options['site_name'];
+		$domain      = $options['domain_name'];
 
-		if ( isset( $options[ 'admin_pass' ] ) && $options[ 'admin_pass' ] ) {
-			add_filter( 'wpcloud_site_create_data', function( $data ) use ( $options ) {
-				$data[ 'admin_pass' ] = $options[ 'admin_pass' ];
-				return $data;
-			} );
+		if ( empty( $domain ) ) {
+			$settings       = get_option( 'wpcloud_settings' );
+			$default_domain = $settings['wpcloud_domain'] ?? '';
+			if ( $default_domain ) {
+				$domain  = strtolower( str_replace( ' ', '-', $site_name ) . '.' . $default_domain );
+			}
 		}
+
+		add_filter( 'wpcloud_site_create_data', function( $data ) use ( $options, $domain ) {
+
+			$admin_pass = $options['admin_pass'] ?? '';
+			if ( $admin_pass ) {
+				$data['admin_pass'] = $admin_pass;
+			}
+
+			if ( empty( $domain ) ) {
+				$data['demo_domain'] = true;
+			}
+
+			return $data;
+		} );
 
 		$post_id = wp_insert_post(
 			array(
-				'post_title' => $domain,
-				'post_name' => $post_name,
+				'post_title' => $site_name,
+				'post_name' => $site_name,
 				'post_type' => 'wpcloud_site',
 				'post_status' => 'draft',
 				'post_author' => $author->ID,

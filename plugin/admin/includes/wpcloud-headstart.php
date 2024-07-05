@@ -225,17 +225,6 @@ INTRO;
 	return true;
 }
 
-// Add the demo domain if we are adding the api creds for the first time.
-add_filter( 'pre_update_option_wpcloud_settings', function( $value, $old_value ) {
-	// If we adding api creds for the first time, add the demo domain.
-	$has_api_creds = isset( $old_value['wpcloud_client'] ) && isset( $old_value['wpcloud_api_key'] );
-	if ( ! $has_api_creds && isset( $value['wpcloud_client'] ) && isset( $value['wpcloud_api_key'] ) ) {
-		$value['wpcloud_domain'] = $value['wpcloud_domain'] ?? WPCLOUD_DEMO_DOMAIN;
-	}
-	return $value;
-}, 10, 2);
-
-
 // Run the headstart if we are adding the settings for the first time and the headstart is requested.
 add_action('add_option', function( $option, $value ) {
 		if ( "wpcloud_settings" !== $option ) {

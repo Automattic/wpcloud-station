@@ -88,8 +88,8 @@ function wpcloud_settings_init(): void {
 			'label_for'           => 'wpcloud_domain',
 			'class'               => 'wpcloud_row',
 			'wpcloud_custom_data' => 'custom',
-			'default'             => WPCLOUD_DEMO_DOMAIN,
-			'description'         => __( 'The default domain to use for new sites. Each site will use this root domain with the site name as the subdomain. If using the default WP Cloud demo domain, a unique subdomain will be generated for each site.' ),
+			'default'             => '',
+			'description'         => __( 'The default domain to use for new sites. Each site will use this root domain with the site name as the subdomain. If left empty a unique subdomain will be generated for each site.' ),
 		]
 	);
 
