@@ -12,10 +12,6 @@
  * @package        wpcloud-station
  */
 
-/**
- * Demo mode
- */
-define( 'WPCLOUD_DEMO_MODE', false );
 //@TODO: change this to wpcloudstation.dev once we have that domain set up.
 define( 'WPCLOUD_DEMO_DOMAIN', 'jhnstn.dev' );
 

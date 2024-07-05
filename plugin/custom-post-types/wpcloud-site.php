@@ -535,18 +535,6 @@ add_action( 'wpcloud_webhook_site_provisioned', 'wpcloud_on_site_provisioned', 1
  * @return mixed The detail value. WP_Error on error.
  */
 function wpcloud_get_site_detail( int|WP_Post $post, string $key, ): mixed {
-	/**
-	 * Return fixture data if in demo mode.
-	 */
-	if ( wpcloud_is_demo_mode() ) {
-		$site = wpcloud_site_details_fixture();
-		if ( isset( $site->$key ) ) {
-			return $site->$key;
-		} else {
-			return null;
-		}
-	}
-
 	if ( is_int( $post ) ) {
 		$post = get_post( $post );
 	}
@@ -694,9 +682,6 @@ function wpcloud_get_domain_alias_list( int|WP_Post| null $post = null ): array 
 }
 
 function is_wpcloud_site_post() {
-	if ( wpcloud_is_demo_mode() ) {
-		return true;
-	}
 	return get_post_type() === 'wpcloud_site';
 }
 
