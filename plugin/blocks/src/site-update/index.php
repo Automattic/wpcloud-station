@@ -31,13 +31,12 @@ function wpcloud_block_form_site_update_handler($response, $data) {
 					$current_suspend_value = '';
 				}
 				if ( ! is_null( $current_suspend_value ) && $value === $current_suspend_value ) {
-					continue;
+					continue 2;
 				}
 
 			case 'space_quota':
 				$value = intval( $value ) .'G';
 				break;
-
 			}
 
 		$result = $value ? wpcloud_client_update_site_meta( $data['wpcloud_site_id'], $key, $value ) : wpcloud_client_delete_site_meta( $data['wpcloud_site_id'], $key );

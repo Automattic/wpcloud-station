@@ -69,7 +69,7 @@ class WPCLOUD_Site {
 		$php_version = $options['php_version'];
 		$data_center = $options['data_center'];
 		$site_name   = $options['site_name'];
-		$domain      = $options['domain_name'];
+		$domain      = $options['domain_name'] ?? '';
 
 		if ( empty( $domain ) ) {
 			$settings       = get_option( 'wpcloud_settings' );
