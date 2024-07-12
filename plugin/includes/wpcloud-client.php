@@ -109,10 +109,11 @@ function wpcloud_client_domain_verification_record( ?int $wpcloud_site_id, strin
  *
  * When a new site is created, it returns a Job ID for the site provisioning job which can be checked for completion.
  *
- * @param string  $domain         The domain name for the site.
  * @param string  $admin_user     The WordPress admin username for the new site.
  * @param string  $admin_email    The WordPress admin email for the new site.
  * @param array   $data           Optional. An array of optional site creation parameters. Default: array()
+ *                                          domain        The domain name for the site.
+ *                                          demo_domain   Generate a demo domain for the site.
  *                                          admin_pass    The password for the admin user.
  *                                          clone_from    WP Cloud Site ID of the site from which to clone.
  *                                          db_charset    The database character set.
@@ -152,26 +153,31 @@ function wpcloud_client_domain_verification_record( ?int $wpcloud_site_id, strin
  *
  * @return object|WP_Error Create site job details. WP_Error on error.
  */
-function wpcloud_client_site_create( string $domain, string $admin_user, string $admin_email, array $data = array(), array $software = array(), array $meta = array() ): mixed {
+function wpcloud_client_site_create( string $admin_user, string $admin_email, array $data = array(), array $software = array(), array $meta = array() ): mixed {
 	$client_name = wpcloud_get_client_name();
 
-	// First validate if the domain can be hosted
-	$validate_domain = wpcloud_client_domain_validate( null, $domain );
-	if ( is_wp_error( $validate_domain ) ) {
-		return $validate_domain;
-	} elseif ( ! $validate_domain ) {
-		return new WP_Error( 'forbidden', 'Domain cannot be hosted' );
+	$default_data = array(
+		'admin_user'  => $admin_user,
+		'admin_email' => $admin_email,
+		'software'    => $software,
+		'meta'        => $meta,
+	);
+
+	$domain_name = $data['domain_name'] ?? '';
+	// First validate if the domain if provided.
+	if ( $domain_name ) {
+		$validate_domain = wpcloud_client_domain_validate( null, $domain_name );
+		if ( is_wp_error( $validate_domain ) ) {
+			return $validate_domain;
+		} elseif ( ! $validate_domain ) {
+			return new WP_Error( 'forbidden', 'Domain cannot be hosted' );
+		}
+		$default_data['domain_name'] = $domain_name;
 	}
 
 	$data = array_merge(
 		$data,
-		array(
-			'domain_name' => $domain,
-			'admin_user'  => $admin_user,
-			'admin_email' => $admin_email,
-			'software'    => $software,
-			'meta'        => $meta,
-		),
+		$default_data
 	);
 
 	return wpcloud_client_post( null, "create-site/{$client_name}", $data );

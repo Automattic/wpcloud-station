@@ -99,6 +99,7 @@ function wpcloud_on_create_site( int $post_id, WP_Post $post, bool $update ): vo
 	}
 
 	$data = apply_filters( 'wpcloud_site_create_data', $data, $post_id, $post );
+	$data['domain_name'] = $domain;
 
 	// check for a default theme
 	$wpcloud_settings = get_option( 'wpcloud_settings' );
@@ -109,7 +110,7 @@ function wpcloud_on_create_site( int $post_id, WP_Post $post, bool $update ): vo
 		$software[ $default_theme ] = 'activate';
 	}
 
-	$result = wpcloud_client_site_create( $domain, $author->user_login, $author->user_email, $data, $software );
+	$result = wpcloud_client_site_create( $author->user_login, $author->user_email, $data, $software );
 
 	if ( is_wp_error( $result ) ) {
 		error_log( $result->get_error_message() );
