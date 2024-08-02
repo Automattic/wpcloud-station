@@ -519,18 +519,54 @@ class WPCloud_CLI_Client extends WPCloud_CLI {
 	}
 
 	public function headstart($args, $switches ) {
-
-
 		$client = $switches['client'] ?? '';
 		$key = $switches['key'] ?? '';
 		$force = $switches['force'] ?? false;
 
 		$result = wpcloud_headstart( $client, $key, $force, new WPCloud_CLI_Skin());
+		WP_CLI::success( 'Headstart installed' );
+	}
+}
+
+class WPCloud_CLI_Client_Meta extends WPCloud_CLI {
+	 public function get($args) {
+		$key = $args[0] ?? '';
+		if ( ! $key ) {
+			WP_CLI::error( 'Please provide a key' );
+		}
+		self::log_result( wpcloud_client_get_client_meta( $key ) );
+	 }
+
+	 public function set($args) {
+		$key = $args[0] ?? '';
+		if ( ! $key ) {
+			WP_CLI::error( 'Please provide a key' );
+		}
+
+		$value = $args[1] ?? '';
+		if ( ! $value ) {
+			WP_CLI::error( 'Please provide a value' );
+		}
+		$result = wpcloud_client_set_client_meta( $key, $value );
 		if ( is_wp_error( $result ) ) {
 			WP_CLI::error( $result->get_error_message() );
 		}
-		WP_CLI::success( 'Headstart installed' );
-	}
+		self::log( '%gOK' );
+	 }
+
+	 public function remove($args) {
+		$key = $args[0] ?? '';
+		if ( ! $key ) {
+			WP_CLI::error( 'Please provide a key' );
+		}
+
+		$result = wpcloud_client_remove_client_meta( $key );
+		if ( is_wp_error( $result ) ) {
+			WP_CLI::error( $result->get_error_message() );
+		}
+		self::log( '%gOK' );
+	 }
+
 }
 
 class WPCloud_CLI_Skin extends WP_Upgrader_Skin {
@@ -558,4 +594,5 @@ add_action( 'cli_init', function( ) {
 	WP_CLI::add_command( 'cloud site domain' , 'WPCloud_CLI_Site_Domain');
 	WP_CLI::add_command( 'cloud site ssh-user' , 'WPCloud_CLI_Site_SSH_User');
 	WP_CLI::add_command( 'cloud client' , 'WPCloud_CLI_Client');
+	WP_CLI::add_command( 'cloud client meta' , 'WPCloud_CLI_Client_Meta');
 } );

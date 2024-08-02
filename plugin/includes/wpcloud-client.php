@@ -673,6 +673,58 @@ function wpcloud_client_get_site_meta( int $wpcloud_site_id, string $key, bool $
 }
 
 /**
+ * Get client meta by key
+ *
+ * @param string $key The meta key to get.
+ *
+ * @return stdClass | WP_Error Response body on success. WP_Error on failure.
+ */
+function wpcloud_client_get_client_meta( string $key ): stdClass | WP_Error {
+	$client_name = wpcloud_get_client_name();
+	$endpoint = "client-meta/$client_name/$key/get";
+
+	$result = wpcloud_client_get( 0, $endpoint );
+	if ( is_wp_error( $result ) ) {
+		return $result;
+	}
+
+	// Normalize the result to be an object with the key as the property.
+	if ( ! is_object( $result ) ) {
+		$result = (object) array( $key => $result );
+	}
+	return $result;
+}
+
+/**
+ * Set client meta by key
+ *
+ * @param string $key The meta key to set.
+ * @param string $value The value to set.
+ *
+ * @return stdClass | WP_Error Response body on success. WP_Error on failure.
+ */
+function wpcloud_client_set_client_meta( string $key, string $value ): stdClass | WP_Error {
+	$client_name = wpcloud_get_client_name();
+	$endpoint = "client-meta/$client_name/$key/update";
+
+	return (object) wpcloud_client_post( 0, $endpoint, array( 'value' => $value ) );
+}
+
+/**
+ * Remove client meta by key
+ *
+ * @param string $key The meta key to remove.
+ *
+ * @return stdClass | WP_Error Response body on success. WP_Error on failure.
+ */
+function wpcloud_client_remove_client_meta( string $key ): stdClass | WP_Error {
+	$client_name = wpcloud_get_client_name();
+	$endpoint = "client-meta/$client_name/$key/remove";
+
+	return (object) wpcloud_client_get( 0, $endpoint );
+}
+
+/**
  * Get the status of a job.
  *
  * @param integer $job_id The job id for which to get the status.
