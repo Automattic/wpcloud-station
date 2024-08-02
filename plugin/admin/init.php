@@ -107,6 +107,8 @@ function wpcloud_settings_init(): void {
 		]
 	);
 
+	/*
+	@TODO Still need to implement the secret key handshake on wp cloud.
 	add_settings_field(
 		'wpcloud_field_webhook_secret_key',
 		__( 'Webhook Secret Key', 'wpcloud' ),
@@ -120,6 +122,7 @@ function wpcloud_settings_init(): void {
 			'description'	    => __( 'The secret key to use when sending site creation events to the webhook URL. This can be used to verify the request came from WP Cloud.' ),
 		]
 	);
+	*/
 
 	$themes = wpcloud_admin_get_available_themes();
 	add_settings_field(
