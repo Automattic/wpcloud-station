@@ -93,6 +93,34 @@ function wpcloud_settings_init(): void {
 		]
 	);
 
+	add_settings_field(
+		'wpcloud_field_webhook',
+		__( 'Webhook URL', 'wpcloud' ),
+		'wpcloud_client_meta_field_input_cb',
+		'wpcloud',
+		'wpcloud_section_settings',
+		[
+			'label_for'       => 'wpcloud_webhook_url',
+			'class'           => 'wpcloud_row',
+			'description'	    => __( 'The URL to send site creation events to. This can be used to trigger actions on site creation.' ),
+			'client_meta_key' => 'webhook_url',
+		]
+	);
+
+	add_settings_field(
+		'wpcloud_field_webhook_secret_key',
+		__( 'Webhook Secret Key', 'wpcloud' ),
+		'wpcloud_client_meta_field_input_cb',
+		'wpcloud',
+		'wpcloud_section_settings',
+		[
+			'label_for'       => 'wpcloud_webhook_secret_key',
+			'class'           => 'wpcloud_row',
+			'client_meta_key' => 'webhook_secret_key',
+			'description'	    => __( 'The secret key to use when sending site creation events to the webhook URL. This can be used to verify the request came from WP Cloud.' ),
+		]
+	);
+
 	$themes = wpcloud_admin_get_available_themes();
 	add_settings_field(
 		'wpcloud_field_default_theme',
@@ -204,12 +232,13 @@ function wpcloud_get_action() {
 }
 
 function wpcloud_field_input_cb( array $args ): void {
-	$label = $args['label_for'] ?? '';
+	$label   = $args['label_for'] ?? '';
 	$options = get_option( 'wpcloud_settings' );
-	$default = $args[ 'default' ] ?? '';
-	$value = $options[ $label ] ?? $default;
-	$type = $args['type'] ?? 'text';
+	$default = $args['default'] ?? '';
+	$value   = $args['value'] ?? $options[ $label ] ?? $default;
+	$type    = $args['type'] ?? 'text';
 	$checked = $args[ 'checked' ] ?? false;
+
 	// output the field
 	if ( 'checkbox' === $type ) {
 		$value = '1';
@@ -228,7 +257,43 @@ function wpcloud_field_input_cb( array $args ): void {
 		<p class="description"><?php echo esc_html( $args['description'] ); ?></p>
 	<?php
 	}
+	if ( isset( $args[ 'error' ] ) ) { ?>
+		<p class="error"><?php echo esc_html( $args['error'] ); ?></p>
+	<?php
+	}
 }
+
+function wpcloud_client_meta_field_input_cb( array $args ): void {
+	$meta_key = $args['client_meta_key'] ?? '';
+	$request  = wpcloud_client_get_client_meta( $meta_key );
+	if ( is_wp_error( $request ) ) {
+		// Let's ignore 404s
+		if ( ! str_contains( $request->get_error_message(), 'Resource not found' )) {
+			$args[ 'error' ] = "Warning: There was a issue retrieving the setting: " . $request->get_error_message();
+		}
+		error_log( $request->get_error_message() );
+	} else {
+		$args[ 'value' ] = $request->$meta_key;
+	}
+
+	wpcloud_field_input_cb( $args );
+}
+// register a hook to update the client meta when the option is updated.
+
+function wpcloud_update_remote_client_meta( $value, $old_value ) {
+	foreach( [ 'webhook_url', 'webhook_secret_key' ] as $meta_key ) {
+		$option_key = 'wpcloud_' . $meta_key;
+		$old_meta = $old_value[ $option_key ] ?? '';
+		$new_meta = $value[ $option_key ] ?? '';
+		if ( $old_meta !== $new_meta ) {
+			wpcloud_client_set_client_meta( $meta_key, $new_meta );
+		}
+		// Let's use the remote value as the only source.
+		unset( $value[ $option_key ] );
+	}
+	return $value;
+}
+add_action( 'pre_update_option_wpcloud_settings' , 'wpcloud_update_remote_client_meta', 10, 2 );
 
 function wpcloud_field_select_cb( array $args ): void {
 	$options   = get_option( 'wpcloud_settings' );
@@ -369,13 +434,3 @@ function cc_mime_types( $mimes ){
   return $mimes;
 }
 add_filter( 'upload_mimes', 'cc_mime_types' );
-
-function fix_svg() {
-  echo '<style type="text/css">
-        .attachment-266x266, .thumbnail img {
-             width: 100% !important;
-             height: auto !important;
-        }
-        </style>';
-}
-//add_action( 'admin_head', 'fix_svg' );
