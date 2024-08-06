@@ -25,9 +25,12 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
 
 if ( ! is_admin() ) {
 	require_once plugin_dir_path( __FILE__ ) . 'assets/js/build/index.asset.php';
-	add_action( 'wp_enqueue_scripts', function():void {
-		wp_enqueue_script( 'wpcloud', plugin_dir_url( __FILE__ ) . 'assets/js/build/index.js', array( 'wp-hooks' ) );
-	} );
+	add_action(
+		'wp_enqueue_scripts',
+		function (): void {
+			wp_enqueue_script( 'wpcloud', plugin_dir_url( __FILE__ ) . 'assets/js/build/index.js', array( 'wp-hooks' ), '1.0.0', true );
+		}
+	);
 }
 
 /**
@@ -51,16 +54,20 @@ add_action( 'rest_api_init', 'wpcloud_register_controllers' );
  * Set up ACL for WP Cloud specific pages
  */
 function wpcloud_setup_acl(): void {
-	// Verify that the private category exists
-	wp_insert_term( 'WP Cloud Private Page', 'category', array(
-    'description' => 'Private category for WP Cloud specific pages.',
-    'slug' => WPCLOUD_PRIVATE_CATEGORY,
-	) );
+	// Verify that the private category exists.
+	wp_insert_term(
+		'WP Cloud Private Page',
+		'category',
+		array(
+			'description' => 'Private category for WP Cloud specific pages.',
+			'slug'        => WPCLOUD_PRIVATE_CATEGORY,
+		)
+	);
 
-	// Allow adding categories to pages
-	register_taxonomy_for_object_type('category', 'page');
+	// Allow adding categories to pages.
+	register_taxonomy_for_object_type( 'category', 'page' );
 
-	add_filter('template_redirect', 'wpcloud_verify_logged_in');
+	add_filter( 'template_redirect', 'wpcloud_verify_logged_in' );
 }
 
 /**
@@ -71,20 +78,24 @@ function wpcloud_verify_logged_in(): void {
 		return;
 	}
 
-	$categories = array_reduce(get_the_category(), function($categories, $category) {
-		$categories[] = $category->slug;
-		return $categories;
-	}, []);
+	$categories = array_reduce(
+		get_the_category(),
+		function ( $categories, $category ) {
+			$categories[] = $category->slug;
+			return $categories;
+		},
+		array()
+	);
 
 	$is_wpcloud_site_archive = is_post_type_archive( 'wpcloud_site' );
-	$is_wpcloud_private_page = array_search( WPCLOUD_PRIVATE_CATEGORY, $categories ) !== false;
+	$is_wpcloud_private_page = array_search( WPCLOUD_PRIVATE_CATEGORY, $categories, true ) !== false;
 
 	if ( $is_wpcloud_site_archive || $is_wpcloud_private_page ) {
 		if ( ! is_user_logged_in() ) {
 			global $wp;
-			$url = add_query_arg( array('ref' => $wp->request ), '/login' );
-			wp_redirect( $url );
-   		exit();
+			$url = add_query_arg( array( 'ref' => $wp->request ), '/login' );
+			wp_safe_redirect( $url );
+			exit();
 		}
 	}
 }
@@ -98,7 +109,3 @@ function wpcloud_init(): void {
 	wpcloud_setup_acl();
 }
 add_action( 'init', 'wpcloud_init' );
-
-function wpcloud_station_get_assets_url( $url ) {
-	return plugins_url( '/assets/' . $url, __FILE__ );
-}

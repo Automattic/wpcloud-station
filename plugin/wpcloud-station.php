@@ -12,7 +12,7 @@
  * @package        wpcloud-station
  */
 
-//@TODO: change this to wpcloudstation.dev once we have that domain set up.
+// @TODO: change this to wpcloudstation.dev once we have that domain set up.
 define( 'WPCLOUD_DEMO_DOMAIN', 'jhnstn.dev' );
 
 /**

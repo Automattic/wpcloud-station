@@ -14,6 +14,6 @@
 	"phpsab.autoRulesetSearch": false,
 	"phpsab.standard": "WordPress",
 	"phpsab.snifferArguments": [
-		"--ignore=*/wp-admin/*,*/wp-includes/*"
+		"--ignore=lib"
 	]
 }

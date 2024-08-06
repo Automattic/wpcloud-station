@@ -5,6 +5,8 @@
  * @package wpcloud-station
  */
 
+ // phpcs:disable WordPress.PHP.DevelopmentFunctions.error_log_error_log
+
 declare( strict_types = 1 );
 
 /**
@@ -25,13 +27,13 @@ function wpcloud_register_site_post_type(): void {
 		'search_items'       => __( 'Search Sites', 'wpcloud' ),
 		'parent_item_colon'  => __( 'Parent Sites:', 'wpcloud' ),
 		'not_found'          => __( 'No sites found.', 'wpcloud' ),
-		'not_found_in_trash' => __( 'No sites found in Trash.', 'wpcloud' )
-	  );
+		'not_found_in_trash' => __( 'No sites found in Trash.', 'wpcloud' ),
+	);
 
-	// Set the custom post type args
+	// Set the custom post type args.
 	$args = array(
-		'labels'	   => $labels,
-		'public'	   => true,
+		'labels'       => $labels,
+		'public'       => true,
 		'has_archive'  => true,
 		'rest_base'    => 'wpcloud/sites',
 		'rewrite'      => array( 'slug' => 'sites' ),
@@ -42,10 +44,10 @@ function wpcloud_register_site_post_type(): void {
 		'taxonomies'   => array( 'category', 'tag' ),
 	);
 
-	// Register the custom post type
+	// Register the custom post type.
 	register_post_type( 'wpcloud_site', $args );
 
-	// register the post meta
+	// Register the post meta.
 	wpcloud_site_register_post_meta( 'wpcloud_site_id', 'integer' );
 	wpcloud_site_register_post_meta( 'php_version', 'string' );
 	wpcloud_site_register_post_meta( 'data_center', 'string' );
@@ -62,10 +64,10 @@ function wpcloud_site_register_post_meta( string $name, string $type ) {
 		'wpcloud_site',
 		$name,
 		array(
-			'show_in_rest'       => true,
-			'single'             => true,
-			'type'               => $type,
-			'sanitize_callback'  => 'wp_kses_post',
+			'show_in_rest'      => true,
+			'single'            => true,
+			'type'              => $type,
+			'sanitize_callback' => 'wp_kses_post',
 		)
 	);
 }
@@ -98,13 +100,13 @@ function wpcloud_on_create_site( int $post_id, WP_Post $post, bool $update ): vo
 		$data['geo_affinity'] = $data_center;
 	}
 
-	$data = apply_filters( 'wpcloud_site_create_data', $data, $post_id, $post );
+	$data                = apply_filters( 'wpcloud_site_create_data', $data, $post_id, $post );
 	$data['domain_name'] = $domain;
 
-	// check for a default theme
+	// Check for a default theme.
 	$wpcloud_settings = get_option( 'wpcloud_settings' );
-	$default_theme = $wpcloud_settings['wpcloud_default_theme'] ?? '';
-	$software = $wpcloud_settings['software'] ?? array();
+	$default_theme    = $wpcloud_settings['wpcloud_default_theme'] ?? '';
+	$software         = $wpcloud_settings['software'] ?? array();
 
 	if ( ! empty( $default_theme ) ) {
 		$software[ $default_theme ] = 'activate';
@@ -168,7 +170,6 @@ function wpcloud_on_rest_prepare_site( WP_REST_Response $response, WP_Post $post
 			'wp_admin_user'   => $wpcloud_site->wp_admin_user,
 			'static_file_404' => $wpcloud_site->static_file_404,
 			'wp_admin_email'  => $wpcloud_site->wp_admin_email,
-			'wp_admin_user'   => $wpcloud_site->wp_admin_user,
 			'wp_version'      => $wpcloud_site->wp_version,
 		)
 	);
@@ -180,17 +181,16 @@ add_filter( 'rest_prepare_wpcloud_site', 'wpcloud_on_rest_prepare_site', 10, 2 )
 /**
  * Always query both draft and published sites in REST query.
  *
- * @param array      $args    The request arguments.
- * @param WP_Request $request The request.
+ * @param array $args    The request arguments.
  *
  * @return array The arguments with draft and publish included.
  */
-function wpcloud_site_rest_query( $args, $request ): array {
+function wpcloud_site_rest_query( $args ): array {
 	$args['post_status'] = array( 'draft', 'publish' );
 
 	return $args;
 }
-add_filter( 'rest_wpcloud_site_query', 'wpcloud_site_rest_query', 10, 2 );
+add_filter( 'rest_wpcloud_site_query', 'wpcloud_site_rest_query' );
 
 /**
  * Prevent WP Cloud Site from trash. Must force delete.
@@ -245,9 +245,8 @@ function wpcloud_lookup_post_by_site_id( int $wpcloud_site_id ): mixed {
 /**
  * Update the post status to `publish` when `site_provisioned` webhook received.
  *
- * @param int    $timestamp       The timestamp of the event in unix milliseconds.
- * @param int    $wpcloud_site_id The WP Cloud Site Id.
- * @param array  $data            An array of data sent with the event.
+ * @param int $timestamp       The timestamp of the event in unix milliseconds.
+ * @param int $wpcloud_site_id The WP Cloud Site Id.
  */
 function wpcloud_on_site_provisioned( int $timestamp, int $wpcloud_site_id ): void {
 	$post = wpcloud_lookup_post_by_site_id( $wpcloud_site_id );
@@ -255,7 +254,12 @@ function wpcloud_on_site_provisioned( int $timestamp, int $wpcloud_site_id ): vo
 		return;
 	}
 
-	wp_update_post( array( 'ID' => $post->ID, 'post_status' => 'publish' ) );
+	wp_update_post(
+		array(
+			'ID'          => $post->ID,
+			'post_status' => 'publish',
+		)
+	);
 }
 add_action( 'wpcloud_webhook_site_provisioned', 'wpcloud_on_site_provisioned', 10, 2 );
 
@@ -263,7 +267,7 @@ add_action( 'wpcloud_webhook_site_provisioned', 'wpcloud_on_site_provisioned', 1
  * Get a site detail.
  *
  * @param int|WP_Post $post The site post or ID.
- * @param string $key The detail key.
+ * @param string      $key The detail key.
  *
  * @return mixed The detail value. WP_Error on error.
  */
@@ -276,7 +280,6 @@ function wpcloud_get_site_detail( int|WP_Post $post, string $key, ): mixed {
 		return null;
 	}
 
-
 	$wpcloud_site_id = get_post_meta( $post->ID, 'wpcloud_site_id', true );
 	if ( empty( $wpcloud_site_id ) ) {
 		return null;
@@ -285,14 +288,14 @@ function wpcloud_get_site_detail( int|WP_Post $post, string $key, ): mixed {
 	$wpcloud_site_id = intval( $wpcloud_site_id );
 
 	$result = '';
-	switch ($key) {
+	switch ( $key ) {
 		case 'phpmyadmin_url':
 			$result = wpcloud_client_site_phpmyadmin_url( $wpcloud_site_id );
 			return $result;
 
 		case 'ssl_info':
 			// @TODO getting timeout errors but probably since we are not using valid domains ?
-			//$result = wpcloud_client_site_ssl_info( $wpcloud_site_id );
+			// $result = wpcloud_client_site_ssl_info( $wpcloud_site_id );
 			return '';
 
 		case 'ip_addresses':
@@ -329,11 +332,11 @@ function wpcloud_get_site_detail( int|WP_Post $post, string $key, ): mixed {
 				return '';
 			}
 
-			// make the size human readable
+			// Make the size human readable.
 			$bytes = (float) $result->space_quota;
-			$i = floor(log($bytes, 1024));
-			$gigs = round($bytes / pow(1024, $i), 2);
-			return $gigs .'G';
+			$i     = floor( log( $bytes, 1024 ) );
+			$gigs  = round( $bytes / pow( 1024, $i ), 2 );
+			return $gigs . 'G';
 
 		case 'site_access_with_ssh':
 			$result = wpcloud_client_get_site_meta( $wpcloud_site_id, 'ssh_port' );
@@ -343,19 +346,19 @@ function wpcloud_get_site_detail( int|WP_Post $post, string $key, ): mixed {
 			}
 			$ssh_port = $result->ssh_port ?? -1;
 			// @TODO: Confirm that this is always the case, it appears that the port will be 2223 for ssh and 2221 for sftp
-			return  $ssh_port == 2223;
+			return 2223 === $ssh_port;
 
 		case 'data_center':
 			$key = 'geo_affinity';
+			// Fallthrough intentional to set the result.
 		default:
 			$result = wpcloud_client_site_details( $wpcloud_site_id, true );
 	}
 
-
 	if ( is_wp_error( $result ) ) {
 		return $result;
 	}
-	if ('geo_affinity' === $key) {
+	if ( 'geo_affinity' === $key ) {
 		return $result->extra->server_pool->geo_affinity;
 	}
 
@@ -368,6 +371,7 @@ function wpcloud_get_site_detail( int|WP_Post $post, string $key, ): mixed {
 
 /**
  * Check if a site detail should be refreshed.
+ *
  * @param string $key The detail key.
  * @return bool True if the detail should be refreshed.
  */
@@ -381,6 +385,7 @@ function wpcloud_should_refresh_detail( string $key ): bool {
 
 /**
  * Get the current site ID.
+ *
  * @return int The site ID.
  */
 function wpcloud_get_current_site_id(): int {
@@ -397,7 +402,12 @@ function wpcloud_get_current_site_id(): int {
 	return intval( $wpcloud_site_id );
 }
 
-function wpcloud_get_domain_alias_list( int|WP_Post| null $post = null ): array {
+/**
+ * Get the domain alias list for the current site.
+ *
+ * @return array The domain alias list.
+ */
+function wpcloud_get_domain_alias_list(): array {
 	$wpcloud_site_id = wpcloud_get_current_site_id();
 
 	if ( ! $wpcloud_site_id ) {
@@ -414,6 +424,11 @@ function wpcloud_get_domain_alias_list( int|WP_Post| null $post = null ): array 
 	return $result;
 }
 
-function is_wpcloud_site_post() {
+/**
+ * Check if the current post is a WP Cloud Site post.
+ *
+ * @return bool True if the current post is a WP Cloud Site post.
+ */
+function is_wpcloud_site_post(): bool {
 	return get_post_type() === 'wpcloud_site';
 }
