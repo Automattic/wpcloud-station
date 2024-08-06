@@ -1,12 +1,15 @@
 <?php
+/**
+ * File description goes here.
+ *
+ * @package YourPackageName
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( '-1' );
 }
 $client_ips = null;
-$ip_request = wpcloud_client_site_ip_addresses();
-if ( ! is_wp_error( $ip_request ) ) {
-	$client_ips = $ip_request->ips;
-}
+$server_ip  = filter_var( wp_unslash( $_SERVER['SERVER_ADDR'] ?? '' ), FILTER_VALIDATE_IP );
 
 ?>
 <style>
@@ -45,7 +48,7 @@ if ( ! is_wp_error( $ip_request ) ) {
 				<label for="wpcloud_api_key">Server IP Address</label>
 			</th>
 			<td>
-			<?php echo $_SERVER['SERVER_ADDR']; ?>
+			<?php echo esc_html( $server_ip ); ?>
 			</td>
 		</tr>
 </tbody></table>

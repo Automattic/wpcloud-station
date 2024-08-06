@@ -1,5 +1,7 @@
 <?php
 /**
+ * WP Cloud Station Admin
+ *
  * @package wpcloud-station
  */
 
@@ -7,6 +9,11 @@ declare( strict_types = 1 );
 
 require_once plugin_dir_path( __FILE__ ) . 'includes/wpcloud-headstart.php';
 
+/**
+ * Get the available themes.
+ *
+ * @return array The available themes.
+ */
 function wpcloud_admin_get_available_themes() {
 	return array(
 		'themes/twentytwentyfour'  => __( 'Twenty Twenty Four', 'wpcloud' ),
@@ -16,6 +23,11 @@ function wpcloud_admin_get_available_themes() {
 	);
 }
 
+/**
+ * Get the available plugins.
+ *
+ * @return array The available plugins.
+ */
 function wpcloud_admin_get_available_plugins() {
 	return array(
 		'plugins/classic-editor'            => __( 'Classic Editor', 'wpcloud' ),
@@ -30,6 +42,13 @@ function wpcloud_admin_get_available_plugins() {
 	);
 }
 
+/**
+ * Sanitize the settings
+ *
+ * @param array $input The input to sanitize.
+ *
+ * @return array The sanitized input.
+ */
 function wpcloud_settings_sanitize( $input ) {
 	$input['software'] = array_filter( $input['software'] ?? array() );
 
@@ -42,6 +61,11 @@ function wpcloud_settings_sanitize( $input ) {
 	return $input;
 }
 
+/**
+ * Initialize the settings
+ *
+ * @return void
+ */
 function wpcloud_settings_init(): void {
 	register_setting( 'wpcloud', 'wpcloud_settings', 'wpcloud_settings_sanitize' );
 
@@ -173,7 +197,7 @@ function wpcloud_settings_init(): void {
 
 	// Only allow headstart if no settings have been saved yet
 	// headstart is might make unwanted changes if there are existing settings.
-	// It can be forced to run via the cli command `wp wpcloud client headstart`
+	// It can be forced to run via the cli command `wp wpcloud client headstart`.
 	$allow_headstart = empty( get_option( 'wpcloud_settings' ) );
 	add_settings_field(
 		'wpcloud_field_headstart',
@@ -194,6 +218,11 @@ function wpcloud_settings_init(): void {
 }
 add_action( 'admin_init', 'wpcloud_settings_init' );
 
+/**
+ * Add the options page
+ *
+ * @return void
+ */
 function wpcloud_options_page(): void {
 	add_menu_page(
 		'WP Cloud',
@@ -225,6 +254,11 @@ function wpcloud_options_page(): void {
 }
 add_action( 'admin_menu', 'wpcloud_options_page' );
 
+/**
+ * Get the action from the request
+ *
+ * @return string The action.
+ */
 function wpcloud_get_action() {
 	$action = '';
 	if ( isset( $_REQUEST['action'] ) ) {
@@ -233,6 +267,12 @@ function wpcloud_get_action() {
 	return $action;
 }
 
+/**
+ * Get the site id from the request
+ *
+ * @param array $args The request args.
+ * @return void.
+ */
 function wpcloud_field_input_cb( array $args ): void {
 	$label   = $args['label_for'] ?? '';
 	$options = get_option( 'wpcloud_settings' );
@@ -241,26 +281,26 @@ function wpcloud_field_input_cb( array $args ): void {
 	$type    = $args['type'] ?? 'text';
 	$checked = $args['checked'] ?? false;
 
-	// output the field
+	// output the field.
 	if ( 'checkbox' === $type ) {
 		$value = '1';
 	}
 	$disabled = $args['disabled'] ?? false;
 	?>
 	<input
-		type="<?php echo $type; ?>"
-		id="<?php echo esc_attr( $args['label_for'] ); ?>"
-		name="wpcloud_settings[<?php echo esc_attr( $args['label_for'] ); ?>]"
-		value="<?php echo $value; ?>"
-		<?php
-		if ( 'checkbox' === $type && $checked ) {
-			echo ' checked '; }
-		?>
-		<?php
-		if ( $disabled ) {
-			echo ' disabled '; }
-		?>
-	>
+			type="<?php echo esc_attr( $type ); ?>"
+			id="<?php echo esc_attr( $args['label_for'] ); ?>"
+			name="wpcloud_settings[<?php echo esc_attr( $args['label_for'] ); ?>]"
+			value="<?php echo esc_attr( $value ); ?>"
+			<?php
+			if ( 'checkbox' === $type && $checked ) {
+				echo ' checked '; }
+			?>
+			<?php
+			if ( $disabled ) {
+				echo ' disabled '; }
+			?>
+		>
 	<?php if ( isset( $args['description'] ) ) { ?>
 		<p class="description"><?php echo esc_html( $args['description'] ); ?></p>
 		<?php
@@ -272,23 +312,35 @@ function wpcloud_field_input_cb( array $args ): void {
 	}
 }
 
+/**
+ * Get the client meta field input
+ *
+ * @param array $args The args.
+ * @return void.
+ */
 function wpcloud_client_meta_field_input_cb( array $args ): void {
 	$meta_key = $args['client_meta_key'] ?? '';
 	$request  = wpcloud_client_get_client_meta( $meta_key );
 	if ( is_wp_error( $request ) ) {
-		// Let's ignore 404s
+		// Let's ignore 404s.
 		if ( ! str_contains( $request->get_error_message(), 'Resource not found' ) ) {
 			$args['error'] = 'Warning: There was a issue retrieving the setting: ' . $request->get_error_message();
 		}
-		error_log( $request->get_error_message() );
+		error_log( $request->get_error_message() ); // phpcs:disable WordPress.PHP.DevelopmentFunctions.error_log_error_log
 	} else {
 		$args['value'] = $request->$meta_key;
 	}
 
 	wpcloud_field_input_cb( $args );
 }
-// register a hook to update the client meta when the option is updated.
 
+/**
+ * Hook to update the client meta when the option is updated.
+ *
+ * @param array $value The new value.
+ * @param array $old_value The old value.
+ * @return array The new value.
+ */
 function wpcloud_update_remote_client_meta( $value, $old_value ) {
 	foreach ( array( 'webhook_url', 'webhook_secret_key' ) as $meta_key ) {
 		$option_key = 'wpcloud_' . $meta_key;
@@ -304,6 +356,12 @@ function wpcloud_update_remote_client_meta( $value, $old_value ) {
 }
 add_action( 'pre_update_option_wpcloud_settings', 'wpcloud_update_remote_client_meta', 10, 2 );
 
+/**
+ * Get the client meta field input
+ *
+ * @param array $args The args.
+ * @return void.
+ */
 function wpcloud_field_select_cb( array $args ): void {
 	$options   = get_option( 'wpcloud_settings' );
 	$label_for = esc_attr( $args['label_for'] );
@@ -312,14 +370,14 @@ function wpcloud_field_select_cb( array $args ): void {
 	$value     = esc_attr( $options[ $label_for ] ?? $default );
 	$items     = $args['items'];
 
-	// output the field
+	// output the field.
 	?>
-	<select name="<?php echo $name; ?>" id="<?php echo $label_for; ?>">
+	<select name="<?php echo esc_attr( $name ); ?>" id="<?php echo esc_attr( $label_for ); ?>">
 		<option value=''></option>
 	<?php
 	foreach ( $items as $item_value => $item_label ) {
 		$selected = $item_value === $value ? 'selected' : '';
-		echo "<option value='$item_value' $selected>$item_label</option>";
+		echo '<option value="' . esc_attr( $item_value ) . '"' . esc_attr( $selected ) . '>' . esc_html( $item_label ) . '</option>';
 	}
 	?>
 	</select>
@@ -329,12 +387,18 @@ function wpcloud_field_select_cb( array $args ): void {
 	}
 }
 
+/**
+ * Get the client meta field input
+ *
+ * @param array $args The args.
+ * @return void.
+ */
 function wpcloud_field_software_cb( array $args ): void {
 	$options   = get_option( 'wpcloud_settings' );
 	$label_for = esc_attr( $args['label_for'] );
 	$items     = $args['items'];
 
-	// output the field
+	// output the field.
 	echo '<table>';
 	foreach ( $items as $item_value => $item_label ) {
 		$name  = "wpcloud_settings[$label_for][$item_value]";
@@ -342,13 +406,13 @@ function wpcloud_field_software_cb( array $args ): void {
 		?>
 		<tr>
 			<td style="padding: 5px;">
-				<label><?php echo $item_label; ?></label>
+				<label><?php echo esc_html( $item_label ); ?></label>
 			</td>
 			<td style="padding: 5px;">
-				<select name="<?php echo $name; ?>" id="<?php echo $name; ?>">
+				<select name="<?php echo esc_attr( $name ); ?>" id="<?php echo esc_attr( $name ); ?>">
 					<option value=""></option>
-					<option value="install" <?php echo ( $value === 'install' ) ? 'selected' : ''; ?>>Install</option>
-					<option value="activate" <?php echo ( $value === 'activate' ) ? 'selected' : ''; ?>>Activate</option>
+					<option value="install" <?php echo ( 'install' === $value ) ? 'selected' : ''; ?>>Install</option>
+					<option value="activate" <?php echo ( 'activate' === $value ) ? 'selected' : ''; ?>>Activate</option>
 				</select>
 			</td>
 		</tr>
@@ -362,6 +426,12 @@ function wpcloud_field_software_cb( array $args ): void {
 	}
 }
 
+/**
+ * Get the client meta field input
+ *
+ * @param int $wpcloud_site_id The site id.
+ * @return void.
+ */
 function site_created__success( int $wpcloud_site_id ): void {
 	$wpcloud_site = get_post( $wpcloud_site_id );
 	?>
@@ -369,13 +439,18 @@ function site_created__success( int $wpcloud_site_id ): void {
 	<p>
 		<?php
 		/* translators: %s: name of the site */
-		printf( __( 'Provisioning  %s', 'wpcloud' ), $wpcloud_site->post_title )
+		printf( esc_html__( 'Provisioning  %s', 'wpcloud' ), esc_html( $wpcloud_site->post_title ) )
 		?>
 	</p>
 </div>
 	<?php
 }
 
+/**
+ * Get the client meta field input
+ *
+ * @return void.
+ */
 function wpcloud_admin_controller(): void {
 	// check user capabilities
 	// @TODO make this a wpcloud capability...
@@ -386,6 +461,11 @@ function wpcloud_admin_controller(): void {
 	wpcloud_admin_list_sites();
 }
 
+/**
+ * Get the client meta field input
+ *
+ * @return void.
+ */
 function wpcloud_admin_list_sites(): void {
 	do_action( 'admin_notices' );
 
@@ -402,7 +482,7 @@ function wpcloud_admin_list_sites(): void {
 	(() => {
 		document.querySelectorAll('.delete').forEach((el) => {
 			el.addEventListener('click', (e) => {
-				if (!confirm('<?php echo $confirm_delete_message; ?>')) {
+				if (!confirm('<?php echo esc_js( $confirm_delete_message ); ?>')) {
 					e.preventDefault();
 				}
 			});
@@ -412,14 +492,19 @@ function wpcloud_admin_list_sites(): void {
 	<?php
 }
 
+/**
+ * Get the client meta field input
+ *
+ * @return void.
+ */
 function wpcloud_admin_options_controller(): void {
-		// check user capabilities
+		// Check user capabilities.
 	if ( ! current_user_can( 'manage_options' ) ) {
 			return;
 	}
 
 	if ( isset( $_GET['settings-updated'] ) ) {
-		// add settings saved message with the class of "updated"
+		// Add settings saved message with the class of "updated".
 		add_settings_error( 'wpcloud_messages', 'wpcloud_message', __( 'Settings Saved', 'wpcloud' ), 'updated' );
 	}
 
@@ -427,7 +512,7 @@ function wpcloud_admin_options_controller(): void {
 		require_once plugin_dir_path( __FILE__ ) . 'options.php';
 }
 
-// Allow SVG
+// Allow SVG.
 add_filter(
 	'wp_check_filetype_and_ext',
 	function ( $data, $file, $filename, $mimes ) {
@@ -443,6 +528,12 @@ add_filter(
 	4
 );
 
+/**
+ * Add SVG support
+ *
+ * @param array $mimes The mime types.
+ * @return array The mime types.
+ */
 function cc_mime_types( $mimes ) {
 	$mimes['svg'] = 'image/svg+xml';
 	return $mimes;
