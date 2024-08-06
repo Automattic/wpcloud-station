@@ -21,7 +21,7 @@ import { __unstableStripHTML as stripHTML } from '@wordpress/dom'; // eslint-dis
  * Internal dependencies
  */
 
-import Password from './fields/password';
+import { Text, Password, Select } from './fields';
 
 /**
  * Get the name attribute from a content string.
@@ -42,66 +42,18 @@ const getNameFromLabel = ( content ) => {
 	);
 };
 
-function renderSelect(
-	{ options, label, name, required },
-	inputClasses,
-	inputStyle
-) {
-	if ( ! options ) {
-		options = [ { label: `{ ${ name } }`, value: '' } ];
-	}
-	return (
-		<div class="wpcloud-form-input--select--wrapper">
-			<select
-				className={ classNames(
-					'wpcloud-station-form-input__select',
-					inputClasses
-				) }
-				style={ inputStyle }
-				name={ name || getNameFromLabel( label ) }
-				required={ required }
-				aria-required={ required }
-			>
-				{ options.map( ( option ) => (
-					<option key={ option.value } value={ option.value }>
-						{ option.label }
-					</option>
-				) ) }
-			</select>
-		</div>
-	);
-}
-
-function renderText(
-	{ type, name, label, required, placeholder, uniqueId },
-	inputClasses,
-	inputStyle
-) {
-	const TagName = 'textarea' === type ? 'textarea' : 'input';
-	return (
-		<TagName
-			className={ inputClasses }
-			type={ 'textarea' === type ? undefined : type }
-			name={ name || getNameFromLabel( label ) }
-			required={ required }
-			aria-required={ required }
-			placeholder={ placeholder || undefined }
-			style={inputStyle}
-			id={ uniqueId }
-		/>
-	);
-}
-
 function renderField( attributes ) {
 	const { type, displayAsToggle, submitOnChange } = attributes;
 
 	const borderProps = getBorderClassesAndStyles( attributes );
 	const colorProps = getColorClassesAndStyles( attributes );
 
-	const inputStyle = {
+	attributes.inputStyle = {
 		...borderProps.style,
 		...colorProps.style,
 	};
+
+	attributes.name = attributes.name || getNameFromLabel( attributes.label );
 
 	const inputClasses = classNames(
 		'wpcloud-block-form-input__input',
@@ -117,8 +69,8 @@ function renderField( attributes ) {
 	}
 
 	return 'select' === type
-		? renderSelect( attributes, inputClasses, inputStyle )
-		: renderText( attributes, inputClasses, inputStyle );
+		? <Select attributes={attributes} className={inputClasses} />
+		: <Text attributes={attributes} className={inputClasses} />;
 }
 
 

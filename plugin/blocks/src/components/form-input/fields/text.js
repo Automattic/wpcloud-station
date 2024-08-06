@@ -1,40 +1,32 @@
 /**
- * External dependencies
- */
-import classNames from 'classnames';
-
-/**
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
+
 
 export default function TextField( {
 	attributes,
 	className,
 	onPlaceholderChange,
 } ) {
-	const { placeholder, required, type, name } = attributes;
-
-	const controls = <></>;
+	const { placeholder, required, type, name, uniqueId, inputStyle } = attributes;
 
 	const TagName = type === 'textarea' ? 'textarea' : 'input';
 	return (
-		<>
-			{ controls }
+
 			<TagName
 				type={ 'textarea' === type ? undefined : type }
-				className={ classNames(
-					className,
-					'wpcloud-block-form-input__input'
-				) }
+				className={ className }
 				aria-label={ __( 'Optional placeholder text' ) }
-				placeholder={ placeholder }
+				placeholder={ placeholder || undefined }
 				onChange={ ( event ) =>
 					onPlaceholderChange( event.target.value )
 				}
-				aria-required={required}
-				name={name}
+				name={ name }
+				id={ uniqueId }
+				style={ inputStyle }
+				required={ required }
+				aria-required={ required }
 			/>
-		</>
 	);
 }

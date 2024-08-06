@@ -1,9 +1,4 @@
 /**
- * External dependencies
- */
-import classNames from 'classnames';
-
-/**
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
@@ -13,7 +8,7 @@ export default function SelectField( {
 	className,
 	onValueChange,
 } ) {
-	const { name, value } = attributes;
+	const { name, value, inputStyle, required } = attributes;
 	let { options } = attributes;
 
 	if (!options) {
@@ -23,13 +18,13 @@ export default function SelectField( {
 	return (
 		<div className="wpcloud-form-input--select--wrapper">
 			<select
-				className={ classNames(
-					className,
-					'wpcloud-station-form-input__select'
-				) }
+				className={ className }
 				aria-label={ __( 'Select' ) }
 				value={ value }
 				onChange={ ( event ) => onValueChange( event.target.value ) }
+				style={ inputStyle }
+				name={ name }
+				required={ required }
 			>
 				{ options.map( ( option, index ) => ( <option key={ index } value={ option.value }>{ option.label }</option> ) ) }
 			</select>
