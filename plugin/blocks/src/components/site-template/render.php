@@ -1,21 +1,27 @@
 <?php
+/**
+ * Render the Site Template block.
+ *
+ * @package wpcloud-block
+ * @subpackage site-template
+ */
 
-// lets see if we can remove the first block, which would be the header
-// if it is, capture and remove it and add back in later
-$inner_blocks = $block->parsed_block['innerBlocks'];
-$header = $inner_blocks[0];
+// lets see if we can remove the first block, which would be the header.
+// if it is, capture and remove it and add back in later.
+$inner_blocks   = $block->parsed_block['innerBlocks'];
+$header         = $inner_blocks[0];
 $header_content = '';
-if ('wpcloud/site-template-header' === $header['blockName'] )  {
-	$header = array_shift($inner_blocks);
-	$header_content = ( new WP_Block( $header ) )->render( array( 'dynamic' => false ) );
-	$header_item = '<tr>' . $header_content . '</tr>';
+if ( 'wpcloud/site-template-header' === $header['blockName'] ) {
+	$header                             = array_shift( $inner_blocks );
+	$header_content                     = ( new WP_Block( $header ) )->render( array( 'dynamic' => false ) );
+	$header_item                        = '<tr>' . $header_content . '</tr>';
 	$block->parsed_block['innerBlocks'] = $inner_blocks;
-	array_splice( $block->parsed_block['innerContent'], 1, 2);
+	array_splice( $block->parsed_block['innerContent'], 1, 2 );
 }
 
 $page_key            = isset( $block->context['queryId'] ) ? 'query-' . $block->context['queryId'] . '-page' : 'query-page';
 $enhanced_pagination = isset( $block->context['enhancedPagination'] ) && $block->context['enhancedPagination'];
-$page                = empty( $_GET[ $page_key ] ) ? 1 : (int) $_GET[ $page_key ];
+$the_page            = empty( $_GET[ $page_key ] ) ? 1 : (int) $_GET[ $page_key ]; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 // Use global query if needed.
 $use_global_query = ( isset( $block->context['query']['inherit'] ) && $block->context['query']['inherit'] );
@@ -34,17 +40,17 @@ if ( $use_global_query ) {
 		$query = $wp_query;
 	}
 } else {
-	$query_args = build_query_vars_from_query_block( $block, $page );
+	$query_args = build_query_vars_from_query_block( $block, $the_page );
 
-	// Add in some special handling for the site template block
+	// Add in some special handling for the site template block.
 	$query_args['post_status'] = 'any';
 
 	// Limit the query to the current user if they are not an admin.
 	if ( ! current_user_can( 'manage_options' ) ) {
-		$query_args['author__in'] = array ( get_current_user_id() );
+		$query_args['author__in'] = array( get_current_user_id() );
 	}
 
-	$query      = new WP_Query( $query_args );
+	$query = new WP_Query( $query_args );
 }
 
 if ( ! $query->have_posts() ) {
@@ -65,12 +71,12 @@ while ( $query->have_posts() ) {
 	// This ensures that for the inner instances of the Post Template block, we do not render any block supports.
 	$block_instance['blockName'] = 'core/null';
 
-	$post_id              = get_the_ID();
-	$post_type            = get_post_type();
-	$filter_block_context = static function ( $context ) use ( $post_id, $post_type ) {
-		$context['postType'] = $post_type;
+	$the_post_id          = get_the_ID();
+	$the_post_type        = get_post_type();
+	$filter_block_context = static function ( $context ) use ( $the_post_id, $the_post_type ) {
+		$context['postType']       = $the_post_type;
 		$context['wpcloud/layout'] = 'table';
-		$context['postId']   = $post_id;
+		$context['postId']         = $the_post_id;
 		return $context;
 	};
 
@@ -85,7 +91,7 @@ while ( $query->have_posts() ) {
 	// Wrap the render inner blocks in a `li` element with the appropriate post classes.
 	$post_classes = implode( ' ', get_post_class( 'wp-block-post' ) );
 
-	$inner_block_directives = $enhanced_pagination ? ' data-wp-key="post-template-item-' . $post_id . '"' : '';
+	$inner_block_directives = $enhanced_pagination ? ' data-wp-key="post-template-item-' . $the_post_id . '"' : '';
 
 	$content .= '<tr' . $inner_block_directives . ' class="' . esc_attr( $post_classes ) . '">' . $block_content . '</tr>';
 }
@@ -96,6 +102,7 @@ while ( $query->have_posts() ) {
  * from a secondary query loop back to the main query loop.
  * Since we use two custom loops, it's safest to always restore.
 */
+// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 printf(
 	'<table %1$s><thead>%2$s</thead></tbody>%3$s</tbody></table>',
 	$wrapper_attributes,
