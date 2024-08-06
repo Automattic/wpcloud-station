@@ -1,0 +1,18 @@
+{
+    "name": "automattic/wpcloud-station",
+    "description": "\"WP Cloud Station\"",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Automattic Inc"
+        }
+    ],
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
+    },
+    "require-dev": {
+        "wp-coding-standards/wpcs": "^3.0"
+    }
+}
