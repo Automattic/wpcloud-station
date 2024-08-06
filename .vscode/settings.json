@@ -1,12 +1,19 @@
 {
-    "cSpell.words": [
-        "akismet",
-        "datacenter",
-        "headstart",
-        "phpmyadmin",
-        "subsizes",
-        "textdomain",
-        "woocommerce",
-        "wpcloud"
-    ]
+	"cSpell.words": [
+		"akismet",
+		"datacenter",
+		"headstart",
+		"phpmyadmin",
+		"subsizes",
+		"textdomain",
+		"woocommerce",
+		"wpcloud"
+	],
+	"phpsab.executablePathCBF": "./vendor/squizlabs/php_codesniffer/bin/phpcbf",
+	"phpsab.executablePathCS": "./vendor/squizlabs/php_codesniffer/bin/phpcs",
+	"phpsab.autoRulesetSearch": false,
+	"phpsab.standard": "WordPress",
+	"phpsab.snifferArguments": [
+		"--ignore=*/wp-admin/*,*/wp-includes/*"
+	]
 }
