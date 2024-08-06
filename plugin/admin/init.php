@@ -18,20 +18,20 @@ function wpcloud_admin_get_available_themes() {
 
 function wpcloud_admin_get_available_plugins() {
 	return array(
-		'plugins/classic-editor'             => __( 'Classic Editor', 'wpcloud' ),
-		'plugins/crowdsignal-forms'          => __( 'CrowSignal Forms', 'wpcloud' ),
-		'plugins/mailpoet'                   => __( 'MailPoet', 'wpcloud' ),
-		'plugins/polldaddy'                  => __( 'Crowdsignal', 'wpcloud' ),
-		'plugins/woocommerce'                => __( 'WooCommerce', 'wpcloud' ),
-		'plugins/-bookings'                  => __( 'WooCommerce Bookings', 'wpcloud' ),
-		'plugins/woocommerce-payments'       => __( 'WooCommerce Payments', 'wpcloud' ),
-		'plugins/woocommerce-subscriptions'  => __( 'WooCommerce Subscriptions', 'wpcloud' ),
-		'plugins/wordpress-seo'              => __( 'WordPress SEO', 'wpcloud' ),
+		'plugins/classic-editor'            => __( 'Classic Editor', 'wpcloud' ),
+		'plugins/crowdsignal-forms'         => __( 'CrowSignal Forms', 'wpcloud' ),
+		'plugins/mailpoet'                  => __( 'MailPoet', 'wpcloud' ),
+		'plugins/polldaddy'                 => __( 'Crowdsignal', 'wpcloud' ),
+		'plugins/woocommerce'               => __( 'WooCommerce', 'wpcloud' ),
+		'plugins/-bookings'                 => __( 'WooCommerce Bookings', 'wpcloud' ),
+		'plugins/woocommerce-payments'      => __( 'WooCommerce Payments', 'wpcloud' ),
+		'plugins/woocommerce-subscriptions' => __( 'WooCommerce Subscriptions', 'wpcloud' ),
+		'plugins/wordpress-seo'             => __( 'WordPress SEO', 'wpcloud' ),
 	);
 }
 
 function wpcloud_settings_sanitize( $input ) {
-	$input['software'] = array_filter( $input['software'] ?? []);
+	$input['software'] = array_filter( $input['software'] ?? array() );
 
 	if ( empty( $input['software'] ) ) {
 		unset( $input['software'] );
@@ -57,11 +57,11 @@ function wpcloud_settings_init(): void {
 		'wpcloud_field_input_cb',
 		'wpcloud',
 		'wpcloud_section_settings',
-		[
-			'label_for'         => 'wpcloud_client',
-			'class'             => 'wpcloud_row',
+		array(
+			'label_for'           => 'wpcloud_client',
+			'class'               => 'wpcloud_row',
 			'wpcloud_custom_data' => 'custom',
-		]
+		)
 	);
 
 	add_settings_field(
@@ -70,13 +70,12 @@ function wpcloud_settings_init(): void {
 		'wpcloud_field_input_cb',
 		'wpcloud',
 		'wpcloud_section_settings',
-		[
-			'label_for'         => 'wpcloud_api_key',
-			'class'             => 'wpcloud_row',
+		array(
+			'label_for'           => 'wpcloud_api_key',
+			'class'               => 'wpcloud_row',
 			'wpcloud_custom_data' => 'custom',
-		]
+		)
 	);
-
 
 	add_settings_field(
 		'wpcloud_field_domain',
@@ -84,13 +83,13 @@ function wpcloud_settings_init(): void {
 		'wpcloud_field_input_cb',
 		'wpcloud',
 		'wpcloud_section_settings',
-		[
+		array(
 			'label_for'           => 'wpcloud_domain',
 			'class'               => 'wpcloud_row',
 			'wpcloud_custom_data' => 'custom',
 			'default'             => '',
 			'description'         => __( 'The default domain to use for new sites. Each site will use this root domain with the site name as the subdomain. If left empty a unique subdomain will be generated for each site.' ),
-		]
+		)
 	);
 
 	add_settings_field(
@@ -99,12 +98,12 @@ function wpcloud_settings_init(): void {
 		'wpcloud_client_meta_field_input_cb',
 		'wpcloud',
 		'wpcloud_section_settings',
-		[
+		array(
 			'label_for'       => 'wpcloud_webhook_url',
 			'class'           => 'wpcloud_row',
-			'description'	    => __( 'The URL to send site creation events to. This can be used to trigger actions on site creation.' ),
+			'description'     => __( 'The URL to send site creation events to. This can be used to trigger actions on site creation.' ),
 			'client_meta_key' => 'webhook_url',
-		]
+		)
 	);
 
 	/*
@@ -119,7 +118,7 @@ function wpcloud_settings_init(): void {
 			'label_for'       => 'wpcloud_webhook_secret_key',
 			'class'           => 'wpcloud_row',
 			'client_meta_key' => 'webhook_secret_key',
-			'description'	    => __( 'The secret key to use when sending site creation events to the webhook URL. This can be used to verify the request came from WP Cloud.' ),
+			'description'       => __( 'The secret key to use when sending site creation events to the webhook URL. This can be used to verify the request came from WP Cloud.' ),
 		]
 	);
 	*/
@@ -131,14 +130,14 @@ function wpcloud_settings_init(): void {
 		'wpcloud_field_select_cb',
 		'wpcloud',
 		'wpcloud_section_settings',
-		[
+		array(
 			'label_for'           => 'wpcloud_default_theme',
 			'class'               => 'wpcloud_row',
 			'wpcloud_custom_data' => 'custom',
-			'description'         => __( 'The default theme to install on new sites.'),
+			'description'         => __( 'The default theme to install on new sites.' ),
 			'items'               => $themes,
 			'default'             => array_keys( $themes )[0],
-		]
+		)
 	);
 
 	add_settings_field(
@@ -147,13 +146,13 @@ function wpcloud_settings_init(): void {
 		'wpcloud_field_software_cb',
 		'wpcloud',
 		'wpcloud_section_settings',
-		[
+		array(
 			'label_for'           => 'software',
 			'class'               => 'wpcloud_row',
 			'wpcloud_custom_data' => 'custom',
-			'description'         => __( 'Plugins available to install or activate with new installs. '),
+			'description'         => __( 'Plugins available to install or activate with new installs. ' ),
 			'items'               => wpcloud_admin_get_available_plugins(),
-		]
+		)
 	);
 
 	add_settings_field(
@@ -162,14 +161,14 @@ function wpcloud_settings_init(): void {
 		'wpcloud_field_input_cb',
 		'wpcloud',
 		'wpcloud_section_settings',
-		[
+		array(
 			'label_for'           => 'client_cache',
 			'class'               => 'wpcloud_row',
 			'wpcloud_custom_data' => 'custom',
-			'description'         => __( 'Enable caching of common client requests to reduce the number of requests to the WP Cloud API and speed up page loads. The cache is stored in memory per request.'),
+			'description'         => __( 'Enable caching of common client requests to reduce the number of requests to the WP Cloud API and speed up page loads. The cache is stored in memory per request.' ),
 			'type'                => 'checkbox',
-			'checked'             => get_option( 'wpcloud_settings',[] )[ 'client_cache' ] ?? false,
-		]
+			'checked'             => get_option( 'wpcloud_settings', array() )['client_cache'] ?? false,
+		)
 	);
 
 	// Only allow headstart if no settings have been saved yet
@@ -182,15 +181,15 @@ function wpcloud_settings_init(): void {
 		'wpcloud_field_input_cb',
 		'wpcloud',
 		'wpcloud_section_settings',
-		[
-			'label_for'         => 'wpcloud_headstart',
-			'class'             => 'wpcloud_row',
-			'type'              => 'checkbox',
+		array(
+			'label_for'           => 'wpcloud_headstart',
+			'class'               => 'wpcloud_row',
+			'type'                => 'checkbox',
 			'wpcloud_custom_data' => 'custom',
 			'description'         => __( 'Run the headstart script to setup the demo site. This can only be ran when saving WP Cloud setting for the first time.' ),
-			'checked' => $allow_headstart,
-			'disabled' => ! $allow_headstart,
-		]
+			'checked'             => $allow_headstart,
+			'disabled'            => ! $allow_headstart,
+		)
 	);
 }
 add_action( 'admin_init', 'wpcloud_settings_init' );
@@ -228,8 +227,8 @@ add_action( 'admin_menu', 'wpcloud_options_page' );
 
 function wpcloud_get_action() {
 	$action = '';
-	if ( isset( $_REQUEST[ 'action' ] ) ) {
-		$action = sanitize_text_field( wp_unslash( $_REQUEST[ 'action' ] ) );
+	if ( isset( $_REQUEST['action'] ) ) {
+		$action = sanitize_text_field( wp_unslash( $_REQUEST['action'] ) );
 	}
 	return $action;
 }
@@ -240,7 +239,7 @@ function wpcloud_field_input_cb( array $args ): void {
 	$default = $args['default'] ?? '';
 	$value   = $args['value'] ?? $options[ $label ] ?? $default;
 	$type    = $args['type'] ?? 'text';
-	$checked = $args[ 'checked' ] ?? false;
+	$checked = $args['checked'] ?? false;
 
 	// output the field
 	if ( 'checkbox' === $type ) {
@@ -249,20 +248,27 @@ function wpcloud_field_input_cb( array $args ): void {
 	$disabled = $args['disabled'] ?? false;
 	?>
 	<input
-		type="<?php echo $type ?>"
+		type="<?php echo $type; ?>"
 		id="<?php echo esc_attr( $args['label_for'] ); ?>"
 		name="wpcloud_settings[<?php echo esc_attr( $args['label_for'] ); ?>]"
-		value="<?php echo $value ?>"
-		<?php if ( 'checkbox' === $type && $checked ) { echo ' checked '; } ?>
-		<?php if ( $disabled ) { echo ' disabled '; } ?>
+		value="<?php echo $value; ?>"
+		<?php
+		if ( 'checkbox' === $type && $checked ) {
+			echo ' checked '; }
+		?>
+		<?php
+		if ( $disabled ) {
+			echo ' disabled '; }
+		?>
 	>
 	<?php if ( isset( $args['description'] ) ) { ?>
 		<p class="description"><?php echo esc_html( $args['description'] ); ?></p>
-	<?php
+		<?php
 	}
-	if ( isset( $args[ 'error' ] ) ) { ?>
+	if ( isset( $args['error'] ) ) {
+		?>
 		<p class="error"><?php echo esc_html( $args['error'] ); ?></p>
-	<?php
+		<?php
 	}
 }
 
@@ -271,12 +277,12 @@ function wpcloud_client_meta_field_input_cb( array $args ): void {
 	$request  = wpcloud_client_get_client_meta( $meta_key );
 	if ( is_wp_error( $request ) ) {
 		// Let's ignore 404s
-		if ( ! str_contains( $request->get_error_message(), 'Resource not found' )) {
-			$args[ 'error' ] = "Warning: There was a issue retrieving the setting: " . $request->get_error_message();
+		if ( ! str_contains( $request->get_error_message(), 'Resource not found' ) ) {
+			$args['error'] = 'Warning: There was a issue retrieving the setting: ' . $request->get_error_message();
 		}
 		error_log( $request->get_error_message() );
 	} else {
-		$args[ 'value' ] = $request->$meta_key;
+		$args['value'] = $request->$meta_key;
 	}
 
 	wpcloud_field_input_cb( $args );
@@ -284,10 +290,10 @@ function wpcloud_client_meta_field_input_cb( array $args ): void {
 // register a hook to update the client meta when the option is updated.
 
 function wpcloud_update_remote_client_meta( $value, $old_value ) {
-	foreach( [ 'webhook_url', 'webhook_secret_key' ] as $meta_key ) {
+	foreach ( array( 'webhook_url', 'webhook_secret_key' ) as $meta_key ) {
 		$option_key = 'wpcloud_' . $meta_key;
-		$old_meta = $old_value[ $option_key ] ?? '';
-		$new_meta = $value[ $option_key ] ?? '';
+		$old_meta   = $old_value[ $option_key ] ?? '';
+		$new_meta   = $value[ $option_key ] ?? '';
 		if ( $old_meta !== $new_meta ) {
 			wpcloud_client_set_client_meta( $meta_key, $new_meta );
 		}
@@ -296,13 +302,13 @@ function wpcloud_update_remote_client_meta( $value, $old_value ) {
 	}
 	return $value;
 }
-add_action( 'pre_update_option_wpcloud_settings' , 'wpcloud_update_remote_client_meta', 10, 2 );
+add_action( 'pre_update_option_wpcloud_settings', 'wpcloud_update_remote_client_meta', 10, 2 );
 
 function wpcloud_field_select_cb( array $args ): void {
 	$options   = get_option( 'wpcloud_settings' );
 	$label_for = esc_attr( $args['label_for'] );
 	$name      = "wpcloud_settings[$label_for]";
-	$default   = $args[ 'default' ] ?? '';
+	$default   = $args['default'] ?? '';
 	$value     = esc_attr( $options[ $label_for ] ?? $default );
 	$items     = $args['items'];
 
@@ -311,7 +317,7 @@ function wpcloud_field_select_cb( array $args ): void {
 	<select name="<?php echo $name; ?>" id="<?php echo $label_for; ?>">
 		<option value=''></option>
 	<?php
-	foreach( $items as $item_value => $item_label ) {
+	foreach ( $items as $item_value => $item_label ) {
 		$selected = $item_value === $value ? 'selected' : '';
 		echo "<option value='$item_value' $selected>$item_label</option>";
 	}
@@ -319,7 +325,7 @@ function wpcloud_field_select_cb( array $args ): void {
 	</select>
 	<?php if ( isset( $args['description'] ) ) { ?>
 		<p class="description"><?php echo esc_html( $args['description'] ); ?></p>
-	<?php
+		<?php
 	}
 }
 
@@ -329,10 +335,10 @@ function wpcloud_field_software_cb( array $args ): void {
 	$items     = $args['items'];
 
 	// output the field
-	echo "<table>";
-	foreach( $items as $item_value => $item_label ) {
-		$name = "wpcloud_settings[$label_for][$item_value]";
-		$value     = isset( $options[ "software" ][ $item_value ] ) ? esc_attr( $options[ "software" ][ $item_value ] ) : '';
+	echo '<table>';
+	foreach ( $items as $item_value => $item_label ) {
+		$name  = "wpcloud_settings[$label_for][$item_value]";
+		$value = isset( $options['software'][ $item_value ] ) ? esc_attr( $options['software'][ $item_value ] ) : '';
 		?>
 		<tr>
 			<td style="padding: 5px;">
@@ -341,32 +347,33 @@ function wpcloud_field_software_cb( array $args ): void {
 			<td style="padding: 5px;">
 				<select name="<?php echo $name; ?>" id="<?php echo $name; ?>">
 					<option value=""></option>
-					<option value="install" <?php echo ($value === 'install') ? 'selected' : ''; ?>>Install</option>
-					<option value="activate" <?php echo ($value === 'activate') ? 'selected' : ''; ?>>Activate</option>
+					<option value="install" <?php echo ( $value === 'install' ) ? 'selected' : ''; ?>>Install</option>
+					<option value="activate" <?php echo ( $value === 'activate' ) ? 'selected' : ''; ?>>Activate</option>
 				</select>
 			</td>
 		</tr>
-	<?php
+		<?php
 	}
-	echo "</table>";
-	if ( isset( $args['description'] ) ) { ?>
+	echo '</table>';
+	if ( isset( $args['description'] ) ) {
+		?>
 		<p class="description"><?php echo esc_html( $args['description'] ); ?></p>
-	<?php
+		<?php
 	}
 }
 
 function site_created__success( int $wpcloud_site_id ): void {
 	$wpcloud_site = get_post( $wpcloud_site_id );
-?>
+	?>
 <div class="notice notice-success is-dismissible">
 	<p>
 		<?php
 		/* translators: %s: name of the site */
-		echo sprintf( __( 'Provisioning  %s', 'wpcloud' ), $wpcloud_site->post_title )
+		printf( __( 'Provisioning  %s', 'wpcloud' ), $wpcloud_site->post_title )
 		?>
 	</p>
 </div>
-<?php
+	<?php
 }
 
 function wpcloud_admin_controller(): void {
@@ -382,7 +389,7 @@ function wpcloud_admin_controller(): void {
 function wpcloud_admin_list_sites(): void {
 	do_action( 'admin_notices' );
 
-	require_once  plugin_dir_path(__FILE__) . '/includes/class-wpcloud-site-list.php';
+	require_once plugin_dir_path( __FILE__ ) . '/includes/class-wpcloud-site-list.php';
 	$wpcloud_site_list = new WPCLOUD_Site_List();
 	$wpcloud_site_list->prepare_items();
 	$confirm_delete_message = __( 'Are you sure you want to delete this site?', 'wpcloud' );
@@ -407,33 +414,37 @@ function wpcloud_admin_list_sites(): void {
 
 function wpcloud_admin_options_controller(): void {
 		// check user capabilities
-		if ( ! current_user_can( 'manage_options' ) ) {
-				return;
-		}
+	if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+	}
 
-		if ( isset( $_GET['settings-updated'] ) ) {
-			// add settings saved message with the class of "updated"
-			add_settings_error( 'wpcloud_messages', 'wpcloud_message', __( 'Settings Saved', 'wpcloud' ), 'updated' );
-		}
+	if ( isset( $_GET['settings-updated'] ) ) {
+		// add settings saved message with the class of "updated"
+		add_settings_error( 'wpcloud_messages', 'wpcloud_message', __( 'Settings Saved', 'wpcloud' ), 'updated' );
+	}
 
 		settings_errors( 'wpcloud_messages' );
-		require_once  plugin_dir_path(__FILE__) . 'options.php';
+		require_once plugin_dir_path( __FILE__ ) . 'options.php';
 }
 
 // Allow SVG
-add_filter( 'wp_check_filetype_and_ext', function($data, $file, $filename, $mimes) {
-  $filetype = wp_check_filetype( $filename, $mimes );
+add_filter(
+	'wp_check_filetype_and_ext',
+	function ( $data, $file, $filename, $mimes ) {
+		$filetype = wp_check_filetype( $filename, $mimes );
 
-  return [
-      'ext'             => $filetype['ext'],
-      'type'            => $filetype['type'],
-      'proper_filename' => $data['proper_filename']
-  ];
+		return array(
+			'ext'             => $filetype['ext'],
+			'type'            => $filetype['type'],
+			'proper_filename' => $data['proper_filename'],
+		);
+	},
+	10,
+	4
+);
 
-}, 10, 4 );
-
-function cc_mime_types( $mimes ){
-  $mimes['svg'] = 'image/svg+xml';
-  return $mimes;
+function cc_mime_types( $mimes ) {
+	$mimes['svg'] = 'image/svg+xml';
+	return $mimes;
 }
 add_filter( 'upload_mimes', 'cc_mime_types' );
