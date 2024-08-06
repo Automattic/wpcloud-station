@@ -35,15 +35,16 @@ if ( array_key_exists($name, $site_meta_options) ) {
 
 	if ( 'select' === $type ) {
 		$options = $site_meta_options[$name]['options'];
-
 		$options_html = '';
-		foreach ( $options as $value => $label ) {
-			$options_html .= sprintf(
-				'<option value="%s" %s>%s</option>',
-				esc_attr( $value ),
-				selected( $current_value, $value, false ),
-				esc_html( $label )
-			);
+		if ( ! is_wp_error( $options ) ) {
+			foreach ( $options as $value => $label ) {
+				$options_html .= sprintf(
+					'<option value="%s" %s>%s</option>',
+					esc_attr( $value ),
+					selected( $current_value, $value, false ),
+					esc_html( $label )
+				);
+			}
 		}
 
 		$regex = '/(<select[^>]*>)(?:\s*<option[^>]*>.*?<\/option>)*\s*(<\/select>)/';
