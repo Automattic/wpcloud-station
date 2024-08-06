@@ -13,7 +13,7 @@ export default function TextField( {
 	className,
 	onPlaceholderChange,
 } ) {
-	const { placeholder, required, type } = attributes;
+	const { placeholder, required, type, name } = attributes;
 
 	const controls = <></>;
 
@@ -32,7 +32,8 @@ export default function TextField( {
 				onChange={ ( event ) =>
 					onPlaceholderChange( event.target.value )
 				}
-				aria-required={ required }
+				aria-required={required}
+				name={name}
 			/>
 		</>
 	);
