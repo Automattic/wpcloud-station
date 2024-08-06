@@ -8,7 +8,7 @@
 declare( strict_types = 1 );
 
 // Cache singleton for common client requests.
-$_WPCLOUD_client_cache = new stdClass();
+$wpcloud_client_cache = new stdClass();
 
 /**
  * Get WP Cloud Client Name from settings.
@@ -37,7 +37,7 @@ function wpcloud_get_client_api_key(): mixed {
 		return null;
 	}
 
-	return  $wpcloud_settings['wpcloud_api_key'] ?? null;
+	return $wpcloud_settings['wpcloud_api_key'] ?? null;
 }
 
 /**
@@ -48,8 +48,8 @@ function wpcloud_get_client_api_key(): mixed {
  *
  * @return object|WP_Error Domain verification record. WP_Error on error.
  */
-function wpcloud_client_domain_ip_addresses( ?int $wpcloud_site_id, string $domain = ''): mixed {
-    $client_name = wpcloud_get_client_name();
+function wpcloud_client_domain_ip_addresses( ?int $wpcloud_site_id, string $domain = '' ): mixed {
+	$client_name = wpcloud_get_client_name();
 
 	return wpcloud_client_get( $wpcloud_site_id, "get-ips/{$client_name}/{$domain}" );
 }
@@ -63,7 +63,7 @@ function wpcloud_client_domain_ip_addresses( ?int $wpcloud_site_id, string $doma
  * @return bool|WP_Error True if domain can be used. False if domain is currently in use. WP_Error on error.
  */
 function wpcloud_client_domain_validate( ?int $wpcloud_site_id, string $domain ): mixed {
-    $client_name = wpcloud_get_client_name();
+	$client_name = wpcloud_get_client_name();
 
 	$response = wpcloud_client_get( $wpcloud_site_id, "check-can-host-domain/{$client_name}/{$domain}" );
 
@@ -79,7 +79,7 @@ function wpcloud_client_domain_validate( ?int $wpcloud_site_id, string $domain )
 				'Domain mapping already exists. To map domain to new site, add the domain verification record to DNS TXT records to provide proof of ownership.',
 				array(
 					'domain-verification-record' => $domain_verification_record,
-					'status'                     => 409
+					'status'                     => 409,
 				)
 			);
 		}
@@ -99,7 +99,7 @@ function wpcloud_client_domain_validate( ?int $wpcloud_site_id, string $domain )
  * @return string|WP_Error Domain verification record. WP_Error on error.
  */
 function wpcloud_client_domain_verification_record( ?int $wpcloud_site_id, string $domain ): mixed {
-    $client_name = wpcloud_get_client_name();
+	$client_name = wpcloud_get_client_name();
 
 	return wpcloud_client_get( $wpcloud_site_id, "get-domain-verification-code/{$client_name}/{$domain}" );
 }
@@ -109,47 +109,47 @@ function wpcloud_client_domain_verification_record( ?int $wpcloud_site_id, strin
  *
  * When a new site is created, it returns a Job ID for the site provisioning job which can be checked for completion.
  *
- * @param string  $admin_user     The WordPress admin username for the new site.
- * @param string  $admin_email    The WordPress admin email for the new site.
- * @param array   $data           Optional. An array of optional site creation parameters. Default: array()
- *                                          domain        The domain name for the site.
- *                                          demo_domain   Generate a demo domain for the site.
- *                                          admin_pass    The password for the admin user.
- *                                          clone_from    WP Cloud Site ID of the site from which to clone.
- *                                          db_charset    The database character set.
- *                                                        Options:
- *                                                            latin1
- *                                                            utf8
- *                                                            utf8mb4
- *                                                        Default: latin1
- *                                          db_collate    The database collation.
- *                                                        Options:
- *                                                            latin1_swedish_ci
- *                                                            utf8_general_ci
- *                                                            utf8mb4_general_ci
- *                                                        Default: Corresponds to the appropriate collation for the character set.
- *                                          geo_affinity  if specified, the site will be assigned a primary pool server based on the preferred data_center.
- *                                                        Options:
- *                                                            ams Amsterdam
- *                                                            bur Burbank
- *                                                            dca Washington DC
- *                                                            dfw Dallas/Ft. Worth
- *                                          php_version   The desired PHP version.
- *                                                        Options:
- *                                                            7.4
- *                                                            8.1
- *                                                            8.2
- *                                                            8.3
- *                                                        Default: 8.1
- *                                                        Note: PHP version options are subject to change as new versions are released and old version retired.
- *                                          space_quota   The desired space quota. Default: 200G
- * @param array   $software       Optional. An array of plugins and themes with actions to install and/or activate on site creation. Default: array()
- * @param array   $meta           Optional. An array of keys and values for meta to be set for a site. Default: array()
- *                                Supported keys:
- *                                    development_mode
- *                                    privacy_model
- *                                    photon_subsizes
- *                                    static_file_404
+ * @param string $admin_user     The WordPress admin username for the new site.
+ * @param string $admin_email    The WordPress admin email for the new site.
+ * @param array  $data           Optional. An array of optional site creation parameters. Default: array()
+ *                                         domain        The domain name for the site.
+ *                                         demo_domain   Generate a demo domain for the site.
+ *                                         admin_pass    The password for the admin user.
+ *                                         clone_from    WP Cloud Site ID of the site from which to clone.
+ *                                         db_charset    The database character set.
+ *                                                       Options:
+ *                                                           latin1
+ *                                                           utf8
+ *                                                           utf8mb4
+ *                                                       Default: latin1
+ *                                         db_collate    The database collation.
+ *                                                       Options:
+ *                                                           latin1_swedish_ci
+ *                                                           utf8_general_ci
+ *                                                           utf8mb4_general_ci
+ *                                                       Default: Corresponds to the appropriate collation for the character set.
+ *                                         geo_affinity  if specified, the site will be assigned a primary pool server based on the preferred data_center.
+ *                                                       Options:
+ *                                                           ams Amsterdam
+ *                                                           bur Burbank
+ *                                                           dca Washington DC
+ *                                                           dfw Dallas/Ft. Worth
+ *                                         php_version   The desired PHP version.
+ *                                                       Options:
+ *                                                           7.4
+ *                                                           8.1
+ *                                                           8.2
+ *                                                           8.3
+ *                                                       Default: 8.1
+ *                                                       Note: PHP version options are subject to change as new versions are released and old version retired.
+ *                                         space_quota   The desired space quota. Default: 200G.
+ * @param array  $software       Optional. An array of plugins and themes with actions to install and/or activate on site creation. Default: array().
+ * @param array  $meta           Optional. An array of keys and values for meta to be set for a site. Default: array()
+ *                               Supported keys:
+ *                                   development_mode
+ *                                   privacy_model
+ *                                   photon_subsizes
+ *                                   static_file_404.
  *
  * @return object|WP_Error Create site job details. WP_Error on error.
  */
@@ -191,7 +191,7 @@ function wpcloud_client_site_create( string $admin_user, string $admin_email, ar
  * @return object|WP_Error Delete site job detals. WP_Error on error.
  */
 function wpcloud_client_site_delete( int $wpcloud_site_id ): mixed {
-    $client_name = wpcloud_get_client_name();
+	$client_name = wpcloud_get_client_name();
 
 	return wpcloud_client_post( $wpcloud_site_id, "delete-site/{$client_name}/{$wpcloud_site_id}" );
 }
@@ -201,10 +201,11 @@ function wpcloud_client_site_delete( int $wpcloud_site_id ): mixed {
  *
  * @param integer $wpcloud_site_id The WP Cloud Site ID.
  * @param bool    $extra           Include extra details.
+ * @param bool    $use_cache       Optional. True to use cache. Default: true.
  *
  * @return object|WP_Error Site details. WP_Error on error.
  */
-function wpcloud_client_site_details( int $wpcloud_site_id, bool $extra = false , bool $use_cache = true): mixed {
+function wpcloud_client_site_details( int $wpcloud_site_id, bool $extra = false, bool $use_cache = true ): mixed {
 	$path = "get-site/{$wpcloud_site_id}";
 
 	if ( $extra ) {
@@ -222,12 +223,12 @@ function wpcloud_client_site_details( int $wpcloud_site_id, bool $extra = false 
  * Add domain alias (CNAME) for a site.
  *
  * @param integer $wpcloud_site_id The WP Cloud Site ID.
- * @param bool    $domain          The domain to add as an alias.
+ * @param string  $domain          The domain to add as an alias.
  *
  * @return array|WP_Error List of domain aliases. WP_Error on error.
  */
 function wpcloud_client_site_domain_alias_add( int $wpcloud_site_id, string $domain ): mixed {
-  $client_name = wpcloud_get_client_name();
+	$client_name = wpcloud_get_client_name();
 
 	$response = wpcloud_client_get( $wpcloud_site_id, "site-alias/{$client_name}/{$wpcloud_site_id}/add/{$domain}" );
 	if ( is_wp_error( $response ) ) {
@@ -249,7 +250,7 @@ function wpcloud_client_site_domain_alias_add( int $wpcloud_site_id, string $dom
  * @return array|WP_Error List of domain aliases. WP_Error on error.
  */
 function wpcloud_client_site_domain_alias_list( int $wpcloud_site_id ): mixed {
-  $client_name = wpcloud_get_client_name();
+	$client_name = wpcloud_get_client_name();
 
 	$response = wpcloud_client_get( $wpcloud_site_id, "site-alias/{$client_name}/{$wpcloud_site_id}/list" );
 	if ( is_wp_error( $response ) ) {
@@ -267,12 +268,12 @@ function wpcloud_client_site_domain_alias_list( int $wpcloud_site_id ): mixed {
  * Remove domain alias (CNAME) for a site.
  *
  * @param integer $wpcloud_site_id The WP Cloud Site ID.
- * @param bool    $domain          The domain to remove as an alias.
+ * @param string  $domain          The domain to remove as an alias.
  *
  * @return array|WP_Error List of domain aliases. WP_Error on error.
  */
 function wpcloud_client_site_domain_alias_remove( int $wpcloud_site_id, string $domain ): mixed {
-    $client_name = wpcloud_get_client_name();
+	$client_name = wpcloud_get_client_name();
 
 	$response = wpcloud_client_get( $wpcloud_site_id, "site-alias/{$client_name}/{$wpcloud_site_id}/remove/{$domain}" );
 	if ( is_wp_error( $response ) ) {
@@ -311,15 +312,15 @@ function wpcloud_client_site_domain_primary_set( int $wpcloud_site_id, string $d
  * Get a list of sites for the client.
  *
  * @param string[] ...$meta_keys One or more meta keys to include in response.
- *                               Supported: wp_version, php_version, space_quota, db_file_size, static_file_404, suspended
+ *                               Supported: wp_version, php_version, space_quota, db_file_size, static_file_404, suspended.
  *
  * @return array|WP_Error Site status details or error.
  */
-function wpcloud_client_site_list( string ...$meta_keys ): mixed {
-    $client_name = wpcloud_get_client_name();
-    $path        = "get-sites/{$client_name}/";
+function wpcloud_client_site_list( array ...$meta_keys ): mixed {
+	$client_name = wpcloud_get_client_name();
+	$path        = "get-sites/{$client_name}/";
 
-    foreach ( $meta_keys as $meta_key ) {
+	foreach ( $meta_keys as $meta_key ) {
 		$path .= "{$meta_key}/";
 	}
 
@@ -353,7 +354,7 @@ function wpcloud_client_site_list( string ...$meta_keys ): mixed {
  * @return object|WP_Error Job ID on success. WP_Error on error.
  */
 function wpcloud_client_site_manage_software( int $wpcloud_site_id, array $software ): mixed {
-    $client_name = wpcloud_get_client_name();
+	$client_name = wpcloud_get_client_name();
 
 	return wpcloud_client_post( $wpcloud_site_id, "site-manage-software/{$client_name}/{$wpcloud_site_id}", $software );
 }
@@ -388,11 +389,11 @@ function wpcloud_client_site_ssl_info( int $wpcloud_site_id ): mixed {
 /**
  * Get IP addresses
  *
- * @param integer $wpcloud_site_id The WP Cloud Site ID.
+ * @param string $domain Optional. The domain for which to get the IP addresses.
  *
  * @return object|WP_Error IP address information on success. WP_Error on error.
  */
-function wpcloud_client_site_ip_addresses( string $domain ='' ): mixed {
+function wpcloud_client_site_ip_addresses( string $domain = '' ): mixed {
 	$client_name = wpcloud_get_client_name();
 	return wpcloud_client_get( null, "get-ips/$client_name/$domain" );
 }
@@ -413,28 +414,30 @@ function wpcloud_client_site_ssl_retry( int $wpcloud_site_id, string $domain ): 
 
 	return (bool) $response->queued;
 }
+
 /**
  * Get PHP versions available for the client.
  *
- * @param $descending Optional. True to sort in descending order. Default: false.
+ * @param bool $descending Optional. True to sort in descending order. Default: false.
+ * @param bool $use_cache  Optional. True to use cache. Default: true.
  *
  * @return array|WP_Error Array of PHP versions available. WP_Error on error.
  */
-function wpcloud_client_php_versions_available( bool $descending = false , bool $use_cache = true ): stdClass | WP_error {
-	$get_php_version = function() use ( $descending ) {
+function wpcloud_client_php_versions_available( bool $descending = false, bool $use_cache = true ): stdClass|WP_error {
+	$get_php_version = function () use ( $descending ) {
 		$client_name = wpcloud_get_client_name();
-		$response = wpcloud_client_get( null, "get-php-versions/$client_name" );
+		$response    = wpcloud_client_get( null, "get-php-versions/$client_name" );
 		if ( is_wp_error( $response ) ) {
 			return $response;
 		}
 
 		$result = array_reduce(
 			$response,
-			function( $versions, $version ) {
+			function ( $versions, $version ) {
 				$versions[ $version ] = $version;
 				return $versions;
 			},
-			[]
+			array()
 		);
 
 		if ( $descending ) {
@@ -447,14 +450,14 @@ function wpcloud_client_php_versions_available( bool $descending = false , bool 
 	return $use_cache ? wpcloud_client_get_through_cache( 0, $get_php_version, 'php_versions' ) : $get_php_version();
 }
 
-/*
-* Data center labels. These are used to display the data center in the UI.
-* Call wpcloud_client_data_centers_available() to get actual data centers available
+/**
+ * Data center labels. These are used to display the data center in the UI.
+ * Call wpcloud_client_data_centers_available() to get actual data centers available
  *
  * @return array Array of data center codes and names. WP_Error on error.
-*/
-function wpcloud_client_data_center_mapping(): array  {
-	return 	array(
+ */
+function wpcloud_client_data_center_mapping(): array {
+	return array(
 		'ams' => __( 'Amsterdam, NL' ),
 		'bur' => __( 'Los Angeles, CA' ),
 		'dca' => __( 'Washington, D.C., USA' ),
@@ -462,17 +465,18 @@ function wpcloud_client_data_center_mapping(): array  {
 	);
 }
 
-/*
+/**
  * Get available datacenters for the client.
  *
  * @param bool $include_no_preference Optional. True to include an option for No Preference. Default: false.
+ * @param bool $use_cache             Optional. True to use cache. Default: true.
  *
  * @return array|WP_Error List of datacenters available. WP_Error on error.
  */
-function wpcloud_client_data_centers_available( bool $include_no_preference = false, bool $use_cache = true ): stdClass | WP_error {
-	$get_data_centers = function() use ( $include_no_preference ) {
+function wpcloud_client_data_centers_available( bool $include_no_preference = false, bool $use_cache = true ): stdClass|WP_error {
+	$get_data_centers = function () use ( $include_no_preference ) {
 		$client_name = wpcloud_get_client_name();
-		$response = wpcloud_client_get( null, "get-available-datacenters/$client_name" );
+		$response    = wpcloud_client_get( null, "get-available-datacenters/$client_name" );
 		if ( is_wp_error( $response ) ) {
 			return $response;
 		}
@@ -482,7 +486,7 @@ function wpcloud_client_data_centers_available( bool $include_no_preference = fa
 		if ( $include_no_preference ) {
 			$result = array(
 				'' => __( 'No Preference' ),
-				...$result
+				...$result,
 			);
 		}
 
@@ -495,10 +499,10 @@ function wpcloud_client_data_centers_available( bool $include_no_preference = fa
 /**
  * Add an SSH user to a site.
  *
- * @param integer $wpcloud_site_id The WP Cloud Site ID.
- * @param string  $user           The SSH user to add.
- * @param string  $pkey           The SSH public key for the user.
- * @param string  $pass           Optional. The SSH password for the user.
+ * @param integer     $wpcloud_site_id The WP Cloud Site ID.
+ * @param string      $user           The SSH user to add.
+ * @param string      $pkey           The SSH public key for the user.
+ * @param string|null $pass           Optional. The SSH password for the user.
  *
  * @return mixed|WP_Error Response body on success. WP_Error on failure.
  */
@@ -527,7 +531,6 @@ function wpcloud_client_ssh_user_add( int $wpcloud_site_id, string $user, string
  * @param integer $wpcloud_site_id The WP Cloud Site ID.
  *
  * @return array|WP_Error List of SSH users. WP_Error on error.
-
  */
 function wpcloud_client_ssh_user_list( int $wpcloud_site_id ): mixed {
 	$client_name = wpcloud_get_client_name();
@@ -547,7 +550,18 @@ function wpcloud_client_ssh_user_remove( int $wpcloud_site_id, string $user ): m
 	return wpcloud_client_post( $wpcloud_site_id, "ssh-user/$client_name/$wpcloud_site_id/remove/$user" );
 }
 
-function wpcloud_client_ssh_user_update( int $wpcloud_site_id, string $user, string $pkey = '', string|null $pass = null) : mixed {
+/**
+ * Update an SSH user for a site.
+ * If the user does not exist, it will be added.
+ *
+ * @param integer     $wpcloud_site_id The WP Cloud Site ID.
+ * @param string      $user           The SSH user to update.
+ * @param string      $pkey           The SSH public key for the user.
+ * @param string|null $pass           Optional. The SSH password for the user.
+ *
+ * @return mixed|WP_Error Response body on success. WP_Error on failure.
+ */
+function wpcloud_client_ssh_user_update( int $wpcloud_site_id, string $user, string $pkey = '', string|null $pass = null ): mixed {
 	$client_name = wpcloud_get_client_name();
 
 	$post = array(
@@ -565,39 +579,58 @@ function wpcloud_client_ssh_user_update( int $wpcloud_site_id, string $user, str
 	return $response;
 }
 
-function wpcloud_client_ssh_disconnect_all_users( int $wpcloud_site_id): mixed {
+/**
+ * Disconnect all SSH users from a site.
+ *
+ * @param integer $wpcloud_site_id The WP Cloud Site ID.
+ *
+ * @return mixed|WP_Error Response body on success. WP_Error on failure.
+ */
+function wpcloud_client_ssh_disconnect_all_users( int $wpcloud_site_id ): mixed {
 	$client_name = wpcloud_get_client_name();
 	return wpcloud_client_post( $wpcloud_site_id, "ssh-disconnect-all-users/$client_name/$wpcloud_site_id" );
 }
 
-function wpcloud_client_site_set_access_type( int $wpcloud_site_id, string $access_type): mixed {
+/**
+ * Get the SSH connection details for a site.
+ *
+ * @param integer $wpcloud_site_id The WP Cloud Site ID.
+ * @param string  $access_type The type of access.
+ *
+ * @return object|WP_Error SSH connection details on success. WP_Error on error.
+ */
+function wpcloud_client_site_set_access_type( int $wpcloud_site_id, string $access_type ): mixed {
 	$client_name = wpcloud_get_client_name();
 	return wpcloud_client_get( $wpcloud_site_id, "site-set-access-type/$client_name/$wpcloud_site_id/$access_type" );
 }
 
-
+/**
+ * Get the meta keys for a site.
+ *
+ * @return array The meta keys for a site.
+ */
 function wpcloud_client_site_meta_keys(): array {
 	// @TODO move the labels to WPCLOUD_Site::get_meta_fields()
-	return [
-		"db_charset"           => __( 'DB Charset' ),
-		"db_collate"           => __( 'DB Collate' ),
-		"suspended"            => __( 'Suspended Status Code' ),
-		"suspend_after"        => __( 'Suspend After' ),
-		"php_version"          => __( 'PHP Version' ),
-		"wp_version"           => __( 'WP Version' ),
-		"do_not_delete"        => __( 'Do Not Delete' ),
-		"db_file_size"         => __( 'DB File Size' ),
-		"space_quota"          => __( 'Space Quota' ),
-		"max_space_quota"      => __( 'Max Space Quota (Gigabytes)' ),
-		"photon_subsizes"      => __( 'Photon Subsizes' ),
-		"privacy_model"        => __( 'Privacy Model' ),
-		"static_file_404"      => __( 'Static File 404' ),
-		"default_php_conns"    => __( 'Default PHP Connections' ),
-		"burst_php_conns"      => __( 'Burst PHP Connections' ),
-		"php_fs_permissions"   => __( 'PHP FS Permissions' ),
-		"canonicalize_aliases" => __( 'Canonicalize Aliases'),
-		"ssh_port"             => __( 'SSH Port' ),
-	];
+	return array(
+		'db_charset'           => __( 'DB Charset' ),
+		'db_collate'           => __( 'DB Collate' ),
+		'suspended'            => __( 'Suspended Status Code' ),
+		'suspend_after'        => __( 'Suspend After' ),
+		'php_version'          => __( 'PHP Version' ),
+		'wp_version'           => __( 'WP Version' ),
+		'do_not_delete'        => __( 'Do Not Delete' ),
+		'db_file_size'         => __( 'DB File Size' ),
+		'space_quota'          => __( 'Space Quota' ),
+		'max_space_quota'      => __( 'Max Space Quota (Gigabytes)' ),
+		'photon_subsizes'      => __( 'Photon Subsizes' ),
+		'privacy_model'        => __( 'Privacy Model' ),
+		'static_file_404'      => __( 'Static File 404' ),
+		'default_php_conns'    => __( 'Default PHP Connections' ),
+		'burst_php_conns'      => __( 'Burst PHP Connections' ),
+		'php_fs_permissions'   => __( 'PHP FS Permissions' ),
+		'canonicalize_aliases' => __( 'Canonicalize Aliases' ),
+		'ssh_port'             => __( 'SSH Port' ),
+	);
 }
 /**
  *
@@ -605,26 +638,26 @@ function wpcloud_client_site_meta_keys(): array {
  *
  * Also handles updates for the WordPress version via the `site-wordpress-version` endpoint.
  *
- * @param integer $wpcloud_site_id The WP Cloud Site ID.
- * @param string  $key            The meta key to update.
+ * @param integer     $wpcloud_site_id The WP Cloud Site ID.
+ * @param string      $key            The meta key to update.
  * @param string|null $value       The value to set. If null, the key will be removed.
  *
  * @return mixed|WP_Error Response body on success. WP_Error on failure.
  */
-function wpcloud_client_update_site_meta( int $wpcloud_site_id, string $key, string|null $value): mixed {
+function wpcloud_client_update_site_meta( int $wpcloud_site_id, string $key, string|null $value ): mixed {
 	if ( ! array_key_exists( $key, wpcloud_client_site_meta_keys() ) ) {
 		return new WP_Error( 'bad_request', 'Invalid meta key', array( 'status' => 400 ) );
 	}
 
 	$endpoint = "site-meta/$wpcloud_site_id/$key/update";
-	if ( "wp_version" === $key ) {
-		$endpoint =  "site-wordpress-version/$wpcloud_site_id/$value";
+	if ( 'wp_version' === $key ) {
+		$endpoint = "site-wordpress-version/$wpcloud_site_id/$value";
 	}
-	if ( is_null($value) ) {
+	if ( is_null( $value ) ) {
 		$endpoint = "site-meta/$wpcloud_site_id/$key/remove";
 
 	}
-	return wpcloud_client_post( $wpcloud_site_id, $endpoint, array("value" => $value) );
+	return wpcloud_client_post( $wpcloud_site_id, $endpoint, array( 'value' => $value ) );
 }
 
 /**
@@ -634,9 +667,8 @@ function wpcloud_client_update_site_meta( int $wpcloud_site_id, string $key, str
  * @param string  $key            The meta key to delete.
  *
  * @return mixed|WP_Error Response body on success. WP_Error on failure.
-
  */
-function wpcloud_client_delete_site_meta( int $wpcloud_site_id, string $key): mixed {
+function wpcloud_client_delete_site_meta( int $wpcloud_site_id, string $key ): mixed {
 	if ( ! array_key_exists( $key, wpcloud_client_site_meta_keys() ) ) {
 		return new WP_Error( 'bad_request', 'Invalid meta key', array( 'status' => 400 ) );
 	}
@@ -650,17 +682,18 @@ function wpcloud_client_delete_site_meta( int $wpcloud_site_id, string $key): mi
  *
  * @param integer $wpcloud_site_id The WP Cloud Site ID.
  * @param string  $key            The meta key to get.
+ * @param bool    $use_cache      Optional. True to use cache. Default: true.
  *
  * @return stdClass | WP_Error Response body on success. WP_Error on failure.
  */
-function wpcloud_client_get_site_meta( int $wpcloud_site_id, string $key, bool $use_cache = true ): stdClass | WP_Error {
-	$get_meta = function() use ( $wpcloud_site_id, $key ) {
+function wpcloud_client_get_site_meta( int $wpcloud_site_id, string $key, bool $use_cache = true ): stdClass|WP_Error {
+	$get_meta = function () use ( $wpcloud_site_id, $key ) {
 		if ( ! array_key_exists( $key, wpcloud_client_site_meta_keys() ) ) {
 			return new WP_Error( 'bad_request', 'Invalid meta key', array( 'status' => 400 ) );
 		}
 
 		$endpoint = "site-meta/$wpcloud_site_id/$key/get";
-		$result = wpcloud_client_get( $wpcloud_site_id, $endpoint );
+		$result   = wpcloud_client_get( $wpcloud_site_id, $endpoint );
 
 		// Normalize the result to be an object with the key as the property.
 		if ( ! is_object( $result ) ) {
@@ -679,9 +712,9 @@ function wpcloud_client_get_site_meta( int $wpcloud_site_id, string $key, bool $
  *
  * @return stdClass | WP_Error Response body on success. WP_Error on failure.
  */
-function wpcloud_client_get_client_meta( string $key ): stdClass | WP_Error {
+function wpcloud_client_get_client_meta( string $key ): stdClass|WP_Error {
 	$client_name = wpcloud_get_client_name();
-	$endpoint = "client-meta/$client_name/$key/get";
+	$endpoint    = "client-meta/$client_name/$key/get";
 
 	$result = wpcloud_client_get( 0, $endpoint );
 	if ( is_wp_error( $result ) ) {
@@ -703,9 +736,9 @@ function wpcloud_client_get_client_meta( string $key ): stdClass | WP_Error {
  *
  * @return stdClass | WP_Error Response body on success. WP_Error on failure.
  */
-function wpcloud_client_set_client_meta( string $key, string $value ): stdClass | WP_Error {
+function wpcloud_client_set_client_meta( string $key, string $value ): stdClass|WP_Error {
 	$client_name = wpcloud_get_client_name();
-	$endpoint = "client-meta/$client_name/$key/update";
+	$endpoint    = "client-meta/$client_name/$key/update";
 
 	return (object) wpcloud_client_post( 0, $endpoint, array( 'value' => $value ) );
 }
@@ -717,9 +750,9 @@ function wpcloud_client_set_client_meta( string $key, string $value ): stdClass 
  *
  * @return stdClass | WP_Error Response body on success. WP_Error on failure.
  */
-function wpcloud_client_remove_client_meta( string $key ): stdClass | WP_Error {
+function wpcloud_client_remove_client_meta( string $key ): stdClass|WP_Error {
 	$client_name = wpcloud_get_client_name();
-	$endpoint = "client-meta/$client_name/$key/remove";
+	$endpoint    = "client-meta/$client_name/$key/remove";
 
 	return (object) wpcloud_client_get( 0, $endpoint );
 }
@@ -871,8 +904,8 @@ function wpcloud_client_request( ?int $wpcloud_site_id, string $method, string $
 		 * Action triggered when an error occurs during a WP Cloud API request.
 		 *
 		 * @param integer|null   The WP Cloud Site ID.
- 		 * @param string         HTTP Request method. 'GET' or 'POST'.
- 		 * @param string         The request path without host. e.g. 'get-site/example.com'.
+		 * @param string         HTTP Request method. 'GET' or 'POST'.
+		 * @param string         The request path without host. e.g. 'get-site/example.com'.
 		 * @param array|WP_Error Array containing 'headers', 'body', 'response', 'cookies', 'filename'. WP_Error on failure.
 		 */
 		do_action( 'wpcloud_client_response_error', $wpcloud_site_id, $method, $path, $response );
@@ -884,13 +917,13 @@ function wpcloud_client_request( ?int $wpcloud_site_id, string $method, string $
 	 * Action triggered on successful WP Cloud API request.
 	 *
 	 * @param integer|null   The WP Cloud Site ID.
- 	 * @param string         HTTP Request method. 'GET' or 'POST'.
- 	 * @param string         The request path without host. e.g. 'get-site/example.com'.
+	 * @param string         HTTP Request method. 'GET' or 'POST'.
+	 * @param string         The request path without host. e.g. 'get-site/example.com'.
 	 * @param array|WP_Error Array containing 'headers', 'body', 'response', 'cookies', 'filename'. WP_Error on failure.
 	 */
 	do_action( 'wpcloud_client_response_success', $wpcloud_site_id, $method, $path, $response );
 
-	// Return data if provided
+	// Return data if provided.
 	if ( is_object( $result ) && isset( $result->data ) ) {
 		return $result->data;
 	}
@@ -901,25 +934,25 @@ function wpcloud_client_request( ?int $wpcloud_site_id, string $method, string $
 /**
  * Read through cache.
  *
- * @param int $wpcloud_site_id The site ID.
+ * @param int      $wpcloud_site_id The site ID.
  * @param callable $call_client The client function to call if the cache is empty.
- * @param string $key The key to get from the cache.
+ * @param string   $key The key to get from the cache.
  * @return stdClass | WP_Error The result of the client function or WP_Error if the client function fails.
  */
-function wpcloud_client_get_through_cache(int $wpcloud_site_id, callable $call_client, $key =''): stdClass | WP_Error {
+function wpcloud_client_get_through_cache( int $wpcloud_site_id, callable $call_client, $key = '' ): stdClass|WP_Error {
 
-	// check if the client cache is enabled
-	$is_enabled = get_option( 'wpcloud_settings',[] )[ 'client_cache' ] ?? false;
+	// Check if the client cache is enabled.
+	$is_enabled = get_option( 'wpcloud_settings', array() )['client_cache'] ?? false;
 	if ( ! $is_enabled ) {
 		return $call_client();
 	}
-	global $_WPCLOUD_client_cache;
-	$cached = $_WPCLOUD_client_cache->$wpcloud_site_id ?? null;
+	global $wpcloud_client_cache;
+	$cached = $wpcloud_client_cache->$wpcloud_site_id ?? null;
 
 	$cache_hit = $cached && ( ! $key || ( $key && isset( $cached?->$key ) ) );
 
 	if ( $cache_hit ) {
-		return  $key ? $cached->$key : $cached;
+		return $key ? $cached->$key : $cached;
 	}
 
 	$cache_item = $call_client();
@@ -929,16 +962,16 @@ function wpcloud_client_get_through_cache(int $wpcloud_site_id, callable $call_c
 
 	// If we are not looking for a key we can cache the whole result and return it.
 	if ( ! $key ) {
-		$_WPCLOUD_client_cache->$wpcloud_site_id  = $cache_item;
+		$wpcloud_client_cache->$wpcloud_site_id = $cache_item;
 		return $cache_item;
 	}
 
 	// If the cache was completely empty we need to create the object to cache the key.
 	if ( is_null( $cached ) ) {
-		$_WPCLOUD_client_cache->$wpcloud_site_id = new stdClass();
+		$wpcloud_client_cache->$wpcloud_site_id = new stdClass();
 	}
 
-	$_WPCLOUD_client_cache->$wpcloud_site_id->$key = $cache_item;
+	$wpcloud_client_cache->$wpcloud_site_id->$key = $cache_item;
 
 	return $cache_item;
 }
