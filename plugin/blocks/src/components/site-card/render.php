@@ -38,8 +38,8 @@ if ( ! $site_thumbnail ) {
 $wrapper_attributes = $wrapper . ' ' . get_block_wrapper_attributes( array( 'class' => trim( $class_names ) ) );
 
 $domain_name = wpcloud_get_site_detail( $post_in_loop_id, 'domain_name' );
-if ( is_wp_error( $domain ) ) {
-	error_log( 'Error getting domain name: ' . $domain->get_error_message() ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+if ( is_wp_error( $domain_name ) ) {
+	error_log( 'Error getting domain name: ' . $domain_name->get_error_message() ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
 	$domain_name = '';
 }
 
@@ -51,8 +51,8 @@ if ( is_wp_error( $domain ) ) {
 		<a href="<?php echo get_the_permalink(); ?>"><?php echo get_post_field( 'post_name', get_post() ); ?></a>
 	</h2>
 	<h3 class="site-url">
-		<a href="https://<?php echo $domain; ?>" target="_blank">
-			<span><?php echo $domain; ?></span>
+		<a href="https://<?php echo $domain_name; ?>" target="_blank">
+			<span><?php echo $domain_name; ?></span>
 			<span className="dashicons dashicons-external" ></span>
 		</a>
 	</h3>

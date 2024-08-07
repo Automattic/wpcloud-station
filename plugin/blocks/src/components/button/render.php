@@ -47,7 +47,7 @@ switch ( $block_type ) {
 		$classes[] = 'wpcloud-block-button__detail';
 		$detail    = wpcloud_get_site_detail( get_the_ID(), $attributes['name'] );
 		if ( is_wp_error( $detail ) ) {
-			error_log( $detail->get_error_message() ); // phpcs:disable WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			error_log( $detail->get_error_message() ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
 			break;
 		}
 		$button_attributes['data-wpcloud-detail'] = $attributes['name'];
@@ -98,7 +98,7 @@ if ( $url ) {
 }
 $wrapper_attributes = get_block_wrapper_attributes( $button_attributes );
 
-if ( 'button' === $style || 'submit' === $type ) {
+if ( 'button' === $style || 'submit' === $block_type ) {
 	$wrapper = 'button';
 } else {
 	$wrapper = 'div';
