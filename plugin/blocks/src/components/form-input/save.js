@@ -69,8 +69,8 @@ function renderField( attributes ) {
 	}
 
 	return 'select' === type
-		? <Select attributes={attributes} className={inputClasses} />
-		: <Text attributes={attributes} className={inputClasses} />;
+		? <Select attributes={ attributes } className={ classNames( inputClasses, 'wpcloud-station-form-input__select' ) } />
+		: <Text attributes={ attributes } className={ inputClasses } />;
 }
 
 

@@ -199,11 +199,12 @@ function InputFieldBlock( { attributes, setAttributes, className, context, clien
 					</span>
 				)}
 				{ displayAsToggle && ( <span className="toggle-container"></span> ) }
+
 				<InputTag
 					attributes={ attributes }
 					onPlaceholderChange={ updatePlaceholder }
 					onValueChange={ updateValue }
-					className={classNames( className, { 'is-toggle': displayAsToggle } ) }
+					className={classNames( className, 'wpcloud-block-form-input__input', { 'is-toggle': displayAsToggle, 'wpcloud-station-form-input__select': 'select' === type } ) }
 					isSelected={ blockProps.isSelected }
 				/>
 			</span>

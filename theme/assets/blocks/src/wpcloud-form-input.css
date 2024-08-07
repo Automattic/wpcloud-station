@@ -106,7 +106,7 @@
 	}
 
 	.wpcloud-station-form-input__select {
-		padding: 9px;
+		padding: 0.63rem;
+		margin-bottom: 0;
 	}
-
 }
