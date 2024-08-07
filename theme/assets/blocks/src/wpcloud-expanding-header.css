@@ -18,11 +18,6 @@
 			overflow: hidden;
  		}
 	}
-	&.hide-on-open {
- 		.wpcloud-block-expanding-section__header{
-			padding: 0;
-		}
-	}
 	.wpcloud-block-expanding-section__header {
 		padding: var(--wp--preset--spacing--30) var(--wp--preset--spacing--50);
 		color: var(--wp--preset--color--foreground-secondary);
@@ -38,6 +33,13 @@
 			font-weight: normal;
 		}
 	}
+
+	&.hide-on-open {
+ 		.wpcloud-block-expanding-section__header{
+			padding: 0 0;
+		}
+	}
+
 	.wpcloud_expanding_section_header_chevron {
 		transition: transform 0.5s ease-in-out;
 	}
