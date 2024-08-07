@@ -9,6 +9,9 @@
 
 if ( ! class_exists( 'WPCLOUD_Webhook_Controller' ) ) {
 
+	/**
+	 * Class WPCLOUD_Webhook_Controller.
+	 */
 	class WPCLOUD_Webhook_Controller extends WP_REST_Controller {
 
 		/**
@@ -30,7 +33,8 @@ if ( ! class_exists( 'WPCLOUD_Webhook_Controller' ) ) {
 		 */
 		public function register_routes() {
 			register_rest_route(
-				$this->namespace, '/' . $this->rest_base,
+				$this->namespace,
+				'/' . $this->rest_base,
 				array(
 					array(
 						'methods'  => WP_REST_Server::CREATABLE,
@@ -43,7 +47,7 @@ if ( ! class_exists( 'WPCLOUD_Webhook_Controller' ) ) {
 		/**
 		 * Post a webhook.
 		 *
-		 * @param WP_REST_Request $request
+		 * @param WP_REST_Request $request The request object.
 		 *
 		 * @return WP_Error|WP_REST_Response
 		 */
@@ -62,7 +66,7 @@ if ( ! class_exists( 'WPCLOUD_Webhook_Controller' ) ) {
 			 * @param int    $wpcloud_site_id The WP Cloud Site Id.
 			 * @param array  $data            An array of data sent with the event.
 			 */
-			do_action( "wpcloud_webhook", $event, $timestamp, $wpcloud_site_id, $data );
+			do_action( 'wpcloud_webhook', $event, $timestamp, $wpcloud_site_id, $data );
 
 			/**
 			 * Specific action for events (e.g. `site_provisioned`, `on-demand-backup`).
@@ -75,7 +79,5 @@ if ( ! class_exists( 'WPCLOUD_Webhook_Controller' ) ) {
 
 			return new WP_REST_Response( null, WP_Http::NO_CONTENT );
 		}
-
 	}
-
 }
