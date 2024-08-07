@@ -8,7 +8,8 @@
   },
   "scripts": {
     "build:css": "node bin/build-theme-css.js",
-    "watch:css": "onchange 'assets/blocks/src/*.css' -- npm run build:css"
+    "watch:css": "onchange 'assets/blocks/src/*.css' -- npm run build:css",
+    "build": "npm run build:css && zip -r ../plugin.zip . -x@.distignore"
   },
   "repository": {
     "type": "git",
