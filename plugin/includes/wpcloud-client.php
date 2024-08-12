@@ -758,6 +758,28 @@ function wpcloud_client_remove_client_meta( string $key ): stdClass|WP_Error {
 }
 
 /**
+ * Get the status of the edge cache for a site.
+ *
+ * @param integer $wpcloud_site_id The WP Cloud Site ID.
+ *
+ * @return stdClass|WP_Error Edge cache status on success. WP_Error on failure.
+ */
+function wpcloud_client_edge_cache_status( int $wpcloud_site_id ): stdClass|WP_Error {
+	return wpcloud_client_get( $wpcloud_site_id, "edge-cache/$wpcloud_site_id" );
+}
+
+/**
+ * Update the edge cache for a site.
+ *
+ * @param integer $wpcloud_site_id The WP Cloud Site ID.
+ * @param string  $action          The action to take. 'on', 'off', or 'purge'.
+ *
+ * @return stdClass|WP_Error Edge cache status on success. WP_Error on failure.
+ */
+function wpcloud_client_edge_cache_update( int $wpcloud_site_id, string $action ): stdClass|WP_Error {
+	return wpcloud_client_post( $wpcloud_site_id, "edge-cache/$wpcloud_site_id/$action" );
+}
+/**
  * Get the status of a job.
  *
  * @param integer $job_id The job id for which to get the status.
