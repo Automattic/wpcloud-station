@@ -213,7 +213,7 @@ function wpcloud_on_delete_site( int $post_id ): void {
 
 	$result = wpcloud_client_site_delete( $wpcloud_site_id );
 	if ( is_wp_error( $result ) ) {
-		error_log( 'Error while deleting WP Cloud Site: ' . print_r( $result, true ) );
+		error_log( 'Error while deleting WP Cloud Site: ' . print_r( $result, true ) ); // phpcs:ignore
 	}
 }
 add_action( 'before_delete_post', 'wpcloud_on_delete_site', 10, 1 );
@@ -230,8 +230,8 @@ function wpcloud_lookup_post_by_site_id( int $wpcloud_site_id ): mixed {
 		array(
 			'post_type'   => 'wpcloud_site',
 			'post_status' => 'any',
-			'meta_key'    => 'wpcloud_site_id',
-			'meta_value'  => $wpcloud_site_id,
+			'meta_key'    => 'wpcloud_site_id', // phpcs:ignore
+			'meta_value'  => $wpcloud_site_id, // phpcs:ignore
 		)
 	);
 
