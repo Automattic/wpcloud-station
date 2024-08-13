@@ -14,7 +14,7 @@ export default function DetailSelect( {
 	let options = [{ value: '', label: '-'}];
 	let optionData = {};
 	if ('input' === context) {
-		optionData = window.wpcloud?.siteMetaFields || {};
+		optionData = window.wpcloud?.siteMutableFields || {};
 	} else {
 		optionData = window.wpcloud?.siteDetails || {};
 	}

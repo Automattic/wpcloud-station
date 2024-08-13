@@ -114,7 +114,7 @@ function wpcloud_block_admin_enqueue_scripts(): void {
 			'wpcloud.dataCenters=' . wp_json_encode( wpcloud_block_available_datacenters_options() ) . ';' .
 			'wpcloud.linkableSiteDetails=' . wp_json_encode( WPCloud_Site::get_linkable_detail_options() ) . ';' .
 			'wpcloud.siteMutableOptions=' . wp_json_encode( WPCloud_Site::get_mutable_options() ) . ';' .
-			'wpcloud.siteMetaFields=' . wp_json_encode( WPCloud_Site::get_meta_fields() ) . ';'
+			'wpcloud.siteMutableFields=' . wp_json_encode( WPCloud_Site::get_mutable_fields() ) . ';'
 		);
 	}
 }
