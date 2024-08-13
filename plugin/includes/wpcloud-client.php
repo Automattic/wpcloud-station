@@ -611,24 +611,24 @@ function wpcloud_client_site_set_access_type( int $wpcloud_site_id, string $acce
  */
 function wpcloud_client_site_meta_keys(): array {
 	return array(
-		'db_charset'           => __( 'DB Charset' ),
-		'db_collate'           => __( 'DB Collate' ),
-		'suspended'            => __( 'Suspended Status Code' ),
-		'suspend_after'        => __( 'Suspend After' ),
-		'php_version'          => __( 'PHP Version' ),
-		'wp_version'           => __( 'WP Version' ),
-		'do_not_delete'        => __( 'Do Not Delete' ),
-		'db_file_size'         => __( 'DB File Size' ),
-		'space_quota'          => __( 'Space Quota' ),
-		'max_space_quota'      => __( 'Max Space Quota (Gigabytes)' ),
-		'photon_subsizes'      => __( 'Photon Subsizes' ),
-		'privacy_model'        => __( 'Privacy Model' ),
-		'static_file_404'      => __( 'Static File 404' ),
-		'default_php_conns'    => __( 'Default PHP Connections' ),
-		'burst_php_conns'      => __( 'Burst PHP Connections' ),
-		'php_fs_permissions'   => __( 'PHP FS Permissions' ),
-		'canonicalize_aliases' => __( 'Canonicalize Aliases' ),
-		'ssh_port'             => __( 'SSH Port' ),
+		'db_charset',
+		'db_collate',
+		'suspended',
+		'suspend_after',
+		'php_version',
+		'wp_version',
+		'do_not_delete',
+		'db_file_size',
+		'space_quota',
+		'max_space_quota',
+		'photon_subsizes',
+		'privacy_model',
+		'static_file_404',
+		'default_php_conns',
+		'burst_php_conns',
+		'php_fs_permissions',
+		'canonicalize_aliases',
+		'ssh_port',
 	);
 }
 /**
@@ -644,7 +644,7 @@ function wpcloud_client_site_meta_keys(): array {
  * @return mixed|WP_Error Response body on success. WP_Error on failure.
  */
 function wpcloud_client_update_site_meta( int $wpcloud_site_id, string $key, string|null $value ): mixed {
-	if ( ! array_key_exists( $key, wpcloud_client_site_meta_keys() ) ) {
+	if ( ! in_array( $key, wpcloud_client_site_meta_keys() ) ) {
 		return new WP_Error( 'bad_request', 'Invalid meta key', array( 'status' => 400 ) );
 	}
 
@@ -668,7 +668,7 @@ function wpcloud_client_update_site_meta( int $wpcloud_site_id, string $key, str
  * @return mixed|WP_Error Response body on success. WP_Error on failure.
  */
 function wpcloud_client_delete_site_meta( int $wpcloud_site_id, string $key ): mixed {
-	if ( ! array_key_exists( $key, wpcloud_client_site_meta_keys() ) ) {
+	if ( ! in_array( $key, wpcloud_client_site_meta_keys() ) ) {
 		return new WP_Error( 'bad_request', 'Invalid meta key', array( 'status' => 400 ) );
 	}
 
@@ -687,7 +687,7 @@ function wpcloud_client_delete_site_meta( int $wpcloud_site_id, string $key ): m
  */
 function wpcloud_client_get_site_meta( int $wpcloud_site_id, string $key, bool $use_cache = true ): stdClass|WP_Error {
 	$get_meta = function () use ( $wpcloud_site_id, $key ) {
-		if ( ! array_key_exists( $key, wpcloud_client_site_meta_keys() ) ) {
+		if ( ! in_array( $key, wpcloud_client_site_meta_keys() ) ) {
 			return new WP_Error( 'bad_request', 'Invalid meta key', array( 'status' => 400 ) );
 		}
 

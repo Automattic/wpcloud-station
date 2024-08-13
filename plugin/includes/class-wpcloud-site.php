@@ -223,15 +223,6 @@ class WPCLOUD_Site {
 		return apply_filters( 'wpcloud_site_detail_options', $options );
 	}
 	/**
-	 * Get the meta keys for a WPCLOUD_Site.
-	 *
-	 * @return array
-	 */
-	public static function get_meta_fields(): array {
-		return wpcloud_client_site_meta_keys();
-	}
-
-	/**
 	 * Get mutable option keys
 	 *
 	 * @return array
