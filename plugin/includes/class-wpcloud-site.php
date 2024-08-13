@@ -414,6 +414,10 @@ class WPCLOUD_Site {
 					'off'   => __( 'Off' ),
 					'purge' => __( 'Purge' ),
 				),
+				'option_aliases' => array(
+					'on'  => __( 'Enabled', 'wpcloud' ),
+					'off' => __( 'Disabled', 'wpcloud' ),
+				),
 				'default' => '',
 				'hint'    => __( 'Change the edge cache status. Either `on`, `off` or `purge`' ),
 			),

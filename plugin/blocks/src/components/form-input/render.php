@@ -43,13 +43,20 @@ if ( array_key_exists( $name, $site_mutable_options ) ) {
 
 	if ( 'select' === $input_type ) {
 		$options      = $site_mutable_options[ $name ]['options'];
+		$aliases      = $site_mutable_options[ $name ]['option_aliases'] ?? array();
 		$options_html = '';
 		if ( ! is_wp_error( $options ) ) {
 			foreach ( $options as $value => $label ) {
+
+				$selected = selected( $current_value, $value, false );
+				// check for option aliases.
+				if ( ! $selected && array_key_exists( $value, $aliases ) ) {
+					$selected = selected( $current_value, $aliases[ $value ], false );
+				}
 				$options_html .= sprintf(
 					'<option value="%s" %s>%s</option>',
 					esc_attr( $value ),
-					selected( $current_value, $value, false ),
+					esc_attr( $selected ),
 					esc_html( $label )
 				);
 			}
