@@ -773,9 +773,9 @@ function wpcloud_client_edge_cache_status( int $wpcloud_site_id ): stdClass|WP_E
  * @param integer $wpcloud_site_id The WP Cloud Site ID.
  * @param string  $action          The action to take. 'on', 'off', or 'purge'.
  *
- * @return stdClass|WP_Error Edge cache status on success. WP_Error on failure.
+ * @return array|WP_Error Edge cache status on success. WP_Error on failure.
  */
-function wpcloud_client_edge_cache_update( int $wpcloud_site_id, string $action ): stdClass|WP_Error {
+function wpcloud_client_edge_cache_update( int $wpcloud_site_id, string $action ): array|WP_Error {
 	return wpcloud_client_post( $wpcloud_site_id, "edge-cache/$wpcloud_site_id/$action" );
 }
 /**

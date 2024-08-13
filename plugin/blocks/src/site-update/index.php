@@ -14,7 +14,7 @@
  */
 function wpcloud_block_form_site_update_fields( array $fields ): array {
 	$meta_fields = array_filter(
-		WPCloud_Site::get_meta_fields(),
+		WPCloud_Site::get_mutable_fields(),
 		function ( $field ) {
 			return false !== $field;
 		}
@@ -33,18 +33,19 @@ add_filter( 'wpcloud_block_form_submitted_fields_site_update', 'wpcloud_block_fo
  * @return array The response data.
  */
 function wpcloud_block_form_site_update_handler( $response, $data ) {
-	$meta_fields = array_keys( WPCloud_Site::get_meta_fields() );
+	$mutable_fields = array_keys( WPCloud_Site::get_mutable_fields() );
 
-	$site_meta = array_filter(
+	$site_mutable_fields = array_filter(
 		$data,
-		function ( $value, $key ) use ( $meta_fields ) {
-			return in_array( $key, $meta_fields );
+		function ( $value, $key ) use ( $mutable_fields ) {
+			return in_array( $key, $mutable_fields, true );
 		},
 		ARRAY_FILTER_USE_BOTH
 	);
 
-	foreach ( $site_meta as $key => $value ) {
+	$result = null;
 
+	foreach ( $site_mutable_fields as $key => $value ) {
 		switch ( $key ) {
 			case 'canonical_aliases':
 				// canonicalize_aliases doesn't like "truthy" values.
@@ -65,9 +66,15 @@ function wpcloud_block_form_site_update_handler( $response, $data ) {
 			case 'space_quota':
 				$value = intval( $value ) . 'G';
 				break;
+
+			case 'edge_cache':
+				$result = wpcloud_client_edge_cache_update( $data['wpcloud_site_id'], $value );
+				break;
 		}
 
-		$result = $value ? wpcloud_client_update_site_meta( $data['wpcloud_site_id'], $key, $value ) : wpcloud_client_delete_site_meta( $data['wpcloud_site_id'], $key );
+		if ( is_null( $result ) ) {
+			$result = $value ? wpcloud_client_update_site_meta( $data['wpcloud_site_id'], $key, $value ) : wpcloud_client_delete_site_meta( $data['wpcloud_site_id'], $key );
+		}
 
 		if ( is_wp_error( $result ) ) {
 			$response['success'] = false;

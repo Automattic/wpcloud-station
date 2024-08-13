@@ -20,8 +20,6 @@ export default function SelectField( {
 		options = optionData;
 	}
 
-
-
 	return (
 		<div className="wpcloud-form-input--select--wrapper">
 			<select
