@@ -103,6 +103,7 @@ function wpcloud_block_available_wp_versions(): array {
  */
 function wpcloud_block_admin_enqueue_scripts(): void {
 	if ( ! wp_doing_ajax() ) {
+		wp_register_script( 'wpcloud-blocks-site-form', '', array(), '1.0.0', true );
 		wp_enqueue_script( 'wpcloud-blocks-site-form' );
 		wp_add_inline_script(
 			'wpcloud-blocks-site-form',
