@@ -9,7 +9,13 @@ export default function SelectField( {
 	onValueChange,
 } ) {
 	const { name, value, inputStyle, required } = attributes;
-	let { options = { label: `{ ${name} } `, value: '' } } = attributes;
+	let { options } = attributes;
+
+	if ( ! options ) {
+		const optionData = window.wpcloud?.siteMutableFields || {};
+
+		options = optionData[name]?.options || [ { value: '', label: '-' } ];
+	}
 
 	// Loading options from the backend can have the form { value: 'label' }
 	if ( ! Array.isArray( options ) ) {

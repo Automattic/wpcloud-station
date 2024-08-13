@@ -35,6 +35,7 @@ export default function DetailSelect( {
 					label,
 					metadata: { name: label },
 					options: optionData[ newName ].options || [],
+					type: optionData[ newName ].type || 'text',
 				} );
 				onChange && onChange( newName );
 			} }

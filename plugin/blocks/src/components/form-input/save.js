@@ -53,8 +53,6 @@ function renderField( attributes ) {
 		...colorProps.style,
 	};
 
-	attributes.name = attributes.name || getNameFromLabel( attributes.label );
-
 	const inputClasses = classNames(
 		'wpcloud-block-form-input__input',
 		colorProps.className,
@@ -64,13 +62,16 @@ function renderField( attributes ) {
 			'submit-on-change': submitOnChange
 		}
 	);
-	if ('password' === type) {
-		return <Password attributes={attributes} className={inputClasses} />;
-	}
 
-	return 'select' === type
-		? <Select attributes={ attributes } className={ classNames( inputClasses, 'wpcloud-station-form-input__select' ) } />
-		: <Text attributes={ attributes } className={ inputClasses } />;
+	switch (type) {
+		case 'select':
+			return <Select attributes={ attributes } className={ classNames( inputClasses, 'wpcloud-station-form-input__select' ) } />;
+		case 'password':
+			return <Password attributes={attributes} className={inputClasses} />;
+		default:
+			attributes.name = attributes.name || getNameFromLabel( attributes.label );
+			return <Text attributes={ attributes } className={ inputClasses } />;
+	}
 }
 
 
