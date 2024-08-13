@@ -348,6 +348,24 @@ function wpcloud_get_site_detail( int|WP_Post $post, string $key, ): mixed {
 			// @TODO: Confirm that this is always the case, it appears that the port will be 2223 for ssh and 2221 for sftp
 			return 2223 === $ssh_port;
 
+		case 'edge_cache':
+			$result = wpcloud_client_edge_cache_status( $wpcloud_site_id );
+			if ( is_wp_error( $result ) ) {
+				error_log( $result->get_error_message() );
+				return '';
+			}
+			switch ( $result->status ) {
+				case 0:
+					return __( 'Disabled', 'wpcloud' );
+				case 1:
+					return __( 'Enabled', 'wpcloud' );
+				case 2:
+					return __( 'DDoS', 'wpcloud' );
+				default:
+					return __( 'Unknown', 'wpcloud' );
+			}
+			return '';
+
 		case 'data_center':
 			$key = 'geo_affinity';
 			// Fallthrough intentional to set the result.

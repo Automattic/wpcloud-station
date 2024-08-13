@@ -26,7 +26,7 @@ if ( ! $allowed ) {
 $content = apply_filters( 'wpcloud_block_form_render_field_' . $name, $content, $attributes, $block );
 $content = apply_filters( 'wpcloud_block_form_render_field', $content, $attributes, $block );
 
-$site_meta_options = WPCloud_Site::get_meta_options();
+$site_meta_options = WPCloud_Site::get_mutable_options();
 
 if ( array_key_exists( $name, $site_meta_options ) ) {
 	$current_value = wpcloud_get_site_detail( get_the_ID(), $name );

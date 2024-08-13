@@ -10,14 +10,14 @@ import { InnerBlocks } from '@wordpress/block-editor';
  */
 import metadata from './block.json';
 
-const metaOptions = window.wpcloud?.siteMetaOptions || {};
+const mutableOptions = window.wpcloud?.siteMutableOptions || {};
 
 function addInputTemplate( name, label ) {
-	const options = metaOptions[ name ]?.options;
+	const options = mutableOptions[ name ]?.options;
 
 	// If there is hin text we will use that as the label
 
-	const hintText = metaOptions[ name ]?.hint;
+	const hintText = mutableOptions[ name ]?.hint;
 	let hint = null;
 	if ( hintText ) {
 		hint = [
@@ -54,7 +54,7 @@ function addInputTemplate( name, label ) {
 		];
 	}
 
-	const type = metaOptions[ name ]?.type || 'text';
+	const type = mutableOptions[ name ]?.type || 'text';
 
 	const inputAttributes = {
 		type,

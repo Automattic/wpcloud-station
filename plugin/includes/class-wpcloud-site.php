@@ -187,7 +187,7 @@ class WPCLOUD_Site {
 	 * @return array The detail options
 	 */
 	public static function get_detail_options(): array {
-		return array(
+		$options = array(
 			'site_name'        => __( 'Site Name' ), // only used locally.
 			'site_owner_id'    => __( 'Site Owner ID' ), // only used locally.
 			'domain_name'      => __( 'Domain Name' ),
@@ -219,6 +219,7 @@ class WPCLOUD_Site {
 			'max_space_quota'  => __( 'Max Space Quota' ),
 			'space_used'       => __( 'Space Used' ),
 		);
+		return do_filter( 'wpcloud_site_detail_options', $options );
 	}
 	/**
 	 * Get the meta keys for a WPCLOUD_Site.
@@ -237,8 +238,8 @@ class WPCLOUD_Site {
 	 *
 	 * @return array
 	 */
-	public static function get_meta_options(): array {
-		return array(
+	public static function get_mutable_options(): array {
+		$options = array(
 			// db_charset and db_collate should be paired ?
 			'db_charset'           => array(
 				'type'    => 'select',
@@ -367,12 +368,14 @@ class WPCLOUD_Site {
 				'default' => true,
 				'hint'    => __( 'May be used to change whether a sites domain aliases redirect (default, "true") to the sites primary domain name or are served directly (when set to "false")' ),
 			),
+
 			'site_access_with_ssh' => array(
 				'type'    => 'checkbox',
 				'default' => false,
 				'hint'    => __( 'Site access is via SFTP by default. Enabling allows access via SSH' ),
 			),
 		);
+		return apply_filters( 'wpcloud_site_mutable_options', $options );
 	}
 
 	/**
