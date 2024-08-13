@@ -610,7 +610,6 @@ function wpcloud_client_site_set_access_type( int $wpcloud_site_id, string $acce
  * @return array The meta keys for a site.
  */
 function wpcloud_client_site_meta_keys(): array {
-	// @TODO move the labels to WPCLOUD_Site::get_meta_fields()
 	return array(
 		'db_charset'           => __( 'DB Charset' ),
 		'db_collate'           => __( 'DB Collate' ),

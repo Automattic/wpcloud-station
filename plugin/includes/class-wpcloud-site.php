@@ -240,7 +240,7 @@ class WPCLOUD_Site {
 		$fields = array();
 		foreach ( self::get_mutable_options() as $key => $option ) {
 			if ( isset( $option['label'] ) ) {
-				$fields[ $key ] = $option['label'];
+				$fields[ $key ] = $option;
 			}
 		}
 		return $fields;

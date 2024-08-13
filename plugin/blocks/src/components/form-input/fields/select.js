@@ -9,11 +9,18 @@ export default function SelectField( {
 	onValueChange,
 } ) {
 	const { name, value, inputStyle, required } = attributes;
-	let { options } = attributes;
+	let { options = { label: `{ ${name} } `, value: '' } } = attributes;
 
-	if (!options) {
-		options = [{ label: `{ ${name} } `, value: '' }];
+	// Loading options from the backend can have the form { value: 'label' }
+	if ( ! Array.isArray( options ) ) {
+		const optionData = [];
+		for ( const [ key, value ] of Object.entries( options ) ) {
+			optionData.push( { value: key, label: value } );
+		}
+		options = optionData;
 	}
+
+
 
 	return (
 		<div className="wpcloud-form-input--select--wrapper">
