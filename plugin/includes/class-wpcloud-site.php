@@ -216,6 +216,7 @@ class WPCLOUD_Site {
 			'site_ssh_user'    => __( 'Site SSH User' ),
 			'edge_cache'       => __( 'Edge Cache' ),
 			'defensive_mode'   => __( 'Defensive Mode' ),
+			'_data'            => __( 'Site Data' ),
 
 			// These are read only meta fields.
 			'max_space_quota'  => __( 'Max Space Quota' ),
@@ -418,6 +419,18 @@ class WPCLOUD_Site {
 				'type'    => 'text',
 				'default' => '',
 				'hint'    => __( 'Enable or disable defensive mode for a site. The value is in minutes. minimum 30 minutes and a maximum of 7 days' ),
+			),
+			'_data'                => array(
+				'label'   => __( 'Site Data' ),
+				'type'    => 'select',
+				'default' => '',
+				'options' => array(
+					''         => '',
+					'staging'  => __( 'Staging' ),
+					'billing'  => __( 'Billing' ),
+					'internal' => __( 'Internal' ),
+				),
+				'hint'    => __( 'Site data' ),
 			),
 		);
 		return apply_filters( 'wpcloud_site_mutable_options', $options );

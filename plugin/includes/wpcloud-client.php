@@ -629,6 +629,7 @@ function wpcloud_client_site_meta_keys(): array {
 		'php_fs_permissions',
 		'canonicalize_aliases',
 		'ssh_port',
+		'_data',
 	);
 }
 /**
