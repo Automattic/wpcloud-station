@@ -439,6 +439,8 @@ function wpcloud_client_php_versions_available( bool $descending = false, bool $
 			},
 			array()
 		);
+		// Remove PHP 7.4 from the list.
+		unset( $result['7.4'] );
 
 		if ( $descending ) {
 			arsort( $result );
