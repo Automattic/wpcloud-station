@@ -1,0 +1,17 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "wpcloud/disable-defensive-mode",
+	"version": "0.1.0",
+	"title": "Defensive Mode Settings",
+	"category": "wpcloud",
+	"icon": "feedback",
+	"description": "Disable Defensive Mode for a site.",
+	"example": {},
+	"supports": {
+		"html": false
+	},
+	"textdomain": "wpcloud",
+	"editorScript": "file:./index.js",
+	"viewScript": "file:./view.js"
+}
