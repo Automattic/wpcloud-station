@@ -5,11 +5,23 @@
 	align-items: center;
 	letter-spacing: 0.125rem;
 
+	.wpcloud-block-button__label {
+		cursor: pointer;
+		text-wrap: nowrap;
+	}
 	a:hover {
 		text-decoration: none;
 	}
-	&:hover {
+	&:hover:not(:disabled) {
 		filter: brightness(80%);
+	}
+
+	&:disabled,
+  &[disabled] {
+		opacity: 0.4;
+		&, .wpcloud-block-button__label {
+			cursor: not-allowed;
+		}
 	}
 
 	.wpcloud-block-button__content {
@@ -44,10 +56,7 @@
 		}
 	}
 
-	.wpcloud-block-button__label {
-		cursor: pointer;
-		text-wrap: nowrap;
-	}
+
 
 	a:where(:not(.wp-element-button)) {
 		color: unset;
