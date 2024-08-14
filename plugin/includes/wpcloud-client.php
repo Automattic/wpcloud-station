@@ -778,6 +778,19 @@ function wpcloud_client_edge_cache_status( int $wpcloud_site_id ): stdClass|WP_E
 function wpcloud_client_edge_cache_update( int $wpcloud_site_id, string $action ): array|WP_Error {
 	return wpcloud_client_post( $wpcloud_site_id, "edge-cache/$wpcloud_site_id/$action" );
 }
+
+/**
+ * Set the site in defensive mode
+ *
+ * @param integer $wpcloud_site_id The WP Cloud Site ID.
+ * @param string  $timestamp       Optional. The timestamp to set the site in defensive mode until. Default: '0'.
+ *
+ * @return array|WP_Error Defensive mode status on success. WP_Error on failure.
+ */
+function wpcloud_client_defensive_mode_update( int $wpcloud_site_id, string $timestamp = '0' ): array|WP_Error {
+	return wpcloud_client_post( $wpcloud_site_id, "edge-cache/$wpcloud_site_id/ddos_until", array( 'timestamp' => $timestamp ) );
+}
+
 /**
  * Get the status of a job.
  *

@@ -215,6 +215,7 @@ class WPCLOUD_Site {
 			'wp_admin_url'     => __( 'WP Admin URL' ),
 			'site_ssh_user'    => __( 'Site SSH User' ),
 			'edge_cache'       => __( 'Edge Cache' ),
+			'defensive_mode'   => __( 'Defensive Mode' ),
 
 			// These are read only meta fields.
 			'max_space_quota'  => __( 'Max Space Quota' ),
@@ -398,9 +399,9 @@ class WPCLOUD_Site {
 				'hint'    => __( 'Site access is via SFTP by default. Enabling allows access via SSH' ),
 			),
 			'edge_cache'           => array(
-				'label'   => __( 'Edge Cache' ),
-				'type'    => 'select',
-				'options' => array(
+				'label'          => __( 'Edge Cache' ),
+				'type'           => 'select',
+				'options'        => array(
 					'on'    => __( 'On' ),
 					'off'   => __( 'Off' ),
 					'purge' => __( 'Purge' ),
@@ -409,8 +410,14 @@ class WPCLOUD_Site {
 					'on'  => __( 'Enabled', 'wpcloud' ),
 					'off' => __( 'Disabled', 'wpcloud' ),
 				),
+				'default'        => '',
+				'hint'           => __( 'Change the edge cache status. Either `on`, `off` or `purge`' ),
+			),
+			'defensive_mode'       => array(
+				'label'   => __( 'Defensive Mode' ),
+				'type'    => 'text',
 				'default' => '',
-				'hint'    => __( 'Change the edge cache status. Either `on`, `off` or `purge`' ),
+				'hint'    => __( 'Enable or disable defensive mode for a site. The value is in minutes. minimum 30 minutes and a maximum of 7 days' ),
 			),
 		);
 		return apply_filters( 'wpcloud_site_mutable_options', $options );

@@ -366,6 +366,21 @@ function wpcloud_get_site_detail( int|WP_Post $post, string $key, ): mixed {
 			}
 			return '';
 
+		case 'defensive_mode':
+			$result = wpcloud_client_edge_cache_status( $wpcloud_site_id );
+
+			if ( is_wp_error( $result ) ) {
+				error_log( $result->get_error_message() );
+				return '';
+			}
+			$ddos_until = $result->ddos_until ?? -1;
+			if ( $ddos_until <= 0 ) {
+				return __( 'Disabled', 'wpcloud' );
+			}
+			$date_format = get_option( 'date_format' );
+			$time_format = get_option( 'time_format' );
+			return __( 'Enabled until: ' ) . gmdate( "$date_format $time_format", $ddos_until );
+
 		case 'data_center':
 			$key = 'geo_affinity';
 			// Fallthrough intentional to set the result.
