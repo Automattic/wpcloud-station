@@ -647,7 +647,7 @@ function wpcloud_client_site_meta_keys(): array {
  * @return mixed|WP_Error Response body on success. WP_Error on failure.
  */
 function wpcloud_client_update_site_meta( int $wpcloud_site_id, string $key, string|null $value ): mixed {
-	if ( ! in_array( $key, wpcloud_client_site_meta_keys() ) ) {
+	if ( ! in_array( $key, wpcloud_client_site_meta_keys(), true ) ) {
 		return new WP_Error( 'bad_request', 'Invalid meta key', array( 'status' => 400 ) );
 	}
 
@@ -671,7 +671,7 @@ function wpcloud_client_update_site_meta( int $wpcloud_site_id, string $key, str
  * @return mixed|WP_Error Response body on success. WP_Error on failure.
  */
 function wpcloud_client_delete_site_meta( int $wpcloud_site_id, string $key ): mixed {
-	if ( ! in_array( $key, wpcloud_client_site_meta_keys() ) ) {
+	if ( ! in_array( $key, wpcloud_client_site_meta_keys(), true ) ) {
 		return new WP_Error( 'bad_request', 'Invalid meta key', array( 'status' => 400 ) );
 	}
 
@@ -690,7 +690,7 @@ function wpcloud_client_delete_site_meta( int $wpcloud_site_id, string $key ): m
  */
 function wpcloud_client_get_site_meta( int $wpcloud_site_id, string $key, bool $use_cache = true ): stdClass|WP_Error {
 	$get_meta = function () use ( $wpcloud_site_id, $key ) {
-		if ( ! in_array( $key, wpcloud_client_site_meta_keys() ) ) {
+		if ( ! in_array( $key, wpcloud_client_site_meta_keys(), true ) ) {
 			return new WP_Error( 'bad_request', 'Invalid meta key', array( 'status' => 400 ) );
 		}
 
