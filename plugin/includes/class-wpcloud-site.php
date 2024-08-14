@@ -35,23 +35,29 @@ class WPCLOUD_Site {
 	 * @param array $options The options for the site.
 	 * @return WP_Post|WP_Error
 	 */
-	public static function create( array $options ): mixed {
-		$author = get_user_by( 'id', $options['site_owner_id'] ?? 0 );
-
-		if ( ! $author ) {
-			return new WP_Error( 'invalid_user', __( 'Invalid user.', 'wpcloud' ) );
+	public static function create( array $options, WP_Post $post = null ): WP_Post|WP_Error {
+		if ( ! $post ) {
+			$post = self::create_post( $options );
+		}
+		if ( is_wp_error( $post ) ) {
+			return $post;
 		}
 
-		$can_create = apply_filters( 'wpcloud_can_create_site', true, $author, $options );
-		if ( ! $can_create ) {
-			return new WP_Error( 'unauthorized', __( 'You are not authorized to create a site.', 'wpcloud' ) );
-		}
+		// Unpack the options.
+		$php_version = $options['php_version'] ?? get_post_meta( $post->ID, 'php_version', true );
+		$data_center = $options['data_center'] ?? get_post_meta( $post->ID, 'data_center', true );
+		$admin_pass  = $options['admin_pass'] ?? '';
+		$site_name   = $options['site_name'] ?? $post->post_title;
+		$domain      = $options['domain_name'] ?? get_post_meta( $post->ID, 'initial_domain', true );
 
-		$php_version = $options['php_version'];
-		$data_center = $options['data_center'];
-		$site_name   = $options['site_name'];
-		$domain      = $options['domain_name'] ?? '';
+		// Set up site data.
+		$data = array(
+			'php_version'  => $php_version,
+			'geo_affinity' => $data_center,
+			'admin_pass'   => $admin_pass,
+		);
 
+		// Set up domain.
 		if ( empty( $domain ) ) {
 			$settings       = get_option( 'wpcloud_settings' );
 			$default_domain = $settings['wpcloud_domain'] ?? '';
@@ -59,24 +65,62 @@ class WPCLOUD_Site {
 				$domain = strtolower( str_replace( ' ', '-', $site_name ) . '.' . $default_domain );
 			}
 		}
+		// Use a demo domain if the domain is still empty.
+		if ( empty( $domain ) ) {
+			$data['demo_domain'] = true;
+		} else {
+			$data['domain_name'] = $domain;
+		}
 
-		add_filter(
-			'wpcloud_site_create_data',
-			function ( $data ) use ( $options, $domain ) {
+		$data = apply_filters( 'wpcloud_site_create_data', $data, $post );
 
-				$admin_pass = $options['admin_pass'] ?? '';
-				if ( $admin_pass ) {
-					$data['admin_pass'] = $admin_pass;
-				}
+		// Set up default software.
+		$wpcloud_settings = get_option( 'wpcloud_settings' );
+		$software         = $wpcloud_settings['software'] ?? array();
+		$default_theme    = $wpcloud_settings['wpcloud_default_theme'] ?? '';
+		if ( ! empty( $default_theme ) ) {
+			$software[ $default_theme ] = 'activate';
+		}
+		$software = apply_filters( 'wpcloud_site_create_software', $software, $post );
 
-				if ( empty( $domain ) ) {
-					$data['demo_domain'] = true;
-				}
+		$author = get_user_by( 'id', $post->post_author );
+		$result = wpcloud_client_site_create( $author->user_login, $author->user_email, $data, $software );
 
-				return $data;
-			}
-		);
+		if ( is_wp_error( $result ) ) {
+			error_log( $result->get_error_message() );
+			update_post_meta( $post->ID, 'wpcloud_site_error', $result->get_error_message() );
+			return $result;
+		}
 
+		update_post_meta( $post->ID, 'wpcloud_site_id', $result->atomic_site_id );
+
+		do_action( 'wpcloud_site_created', $post->ID, $post, $result->atomic_site_id );
+
+		return $post;
+	}
+
+
+	/**
+	 * Create a new wpcloud_site custom post type.
+	 *
+	 * @param array $options The options for the site.
+	 * @return WP_Post|WP_Error
+	 */
+	protected static function create_post( array $options ): WP_Post|WP_Error {
+		$author = get_user_by( 'id', $options['site_owner_id'] ?? 0 );
+
+		if ( ! $author ) {
+			return new WP_Error( 'invalid_user', __( 'Invalid user.', 'wpcloud' ) );
+		}
+
+		$can_create = apply_filters( 'wpcloud_can_create_site', true, $author, $options );
+
+		if ( ! $can_create ) {
+			return new WP_Error( 'unauthorized', __( 'You are not authorized to create a site.', 'wpcloud' ) );
+		}
+
+		$site_name = $options['site_name'] ?? '';
+		// Create the CPT post.
 		$post_id = wp_insert_post(
 			array(
 				'post_title'  => $site_name,
@@ -84,18 +128,12 @@ class WPCLOUD_Site {
 				'post_type'   => 'wpcloud_site',
 				'post_status' => 'draft',
 				'post_author' => $author->ID,
-				'meta_input'  => array(
-					'php_version'    => $php_version,
-					'data_center'    => $data_center,
-					'initial_domain' => $domain,
-				),
 			)
 		);
 
 		if ( is_wp_error( $post_id ) ) {
 			return $post_id;
 		}
-
 		return get_post( $post_id );
 	}
 

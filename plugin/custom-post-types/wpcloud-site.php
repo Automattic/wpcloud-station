@@ -73,60 +73,6 @@ function wpcloud_site_register_post_meta( string $name, string $type ) {
 }
 
 /**
- * After WP Cloud Site post has been created, create the site through the API.
- *
- * @param integer $post_id The post ID.
- * @param WP_Post $post    The post.
- * @param boolean $update  True if update. False of create.
- */
-function wpcloud_on_create_site( int $post_id, WP_Post $post, bool $update ): void {
-	if ( $update ) {
-		return;
-	}
-	if ( 'wpcloud_site' !== $post->post_type ) {
-		return;
-	}
-
-	$data        = array();
-	$author      = get_user_by( 'id', $post->post_author );
-	$domain      = get_post_meta( $post_id, 'initial_domain', true );
-	$php_version = get_post_meta( $post_id, 'php_version', true );
-	$data_center = get_post_meta( $post_id, 'data_center', true );
-
-	if ( ! empty( $php_version ) ) {
-		$data['php_version'] = $php_version;
-	}
-	if ( ! empty( $data_center ) && 'No Preference' !== $data_center ) {
-		$data['geo_affinity'] = $data_center;
-	}
-
-	$data                = apply_filters( 'wpcloud_site_create_data', $data, $post_id, $post );
-	$data['domain_name'] = $domain;
-
-	// Check for a default theme.
-	$wpcloud_settings = get_option( 'wpcloud_settings' );
-	$default_theme    = $wpcloud_settings['wpcloud_default_theme'] ?? '';
-	$software         = $wpcloud_settings['software'] ?? array();
-
-	if ( ! empty( $default_theme ) ) {
-		$software[ $default_theme ] = 'activate';
-	}
-
-	$result = wpcloud_client_site_create( $author->user_login, $author->user_email, $data, $software );
-
-	if ( is_wp_error( $result ) ) {
-		error_log( $result->get_error_message() );
-		update_post_meta( $post_id, 'wpcloud_site_error', $result->get_error_message() );
-		return;
-	}
-
-	update_post_meta( $post_id, 'wpcloud_site_id', $result->atomic_site_id );
-
-	do_action( 'wpcloud_site_created', $post_id, $post, $result->atomic_site_id );
-}
-add_action( 'wp_after_insert_post', 'wpcloud_on_create_site', 10, 3 );
-
-/**
  * Prepare WP Cloud Site data for REST response. Retrieve details from the API and add to the response.
  *
  * @param WP_REST_Response $response The response.
@@ -177,6 +123,23 @@ function wpcloud_on_rest_prepare_site( WP_REST_Response $response, WP_Post $post
 	return $response;
 }
 add_filter( 'rest_prepare_wpcloud_site', 'wpcloud_on_rest_prepare_site', 10, 2 );
+
+
+/**
+ * Create a WP Cloud Site when a `wpcloud_site` post is created via the rest API.
+ *
+ * @param WP_Post         $post     The post.
+ * @param WP_REST_Request $request The request.
+ * @param bool            $creating  True if creating.
+ */
+function wpcloud_rest_after_insert_post_wpcloud_site( $post, $request, $creating ) {
+	if ( ! $creating ) {
+		return;
+	}
+	$options = $request->get_json_params() ?? array();
+	WPCLOUD_Site::create( $options, $post );
+}
+add_action( 'rest_after_insert_post_wpcloud_site', 'wpcloud_rest_after_insert_post_wpcloud_site', 10, 3 );
 
 /**
  * Always query both draft and published sites in REST query.
