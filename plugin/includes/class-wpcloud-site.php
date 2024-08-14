@@ -32,7 +32,8 @@ class WPCLOUD_Site {
 	 *  'admin_pass' => 'password123',
 	 * ];
 	 *
-	 * @param array $options The options for the site.
+	 * @param array   $options The options for the site.
+	 * @param WP_Post $post The post object for the site.
 	 * @return WP_Post|WP_Error
 	 */
 	public static function create( array $options, WP_Post $post = null ): WP_Post|WP_Error {
@@ -526,13 +527,7 @@ class WPCLOUD_Site {
 					error_log( $result->get_error_message() );
 					return '';
 				}
-				$ddos_until = $result->ddos_until ?? -1;
-				if ( $ddos_until <= 0 ) {
-					return __( 'Disabled', 'wpcloud' );
-				}
-				$date_format = get_option( 'date_format' );
-				$time_format = get_option( 'time_format' );
-				return __( 'Enabled until: ' ) . gmdate( "$date_format $time_format", $ddos_until );
+				return $result->ddos_until ?? '';
 
 			case 'data_center':
 				$key = 'geo_affinity';

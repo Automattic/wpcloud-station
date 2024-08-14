@@ -62,3 +62,21 @@ function wpcloud_block_form_defensive_mode_disable_handler( $response, $data ) {
 	return $response;
 }
 add_filter( 'wpcloud_form_process_defensive_mode_disable', 'wpcloud_block_form_defensive_mode_disable_handler', 10, 2 );
+
+/**
+ * Defensive mode site detail value.
+ *
+ * @param int $ddos_until The timestamp of the event in unix milliseconds.
+ *
+ * @return string Formatted value.
+ */
+function wpcloud_block_defensive_mode_site_detail_value( $ddos_until ) {
+	if ( $ddos_until <= 0 ) {
+		return __( 'Disabled', 'wpcloud' );
+	}
+	$date_format = get_option( 'date_format' );
+	$time_format = get_option( 'time_format' );
+	return __( 'Enabled until: ' ) . gmdate( "$date_format $time_format", $ddos_until );
+}
+
+add_filter( 'wpcloud_block_site_detail_value_defensive_mode', 'wpcloud_block_defensive_mode_site_detail_value' );
