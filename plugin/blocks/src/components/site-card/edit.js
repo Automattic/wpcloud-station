@@ -8,7 +8,6 @@ import classNames from 'classnames';
  */
 import { __ } from '@wordpress/i18n';
 import { useBlockProps } from '@wordpress/block-editor';
-import { Dashicon } from '@wordpress/components';
 
 /**
  * Internal dependencies
@@ -29,8 +28,8 @@ export default function Edit( { className, context } ) {
 	const blockProps = useBlockProps();
 	const {
 		postId,
-		postTitle,
-		primaryDomain
+		postTitle = __( 'Site Name', 'wpcloud' ),
+		primaryDomain = 'example.com',
 	} = context;
 
 	return (
@@ -47,7 +46,7 @@ export default function Edit( { className, context } ) {
 				name={postTitle}
 			/>
 			<h2 className="site-title">
-				<a href="#" target="_blank">{postTitle}</a>
+				<a href="#" target="_blank">{ postTitle }</a>
 			</h2>
 			<h3 className="site-url">
 				<a href="#" target="_blank">

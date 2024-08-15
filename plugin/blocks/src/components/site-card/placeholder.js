@@ -18,10 +18,7 @@ export function getPlaceholderStyle(id) {
 	}
 }
 
-export function Placeholder({ postId, name = 'Site Name' }) {
-	if ( !postId ) {
-		return null;
-	}
+export function Placeholder({ postId = 1, name = 'Site Name' }) {
 	const style = getPlaceholderStyle(postId);
 	return (
 		<div className="wpcloud-site-card--placeholder" style={style} >
