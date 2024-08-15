@@ -66,12 +66,13 @@ class WPCLOUD_Site_List extends WP_List_Table {
 	 */
 	public function get_columns() {
 		$columns = array(
-			'select'  => '<input type="checkbox" />',
-			'name'    => __( 'Name', 'wpcloud' ),
-			'owner'   => __( 'Owner', 'wpcloud' ),
-			'status'  => __( 'Status', 'wpcloud' ),
-			'created' => __( 'Created', 'wpcloud' ),
-			'tags'    => __( 'Tags', 'wpcloud' ),
+			'select'       => '<input type="checkbox" />',
+			'name'         => __( 'Name', 'wpcloud' ),
+			'owner'        => __( 'Owner', 'wpcloud' ),
+			'status'       => __( 'Status', 'wpcloud' ),
+			'space_used'   => __( 'Space Used', 'wpcloud' ),
+			'db_file_size' => __( 'DB File Size', 'wpcloud' ),
+			'created'      => __( 'Created', 'wpcloud' ),
 		);
 
 		return $columns;
@@ -94,7 +95,7 @@ class WPCLOUD_Site_List extends WP_List_Table {
 	 * @return array
 	 */
 	public function column_name( $item ) {
-		$domain  = wpcloud_get_site_detail( $item->ID, 'domain_name' );
+		$domain  = WPCLOUD_Site::get_detail( $item->ID, 'domain_name' );
 		$actions = array(
 			// translators: %s: The Edit link.
 			'edit'   => sprintf( __( '<a href="%s">Edit</a>' ), get_permalink( $item ) ),
@@ -112,7 +113,13 @@ class WPCLOUD_Site_List extends WP_List_Table {
 	 * @return array
 	 */
 	public function column_status( $item ) {
-		return $item->post_status;
+		if ( 'draft' === $item->post_status ) {
+			return __( 'Provisioning', 'wpcloud' );
+		}
+		if ( 'publish' === $item->post_status ) {
+			return __( 'Live', 'wpcloud' );
+		}
+		return __( 'Unknown', 'wpcloud' );
 	}
 
 	/**
@@ -129,14 +136,36 @@ class WPCLOUD_Site_List extends WP_List_Table {
 	}
 
 	/**
+	 * Get space used column
+	 *
+	 * @param WP_Post $item The current item.
+	 */
+	public function column_space_used( $item ) {
+		$space_used = WPCLOUD_Site::get_detail( $item->ID, 'space_used' );
+		return $space_used;
+	}
+
+	/**
+	 * Get db file size column
+	 *
+	 * @param WP_Post $item The current item.
+	 */
+	public function column_db_file_size( $item ) {
+		$db_file_size = WPCLOUD_Site::get_detail( $item->ID, 'db_file_size' );
+		return $db_file_size;
+	}
+
+	/**
 	 * Get sortable columns
 	 *
 	 * @param WP_Post $item The current item.
 	 * @return array
 	 */
 	public function column_created( $item ) {
-		$dt = get_post_datetime( $item->ID );
-		return $dt->format( 'Y-m-d H:i:s' );
+		$dt          = get_post_datetime( $item->ID );
+		$date_format = get_option( 'date_format' );
+
+		return $dt->format( $date_format );
 	}
 
 	/**
@@ -153,6 +182,8 @@ class WPCLOUD_Site_List extends WP_List_Table {
 
 	/**
 	 * Get sortable columns
+	 *
+	 * @deprecated not in use.
 	 *
 	 * @param WP_Post $item The current item.
 	 * @return array
