@@ -29,7 +29,12 @@ function wpcloud_form_submit_handler() {
 	$post_data = $_POST;
 
 	if ( isset( $post_data['site_id'] ) ) {
-		$post_data['wpcloud_site_id'] = get_post_meta( $post_data['site_id'], 'wpcloud_site_id', true );
+		$wpcloud_site_id = get_post_meta( $post_data['site_id'], 'wpcloud_site_id', true );
+
+		if ( ! $wpcloud_site_id ) {
+			wp_send_json_error( array( 'message' => 'Site not found.' ), 400 );
+		}
+		$post_data['wpcloud_site_id'] = $wpcloud_site_id;
 	}
 
 	// Get the form fields.
