@@ -345,7 +345,7 @@
         "dimensions": {
           "max-width": "550px"
         },
-        "css": "& {\n\tposition: relative;\n}\n& .wp-block-heading {\n\ttext-wrap: nowrap;\n}"
+        "css": "& {\n\tposition: relative;\n}\n& .wp-block-heading {\n\ttext-wrap: nowrap;\n}\n&.wpcloud-admin-only {\n\tborder-color: var(--wp--preset--color--accent-primary);\n}"
       },
       "wpcloud/site-domains": {
         "color": {
