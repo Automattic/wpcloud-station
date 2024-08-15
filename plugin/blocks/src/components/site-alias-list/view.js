@@ -1,13 +1,25 @@
-( ( wpcloud ) => {
+((wpcloud) => {
+
+	const demo_domain = 'wpcloudstation.dev';
 	const aliasList = document.querySelector(
 		'.wpcloud-block-site-alias-list'
 	);
 	const primary = aliasList.querySelector(
 		'.wpcloud-block-site-alias-list__item--primary'
 	);
+	const primaryRow = aliasList.querySelector(
+		'.wpcloud-block-site-alias-list__row--primary'
+	);
 	const primaryValueNode = primary.querySelector(
 		'.wpcloud-block-site-detail__value'
 	);
+
+	// hide the ability to make the demo domain primary
+	aliasList
+		.querySelector(`[data-site-alias$="${demo_domain}"] [data-original-action="site_alias_make_primary"]`)
+		?.classList.add('display-none')
+
+	aliasList.querySelectorAll( '[data-a' ).forEach( wpcloud.bindFormHandler );
 
 	function onSiteAliasRemove( result, form ) {
 		if ( ! result.success ) {
@@ -99,6 +111,9 @@
 		const aliasAnchor = aliasValueNode.querySelector('a');
 		aliasAnchor.href = `https://${oldPrimary}`;
 		aliasAnchor.textContent = oldPrimary;
+
+		// Check ssl on the domains
+		[ primaryRow.querySelector('.wpcloud-block-form-retry-ssl'), alias.querySelector('.wpcloud-block-form-retry-ssl') ].forEach( verifySSL );
 	}
 
 	wpcloud.hooks.addAction(
@@ -156,4 +171,64 @@
 		'wpcloud',
 		() => true
 	);
-} )( window.wpcloud );
+
+	function getDomainFromSSLForm(form) {
+		if (!form) {
+			return;
+		}
+		let domain = form.closest('.wpcloud-block-site-alias-list__row')
+			?.querySelector('[data-domain-name]')
+			?.dataset.domainName;
+		if (!domain) {
+			domain = form.closest('[data-site-alias]')
+				?.dataset.siteAlias;
+		}
+		return domain;
+	}
+
+	async function verifySSL(form) {
+		const domain = getDomainFromSSLForm(form);
+		if ( ! domain || domain.includes( demo_domain ) ) {
+			return;
+		}
+		const response = await fetch(`/wp-json/wpcloud/v1/domains/ssl-status?domain=${domain}`);
+		const result = await response.json();
+		if ( result.success && ! result.valid ) {
+			form.classList.remove( 'display-none' );
+		} else {
+			form.classList.add( 'display-none' );
+		}
+	}
+	// SSL Retry
+	wpcloud.hooks.addFilter(
+		'wpcloud_form_data_retry_ssl',
+		'wpcloud',
+		( data, form ) => {
+			data.domain_name = getDomainFromSSLForm( form );
+			return data;
+		}
+	);
+
+	wpcloud.hooks.addAction(
+		'wpcloud_form_response_retry_ssl',
+		'wpcloud',
+		(result, form) => {
+			if ( result.success ) {
+
+				const button = form.querySelector('.wpcloud-block-button__label');
+				if ( button ) {
+					button.innerText = 'Queued';
+				}
+				setTimeout(() => {
+					form.classList.add('wpcloud-hide');
+				}, 1000);
+				return;
+			}
+		}
+	);
+
+	// Check the status of the existing domains.
+	aliasList.querySelectorAll('.wpcloud-block-form-retry-ssl').forEach( verifySSL );
+
+
+})(window.wpcloud);

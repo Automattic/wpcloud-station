@@ -40,11 +40,15 @@
 			return;
 		}
 
-		const action = data.wpcloud_action;
+		const action = data.wpcloud_action?.trim();
 		wpcloud.hooks.doAction('wpcloud_form_submit', form, action);
+		data = wpcloud.hooks.applyFilters('wpcloud_form_data', data, action, form );
 		if (action) {
 			wpcloud.hooks.doAction(`wpcloud_form_submit_${action}`, form, action);
+			data = wpcloud.hooks.applyFilters(`wpcloud_form_data_${action}`, data, form );
 		}
+
+
 		try {
 			const response = await fetch(
 				'/wp-admin/admin-ajax.php',
