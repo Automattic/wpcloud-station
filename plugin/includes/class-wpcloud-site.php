@@ -447,10 +447,23 @@ class WPCLOUD_Site {
 				$result = wpcloud_client_site_phpmyadmin_url( $wpcloud_site_id );
 				return $result;
 
-			case 'ssl_info':
-				// @TODO getting timeout errors but probably since we are not using valid domains ?
-				// $result = wpcloud_client_site_ssl_info( $wpcloud_site_id );
-				return '';
+			case 'ssl_status':
+				$details = wpcloud_client_site_details( $wpcloud_site_id );
+				if ( is_wp_error( $details ) ) {
+					error_log( $details->get_error_message() );
+					return '';
+				}
+				$result = wpcloud_client_site_ssl_info( $details->domain_name );
+				if ( is_wp_error( $result ) ) {
+						error_log( $result->get_error_message() );
+					return '';
+				}
+				$invalid = $result->broken_record || $result->broken_check;
+
+				if ( $invalid ) {
+					return $invalid;
+				}
+				return 'OK';
 
 			case 'ip_addresses':
 				$details = wpcloud_client_site_details( $wpcloud_site_id );
@@ -562,5 +575,20 @@ class WPCLOUD_Site {
 		);
 
 		return in_array( $key, $refresh_keys, true );
+	}
+
+	/**
+	 * Check if a domain has a valid SSL certificate.
+	 *
+	 * @param string $domain The domain to check.
+	 * @return bool|WP_Error True if the domain has a valid SSL certificate.
+	 */
+	public static function is_domain_ssl_valid( string $domain ): bool|WP_Error {
+		$ssl_status = wpcloud_client_site_ssl_info( $domain );
+		if ( is_wp_error( $ssl_status ) ) {
+			error_log( $ssl_status->get_error_message() );
+			return $ssl_status;
+		}
+		return ! $ssl_status->broken_record && ! $ssl_status->broken_check;
 	}
 }

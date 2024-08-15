@@ -11,6 +11,7 @@ declare( strict_types = 1 );
  * Requires
  */
 require_once plugin_dir_path( __FILE__ ) . 'controllers/class-wpcloud-webhook-controller.php';
+require_once plugin_dir_path( __FILE__ ) . 'controllers/class-wpcloud-domains-controller.php';
 require_once plugin_dir_path( __FILE__ ) . 'custom-post-types/wpcloud-site.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/class-wpcloud-site.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/wpcloud-client.php';
@@ -47,6 +48,9 @@ function wpcloud_add_capabilities(): void {
 function wpcloud_register_controllers(): void {
 	$webhook_controller = new WPCLOUD_Webhook_Controller();
 	$webhook_controller->register_routes();
+
+	$domains_controller = new WPCLOUD_Domains_Controller();
+	$domains_controller->register_routes();
 }
 add_action( 'rest_api_init', 'wpcloud_register_controllers' );
 
