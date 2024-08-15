@@ -47,26 +47,51 @@ export default function Edit() {
 						[
 							'wpcloud/site-detail',
 							{
-								label: __( 'Primary Domain' ),
+								label: __('Primary Domain'),
 								name: 'domain_name',
 								inline: true,
 								hideLabel: true,
 								className:
 									'wpcloud-block-site-alias-list__item--primary',
 								metadata: {
-									name: __( 'Primary Domain' ),
+									name: __('Primary Domain'),
 								},
 							},
 						],
-						[
-							'core/paragraph',
+						[ 'core/group',
 							{
-								metadata: { name: 'Primary Domain Badge' },
-								content: __( 'Primary' ),
-								className:
-									'wpcloud-block-site-alias-list__item--primary-badge',
+								layout: {
+									type: 'flex',
+									flexWrap: 'wrap',
+								}
 							},
-						],
+							[
+								[ 'wpcloud/form',
+									{
+										wpcloudAction: 'retry_ssl',
+										className: 'display-none wpcloud-block-form-retry-ssl'
+									},
+									[
+										[ 'wpcloud/button',
+											{
+												label: __('Retry SSL'),
+												style: 'text',
+												type: 'submit',
+												isPrimary: false
+											}
+										]
+									]
+								],
+								[ 'core/paragraph',
+									{
+										metadata: { name: 'Primary Domain Badge' },
+										content: __( 'Primary' ),
+										className:
+											'wpcloud-block-site-alias-list__item--primary-badge',
+									},
+								]
+							]
+						]
 					],
 				],
 				[
@@ -173,7 +198,32 @@ export default function Edit() {
 										],
 									],
 								],
-							],
+								[
+									'wpcloud/form',
+									{
+										ajax: true,
+										wpcloudAction: 'retry_ssl',
+										inline: true,
+										className:
+											'display-none wpcloud-block-form-retry-ssl wpcloud-more-menu__row',
+									},
+									[
+										[
+											'wpcloud/icon',
+											{ icon: 'warning' },
+										],
+										[
+											'wpcloud/button',
+											{
+												label: __( 'Retry SSL' ),
+												style: 'text',
+												type: 'submit',
+												isPrimary: false
+											},
+										],
+									],
+								]
+							]
 						],
 					],
 				],
