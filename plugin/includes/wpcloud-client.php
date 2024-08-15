@@ -620,6 +620,7 @@ function wpcloud_client_site_meta_keys(): array {
 		'wp_version',
 		'do_not_delete',
 		'db_file_size',
+		'space_used',
 		'space_quota',
 		'max_space_quota',
 		'photon_subsizes',

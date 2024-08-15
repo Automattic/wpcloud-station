@@ -175,9 +175,9 @@ class WPCLOUD_Site {
 
 			// These are read only meta fields.
 			'max_space_quota'  => __( 'Max Space Quota' ),
+			'ssl_status'       => __( 'SSL Status' ),
 			'space_used'       => __( 'Space Used' ),
 			'db_file_size'     => __( 'DB File Size' ),
-			'ssl_status'       => __( 'SSL Status' ),
 		);
 		return apply_filters( 'wpcloud_site_detail_options', $options );
 	}
@@ -492,6 +492,25 @@ class WPCLOUD_Site {
 
 				return 'https://' . $result->domain_name . '/wp-admin';
 
+			case 'space_used':
+				$result = wpcloud_client_get_site_meta( $wpcloud_site_id, 'space_used' );
+				if ( is_wp_error( $result ) ) {
+					error_log( $result->get_error_message() );
+					return '';
+				}
+
+				$space_used = ! isset( $result->space_used ) ? 0 : $result->space_used;
+
+				return self::readable_size( (float) $space_used );
+
+			case 'db_file_size':
+				$result = wpcloud_client_get_site_meta( $wpcloud_site_id, 'db_file_size' );
+				if ( is_wp_error( $result ) ) {
+					error_log( $result->get_error_message() );
+					return '';
+				}
+				return self::readable_size( (float) $result->db_file_size ?? 0 );
+
 			case 'space_quota':
 				$result = wpcloud_client_get_site_meta( $wpcloud_site_id, 'space_quota' );
 				if ( is_wp_error( $result ) ) {
@@ -499,11 +518,7 @@ class WPCLOUD_Site {
 					return '';
 				}
 
-				// Make the size human readable.
-				$bytes = (float) $result->space_quota;
-				$i     = floor( log( $bytes, 1024 ) );
-				$gigs  = round( $bytes / pow( 1024, $i ), 2 );
-				return $gigs . 'G';
+				return self::readable_size( (float) $result->space_quota );
 
 			case 'site_access_with_ssh':
 				$result = wpcloud_client_get_site_meta( $wpcloud_site_id, 'ssh_port' );
@@ -590,5 +605,20 @@ class WPCLOUD_Site {
 			return $ssl_status;
 		}
 		return ! $ssl_status->broken_record && ! $ssl_status->broken_check;
+	}
+
+	/**
+	 * Get readable size.
+	 *
+	 * @param float $bytes The size in bytes.
+	 */
+	protected static function readable_size( float $bytes = 0 ): string {
+		if ( $bytes < 1024 ) {
+			return $bytes . 'B';
+		}
+		$i     = max( 1, floor( log( $bytes, 1024 ) ) );
+		$units = array( 'B', 'KB', 'MB', 'GB', 'TB' );
+		$gigs  = round( $bytes / pow( 1024, $i ), 2 );
+		return $gigs . 'G';
 	}
 }
