@@ -203,7 +203,8 @@
 		const response = await fetch(`/wp-json/wpcloud/v1/domains/ssl-status?domain=${domain}`);
 		const result = await response.json();
 		if ( result.success && ! result.valid ) {
-			form.classList.remove( 'display-none' );
+			form.classList.remove('display-none');
+			form.closest('.wpcloud-block-site-alias-list__row').querySelector('.alias-warning')?.classList.remove('display-none');
 		} else {
 			form.classList.add( 'display-none' );
 		}
