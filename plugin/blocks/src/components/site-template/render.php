@@ -104,7 +104,7 @@ while ( $query->have_posts() ) {
 */
 // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 printf(
-	'<table %1$s><thead>%2$s</thead></tbody>%3$s</tbody></table>',
+	'<table %1$s><thead>%2$s</thead><tbody>%3$s</tbody></table>',
 	$wrapper_attributes,
 	$header_content,
 	$content
