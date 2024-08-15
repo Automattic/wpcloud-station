@@ -509,7 +509,8 @@ class WPCLOUD_Site {
 					error_log( $result->get_error_message() );
 					return '';
 				}
-				return self::readable_size( (float) $result->db_file_size ?? 0 );
+				$db_file_size = ! isset( $result->db_file_size ) ? 0 : $result->db_file_size;
+				return self::readable_size( (float) $db_file_size );
 
 			case 'space_quota':
 				$result = wpcloud_client_get_site_meta( $wpcloud_site_id, 'space_quota' );
