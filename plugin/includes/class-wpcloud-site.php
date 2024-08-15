@@ -146,7 +146,6 @@ class WPCLOUD_Site {
 	public static function get_detail_options(): array {
 		$options = array(
 			'site_name'        => __( 'Site Name' ), // only used locally.
-			'site_owner_id'    => __( 'Site Owner ID' ), // only used locally.
 			'domain_name'      => __( 'Domain Name' ),
 			'site_alias'       => __( 'Site Alias' ),
 			'wp_admin_email'   => __( 'Admin Email' ),
@@ -178,6 +177,7 @@ class WPCLOUD_Site {
 			'ssl_status'       => __( 'SSL Status' ),
 			'space_used'       => __( 'Space Used' ),
 			'db_file_size'     => __( 'DB File Size' ),
+			'owner_sites_link' => __( 'Owner Sites Link' ),
 		);
 		return apply_filters( 'wpcloud_site_detail_options', $options );
 	}
@@ -443,6 +443,12 @@ class WPCLOUD_Site {
 
 		$result = '';
 		switch ( $key ) {
+			case 'owner_sites_link':
+				$owner = get_user_by( 'id', get_post_field( 'post_author', $post ) );
+				if ( ! $owner ) {
+					return '';
+				}
+				return sprintf( '<a href="/sites?owner=%s">%s</a>', $owner->user_nicename, $owner->display_name );
 			case 'phpmyadmin_url':
 				$result = wpcloud_client_site_phpmyadmin_url( $wpcloud_site_id );
 				return $result;
