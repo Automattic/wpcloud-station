@@ -24,4 +24,28 @@
 		'site_alias_add',
 		onSiteAliasAdd
 	);
+
+
+	wpcloud.hooks.addAction(
+		'wpcloud_form_response_request_txt_verification',
+		'request_txt_verification',
+		(result, form) => {
+			if ( ! result.success ) {
+				alert( result.message ); // eslint-disable-line no-alert, no-undef
+				return;
+			}
+			console.log(form);
+			const code = result.code;
+			const actions = form.closest('.wpcloud-alias-actions');
+			const detail = actions.querySelector('.site-alias-verification-code');
+			detail.dataset.clipboardPattern = code;
+
+			actions.querySelector('.wpcloud-copy-to-clipboard')?.addEventListener('click', wpcloud.copyToClipboard);
+
+			const value = detail.querySelector('.wpcloud-block-site-detail__value');
+			value.textContent = `Verification code: ${code}`;
+
+			detail.classList.remove('display-none');
+		}
+	)
 } )( window.wpcloud );

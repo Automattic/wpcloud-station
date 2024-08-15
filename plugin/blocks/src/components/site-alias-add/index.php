@@ -55,3 +55,21 @@ function wpcloud_block_form_site_alias_add_handler( $response, $data ) {
 	return $response;
 }
 add_filter( 'wpcloud_form_process_site_alias_add', 'wpcloud_block_form_site_alias_add_handler', 10, 2 );
+
+
+
+/**
+ * Process the form data for verifying a site alias.
+ *
+ * @param array $response The response data.
+ * @param array $data The form data.
+ * @return array The response data.
+ */
+function wpcloud_block_form_request_txt_verification_handler( $response, $data ) {
+
+	$response['message'] = 'TXT verification request sent successfully.';
+	$response['code']    = '1234567890';
+
+	return $response;
+}
+add_filter( 'wpcloud_form_process_request_txt_verification', 'wpcloud_block_form_request_txt_verification_handler', 10, 2 );
