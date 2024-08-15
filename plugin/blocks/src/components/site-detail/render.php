@@ -51,7 +51,7 @@ switch ( true ) {
 		break;
 
 	case 'wp_version' === $name:
-		$value = ucfirst( $value );
+		$detail = ucfirst( $value );
 		break;
 
 	case 'ssh_user' === $name:
