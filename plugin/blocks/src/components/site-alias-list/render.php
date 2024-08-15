@@ -14,6 +14,7 @@ if ( ! $wpcloud_site_id ) {
 	return;
 }
 $site_aliases = wpcloud_client_site_domain_alias_list( $wpcloud_site_id );
+$site_aliases = applyFilters( 'wpcloud_site_aliases', $site_aliases, $wpcloud_site_id );
 
 if ( is_wp_error( $site_aliases ) ) {
 	error_log( 'WP Cloud Site Alias Block: Error fetching site aliases.' ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
