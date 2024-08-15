@@ -50,7 +50,8 @@ if ( $use_global_query ) {
 		$query_args['author__in'] = array( get_current_user_id() );
 	}
 
-	$query = new WP_Query( $query_args );
+	$query_args = apply_filters( 'wpcloud_site_list_query_args', $query_args, $block );
+	$query      = new WP_Query( $query_args );
 }
 
 if ( ! $query->have_posts() ) {
