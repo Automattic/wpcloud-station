@@ -42,7 +42,7 @@ function wpcloud_block_form_site_alias_add_handler( $response, $data ) {
 		if ( str_contains( $message, 'TXT' ) ) {
 			$response['needsVerification'] = true;
 			$response['site_alias']        = $data['site_alias'];
-			doAction( 'wpcloud_site_alias_needs_verification', $data['site_alias'], $wpcloud_site_id );
+			do_action( 'wpcloud_site_alias_needs_verification', $data['site_alias'], $wpcloud_site_id );
 		}
 		$response['success'] = false;
 		$response['message'] = $added->get_error_message();
