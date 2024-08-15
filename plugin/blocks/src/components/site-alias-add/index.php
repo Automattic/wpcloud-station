@@ -38,6 +38,11 @@ function wpcloud_block_form_site_alias_add_handler( $response, $data ) {
 	$added = wpcloud_client_site_domain_alias_add( $wpcloud_site_id, $data['site_alias'] );
 
 	if ( is_wp_error( $added ) ) {
+		$message = $added->get_error_message();
+		if ( str_contains( $message, 'TXT' ) ) {
+			$response['needsVerification'] = true;
+			$response['site_alias']        = $data['site_alias'];
+		}
 		$response['success'] = false;
 		$response['message'] = $added->get_error_message();
 		$response['status']  = 400;
