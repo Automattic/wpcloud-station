@@ -121,110 +121,189 @@ export default function Edit() {
 								},
 							},
 						],
-
-						[
-							'wpcloud/more-menu',
+						['core/group',
 							{
-								showMenu: false,
+								className: 'wpcloud-alias-actions',
+								style: {
+									layout: {
+										selfStretch: 'fit',
+										flexSize: null,
+									},
+									spacing: {
+										padding: { right: '0', left: '0' },
+										margin: { top: '0', bottom: '0' },
+										blockGap: '0',
+									},
+								},
+								layout: {
+									type: 'flex',
+									flexWrap: 'wrap',
+									justifyContent: 'left',
+								},
+								metadata: {
+									name: 'Alias Actions',
+								},
 							},
 							[
 								[
-									'core/heading',
+									'wpcloud/site-detail',
 									{
-										level: 4,
+										label: 'Verification Code',
+										hideLabel: true,
+										showCopyButton: true,
+										metadata: {
+											name: 'Verification Code',
+										},
 										className:
-											'wpcloud-site-list-menu__title',
-										content: __( 'Domain Options' ),
+											'site-alias-verification-code display-none',
 									},
 								],
-								[
-									'wpcloud/form',
+								['wpcloud/icon',
 									{
-										ajax: true,
-										wpcloudAction:
-											'site_alias_make_primary',
-										inline: true,
-										className:
-											'wpcloud-block-site-alias-list--make-primary wpcloud-more-menu__row',
+										icon: 'warning',
+										className: 'alias-warning display-none',
+									},
+								],
+								[ 'wpcloud/more-menu',
+									{
+										showMenu: false,
 									},
 									[
 										[
-											'wpcloud/icon',
-											{ icon: 'starEmpty' },
-										],
-										[
-											'wpcloud/form-input',
+											'core/heading',
 											{
-												type: 'hidden',
-												name: 'site_alias',
+												level: 4,
+												className:
+													'wpcloud-site-list-menu__title',
+												content: __( 'Domain Options' ),
 											},
 										],
 										[
-											'wpcloud/button',
+											'wpcloud/form',
 											{
-												label: __( 'Make Primary' ),
-												style: 'text',
-												type: 'submit'
+												ajax: true,
+												wpcloudAction:
+													'site_alias_make_primary',
+												inline: true,
+												className:
+													'wpcloud-block-site-alias-list--make-primary wpcloud-more-menu__row',
+												metadata: {
+													name: __( 'Make Primary' ),
+												}
 											},
+											[
+												[
+													'wpcloud/icon',
+													{ icon: 'starEmpty' },
+												],
+												[
+													'wpcloud/form-input',
+													{
+														type: 'hidden',
+														name: 'site_alias',
+													},
+												],
+												[
+													'wpcloud/button',
+													{
+														label: __( 'Make Primary' ),
+														style: 'text',
+														type: 'submit'
+													},
+												],
+											],
 										],
-									],
+										[
+											'wpcloud/form',
+											{
+												ajax: true,
+												wpcloudAction:
+													'site_alias_remove',
+												inline: true,
+												className:
+													'wpcloud-block-site-alias-list--remove wpcloud-more-menu__row',
+												metadata: {
+													name: __( 'Remove Domain' ),
+												}
+											},
+											[
+												[ 'wpcloud/icon', { icon: 'trash' } ],
+												[
+													'wpcloud/form-input',
+													{
+														type: 'hidden',
+														name: 'site_alias',
+													},
+												],
+												[
+													'wpcloud/button',
+													{
+														label: __( 'Remove Domain' ),
+														style: 'text',
+														type: 'submit'
+													},
+												],
+											],
+										],
+										[
+											'wpcloud/form',
+											{
+												wpcloudAction: 'request_txt_verification',
+												inline: true,
+												className:
+													'display-none wpcloud-block-form-request_txt_verification wpcloud-more-menu__row',
+												metadata: {
+													name: __('Request TXT'),
+												},
+											},
+											[
+												[
+													'wpcloud/icon',
+													{ icon: 'warning' },
+												],
+												[
+													'wpcloud/button',
+													{
+														label: __( 'Request TXT' ),
+														style: 'text',
+														type: 'submit',
+														isPrimary: false
+													},
+												],
+											],
+										],
+										[
+											'wpcloud/form',
+											{
+												ajax: true,
+												wpcloudAction: 'retry_ssl',
+												inline: true,
+												className:
+													'display-none wpcloud-block-form-retry-ssl wpcloud-more-menu__row',
+												metadata: {
+													name: __('Retry SSL'),
+												},
+											},
+											[
+												[
+													'wpcloud/icon',
+													{ icon: 'warning' },
+												],
+												[
+													'wpcloud/button',
+													{
+														label: __( 'Retry SSL' ),
+														style: 'text',
+														type: 'submit',
+														isPrimary: false
+													},
+												],
+											],
+										]
+									]
 								],
-								[
-									'wpcloud/form',
-									{
-										ajax: true,
-										wpcloudAction:
-											'site_alias_remove',
-										inline: true,
-										className:
-											'wpcloud-block-site-alias-list--remove wpcloud-more-menu__row',
-									},
-									[
-										[ 'wpcloud/icon', { icon: 'trash' } ],
-										[
-											'wpcloud/form-input',
-											{
-												type: 'hidden',
-												name: 'site_alias',
-											},
-										],
-										[
-											'wpcloud/button',
-											{
-												label: __( 'Remove Domain' ),
-												style: 'text',
-												type: 'submit'
-											},
-										],
-									],
-								],
-								[
-									'wpcloud/form',
-									{
-										ajax: true,
-										wpcloudAction: 'retry_ssl',
-										inline: true,
-										className:
-											'display-none wpcloud-block-form-retry-ssl wpcloud-more-menu__row',
-									},
-									[
-										[
-											'wpcloud/icon',
-											{ icon: 'warning' },
-										],
-										[
-											'wpcloud/button',
-											{
-												label: __( 'Retry SSL' ),
-												style: 'text',
-												type: 'submit',
-												isPrimary: false
-											},
-										],
-									],
-								]
 							]
-						],
+						]
 					],
 				],
 			],

@@ -38,8 +38,9 @@ if ( ! class_exists( 'WPCLOUD_Domains_Controller' ) ) {
 				'/' . $this->rest_base . '/ssl-status',
 				array(
 					array(
-						'methods'  => WP_REST_Server::READABLE,
-						'callback' => array( $this, 'get_ssl_status' ),
+						'methods'             => WP_REST_Server::READABLE,
+						'callback'            => array( $this, 'get_ssl_status' ),
+						'permission_callback' => '__return_true',
 					),
 				)
 			);
