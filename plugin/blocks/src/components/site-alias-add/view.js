@@ -26,12 +26,23 @@
 	);
 
 
+	wpcloud.hooks.addFilter(
+		'wpcloud_form_data_request_txt_verification',
+		'request_txt_verification',
+		(data, form) => {
+			const alias = form.closest('[data-site-alias]')
+				?.dataset.siteAlias;
+			data.domain_name = alias;
+			return data;
+		}
+	)
+
 	wpcloud.hooks.addAction(
 		'wpcloud_form_response_request_txt_verification',
 		'request_txt_verification',
 		(result, form) => {
-			if ( ! result.success ) {
-				alert( result.message ); // eslint-disable-line no-alert, no-undef
+			if (!result.success) {
+				alert(result.message); // eslint-disable-line no-alert, no-undef
 				return;
 			}
 			console.log(form);
@@ -43,9 +54,9 @@
 			actions.querySelector('.wpcloud-copy-to-clipboard')?.addEventListener('click', wpcloud.copyToClipboard);
 
 			const value = detail.querySelector('.wpcloud-block-site-detail__value');
-			value.textContent = `Verification code: ${code}`;
+			value.textContent = `Verification code`;
 
 			detail.classList.remove('display-none');
 		}
-	)
+	);
 } )( window.wpcloud );

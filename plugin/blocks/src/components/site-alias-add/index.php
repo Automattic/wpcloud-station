@@ -56,7 +56,16 @@ function wpcloud_block_form_site_alias_add_handler( $response, $data ) {
 }
 add_filter( 'wpcloud_form_process_site_alias_add', 'wpcloud_block_form_site_alias_add_handler', 10, 2 );
 
-
+/**
+ * Add the required fields for the domain verification forms.
+ *
+ * @param array $fields The form fields.
+ * @return array The form fields.
+ */
+function wpcloud_block_form_request_txt_verification_fields( array $fields ) {
+	return array_merge( $fields, array( 'domain_name' ) );
+}
+add_filter( 'wpcloud_block_form_submitted_fields_request_txt_verification', 'wpcloud_block_form_request_txt_verification_fields' );
 
 /**
  * Process the form data for verifying a site alias.
@@ -67,8 +76,17 @@ add_filter( 'wpcloud_form_process_site_alias_add', 'wpcloud_block_form_site_alia
  */
 function wpcloud_block_form_request_txt_verification_handler( $response, $data ) {
 
+	$verification_code = wpcloud_client_domain_verification_record( $data['domain_name'] ?? '' );
+
+	if ( is_wp_error( $verification_code ) ) {
+		$response['success'] = false;
+		$response['message'] = $verification_code->get_error_message();
+		$response['status']  = 409;
+		return $response;
+	}
+
 	$response['message'] = 'TXT verification request sent successfully.';
-	$response['code']    = '1234567890';
+	$response['code']    = $verification_code;
 
 	return $response;
 }

@@ -72,7 +72,7 @@ function wpcloud_client_domain_validate( ?int $wpcloud_site_id, string $domain )
 	// Otherwise, return the error.
 	if ( is_wp_error( $response ) ) {
 		if ( ! strpos( $response->get_error_message(), 'Domain mapping record already exists' ) ) {
-			$domain_verification_record = wpcloud_client_domain_verification_record( $wpcloud_site_id, $domain );
+			$domain_verification_record = wpcloud_client_domain_verification_record( $domain );
 
 			return new WP_Error(
 				'conflict',
@@ -93,15 +93,14 @@ function wpcloud_client_domain_validate( ?int $wpcloud_site_id, string $domain )
 /**
  * Retrieve the domain verification record for a domain.
  *
- * @param integer|null $wpcloud_site_id Optional. The WP Cloud Site ID.
- * @param string       $domain          The domain for which to get the domain verification record.
+ * @param string $domain          The domain for which to get the domain verification record.
  *
  * @return string|WP_Error Domain verification record. WP_Error on error.
  */
-function wpcloud_client_domain_verification_record( ?int $wpcloud_site_id, string $domain ): mixed {
+function wpcloud_client_domain_verification_record( string $domain ): mixed {
 	$client_name = wpcloud_get_client_name();
 
-	return wpcloud_client_get( $wpcloud_site_id, "get-domain-verification-code/{$client_name}/{$domain}" );
+	return wpcloud_client_get( null, "get-domain-verification-code/{$client_name}/{$domain}" );
 }
 
 /**
