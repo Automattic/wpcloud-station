@@ -11,12 +11,39 @@
 $inner_blocks   = $block->parsed_block['innerBlocks'];
 $header         = $inner_blocks[0];
 $header_content = '';
+
 if ( 'wpcloud/site-template-header' === $header['blockName'] ) {
-	$header                             = array_shift( $inner_blocks );
-	$header_content                     = ( new WP_Block( $header ) )->render( array( 'dynamic' => false ) );
-	$header_item                        = '<tr>' . $header_content . '</tr>';
-	$block->parsed_block['innerBlocks'] = $inner_blocks;
+	$header = array_shift( $inner_blocks );
+	reset( $inner_blocks );
 	array_splice( $block->parsed_block['innerContent'], 1, 2 );
+
+	$header = new WP_Block( $header );
+
+	// Remove the admin only columns if the user is not an admin.
+	if ( ! current_user_can( WPCLOUD_CAN_MANAGE_SITES ) ) {
+		$header_inner_blocks = $header->parsed_block['innerBlocks'];
+		$num_headers         = count( $header_inner_blocks );
+		$rm_i                = 0; // remove index
+		for ( $i = 0; $i < $num_headers; $i++ ) {
+
+			$inner_block = $header_inner_blocks[ $i ];
+
+			if ( isset( $inner_block['attrs']['adminOnly'] ) ) {
+				array_splice( $header->parsed_block['innerBlocks'], $rm_i, 1 );
+				array_splice( $header->parsed_block['innerContent'], $rm_i, 2 );
+				array_splice( $inner_blocks, $rm_i, 1 );
+				array_splice( $block->parsed_block['innerContent'], $rm_i, 2 );
+			} else {
+				++$rm_i;
+			}
+		}
+	}
+
+	$header_instance                    = $header->parsed_block;
+	$header_content                     = ( new WP_Block( $header_instance ) )->render( array( 'dynamic' => false ) );
+	$header_item                        = ' < tr > ' . $header_content . ' < / tr > ';
+	$block->parsed_block['innerBlocks'] = $inner_blocks;
+
 }
 
 $page_key            = isset( $block->context['queryId'] ) ? 'query-' . $block->context['queryId'] . '-page' : 'query-page';

@@ -11,7 +11,7 @@
 	"supports": {
 		"html": false
 	},
-	"allowedBlocks": [ "core/rich-text" ],
+	"allowedBlocks": [ "core/rich-text", "wpcloud/table-cell" ],
 	"textdomain": "site-template-header",
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",
