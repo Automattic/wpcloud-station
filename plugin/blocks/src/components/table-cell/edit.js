@@ -27,7 +27,7 @@ import './editor.scss';
  * @return {Element} Element to render.
  */
 export default function Edit( { attributes, setAttributes } ) {
-	const { isHeader } = attributes;
+	const { isHeader, adminOnly } = attributes;
 	const blockProps = useBlockProps();
 
 	const innerBlocksProps = useInnerBlocksProps( blockProps );
@@ -46,6 +46,18 @@ export default function Edit( { attributes, setAttributes } ) {
 						} }
 						help={ __( 'Enable if the cell is a header cell.' ) }
 					/>
+					{isHeader && (
+						<CheckboxControl
+							label={__('Admin Only')}
+							checked={adminOnly}
+							onChange={(newVal) => {
+								setAttributes({
+									adminOnly: newVal,
+								});
+							}}
+							help={__( 'Limit the table column to admin users only.' )}
+						/>
+					)}
 				</PanelBody>
 			</InspectorControls>
 			<span

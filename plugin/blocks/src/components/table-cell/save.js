@@ -7,14 +7,20 @@ import classNames from 'classnames';
  */
 import { InnerBlocks, useBlockProps } from '@wordpress/block-editor';
 export default function save( { attributes, className } ) {
-	const { isHeader } = attributes;
+	const { isHeader, adminOnly } = attributes;
 	const blockProps = useBlockProps.save();
 
 	const Cell = isHeader ? 'th' : 'td';
 	return (
 		<Cell
 			{ ...blockProps }
-			className={ classNames( blockProps.className, className ) }
+			className={classNames(
+				blockProps.className,
+				className,
+				{
+					'wpcloud-admin-only': adminOnly,
+				}
+			)}
 		>
 			<div className="wpcloud-block-table-cell--wrapper">
 				<InnerBlocks.Content />

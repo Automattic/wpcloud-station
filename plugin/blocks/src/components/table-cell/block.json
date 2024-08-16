@@ -15,6 +15,10 @@
 		"isHeader": {
 			"type": "boolean",
 			"default": false
+		},
+		"adminOnly": {
+			"type": "boolean",
+			"default": false
 		}
 	},
 	"textdomain": "site-table-cell",
