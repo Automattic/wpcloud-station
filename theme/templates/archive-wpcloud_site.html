@@ -25,9 +25,21 @@
 <!-- /wp:heading --></div></th>
 <!-- /wp:wpcloud/table-cell -->
 
-<!-- wp:wpcloud/table-cell {"isHeader":true,"metadata":{"name":"Owner"}} -->
-<th class="wp-block-wpcloud-table-cell"><div class="wpcloud-block-table-cell--wrapper"><!-- wp:heading -->
+<!-- wp:wpcloud/table-cell {"isHeader":true,"adminOnly":true,"metadata":{"name":"Owner"}} -->
+<th class="wp-block-wpcloud-table-cell wpcloud-admin-only"><div class="wpcloud-block-table-cell--wrapper"><!-- wp:heading -->
 <h2 class="wp-block-heading">Owner</h2>
+<!-- /wp:heading --></div></th>
+<!-- /wp:wpcloud/table-cell -->
+
+<!-- wp:wpcloud/table-cell {"isHeader":true,"adminOnly":true,"metadata":{"name":"Space Used"}} -->
+<th class="wp-block-wpcloud-table-cell wpcloud-admin-only"><div class="wpcloud-block-table-cell--wrapper"><!-- wp:heading -->
+<h2 class="wp-block-heading">Space Used</h2>
+<!-- /wp:heading --></div></th>
+<!-- /wp:wpcloud/table-cell -->
+
+<!-- wp:wpcloud/table-cell {"isHeader":true,"adminOnly":true,"metadata":{"name":"DB File Size"}} -->
+<th class="wp-block-wpcloud-table-cell wpcloud-admin-only"><div class="wpcloud-block-table-cell--wrapper"><!-- wp:heading -->
+<h2 class="wp-block-heading">DB File Size</h2>
 <!-- /wp:heading --></div></th>
 <!-- /wp:wpcloud/table-cell -->
 
@@ -46,11 +58,7 @@
 <!-- wp:wpcloud/table-cell {"isHeader":true,"metadata":{"name":"WordPress Version"}} -->
 <th class="wp-block-wpcloud-table-cell"><div class="wpcloud-block-table-cell--wrapper"><!-- wp:wpcloud/icon {"iconSize":"16"} -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="-2 -2 24 24" width="16" height="16" class="wp-block-wpcloud-icon wpcloud-block-icon" aria-hidden="true"><path d="M20 10c0-5.51-4.49-10-10-10C4.48 0 0 4.49 0 10c0 5.52 4.48 10 10 10 5.51 0 10-4.48 10-10zM7.78 15.37L4.37 6.22c.55-.02 1.17-.08 1.17-.08.5-.06.44-1.13-.06-1.11 0 0-1.45.11-2.37.11-.18 0-.37 0-.58-.01C4.12 2.69 6.87 1.11 10 1.11c2.33 0 4.45.87 6.05 2.34-.68-.11-1.65.39-1.65 1.58 0 .74.45 1.36.9 2.1.35.61.55 1.36.55 2.46 0 1.49-1.4 5-1.4 5l-3.03-8.37c.54-.02.82-.17.82-.17.5-.05.44-1.25-.06-1.22 0 0-1.44.12-2.38.12-.87 0-2.33-.12-2.33-.12-.5-.03-.56 1.2-.06 1.22l.92.08 1.26 3.41zM17.41 10c.24-.64.74-1.87.43-4.25.7 1.29 1.05 2.71 1.05 4.25 0 3.29-1.73 6.24-4.4 7.78.97-2.59 1.94-5.2 2.92-7.78zM6.1 18.09C3.12 16.65 1.11 13.53 1.11 10c0-1.3.23-2.48.72-3.59C3.25 10.3 4.67 14.2 6.1 18.09zm4.03-6.63l2.58 6.98c-.86.29-1.76.45-2.71.45-.79 0-1.57-.11-2.29-.33.81-2.38 1.62-4.74 2.42-7.1z"></path></svg>
-<!-- /wp:wpcloud/icon -->
-
-<!-- wp:heading -->
-<h2 class="wp-block-heading">Version</h2>
-<!-- /wp:heading --></div></th>
+<!-- /wp:wpcloud/icon --></div></th>
 <!-- /wp:wpcloud/table-cell -->
 
 <!-- wp:wpcloud/table-cell {"isHeader":true,"metadata":{"name":"Database"}} -->
@@ -66,14 +74,28 @@
 <!-- /wp:wpcloud/table-cell --></span>
 <!-- /wp:wpcloud/site-template-header -->
 
-<!-- wp:wpcloud/table-cell -->
+<!-- wp:wpcloud/table-cell {"metadata":{"name":"Site Card"}} -->
 <td class="wp-block-wpcloud-table-cell"><div class="wpcloud-block-table-cell--wrapper"><!-- wp:wpcloud/site-card -->
 <div class="wp-block-wpcloud-site-card wp-block-wpcloud-site-card"><img src="https://via.placeholder.com/50"/><h2 class="site-title"><a href="#">Site Name</a></h2><h3 class="site-url"><a href="#" target="_blank" rel="noopener"><span>Site Domain</span><span class="dashicon dashicons dashicons-external"></span></a></h3></div>
 <!-- /wp:wpcloud/site-card --></div></td>
 <!-- /wp:wpcloud/table-cell -->
 
 <!-- wp:wpcloud/table-cell {"metadata":{"name":"Owner"}} -->
-<td class="wp-block-wpcloud-table-cell"><div class="wpcloud-block-table-cell--wrapper"><!-- wp:post-author {"textAlign":"left","showAvatar":false,"showBio":false,"isLink":true} /--></div></td>
+<td class="wp-block-wpcloud-table-cell"><div class="wpcloud-block-table-cell--wrapper"><!-- wp:wpcloud/site-detail {"label":"Owner Sites Link","name":"owner_sites_link","hideLabel":true,"metadata":{"name":"Owner Sites Link"}} -->
+<div class="wpcloud-block-site-detail"><div class="wpcloud-block-site-detail__value-container"><div class="wpcloud-block-site-detail__value">{ Owner Sites Link }</div></div></div>
+<!-- /wp:wpcloud/site-detail --></div></td>
+<!-- /wp:wpcloud/table-cell -->
+
+<!-- wp:wpcloud/table-cell {"metadata":{"name":"Space Used"}} -->
+<td class="wp-block-wpcloud-table-cell"><div class="wpcloud-block-table-cell--wrapper"><!-- wp:wpcloud/site-detail {"label":"Space Used","name":"space_used","hideLabel":true,"metadata":{"name":"Space Used"},"className":"wp-block-wpcloud-site-detail"} -->
+<div class="wpcloud-block-site-detail"><div class="wpcloud-block-site-detail__value-container"><div class="wpcloud-block-site-detail__value">{ Space Used }</div></div></div>
+<!-- /wp:wpcloud/site-detail --></div></td>
+<!-- /wp:wpcloud/table-cell -->
+
+<!-- wp:wpcloud/table-cell {"metadata":{"name":"DB File Size"}} -->
+<td class="wp-block-wpcloud-table-cell"><div class="wpcloud-block-table-cell--wrapper"><!-- wp:wpcloud/site-detail {"label":"DB File Size","name":"db_file_size","hideLabel":true,"metadata":{"name":"DB File Size"},"className":"wp-block-wpcloud-site-detail"} -->
+<div class="wpcloud-block-site-detail"><div class="wpcloud-block-site-detail__value-container"><div class="wpcloud-block-site-detail__value">{ DB File Size }</div></div></div>
+<!-- /wp:wpcloud/site-detail --></div></td>
 <!-- /wp:wpcloud/table-cell -->
 
 <!-- wp:wpcloud/table-cell {"metadata":{"name":"Created"}} -->
@@ -87,8 +109,8 @@
 <!-- /wp:wpcloud/table-cell -->
 
 <!-- wp:wpcloud/table-cell {"metadata":{"name":"WordPress Version"}} -->
-<td class="wp-block-wpcloud-table-cell"><div class="wpcloud-block-table-cell--wrapper"><!-- wp:wpcloud/site-detail {"label":"WP","name":"wp_version","hideLabel":true,"className":"wp-block-wpcloud-site-detail"} -->
-<div class="wpcloud-block-site-detail"><div class="wpcloud-block-site-detail__value-container"><div class="wpcloud-block-site-detail__value">{ WP }</div></div></div>
+<td class="wp-block-wpcloud-table-cell"><div class="wpcloud-block-table-cell--wrapper"><!-- wp:wpcloud/site-detail {"label":"WP Version","name":"wp_version","hideLabel":true,"metadata":{"name":"WP Version"},"className":"wp-block-wpcloud-site-detail"} -->
+<div class="wpcloud-block-site-detail"><div class="wpcloud-block-site-detail__value-container"><div class="wpcloud-block-site-detail__value">{ WP Version }</div></div></div>
 <!-- /wp:wpcloud/site-detail --></div></td>
 <!-- /wp:wpcloud/table-cell -->
 

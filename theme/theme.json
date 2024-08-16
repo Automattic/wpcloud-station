@@ -407,7 +407,7 @@
           "fontFamily": "var(--wp--preset--font-family--primary)",
           "fontSize": "var(--wp--preset--font-size--body-medium)"
         },
-        "css": "& .wpcloud-block-table-cell--wrapper {\n\tdisplay: flex;\n\talign-items: center;\n\tjustify-content: left;\n}\n& .wp-block-wpcloud-site-detail {\n\tmargin-top: 0;\n\tpadding: 0;\n}\n& .wpcloud-block-site-detail {\n\tmargin-top: 0;\n\tpadding: 0;\n}"
+        "css": "& .wpcloud-block-table-cell--wrapper {\n\tdisplay: flex;\n\talign-items: center;\n\tjustify-content: left;\n}\n& .wp-block-wpcloud-site-detail {\n\tmargin-top: 0;\n\tpadding: 0;\n}\n& .wpcloud-block-site-detail {\n\tmargin-top: 0;\n\tpadding: 0;\n}\n&.wpcloud-admin-only * {\n\ttext-decoration: underline;\n\ttext-decoration-color: var(--wp--preset--color--accent-primary);\n\ttext-underline-offset: 2px;\n}"
       }
     }
   }
