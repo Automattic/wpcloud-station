@@ -63,13 +63,15 @@ function wpcloud_block_available_php_options(): array {
 	$php_versions = wpcloud_client_php_versions_available( true );
 	if ( is_wp_error( $php_versions ) ) {
 		error_log( 'WP Cloud: ' . $php_versions->get_error_message() ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-		return array();
+		return array( '' => __( 'No Preference' ) );
 	}
 	return (array) $php_versions;
 }
 
 /**
  * Get available data centers.
+ *
+ * @param bool $isEditor Whether the request is from the editor.
  *
  * @return array available data centers.
  */
