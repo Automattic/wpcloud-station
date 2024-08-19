@@ -25,16 +25,8 @@ add_filter( 'wpcloud_block_form_submitted_fields_site_ssh_user_remove', 'wpcloud
  * @return array The response data.
  */
 function wpcloud_block_form__site_ssh_user_remove_handler( $response, $data ) {
-	$wpcloud_site_id = get_post_meta( $data['site_id'], 'wpcloud_site_id', true );
-
-	if ( ! $wpcloud_site_id ) {
-		$response['message'] = 'Site not found.';
-		$response['status']  = 400;
-		return $response;
-	}
-
 	$user   = sanitize_user( $data['ssh_user'] );
-	$result = wpcloud_client_ssh_user_remove( $wpcloud_site_id, $user );
+	$result = wpcloud_client_ssh_user_remove( $data['wpcloud_site_id'], $user );
 
 	if ( is_wp_error( $result ) ) {
 		$response['success'] = false;

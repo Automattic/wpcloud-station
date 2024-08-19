@@ -25,17 +25,9 @@ add_filter( 'wpcloud_block_form_submitted_fields_site_access_type', 'wpcloud_blo
  * @return array The response.
  */
 function wpcloud_block_form_site_access_type_handler( $response, $data ) {
-	$wpcloud_site_id = get_post_meta( $data['site_id'], 'wpcloud_site_id', true );
-
-	if ( ! $wpcloud_site_id ) {
-		$response['message'] = 'Site not found.';
-		$response['status']  = 400;
-		return $response;
-	}
-
 	$site_access_type = '1' === $data['site_access_with_ssh'] ? 'ssh' : 'sftp';
 
-	$result = wpcloud_client_site_set_access_type( $wpcloud_site_id, $site_access_type );
+	$result = wpcloud_client_site_set_access_type( $data['wpcloud_site_id'], $site_access_type );
 
 	if ( is_wp_error( $result ) ) {
 		$response['success'] = false;
@@ -58,15 +50,7 @@ add_filter( 'wpcloud_form_process_site_access_type', 'wpcloud_block_form_site_ac
  * @return array The response.
  */
 function wpcloud_block_form_site_ssh_disconnect_all_users_handler( $response, $data ) {
-	$wpcloud_site_id = get_post_meta( $data['site_id'], 'wpcloud_site_id', true );
-
-	if ( ! $wpcloud_site_id ) {
-		$response['message'] = 'Site not found.';
-		$response['status']  = 400;
-		return $response;
-	}
-
-	$result = wpcloud_client_ssh_disconnect_all_users( $wpcloud_site_id );
+	$result = wpcloud_client_ssh_disconnect_all_users( $data['wpcloud_site_id'] );
 
 	if ( is_wp_error( $result ) ) {
 		$response['success'] = false;

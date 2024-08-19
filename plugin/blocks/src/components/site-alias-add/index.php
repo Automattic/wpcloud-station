@@ -27,22 +27,14 @@ add_filter( 'wpcloud_block_form_submitted_fields_site_alias_add', 'wpcloud_block
  * @return array The response data.
  */
 function wpcloud_block_form_site_alias_add_handler( $response, $data ) {
-	$wpcloud_site_id = get_post_meta( $data['site_id'], 'wpcloud_site_id', true );
-
-	if ( ! $wpcloud_site_id ) {
-		$response['message'] = 'Site not found.';
-		$response['status']  = 400;
-		return $response;
-	}
-
-	$added = wpcloud_client_site_domain_alias_add( $wpcloud_site_id, $data['site_alias'] );
+	$added = wpcloud_client_site_domain_alias_add( $data['wpcloud_site_id'], $data['site_alias'] );
 
 	if ( is_wp_error( $added ) ) {
 		$message = $added->get_error_message();
 		if ( str_contains( $message, 'TXT' ) ) {
 			$response['needsVerification'] = true;
 			$response['site_alias']        = $data['site_alias'];
-			do_action( 'wpcloud_site_alias_needs_verification', $data['site_alias'], $wpcloud_site_id );
+			do_action( 'wpcloud_site_alias_needs_verification', $data['site_alias'], $data['wpcloud_site_id'] );
 		}
 		$response['success'] = false;
 		$response['message'] = $added->get_error_message();

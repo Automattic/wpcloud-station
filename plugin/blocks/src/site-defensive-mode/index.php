@@ -50,8 +50,7 @@ add_filter( 'wpcloud_form_process_defensive_mode_update', 'wpcloud_block_form_de
  * @return array The response.
  */
 function wpcloud_block_form_defensive_mode_disable_handler( $response, $data ) {
-	$wpcloud_site_id = $data['wpcloud_site_id'];
-	$result          = wpcloud_client_defensive_mode_update( $wpcloud_site_id );
+	$result = wpcloud_client_defensive_mode_update( $data['wpcloud_site_id'] );
 	if ( is_wp_error( $result ) ) {
 		$response['success'] = false;
 		$response['message'] = $result->get_error_message();
