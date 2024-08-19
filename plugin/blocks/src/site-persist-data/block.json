@@ -1,0 +1,16 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "wpcloud/site-persist-data",
+	"version": "0.1.0",
+	"title": "Manage Site Persist Data",
+	"category": "wpcloud",
+	"icon": "cloud",
+	"description": "Handle site persist data updates",
+	"example": {},
+	"supports": {
+		"html": false
+	},
+	"textdomain": "wpcloud",
+	"editorScript": "file:./index.js"
+}
