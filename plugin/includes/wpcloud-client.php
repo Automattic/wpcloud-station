@@ -795,6 +795,33 @@ function wpcloud_client_defensive_mode_update( int $wpcloud_site_id, string $tim
 }
 
 /**
+ *
+ * Set site persist data.
+ *
+ * @param integer $wpcloud_site_id The WP Cloud Site ID.
+ * @param string  $key            The key to set.
+ * @param string  $value          The value to set.
+ *
+ * @return stdClass|WP_Error Response body on success. WP_Error on failure.
+ */
+function wpcloud_client_site_persist_data_set( int $wpcloud_site_id, string $key, string $value ): stdClass|WP_Error {
+	$endpoint = "site-persist-data/$wpcloud_site_id";
+	return wpcloud_client_post( $wpcloud_site_id, $endpoint, array( $key => array( 'value' => $value ) ) );
+}
+
+/**
+ * Delete site persist data.
+ *
+ * @param integer $wpcloud_site_id The WP Cloud Site ID.
+ * @param string  $key            The key to delete.
+ *
+ * @return stdClass|WP_Error Response body on success. WP_Error on failure.
+ */
+function wpcloud_client_site_persist_data_delete( int $wpcloud_site_id, string $key ): stdClass|WP_Error {
+	$endpoint = "site-persist-data/$wpcloud_site_id";
+	return wpcloud_client_post( $wpcloud_site_id, $endpoint, array( $key => array( 'delete' => 1 ) ) );
+}
+/**
  * Get the status of a job.
  *
  * @param integer $job_id The job id for which to get the status.
