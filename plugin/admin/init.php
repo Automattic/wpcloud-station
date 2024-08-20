@@ -7,8 +7,6 @@
 
 declare( strict_types = 1 );
 
-require_once plugin_dir_path( __FILE__ ) . 'includes/wpcloud-headstart.php';
-
 /**
  * Get the available themes.
  *
@@ -192,27 +190,6 @@ function wpcloud_settings_init(): void {
 			'description'         => __( 'Enable caching of common client requests to reduce the number of requests to the WP Cloud API and speed up page loads. The cache is stored in memory per request.' ),
 			'type'                => 'checkbox',
 			'checked'             => get_option( 'wpcloud_settings', array() )['client_cache'] ?? false,
-		)
-	);
-
-	// Only allow headstart if no settings have been saved yet
-	// headstart is might make unwanted changes if there are existing settings.
-	// It can be forced to run via the cli command `wp wpcloud client headstart`.
-	$allow_headstart = empty( get_option( 'wpcloud_settings' ) );
-	add_settings_field(
-		'wpcloud_field_headstart',
-		__( 'Headstart Set Up', 'wpcloud' ),
-		'wpcloud_field_input_cb',
-		'wpcloud',
-		'wpcloud_section_settings',
-		array(
-			'label_for'           => 'wpcloud_headstart',
-			'class'               => 'wpcloud_row',
-			'type'                => 'checkbox',
-			'wpcloud_custom_data' => 'custom',
-			'description'         => __( 'Run the headstart script to setup the demo site. This can only be ran when saving WP Cloud setting for the first time.' ),
-			'checked'             => $allow_headstart,
-			'disabled'            => ! $allow_headstart,
 		)
 	);
 }

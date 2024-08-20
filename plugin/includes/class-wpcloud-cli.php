@@ -8,7 +8,6 @@
 // phpcs:disable Generic.Files.OneObjectStructurePerFile.MultipleFound
 
 require_once __DIR__ . '/wpcloud-client.php';
-require_once __DIR__ . '/../admin/includes/wpcloud-headstart.php';
 
 /**
  * WP Cloud CLI
@@ -742,21 +741,6 @@ class WPCloud_CLI_Client extends WPCloud_CLI {
 		self::log_result( wpcloud_client_php_versions_available() );
 		self::log( '%GData centers:' );
 		self::log_result( wpcloud_client_data_centers_available() );
-	}
-
-	/**
-	 * Get the client meta.
-	 *
-	 * @param array $args The arguments.
-	 * @param array $switches The switches.
-	 */
-	public function headstart( $args, $switches ) {
-		$client = $switches['client'] ?? '';
-		$key    = $switches['key'] ?? '';
-		$force  = $switches['force'] ?? false;
-
-		$result = wpcloud_headstart( $client, $key, $force, new WPCloud_CLI_Skin() );
-		WP_CLI::success( 'Headstart installed' );
 	}
 }
 
