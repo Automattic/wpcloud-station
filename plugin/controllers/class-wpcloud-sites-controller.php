@@ -36,6 +36,106 @@ if ( ! class_exists( 'WPCLOUD_Sites_Controller' ) ) {
 		protected $post_type = 'wpcloud_site';
 
 
+		/**
+		 * Item schema.
+		 *
+		 * @return array The item schema.
+		 */
+		public function get_item_schema(): array {
+			$schema = array(
+				'$schema'    => 'http://json-schema.org/draft-04/schema#',
+				'title'      => $this->post_type,
+				'type'       => 'object',
+				// Base properties for every Post.
+				'properties' => array(
+					'date'            => array(
+						'description' => __( "The date the site was created, in the site's timezone." ),
+						'type'        => array( 'string', 'null' ),
+						'format'      => 'date-time',
+						'context'     => array( 'view', 'edit', 'embed' ),
+					),
+					'date_gmt'        => array(
+						'description' => __( 'The date the site was created, as GMT.' ),
+						'type'        => array( 'string', 'null' ),
+						'format'      => 'date-time',
+						'context'     => array( 'view', 'edit' ),
+					),
+					'id'              => array(
+						'description' => __( 'Unique identifier for the site.' ),
+						'type'        => 'integer',
+						'context'     => array( 'view', 'edit', 'embed' ),
+						'readonly'    => true,
+					),
+					'wpcloud_site_id' => array(
+						'description' => __( 'Unique identifier for the site in WP Cloud.' ),
+						'type'        => 'integer',
+						'context'     => array( 'view', 'edit' ),
+						'readonly'    => true,
+					),
+					'link'            => array(
+						'description' => __( 'URL to the site configuration page.' ),
+						'type'        => 'string',
+						'format'      => 'uri',
+						'context'     => array( 'view', 'edit', 'embed' ),
+						'readonly'    => true,
+					),
+					'status'          => array(
+						'description' => __( 'A named status for the site.' ),
+						'type'        => 'string',
+						'enum'        => array( 'active', 'provisioning', 'unknown', 'error' ),
+						'context'     => array( 'view', 'edit' ),
+						'readonly'    => true,
+					),
+					'owner'           => array(
+						'description' => __( 'The user who owns the site. Either id, login, or email' ),
+						'type'        => 'string',
+						'context'     => array( 'view', 'edit' ),
+						'arg_options' => array(
+							'sanitize_callback' => 'sanitize_text_field',
+							'validate_callback' => array( $this, 'validate_owner' ),
+						),
+					),
+					'site_name'       => array(
+						'description' => __( 'Internal name for the site.' ),
+						'type'        => 'string',
+						'context'     => array( 'view', 'edit' ),
+						'arg_options' => array(
+							'sanitize_callback' => 'sanitize_text_field',
+						),
+					),
+					'php_version'     => array(
+						'description' => __( 'The PHP version for the site.' ),
+						'type'        => 'string',
+						'context'     => array( 'view', 'edit' ),
+						'arg_options' => array(
+							'sanitize_callback' => 'sanitize_text_field',
+							'validate_callback' => array( $this, 'validate_php_version' ),
+						),
+					),
+					'data_center'     => array(
+						'description' => __( 'The data center for the site.' ),
+						'type'        => 'string',
+						'context'     => array( 'view', 'edit' ),
+						'arg_options' => array(
+							'sanitize_callback' => 'sanitize_text_field',
+							'validate_callback' => array( $this, 'validate_data_center' ),
+						),
+					),
+					'site_details'    => array(
+						'description' => __( 'Details about the site.' ),
+						'type'        => 'object',
+						'context'     => array( 'view', 'edit' ),
+					),
+				),
+			);
+			return $schema;
+		}
+
+		/**
+		 * Get root path args.
+		 *
+		 * @return array The root path args.
+		 */
 		protected function rootPathArgs(): array {
 			return array(
 				array(
@@ -47,13 +147,18 @@ if ( ! class_exists( 'WPCLOUD_Sites_Controller' ) ) {
 					'methods'             => WP_REST_Server::CREATABLE,
 					'callback'            => array( $this, 'create_item' ),
 					'permission_callback' => array( $this, 'get_items_permissions_check' ),
-				// 'args'                => $this->get_endpoint_args_for_item_schema( WP_REST_Server::CREATABLE ),
+					'args'                => $this->get_endpoint_args_for_item_schema( WP_REST_Server::CREATABLE ),
 				),
 				'allow_batch' => false,
 				'schema'      => array( $this, 'get_public_item_schema' ),
 			);
 		}
 
+		/**
+		 * Get site path args.
+		 *
+		 * @return array The site path args.
+		 */
 		protected function sitePathArgs(): array {
 			return array(
 				'args'        => array(
@@ -71,7 +176,7 @@ if ( ! class_exists( 'WPCLOUD_Sites_Controller' ) ) {
 					'methods'             => WP_REST_Server::EDITABLE,
 					'callback'            => array( $this, 'update_item' ),
 					'permission_callback' => array( $this, 'get_item_permissions_check' ),
-					// 'args'                => $this->get_endpoint_args_for_item_schema( WP_REST_Server::EDITABLE ),
+					'args'                => $this->get_endpoint_args_for_item_schema( WP_REST_Server::EDITABLE ),
 				),
 				array(
 					'methods'             => WP_REST_Server::DELETABLE,
@@ -113,14 +218,26 @@ if ( ! class_exists( 'WPCLOUD_Sites_Controller' ) ) {
 		 *
 		 * @return WP_REST_Response
 		 */
-		public function create_item( $request ) {
-			return new WP_REST_Response(
-				array(
-					'success' => false,
-					'message' => 'Not implemented',
-				),
-				501
-			);
+		public function create_item( $request ): WP_REST_Response {
+			$site_data = $request->get_params();
+
+			$owner = $this->get_owner( $site_data['owner'] );
+			if ( is_wp_error( $owner ) ) {
+				return $owner;
+			}
+			$site_data['site_owner_id'] = $owner->ID;
+
+			$post = WPCloud_Site::create( $site_data );
+			if ( is_wp_error( $post ) ) {
+				return new WP_REST_Response(
+					array(
+						'success' => false,
+						'message' => $post->get_error_message(),
+					),
+					400
+				);
+			}
+			return $this->prepare_item_for_response( $post, $request );
 		}
 
 		/**
@@ -130,7 +247,7 @@ if ( ! class_exists( 'WPCLOUD_Sites_Controller' ) ) {
 		 *
 		 * @return WP_REST_Response
 		 */
-		public function get_item( $request ) {
+		public function get_item( $request ): WP_REST_Response {
 			$post = $this->get_post( $request );
 			if ( is_wp_error( $post ) ) {
 				return $post;
@@ -342,6 +459,93 @@ if ( ! class_exists( 'WPCLOUD_Sites_Controller' ) ) {
 			return apply_filters( 'wpcloud_rest_prepare_site', $response, $post, $request );
 		}
 
+
+		/**
+		 * Validate the owner parameter.
+		 *
+		 * @param string          $owner_search The owner search term.
+		 * @param WP_REST_Request $request The request object.
+		 * @param string          $param The parameter name.
+		 *
+		 * @return true|WP_Error
+		 */
+		public function validate_owner( string $owner_search, WP_REST_Request $request, string $param ): true|WP_Error {
+
+			if ( ! $owner_search ) {
+				return true;
+			}
+
+			$owner = $this->get_owner( $owner_search );
+			if ( is_wp_error( $owner ) ) {
+				return $owner;
+			}
+
+			$can_manage_owner = current_user_can( WPCLOUD_CAN_MANAGE_SITES ) || get_current_user_id() === $owner->ID;
+			$can_manage_owner = apply_filters( 'wpcloud_rest_can_manage_owner', $can_manage_owner, $owner, $request, $param );
+
+			if ( ! $can_manage_owner ) {
+				return new WP_Error( 'rest_forbidden', esc_html__( 'Unauthorized request.', 'wpcloud' ), rest_authorization_required_code() );
+			}
+
+			$args = $request->get_attributes()['args'][ $param ];
+			return rest_validate_value_from_schema( $owner_search, $args, $param );
+		}
+
+		/**
+		 * Validate the PHP version parameter.
+		 *
+		 * @param string          $php_version The PHP version.
+		 * @param WP_REST_Request $request The request object.
+		 * @param string          $param The parameter name.
+		 *
+		 * @return true|WP_Error
+		 */
+		public function validate_php_version( $php_version, $request, $param ): true|WP_Error {
+			if ( ! $php_version ) {
+				return true;
+			}
+
+			$valid_versions = wpcloud_client_php_versions_available( true );
+
+			if ( is_wp_error( $valid_versions ) ) {
+				return $valid_versions;
+			}
+
+			if ( ! array_key_exists( $php_version, (array) $valid_versions ) ) {
+				return new WP_Error( 'rest_invalid_param', __( 'Invalid PHP version.' ), array( 'status' => 400 ) );
+			}
+
+			$args = $request->get_attributes()['args'][ $param ];
+			return rest_validate_value_from_schema( $php_version, $args, $param );
+		}
+
+		/**
+		 * Validate the data center parameter.
+		 *
+		 * @param string          $data_center The data center.
+		 * @param WP_REST_Request $request The request object.
+		 * @param string          $param The parameter name.
+		 *
+		 * @return true|WP_Error
+		 */
+		public function validate_data_center( $data_center, $request, $param ): true|WP_Error {
+			if ( ! $data_center ) {
+				return true;
+			}
+
+			$valid_data_centers = wpcloud_client_data_centers_available( true );
+			if ( is_wp_error( $valid_data_centers ) ) {
+				return $valid_data_centers;
+			}
+
+			if ( ! array_key_exists( $data_center, (array) $valid_data_centers ) ) {
+				return new WP_Error( 'rest_invalid_param', __( 'Invalid data center.' ), array( 'status' => 400 ) );
+			}
+
+			$args = $request->get_attributes()['args'][ $param ];
+			return rest_validate_value_from_schema( $data_center, $args, $param );
+		}
+
 		/**
 		 * Get items permissions check.
 		 *
@@ -422,6 +626,27 @@ if ( ! class_exists( 'WPCLOUD_Sites_Controller' ) ) {
 			}
 
 			return $post;
+		}
+
+		/**
+		 * Get the owner
+		 *
+		 * @param string $owner_search The owner search term.
+		 *
+		 * @return WP_User|WP_Error
+		 */
+		protected function get_owner( string $owner_search ): WP_User|WP_Error {
+			$users = get_users(
+				array(
+					'search'         => $owner_search,
+					'search_columns' => array( 'ID', 'user_login', 'user_email', 'user_nicename' ),
+				)
+			);
+
+			if ( count( $users ) !== 1 ) {
+				return new WP_Error( 'rest_invalid_param', __( 'User not found' ), array( 'status' => 400 ) );
+			}
+			return $users[0];
 		}
 	}
 }
