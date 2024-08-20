@@ -586,11 +586,78 @@ class WPCLOUD_Site {
 	}
 
 	/**
-	 * Check if a site detail should be refreshed.
+	 * Update a site detail.
 	 *
-	 * @param string $key The detail key.
-	 * @return bool True if the detail should be refreshed.
+	 * @param array $data The data to update.
+	 * @return true|WP_Error
 	 */
+	public static function update_detail( array $data ): true|WP_Error {
+		error_log(print_r($data, true));
+		$site_id = (int) ( $data['site_id'] ?? 0 );
+		if ( ! $site_id ) {
+			return new WP_Error( 'invalid_site_id', __( 'Invalid site ID.', 'wpcloud' ) );
+		}
+		$wpcloud_site_id = (int) ( $data['wpcloud_site_id'] ?? get_post_meta( $site_id, 'wpcloud_site_id', true ) );
+		if ( empty( $wpcloud_site_id ) ) {
+			return new WP_Error( 'invalid_wpcloud_site_id', __( 'Invalid WP Cloud Site ID.', 'wpcloud' ) );
+		}
+
+		$mutable_fields = array_keys( self::get_mutable_fields() );
+
+		$site_mutable_fields = array_filter(
+			$data,
+			function ( $value, $key ) use ( $mutable_fields ) {
+				return in_array( $key, $mutable_fields, true );
+			},
+			ARRAY_FILTER_USE_BOTH
+		);
+
+		$result = null;
+
+		foreach ( $site_mutable_fields as $key => $value ) {
+			switch ( $key ) {
+				case 'canonical_aliases':
+					// canonicalize_aliases doesn't like "truthy" values.
+					$value = $value ? 'true' : 'false';
+					break;
+
+				case 'suspend_after':
+					// Don't set the suspend_after value if it's the same as the current value or is not set.
+					$current_suspend_value = self::get_detail( $site_id, 'suspend_after' );
+					if ( is_null( $current_suspend_value ) ) {
+						$current_suspend_value = '';
+					}
+					if ( ! is_null( $current_suspend_value ) && $value === $current_suspend_value ) {
+						continue 2;
+					}
+					break;
+
+				case 'space_quota':
+					$value = intval( $value ) . 'G';
+					break;
+
+				case 'edge_cache':
+					$result = wpcloud_client_edge_cache_update( $wpcloud_site_id, $value );
+					break;
+			}
+
+			if ( is_null( $result ) ) {
+				$result = $value ? wpcloud_client_update_site_meta( $wpcloud_site_id, $key, $value ) : wpcloud_client_delete_site_meta( $wpcloud_site_id, $key );
+			}
+
+			if ( is_wp_error( $result ) ) {
+				return $result;
+			}
+		}
+		return true;
+	}
+
+		/**
+		 * Check if a site detail should be refreshed.
+		 *
+		 * @param string $key The detail key.
+		 * @return bool True if the detail should be refreshed.
+		 */
 	public static function should_refresh_detail( string $key ): bool {
 		$refresh_keys = array(
 			'phpmyadmin_url',
