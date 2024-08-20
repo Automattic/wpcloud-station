@@ -71,8 +71,6 @@ function wpcloud_block_available_php_options(): array {
 /**
  * Get available data centers.
  *
- * @param bool $isEditor Whether the request is from the editor.
- *
  * @return array available data centers.
  */
 function wpcloud_block_available_datacenters_options(): array {
