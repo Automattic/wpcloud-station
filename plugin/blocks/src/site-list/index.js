@@ -8,6 +8,7 @@ import { registerBlockVariation } from '@wordpress/blocks';
  */
 import metadata from './block.json';
 
+
 registerBlockVariation( 'core/query', {
 	name: metadata.name,
 	title: 'Site List',

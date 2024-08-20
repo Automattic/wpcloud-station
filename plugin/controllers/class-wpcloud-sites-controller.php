@@ -14,76 +14,190 @@ if ( ! class_exists( 'WPCLOUD_Sites_Controller' ) ) {
 	 */
 	class WPCLOUD_Sites_Controller extends WP_REST_Controller {
 
+		/**
+		 * The namespace.
+		 *
+		 * @var string
+		 */
 		protected $namespace = 'wpcloud/v1';
 
-		protected $rest_base = '/sites';
+		/**
+		 * Rest base for the current object.
+		 *
+		 * @var string
+		 */
+		protected $rest_base = 'sites';
 
+		/**
+		 * The post type.
+		 *
+		 * @var string
+		 */
 		protected $post_type = 'wpcloud_site';
 
+
+		protected function rootPathArgs(): array {
+			return array(
+				array(
+					'methods'             => WP_REST_Server::READABLE,
+					'callback'            => array( $this, 'get_items' ),
+					'permission_callback' => array( $this, 'get_items_permissions_check' ),
+				),
+				array(
+					'methods'             => WP_REST_Server::CREATABLE,
+					'callback'            => array( $this, 'create_item' ),
+					'permission_callback' => array( $this, 'get_items_permissions_check' ),
+				// 'args'                => $this->get_endpoint_args_for_item_schema( WP_REST_Server::CREATABLE ),
+				),
+				'allow_batch' => false,
+				'schema'      => array( $this, 'get_public_item_schema' ),
+			);
+		}
+
+		protected function sitePathArgs(): array {
+			return array(
+				'args'        => array(
+					'id' => array(
+						'description' => __( 'Unique identifier for the site.' ),
+						'type'        => 'integer',
+					),
+				),
+				array(
+					'methods'             => WP_REST_Server::READABLE,
+					'callback'            => array( $this, 'get_item' ),
+					'permission_callback' => array( $this, 'get_item_permissions_check' ),
+				),
+				array(
+					'methods'             => WP_REST_Server::EDITABLE,
+					'callback'            => array( $this, 'update_item' ),
+					'permission_callback' => array( $this, 'get_item_permissions_check' ),
+					// 'args'                => $this->get_endpoint_args_for_item_schema( WP_REST_Server::EDITABLE ),
+				),
+				array(
+					'methods'             => WP_REST_Server::DELETABLE,
+					'callback'            => array( $this, 'delete_item' ),
+					'permission_callback' => array( $this, 'get_item_permissions_check' ),
+				),
+				'allow_batch' => false,
+			);
+		}
+
+		/**
+		 * Register the routes.
+		 */
 		public function register_routes() {
 			register_rest_route(
 				$this->namespace,
 				'/' . $this->rest_base,
-				array(
-					array(
-						'methods'             => WP_REST_Server::READABLE,
-						'callback'            => array( $this, 'get_items' ),
-						'permission_callback' => array( $this, 'get_items_permissions_check' ),
-						// 'args'                => $this->get_collection_params(),
-					),
-					array(
-						'methods'             => WP_REST_Server::CREATABLE,
-						'callback'            => array( $this, 'create_item' ),
-						'permission_callback' => array( $this, 'get_item_permissions_check' ),
-						// 'args'                => $this->get_endpoint_args_for_item_schema( WP_REST_Server::CREATABLE ),
-					),
-					'allow_batch' => false,
-					'schema'      => array( $this, 'get_public_item_schema' ),
-				)
+				$this->rootPathArgs()
 			);
 
-				register_rest_route(
-					$this->namespace,
-					'/' . $this->rest_base . '/(?P<id>[\d]+)',
-					array(
-						'args'        => array(
-							'id' => array(
-								'description' => __( 'Unique identifier for the site.' ),
-								'type'        => 'integer',
-							),
-						),
-						array(
-							'methods'             => WP_REST_Server::READABLE,
-							'callback'            => array( $this, 'get_item' ),
-							'permission_callback' => array( $this, 'get_item_permissions_check' ),
-						),
-						/*
-						array(
-							'methods'             => WP_REST_Server::EDITABLE,
-							'callback'            => array( $this, 'update_item' ),
-							'permission_callback' => array( $this, 'access_item_permissions_check' ),
-							//'args'                => $this->get_endpoint_args_for_item_schema( WP_REST_Server::EDITABLE ),
-						),
-						*/
-						array(
-							'methods'             => WP_REST_Server::DELETABLE,
-							'callback'            => array( $this, 'delete_item' ),
-							'permission_callback' => array( $this, 'get_item_permissions_check' ),
-						),
-						'allow_batch' => false,
-						// 'schema'      => array( $this, 'get_public_item_schema' ),
-					)
-				);
+			register_rest_route(
+				$this->namespace,
+				'/' . $this->rest_base . '/(?P<id>[\d]+)',
+				$this->sitePathArgs()
+			);
+
+			// @TODO: Remove this route once Gutenberg is updated to use the new routes.
+			register_rest_route(
+				'wp/v2',
+				'/wpcloud_site',
+				$this->rootPathArgs()
+			);
 		}
-		public function delete_item( $request ) {
-		}
+
+		/**
+		 * Create a site.
+		 *
+		 * @param WP_REST_Request $request The request object.
+		 *
+		 * @return WP_REST_Response
+		 */
 		public function create_item( $request ) {
+			return new WP_REST_Response(
+				array(
+					'success' => false,
+					'message' => 'Not implemented',
+				),
+				501
+			);
 		}
+
+		/**
+		 * Get a site.
+		 *
+		 * @param WP_REST_Request $request The request object.
+		 *
+		 * @return WP_REST_Response
+		 */
 		public function get_item( $request ) {
+			$post = $this->get_post( $request );
+			if ( is_wp_error( $post ) ) {
+				return $post;
+			}
+
+			$data = $this->prepare_item_for_response( $post, $request );
+			return rest_ensure_response( $data );
 		}
 
+		/**
+		 * Update a site.
+		 *
+		 * @param WP_REST_Request $request The request object.
+		 *
+		 * @return WP_REST_Response
+		 */
+		public function update_item( $request ) {
+			return new WP_REST_Response(
+				array(
+					'success' => false,
+					'message' => 'Not implemented',
+				),
+				501
+			);
+		}
 
+		/**
+		 * Delete a site.
+		 *
+		 * @param WP_REST_Request $request The request object.
+		 *
+		 * @return WP_REST_Response
+		 */
+		public function delete_item( $request ) {
+			$post = $this->get_post( $request );
+			if ( is_wp_error( $post ) ) {
+				return $post;
+			}
 
+			$result = wp_delete_post( $post->ID, true );
+
+			if ( is_wp_error( $result ) ) {
+				return new WP_REST_Response(
+					array(
+						'success' => false,
+						'message' => 'Error deleting site.',
+					),
+					400
+				);
+			}
+
+			return new WP_REST_Response(
+				array(
+					'success' => true,
+					'message' => 'Delete site request succeeded.',
+				),
+				200
+			);
+		}
+
+		/**
+		 * Get the sites.
+		 *
+		 * @param WP_REST_Request $request The request object.
+		 *
+		 * @return WP_REST_Response
+		 */
 		public function get_items( $request ) {
 
 			$parameter_mappings = array(
@@ -118,6 +232,7 @@ if ( ! class_exists( 'WPCLOUD_Sites_Controller' ) ) {
 				$query_args['author__in'] = array( get_current_user_id() );
 			}
 
+			$posts        = array();
 			$posts_query  = new WP_Query();
 			$query_result = $posts_query->query( $query_args );
 			foreach ( $query_result as $post ) {
@@ -175,6 +290,14 @@ if ( ! class_exists( 'WPCLOUD_Sites_Controller' ) ) {
 			return $response;
 		}
 
+		/**
+		 * Prepare a single site output for response.
+		 *
+		 * @param WP_Post         $item The post object.
+		 * @param WP_REST_Request $request Request object.
+		 *
+		 * @return WP_REST_Response
+		 */
 		public function prepare_item_for_response( $item, $request ) {
 			$post = $item;
 
@@ -228,6 +351,7 @@ if ( ! class_exists( 'WPCLOUD_Sites_Controller' ) ) {
 		 */
 		public function get_items_permissions_check( $request ) {
 			$check = $this->user_access_check();
+			// we only need to check for an error here.
 			if ( is_wp_error( $check ) ) {
 				return $check;
 			}
@@ -242,7 +366,7 @@ if ( ! class_exists( 'WPCLOUD_Sites_Controller' ) ) {
 		 * @return true|WP_Error
 		 */
 		public function get_item_permissions_check( $request ): true|WP_Error {
-			$post = $this->get_post( $request['id'] );
+			$post = $this->get_post( $request );
 			if ( is_wp_error( $post ) ) {
 				return $post;
 			}
@@ -251,8 +375,8 @@ if ( ! class_exists( 'WPCLOUD_Sites_Controller' ) ) {
 				return $check;
 			}
 
-			if ( get_current_user_id() !== $post->post_author ) {
-				return new WP_Error( 'rest_forbidden', esc_html__( 'You do not have permission to manage this site.', 'wpcloud' ), rest_authorization_required_code() );
+			if ( get_current_user_id() !== (int) $post->post_author ) {
+				return new WP_Error( 'rest_forbidden', esc_html__( 'Unauthorized request.', 'wpcloud' ), rest_authorization_required_code() );
 			}
 			return true;
 		}
@@ -260,11 +384,11 @@ if ( ! class_exists( 'WPCLOUD_Sites_Controller' ) ) {
 		/**
 		 * Check permissions for the current request.
 		 *
-		 * @return WP_Error|bool
+		 * @return bool|WP_Error True if the requester has manage site capabilities. False if logged in but with out manage site capabilities, WP_Error if not logged in.
 		 */
-		protected function user_access_check(): WP_Error|bool {
+		protected function user_access_check(): bool|WP_Error {
 			if ( ! is_user_logged_in() ) {
-				return new WP_Error( 'rest_forbidden', esc_html__( 'You are not currently logged in.', 'wpcloud' ), rest_authorization_required_code() );
+				return new WP_Error( 'rest_forbidden', esc_html__( 'Unauthorized request', 'wpcloud' ), rest_authorization_required_code() );
 			}
 			if ( current_user_can( WPCLOUD_CAN_MANAGE_SITES ) ) {
 				return true;
@@ -273,14 +397,22 @@ if ( ! class_exists( 'WPCLOUD_Sites_Controller' ) ) {
 			return false;
 		}
 
-		protected function get_post( $id ) {
+		/**
+		 * Get a post.
+		 *
+		 * @param WP_REST_Request $request The request object.
+		 * @return WP_Post|WP_Error
+		 */
+		protected function get_post( WP_REST_Request $request ): WP_Post|WP_Error {
 			$error = new WP_Error(
 				'rest_post_invalid_id',
 				__( 'Invalid post ID.' ),
 				array( 'status' => 404 )
 			);
 
-			if ( (int) $id <= 0 ) {
+			$id = (int) $request->get_param( 'id' );
+
+			if ( $id <= 0 ) {
 				return $error;
 			}
 
