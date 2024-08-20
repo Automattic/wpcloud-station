@@ -38,9 +38,12 @@ class WPCLOUD_Site_List extends WP_List_Table {
 		$columns  = $this->get_columns();
 		$hidden   = array();
 		$sortable = $this->get_sortable_columns();
+		$paged    = absint( $_GET['paged'] ?? 1 );
+		$per_page = 20;
 
 		$defaults = array(
-			'posts_per_page' => 20,
+			'posts_per_page' => $per_page,
+			'paged'          => $paged,
 			'post_type'      => 'wpcloud_site',
 			'post_status'    => 'any',
 			'orderby'        => 'id',
@@ -52,9 +55,10 @@ class WPCLOUD_Site_List extends WP_List_Table {
 		$this->_column_headers = array( $columns, $hidden, $sortable );
 		$results               = new WP_Query( $options );
 
-		if ( is_wp_error( $results ) ) {
-			error_log( $results->get_error_message() ); // phpcs:disable WordPress.PHP.DevelopmentFunctions.error_log_error_log
-		}
+		$this->set_pagination_args( array(
+			'total_items' => $results->found_posts,
+			'per_page'    => $per_page,
+		) );
 
 		$this->items = $results->posts;
 	}
