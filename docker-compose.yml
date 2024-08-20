@@ -25,7 +25,7 @@ services:
       MYSQL_ROOT_PASSWORD: somewordpress
 
   wordpress:
-    image: wordpress:latest
+    image: wordpress:php8.2
     volumes:
       - wp_data:/var/www/html
       - ./plugin:/var/www/html/wp-content/plugins/wpcloud-station
