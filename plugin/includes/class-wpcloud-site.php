@@ -599,7 +599,7 @@ class WPCLOUD_Site {
 	 * @return true|WP_Error
 	 */
 	public static function update_detail( array $data ): true|WP_Error {
-		error_log(print_r($data, true));
+		error_log( print_r( $data, true ) );
 		$site_id = (int) ( $data['site_id'] ?? 0 );
 		if ( ! $site_id ) {
 			return new WP_Error( 'invalid_site_id', __( 'Invalid site ID.', 'wpcloud' ) );
@@ -659,12 +659,12 @@ class WPCLOUD_Site {
 		return true;
 	}
 
-		/**
-		 * Check if a site detail should be refreshed.
-		 *
-		 * @param string $key The detail key.
-		 * @return bool True if the detail should be refreshed.
-		 */
+	/**
+	 * Check if a site detail should be refreshed.
+	 *
+	 * @param string $key The detail key.
+	 * @return bool True if the detail should be refreshed.
+	 */
 	public static function should_refresh_detail( string $key ): bool {
 		$refresh_keys = array(
 			'phpmyadmin_url',

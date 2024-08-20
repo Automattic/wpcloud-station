@@ -398,7 +398,7 @@ class WPCloud_CLI_Site extends WPCloud_CLI {
 			$this->site_id = get_post_meta( $site_cpt->ID, 'wpcloud_site_id', true );
 
 			if ( ! $this->site_id ) {
-				WP_CLI::error( sprintf( 'Local site %s is missing a wp cloud site id' . $site_cpt->post_title ) );
+				WP_CLI::error( sprintf( 'Local site %s is missing a wp cloud site id', $site_cpt->post_title ) );
 			}
 			return;
 		}

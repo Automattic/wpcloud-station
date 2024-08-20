@@ -8,7 +8,7 @@
 declare( strict_types = 1 );
 
 // Cache singleton for common client requests.
-$wpcloud_client_cache = new stdClass();
+$GLOBALS['wpcloud_client_cache'] = new stdClass();
 
 /**
  * Get WP Cloud Client Name from settings.
