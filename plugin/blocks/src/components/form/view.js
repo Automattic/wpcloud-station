@@ -48,7 +48,6 @@
 			data = wpcloud.hooks.applyFilters(`wpcloud_form_data_${action}`, data, form );
 		}
 
-
 		try {
 			const response = await fetch(
 				'/wp-admin/admin-ajax.php',
@@ -101,12 +100,17 @@
 			e.preventDefault();
 			button.setAttribute('disabled', 'disabled');
 
+			// Get select values before cloning the form
+			const selects = form.querySelectorAll('select:not(.submit-on-change)');
+			let selectData = {};
+			selects.forEach((select) => { selectData[select.name] = select.value; });
+
 			// Ignore the submit on change inputs
 			const altForm = form.cloneNode(true);
 			altForm.querySelectorAll('.submit-on-change').forEach( input => input.remove() );
 			const data = Object.fromEntries(new FormData(altForm));
 
-			await submitFormData(form, data);
+			await submitFormData(form, {...data, ...selectData});
 		});
 
 		// Bind submit on change inputs

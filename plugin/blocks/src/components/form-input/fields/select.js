@@ -31,7 +31,6 @@ export default function SelectField( {
 			<select
 				className={ className }
 				aria-label={ __( 'Select' ) }
-				value={ value }
 				onChange={ ( event ) => onValueChange( event.target.value ) }
 				style={ inputStyle }
 				name={ name }
