@@ -32,16 +32,19 @@ function wpcloud_register_site_post_type(): void {
 
 	// Set the custom post type args.
 	$args = array(
-		'labels'       => $labels,
-		'public'       => true,
-		'has_archive'  => true,
-		'rest_base'    => 'wpcloud/sites',
-		'rewrite'      => array( 'slug' => 'sites' ),
-		'show_in_rest' => true,
-		'show_in_ui'   => false,
-		'show_in_menu' => false,
-		'supports'     => array( 'title', 'editor', 'comments', 'author', 'thumbnail', 'custom-fields' ),
-		'taxonomies'   => array( 'category', 'tag' ),
+		'labels'                => $labels,
+		'public'                => true,
+		'has_archive'           => true,
+		'show_in_ui'            => false,
+		'show_in_menu'          => false,
+		'supports'              => array( 'title', 'editor', 'comments', 'author', 'thumbnail', 'custom-fields' ),
+		'taxonomies'            => array( 'category', 'tag' ),
+		'rewrite'               => array( 'slug' => 'sites' ),
+
+		// REST.
+		'show_in_rest'          => true,
+		'rest_controller_class' => 'WPCLOUD_Sites_Controller',
+
 	);
 
 	// Register the custom post type.
