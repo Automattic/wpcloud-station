@@ -19,7 +19,7 @@ if ( ! class_exists( 'WPCLOUD_Webhook_Controller' ) ) {
 		 *
 		 * @var string
 		 */
-		protected $namespace = 'wpcloud/v1';
+		protected $namespace = 'wpcloud-station/v1';
 
 		/**
 		 * Rest base for the current object.
