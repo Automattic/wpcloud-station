@@ -197,6 +197,13 @@ class WPCLOUD_Site {
 	}
 
 	/**
+	 * Get read only option keys
+	 */
+	public static function get_read_only_fields(): array {
+		return array_diff( array_keys( self::get_detail_options() ), array_keys( self::get_mutable_fields() ) );
+	}
+
+	/**
 	 * Get the options for modifiable site meta for a WPCLOUD_Site.
 	 *
 	 * See https://wp.cloud/apidocs-webhost/#api-Sites-site-meta
@@ -319,7 +326,7 @@ class WPCLOUD_Site {
 			'default_php_conns'    => array(
 				'label'   => __( 'Default PHP Conns' ),
 				'type'    => 'select',
-				'options' => range( 2, 10 ),
+				'options' => array_combine( range( 2, 10 ), range( 2, 10 ) ),
 				'default' => 0,
 				'hint'    => __( 'May be used to either limit allowed concurrent PHP connections or to increase the default number of concurrent connections a site can use if the web server has spare PHP connections capacity. Clients may set any value for a site between 2 and 10; the platform has more leeway if needed.' ),
 			),

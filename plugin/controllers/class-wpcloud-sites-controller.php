@@ -19,7 +19,7 @@ if ( ! class_exists( 'WPCLOUD_Sites_Controller' ) ) {
 		 *
 		 * @var string
 		 */
-		protected $namespace = 'wpcloud/v1';
+		protected $namespace = 'wpcloud-station/v1';
 
 		/**
 		 * Rest base for the current object.
@@ -125,11 +125,36 @@ if ( ! class_exists( 'WPCLOUD_Sites_Controller' ) ) {
 						'description' => __( 'Details about the site.' ),
 						'type'        => 'object',
 						'context'     => array( 'view', 'edit' ),
+						'arg_options' => array(
+							'sanitize_callback' => array( $this, 'sanitize_site_details' ),
+							'validate_callback' => array( $this, 'validate_site_details' ),
+						),
 					),
 				),
 			);
+
+			$mutable_details = WPCloud_Site::get_mutable_options();
+			foreach ( $mutable_details as $key => $detail ) {
+				$prop = array(
+					'description' => $detail['hint'],
+					'type'        => $detail['type'],
+					'context'     => array( 'view', 'edit' ),
+				);
+				if ( isset( $detail['options'] ) ) {
+					$prop['enum'] = $detail['options'];
+				}
+				$schema['properties']['site_details']['properties'][ $key ] = $prop;
+			}
+
+			$read_only_details = WPCloud_Site::get_read_only_fields();
+			foreach ( $read_only_details as $key => $detail ) {
+				$schema['properties']['site_details'][ $key ] = array(
+					'context' => array( 'view' ),
+				);
+			}
 			return $schema;
 		}
+
 
 		/**
 		 * Get root path args.
@@ -155,39 +180,6 @@ if ( ! class_exists( 'WPCLOUD_Sites_Controller' ) ) {
 		}
 
 		/**
-		 * Get site path args.
-		 *
-		 * @return array The site path args.
-		 */
-		protected function sitePathArgs(): array {
-			return array(
-				'args'        => array(
-					'id' => array(
-						'description' => __( 'Unique identifier for the site.' ),
-						'type'        => 'integer',
-					),
-				),
-				array(
-					'methods'             => WP_REST_Server::READABLE,
-					'callback'            => array( $this, 'get_item' ),
-					'permission_callback' => array( $this, 'get_item_permissions_check' ),
-				),
-				array(
-					'methods'             => WP_REST_Server::EDITABLE,
-					'callback'            => array( $this, 'update_item' ),
-					'permission_callback' => array( $this, 'get_item_permissions_check' ),
-					'args'                => $this->get_endpoint_args_for_item_schema( WP_REST_Server::EDITABLE ),
-				),
-				array(
-					'methods'             => WP_REST_Server::DELETABLE,
-					'callback'            => array( $this, 'delete_item' ),
-					'permission_callback' => array( $this, 'get_item_permissions_check' ),
-				),
-				'allow_batch' => false,
-			);
-		}
-
-		/**
 		 * Register the routes.
 		 */
 		public function register_routes() {
@@ -200,7 +192,45 @@ if ( ! class_exists( 'WPCLOUD_Sites_Controller' ) ) {
 			register_rest_route(
 				$this->namespace,
 				'/' . $this->rest_base . '/(?P<id>[\d]+)',
-				$this->sitePathArgs()
+				array(
+					'args'        => array(
+						'id' => array(
+							'description' => __( 'Unique identifier for the site.' ),
+							'type'        => 'integer',
+						),
+					),
+					array(
+						'methods'             => WP_REST_Server::READABLE,
+						'callback'            => array( $this, 'get_item' ),
+						'permission_callback' => array( $this, 'get_item_permissions_check' ),
+					),
+					array(
+						'methods'             => WP_REST_Server::EDITABLE,
+						'callback'            => array( $this, 'update_item' ),
+						'permission_callback' => array( $this, 'get_item_permissions_check' ),
+						'args'                => $this->get_endpoint_args_for_item_schema( WP_REST_Server::EDITABLE ),
+					),
+					array(
+						'methods'             => WP_REST_Server::DELETABLE,
+						'callback'            => array( $this, 'delete_item' ),
+						'permission_callback' => array( $this, 'get_item_permissions_check' ),
+					),
+					'allow_batch' => false,
+					'schema'      => array( $this, 'get_public_item_schema' ),
+				)
+			);
+
+			register_rest_route(
+				$this->namespace,
+				'/' . $this->rest_base . '/details/list',
+				array(
+					array(
+						'methods'             => WP_REST_Server::READABLE,
+						'callback'            => array( $this, 'get_site_details_list' ),
+						'permission_callback' => '__return_true',
+					),
+					'schema' => array( $this, 'get_public_item_schema' ),
+				),
 			);
 
 			// @TODO: Remove this route once Gutenberg is updated to use the new routes.
@@ -265,12 +295,43 @@ if ( ! class_exists( 'WPCLOUD_Sites_Controller' ) ) {
 		 * @return WP_REST_Response
 		 */
 		public function update_item( $request ) {
+			$site_id      = (int) $request['id'];
+			$site_details = $request->get_param( 'site_details' );
+			if ( ! $site_details ) {
+				return new WP_REST_Response(
+					array(
+						'success' => false,
+						'message' => 'No site details provided.',
+					),
+					400
+				);
+			}
+			$data   = array( 'site_id' => $site_id );
+			$errors = array();
+			foreach ( $site_details as $key => $value ) {
+				$result = WPCloud_Site::update_detail( array_merge( $data, array( $key => $value ) ) );
+				if ( is_wp_error( $result ) ) {
+					$errors[] = $result->get_error_message();
+				}
+			}
+
+			if ( ! empty( $errors ) ) {
+				return new WP_REST_Response(
+					array(
+						'success' => false,
+						'message' => 'Error updating site details.',
+						'errors'  => $errors,
+					),
+					400
+				);
+			}
+
 			return new WP_REST_Response(
 				array(
-					'success' => false,
-					'message' => 'Not implemented',
+					'success' => true,
+					'message' => 'Update site request succeeded.',
 				),
-				501
+				200
 			);
 		}
 
@@ -306,6 +367,43 @@ if ( ! class_exists( 'WPCLOUD_Sites_Controller' ) ) {
 				),
 				200
 			);
+		}
+
+
+		/**
+		 * Get the site details list.
+		 *
+		 * @param WP_REST_Request $request The request object.
+		 *
+		 * @return WP_REST_Response
+		 */
+		public function get_site_details_list( $request ): WP_REST_Response {
+			$list = array();
+
+			$mutable_details = WPCloud_Site::get_mutable_options();
+
+			foreach ( $mutable_details as $key => $detail ) {
+				$field = array(
+					'field'   => $key,
+					'type'    => $detail['type'],
+					'context' => array( 'view', 'edit' ),
+				);
+				if ( isset( $detail['options'] ) ) {
+					$field['options'] = $detail['options'];
+				}
+				$list[] = $field;
+
+			}
+
+			$read_only_details = WPCloud_Site::get_read_only_fields();
+			foreach ( $read_only_details as $key => $detail ) {
+				$list[] = array(
+					'field'   => $key,
+					'context' => array( 'view' ),
+				);
+			}
+
+			return rest_ensure_response( $list );
 		}
 
 		/**
@@ -544,6 +642,62 @@ if ( ! class_exists( 'WPCLOUD_Sites_Controller' ) ) {
 
 			$args = $request->get_attributes()['args'][ $param ];
 			return rest_validate_value_from_schema( $data_center, $args, $param );
+		}
+
+		/**
+		 * Validate the site details parameter.
+		 *
+		 * @param array           $site_details The site details.
+		 * @param WP_REST_Request $request The request object.
+		 * @param string          $param The parameter name.
+		 *
+		 * @return true|WP_Error
+		 */
+		public function validate_site_details( $site_details, $request, $param ): true|WP_Error {
+			if ( ! $site_details ) {
+				return true;
+			}
+
+			$mutable_details = WPCloud_Site::get_mutable_options();
+			foreach ( $site_details as $key => $value ) {
+				$mutable_detail = $mutable_details[ $key ] ?? false;
+				if ( ! $mutable_detail ) {
+					return new WP_Error( 'rest_invalid_param', __( 'Invalid site detail.' ), array( 'status' => 400 ) );
+				}
+
+				$options = $mutable_detail['options'] ?? false;
+				if ( $options ) {
+					$valid_value = array_key_exists( $value, (array) $options );
+					$valid       = apply_filters( 'wpcloud_rest_validate_site_detail', $valid_value, $value, $key, $options, $request, $param );
+					if ( ! $valid ) {
+						return new WP_Error( 'rest_invalid_param', __( 'Invalid site detail value.' ), array( 'status' => 400 ) );
+					}
+				}
+				return true;
+			}
+
+			$args = $request->get_attributes()['args'][ $param ];
+			return rest_validate_value_from_schema( $site_details, $args, $param );
+		}
+
+		/**
+		 * Sanitize the site details parameter.
+		 *
+		 * @param array $site_details The site details.
+		 *
+		 * @return array The sanitized site details.
+		 */
+		public function sanitize_site_details( array $site_details ): array {
+			if ( ! $site_details ) {
+				return array();
+			}
+
+			$sanitized = array();
+			foreach ( $site_details as $key => $value ) {
+				$sanitized[ sanitize_text_field( $key ) ] = sanitize_text_field( $value );
+			}
+
+			return $sanitized;
 		}
 
 		/**
