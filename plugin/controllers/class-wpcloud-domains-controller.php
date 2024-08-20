@@ -1,6 +1,6 @@
 <?php
 /**
- * WP Cloud Webhook Controller.
+ * WP Cloud Domains Controller.
  *
  * @package wpcloud-station
  */
@@ -40,7 +40,7 @@ if ( ! class_exists( 'WPCLOUD_Domains_Controller' ) ) {
 					array(
 						'methods'             => WP_REST_Server::READABLE,
 						'callback'            => array( $this, 'get_ssl_status' ),
-						'permission_callback' => '__return_true',
+						'permission_callback' => array( $this, 'get_permissions_check' ),
 					),
 				)
 			);
@@ -76,6 +76,20 @@ if ( ! class_exists( 'WPCLOUD_Domains_Controller' ) ) {
 				),
 				200
 			);
+		}
+
+		/**
+		 * Check permissions for the current request.
+		 *
+		 * @param WP_REST_Request $request The request object.
+		 *
+		 * @return bool|WP_Error
+		 */
+		public function get_permissions_check( $request ) {
+			if ( ! logged_in() ) {
+				return new WP_Error( 'rest_forbidden', esc_html__( 'You are not currently logged in.', 'wpcloud' ), $this->authorization_status_code() );
+			}
+			return true;
 		}
 	}
 }
