@@ -28,7 +28,6 @@ add_action( 'init', 'wpcloud_station_enqueue_block_styles' );
 // We don't want to show the admin bar in the front end.
 add_filter( 'show_admin_bar', '__return_false' );
 
-
 add_action(
 	'wp_enqueue_scripts',
 	function () {
@@ -36,3 +35,13 @@ add_action(
 		wp_enqueue_style( 'wpcloud-station', get_theme_file_uri( 'assets/styles/global.css' ), array(), '1.0.0' );
 	}
 );
+
+if ( function_exists( 'register_block_pattern_category' ) ) {
+	register_block_pattern_category(
+		'wpcloud_forms',
+		array(
+			'label'       => __( 'WP Cloud Forms', 'wpcloud' ),
+			'description' => __( 'Core WP Cloud forms', 'wpcloud' ),
+		)
+	);
+}
