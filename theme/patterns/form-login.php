@@ -1,11 +1,9 @@
 <?php
 /**
  * Title: Login Form
- * Slug: wpcloud-station/page-login
+ * Slug: wpcloud-station/form-login
  * Categories: wpcloud_forms
  * Keywords: starter
- * Blocks: wpcloud/login
- * Post Types: page
  * Description: Login form.
  */
 ?>

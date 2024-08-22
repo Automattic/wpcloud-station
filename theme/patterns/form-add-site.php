@@ -4,8 +4,6 @@
  * Slug: wpcloud-station/page-add-site
  * Categories: wpcloud_forms
  * Keywords: starter
- * Blocks: wpcloud/site-create
- * Post Types: page
  * Description: Add new site form.
  */
 ?>
