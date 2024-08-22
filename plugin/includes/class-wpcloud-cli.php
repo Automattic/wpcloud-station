@@ -8,6 +8,11 @@
 // phpcs:disable Generic.Files.OneObjectStructurePerFile.MultipleFound
 
 require_once __DIR__ . '/wpcloud-client.php';
+require_once __DIR__ . '/../admin/includes/wpcloud-headstart.php';
+
+require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader-skin.php';
+require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
+require_once ABSPATH . 'wp-admin/includes/class-theme-upgrader.php';
 
 /**
  * WP Cloud CLI
@@ -741,6 +746,20 @@ class WPCloud_CLI_Client extends WPCloud_CLI {
 		self::log_result( wpcloud_client_php_versions_available() );
 		self::log( '%GData centers:' );
 		self::log_result( wpcloud_client_data_centers_available() );
+	}
+
+	/**
+	 * Run the headstart.
+	 *
+	 * @param array $args The arguments.
+	 * @param array $switches The switches.
+	 */
+	public function headstart( $args, $switches ) {
+		$result = wpcloud_headstart( new WPCloud_CLI_Skin() );
+		if ( is_wp_error( $result ) ) {
+			WP_CLI::error( $result->get_error_message() );
+		}
+		WP_CLI::success( 'Headstart installed' );
 	}
 }
 

@@ -7,6 +7,8 @@
 
 declare( strict_types = 1 );
 
+require_once 'includes/wpcloud-headstart.php';
+
 /**
  * Get the available themes.
  *
@@ -190,6 +192,21 @@ function wpcloud_settings_init(): void {
 			'description'         => __( 'Enable caching of common client requests to reduce the number of requests to the WP Cloud API and speed up page loads. The cache is stored in memory per request.' ),
 			'type'                => 'checkbox',
 			'checked'             => get_option( 'wpcloud_settings', array() )['client_cache'] ?? false,
+		)
+	);
+
+	add_settings_field(
+		'wpcloud_field_headstart',
+		__( 'Headstart Set Up', 'wpcloud' ),
+		'wpcloud_field_input_cb',
+		'wpcloud',
+		'wpcloud_section_settings',
+		array(
+			'label_for'           => 'wpcloud_headstart',
+			'class'               => 'wpcloud_row',
+			'type'                => 'checkbox',
+			'wpcloud_custom_data' => 'custom',
+			'description'         => __( 'Run the headstart script to setup the demo site. The script will not delete or overwrite any existing pages or settings so it\'s safe to run multiple times.' ),
 		)
 	);
 }
