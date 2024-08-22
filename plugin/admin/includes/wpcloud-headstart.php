@@ -127,11 +127,11 @@ function wpcloud_headstart(  WP_Upgrader_Skin $headstart_skin = new WPCloud_Quit
 	$core_pages = array(
 		'login'    => array(
 			'title'   => 'Login',
-			'content' => '<!-- wp:pattern {"slug":"wpcloud-station/page-login"} /-->',
+			'content' => '<!-- wp:pattern {"slug":"wpcloud-station/form-login"} /-->',
 		),
 		'add-site' => array(
 			'title'   => 'Add Site',
-			'content' => '<!-- wp:pattern {"slug":"wpcloud-station/page-add-site"} /-->',
+			'content' => '<!-- wp:pattern {"slug":"wpcloud-station/form-add-site"} /-->',
 		),
 	);
 
