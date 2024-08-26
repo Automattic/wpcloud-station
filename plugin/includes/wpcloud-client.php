@@ -828,10 +828,31 @@ function wpcloud_client_site_persist_data_delete( int $wpcloud_site_id, string $
  *
  * @return string|WP_Error "success", "failure", "queued". WP Error on error.
  */
-function wpcloud_client_job_status( int $job_id ) {
+function wpcloud_client_job_status( int $job_id ): string|WP_Error {
 	return wpcloud_client_get( null, "job-completion/{$job_id}" );
 }
 
+/**
+ * Get the status of a test job.
+ *
+ * @param integer $code    The test code.
+ * @param string  $message The test message.
+ *
+ * @return true|WP_Error True if the test status matches the code and message. WP_Error on error.
+ */
+function wpcloud_client_test_status( int $code = 200, string $message = 'ping' ): true|WP_Error {
+	$result = wpcloud_client_get( null, "test-status/$code/$message" );
+
+	if ( is_wp_error( $result ) ) {
+		return $result;
+	}
+
+	if ( $message !== $result->message ) {
+		return new WP_Error( 'failure', 'Unexpected response', array( 'status' => 500 ) );
+	}
+
+	return true;
+}
 /**
  * Make a GET request the WP Cloud API.
  *

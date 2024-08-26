@@ -761,6 +761,18 @@ class WPCloud_CLI_Client extends WPCloud_CLI {
 		}
 		WP_CLI::success( 'Headstart installed' );
 	}
+
+	/**
+	 * Test the status.
+	 *
+	 * @param array $args The arguments.
+	 * @param array $switches The switches.
+	 */
+	public function status( $args, $switches ) {
+		$test_message = $args[0];
+		$result       = wpcloud_client_test_status( 200, $test_message );
+		self::log_result( $result );
+	}
 }
 
 /**
