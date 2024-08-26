@@ -8,6 +8,8 @@
 declare( strict_types = 1 );
 
 require_once 'includes/wpcloud-headstart.php';
+$wpcloud_request_api_status = wpcloud_client_test_status();
+$wpcloud_api_healthy        = is_wp_error( $wpcloud_request_api_status ) ? false : true;
 
 /**
  * Get the available themes.
@@ -67,6 +69,8 @@ function wpcloud_settings_sanitize( $input ) {
  * @return void
  */
 function wpcloud_settings_init(): void {
+	global $wpcloud_api_healthy;
+
 	register_setting( 'wpcloud', 'wpcloud_settings', 'wpcloud_settings_sanitize' );
 
 	add_settings_section(
@@ -113,6 +117,7 @@ function wpcloud_settings_init(): void {
 			'wpcloud_custom_data' => 'custom',
 			'default'             => '',
 			'description'         => __( 'The default domain to use for new sites. Each site will use this root domain with the site name as the subdomain. If left empty a unique subdomain will be generated for each site.' ),
+			'disabled'            => ! $wpcloud_api_healthy,
 		)
 	);
 
@@ -127,6 +132,7 @@ function wpcloud_settings_init(): void {
 			'class'           => 'wpcloud_row',
 			'description'     => __( 'The URL to send site creation events to. This can be used to trigger actions on site creation.' ),
 			'client_meta_key' => 'webhook_url',
+			'disabled'        => ! $wpcloud_api_healthy,
 		)
 	);
 
@@ -161,6 +167,7 @@ function wpcloud_settings_init(): void {
 			'description'         => __( 'The default theme to install on new sites.' ),
 			'items'               => $themes,
 			'default'             => array_keys( $themes )[0],
+			'disabled'            => ! $wpcloud_api_healthy,
 		)
 	);
 
@@ -176,6 +183,7 @@ function wpcloud_settings_init(): void {
 			'wpcloud_custom_data' => 'custom',
 			'description'         => __( 'Plugins available to install or activate with new installs. ' ),
 			'items'               => wpcloud_admin_get_available_plugins(),
+			'disabled'            => ! $wpcloud_api_healthy,
 		)
 	);
 
@@ -191,7 +199,8 @@ function wpcloud_settings_init(): void {
 			'wpcloud_custom_data' => 'custom',
 			'description'         => __( 'Enable caching of common client requests to reduce the number of requests to the WP Cloud API and speed up page loads. The cache is stored in memory per request.' ),
 			'type'                => 'checkbox',
-			'checked'             => get_option( 'wpcloud_settings', array() )['client_cache'] ?? false,
+			'checked'             => get_option( 'wpcloud_settings', array() )['client_cache'] ?? true,
+			'disabled'            => ! $wpcloud_api_healthy,
 		)
 	);
 
@@ -207,6 +216,7 @@ function wpcloud_settings_init(): void {
 			'type'                => 'checkbox',
 			'wpcloud_custom_data' => 'custom',
 			'description'         => __( 'Run the headstart script to setup the demo site. The script will not delete or overwrite any existing pages or settings so it\'s safe to run multiple times.' ),
+			'disabled'            => ! $wpcloud_api_healthy,
 		)
 	);
 }
@@ -279,7 +289,7 @@ function wpcloud_field_input_cb( array $args ): void {
 	if ( 'checkbox' === $type ) {
 		$value = '1';
 	}
-	$disabled = $args['disabled'] ?? false;
+	$disabled = $args['disabled'] ?? false ? ' disabled ' : '';
 	?>
 	<input
 			type="<?php echo esc_attr( $type ); ?>"
@@ -290,13 +300,10 @@ function wpcloud_field_input_cb( array $args ): void {
 			if ( 'checkbox' === $type && $checked ) {
 				echo ' checked '; }
 			?>
-			<?php
-			if ( $disabled ) {
-				echo ' disabled '; }
-			?>
+			<?php echo esc_attr( $disabled ); ?>
 		>
 	<?php if ( isset( $args['description'] ) ) { ?>
-		<p class="description"><?php echo esc_html( $args['description'] ); ?></p>
+		<p class="description <?php echo esc_attr( $disabled ); ?>"><?php echo esc_html( $args['description'] ); ?></p>
 		<?php
 	}
 	if ( isset( $args['error'] ) ) {
@@ -313,16 +320,13 @@ function wpcloud_field_input_cb( array $args ): void {
  * @return void.
  */
 function wpcloud_client_meta_field_input_cb( array $args ): void {
-	$meta_key = $args['client_meta_key'] ?? '';
-	$request  = wpcloud_client_get_client_meta( $meta_key );
-	if ( is_wp_error( $request ) ) {
-		// Let's ignore 404s.
-		if ( ! str_contains( $request->get_error_message(), 'Resource not found' ) ) {
-			$args['error'] = 'Warning: There was a issue retrieving the setting: ' . $request->get_error_message();
+	$disabled = $args['{disabled'] ?? false;
+	if ( ! $disabled ) {
+		$meta_key = $args['client_meta_key'] ?? '';
+		$request  = wpcloud_client_get_client_meta( $meta_key );
+		if ( ! is_wp_error( $request ) ) {
+			$args['value'] = $request->$meta_key;
 		}
-		error_log( $request->get_error_message() ); // phpcs:disable WordPress.PHP.DevelopmentFunctions.error_log_error_log
-	} else {
-		$args['value'] = $request->$meta_key;
 	}
 
 	wpcloud_field_input_cb( $args );
@@ -363,10 +367,11 @@ function wpcloud_field_select_cb( array $args ): void {
 	$default   = $args['default'] ?? '';
 	$value     = esc_attr( $options[ $label_for ] ?? $default );
 	$items     = $args['items'];
+	$disabled  = $args['disabled'] ?? false ? ' disabled ' : '';
 
 	// output the field.
 	?>
-	<select name="<?php echo esc_attr( $name ); ?>" id="<?php echo esc_attr( $label_for ); ?>">
+	<select name="<?php echo esc_attr( $name ); ?>" id="<?php echo esc_attr( $label_for ); ?>" <?php echo esc_attr( $disabled ); ?> >
 		<option value=''></option>
 	<?php
 	foreach ( $items as $item_value => $item_label ) {
@@ -376,7 +381,7 @@ function wpcloud_field_select_cb( array $args ): void {
 	?>
 	</select>
 	<?php if ( isset( $args['description'] ) ) { ?>
-		<p class="description"><?php echo esc_html( $args['description'] ); ?></p>
+		<p class="description <?php echo esc_attr( $disabled ); ?>"><?php echo esc_html( $args['description'] ); ?></p>
 		<?php
 	}
 }
@@ -391,6 +396,7 @@ function wpcloud_field_software_cb( array $args ): void {
 	$options   = get_option( 'wpcloud_settings' );
 	$label_for = esc_attr( $args['label_for'] );
 	$items     = $args['items'];
+	$disabled  = $args['disabled'] ?? false ? ' disabled ' : '';
 
 	// output the field.
 	echo '<table>';
@@ -400,10 +406,12 @@ function wpcloud_field_software_cb( array $args ): void {
 		?>
 		<tr>
 			<td style="padding: 5px;">
-				<label><?php echo esc_html( $item_label ); ?></label>
+				<label class="<?php echo esc_attr( $disabled ); ?>"><?php echo esc_html( $item_label ); ?></label>
 			</td>
 			<td style="padding: 5px;">
-				<select name="<?php echo esc_attr( $name ); ?>" id="<?php echo esc_attr( $name ); ?>">
+				<select name="<?php echo esc_attr( $name ); ?>" id="<?php echo esc_attr( $name ); ?>"
+				<?php echo esc_attr( $disabled ); ?>
+				>
 					<option value=""></option>
 					<option value="install" <?php echo ( 'install' === $value ) ? 'selected' : ''; ?>>Install</option>
 					<option value="activate" <?php echo ( 'activate' === $value ) ? 'selected' : ''; ?>>Activate</option>
@@ -415,7 +423,7 @@ function wpcloud_field_software_cb( array $args ): void {
 	echo '</table>';
 	if ( isset( $args['description'] ) ) {
 		?>
-		<p class="description"><?php echo esc_html( $args['description'] ); ?></p>
+		<p class="description <?php echo esc_attr( $disabled ); ?>"><?php echo esc_html( $args['description'] ); ?></p>
 		<?php
 	}
 }
