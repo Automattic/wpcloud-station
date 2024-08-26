@@ -20,6 +20,13 @@ $wpcloud_api_error = '';
 if ( ! $wpcloud_api_healthy ) {
 	$wpcloud_api_error = $wpcloud_request_api_status->get_error_message();
 	$ip_error          = str_contains( $wpcloud_api_error, 'not allowed' );
+} else {
+	$client_ips_request = wpcloud_client_domain_ip_addresses( null );
+	if ( is_wp_error( $client_ips_request ) ) {
+		$client_ips = $client_ips_request;
+	} else {
+		$client_ips = ( (array) $client_ips_request )['ips'] ?? array();
+	}
 }
 
 ?>
@@ -86,6 +93,28 @@ if ( ! $wpcloud_api_healthy ) {
 				<?php esc_html_e( 'Return back to this page after correcting the API issues to continue configuring Station.' ); ?>
 			</p>
 		</div>
+	<?php else : ?>
+		<h2>Details</h2>
+		<table class="form-table" role="presentation">
+			<tbody>
+				<?php if ( $client_ips ) : ?>
+				<tr class="wpcloud_row">
+					<th scope="row">
+						<label for="wpcloud_api_key">WP Cloud IP Address Range</label>
+					</th>
+					<td>
+					<?php if ( is_wp_error( $client_ips ) ) : ?>
+						<?php echo esc_html( $client_ips->get_error_message() ); ?>
+					<?php else : ?>
+						<?php foreach ( $client_ips as $ip ) : ?>
+							<?php echo esc_html( $ip ); ?>
+						<?php endforeach; ?>
+					<?php endif; ?>
+					</td>
+				</tr>
+				<?php endif; ?>
+			</tbody>
+		</table>
 	<?php endif; ?>
 
 
@@ -96,19 +125,3 @@ if ( ! $wpcloud_api_healthy ) {
 			submit_button( 'Save Settings' );
 			?>
 	</form>
-<h2>Details</h2>
-<table class="form-table" role="presentation">
-	<tbody>
-		<?php if ( $client_ips ) : ?>
-		<tr class="wpcloud_row">
-			<th scope="row">
-				<label for="wpcloud_api_key">WP Cloud IP Address Range</label>
-			</th>
-			<td>
-			<?php foreach ( $client_ips as $ip ) : ?>
-				<?php echo esc_html( $ip ); ?>
-			<?php endforeach; ?>
-			</td>
-		</tr>
-		<?php endif; ?>
-</tbody></table>

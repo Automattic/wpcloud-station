@@ -46,9 +46,9 @@ function wpcloud_get_client_api_key(): mixed {
  * @param integer|null $wpcloud_site_id Optional. The WP Cloud Site ID.
  * @param string       $domain          The domain for which to get the IP addresses.
  *
- * @return object|WP_Error Domain verification record. WP_Error on error.
+ * @return stdClass|WP_Error Domain verification record. WP_Error on error.
  */
-function wpcloud_client_domain_ip_addresses( ?int $wpcloud_site_id, string $domain = '' ): mixed {
+function wpcloud_client_domain_ip_addresses( ?int $wpcloud_site_id, string $domain = '' ): stdClass|WP_Error {
 	$client_name = wpcloud_get_client_name();
 
 	return wpcloud_client_get( $wpcloud_site_id, "get-ips/{$client_name}/{$domain}" );
