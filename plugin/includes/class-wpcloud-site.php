@@ -13,7 +13,6 @@ declare( strict_types = 1 );
  * Class WPCLOUD_Site
  */
 class WPCLOUD_Site {
-
 	const LINKABLE_DETAIL_KEYS = array(
 		'domain_name',
 		'wp_admin_url',
@@ -407,6 +406,16 @@ class WPCLOUD_Site {
 	 */
 	public static function get_linkable_detail_options(): array {
 		return array_intersect_key( self::get_detail_options(), array_flip( self::LINKABLE_DETAIL_KEYS ) );
+	}
+
+	/**
+	 * Check if the API is connected.
+	 *
+	 * @return bool True if the API is connected.
+	 */
+	public static function is_api_connected(): bool {
+		$api_health = wpcloud_client_test_status();
+		return ! is_wp_error( $api_health->error );
 	}
 
 	/**
