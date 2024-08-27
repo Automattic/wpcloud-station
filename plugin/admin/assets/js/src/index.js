@@ -1,12 +1,12 @@
 
-(function (wp, wpcloud ) {
-	if ( !wp || !wp.data || !wpcloud ) {
+(function ( { wp, wpcloud } ) {
+	if (!wp || !wpcloud ) {
 		return;
 	}
 	if (!wpcloud.apiConnected) {
 		wp.data.dispatch('core/notices').createNotice(
-			'warning',
-			'You are not connected to the WP Cloud API. Station requires a valid API connection to function properly.',
+			'error',
+			'You are not connected to the WP Cloud API. Station requires a valid API connection to function properly.', // Text string to display.
 			{
 				isDismissible: false,
 				actions: [
@@ -18,4 +18,4 @@
 			}
 		);
 	}
-} )( window.wp, window.wpcloud );
+})( window );
