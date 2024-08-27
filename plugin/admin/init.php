@@ -541,3 +541,17 @@ function cc_mime_types( $mimes ) {
 	return $mimes;
 }
 add_filter( 'upload_mimes', 'cc_mime_types' );
+
+
+/**
+ * Enqueue the admin styles
+ *
+ * @return void
+ */
+add_action(
+	'admin_enqueue_scripts',
+	function () {
+		$config = require_once plugin_dir_path( __FILE__ ) . 'assets/js/build/index.asset.php';
+		wp_enqueue_script( 'wpcloud-admin', plugin_dir_url( __FILE__ ) . 'assets/js/build/index.js', $config['dependencies'], $config['version'], true );
+	}
+);
