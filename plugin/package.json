@@ -6,15 +6,19 @@
 	"license": "GPL-3.0-or-later",
 	"main": "build/index.js",
 	"scripts": {
-		"build": "wp-scripts build --webpack-src-dir=blocks/src/ --output-path=blocks/build/ --webpack-copy-php",
+		"build": "npm run build:blocks && npm run build:frontend && npm run build:admin",
 		"format": "wp-scripts format",
 		"lint:css": "wp-scripts lint-style ./blocks/src/**/*.css",
 		"lint:js": "wp-scripts lint-js ./blocks/src/**/*.js",
 		"packages-update": "wp-scripts packages-update",
 		"plugin-zip": "wp-scripts plugin-zip",
-		"start": "wp-scripts start --webpack-src-dir=blocks/src/ --output-path=blocks/build/ --webpack-copy-php",
-		"build:frontend": "wp-scripts build --webpack-src-dir=assets/js/src --output-path=assets/js/build",
-		"start:frontend": "wp-scripts start --webpack-src-dir=assets/js/src --output-path=assets/js/build/index.js"
+		"start": "npm run start:blocks & npm run start:frontend & npm run start:admin",
+		"build:blocks" : "wp-scripts build --webpack-src-dir=blocks/src/ --output-path=blocks/build/ --webpack-copy-php",
+		"start:blocks" : "wp-scripts start --webpack-src-dir=blocks/src/ --output-path=blocks/build/ --webpack-copy-php",
+		"build:frontend": "wp-scripts build --webpack-src-dir=assets/js/src/ --output-path=assets/js/build/",
+		"start:frontend": "wp-scripts start --webpack-src-dir=assets/js/src/ --output-path=assets/js/build/",
+		"build:admin": "wp-scripts build --webpack-src-dir=admin/assets/js/src/ --output-path=admin/assets/js/build/",
+		"start:admin": "wp-scripts start --webpack-src-dir=admin/assets/js/src/ --output-path=admin/assets/js/build/"
 	},
 	"engines": {
 		"node": ">=20.10.0",
