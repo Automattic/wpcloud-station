@@ -835,19 +835,19 @@ function wpcloud_client_job_status( int $job_id ): string|WP_Error {
 /**
  * Get the status of a test job.
  *
- * @param integer $code    The test code.
- * @param string  $message The test message.
+ * @param integer     $code    The test code.
+ * @param null|string $message The test message.
  *
  * @return true|WP_Error True if the test status matches the code and message. WP_Error on error.
  */
-function wpcloud_client_test_status( int $code = 200, string $message = 'ping' ): true|WP_Error {
+function wpcloud_client_test_status( int $code = 200, ?string $message = 'OK' ): true|WP_Error {
 	$result = wpcloud_client_get( null, "test-status/$code/$message" );
 
 	if ( is_wp_error( $result ) ) {
 		return $result;
 	}
 
-	if ( $message !== $result->message ) {
+	if ( $message !== $result->message || 'OK' !== $result->message ) {
 		return new WP_Error( 'failure', 'Unexpected response', array( 'status' => 500 ) );
 	}
 

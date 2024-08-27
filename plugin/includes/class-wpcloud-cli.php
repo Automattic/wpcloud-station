@@ -769,9 +769,12 @@ class WPCloud_CLI_Client extends WPCloud_CLI {
 	 * @param array $switches The switches.
 	 */
 	public function status( $args, $switches ) {
-		$test_message = $args[0];
+		$test_message = $args[0] ?? 'OK';
 		$result       = wpcloud_client_test_status( 200, $test_message );
-		self::log_result( $result );
+		if ( is_wp_error( $result ) ) {
+			return WP_CLI::error( $result->get_error_message() );
+		}
+		WP_CLI::success( 'OK' );
 	}
 }
 

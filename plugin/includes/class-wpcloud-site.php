@@ -415,7 +415,7 @@ class WPCLOUD_Site {
 	 */
 	public static function is_api_connected(): bool {
 		$api_health = wpcloud_client_test_status();
-		return ! is_wp_error( $api_health->error );
+		return ! is_wp_error( $api_health );
 	}
 
 	/**
