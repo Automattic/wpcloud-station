@@ -485,10 +485,13 @@ function wpcloud_client_data_centers_available( bool $include_no_preference = fa
 		$result = array_intersect_key( wpcloud_client_data_center_mapping(), array_flip( $response ) );
 
 		if ( $include_no_preference ) {
+			$available = $result;
 			$result = array(
 				'' => __( 'No Preference' ),
-				...$result,
 			);
+			foreach ( $available as $key => $name ) {
+				$result[ $key ] = $name;
+			}
 		}
 
 		return (object) $result;
