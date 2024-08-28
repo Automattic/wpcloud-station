@@ -567,7 +567,7 @@ if ( ! class_exists( 'WPCLOUD_Sites_Controller' ) ) {
 		 *
 		 * @return true|WP_Error
 		 */
-		public function validate_owner( string $owner_search, WP_REST_Request $request, string $param ): true|WP_Error {
+		public function validate_owner( string $owner_search, WP_REST_Request $request, string $param ): bool|WP_Error {
 
 			if ( ! $owner_search ) {
 				return true;
@@ -598,7 +598,7 @@ if ( ! class_exists( 'WPCLOUD_Sites_Controller' ) ) {
 		 *
 		 * @return true|WP_Error
 		 */
-		public function validate_php_version( $php_version, $request, $param ): true|WP_Error {
+		public function validate_php_version( $php_version, $request, $param ): bool|WP_Error {
 			if ( ! $php_version ) {
 				return true;
 			}
@@ -626,7 +626,7 @@ if ( ! class_exists( 'WPCLOUD_Sites_Controller' ) ) {
 		 *
 		 * @return true|WP_Error
 		 */
-		public function validate_data_center( $data_center, $request, $param ): true|WP_Error {
+		public function validate_data_center( $data_center, $request, $param ): bool|WP_Error {
 			if ( ! $data_center ) {
 				return true;
 			}
@@ -653,7 +653,7 @@ if ( ! class_exists( 'WPCLOUD_Sites_Controller' ) ) {
 		 *
 		 * @return true|WP_Error
 		 */
-		public function validate_site_details( $site_details, $request, $param ): true|WP_Error {
+		public function validate_site_details( $site_details, $request, $param ): bool|WP_Error {
 			if ( ! $site_details ) {
 				return true;
 			}
@@ -723,7 +723,7 @@ if ( ! class_exists( 'WPCLOUD_Sites_Controller' ) ) {
 		 *
 		 * @return true|WP_Error
 		 */
-		public function get_item_permissions_check( $request ): true|WP_Error {
+		public function get_item_permissions_check( $request ): bool|WP_Error {
 			$post = $this->get_post( $request );
 			if ( is_wp_error( $post ) ) {
 				return $post;

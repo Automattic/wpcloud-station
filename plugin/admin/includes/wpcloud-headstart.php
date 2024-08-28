@@ -72,7 +72,7 @@ class WPCloud_Debug_Skin extends WPCloud_Quiet_Skin {
  * @param WP_Upgrader_Skin $headstart_skin The skin to use for the installation.
  * @return true|WP_Error True if headstart succeeded, WP_Error on failure.
  */
-function wpcloud_headstart(  WP_Upgrader_Skin $headstart_skin = new WPCloud_Quite_Skin() ): true|WP_Error { // phpcs:ignore
+function wpcloud_headstart(  WP_Upgrader_Skin $headstart_skin = new WPCloud_Quite_Skin() ): bool|WP_Error { // phpcs:ignore
 
 	// Install the demo theme.
 	$available_themes = wp_get_themes();

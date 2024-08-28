@@ -607,7 +607,7 @@ class WPCLOUD_Site {
 	 * @param array $data The data to update.
 	 * @return true|WP_Error
 	 */
-	public static function update_detail( array $data ): true|WP_Error {
+	public static function update_detail( array $data ): bool|WP_Error {
 		error_log( print_r( $data, true ) );
 		$site_id = (int) ( $data['site_id'] ?? 0 );
 		if ( ! $site_id ) {
