@@ -3,10 +3,10 @@
 	"apiVersion": 3,
 	"name": "wpcloud/site-update",
 	"version": "0.1.0",
-	"title": "Update Site Block",
+	"title": "Update Site",
 	"category": "wpcloud",
 	"icon": "feedback",
-	"description": "Handle site updates",
+	"description": "Form with all available updatable site details",
 	"example": {},
 	"supports": {
 		"html": false
