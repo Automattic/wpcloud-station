@@ -32,5 +32,4 @@
 	.wpcloud-block-form--input:not(.wpcloud-block-form--input--toggle) + .wpcloud-block-form--input:not(.wpcloud-block-form--input--toggle) {
 		margin-top: 1rem;
 	}
-
 }

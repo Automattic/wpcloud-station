@@ -57,6 +57,7 @@ function InputFieldBlock( { attributes, setAttributes, className, context, clien
 		textarea: Text,
 		select: Select,
 		checkbox: Text,
+		datetime: Text,
 	};
 
 	const typeOptions = [
@@ -65,11 +66,12 @@ function InputFieldBlock( { attributes, setAttributes, className, context, clien
 		{ value: 'password', label: __( 'Password' ) },
 		{ value: 'hidden', label: __( 'Hidden' ) },
 		{ value: 'textarea', label: __( 'Textarea' ) },
-		{ value: 'checkbox', label: __( 'Checkbox' )},
-		{ value: 'select', label: __( 'Select' ) },
+		{ value: 'checkbox', label: __( 'Checkbox' ) },
+		{ value: 'select', label: __('Select') },
+		{ value: 'datetime', label: __('Date Time') },
 	];
 
-	const InputTag = inputTags[ type ] ? inputTags[ type ] : Text;
+	const InputTag = inputTags[type] ? inputTags[type] : Text;
 	const showLabel = ! ( hideLabel || 'hidden' === type );
 
 	const controls = (

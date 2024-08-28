@@ -9,9 +9,12 @@ export default function TextField( {
 	className,
 	onPlaceholderChange,
 } ) {
-	const { placeholder, required, type, name, uniqueId, inputStyle } = attributes;
-
+	const { placeholder, required, name, uniqueId, inputStyle } = attributes;
+	let { type } = attributes;
 	const TagName = type === 'textarea' ? 'textarea' : 'input';
+	if ('datetime' === type) {
+		type = 'datetime-local';
+	}
 	return (
 
 			<TagName

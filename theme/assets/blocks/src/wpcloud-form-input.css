@@ -99,6 +99,28 @@
 			min-height: 2em;
 			line-height: 2;
 		}
+
+		&[type="datetime-local"], &[type="datetime"] {
+			&::-webkit-calendar-picker-indicator {
+				filter: invert(1);
+			}
+			&::-webkit-datetime-edit-fields-wrapper {
+				color: var(--wp--preset--color--foreground-secondary);
+				font-family: var(--wp--preset--font-family--primary);
+			}
+		}
+
+		&::-webkit-datetime-edit-day-field:focus,
+		&::-webkit-datetime-edit-month-field:focus,
+		&::-webkit-datetime-edit-year-field:focus,
+		&::-webkit-datetime-edit-hour-field:focus,
+		&::-webkit-datetime-edit-minute-field:focus,
+		&::-webkit-datetime-edit-ampm-field:focus {
+
+    background-color: transparent;
+    color: var(--wp--preset--color--foreground-primary);
+    outline: none;
+}
 	}
 
 	textarea.wpcloud-block-form-input__input {
@@ -109,4 +131,5 @@
 		padding: 0.63rem;
 		margin-bottom: 0;
 	}
+
 }
