@@ -33,9 +33,9 @@ class WPCloud_CLI {
 	 *
 	 * @param array|string|bool $result The result to log.
 	 * @param int|null          $padding The padding for the log.
-	 * @return null
+	 * @return mixed
 	 */
-	protected static function log_response( array|string|bool $result, int|null $padding = null ): null {
+	protected static function log_response( array|string|bool $result, int|null $padding = null ): mixed {
 		if ( empty( $result ) ) {
 			return null;
 		}
