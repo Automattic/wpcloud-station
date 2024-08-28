@@ -1,0 +1,16 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "wpcloud/log-download",
+	"version": "0.1.0",
+	"title": "Download Log File",
+	"category": "wpcloud",
+	"icon": "feedback",
+	"description": "A block to download the log file",
+	"example": {},
+	"supports": {
+		"html": false
+	},
+	"textdomain": "wpcloud",
+	"editorScript": "file:./index.js"
+}
