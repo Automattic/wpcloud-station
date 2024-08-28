@@ -12,7 +12,7 @@
 		"lint:js": "wp-scripts lint-js ./blocks/src/**/*.js",
 		"packages-update": "wp-scripts packages-update",
 		"plugin-zip": "wp-scripts plugin-zip",
-		"start": "npm run start:blocks & npm run start:frontend & npm run start:admin",
+		"start": "npm run build && npm run start:blocks & npm run start:frontend & npm run start:admin",
 		"build:blocks" : "wp-scripts build --webpack-src-dir=blocks/src/ --output-path=blocks/build/ --webpack-copy-php",
 		"start:blocks" : "wp-scripts start --webpack-src-dir=blocks/src/ --output-path=blocks/build/ --webpack-copy-php",
 		"build:frontend": "wp-scripts build --webpack-src-dir=assets/js/src/ --output-path=assets/js/build/",
