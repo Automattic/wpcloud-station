@@ -1,7 +1,7 @@
 {
 	"core": "WordPress/WordPress",
-	"plugins": [ "./plugin" ],
-	"themes": [ "./theme" ],
+	"phpVersion": "8.1",
+
 	"config": {
 		"WP_DEBUG": true,
 		"WP_DEBUG_LOG": true,
@@ -9,5 +9,9 @@
 		"SCRIPT_DEBUG": true,
 		"WP_DEVELOPMENT_MODE": "all",
 		"WP_ENVIRONMENT_TYPE": "local"
-	}
+	},
+	"mappings": {
+		 "wp-content/plugins/wpcloud-station-plugin": "./plugin",
+		 "wp-content/themes/wpcloud-station-theme": "./theme"
+		}
 }
