@@ -856,6 +856,69 @@ function wpcloud_client_test_status( int $code = 200, ?string $message = 'statio
 
 	return true;
 }
+
+/**
+ * Fetch the site error logs.
+ *
+ * @param string  $type            The type of logs to fetch. Options: 'site-error-logs', 'site-logs'.
+ * @param integer $wpcloud_site_id The WP Cloud Site ID.
+ * @param array   $range           The range of the logs to fetch. Default: start: 28 days ago, end: now.
+ * @param array   $page            The page size and scroll id. Default: size: 500.
+ * @param string  $order           The sort order. Default: 'asc'.
+ * @param array   $severity        The severity of the logs to filter. Default: empty array. Options: ['User','Warning','Deprecated','Fatal error'].
+ */
+function wpcloud_client_logs( string $type, int $wpcloud_site_id, array $range, array $page, string $order, array $severity ): stdClass|WP_Error {
+	$endpoint  = "$type/$wpcloud_site_id";
+	$start     = $range['start'] ?? strtotime( '-28 days' );
+	$end       = $range['end'] ?? time();
+	$page_size = $page['size'] ?? 500;
+	$scroll_id = $page['scroll_id'] ?? null;
+
+	$args = array(
+		'start'      => $start,
+		'end'        => $end,
+		'page_size'  => $page_size,
+		'sort_order' => $order,
+	);
+	if ( $scroll_id ) {
+		$args['scroll_id'] = $scroll_id;
+	}
+	if ( $severity ) {
+		$args['filter'] = array( 'severity' => $severity );
+	}
+
+	return wpcloud_client_post( $wpcloud_site_id, $endpoint, $args );
+}
+
+/**
+ * Fetch the site error logs.
+ *
+ * @param integer $wpcloud_site_id The WP Cloud Site ID.
+ * @param array   $range           Optional. The range of the logs to fetch. Default: start: 28 days ago, end: now.
+ * @param array   $page            Optional. The page size and scroll id. Default: size: 500.
+ * @param string  $order           Optional. The sort order. Default: 'asc'.
+ * @param array   $severity         Optional. The severity of the logs to filter. Default: empty array. Options: ['User','Warning','Deprecated','Fatal error'].
+ *
+ * @return stdClass|WP_Error Site error logs on success. WP_Error on error.
+ */
+function wpcloud_client_site_error_logs( int $wpcloud_site_id, ?array $range = array(), ?array $page = array(), string $order = 'asc', array $severity = array() ): stdClass|WP_Error {
+	return wpcloud_client_logs( 'site-error-logs', $wpcloud_site_id, $range, $page, $order, $severity );
+}
+
+/**
+ * Fetch the site logs.
+ *
+ * @param integer $wpcloud_site_id The WP Cloud Site ID.
+ * @param array   $range           Optional. The range of the logs to fetch. Default: start: 28 days ago, end: now.
+ * @param array   $page            Optional. The page size and scroll id. Default: size: 500.
+ * @param string  $order           Optional. The sort order. Default: 'asc'.
+ * @param array   $severity         Optional. The severity of the logs to filter. Default: empty array. Options: ['User','Warning','Deprecated','Fatal error'].
+ *
+ * @return stdClass|WP_Error Site error logs on success. WP_Error on error.
+ */
+function wpcloud_client_site_logs( int $wpcloud_site_id, ?array $range = array(), ?array $page = array(), string $order = 'asc', array $severity = array() ): stdClass|WP_Error {
+	return wpcloud_client_logs( 'site-logs', $wpcloud_site_id, $range, $page, $order, $severity );
+}
 /**
  * Make a GET request the WP Cloud API.
  *

@@ -102,8 +102,14 @@ class WPCloud_CLI {
 	 * @return string
 	 */
 	protected static function human_filesize( $bytes, $dec = 2 ): string {
+		if ( is_null( $bytes ) ) {
+			return '0 B';
+		}
 		$size   = array( 'B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB' );
 		$factor = floor( ( strlen( $bytes ) - 1 ) / 3 );
+		if ( $factor < 0 ) {
+			return '0 B';
+		}
 		if ( 0 === $factor ) {
 			$dec = 0;
 		}
@@ -244,7 +250,7 @@ class WPCloud_CLI_Site extends WPCloud_CLI {
 	 * @param bool $remote  Whether to update the remote site.
 	 * @param bool $confirmed Whether to confirm the update.
 	 */
-	private function _delete( int $site_id, $remote = false, $confirmed = false ) {
+	private function _delete( int $site_id, $remote = false, $confirmed = false ) { // phpcs:ignore
 		$result = null;
 		if ( ! $confirmed ) {
 			WP_CLI::confirm( sprintf( 'Are you sure you want to delete the site %d ?', $site_id ) );
@@ -384,7 +390,38 @@ class WPCloud_CLI_Site extends WPCloud_CLI {
 	}
 
 	/**
-	 * Get the site meta.
+	 * Get site logs
+	 *
+	 * @param array $args The arguments.
+	 * @param array $switches The switches.
+	 */
+	public function logs( $args, $switches = array() ) {
+		$this->set_site_id( $args );
+		$type = $switches['type'] ?? 'site';
+		$file = $switches['file'] ?? false;
+
+		if ( $file ) {
+			$log_file = WPCLOUD_Site::prepare_log_file( $type, $this->site_id );
+
+			WP_CLI::success( $log_file );
+			return;
+		}
+
+		$result = 'site' === $type ? wpcloud_client_site_logs( $this->site_id ) : wpcloud_client_site_error_logs( $this->site_id );
+		if ( is_wp_error( $result ) ) {
+			WP_CLI::error( $result->get_error_message() );
+			return;
+		}
+
+		self::log( 'Total logs: ' . $result->total_results );
+		self::log( 'Next page: ' . $result->scroll_id );
+		$logs = wp_json_encode( $result->logs, JSON_PRETTY_PRINT );
+		WP_CLI::print_value( $logs );
+	}
+
+
+	/**
+	 * Set site id
 	 *
 	 * @param array $args The arguments.
 	 */
@@ -429,7 +466,7 @@ class WPCloud_CLI_Site extends WPCloud_CLI {
 	}
 
 	/**
-	 * Get the site meta.
+	 * Get the site cpt
 	 *
 	 * @param array $args The arguments.
 	 */
