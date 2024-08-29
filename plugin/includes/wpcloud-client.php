@@ -843,7 +843,7 @@ function wpcloud_client_job_status( int $job_id ): string|WP_Error {
  *
  * @return true|WP_Error True if the test status matches the code and message. WP_Error on error.
  */
-function wpcloud_client_test_status( int $code = 200, ?string $message = 'OK' ): bool|WP_Error {
+function wpcloud_client_test_status( int $code = 200, ?string $message = 'station-status' ): bool|WP_Error {
 	$result = wpcloud_client_get( null, "test-status/$code/$message" );
 
 	if ( is_wp_error( $result ) ) {
