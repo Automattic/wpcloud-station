@@ -12,5 +12,6 @@
 		"html": false
 	},
 	"textdomain": "wpcloud",
-	"editorScript": "file:./index.js"
+	"editorScript": "file:./index.js",
+	"viewScript": "file:./view.js"
 }

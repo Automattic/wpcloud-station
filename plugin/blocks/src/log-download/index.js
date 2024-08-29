@@ -11,9 +11,13 @@ import { InnerBlocks } from '@wordpress/block-editor';
 import metadata from './block.json';
 import { inputTemplate } from '../utils/templates';
 
+const required = [
+	{ name: 'type', label: __('Type'), required: true, hint: '', type: 'select', options: { server: __('Server'), error: __('Error') } },
+	{ name: 'log_start', label: __('Start Time'),required: true, hint: __( 'Logs are only guaranteed for 28 days. A start date before that may return incomplete data.' ), type: 'datetime' },
+	{ name: 'log_end', label: __('End Time'), required: true, hint: '', type: 'datetime', value: '2024-08-29T14:40' },
+]
 const filters = [
-	{ name: 'start', label: __('Start Time'), hint: __( 'Logs are only guaranteed for 28 days. A start date before that may return incomplete data.' ), type: 'datetime' },
-	{ name: 'end', label: __('End Time'), hint: '', type: 'datetime' },
+
 	{ name: 'page_size', label: __('Page Size'), hint: __( 'The maximum number of records to retrieve in a single request. Defaults to 500. Max of 10000.' ), type: 'number', placeholder: __('Enter page size') },
 	{ name: 'scroll_id', label: __('Scroll ID'), hint: __( 'String used to specify the next page of data for large queries; the same query arguments as the initial query must be provided with the scroll_id on each subsequent request.' ), type: 'text', placeholder: __('Enter scroll ID') },
 	{ name: 'sort_order', label: __('Sort Order'), hint: '', type: 'select', options: { asc: __('Ascending'), desc: __('Descending') } },
@@ -26,7 +30,7 @@ const filters = [
 ];
 
 const template = [
-	[ 'wpcloud/site-details', {},
+	[ 'wpcloud/site-details', { metadata: { name: 'Download logs form' } },
 		[
 			[ 'core/heading', { level: 2, content: __('Download Logs') } ],
 			[
@@ -36,8 +40,21 @@ const template = [
 					wpcloudAction: 'log_download',
 				},
 				[
-					inputTemplate({ name: 'type', label: __('Type'), hint: '', type: 'select', options: { server: __('Server'), error: __('Error') } }),
-					...filters.map(inputTemplate),
+					...required.map(inputTemplate),
+					[ 'wpcloud/expanding-section', { metadata: { name: 'Log Filters' }, clickToToggle: false, hideHeader: false },
+						[
+							[ 'wpcloud/expanding-header', { className: 'click-to-toggle' },
+							[
+								['core/heading', { level: 3, content: __('Filters'),  }],
+							],
+							],
+							[ 'wpcloud/expanding-content', {},
+								[
+									...filters.map(inputTemplate)
+								]
+							],
+						]
+					],
 					[ 'wpcloud/button', { label: __('Download'), type: 'submit' } ],
 				]
 			],

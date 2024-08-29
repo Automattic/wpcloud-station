@@ -42,6 +42,7 @@ add_filter( 'wpcloud_block_form_submitted_fields_log_download', 'wpcloud_block_f
  * @return void
  */
 function wpcloud_block_form_log_download_handler( $response, $data ): void {
+	error_log( print_r( $data, true ) );
 	$log_data = '{"some": "data"}';
 
 	header( 'Content-Description: File Transfer' );
@@ -53,9 +54,9 @@ function wpcloud_block_form_log_download_handler( $response, $data ): void {
 	header( 'Cache-Control: must-revalidate, post-check=0, pre-check=0' );
 	header( 'Pragma: public' );
 	header( 'Content-Length: ' . strlen( $log_data ) );
-
-	echo $log_data; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	header( 'Connection: close' );
+	echo $log_data; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+
 	die();
 }
 add_filter( 'wpcloud_form_process_log_download', 'wpcloud_block_form_log_download_handler', 10, 2 );

@@ -1,7 +1,10 @@
 const mutableOptions = window.wpcloud?.siteMutableOptions || {};
 
-export function inputTemplate({ name, label, options, hint, type, placeholder } ) {
-
+export function inputTemplate(templateData) {
+	const { name, label, options, hint, type, placeholder, required, value } = templateData;
+	if (type == 'datetime') {
+		console.log(templateData);
+	}
 	let hintTemplate = null;
 	if ( hint ) {
 		hintTemplate = [
@@ -43,6 +46,8 @@ export function inputTemplate({ name, label, options, hint, type, placeholder } 
 		label: '',
 		meta: { name: label },
 		placeholder,
+		required,
+		value
 	};
 	const input = [ 'wpcloud/form-input' ];
 
@@ -70,5 +75,8 @@ export function inputTemplate({ name, label, options, hint, type, placeholder } 
 		input.push( [ hintTemplate ] );
 	}
 
+	if (type == "datetime") {
+		console.log(input);
+	}
 	return input;
 }
