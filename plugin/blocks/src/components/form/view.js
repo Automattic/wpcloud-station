@@ -1,5 +1,32 @@
 ((wpcloud) => {
 
+	async function saveDownload( response ) {
+		const blob = await response.blob();
+		const filename = response.headers.get('Content-Disposition').split('filename=')[1];
+
+		if (typeof window.navigator.msSaveBlob !== 'undefined') {
+			window.navigator.msSaveBlob(blob, filename);
+			return;
+		}
+		const blobURL = window.URL.createObjectURL(blob);
+		const link = document.createElement('a');
+
+		link.style.display = 'none';
+		link.href = blobURL;
+		link.setAttribute('download', filename);
+
+		if (typeof link.download === 'undefined') {
+			link.setAttribute('target', '_blank');
+		}
+		document.body.appendChild(link);
+		link.click();
+		document.body.removeChild(link);
+
+		setTimeout(() => {
+			window.URL.revokeObjectURL(blobURL);
+		}, 100);
+	}
+
 	async function submitFormData(form, data) {
 		form.classList.add('is-loading');
 		form.classList.remove('is-error');
@@ -60,7 +87,17 @@
 				}
 			);
 
-			const result = await response.json();
+			const contentType = response.headers.get('Content-Type');
+			let result = {};
+
+			if ( contentType.includes('octet-stream')) {
+				await saveDownload(response);
+				result.data = { action: 'download' };
+			} else if ( contentType.includes('json')) {
+				result = await response.json();
+			} else {
+				throw new Error('Invalid response type');
+			}
 
 			wpcloud.hooks.doAction(
 				'wpcloud_form_response',
