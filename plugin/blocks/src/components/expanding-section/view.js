@@ -1,5 +1,5 @@
 ((wpcloud) => {
-	document.querySelectorAll('.wpcloud-block-expanding-section.click-to-toggle').forEach((section) => {
+	document.querySelectorAll('.wpcloud-block-expanding-section.click-to-toggle, .wp-block-wpcloud-expanding-header.click-to-toggle').forEach((section) => {
 		section.addEventListener('click', (event) => {
 			const selection = document.getSelection();
 			if (selection.type === 'Range') {

@@ -850,7 +850,7 @@ function wpcloud_client_test_status( int $code = 200, ?string $message = 'statio
 		return $result;
 	}
 
-	if ( $message !== $result->message || 'OK' !== $result->message ) {
+	if ( $message !== $result->message || 'station-status' !== $result->message ) {
 		return new WP_Error( 'failure', 'Unexpected response', array( 'status' => 500 ) );
 	}
 
