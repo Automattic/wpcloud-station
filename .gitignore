@@ -10,3 +10,4 @@ node_modules/
 
 /vendor/
 /build/
+docker-compose.yml

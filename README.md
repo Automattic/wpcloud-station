@@ -36,6 +36,17 @@ We welcome contributions from the community. If you would like to contribute, pl
 
 [Code of Conduct](https://github.com/Automattic/wpcloud-station/blob/trunk/CODE-OF-CONDUCT.md)
 
+### Local Setup
+
+#### Docker
+- Copy the `docker-compose.yml-example` file to `docker-compose.yaml`
+- Update the environment variable `WP_CLOUD_API_KEY` to your WP Cloud API key.
+- Run `docker compose up`
+
+#### wp-env
+- run `wp-env start`
+- Note: you will need to add your api key to the WP Cloud settings page
+
 ## Frequently Asked Questions
 
 * Can I use WP Cloud Station plugin on any site?

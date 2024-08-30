@@ -25,7 +25,7 @@ services:
       MYSQL_ROOT_PASSWORD: somewordpress
 
   wordpress:
-    image: wordpress:php8.2
+    image: wordpress:php8.1
     volumes:
       - wp_data:/var/www/html
       - ./plugin:/var/www/html/wp-content/plugins/wpcloud-station
@@ -41,6 +41,7 @@ services:
       # Enable application passwords for REST API
       WORDPRESS_CONFIG_EXTRA: |
         define( 'WP_ENVIRONMENT_TYPE', 'local' );
+      WP_CLOUD_API_KEY: your_api_key
 
 volumes:
   db_data:
