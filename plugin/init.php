@@ -37,6 +37,28 @@ if ( ! is_admin() ) {
 }
 
 /**
+ * Get the api key.
+ */
+function wpcloud_get_api_key(): string {
+
+	// Try to find the key in the ENV or config.
+	$api_key = getenv( 'WP_CLOUD_API_KEY' );
+	if ( defined( 'WP_CLOUD_API_KEY' ) ) {
+		$api_key = WP_CLOUD_API_KEY;
+	}
+
+	$api_key = apply_filters( 'wpcloud_api_key', $api_key );
+
+	if ( ! empty( $api_key ) ) {
+		return $api_key;
+	}
+
+	// Else check the local options.
+	$options = get_option( 'wpcloud_options' ) ?? array();
+	return $options['wpcloud_api_key'] ?? null;
+}
+
+/**
  * Set up the plugin's capabilities.
  */
 function wpcloud_add_capabilities(): void {
