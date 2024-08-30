@@ -29,15 +29,8 @@ $content    = apply_filters( 'wpcloud_block_form_render_field', $content, $attri
 
 // Check block data for values and options.
 $current_value = $attributes['value'] ?? '';
-$options       = array();
+$options       = $attributes['options'] ?? array();
 $aliases       = array();
-
-if ( isset( $attributes['options'] ) ) {
-
-	foreach ( $attributes['options'] as $option ) {
-		$options[ $option['value'] ] = $option['label'];
-	}
-}
 
 // Check mutable options for values and options.
 $site_mutable_options = WPCloud_Site::get_mutable_options();
@@ -55,27 +48,39 @@ if ( array_key_exists( $name, $site_mutable_options ) ) {
 	if ( 'select' === $input_type ) {
 		$options = $site_mutable_options[ $name ]['options'] ?? $options;
 		$aliases = $site_mutable_options[ $name ]['option_aliases'] ?? $aliases;
+		if ( is_wp_error( $options ) ) {
+			error_log( 'WP Cloud: ' . $options->get_error_message() );
+			$options = array();
+		}
 	}
 }
 
 if ( 'select' === $input_type ) {
 	$options_html = '';
-	if ( ! is_wp_error( $options ) ) {
-		foreach ( $options as $value => $label ) {
 
-			$selected = selected( $current_value, $value, false );
-			// check for option aliases.
-			if ( ! $selected && array_key_exists( $value, $aliases ) ) {
-				$selected = selected( $current_value, $aliases[ $value ], false );
-			}
-			$options_html .= sprintf(
-				'<option value="%s" %s>%s</option>',
-				esc_attr( $value ),
-				esc_attr( $selected ),
-				esc_html( $label )
-			);
+	foreach ( $options as $value => $option) {
+
+		// Check if the option is the label or an array with a value and label.
+		if ( is_array( $option ) ) {
+			$value = $option['value'];
+			$label = $option['label'];
+		} else {
+			$label = $option;
 		}
+
+		$selected = selected( $current_value, $value, false );
+		// check for option aliases.
+		if ( ! $selected && array_key_exists( $value, $aliases ) ) {
+			$selected = selected( $current_value, $aliases[ $value ], false );
+		}
+		$options_html .= sprintf(
+			'<option value="%s" %s>%s</option>',
+			esc_attr( $value ),
+			esc_attr( $selected ),
+			esc_html( $label )
+		);
 	}
+
 
 	$regex   = '/(<select[^>]*>)(?:\s*<option[^>]*>.*?<\/option>)*\s*(<\/select>)/';
 	$content = preg_replace( $regex, '$1' . $options_html . '$2', $content );
