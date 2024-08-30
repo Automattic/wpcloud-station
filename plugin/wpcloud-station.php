@@ -12,25 +12,6 @@
  * @package        wpcloud-station
  */
 
-// @TODO: change this to wpcloudstation.dev once we have that domain set up.
-define( 'WPCLOUD_DEMO_DOMAIN', 'jhnstn.dev' );
-
-/**
- *  Actions
- */
-define( 'WPCLOUD_ACTION_UPDATE_SITE', 'wpcloud_update_site' );
-
-define( 'WPCLOUD_CLIENT_RESPONSE_ERROR', 'wpcloud_client_response_error' );
-define( 'WPCLOUD_CLIENT_RESPONSE_SUCCESS', 'wpcloud_client_response_success' );
-
-
-/**
- * Filters
- */
-define( 'WPCLOUD_SHOULD_CREATE_SITE', 'wpcloud_should_create_site' );
-define( 'WPCLOUD_INITIAL_SITE_STATUS', 'wpcloud_initial_site_status' );
-
-
 /**
  * Capabilities
  */
