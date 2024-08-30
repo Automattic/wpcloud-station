@@ -702,13 +702,11 @@ class WPCLOUD_Site {
 	 *
 	 * @param float $bytes The size in bytes.
 	 */
-	protected static function readable_size( float $bytes = 0 ): string {
-		if ( $bytes < 1024 ) {
-			return $bytes . 'B';
-		}
-		$i     = max( 1, floor( log( $bytes, 1024 ) ) );
-		$units = array( 'B', 'KB', 'MB', 'GB', 'TB' );
-		$gigs  = round( $bytes / pow( 1024, $i ), 2 );
-		return $gigs . 'G';
+	public static function readable_size( float $bytes = 0 ): string {
+		$i = floor( log( $bytes ) / log( 1024 ) );
+
+		$sizes = array( 'B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB' );
+
+		return sprintf( '%.02F', $bytes / pow( 1024, $i ) ) * 1 . ' ' . $sizes[ $i ];
 	}
 }

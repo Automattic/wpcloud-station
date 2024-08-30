@@ -93,31 +93,7 @@ class WPCloud_CLI {
 		}
 		self::log_response( json_decode( json_encode( $result ), true ) );
 	}
-
-	/**
-	 * Convert bytes to human readable filesize.
-	 *
-	 * @param int $bytes The bytes to convert.
-	 * @param int $dec   The decimal places.
-	 * @return string
-	 */
-	protected static function human_filesize( $bytes, $dec = 2 ): string {
-		if ( is_null( $bytes ) ) {
-			return '0 B';
-		}
-		$size   = array( 'B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB' );
-		$factor = floor( ( strlen( $bytes ) - 1 ) / 3 );
-		if ( $factor < 0 ) {
-			return '0 B';
-		}
-		if ( 0 === $factor ) {
-			$dec = 0;
-		}
-
-		return sprintf( "%.{$dec}f %s", $bytes / ( 1024 ** $factor ), $size[ $factor ] );
-	}
 }
-
 
 /**
  * WP Cloud CLI Job
@@ -187,7 +163,7 @@ class WPCloud_CLI_Site extends WPCloud_CLI {
 						'id'         => $site->atomic_site_id,
 						'domain'     => $site->domain_name,
 						'created'    => $site->created,
-						'space_used' => self::human_filesize( $site->space_used ),
+						'space_used' => WPCLOUD_Site::readable_size( $site->space_used ),
 					);
 				},
 				$sites
@@ -407,7 +383,7 @@ class WPCloud_CLI_Site extends WPCloud_CLI {
 			return;
 		}
 
-		$result = 'site' === $type ? wpcloud_client_site_logs( $this->site_id ) : wpcloud_client_site_error_logs( $this->site_id );
+		$result = 'site' === $type ? wpcloud_client_site_logs( $this->site_id, null, null ) : wpcloud_client_site_error_logs( $this->site_id, null, null );
 		if ( is_wp_error( $result ) ) {
 			WP_CLI::error( $result->get_error_message() );
 			return;
