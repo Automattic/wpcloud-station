@@ -37,9 +37,14 @@ define( 'WPCLOUD_INITIAL_SITE_STATUS', 'wpcloud_initial_site_status' );
 define( 'WPCLOUD_CAN_MANAGE_SITES', 'wpcloud_manage_sites' );
 
 /**
- * Access Control
+ * Page categories
  */
-define( 'WPCLOUD_PRIVATE_CATEGORY', 'wpcloud_private' );
+
+// Pages that are only accessible to logged in users.
+define( 'WPCLOUD_CATEGORY_PRIVATE', 'wpcloud_private' );
+// Pages required for the core functionality of the plugin.
+define( 'WPCLOUD_CATEGORY_CORE', 'wpcloud_core_pages' );
+
 
 // Initialize the plugin.
 require_once plugin_dir_path( __FILE__ ) . 'init.php';

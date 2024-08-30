@@ -114,44 +114,52 @@ function wpcloud_headstart(  WP_Upgrader_Skin $headstart_skin = null ): bool|WP_
 	$wp_rewrite->set_permalink_structure( $permalink_structure );
 	$wp_rewrite->flush_rules( true );
 
-	// Add the private category.
-	$wpcloud_private_cat = get_category_by_slug( WPCLOUD_PRIVATE_CATEGORY );
-	if ( ! $wpcloud_private_cat ) {
-		$wpcloud_private_cat = wp_insert_term(
-			'WP Cloud Private Page',
-			'category',
-			array(
-				'description' => 'Private category for WP Cloud specific pages.',
-				'slug'        => WPCLOUD_PRIVATE_CATEGORY,
-			)
-		);
+	// Add the core category.
+	$wpcloud_core_cat = get_category_by_slug( WPCLOUD_CATEGORY_CORE );
+	if ( ! $wpcloud_core_cat ) {
+		wpcloud_setup_categories();
 	}
 
 	$core_pages = array(
 		'login'    => array(
-			'title'   => 'Login',
-			'content' => '<!-- wp:pattern {"slug":"wpcloud-station/form-login"} /-->',
+			'post_title'    => 'Login',
+			'post_content'  => '<!-- wp:pattern {"slug":"wpcloud-station/form-login"} /-->',
+			'post_category' => array( $wpcloud_core_cat->term_id ),
 		),
 		'add-site' => array(
-			'title'   => 'Add Site',
-			'content' => '<!-- wp:pattern {"slug":"wpcloud-station/form-add-site"} /-->',
+			'post_title'    => 'Add Site',
+			'post_content'  => '<!-- wp:pattern {"slug":"wpcloud-station/form-add-site"} /-->',
+			'post_category' => array( $wpcloud_core_cat->term_id, get_category_by_slug( WPCLOUD_CATEGORY_PRIVATE )->term_id ),
 		),
 	);
 
 	$query = new WP_Query(
 		array(
-			'cat'           => $wpcloud_private_cat->term_id,
+			'cat'           => $wpcloud_core_cat->term_id,
 			'post_type'     => 'any',
 			'post_name__in' => array_keys( $core_pages ),
 		)
+	);
+
+	$defaults = array(
+		'post_status' => 'publish',
+		'post_type'   => 'page',
 	);
 
 	$post_names = array_map( fn( $post ) => $post->post_name, $query->get_posts() );
 
 	foreach ( $core_pages as $page_name => $args ) {
 		if ( ! in_array( $page_name, $post_names, true ) ) {
-			$headstart_skin->feedback( 'Creating "' . $args['title'] . '" page...' );
-			$page_id = wpcloud_headstart_insert_page( array_merge( $args, array( 'name' => $page_name ) ) );
+			$headstart_skin->feedback( 'Creating "' . $page_name . '" page...' );
+			$args = wp_parse_args(
+				$args,
+				array(
+					'post_title'    => $page_name,
+					'post_status'  => 'publish',
+					'post_type'    => 'page',
+				)
+			);
+			$page_id = wp_insert_post( $args );
 			if ( is_wp_error( $page_id ) ) {
 				$headstart_skin->feedback( $page_id->get_error_message() );
 			}
@@ -161,34 +169,10 @@ function wpcloud_headstart(  WP_Upgrader_Skin $headstart_skin = null ): bool|WP_
 	return true;
 }
 
-/**
- * Create insert a page
- *
- * @param array $args The arguments for the core pages.
- * @return int|WP_Error The page ID or WP_Error on failure.
- */
-function wpcloud_headstart_insert_page( array $args ): int|WP_Error {
-	$post_args = array(
-		'post_title'   => $args['title'] ?? '',
-		'post_content' => $args['content'] ?? '',
-		'post_status'  => 'publish',
-		'post_type'    => 'page',
-		'post_name'    => $args['name'] ?? '',
-	);
-
-	$post_category = $args['category'] ?? array();
-
-	$wpcloud_private_cat = get_category_by_slug( WPCLOUD_PRIVATE_CATEGORY );
-	if ( $wpcloud_private_cat ) {
-		$post_category[] = $wpcloud_private_cat->term_id;
-	}
-	$post_args['post_category'] = $post_category;
-	return wp_insert_post( $post_args );
-}
-
 add_action(
 	'update_option',
 	function ( $option ) {
+
 		if ( 'wpcloud_settings' === $option ) {
 			wpcloud_headstart( new WPCloud_Debug_Skin() );
 		}
