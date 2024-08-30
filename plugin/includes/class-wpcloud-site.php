@@ -503,7 +503,7 @@ class WPCLOUD_Site {
 				return $result->suggested ?? $result->ips ?? '';
 
 			case 'site_name':
-				return $post->post_title;
+				return get_the_title( $post );
 
 			case 'wp_admin_url':
 				$result = wpcloud_client_site_details( $wpcloud_site_id, true );
