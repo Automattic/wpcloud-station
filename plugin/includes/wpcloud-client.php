@@ -881,7 +881,6 @@ function wpcloud_client_logs( string $type, int $wpcloud_site_id, int $start, in
 			'filter'    => array(),
 		)
 	);
-	error_log(print_r($args, true));
 	return wpcloud_client_post( $wpcloud_site_id, $endpoint, $args );
 }
 
