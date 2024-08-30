@@ -216,6 +216,7 @@ function wpcloud_settings_init(): void {
 			'type'                => 'checkbox',
 			'wpcloud_custom_data' => 'custom',
 			'description'         => __( 'Run the headstart script to setup the demo site. The script will not delete or overwrite any existing pages or settings so it\'s safe to run multiple times.' ),
+			'checked'             => false,
 			'disabled'            => ! $wpcloud_api_healthy,
 		)
 	);
@@ -349,6 +350,10 @@ function wpcloud_update_remote_client_meta( $value, $old_value ) {
 		}
 		// Let's use the remote value as the only source.
 		unset( $value[ $option_key ] );
+	}
+
+	if ( isset( $value['wpcloud_headstart'] ) ) {
+		$value['wpcloud_headstart'] = time();
 	}
 	return $value;
 }

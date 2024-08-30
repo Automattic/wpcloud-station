@@ -58,8 +58,7 @@ if ( array_key_exists( $name, $site_mutable_options ) ) {
 if ( 'select' === $input_type ) {
 	$options_html = '';
 
-	foreach ( $options as $value => $option) {
-
+	foreach ( $options as $value => $option ) {
 		// Check if the option is the label or an array with a value and label.
 		if ( is_array( $option ) ) {
 			$value = $option['value'];
