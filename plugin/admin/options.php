@@ -100,7 +100,7 @@ if ( ! $wpcloud_api_healthy ) {
 				<?php if ( $client_ips ) : ?>
 				<tr class="wpcloud_row">
 					<th scope="row">
-						<label for="wpcloud_api_key">WP Cloud IP Address Range</label>
+						<label for="wpcloud_address_range">WP Cloud IP Address Range</label>
 					</th>
 					<td>
 					<?php if ( is_wp_error( $client_ips ) ) : ?>
