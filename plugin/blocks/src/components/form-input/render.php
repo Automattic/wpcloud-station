@@ -16,8 +16,6 @@ if ( $limit_to_admin && ! current_user_can( 'manage_options' ) ) {
 
 $name       = $attributes['name'] ?? 'any';
 $input_type = $attributes['type'] ?? 'text';
-error_log( $input_type );
-
 
 $allowed = apply_filters( 'wpcloud_block_form_allow_field_' . $name, true, $attributes, $block );
 
@@ -58,8 +56,6 @@ if ( array_key_exists( $name, $site_mutable_options ) ) {
 		$options = $site_mutable_options[ $name ]['options'] ?? $options;
 		$aliases = $site_mutable_options[ $name ]['option_aliases'] ?? $aliases;
 	}
-} else {
-	error_log( print_r( $options, true ) );
 }
 
 if ( 'select' === $input_type ) {
