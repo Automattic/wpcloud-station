@@ -20,6 +20,26 @@ add_filter( 'wpcloud_block_form_submitted_fields_site_create', 'wpcloud_block_fo
 
 
 /**
+ * Add the site owner options to the form.
+ *
+ * @param array $attributes The attributes of the field.
+ *
+ * @return array The attributes of the field.
+ */
+function wpcloud_block_site_owner_options( $attributes ): array {
+	$users   = get_users();
+	$options = array();
+	foreach ( $users as $user ) {
+		$options[ $user->ID ] = $user->display_name;
+	}
+
+	$current_user          = wp_get_current_user();
+	$attributes['value']   = $current_user->ID;
+	$attributes['options'] = $options;
+	return $attributes;
+}
+add_filter( 'wpcloud_block_form_field_attributes_site_owner_id', 'wpcloud_block_site_owner_options' );
+/**
  * Process the form data for site create
  *
  * @param array $response The response data.
@@ -56,34 +76,6 @@ function wpcloud_block_form_site_create_handler( $response, $data ) {
 	return $response;
 }
 add_filter( 'wpcloud_form_process_site_create', 'wpcloud_block_form_site_create_handler', 10, 2 );
-
-/**
- * Render the site owner field with the available users.
- *
- * @param string $content The content of the field.
- * @return string The content of the field with the users.
- */
-function wpcloud_block_form_render_field_site_owner_id( $content ) {
-	$users        = get_users();
-	$current_user = wp_get_current_user();
-	$options      = '<option value="' . $current_user->ID . '">' . $current_user->display_name . '</option>';
-	foreach ( $users as $user ) {
-		if ( $user->ID === $current_user->ID ) {
-			continue;
-		}
-		$options .= sprintf(
-			'<option value="%d">%s</option>',
-			$user->ID,
-			$user->display_name
-		);
-	}
-
-	$regex = '/(<select[^>]*>)(?:\s*<option[^>]*>.*?<\/option>)*\s*(<\/select>)/';
-	return preg_replace( $regex, '$1' . $options . '$2', $content );
-}
-add_filter( 'wpcloud_block_form_render_field_site_owner_id', 'wpcloud_block_form_render_field_site_owner_id' );
-
-
 
 /**
  * Render the PHP version field with the available PHP versions.
