@@ -92,18 +92,21 @@ function wpcloud_settings_init(): void {
 		)
 	);
 
-	add_settings_field(
-		'wpcloud_field_api_key',
-		__( 'API Key', 'wpcloud' ),
-		'wpcloud_field_input_cb',
-		'wpcloud',
-		'wpcloud_section_settings',
-		array(
-			'label_for'           => 'wpcloud_api_key',
-			'class'               => 'wpcloud_row',
-			'wpcloud_custom_data' => 'custom',
-		)
-	);
+	// Only show the API key field if it's not set in the environment.
+	if ( ! wpcloud_get_api_key() ) {
+		add_settings_field(
+			'wpcloud_field_api_key',
+			__( 'API Key', 'wpcloud' ),
+			'wpcloud_field_input_cb',
+			'wpcloud',
+			'wpcloud_section_settings',
+			array(
+				'label_for'           => 'wpcloud_api_key',
+				'class'               => 'wpcloud_row',
+				'wpcloud_custom_data' => 'custom',
+			)
+		);
+	}
 
 	add_settings_field(
 		'wpcloud_field_domain',
