@@ -45,7 +45,6 @@ jobs:
         run: npm ci && npm run build:css
 
       - name: Build Theme
-        working-directory: './theme'
         run: |
           mkdir -p temp/wpcloud-station
           cd theme
