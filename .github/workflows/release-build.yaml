@@ -25,8 +25,15 @@ jobs:
         run: npm ci && npm run build
 
       - name: Build plugin
-        working-directory: './plugin'
-        run:  zip -r ../plugin.zip . -x@.distignore
+        run:  |
+          mkdir -p temp/wpcloud-station
+          cd plugin
+          zip -r ../temp/wpcloud-station/plugin.zip . -x@.distignore
+          cd ../temp/wpcloud-station
+          unzip plugin.zip
+          cd ../..
+          zip -r ./plugin.zip temp/wpcloud-station -x@.distignore
+          rm -rf temp
 
       - name: Setup Node for theme
         uses: actions/setup-node@v2
@@ -39,7 +46,15 @@ jobs:
 
       - name: Build Theme
         working-directory: './theme'
-        run: zip -r ../theme.zip . -x@.distignore
+        run: |
+          mkdir -p temp/wpcloud-station
+          cd theme
+          zip -r ../temp/wpcloud-station/theme.zip . -x@.distignore
+          cd ../temp/wpcloud-station
+          unzip theme.zip
+          cd ../..
+          zip -r ./theme.zip temp/wpcloud-station -x@.distignore
+          rm -rf temp
 
       - name: Get release
         id: get_release
