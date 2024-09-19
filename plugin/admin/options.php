@@ -15,6 +15,10 @@ $ip_error   = false;
 global $wpcloud_request_api_status;
 global $wpcloud_api_healthy;
 
+// Check for hosted Station sites.
+$wpcloud_is_atomic         = defined( 'IS_ATOMIC' ) && IS_ATOMIC;
+$wpcloud_is_hosted_station = defined( 'ATOMIC_CLIENT_ID' ) && defined( 'WP_STATION_CLIENT_ID' ) && WP_STATION_CLIENT_ID !== ATOMIC_CLIENT_ID;
+
 $wpcloud_api_error = '';
 
 if ( ! $wpcloud_api_healthy ) {
@@ -60,7 +64,7 @@ if ( ! $wpcloud_api_healthy ) {
 			</p>
 
 			<ul>
-			<?php if ( defined( 'IS_ATOMIC' ) && IS_ATOMIC ) : ?>
+			<?php if ( $wpcloud_is_atomic && ! $wpcloud_is_hosted_station ) : ?>
 				<li>
 					<p>
 						<?php esc_attr_e( 'It appears you are trying to run Station on a WP Cloud site. For security reasons, WP Cloud sites are unable to connect to the WP Cloud API directly. ' ); ?>

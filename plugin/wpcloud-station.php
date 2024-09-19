@@ -26,6 +26,8 @@ define( 'WPCLOUD_CATEGORY_PRIVATE', 'wpcloud_private' );
 // Pages required for the core functionality of the plugin.
 define( 'WPCLOUD_CATEGORY_CORE', 'wpcloud_core_pages' );
 
+define( 'WP_STATION_CLIENT_ID', 61 );
+
 
 // Initialize the plugin.
 require_once plugin_dir_path( __FILE__ ) . 'init.php';
