@@ -15,29 +15,19 @@ jobs:
         with:
           ref: ${{ github.ref }}
 
-
-
       - name: Setup Node for theme
         uses: actions/setup-node@v2
         with:
           node-version: '20.11'
           cache: 'npm'
           cache-dependency-path: './theme'
-      - working-directory: './theme'
-        run: npm ci && npm run build:css
 
       - name: Build Theme
-        run: |
-          mkdir -p ./temp/wpcloud-station
-          cd ./theme
-          zip -r ../temp/wpcloud-station/theme.zip . -x@.distignore
-          cd ../temp/wpcloud-station
-          unzip theme.zip
-          rm theme.zip
-          cd ..
-          zip -r ../theme.zip ./wpcloud-station
-          cd ..
-          rm -rf temp
+        working-directory: './theme'
+        run: npm ci && npm run build:css
+
+      - name: Package Theme
+        run: './bin/package.sh theme'
 
       - name: Setup Node for plugin
         uses: actions/setup-node@v2
@@ -46,21 +36,12 @@ jobs:
           cache: 'npm'
           cache-dependency-path: './plugin'
 
-      - working-directory: './plugin'
+      - name: Build Plugin
+        working-directory: './plugin'
         run: npm ci && npm run build
 
-      - name: Build plugin
-        run:  |
-          mkdir -p ./temp/wpcloud-station
-          cd ./plugin
-          zip -r ../temp/wpcloud-station/plugin.zip . -x@.distignore
-          cd ../temp/wpcloud-station
-          unzip plugin.zip
-          rm plugin.zip
-          cd ..
-          zip -r ../plugin.zip wpcloud-station
-          cd ..
-          rm -rf temp
+      - name: Package Plugin
+        run:  './bin/package.sh plugin'
 
       - name: Get release
         id: get_release
