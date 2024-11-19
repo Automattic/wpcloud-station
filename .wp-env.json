@@ -11,7 +11,7 @@
 		"WP_ENVIRONMENT_TYPE": "local"
 	},
 	"mappings": {
-		 "wp-content/plugins/wpcloud-station-plugin": "./plugin",
-		 "wp-content/themes/wpcloud-station-theme": "./theme"
+		 "wp-content/plugins/wpcloud-station": "./plugin",
+		 "wp-content/themes/wpcloud-station": "./theme"
 		}
 }
