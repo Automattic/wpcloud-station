@@ -49,12 +49,14 @@ class WPCLOUD_Site {
 		$admin_pass  = $options['admin_pass'] ?? '';
 		$site_name   = $options['site_name'] ?? $post->post_title;
 		$domain      = $options['domain_name'] ?? get_post_meta( $post->ID, 'initial_domain', true );
+		$meta        = $options['meta'] ?? array();
 
 		// Set up site data.
 		$data = array(
 			'php_version'  => $php_version,
 			'geo_affinity' => $data_center,
 			'admin_pass'   => $admin_pass,
+			'meta'         => $meta,
 		);
 
 		// Set up domain.
@@ -323,7 +325,7 @@ class WPCLOUD_Site {
 			),
 
 			'default_php_conns'    => array(
-				'label'   => __( 'Default PHP Conns' ),
+				'label'   => __( 'Default PHP Workers' ),
 				'type'    => 'select',
 				'options' => array_combine( range( 2, 10 ), range( 2, 10 ) ),
 				'default' => 0,
@@ -334,7 +336,7 @@ class WPCLOUD_Site {
 				'label'   => __( 'Burst PHP Conns' ),
 				'type'    => 'checkbox',
 				'default' => false,
-				'hint'    => __( 'Enable burst for sites with fewer than 10 default_php_conns. 0 or absent when default_php_conns < 10 means burst is disabled, 1 means burst is enabled.' ),
+				'hint'    => __( 'Enable burst for sites with fewer than 10 PHP Workers (default_php_conns). 0 or absent when default_php_conns < 10 means burst is disabled, 1 means burst is enabled.' ),
 			),
 
 			'php_fs_permissions'   => array(
