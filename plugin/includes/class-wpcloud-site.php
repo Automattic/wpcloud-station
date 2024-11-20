@@ -46,7 +46,6 @@ class WPCLOUD_Site {
 		// Unpack the options.
 		$php_version = $options['php_version'] ?? get_post_meta( $post->ID, 'php_version', true );
 		$data_center = $options['data_center'] ?? get_post_meta( $post->ID, 'data_center', true );
-		$admin_pass  = $options['admin_pass'] ?? '';
 		$site_name   = $options['site_name'] ?? $post->post_title;
 		$domain      = $options['domain_name'] ?? get_post_meta( $post->ID, 'initial_domain', true );
 		$meta        = $options['meta'] ?? array();
@@ -55,8 +54,7 @@ class WPCLOUD_Site {
 		$data = array(
 			'php_version'  => $php_version,
 			'geo_affinity' => $data_center,
-			'admin_pass'   => $admin_pass,
-			'meta'         => $meta,
+			'admin_pass'   => $options['admin_pass'] ?? '',
 		);
 
 		// Set up domain.
@@ -86,10 +84,10 @@ class WPCLOUD_Site {
 		$software = apply_filters( 'wpcloud_site_create_software', $software, $post );
 
 		$author = get_user_by( 'id', $post->post_author );
-		$result = wpcloud_client_site_create( $author->user_login, $author->user_email, $data, $software );
+		$result = wpcloud_client_site_create( $author->user_login, $author->user_email, $data, $software, $meta );
 
 		if ( is_wp_error( $result ) ) {
-			error_log( $result->get_error_message() );
+			error_log( 'WP Cloud: Error creating site: ' . $result->get_error_message() );
 			update_post_meta( $post->ID, 'wpcloud_site_error', $result->get_error_message() );
 			return $result;
 		}
@@ -610,7 +608,6 @@ class WPCLOUD_Site {
 	 * @return true|WP_Error
 	 */
 	public static function update_detail( array $data ): bool|WP_Error {
-		error_log( print_r( $data, true ) );
 		$site_id = (int) ( $data['site_id'] ?? 0 );
 		if ( ! $site_id ) {
 			return new WP_Error( 'invalid_site_id', __( 'Invalid site ID.', 'wpcloud' ) );

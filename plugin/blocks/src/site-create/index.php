@@ -13,7 +13,23 @@
  * @return array The form fields.
  */
 function wpcloud_block_form_site_create_fields( array $fields ) {
-	$site_create_fields = array( 'site_name', 'domain_name', 'php_version', 'data_center', 'site_owner_id', 'site_pass', 'site_email', 'admin_pass' );
+	$site_create_fields = array(
+		'site_name',
+		'domain_name',
+		'php_version',
+		'data_center',
+		'site_owner_id',
+		'site_pass',
+		'site_email',
+		'admin_pass',
+		// available meta fields.
+		'development_mode',
+		'privacy_model',
+		'photon_subsizes',
+		'static_file_404',
+		'default_php_conns',
+		'burst_php_conns',
+	);
 	return array_merge( $fields, $site_create_fields );
 }
 add_filter( 'wpcloud_block_form_submitted_fields_site_create', 'wpcloud_block_form_site_create_fields', 11, 1 );
@@ -91,6 +107,24 @@ function wpcloud_block_form_site_create_handler( $response, $data ) {
 
 	if ( ! isset( $data['site_name'] ) ) {
 		$data['site_name'] = $data['domain_name'];
+	}
+
+	$data['meta'] = array();
+
+	$meta_keys = array(
+		'development_mode',
+		'privacy_model',
+		'photon_subsizes',
+		'static_file_404',
+		'default_php_conns',
+		'burst_php_conns',
+	);
+
+	foreach ( $meta_keys as $key ) {
+		if ( isset( $data[ $key ] ) ) {
+			$data['meta'][ $key ] = $data[ $key ];
+		}
+		unset( $data[ $key ] );
 	}
 
 	$site = WPCloud_Site::create( $data );
