@@ -36,6 +36,10 @@
 			data[input.name] = input.value;
 		});
 
+		form.querySelectorAll('input[type="checkbox"]').forEach((input) => {
+			data[input.name] = input.checked ? 1 : 0;
+		});
+
 		data.action = 'wpcloud_form_submit';
 		// override redirect if a ref query string is present
 		const queryString = window.location.search;
@@ -158,9 +162,6 @@
 
 			input.addEventListener('change', () => {
 				const data = { [input.name]: input.value };
-				if (input.type === 'checkbox') {
-					data[input.name] = input.checked ? 1 : 0;
-				}
 				submitFormData(form, data);
 			});
 		});
