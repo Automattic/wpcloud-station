@@ -46,15 +46,15 @@ class WPCLOUD_Site {
 		// Unpack the options.
 		$php_version = $options['php_version'] ?? get_post_meta( $post->ID, 'php_version', true );
 		$data_center = $options['data_center'] ?? get_post_meta( $post->ID, 'data_center', true );
-		$admin_pass  = $options['admin_pass'] ?? '';
 		$site_name   = $options['site_name'] ?? $post->post_title;
 		$domain      = $options['domain_name'] ?? get_post_meta( $post->ID, 'initial_domain', true );
+		$meta        = $options['meta'] ?? array();
 
 		// Set up site data.
 		$data = array(
 			'php_version'  => $php_version,
 			'geo_affinity' => $data_center,
-			'admin_pass'   => $admin_pass,
+			'admin_pass'   => $options['admin_pass'] ?? '',
 		);
 
 		// Set up domain.
@@ -84,10 +84,10 @@ class WPCLOUD_Site {
 		$software = apply_filters( 'wpcloud_site_create_software', $software, $post );
 
 		$author = get_user_by( 'id', $post->post_author );
-		$result = wpcloud_client_site_create( $author->user_login, $author->user_email, $data, $software );
+		$result = wpcloud_client_site_create( $author->user_login, $author->user_email, $data, $software, $meta );
 
 		if ( is_wp_error( $result ) ) {
-			error_log( $result->get_error_message() );
+			error_log( 'WP Cloud: Error creating site: ' . $result->get_error_message() );
 			update_post_meta( $post->ID, 'wpcloud_site_error', $result->get_error_message() );
 			return $result;
 		}
@@ -323,7 +323,7 @@ class WPCLOUD_Site {
 			),
 
 			'default_php_conns'    => array(
-				'label'   => __( 'Default PHP Conns' ),
+				'label'   => __( 'Default PHP Workers' ),
 				'type'    => 'select',
 				'options' => array_combine( range( 2, 10 ), range( 2, 10 ) ),
 				'default' => 0,
@@ -334,7 +334,7 @@ class WPCLOUD_Site {
 				'label'   => __( 'Burst PHP Conns' ),
 				'type'    => 'checkbox',
 				'default' => false,
-				'hint'    => __( 'Enable burst for sites with fewer than 10 default_php_conns. 0 or absent when default_php_conns < 10 means burst is disabled, 1 means burst is enabled.' ),
+				'hint'    => __( 'Enable burst for sites with fewer than 10 PHP Workers (default_php_conns). 0 or absent when default_php_conns < 10 means burst is disabled, 1 means burst is enabled.' ),
 			),
 
 			'php_fs_permissions'   => array(
@@ -608,7 +608,6 @@ class WPCLOUD_Site {
 	 * @return true|WP_Error
 	 */
 	public static function update_detail( array $data ): bool|WP_Error {
-		error_log( print_r( $data, true ) );
 		$site_id = (int) ( $data['site_id'] ?? 0 );
 		if ( ! $site_id ) {
 			return new WP_Error( 'invalid_site_id', __( 'Invalid site ID.', 'wpcloud' ) );

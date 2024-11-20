@@ -12,7 +12,6 @@
  * @return array The form fields.
  */
 function wpcloud_block_form_log_download_fields( array $fields ): array {
-	error_log( print_r( $fields, true ) );
 	return array_merge(
 		$fields,
 		array(
