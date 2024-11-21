@@ -309,17 +309,30 @@ function wpcloud_client_site_domain_primary_set( int $wpcloud_site_id, string $d
 /**
  * Get a list of sites for the client.
  *
- * @param string[] ...$meta_keys One or more meta keys to include in response.
+ * @param integer $limit     Optional. The number of sites to return. Default: 0 (all).
+ * @param string  $after     Optional. The site ID to start after.
+ * @param string[] $meta_keys One or more meta keys to include in response.
  *                               Supported: wp_version, php_version, space_quota, db_file_size, static_file_404, suspended.
  *
  * @return array|WP_Error Site status details or error.
  */
-function wpcloud_client_site_list( array ...$meta_keys ): mixed {
+function wpcloud_client_site_list( $limit = 0, $after = '', $meta_keys = array() ): mixed {
 	$client_name = wpcloud_get_client_name();
 	$path        = "get-sites/{$client_name}/";
 
 	foreach ( $meta_keys as $meta_key ) {
 		$path .= "{$meta_key}/";
+	}
+
+	$query = array();
+	if ( $limit > 0 ) {
+		$query['limit'] = $limit;
+	}
+	if ( $after ) {
+		$query['after'] = $after;
+	}
+	if ( ! empty( $query ) ) {
+		$path .= '?' . http_build_query( $query );
 	}
 
 	return wpcloud_client_get( null, $path );

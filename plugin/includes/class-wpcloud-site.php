@@ -99,6 +99,30 @@ class WPCLOUD_Site {
 		return $post;
 	}
 
+	/**
+	 * Get site by ID.
+	 *
+	 * @param int $wpcloud_site_id The site ID.
+	 */
+	public static function get_by_id( int $wpcloud_site_id ): null|WP_Post {
+		$site = get_posts(
+			array(
+				'post_type'   => 'wpcloud_site',
+				'post_status' => 'any',
+				'meta_query'  => array(
+					array(
+						'key'   => 'wpcloud_site_id',
+						'value' => $wpcloud_site_id,
+					),
+				),
+			)
+		);
+		if ( empty( $site ) ) {
+			return null;
+		}
+		return $site[0];
+	}
+
 
 	/**
 	 * Create a new wpcloud_site custom post type.
@@ -126,7 +150,7 @@ class WPCLOUD_Site {
 				'post_title'  => $site_name,
 				'post_name'   => $site_name,
 				'post_type'   => 'wpcloud_site',
-				'post_status' => 'draft',
+				'post_status' => $options['post_status'] ?? 'draft',
 				'post_author' => $author->ID,
 			)
 		);
@@ -138,7 +162,7 @@ class WPCLOUD_Site {
 	}
 
 	/**
-	 * Get a WPCLOUD_Site by ID.
+	 * Get detail options
 	 *
 	 * @return array The detail options
 	 */
@@ -714,5 +738,73 @@ class WPCLOUD_Site {
 			return '0 B';
 		}
 		return sprintf( '%.02F', $bytes / $divisor ) * 1 . ' ' . $sizes[ $i ];
+	}
+
+	/**
+	 * Backfill sites.
+	 *
+	 * @param WP_User $owner The owner of the sites.
+	 * @param int     $limit The number of sites to backfill.
+	 * @param int     $offset The offset to start backfilling from.
+	 *
+	 * @return array|WP_Error The sites that were backfilled.
+	 */
+	public static function backfill( WP_User $owner, $limit = 10, $offset = '' ): array|WP_Error {
+		$sites    = wpcloud_client_site_list( $limit, $offset );
+		$imported = array();
+		foreach ( $sites as $site ) {
+			$existing_site = self::get_by_id( (int) $site->atomic_site_id );
+
+			if ( $existing_site ) {
+				continue;
+			}
+			$post = self::create_post(
+				array(
+					'site_name'     => $site->domain_name,
+					'site_owner_id' => $owner->ID,
+				)
+			);
+			if ( is_wp_error( $post ) ) {
+				error_log( 'Error creating site post: ' . $post->get_error_message() );
+				continue;
+			}
+
+			update_post_meta( $post->ID, 'wpcloud_site_id', $site->atomic_site_id );
+			$imported[] = $site;
+		}
+		return $imported;
+	}
+
+	/**
+	 * Import a site.
+	 *
+	 * @param int|string $wpcloud_site_id The site ID.
+	 * @param WP_User    $owner The owner of the site.
+	 */
+	public static function import( int|string $wpcloud_site_id, WP_User $owner ): bool|WP_Error {
+		// Verify that the site exists before importing.
+		$site = wpcloud_client_site_details( (int) $wpcloud_site_id, true, false );
+		if ( is_wp_error( $site ) ) {
+			return $site;
+		}
+
+		$existing_site = self::get_by_id( (int) $wpcloud_site_id );
+
+		if ( $existing_site ) {
+			return false;
+		}
+		$post = self::create_post(
+			array(
+				'site_name'     => $site->domain_name,
+				'site_owner_id' => $owner->ID,
+				'post_status'   => 'publish',
+			)
+		);
+		if ( is_wp_error( $post ) ) {
+			return $post;
+		}
+
+		update_post_meta( $post->ID, 'wpcloud_site_id', $site->atomic_site_id );
+		return true;
 	}
 }
