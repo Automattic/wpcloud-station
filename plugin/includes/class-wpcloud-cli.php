@@ -130,82 +130,130 @@ class WPCloud_CLI_Site extends WPCloud_CLI {
 
 	/**
 	 * List all sites.
+	 * ## OPTIONS
+	 *
+	 * [--source=<all|remote|local|remote-only>]
+	 * : list sites from all contexts, remote , remote only, or local.
+	 * remote-only will list sites that are only on the remote server.
+	 * default: local
+	 *
+	 * [--limit=<limit>]
+	 * : Limit the number of remote sites to list.
+	 *
+	 * [--after=<after>]
+	 * : List remote sites after a specific site id.
+	 * ---
+	 *
+	 * ## EXAMPLES
+	 *
+	 *  wp cloud site list --context=all
 	 *
 	 * @param array $args     The arguments.
 	 * @param array $switches The switches.
 	 */
 	public function list( $args, $switches = array() ) {
+		$limit   = $switches['limit'] ?? 0;
+		$after   = $switches['after'] ?? '';
+		$context = $switches['source'] ?? '';
 
-		$show_remote = $switches['remote'] ?? false;
-
-		if ( $show_remote ) {
-			$sites = wpcloud_client_site_list();
-			if ( is_wp_error( $sites ) ) {
-				WP_CLI::error( $sites->get_error_message() );
-			}
-			if ( isset( $switches['col'] ) ) {
-				$column = $switches['col'];
-				if ( 'id' === $column ) {
-					$column = 'atomic_site_id';
-				}
-				$sites = array_map(
-					function ( $site ) use ( $column ) {
-						return $site->$column;
-					},
-					$sites
-				);
-				self::log_result( implode( ' ', $sites ) );
-				return;
-			}
-			$site_list = array_map(
-				function ( $site ) {
-					return array(
-						'id'         => $site->atomic_site_id,
-						'domain'     => $site->domain_name,
-						'created'    => $site->created,
-						'space_used' => WPCLOUD_Site::readable_size( $site->space_used ),
-					);
-				},
-				$sites
-			);
-
-				WP_CLI\Utils\format_items( 'table', $site_list, array( 'id', 'domain', 'created', 'space_used' ) );
-		} else {
-			$sites = get_posts(
-				array(
-					'post_type'      => 'wpcloud_site',
-					'posts_per_page' => -1,
-					'post_status'    => 'any',
-				)
-			);
-
-			if ( isset( $switches['col'] ) ) {
-				$column = $switches['col'];
-				$sites  = array_map(
-					function ( $site ) use ( $column ) {
-						return $site->$column;
-					},
-					$sites
-				);
-				self::log_result( implode( ' ', $sites ) );
-				return;
-			}
-
-			$site_list = array_map(
-				function ( $site ) {
-					return array(
-						'wpcloud id' => get_post_meta( $site->ID, 'wpcloud_site_id', true ),
-						'id'         => $site->ID,
-						'domain'     => $site->post_title,
-						'created'    => $site->post_date,
-						'status'     => $site->post_status,
-					);
-				},
-				$sites
-			);
-
-			WP_CLI\Utils\format_items( 'table', $site_list, array( 'wpcloud id', 'id', 'domain', 'created', 'status' ) );
+		switch ( $context ) {
+			case 'all':
+				self::log( '%GRemote sites' );
+				$remote_total = self::list_remote( $limit, $after );
+				self::log( '%GLocal sites' );
+				$local_total = self::list_local();
+				self::log( '%gTotal remote sites: ' . $remote_total );
+				self::log( '%gTotal local sites: ' . $local_total );
+				break;
+			case 'remote':
+				$total = self::list_remote( $limit, $after );
+				self::log( '%gTotal remote sites: ' . $total );
+				break;
+			case 'remote-only':
+				$total = self::list_remote( $limit, $after, true );
+				self::log( '%gTotal remote only sites: ' . $total );
+				break;
+			default:
+				$total = self::list_local( $switches['col'] ?? '' );
+				self::log( '%gTotal local sites: ' . $total );
+				break;
 		}
+	}
+
+	/**
+	 * List all remote sites.
+	 *
+	 * @param int $limit The limit.
+	 * @param int $after The after.
+	 * @param bool $remote_only Whether to list only remote sites.
+	 */
+	private static function list_remote( $limit, $after, $remote_only = false ): int {
+		$sites = wpcloud_client_site_list( $limit, $after );
+		if ( $remote_only ) {
+			$sites = array_filter(
+				$sites,
+				function ( $site ) {
+					return ! WPCLOUD_Site::get_by_id( $site->atomic_site_id );
+				}
+			);
+		}
+		if ( is_wp_error( $sites ) ) {
+			WP_CLI::error( $sites->get_error_message() );
+		}
+		$site_list = array_map(
+			function ( $site ) {
+				return array(
+					'id'         => $site->atomic_site_id,
+					'domain'     => $site->domain_name,
+					'created'    => $site->created,
+					'space_used' => WPCLOUD_Site::readable_size( $site->space_used ),
+				);
+			},
+			$sites
+		);
+
+		WP_CLI\Utils\format_items( 'table', $site_list, array( 'id', 'domain', 'created', 'space_used' ) );
+		return count( $sites );
+	}
+
+	/**
+	 * List all local sites.
+	 */
+	private static function list_local( $column = '' ): int {
+		$sites = get_posts(
+			array(
+				'post_type'      => 'wpcloud_site',
+				'posts_per_page' => -1,
+				'post_status'    => 'any',
+			)
+		);
+
+		if ( $column ) {
+			$sites = array_map(
+				function ( $site ) use ( $column ) {
+					return $site->$column;
+				},
+				$sites
+			);
+			self::log_result( implode( ' ', $sites ) );
+			return count( $sites );
+		}
+
+		$site_list = array_map(
+			function ( $site ) {
+				return array(
+					'wpcloud id' => get_post_meta( $site->ID, 'wpcloud_site_id', true ),
+					'id'         => $site->ID,
+					'domain'     => $site->post_title,
+					'created'    => $site->post_date,
+					'status'     => $site->post_status,
+				);
+			},
+			$sites
+		);
+
+		WP_CLI\Utils\format_items( 'table', $site_list, array( 'wpcloud id', 'id', 'domain', 'created', 'status' ) );
+		return count( $site_list );
 	}
 
 	/**
