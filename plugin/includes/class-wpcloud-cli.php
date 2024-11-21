@@ -183,8 +183,8 @@ class WPCloud_CLI_Site extends WPCloud_CLI {
 	/**
 	 * List all remote sites.
 	 *
-	 * @param int $limit The limit.
-	 * @param int $after The after.
+	 * @param int  $limit The limit.
+	 * @param int  $after The after.
 	 * @param bool $remote_only Whether to list only remote sites.
 	 */
 	private static function list_remote( $limit, $after, $remote_only = false ): int {
@@ -263,9 +263,90 @@ class WPCloud_CLI_Site extends WPCloud_CLI {
 	 */
 	public function get( array $args ): void {
 		$this->set_site_id( $args );
-		$result = wpcloud_client_site_details( $this->site_id, true );
+		$result     = wpcloud_client_site_details( $this->site_id, true );
+		$local_site = WPCLOUD_Site::get_by_id( $this->site_id );
+
+		self::log( '%GLocal site:' );
+		self::log_result( $local_site );
+
+		self::log( '%GSite details:' );
 		self::log_result( $result );
 	}
+
+	/**
+	 * Import a site.
+	 *
+	 * @param array $args The arguments.
+	 */
+	public function import( array $args, array $switches ): void {
+
+		$owner_slug = $args[0] ?? '';
+		$owner      = get_user_by( 'slug', $owner_slug );
+		if ( ! $owner ) {
+			WP_CLI::error( "Owner not found: slug=`$owner_slug`" );
+			return;
+		}
+
+		if ( isset( $switches['all'] ) ) {
+			$sites = wpcloud_client_site_list();
+			if ( is_wp_error( $sites ) ) {
+				WP_CLI::error( $sites->get_error_message() );
+				return;
+			}
+			// Skip sites that already exist locally.
+			$sites = array_filter(
+				$sites,
+				function ( $site ) {
+					return ! WPCLOUD_Site::get_by_id( $site->atomic_site_id );
+				}
+			);
+
+			$total = count( $sites );
+
+			self::log(
+				sprintf(
+					_n( 'There is %s site to import', 'There are %s sites to import', $total, 'wpcloud_station'), // phpcs:ignore
+					$total
+				)
+			);
+			WP_CLI::confirm( 'Are you sure you want to import?' );
+			$progress = \WP_CLI\Utils\make_progress_bar( 'Importing', $total );
+			foreach ( $sites as $site ) {
+				$this->import_site( $site->atomic_site_id, $owner );
+				$progress->tick();
+			}
+			$progress->finish();
+			return;
+		}
+
+		$site_id = $args[1] ?? 0;
+		if ( ! $site_id ) {
+			WP_CLI::error( 'Please provide a wpcloud site id.' );
+			return;
+		}
+		$this->import_site( $site_id, $owner );
+		WP_CLI::success( 'Site imported' );
+	}
+
+	/**
+	 * Import a site.
+	 *
+	 * @param int     $site_id The site ID.
+	 * @param WP_User $owner   The owner.
+	 */
+	private function import_site( int $site_id, WP_User $owner ): bool {
+		$result = WPCLOUD_Site::import( $site_id, $owner );
+		if ( is_wp_error( $result ) ) {
+			WP_CLI::warning( $result->get_error_message() );
+			return false;
+		}
+		if ( ! $result ) {
+			WP_CLI::warning( "Site $site_id already exists locally" );
+			return false;
+		}
+		return true;
+	}
+
 
 	/**
 	 * Update a site.
