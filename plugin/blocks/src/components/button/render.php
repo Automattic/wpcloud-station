@@ -12,7 +12,6 @@ if ( $attributes['adminOnly'] && ! current_user_can( 'manage_options' ) ) {
 	return;
 }
 
-
 $classes           = array( 'wpcloud-block-button' );
 $button_attributes = array();
 
@@ -34,6 +33,20 @@ switch ( $block_type ) {
 	case 'link':
 		$classes[] = 'wpcloud-block-button__link wp-element-button';
 		$url       = $attributes['url'] ?? '/';
+		$matches   = array();
+		if ( preg_match( '/{(.*)}/', $url, $matches ) ) {
+			$pattern = $matches[1] ?? '';
+			if ( str_starts_with( $pattern, 'site' ) && is_wpcloud_site_post() ) {
+				global $post;
+				$attribute = str_replace( 'site.', '', $pattern );
+				try {
+					$new_value = $post->$attribute;
+					$url       = str_replace( $matches[0], $new_value, $url );
+				} catch ( Exception $e ) {
+					error_log( $e->getMessage() ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+				}
+			}
+		}
 		break;
 
 	case 'action':
