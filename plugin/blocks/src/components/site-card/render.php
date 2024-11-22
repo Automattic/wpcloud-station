@@ -48,7 +48,7 @@ if ( is_wp_error( $domain_name ) ) {
 <<?php echo $wrapper_attributes; ?> >
 	<?php echo $site_logo; ?>
 	<h2 class="site-title">
-		<a href="<?php echo get_the_permalink(); ?>"><?php echo get_post_field( 'post_name', get_post() ); ?></a>
+		<a href="<?php echo get_the_permalink(); ?>"><?php echo str_replace( '-wpcloudstation-dev', '', get_post_field( 'post_name', get_post() ) ); ?></a>
 	</h2>
 	<h3 class="site-url">
 		<a href="https://<?php echo $domain_name; ?>" target="_blank">
