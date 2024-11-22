@@ -741,41 +741,6 @@ class WPCLOUD_Site {
 	}
 
 	/**
-	 * Backfill sites.
-	 *
-	 * @param WP_User $owner The owner of the sites.
-	 * @param int     $limit The number of sites to backfill.
-	 * @param int     $offset The offset to start backfilling from.
-	 *
-	 * @return array|WP_Error The sites that were backfilled.
-	 */
-	public static function backfill( WP_User $owner, $limit = 10, $offset = '' ): array|WP_Error {
-		$sites    = wpcloud_client_site_list( $limit, $offset );
-		$imported = array();
-		foreach ( $sites as $site ) {
-			$existing_site = self::get_by_id( (int) $site->atomic_site_id );
-
-			if ( $existing_site ) {
-				continue;
-			}
-			$post = self::create_post(
-				array(
-					'site_name'     => $site->domain_name,
-					'site_owner_id' => $owner->ID,
-				)
-			);
-			if ( is_wp_error( $post ) ) {
-				error_log( 'Error creating site post: ' . $post->get_error_message() );
-				continue;
-			}
-
-			update_post_meta( $post->ID, 'wpcloud_site_id', $site->atomic_site_id );
-			$imported[] = $site;
-		}
-		return $imported;
-	}
-
-	/**
 	 * Import a site.
 	 *
 	 * @param int|string $wpcloud_site_id The site ID.
