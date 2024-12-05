@@ -176,3 +176,14 @@ function wpcloud_station_template_include( $template ) {
 	return $template;
 }
 add_filter( 'template_include', 'wpcloud_station_template_include', 50 );
+
+/**
+ * Add site view rewrite rule.
+ *
+ * @param string $view The view.
+ */
+function wpcloud_station_add_site_view_route( $view ) {
+	$query = sprintf( 'index.php?site_name=$matches[1]&view=%s', $view );
+	$regex = sprintf( 'sites/([^/]+)/%s/?$', $view );
+	add_rewrite_rule( $regex, $query, 'top' );
+}
