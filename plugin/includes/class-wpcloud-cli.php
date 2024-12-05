@@ -218,6 +218,8 @@ class WPCloud_CLI_Site extends WPCloud_CLI {
 
 	/**
 	 * List all local sites.
+	 *
+	 * @param string $column The column to list.
 	 */
 	private static function list_local( $column = '' ): int {
 		$sites = get_posts(
@@ -277,6 +279,7 @@ class WPCloud_CLI_Site extends WPCloud_CLI {
 	 * Import a site.
 	 *
 	 * @param array $args The arguments.
+	 * @param array $switches The switches.
 	 */
 	public function import( array $args, array $switches ): void {
 
@@ -346,7 +349,6 @@ class WPCloud_CLI_Site extends WPCloud_CLI {
 		}
 		return true;
 	}
-
 
 	/**
 	 * Update a site.
