@@ -139,7 +139,7 @@ function wpcloud_init(): void {
 }
 add_action( 'init', 'wpcloud_init' );
 
-// Set up site views
+
 /**
  * Add query vars for site views.
  *
@@ -164,15 +164,14 @@ function wpcloud_station_template_include( $template ) {
 	$view      = get_query_var( 'view', '' );
 	$site_name = get_query_var( 'site_name', '' );
 
-	if ( ! $site_name ) {
+	if ( ! $site_name || ! $view ) {
 		return $template;
 	}
 
-	$view = sprintf( '%s/site_views/%s.php', get_stylesheet_directory(), $view );
-	error_log($view);
+	$view = plugin_dir_path( __FILE__ ) . 'views/sites.php';
 
 	if ( file_exists( $view ) ) {
-		$template = $view;
+		return $view;
 	}
 	return $template;
 }

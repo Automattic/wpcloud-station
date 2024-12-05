@@ -45,14 +45,3 @@ if ( function_exists( 'register_block_pattern_category' ) ) {
 		)
 	);
 }
-
-
-/**
- * Add rewrite rules for site views.
- *
- * @return void
- */
-function wpcloud_station_add_rewrite_rules() {
-	add_rewrite_rule( 'sites/([^/]+)/metrics/?$', 'index.php?site_name=$matches[1]&view=metrics', 'top' );
-}
-add_action( 'init', 'wpcloud_station_add_rewrite_rules' );
