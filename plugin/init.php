@@ -138,3 +138,52 @@ function wpcloud_init(): void {
 	add_filter( 'template_redirect', 'wpcloud_verify_logged_in' );
 }
 add_action( 'init', 'wpcloud_init' );
+
+
+/**
+ * Add query vars for site views.
+ *
+ * @param array $vars The query vars.
+ *
+ * @return array
+ */
+function wpcloud_station_query_vars( $vars ) {
+	array_push( $vars, 'site_name', 'view' );
+	return $vars;
+}
+add_filter( 'query_vars', 'wpcloud_station_query_vars' );
+
+/**
+ * Update the template to include the site view if it exists.
+ *
+ * @param string $template The template.
+ *
+ * @return string The template.
+ */
+function wpcloud_station_template_include( $template ) {
+	$view      = get_query_var( 'view', '' );
+	$site_name = get_query_var( 'site_name', '' );
+
+	if ( ! $site_name || ! $view ) {
+		return $template;
+	}
+
+	$view = plugin_dir_path( __FILE__ ) . 'views/sites.php';
+
+	if ( file_exists( $view ) ) {
+		return $view;
+	}
+	return $template;
+}
+add_filter( 'template_include', 'wpcloud_station_template_include', 50 );
+
+/**
+ * Add site view rewrite rule.
+ *
+ * @param string $view The view.
+ */
+function wpcloud_station_add_site_view_rewrite_rule( $view ) {
+	$query = sprintf( 'index.php?site_name=$matches[1]&view=%s', $view );
+	$regex = sprintf( 'sites/([^/]+)/%s/?$', $view );
+	add_rewrite_rule( $regex, $query, 'top' );
+}

@@ -309,8 +309,8 @@ function wpcloud_client_site_domain_primary_set( int $wpcloud_site_id, string $d
 /**
  * Get a list of sites for the client.
  *
- * @param integer $limit     Optional. The number of sites to return. Default: 0 (all).
- * @param string  $after     Optional. The site ID to start after.
+ * @param integer  $limit     Optional. The number of sites to return. Default: 0 (all).
+ * @param string   $after     Optional. The site ID to start after.
  * @param string[] $meta_keys One or more meta keys to include in response.
  *                               Supported: wp_version, php_version, space_quota, db_file_size, static_file_404, suspended.
  *
