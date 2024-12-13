@@ -23,7 +23,7 @@ if ( is_admin() ) {
 }
 
 if ( defined( 'WP_CLI' ) && WP_CLI ) {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-wpcloud-cli.php';
+	require_once plugin_dir_path( __FILE__ ) . '/cli/init.php';
 }
 
 if ( ! is_admin() ) {
