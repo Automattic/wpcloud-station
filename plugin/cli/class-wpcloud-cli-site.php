@@ -433,15 +433,24 @@ class WPCloud_CLI_Site extends WPCloud_CLI {
 	 * @param array $args The arguments.
 	 */
 	protected function set_site_id( $args ) {
-		$this->site_id = $args[0] ?? 0;
+		$this->site_id = self::get_site_id( $this->api(), $args[0] ?? 0 );
+	}
+
+	/**
+	 * Get site id
+	 *
+	 * @param WPCLOUD_CLI_Api $api The wpcloud api.
+	 * @param string|int      $site_id The site ID.
+	 */
+	public static function get_site_id( WPCLOUD_CLI_Api $api, string|int $site_id = 0 ): null|int {
 
 		// Check the local sites first.
 		$site_cpt = null;
-		if ( ! is_numeric( $this->site_id ) ) {
+		if ( ! is_numeric( $site_id ) ) {
 			$query = new WP_Query(
 				array(
 					'post_type'   => 'wpcloud_site',
-					'title'       => $this->site_id,
+					'title'       => $site_id,
 					'post_status' => 'any',
 					'numberposts' => 1,
 				)
@@ -449,36 +458,40 @@ class WPCloud_CLI_Site extends WPCloud_CLI {
 
 			$site_cpt = $query->have_posts() ? $query->posts[0] : null;
 		} else {
-			$site_cpt = get_post( $this->site_id );
+			$site_cpt = get_post( $site_id );
 		}
 
 		if ( $site_cpt && ! is_wp_error( $site_cpt ) ) {
-			$this->site_id = (int) get_post_meta( $site_cpt->ID, 'wpcloud_site_id', true );
+			$site_id = (int) get_post_meta( $site_cpt->ID, 'wpcloud_site_id', true );
 
-			if ( ! $this->site_id ) {
+			if ( ! $site_id ) {
 				WP_CLI::error( sprintf( 'Local site %s is missing a wp cloud site id', $site_cpt->post_title ) );
+				return null;
 			}
-			return;
+			return $site_id;
 		}
-		if ( ! is_numeric( $this->site_id ) ) {
-			$sites = $this->api()->site_list()->result;
+
+		if ( ! is_numeric( $site_id ) ) {
+			$sites = $api->site_list()->result;
 			$site  = array_filter(
 				$sites,
-				function ( $site ) {
-					return $site->domain_name === $this->site_id;
+				function ( $site ) use ( $site_id ) {
+					return $site_id === $site->domain_name;
 				}
 			);
 
 			if ( empty( $site ) ) {
 				WP_CLI::error( 'Site not found.' );
 			}
-			$site          = reset( $site );
-			$this->site_id = (int) $site->atomic_site_id;
+			$site    = reset( $site );
+			$site_id = (int) $site->atomic_site_id;
 		}
 
-		if ( ! $this->site_id ) {
+		if ( ! $site_id ) {
 			WP_CLI::error( 'Please provide a site id.' );
+			return null;
 		}
+		return $site_id;
 	}
 
 	/**
@@ -491,7 +504,7 @@ class WPCloud_CLI_Site extends WPCloud_CLI {
 		$query = array(
 			'post_type'   => 'wpcloud_site',
 			'post_status' => 'any',
-			'meta_query'  => array(
+			'meta_query'  => array( // phpcs:ignore
 				array(
 					'key'   => 'wpcloud_site_id',
 					'value' => $this->site_id,
