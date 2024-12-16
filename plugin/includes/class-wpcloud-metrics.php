@@ -203,19 +203,44 @@ class WPCloud_Metrics {
 	 * @return mixed The status codes rollup.
 	 */
 	protected function rollup( $key, $rollup_interval_sec ): WP_Error|array {
-		$rollup = array();
+		// Verify the rollup key.
+		$first_row = $this->log_data[0];
+		if ( ! property_exists( $first_row, $key ) ) {
+			return new WP_Error( 'invalid_rollup_key', "Invalid rollup key:	$key" );
+		}
+
+		$rollup = $this->build_rollup_container( $rollup_interval_sec );
 		foreach ( $this->log_data as $row ) {
-			$timestamp            = $row->timestamp;
-			$timestamp            = $timestamp - ( $timestamp % $rollup_interval_sec );
-			$rollup[ $timestamp ] = $rollup[ $timestamp ] ?? array();
-			if ( ! property_exists( $row, $key ) ) {
-				return new WP_Error( 'invalid_rollup_key', "Invalid rollup key:	$key" );
+			$timestamp = $row->timestamp;
+			$timestamp = $timestamp - ( $timestamp % $rollup_interval_sec );
+
+			if ( ! isset( $rollup[ $timestamp ] ) ) {
+				error_log( "Invalid timestamp: $timestamp" ); // phpcs:ignore
+				continue;
 			}
+
 			$term = $row->$key;
 
 			$rollup[ $timestamp ][ $term ] = $rollup[ $timestamp ][ $term ] ?? 0;
 			++$rollup[ $timestamp ][ $term ];
 		}
 		return $rollup;
+	}
+
+	/**
+	 * Rollup container
+	 *
+	 * @param int $interval The interval.
+	 *
+	 * @return array The container.
+	 */
+	protected function build_rollup_container( $interval ): array {
+		$container = array();
+		$end       = $this->end;
+		$start     = $this->start - ( $this->start % $interval );
+		for ( $i = $start; $i < $end; $i += $interval ) {
+			$container[ $i ] = array();
+		}
+		return $container;
 	}
 }
