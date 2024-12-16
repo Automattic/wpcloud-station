@@ -58,7 +58,7 @@ class WPCloud_CLI {
 				return self::log_result( $value, $padding );
 			}
 
-			if ( str_contains( $key, 'wpcom' ) || is_object( $value ) ) {
+			if ( str_contains( (string) $key, 'wpcom' ) || is_object( $value ) ) {
 				continue;
 			}
 
