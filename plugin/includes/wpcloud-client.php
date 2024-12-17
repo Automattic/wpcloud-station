@@ -927,6 +927,62 @@ function wpcloud_client_site_logs( int $wpcloud_site_id, ?int $start, ?int $end,
 	$end   = $end ?? time();
 	return wpcloud_client_logs( 'site-logs', $wpcloud_site_id, $start, $end, $options );
 }
+
+/**
+ * Fetch the site metrics.
+ *
+ * @param integer $wpcloud_site_id The WP Cloud Site ID.
+ * @param integer $start           The start time of the metrics to fetch.
+ * @param integer $end             The end time of the metrics to fetch.
+ * @param array   $options         Optional. Additional options for the metrics query.
+ *
+ * @return stdClass|WP_Error Site metrics on success. WP_Error on error.
+ */
+function wpcloud_client_site_metrics( int $wpcloud_site_id, int $start, int $end, $options = array() ): stdClass|WP_Error {
+	$endpoint = "site-metrics/$wpcloud_site_id";
+	if ( isset( $options['summarize'] ) && $options['summarize'] ) {
+		$endpoint .= '/summarize/';
+		unset( $options['summarize'] );
+	}
+	$supported_metrics = array(
+		'requests_persec',
+		'response_bytes_persec',
+		'response_bytes_average',
+		'response_time_average',
+	);
+	if ( isset( $options['metric'] ) && $options['metric'] ) {
+		if ( ! in_array( $options['metric'], $supported_metrics, true ) ) {
+			return WP_Error( 'bad_request', 'Invalid metric', array( 'status' => 400 ) );
+		}
+	}
+
+	$supported_dimensions = array(
+		'http_version',
+		'http_verb',
+		'http_host',
+		'http_status',
+		'page_renderer',
+		'page_is_cached',
+		'wp_admin_ajax_action',
+		'visitor_asn',
+		'visitor_country_code',
+		'visitor_is_crawler',
+	);
+	if ( isset( $options['dimension'] ) && $options['dimension'] ) {
+		if ( ! in_array( $options['dimension'], $supported_dimensions, true ) ) {
+			return WP_Error( 'bad_request', 'Invalid dimension', array( 'status' => 400 ) );
+		}
+	}
+
+	$args = wp_parse_args(
+		$options,
+		array(
+			'start' => $start,
+			'end'   => $end,
+		)
+	);
+	return wpcloud_client_post( $wpcloud_site_id, $endpoint, $args );
+}
 /**
  * Make a GET request the WP Cloud API.
  *

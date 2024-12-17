@@ -36,211 +36,162 @@ class WPCloud_Metrics {
 	private ?int $end;
 
 	/**
-	 * The options.
-	 *
-	 * @var array
-	 */
-	private $options;
-
-	/**
-	 * The raw data.
-	 *
-	 * @var array
-	 */
-	private $log_data;
-
-	/**
 	 * The result.
 	 *
 	 * @var mixed
 	 */
-	private $result;
+	public $result;
+
 
 	/**
-	 * HTTP status codes.
+	 * The summary.
 	 *
 	 * @var array
 	 */
-	const HTTP_STATUS_CODES = array(
-		100 => 'Continue',
-		101 => 'Switching Protocols',
-		102 => 'Processing',
-		103 => 'Checkpoint',
-		200 => 'OK',
-		201 => 'Created',
-		202 => 'Accepted',
-		203 => 'Non-Authoritative Information',
-		204 => 'No Content',
-		205 => 'Reset Content',
-		206 => 'Partial Content',
-		207 => 'Multi-Status',
-		300 => 'Multiple Choices',
-		301 => 'Moved Permanently',
-		302 => 'Found',
-		303 => 'See Other',
-		304 => 'Not Modified',
-		305 => 'Use Proxy',
-		306 => 'Switch Proxy',
-		307 => 'Temporary Redirect',
-		400 => 'Bad Request',
-		401 => 'Unauthorized',
-		402 => 'Payment Required',
-		403 => 'Forbidden',
-		404 => 'Not Found',
-		405 => 'Method Not Allowed',
-		406 => 'Not Acceptable',
-		407 => 'Proxy Authentication Required',
-		408 => 'Request Timeout',
-		409 => 'Conflict',
-		410 => 'Gone',
-		411 => 'Length Required',
-		412 => 'Precondition Failed',
-		413 => 'Request Entity Too Large',
-		414 => 'Request-URI Too Long',
-		415 => 'Unsupported Media Type',
-		416 => 'Requested Range Not Satisfiable',
-		417 => 'Expectation Failed',
-		418 => 'I\'m a teapot',
-		422 => 'Unprocessable Entity',
-		423 => 'Locked',
-		424 => 'Failed Dependency',
-		425 => 'Unordered Collection',
-		426 => 'Upgrade Required',
-		449 => 'Retry With',
-		450 => 'Blocked by Windows Parental Controls',
-		500 => 'Internal Server Error',
-		501 => 'Not Implemented',
-		502 => 'Bad Gateway',
-		503 => 'Service Unavailable',
-		504 => 'Gateway Timeout',
-		505 => 'HTTP Version Not Supported',
-		506 => 'Variant Also Negotiates',
-		507 => 'Insufficient Storage',
-		509 => 'Bandwidth Limit Exceeded',
-		510 => 'Not Extended',
-	);
+	public $summary;
+
+
+	/**
+	 * The meta.
+	 *
+	 * @var array
+	 */
+	public $meta;
+
+
+	/**
+	 * The data.
+	 *
+	 * @var array
+	 */
+	public $periods;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param int      $site    The site.
-	 * @param string   $type    The type.
-	 * @param int|null $start   The start.
-	 * @param int|null $end     The end.
-	 * @param array    $options The options.
+	 * @param int      $site     The site.
+	 * @param int|null $start    The start.
+	 * @param int|null $end      The end.
 	 *
 	 * @throws Exception If the type is invalid.
 	 */
-	public function __construct( int $site, string $type, ?int $start = null, ?int $end = null, $options = array() ) {
-		$this->site    = $site;
-		$this->start   = $start ?? strtotime( '-24 hours' );
-		$this->end     = $end ?? time();
-		$this->options = $options;
+	public function __construct( int $site, ?int $start = null, ?int $end = null ) {
+		$this->site  = $site;
+		$this->start = $start ?? strtotime( '-24 hours' );
+		$this->end   = $end ?? time();
+	}
 
-		switch ( $type ) {
-			case 'server':
-				$this->result = wpcloud_client_site_logs( $this->site, $this->start, $this->end, $options );
-				break;
-			case 'error':
-				$this->result = wpcloud_client_site_error_logs( $this->site, $this->start, $this->end, $options );
-				break;
-			default:
-				throw new Exception( 'Invalid type' );
+	/**
+	 * Get the requests.
+	 *
+	 * @param string $dimension The dimension.
+	 * @param bool   $summarize Summarize the data.
+	 *
+	 * @return WP_Error|array The data
+	 */
+	public function requests( ?string $dimension = null, bool $summarize = false ): WP_Error|array {
+		$options = array(
+			'metric'    => 'requests_persec',
+			'dimension' => $dimension,
+			'summarize' => $summarize,
+		);
+
+		return $this->get_data( $options );
+	}
+
+	/**
+	 * Get the response bytes.
+	 *
+	 * @param string $dimension The dimension.
+	 * @param bool   $average   Average the data.
+	 * @param bool   $summarize Summarize the data.
+	 *
+	 * @return WP_Error|array The data
+	 */
+	public function response_bytes( ?string $dimension = null, bool $average = false, bool $summarize = false ): array {
+		$metric = $average ? 'response_bytes_average' : 'response_bytes_persec';
+
+		$options = array(
+			'metric'    => $metric,
+			'dimension' => $dimension,
+			'summarize' => $summarize,
+		);
+
+		return $this->get_data( $options );
+	}
+
+	/**
+	 * Get the response time.
+	 *
+	 * @param string $dimension The dimension.
+	 * @param bool   $summarize Summarize the data.
+	 *
+	 * @return WP_Error|array The data
+	 */
+	public function response_time( ?string $dimension = null, bool $summarize = false ): array {
+		$options = array(
+			'metric'    => 'response_time_average',
+			'dimension' => $dimension,
+			'summarize' => $summarize,
+		);
+
+		return $this->get_data( $options );
+	}
+
+
+	/**
+	 * Get the data.
+	 *
+	 * @param array $options The options.
+	 *
+	 * @return WP_Error|array The data
+	 */
+	private function get_data( array $options ): WP_Error|array {
+
+		$options['dimension'] = $this->get_dimension( $options['dimension'] );
+		if ( is_wp_error( $options['dimension'] ) ) {
+			return $options['dimension'];
 		}
 
+		$this->result = wpcloud_client_site_metrics( $this->site, $this->start, $this->end, $options );
 		if ( is_wp_error( $this->result ) ) {
-			throw new Exception( $this->result->get_error_message() ); // phpcs:ignore
-		} else {
-			$this->log_data = $this->result->logs;
+			return $this->result;
 		}
+		$this->meta    = (array) $this->result->_meta;
+		$this->periods = json_decode( wp_json_encode( $this->result->periods ), true );
+		return $this->periods;
 	}
 
 	/**
-	 * Get raw log data.
+	 * Get the server metrics.
 	 *
-	 * @return WP_Error|array The raw log data.
+	 * @param string $dimension The dimension.
+	 *
+	 * @return WP_Error|array
 	 */
-	public function logs(): WP_Error|array {
-		return $this->log_data;
-	}
+	private function get_dimension( ?string $dimension = null ): WP_Error|string {
 
-	/**
-	 * Get the response.
-	 *
-	 * @return WP_Error|array The response.
-	 */
-	public function response(): WP_Error|array {
-		return (array) $this->result;
-	}
-
-	/**
-	 * Get the status codes.
-	 *
-	 * @param int   $rollup_interval_sec The rollup interval in seconds.
-	 * @param array $codes               The status codes.
-	 *
-	 * @return mixed The status codes.
-	 */
-	public function status_codes( int $rollup_interval_sec = 60, $codes = array() ): mixed {
-		if ( is_wp_error( $this->log_data ) ) {
-			return $this->log_data;
-		}
-		if ( empty( $codes ) ) {
-			$codes = array_keys( self::HTTP_STATUS_CODES );
-		}
-		$options           = $this->options;
-		$options['filter'] = array( 'status' => $codes );
-
-		return $this->rollup( 'status', $rollup_interval_sec );
-	}
-
-	/**
-	 * Get the status codes rollup.
-	 *
-	 * @param string $key                 The key.
-	 * @param int    $rollup_interval_sec The rollup interval in seconds.
-	 *
-	 * @return mixed The status codes rollup.
-	 */
-	protected function rollup( $key, $rollup_interval_sec ): WP_Error|array {
-		// Verify the rollup key.
-		$first_row = $this->log_data[0];
-		if ( ! property_exists( $first_row, $key ) ) {
-			return new WP_Error( 'invalid_rollup_key', "Invalid rollup key:	$key" );
+		if ( is_null( $dimension ) ) {
+			return 'http_host';
 		}
 
-		$rollup = $this->build_rollup_container( $rollup_interval_sec );
-		foreach ( $this->log_data as $row ) {
-			$timestamp = $row->timestamp;
-			$timestamp = $timestamp - ( $timestamp % $rollup_interval_sec );
+		$dimensions = array(
+			'http_version',
+			'http_verb',
+			'http_host', // Default.
+			'http_status',
+			'page_renderer',
+			'page_is_cached',
+			'wp_admin_ajax_action',
+			'visitor_asn',
+			'visitor_country_code',
+			'visitor_is_crawler',
+		);
 
-			if ( ! isset( $rollup[ $timestamp ] ) ) {
-				error_log( "Invalid timestamp: $timestamp" ); // phpcs:ignore
-				continue;
-			}
-
-			$term = $row->$key;
-
-			$rollup[ $timestamp ][ $term ] = $rollup[ $timestamp ][ $term ] ?? 0;
-			++$rollup[ $timestamp ][ $term ];
+		if ( ! in_array( $dimension, $dimensions, true ) ) {
+			echo "not in array ?\n";
+			return new WP_Error( 'invalid_dimension', 'Invalid dimension' );
 		}
-		return $rollup;
-	}
-
-	/**
-	 * Rollup container
-	 *
-	 * @param int $interval The interval.
-	 *
-	 * @return array The container.
-	 */
-	protected function build_rollup_container( $interval ): array {
-		$container = array();
-		$end       = $this->end;
-		$start     = $this->start - ( $this->start % $interval );
-		for ( $i = $start; $i < $end; $i += $interval ) {
-			$container[ $i ] = array();
-		}
-		return $container;
+		return $dimension;
 	}
 }

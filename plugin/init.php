@@ -17,6 +17,8 @@ require_once plugin_dir_path( __FILE__ ) . 'controllers/class-wpcloud-webhook-co
 require_once plugin_dir_path( __FILE__ ) . 'custom-post-types/wpcloud-site.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/class-wpcloud-site.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/wpcloud-client.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/class-wpcloud-metrics.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/class-wpcloud-metric-data-view.php';
 require_once plugin_dir_path( __FILE__ ) . 'blocks/init.php';
 if ( is_admin() ) {
 	require_once plugin_dir_path( __FILE__ ) . 'admin/init.php';
