@@ -141,8 +141,6 @@ if ( ! class_exists( 'WPCLOUD_Metrics_Controller' ) ) {
 				$ts = strtotime( $time );
 			}
 
-			error_log( "time: $time" );
-
 			// If the timestamp is false or in the future, return an error.
 			if ( false === $ts || $ts > time() ) {
 				// translators: %s: position.
