@@ -56,9 +56,7 @@ class WPCLOUD_Metric_Data_View extends WPCLOUD_Metrics {
 		}
 		$this->data = array( $x );
 
-		$this->map = array(
-			'status_codes' => $status_codes,
-		);
+		$this->map = array_merge( array( 'timestamp' ), array_map( 'strval', $status_codes ) );
 
 		// Set up y axis data.
 		$status_code_data = array();
