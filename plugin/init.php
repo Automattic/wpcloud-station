@@ -13,6 +13,7 @@ declare( strict_types = 1 );
 require_once plugin_dir_path( __FILE__ ) . 'controllers/class-wpcloud-domains-controller.php';
 require_once plugin_dir_path( __FILE__ ) . 'controllers/class-wpcloud-sites-controller.php';
 require_once plugin_dir_path( __FILE__ ) . 'controllers/class-wpcloud-webhook-controller.php';
+require_once plugin_dir_path( __FILE__ ) . 'controllers/class-wpcloud-metrics-controller.php';
 
 require_once plugin_dir_path( __FILE__ ) . 'custom-post-types/wpcloud-site.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/class-wpcloud-site.php';
@@ -68,6 +69,9 @@ function wpcloud_register_controllers(): void {
 
 	$domains_controller = new WPCLOUD_Domains_Controller();
 	$domains_controller->register_routes();
+
+	$metrics_controller = new WPCLOUD_Metrics_Controller();
+	$metrics_controller->register_routes();
 }
 add_action( 'rest_api_init', 'wpcloud_register_controllers' );
 
