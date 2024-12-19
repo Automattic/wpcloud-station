@@ -104,7 +104,7 @@ class WPCLOUD_Site {
 	 *
 	 * @param int $wpcloud_site_id The site ID.
 	 */
-	public static function get_by_id( int $wpcloud_site_id ): null|WP_Post {
+	public static function get_by_id( ?int $wpcloud_site_id ): null|WP_Post {
 		$site = get_posts(
 			array(
 				'post_type'   => 'wpcloud_site',
