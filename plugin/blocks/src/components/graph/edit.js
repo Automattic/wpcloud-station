@@ -25,7 +25,7 @@ export default function Edit( { attributes, setAttributes } ) {
 
 	const controls = (
 		<InspectorControls>
-			<PanelBody title={__('Plot Settings')}>
+			<PanelBody title={__('graph Settings')}>
 
 				<SelectControl
 					label={ __( 'Metric' ) }
@@ -62,11 +62,11 @@ export default function Edit( { attributes, setAttributes } ) {
 		<div {...useBlockProps()}>
 			{ controls }
 			<figure>
-				<div className="plot-container">Plot placeholder.. </div>
+				<div className="graph-container">graph placeholder.. </div>
 				<RichText
 					tagName="figcaption"
 					className={
-						'wpcloud-block-plot__title'
+						'wpcloud-block-graph__title'
 					}
 					value={ title }
 					onChange={ ( newVal ) => {

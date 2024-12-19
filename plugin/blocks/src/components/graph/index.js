@@ -22,5 +22,5 @@ registerBlockType( metadata.name, {
 	/**
 	 * @see ./save.js
 	 */
-	save: () => (<div {...useBlockProps.save()} />)
+	save: ({ attributes }) => (<div {...useBlockProps.save()} data-graph-attributes={JSON.stringify(attributes)} >Graph</div>)
 } );
