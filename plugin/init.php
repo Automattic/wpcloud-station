@@ -35,6 +35,15 @@ if ( ! is_admin() ) {
 		'wp_enqueue_scripts',
 		function (): void {
 			wp_enqueue_script( 'wpcloud', plugin_dir_url( __FILE__ ) . 'assets/js/build/index.js', array( 'wp-hooks' ), '1.0.0', true );
+
+			wp_localize_script(
+				'wpcloud',
+				'wpcloudStationApi',
+				array(
+					'root'  => esc_url_raw( '/wp-json/wpcloud-station/v1' ),
+					'nonce' => wp_create_nonce( 'wpcloud_station_api' ),
+				)
+			);
 		}
 	);
 }
