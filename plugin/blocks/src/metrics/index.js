@@ -3,7 +3,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import { registerBlockType } from '@wordpress/blocks';
-import { InnerBlocks } from '@wordpress/block-editor';
+import { InnerBlocks, useBlockProps  } from '@wordpress/block-editor';
 
 /**
  * Internal dependencies
@@ -15,19 +15,19 @@ const template = [
 		{
 			className: 'wpcloud-metrics',
 			metadata: {
-				name: 'Plots',
-			}
-		 },
-		[
-
-			['core/heading',
-				{ level: 3, content: __( 'Metrics' , 'wpcloud') }
-			],
-		],
-	]
+				name: 'Graphs',
+			},
+			layout: {
+				type: "grid",
+				columnCount: 2,
+				minimumColumnWidth: null
+			},
+		},
+		[],
+	],
 ];
 
 registerBlockType( metadata.name, {
 	edit: () => <InnerBlocks template={template} />,
-	save: () => <InnerBlocks.Content />
+	save: ({ attributes }) => <div {...useBlockProps.save()} id={attributes.id || 'metrics' }><InnerBlocks.Content /></div>
 } );

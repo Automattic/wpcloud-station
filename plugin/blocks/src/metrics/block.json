@@ -4,19 +4,24 @@
 	"name": "wpcloud/metrics",
 	"version": "0.1.0",
 	"title": "Metrics",
-	"category": "widgets",
+	"category": "wpcloud",
 	"icon": "chart-line",
 	"description": "Metric container block for WPCloud plot blocks",
 	"example": {},
 	"supports": {
 		"html": false
 	},
-	"textdomain": "plot",
+	"textdomain": "wpcloud",
 	"editorScript": "file:./index.js",
 	"viewScript": "file:./view.js",
 	"allowedBlocks": [
 		"core/group",
-		"core/columns",
-		"wpcloud/plot"
-	]
+		"wpcloud/graph"
+	],
+	"attributes": {
+		"id": {
+			"type": "string",
+			"default": "metrics"
+		}
+	}
 }
