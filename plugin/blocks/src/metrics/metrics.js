@@ -1,8 +1,6 @@
 import React from 'react';
 
-import Graph from '../components/graph/graph.js';
-
-
+import Graph from '../components/graph/components/graph.js';
 
 function Metrics({ graphs, site }) {
 
