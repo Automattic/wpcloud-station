@@ -104,9 +104,10 @@ if ( ! class_exists( 'WPCLOUD_Metrics_Controller' ) ) {
 				return new WP_REST_Response( $view->result->get_error_message(), 500 );
 			}
 			$response = array(
-				'meta' => $view->meta,
-				'map'  => $view->map,
-				'data' => $view->data,
+				'meta'   => $view->meta,
+				'map'    => $view->map,
+				'series' => $view->series,
+				'data'   => $view->data,
 			);
 			return new WP_REST_Response( $response, 200 );
 		}
