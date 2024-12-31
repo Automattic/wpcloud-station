@@ -166,7 +166,7 @@ class WPCloud_CLI_Site extends WPCloud_CLI {
 
 		self::log( '%GLocal site:' );
 		if ( $local_site ) {
-			self::log_result( $local_site->get_details() );
+			self::log_result( $local_site );
 		} else {
 			self::log( '%YWARNING: Site not found locally' );
 		}
@@ -305,9 +305,35 @@ class WPCloud_CLI_Site extends WPCloud_CLI {
 	/**
 	 * Create a site.
 	 *
+	 * ## OPTIONS
+	 *
+	 * --name=<name>
+	 * : Site name
+	 *
+	 * --email=<email>
+	 * : Email address of the site owner.
+	 *
+	 * --pass=<pass>
+	 * : Admin password.
+	 *
+	 * [--create-user]
+	 * : Create a user if it does not exist.
+	 *
+	 * [--dc=<dc>]
+	 * : Datacenter
+	 *
+	 * [--php=<php>]
+	 * : PHP version
+	 *
+	 * ---
+	 *
+	 * ## EXAMPLES
+	 *
+	 *  wp cloud site create --name=example.com --email=admin@example.com --pass=*******
+	 *
 	 * @param array $switches The switches.
 	 */
-	public function create( $switches ) {
+	public function create( $args, $switches ) {
 		$name  = $switches['name'] ?? '';
 		$email = $switches['email'] ?? '';
 		$pass  = $switches['pass'] ?? '';
@@ -335,8 +361,13 @@ class WPCloud_CLI_Site extends WPCloud_CLI {
 		}
 
 		$user = get_user_by( 'email', $email );
-		if ( ! $user && $switches['create-user'] ) {
-			$user = wp_create_user( $email, $pass, $email );
+		$create_user = $switches['create-user'] ?? false;
+		if ( ! $user && $create_user ) {
+			$user_id = wp_create_user( $email, $pass, $email );
+			if ( is_wp_error( $user_id ) ) {
+				WP_CLI::error( $user_id->get_error_message() );
+			}
+			$user = get_user_by( 'id', $user_id );
 		}
 
 		if ( ! $user ) {

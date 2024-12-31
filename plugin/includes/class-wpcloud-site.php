@@ -204,6 +204,7 @@ class WPCLOUD_Site {
 		);
 		return apply_filters( 'wpcloud_site_detail_options', $options );
 	}
+
 	/**
 	 * Get mutable option keys
 	 *
@@ -434,6 +435,8 @@ class WPCLOUD_Site {
 
 	/**
 	 * Check if the API is connected.
+	 *
+	 * @TODO This should be moved to a more appropriate location.
 	 *
 	 * @return bool True if the API is connected.
 	 */
@@ -722,6 +725,8 @@ class WPCLOUD_Site {
 
 	/**
 	 * Get readable size.
+	 *
+	 * @TODO This should be moved to a more appropriate location.
 	 *
 	 * @param float $bytes The size in bytes.
 	 */
