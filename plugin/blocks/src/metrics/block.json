@@ -1,0 +1,27 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "wpcloud/metrics",
+	"version": "0.1.0",
+	"title": "Metrics",
+	"category": "wpcloud",
+	"icon": "chart-line",
+	"description": "Metric container block for WPCloud plot blocks",
+	"example": {},
+	"supports": {
+		"html": false
+	},
+	"textdomain": "wpcloud",
+	"editorScript": "file:./index.js",
+	"viewScript": "file:./view.js",
+	"allowedBlocks": [
+		"core/group",
+		"wpcloud/graph"
+	],
+	"attributes": {
+		"id": {
+			"type": "string",
+			"default": "metrics"
+		}
+	}
+}

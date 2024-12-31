@@ -21,6 +21,12 @@ class WPCLOUD_Metric_Data_View extends WPCLOUD_Metrics {
 	 */
 	public $map;
 
+	/**
+	 * The series.
+	 *
+	 * @var array
+	 */
+	public $series;
 
 	/**
 	 * The data.
@@ -57,6 +63,18 @@ class WPCLOUD_Metric_Data_View extends WPCLOUD_Metrics {
 		$this->data = array( $x );
 
 		$this->map = array_merge( array( 'timestamp' ), array_map( 'strval', $status_codes ) );
+		$series    = array();
+		foreach ( $status_codes as $status ) {
+			$series[ $status ] = array(
+				'label' => $status,
+				'width' => 0,
+				'fill'  => true, // color is assigned by the client.
+			);
+		}
+		ksort( $series );
+
+		array_unshift( $series, array() );
+		$this->series = $series;
 
 		// Set up y axis data.
 		$status_code_data = array();

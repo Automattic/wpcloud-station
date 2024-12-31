@@ -34,10 +34,10 @@ if ( ! class_exists( 'WPCLOUD_Metrics_Controller' ) ) {
 		public function register_routes() {
 			register_rest_route(
 				$this->namespace,
-				$this->rest_base . '/(?<metric>[\w]+)/site/(?P<id>[\d]+)',
+				$this->rest_base . '/(?<metric>[\w]+)',
 				array(
 					'args'                => array(
-						'id'     => array(
+						'site'     => array(
 							'description' => esc_html__( 'Unique identifier for the site.', 'wpcloud' ),
 							'type'        => 'integer',
 						),
@@ -76,7 +76,7 @@ if ( ! class_exists( 'WPCLOUD_Metrics_Controller' ) ) {
 		 */
 		public function get_site_metric( WP_REST_Request $request ): WP_REST_Response {
 			$params  = $request->get_params();
-			$site_id = $params['id'];
+			$site_id = $params['site'];
 			$metric  = $params['metric'];
 			$start   = $this->parseTime( $params['start'] ?? null, 'start' );
 			$end     = $this->parseTime( $params['end'] ?? null, 'end' );
@@ -104,9 +104,10 @@ if ( ! class_exists( 'WPCLOUD_Metrics_Controller' ) ) {
 				return new WP_REST_Response( $view->result->get_error_message(), 500 );
 			}
 			$response = array(
-				'meta' => $view->meta,
-				'map'  => $view->map,
-				'data' => $view->data,
+				'meta'   => $view->meta,
+				'map'    => $view->map,
+				'series' => $view->series,
+				'data'   => $view->data,
 			);
 			return new WP_REST_Response( $response, 200 );
 		}
@@ -140,8 +141,6 @@ if ( ! class_exists( 'WPCLOUD_Metrics_Controller' ) ) {
 			} else {
 				$ts = strtotime( $time );
 			}
-
-			error_log( "time: $time" );
 
 			// If the timestamp is false or in the future, return an error.
 			if ( false === $ts || $ts > time() ) {

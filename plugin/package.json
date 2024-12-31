@@ -13,8 +13,8 @@
 		"packages-update": "wp-scripts packages-update",
 		"plugin-zip": "wp-scripts plugin-zip",
 		"start": "npm run build && npm run start:blocks & npm run start:frontend & npm run start:admin",
-		"build:blocks" : "wp-scripts build --webpack-src-dir=blocks/src/ --output-path=blocks/build/ --webpack-copy-php",
-		"start:blocks" : "wp-scripts start --webpack-src-dir=blocks/src/ --output-path=blocks/build/ --webpack-copy-php",
+		"build:blocks": "wp-scripts build --webpack-src-dir=blocks/src/ --output-path=blocks/build/ --webpack-copy-php",
+		"start:blocks": "wp-scripts start --webpack-src-dir=blocks/src/ --output-path=blocks/build/ --webpack-copy-php",
 		"build:frontend": "wp-scripts build --webpack-src-dir=assets/js/src/ --output-path=assets/js/build/",
 		"start:frontend": "wp-scripts start --webpack-src-dir=assets/js/src/ --output-path=assets/js/build/",
 		"build:admin": "wp-scripts build --webpack-src-dir=admin/assets/js/src/ --output-path=admin/assets/js/build/",
@@ -28,8 +28,11 @@
 		"@wordpress/scripts": "^27.6.0"
 	},
 	"dependencies": {
-		"@wordpress/icons": "^9.49.0",
-		"classnames": "^2.5.1",
-		"remove-accents": "^0.5.0"
+		"@wordpress/icons": "~9.49.0",
+		"chroma-js": "~3.1.2",
+		"classnames": "~2.5.1",
+		"remove-accents": "~0.5.0",
+		"uplot": "~1.6.31",
+		"uplot-react": "~1.2.2"
 	}
 }
