@@ -293,6 +293,9 @@
       "wpcloud/form": {
         "css": "& {\n\tdisplay: flex;\n\tflex-direction: column;\n\tmargin-top: 1rem;\n}\n&.is-inline {\n\tflex-direction: row;\n\tjustify-content: space-between;\n\talign-items: center;\n}\n&.is-inline .wpcloud-block-form-input__label {\n\tmargin: 0;\n}\n&.is-inline .wpcloud-block-form-input__input {\n\tmargin: 0;\n}\n&.is-inline .wpcloud-block-form-input__label-text {\n\tmargin: 0;\n}\n&.is-inline .wpcloud-block-form-input__label {\n\tpadding-top: 0;\n\tpadding-bottom: 0;\n}\n&.is-inline .wpcloud-block-form-input__label.is-label-inline .wpcloud-block-form-input__label-text {\n\tmargin-bottom: 0;\n}\n& button {\n\twidth: fit-content;\n}\n&.is-loading {\n\topacity: 0.4;\n}\n& .wpcloud-block-form--input--toggle + .wpcloud-block-form--input--toggle  {\n\tborder-top: 1px solid var(--wp--preset--color--border-primary);\n}\n& .wpcloud-block-form--input:not(.wpcloud-block-form--input--toggle) + .wpcloud-block-form--input:not(.wpcloud-block-form--input--toggle) {\n\tmargin-top: 1rem;\n}"
       },
+      "wpcloud/metrics": {
+        "css": "& .u-label {\n\tcolor: rgb(0, 0, 0, 0.87);\n}\n& .u-title {\n\tcolor: rgb(0, 0, 0, 0.87);\n}"
+      },
       "wpcloud/more-menu": {
         "color": {
           "text": "var(--wp--preset--color--foreground-primary)"
