@@ -46,6 +46,23 @@ if ( ! is_admin() ) {
 			);
 		}
 	);
+
+	add_action(
+		'wp_enqueue_scripts',
+		function (): void {
+			// Add the site to the front end.
+			if ( is_singular() ) {
+				global $post;
+				$site_id = wpcloud_get_site_id( $post );
+				wp_localize_script(
+					'wpcloud',
+					'wpcloudSite',
+					array( 'id' => $site_id )
+				);
+			}
+		},
+		20
+	);
 }
 
 /**
