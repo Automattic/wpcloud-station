@@ -201,7 +201,7 @@ class WPCloud_CLI_Site extends WPCloud_CLI {
 			$sites = array_filter(
 				$sites,
 				function ( $site ) {
-					return ! WPCLOUD_Site::get_by_id( $site->atomic_site_id );
+					return ! WPCLOUD_Site::get_by_id( (int) $site->atomic_site_id );
 				}
 			);
 
@@ -216,7 +216,7 @@ class WPCloud_CLI_Site extends WPCloud_CLI {
 			WP_CLI::confirm( 'Are you sure you want to import?' );
 			$progress = \WP_CLI\Utils\make_progress_bar( 'Importing', $total );
 			foreach ( $sites as $site ) {
-				$this->import_site( $site->atomic_site_id, $owner );
+				$this->import_site( (int) $site->atomic_site_id, $owner );
 				$progress->tick();
 			}
 			$progress->finish();
