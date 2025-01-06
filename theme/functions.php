@@ -40,8 +40,8 @@ if ( function_exists( 'register_block_pattern_category' ) ) {
 	register_block_pattern_category(
 		'wpcloud_forms',
 		array(
-			'label'       => __( 'WP Cloud Forms', 'wpcloud' ),
-			'description' => __( 'Core WP Cloud forms', 'wpcloud' ),
+			'label'       => __( 'WP Cloud Forms' ),
+			'description' => __( 'Core WP Cloud forms' ),
 		)
 	);
 }
