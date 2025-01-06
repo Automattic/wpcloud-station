@@ -7,7 +7,7 @@
  * Author URI:      https://wp.cloud/
  * Text Domain:     wpcloud
  * Domain Path:     /languages
- * Version:         1.0.0-beta.5
+ * Version:         v1.0.0-beta.8
  *
  * @package        wpcloud-station
  */
