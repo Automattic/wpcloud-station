@@ -107,7 +107,7 @@ function wpcloud_headstart(  WP_Upgrader_Skin $headstart_skin = null, ): bool|WP
 	}
 
 	$headstart_skin->feedback( 'Theme enabled.' );
-	wpcloud_set_default_logo();
+	wpcloud_set_default_logo( $headstart_skin );
 	$headstart_skin->feedback( 'Default logo set.' );
 
 	// Add the core category.
@@ -168,19 +168,21 @@ function wpcloud_headstart(  WP_Upgrader_Skin $headstart_skin = null, ): bool|WP
 	return true;
 }
 
-
 /**
  * Set the default logo.
  *
  * @param WP_Upgrader_Skin $skin The skin to use for the installation.
  * @return void
  */
-function wpcloud_set_default_logo( ): void {
+function wpcloud_set_default_logo( WP_Upgrader_Skin $skin = null ): void {
+	if ( ! $skin ) {
+		$skin = new WPCloud_Quiet_Skin();
+	}
 	/* Don't do anything if the custom logo is already set. */
 	$current_logo_id = get_theme_mod( 'custom_logo', -1 );
 	$current_logo    = wp_get_attachment_image( $current_logo_id );
 	if ( ! empty( $current_logo ) ) {
-		echo "Logo already set. Skipping...\n";
+		$skin->feedback( 'Logo already set. Skipping.' );
 		return;
 	}
 
