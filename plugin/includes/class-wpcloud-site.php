@@ -104,7 +104,7 @@ class WPCLOUD_Site {
 	 *
 	 * @param int $wpcloud_site_id The site ID.
 	 */
-	public static function get_by_id( int $wpcloud_site_id ): null|WP_Post {
+	public static function get_by_id( ?int $wpcloud_site_id ): null|WP_Post {
 		$site = get_posts(
 			array(
 				'post_type'   => 'wpcloud_site',
@@ -387,21 +387,21 @@ class WPCLOUD_Site {
 				'default' => false,
 				'hint'    => __( 'Site access is via SFTP by default. Enabling allows access via SSH' ),
 			),
-			'edge_cache'           => array(
-				'label'          => __( 'Edge Cache' ),
-				'type'           => 'select',
-				'options'        => array(
-					'on'    => __( 'On' ),
-					'off'   => __( 'Off' ),
-					'purge' => __( 'Purge' ),
-				),
-				'option_aliases' => array(
-					'on'  => __( 'Enabled', 'wpcloud' ),
-					'off' => __( 'Disabled', 'wpcloud' ),
-				),
-				'default'        => '',
-				'hint'           => __( 'Change the edge cache status. Either `on`, `off` or `purge`' ),
+
+			'edge_cache_toggle'    => array(
+				'label'   => __( 'Edge Cache Toggle' ),
+				'type'    => 'checkbox',
+				'default' => '',
+				'hint'    => __( 'Enable edge cache. Either `on`, `off`' ),
 			),
+
+			'edge_cache_purge'     => array(
+				'label'   => __( 'Edge Cache Purge' ),
+				'type'    => 'hidden',
+				'default' => '',
+				'hint'    => __( 'Purge edge cache' ),
+			),
+
 			'defensive_mode'       => array(
 				'label'   => __( 'Defensive Mode' ),
 				'type'    => 'text',
@@ -580,23 +580,13 @@ class WPCLOUD_Site {
 				// @TODO: Confirm that this is always the case, it appears that the port will be 2223 for ssh and 2221 for sftp
 				return 2223 === $ssh_port;
 
-			case 'edge_cache':
+			case 'edge_cache_toggle':
 				$result = wpcloud_client_edge_cache_status( $wpcloud_site_id );
 				if ( is_wp_error( $result ) ) {
 					error_log( $result->get_error_message() );
 					return '';
 				}
-				switch ( $result->status ) {
-					case 0:
-						return __( 'Disabled', 'wpcloud' );
-					case 1:
-						return __( 'Enabled', 'wpcloud' );
-					case 2:
-						return __( 'DDoS', 'wpcloud' );
-					default:
-						return __( 'Unknown', 'wpcloud' );
-				}
-				return '';
+				return (bool) $result->status;
 
 			case 'defensive_mode':
 				$result = wpcloud_client_edge_cache_status( $wpcloud_site_id );
@@ -678,7 +668,10 @@ class WPCLOUD_Site {
 					$value = intval( $value ) . 'G';
 					break;
 
-				case 'edge_cache':
+				case 'edge_cache_toggle':
+					$value = $value ? 'on' : 'off';
+					// Fallthrough intentional to make edge cache call.
+				case 'edge_cache_purge':
 					$result = wpcloud_client_edge_cache_update( $wpcloud_site_id, $value );
 					break;
 			}
