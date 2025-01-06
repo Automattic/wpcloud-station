@@ -133,7 +133,7 @@ function InputFieldBlock( { attributes, setAttributes, className, context, clien
 							/>
 						</>
 					)}
-					{'checkbox' == type && (
+					{'checkbox' === type && (
 						<ToggleControl
 							label={__('Display as Toggle')}
 							checked={displayAsToggle}
@@ -141,6 +141,15 @@ function InputFieldBlock( { attributes, setAttributes, className, context, clien
 								setAttributes({
 									displayAsToggle: newVal,
 								});
+							}}
+						/>
+					)}
+					{'hidden' === type && (
+						<TextControl
+							label={__('Value')}
+							value={attributes.value}
+							onChange={(newValue) => {
+								setAttributes({ value: newValue });
 							}}
 						/>
 					)}
