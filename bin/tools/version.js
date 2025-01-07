@@ -106,11 +106,11 @@ async function updateVersions(type = 'patch') {
 
 		// Update the version in the plugin file and readme file
 		updateVersionInFile(file, newVersion);
+		runCommand(`git add ${file}`);
 	});
 
 	// Commit the changes
 	console.log('Committing the changes...');
-	runCommand(`git add ${pluginFile}`);
 	runCommand(`git commit -m "Version bump to ${newVersion}"`);
 
 	// Push the branch
