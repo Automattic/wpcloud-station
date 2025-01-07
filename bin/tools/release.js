@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-const { createRelease } = require('./tools/release.js');
-
-=======
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
@@ -11,11 +7,6 @@ const pluginDir = path.join(__dirname, '../plugin'); // Path to the plugin direc
 const pluginFile = path.join(pluginDir, 'wpcloud-station.php'); // Path to the plugin.php file
 const githubRepo = 'automattic/wpcloud-station'; // Replace with your GitHub repo
 const baseBranch = 'trunk'; // Branch to base the release on
-
-// Function to run shell commands
-function runCommand(command, options = {}) {
-	return execSync(command, { stdio: 'pipe', encoding: 'utf-8', ...options });
-}
 
 // Function to extract the plugin version
 function getPluginVersion(filePath) {
@@ -38,7 +29,7 @@ function getPluginVersion(filePath) {
 // Function to check if a GitHub release already exists
 function releaseExists(tag) {
 	try {
-			const releaseList = runCommand(`gh release list --repo ${githubRepo}`);
+			const releaseList = execSync(`gh release list --repo ${githubRepo}`);
 			return releaseList.includes(tag);
 	} catch (error) {
 			console.error('Failed to fetch release list.');
@@ -54,7 +45,7 @@ function getPRsBetweenTags(previousTag, currentTag) {
 	}
 
 	console.log(`Fetching PRs between ${previousTag} and ${currentTag}...`);
-	const prs = runCommand(
+	const prs = execSync(
 			`gh pr list --search "merged:${previousTag}..${currentTag}" --json title,number --jq ".[] | \\\"#\\(.number) \\(.title)\\\""`
 	);
 
@@ -64,7 +55,7 @@ function getPRsBetweenTags(previousTag, currentTag) {
 // Function to get the previous tag
 function getPreviousTag() {
 	try {
-			const tags = runCommand('git tag --sort=-v:refname').split('\n');
+			const tags = execSync('git tag --sort=-v:refname').split('\n');
 			return tags[1] || null; // The second tag is the previous version
 	} catch {
 			console.log('No previous tags found.');
@@ -77,16 +68,16 @@ function createGitHubRelease(tag, releaseTitle, releaseBody) {
 	console.log(`Creating GitHub release for tag: ${tag}`);
 
 	const releaseCommand = `gh release create ${tag} --title "${releaseTitle}" --notes "${releaseBody}" --repo ${githubRepo}`;
-	return runCommand(releaseCommand);
+	return execSync(releaseCommand);
 }
 
 // Main function
 async function createRelease() {
 	console.log('Checking out the trunk branch...');
-	runCommand(`git checkout ${baseBranch}`);
+	execSync(`git checkout ${baseBranch}`);
 
 	console.log('Fetching the latest changes...');
-	runCommand(`git pull origin ${baseBranch}`);
+	execSync(`git pull origin ${baseBranch}`);
 
 	// Get the plugin version
 	const version = getPluginVersion(pluginFile);
@@ -101,7 +92,7 @@ async function createRelease() {
 
 	// Check if the tag already exists
 	try {
-			runCommand(`git rev-parse ${tag}`);
+			execSync(`git rev-parse ${tag}`);
 			console.error(`Tag ${tag} already exists. Exiting.`);
 			process.exit(1);
 	} catch {
@@ -110,8 +101,8 @@ async function createRelease() {
 
 	// Create a new tag
 	console.log(`Creating a new tag: ${tag}`);
-	runCommand(`git tag ${tag}`);
-	runCommand(`git push origin ${tag}`);
+	execSync(`git tag ${tag}`);
+	execSync(`git push origin ${tag}`);
 
 		// Get PRs between tags
 	const prs = getPRsBetweenTags(previousTag, currentTag);
@@ -127,5 +118,4 @@ async function createRelease() {
 }
 
 // Run the script
->>>>>>> trunk
-createRelease();
+module.exports = createRelease;

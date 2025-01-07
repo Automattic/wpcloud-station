@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-
-const { updateVersions } = require('./tools/version.js');
-
-=======
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
@@ -111,11 +106,11 @@ async function updateVersions(type = 'patch') {
 
 		// Update the version in the plugin file and readme file
 		updateVersionInFile(file, newVersion);
+		runCommand(`git add ${file}`);
 	});
 
 	// Commit the changes
 	console.log('Committing the changes...');
-	runCommand(`git add ${pluginFile}`);
 	runCommand(`git commit -m "Version bump to ${newVersion}"`);
 
 	// Push the branch
@@ -127,16 +122,28 @@ async function updateVersions(type = 'patch') {
 	const prTitle = `Version bump to ${newVersion}`;
 	const prBody = `Update version to ${newVersion}.`;
 	const prCommand = `gh pr create --title "${prTitle}" --body "${prBody}" --base ${baseBranch} --head ${branchName}`;
-	runCommand(prCommand);
+	const prOutput = runCommand(prCommand);
 
 	console.log('Pull request created successfully.');
 
 	// return back to trunk branch
 	runCommand(`git checkout ${baseBranch}`);
 	runCommand(`git branch -D ${branchName}`);
+
+	// Extract PR number from the output (assumes output includes a URL like https://github.com/owner/repo/pull/42)
+	const prMatch = prOutput.match(/\/pull\/(\d+)/);
+	const prNumber = prMatch ? prMatch[1] : null;
+
+	if (!prNumber) {
+		console.error('Failed to extract PR number from output.');
+		process.exit(1);
+	}
+
+	console.log(`Pull request created: #${prNumber}`);
+	return prNumber;
 }
 
 // Run the script with the desired increment type
->>>>>>> trunk
-const incrementType = process.argv[2] || 'patch'; // Default to 'patch'
-updateVersions(incrementType);
+//const incrementType = process.argv[2] || 'patch'; // Default to 'patch'
+//updateVersions(incrementType);
+module.exports = updateVersions;
