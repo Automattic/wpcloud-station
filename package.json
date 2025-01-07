@@ -1,0 +1,14 @@
+{
+  "name": "wpcloud-station",
+  "version": "1.0.0",
+  "description": "WP Cloud Station is a client plugin to manage WP Cloud sites.",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "version": "node ./bin/version.js",
+    "release": "node ./bin/release.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
