@@ -1,0 +1,293 @@
+<!-- wp:template-part {"slug":"header","tagName":"header","area":"header"} /-->
+
+<!-- wp:spacer {"height":"12px","className":"wpcloud-site-view\u002d\u002dcontent\u002d\u002dspacer"} -->
+<div style="height:12px" aria-hidden="true" class="wp-block-spacer wpcloud-site-view--content--spacer"></div>
+<!-- /wp:spacer -->
+
+<!-- wp:columns {"className":"wpcloud-site-view\u002d\u002dcontent"} -->
+<div class="wp-block-columns wpcloud-site-view--content"><!-- wp:column {"width":""} -->
+<div class="wp-block-column"></div>
+<!-- /wp:column -->
+
+<!-- wp:column {"width":"360px","className":"wpcloud-site-view\u002d\u002dsidebar"} -->
+<div class="wp-block-column wpcloud-site-view--sidebar" style="flex-basis:360px"><!-- wp:group {"layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"space-between"}} -->
+<div class="wp-block-group"><!-- wp:heading {"level":1} -->
+<h1 class="wp-block-heading" id="/sites"><a href="/sites/">Sites</a></h1>
+<!-- /wp:heading -->
+
+<!-- wp:wpcloud/button {"label":"Add Site","url":"/add-site","className":"wpcloud-block-button\u002d\u002dcontent"} -->
+<div class="wpcloud-block-button__content"><span class="wpcloud-block-button__label">Add Site</span></div>
+<!-- /wp:wpcloud/button --></div>
+<!-- /wp:group -->
+
+<!-- wp:spacer {"height":"19px"} -->
+<div style="height:19px" aria-hidden="true" class="wp-block-spacer"></div>
+<!-- /wp:spacer --></div>
+<!-- /wp:column -->
+
+<!-- wp:column {"width":"1100px","className":"wpcloud-site-view\u002d\u002ddetails"} -->
+<div class="wp-block-column wpcloud-site-view--details" style="flex-basis:1100px"><!-- wp:template-part {"slug":"site-header","area":"uncategorized"} /-->
+
+<!-- wp:columns {"style":{"spacing":{"padding":{"right":"0","left":"0"}}}} -->
+<div class="wp-block-columns" style="padding-right:0;padding-left:0"><!-- wp:column {"width":"440px"} -->
+<div class="wp-block-column" style="flex-basis:440px"><!-- wp:wpcloud/site-details {"metadata":{"name":"Settings"}} -->
+<div class="wp-block-wpcloud-site-details wpcloud-block-site-detail-card"><!-- wp:group {"tagName":"header","metadata":{"name":"header"},"layout":{"type":"flex","flexWrap":"nowrap"}} -->
+<header class="wp-block-group"><!-- wp:heading {"level":3,"className":"wpcloud-site-detail-card__title"} -->
+<h3 class="wp-block-heading wpcloud-site-detail-card__title">Settings</h3>
+<!-- /wp:heading --></header>
+<!-- /wp:group -->
+
+<!-- wp:wpcloud/site-update -->
+<!-- wp:wpcloud/form {"wpcloudAction":"site_update"} -->
+<form class="wp-block-wpcloud-form wpcloud-block-form" enctype="text/plain"><!-- wp:wpcloud/form-input {"type":"select","name":"privacy_model","label":"","options":[{"value":"wp_uploads","label":"WP Uploads"}],"uniqueId":"0da9a6b2-cda7-4cdb-b7ce-6459d8c34c96-privacy_model","submitOnChange":true} -->
+<div class="wpcloud-block-form--input wp-block-wpcloud-form-input wpcloud-block-form--input--select"><label class="wpcloud-block-form-input__label" for="0da9a6b2-cda7-4cdb-b7ce-6459d8c34c96-privacy_model"><span class="wpcloud-block-form-input__label-content"><span class="wpcloud-block-form-input__label-text"></span><!-- wp:wpcloud/expanding-section {"clickToToggle":true,"hideHeader":false,"metadata":{"name":"privacy_model hint"}} -->
+<div class="wp-block-wpcloud-expanding-section wpcloud-block-expanding-section click-to-toggle"><!-- wp:wpcloud/expanding-header -->
+<div class="wp-block-wpcloud-expanding-header wpcloud-block-expanding-section__header-wrapper"><div class="wpcloud-block-expanding-section__header"><!-- wp:heading {"level":5} -->
+<h5 class="wp-block-heading">Privacy Model</h5>
+<!-- /wp:heading -->
+
+<!-- wp:wpcloud/icon {"icon":"info"} -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" class="wp-block-wpcloud-icon wpcloud-block-icon" aria-hidden="true"><path d="M12 3.2c-4.8 0-8.8 3.9-8.8 8.8 0 4.8 3.9 8.8 8.8 8.8 4.8 0 8.8-3.9 8.8-8.8 0-4.8-4-8.8-8.8-8.8zm0 16c-4 0-7.2-3.3-7.2-7.2C4.8 8 8 4.8 12 4.8s7.2 3.3 7.2 7.2c0 4-3.2 7.2-7.2 7.2zM11 17h2v-6h-2v6zm0-8h2V7h-2v2z"></path></svg>
+<!-- /wp:wpcloud/icon --></div></div>
+<!-- /wp:wpcloud/expanding-header -->
+
+<!-- wp:wpcloud/expanding-content -->
+<div class="wp-block-wpcloud-expanding-content wpcloud-block-expanding-section__content-wrapper"><div class="wpcloud-block-expanding-section__content"><div class="wpcloud-block-expanding-section__content-inner"><!-- wp:paragraph -->
+<p>facilitates protection of site assets. May be set to "wp_uploads" to block logged-out requests for WP uploads. If set, an AT_PRIVACY_MODEL constant will be defined in the PHP environment. Use the "site-wordpress-version" endpoint to set "wp_version".</p>
+<!-- /wp:paragraph --></div></div></div>
+<!-- /wp:wpcloud/expanding-content --></div>
+<!-- /wp:wpcloud/expanding-section --></span><div class="wpcloud-form-input--select--wrapper"><select class="wpcloud-block-form-input__input submit-on-change wpcloud-station-form-input__select" aria-label="Select" name="privacy_model"><option value="wp_uploads">WP Uploads</option></select></div></label></div>
+<!-- /wp:wpcloud/form-input -->
+
+<!-- wp:wpcloud/form-input {"type":"select","name":"default_php_conns","label":"","options":[{"value":2,"label":2},{"value":3,"label":3},{"value":4,"label":4},{"value":5,"label":5},{"value":6,"label":6},{"value":7,"label":7},{"value":8,"label":8},{"value":9,"label":9},{"value":10,"label":10}],"uniqueId":"d6ccde29-a63b-4e00-9baa-0bb88e46f8e6-default_php_conns","submitOnChange":true} -->
+<div class="wpcloud-block-form--input wp-block-wpcloud-form-input wpcloud-block-form--input--select"><label class="wpcloud-block-form-input__label" for="d6ccde29-a63b-4e00-9baa-0bb88e46f8e6-default_php_conns"><span class="wpcloud-block-form-input__label-content"><span class="wpcloud-block-form-input__label-text"></span><!-- wp:wpcloud/expanding-section {"clickToToggle":true,"hideHeader":false,"metadata":{"name":"default_php_conns hint"}} -->
+<div class="wp-block-wpcloud-expanding-section wpcloud-block-expanding-section click-to-toggle"><!-- wp:wpcloud/expanding-header -->
+<div class="wp-block-wpcloud-expanding-header wpcloud-block-expanding-section__header-wrapper"><div class="wpcloud-block-expanding-section__header"><!-- wp:heading {"level":5} -->
+<h5 class="wp-block-heading">Default PHP Workers</h5>
+<!-- /wp:heading -->
+
+<!-- wp:wpcloud/icon {"icon":"info"} -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" class="wp-block-wpcloud-icon wpcloud-block-icon" aria-hidden="true"><path d="M12 3.2c-4.8 0-8.8 3.9-8.8 8.8 0 4.8 3.9 8.8 8.8 8.8 4.8 0 8.8-3.9 8.8-8.8 0-4.8-4-8.8-8.8-8.8zm0 16c-4 0-7.2-3.3-7.2-7.2C4.8 8 8 4.8 12 4.8s7.2 3.3 7.2 7.2c0 4-3.2 7.2-7.2 7.2zM11 17h2v-6h-2v6zm0-8h2V7h-2v2z"></path></svg>
+<!-- /wp:wpcloud/icon --></div></div>
+<!-- /wp:wpcloud/expanding-header -->
+
+<!-- wp:wpcloud/expanding-content -->
+<div class="wp-block-wpcloud-expanding-content wpcloud-block-expanding-section__content-wrapper"><div class="wpcloud-block-expanding-section__content"><div class="wpcloud-block-expanding-section__content-inner"><!-- wp:paragraph -->
+<p>may be used to either limit allowed concurrent PHP connections or to increase the default number of concurrent connections a site can use if the web server has spare PHP connections capacity. Clients may set any value for a site between 2 and 10; the platform has more leeway if needed.</p>
+<!-- /wp:paragraph --></div></div></div>
+<!-- /wp:wpcloud/expanding-content --></div>
+<!-- /wp:wpcloud/expanding-section --></span><div class="wpcloud-form-input--select--wrapper"><select class="wpcloud-block-form-input__input submit-on-change wpcloud-station-form-input__select" aria-label="Select" name="default_php_conns"><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div></label></div>
+<!-- /wp:wpcloud/form-input -->
+
+<!-- wp:wpcloud/form-input {"type":"select","name":"php_fs_permissions","label":"","options":[{"value":"rw","label":"Read/Write"},{"value":"ro","label":"Read Only"},{"value":"loggedin","label":"Read only unless logged into WordPress"}],"uniqueId":"25d85153-620d-444e-876b-9cd255004d23-php_fs_permissions","submitOnChange":true} -->
+<div class="wpcloud-block-form--input wp-block-wpcloud-form-input wpcloud-block-form--input--select"><label class="wpcloud-block-form-input__label" for="25d85153-620d-444e-876b-9cd255004d23-php_fs_permissions"><span class="wpcloud-block-form-input__label-content"><span class="wpcloud-block-form-input__label-text"></span><!-- wp:wpcloud/expanding-section {"clickToToggle":true,"hideHeader":false,"metadata":{"name":"php_fs_permissions hint"}} -->
+<div class="wp-block-wpcloud-expanding-section wpcloud-block-expanding-section click-to-toggle"><!-- wp:wpcloud/expanding-header -->
+<div class="wp-block-wpcloud-expanding-header wpcloud-block-expanding-section__header-wrapper"><div class="wpcloud-block-expanding-section__header"><!-- wp:heading {"level":5} -->
+<h5 class="wp-block-heading">PHP File Permissions</h5>
+<!-- /wp:heading -->
+
+<!-- wp:wpcloud/icon {"icon":"info"} -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" class="wp-block-wpcloud-icon wpcloud-block-icon" aria-hidden="true"><path d="M12 3.2c-4.8 0-8.8 3.9-8.8 8.8 0 4.8 3.9 8.8 8.8 8.8 4.8 0 8.8-3.9 8.8-8.8 0-4.8-4-8.8-8.8-8.8zm0 16c-4 0-7.2-3.3-7.2-7.2C4.8 8 8 4.8 12 4.8s7.2 3.3 7.2 7.2c0 4-3.2 7.2-7.2 7.2zM11 17h2v-6h-2v6zm0-8h2V7h-2v2z"></path></svg>
+<!-- /wp:wpcloud/icon --></div></div>
+<!-- /wp:wpcloud/expanding-header -->
+
+<!-- wp:wpcloud/expanding-content -->
+<div class="wp-block-wpcloud-expanding-content wpcloud-block-expanding-section__content-wrapper"><div class="wpcloud-block-expanding-section__content"><div class="wpcloud-block-expanding-section__content-inner"><!-- wp:paragraph -->
+<p>Sets the PHP file system permissions. May be set to `Read/Write`, `Read Only`, or `Logged in` for read only unless logged into WordPress.</p>
+<!-- /wp:paragraph --></div></div></div>
+<!-- /wp:wpcloud/expanding-content --></div>
+<!-- /wp:wpcloud/expanding-section --></span><div class="wpcloud-form-input--select--wrapper"><select class="wpcloud-block-form-input__input submit-on-change wpcloud-station-form-input__select" aria-label="Select" name="php_fs_permissions"><option value="rw">Read/Write</option><option value="ro">Read Only</option><option value="loggedin">Read only unless logged into WordPress</option></select></div></label></div>
+<!-- /wp:wpcloud/form-input -->
+
+<!-- wp:wpcloud/form-input {"type":"checkbox","name":"photon_subsizes","label":"","options":[{"value":"0","label":"disabled"},{"value":"1","label":"enabled"},{"value":"deleted","label":"deleted"}],"displayAsToggle":true,"uniqueId":"2dc98ef2-7f6f-4938-b22f-f2cfd614dfee-photon_subsizes","submitOnChange":true,"metadata":{"name":"Photon sub sizes"},"className":"wpcloud-block-form\u002d\u002dinput\u002d\u002dcheckbox"} -->
+<div class="wpcloud-block-form--input wp-block-wpcloud-form-input wpcloud-block-form--input--checkbox wpcloud-block-form--input--toggle"><input type="checkbox" class="wpcloud-block-form-input__input is-toggle submit-on-change" aria-label="Optional placeholder text" placeholder="Optional placeholder..." name="photon_subsizes" id="2dc98ef2-7f6f-4938-b22f-f2cfd614dfee-photon_subsizes" aria-required="false"/><label class="wpcloud-block-form-input__label is-toggle" for="2dc98ef2-7f6f-4938-b22f-f2cfd614dfee-photon_subsizes"><span class="toggle-container"></span><span class="wpcloud-block-form-input__label-content"><span class="wpcloud-block-form-input__label-text"></span><!-- wp:wpcloud/expanding-section {"clickToToggle":true,"hideHeader":false,"metadata":{"name":"photon_subsizes hint"}} -->
+<div class="wp-block-wpcloud-expanding-section wpcloud-block-expanding-section click-to-toggle"><!-- wp:wpcloud/expanding-header -->
+<div class="wp-block-wpcloud-expanding-header wpcloud-block-expanding-section__header-wrapper"><div class="wpcloud-block-expanding-section__header"><!-- wp:heading {"level":5} -->
+<h5 class="wp-block-heading">Photon Sub-sizes</h5>
+<!-- /wp:heading -->
+
+<!-- wp:wpcloud/icon {"icon":"info"} -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" class="wp-block-wpcloud-icon wpcloud-block-icon" aria-hidden="true"><path d="M12 3.2c-4.8 0-8.8 3.9-8.8 8.8 0 4.8 3.9 8.8 8.8 8.8 4.8 0 8.8-3.9 8.8-8.8 0-4.8-4-8.8-8.8-8.8zm0 16c-4 0-7.2-3.3-7.2-7.2C4.8 8 8 4.8 12 4.8s7.2 3.3 7.2 7.2c0 4-3.2 7.2-7.2 7.2zM11 17h2v-6h-2v6zm0-8h2V7h-2v2z"></path></svg>
+<!-- /wp:wpcloud/icon --></div></div>
+<!-- /wp:wpcloud/expanding-header -->
+
+<!-- wp:wpcloud/expanding-content -->
+<div class="wp-block-wpcloud-expanding-content wpcloud-block-expanding-section__content-wrapper"><div class="wpcloud-block-expanding-section__content"><div class="wpcloud-block-expanding-section__content-inner"><!-- wp:paragraph -->
+<p>Controls whether WP skips generating intermediate image files when an image is uploaded. The platform is able to satisfy requests for intermediate image files whether or not they exist, so sites can save disk space by not creating them. When the a site web server receives a request for a non-existent intermediate image file, it proxies the request to Photon which responds with the intermediate image size. </p>
+<!-- /wp:paragraph --></div></div></div>
+<!-- /wp:wpcloud/expanding-content --></div>
+<!-- /wp:wpcloud/expanding-section --></span></label></div>
+<!-- /wp:wpcloud/form-input -->
+
+<!-- wp:wpcloud/form-input {"type":"checkbox","name":"burst_php_conns","label":"","displayAsToggle":true,"uniqueId":"d56b8a51-9691-4f85-b158-55ab76867421-burst_php_conns","submitOnChange":true,"metadata":{"name":"Burst PHP Connections"},"className":"wpcloud-block-form\u002d\u002dinput\u002d\u002dcheckbox"} -->
+<div class="wpcloud-block-form--input wp-block-wpcloud-form-input wpcloud-block-form--input--checkbox wpcloud-block-form--input--toggle"><input type="checkbox" class="wpcloud-block-form-input__input is-toggle submit-on-change" aria-label="Optional placeholder text" placeholder="Optional placeholder..." name="burst_php_conns" id="d56b8a51-9691-4f85-b158-55ab76867421-burst_php_conns" aria-required="false"/><label class="wpcloud-block-form-input__label is-toggle" for="d56b8a51-9691-4f85-b158-55ab76867421-burst_php_conns"><span class="toggle-container"></span><span class="wpcloud-block-form-input__label-content"><span class="wpcloud-block-form-input__label-text"></span><!-- wp:wpcloud/expanding-section {"hideHeader":false,"metadata":{"name":"burst_php_conns hint"}} -->
+<div class="wp-block-wpcloud-expanding-section wpcloud-block-expanding-section"><!-- wp:wpcloud/expanding-header -->
+<div class="wp-block-wpcloud-expanding-header wpcloud-block-expanding-section__header-wrapper"><div class="wpcloud-block-expanding-section__header"><!-- wp:heading {"level":5} -->
+<h5 class="wp-block-heading">Burst PHP Connections</h5>
+<!-- /wp:heading -->
+
+<!-- wp:wpcloud/button {"type":"action","style":"text","isPrimary":false,"addIcon":true,"iconOnly":true,"action":"wpcloud_expanding_section_toggle"} -->
+<div class="wpcloud-block-button__content"><!-- wp:wpcloud/icon {"icon":"info"} -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" class="wp-block-wpcloud-icon wpcloud-block-icon" aria-hidden="true"><path d="M12 3.2c-4.8 0-8.8 3.9-8.8 8.8 0 4.8 3.9 8.8 8.8 8.8 4.8 0 8.8-3.9 8.8-8.8 0-4.8-4-8.8-8.8-8.8zm0 16c-4 0-7.2-3.3-7.2-7.2C4.8 8 8 4.8 12 4.8s7.2 3.3 7.2 7.2c0 4-3.2 7.2-7.2 7.2zM11 17h2v-6h-2v6zm0-8h2V7h-2v2z"></path></svg>
+<!-- /wp:wpcloud/icon --></div>
+<!-- /wp:wpcloud/button --></div></div>
+<!-- /wp:wpcloud/expanding-header -->
+
+<!-- wp:wpcloud/expanding-content -->
+<div class="wp-block-wpcloud-expanding-content wpcloud-block-expanding-section__content-wrapper"><div class="wpcloud-block-expanding-section__content"><div class="wpcloud-block-expanding-section__content-inner"><!-- wp:paragraph -->
+<p>Enable burst for sites with fewer than 10 default_php_conns. 0 or absent when default_php_conns &lt; 10 means burst is disabled, 1 means burst is enabled.</p>
+<!-- /wp:paragraph --></div></div></div>
+<!-- /wp:wpcloud/expanding-content --></div>
+<!-- /wp:wpcloud/expanding-section --></span></label></div>
+<!-- /wp:wpcloud/form-input -->
+
+<!-- wp:wpcloud/form-input {"type":"checkbox","name":"canonicalize_aliases","label":"","displayAsToggle":true,"uniqueId":"14dc7ef9-4567-4552-b819-b46a888cfb44-canonicalize_aliases","submitOnChange":true,"metadata":{"name":"Canonize Aliases"},"className":"wpcloud-block-form\u002d\u002dinput\u002d\u002dcheckbox"} -->
+<div class="wpcloud-block-form--input wp-block-wpcloud-form-input wpcloud-block-form--input--checkbox wpcloud-block-form--input--toggle"><input type="checkbox" class="wpcloud-block-form-input__input is-toggle submit-on-change" aria-label="Optional placeholder text" placeholder="Optional placeholder..." name="canonicalize_aliases" id="14dc7ef9-4567-4552-b819-b46a888cfb44-canonicalize_aliases" aria-required="false"/><label class="wpcloud-block-form-input__label is-toggle" for="14dc7ef9-4567-4552-b819-b46a888cfb44-canonicalize_aliases"><span class="toggle-container"></span><span class="wpcloud-block-form-input__label-content"><span class="wpcloud-block-form-input__label-text"></span><!-- wp:wpcloud/expanding-section {"clickToToggle":true,"hideHeader":false,"metadata":{"name":"canonicalize_aliases hint"}} -->
+<div class="wp-block-wpcloud-expanding-section wpcloud-block-expanding-section click-to-toggle"><!-- wp:wpcloud/expanding-header -->
+<div class="wp-block-wpcloud-expanding-header wpcloud-block-expanding-section__header-wrapper"><div class="wpcloud-block-expanding-section__header"><!-- wp:heading {"level":5} -->
+<h5 class="wp-block-heading">Canonize Aliases</h5>
+<!-- /wp:heading -->
+
+<!-- wp:wpcloud/icon {"icon":"info"} -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" class="wp-block-wpcloud-icon wpcloud-block-icon" aria-hidden="true"><path d="M12 3.2c-4.8 0-8.8 3.9-8.8 8.8 0 4.8 3.9 8.8 8.8 8.8 4.8 0 8.8-3.9 8.8-8.8 0-4.8-4-8.8-8.8-8.8zm0 16c-4 0-7.2-3.3-7.2-7.2C4.8 8 8 4.8 12 4.8s7.2 3.3 7.2 7.2c0 4-3.2 7.2-7.2 7.2zM11 17h2v-6h-2v6zm0-8h2V7h-2v2z"></path></svg>
+<!-- /wp:wpcloud/icon --></div></div>
+<!-- /wp:wpcloud/expanding-header -->
+
+<!-- wp:wpcloud/expanding-content -->
+<div class="wp-block-wpcloud-expanding-content wpcloud-block-expanding-section__content-wrapper"><div class="wpcloud-block-expanding-section__content"><div class="wpcloud-block-expanding-section__content-inner"><!-- wp:paragraph -->
+<p>May be used to change whether a sites domain aliases redirect (default, "true") to the sites primary domain name or are served directly (when set to "false")</p>
+<!-- /wp:paragraph --></div></div></div>
+<!-- /wp:wpcloud/expanding-content --></div>
+<!-- /wp:wpcloud/expanding-section --></span></label></div>
+<!-- /wp:wpcloud/form-input -->
+
+<!-- wp:wpcloud/button {"type":"submit","label":"Update"} -->
+<div class="wpcloud-block-button__content"><span class="wpcloud-block-button__label">Update</span></div>
+<!-- /wp:wpcloud/button --></form>
+<!-- /wp:wpcloud/form -->
+<!-- /wp:wpcloud/site-update --></div>
+<!-- /wp:wpcloud/site-details -->
+
+<!-- wp:wpcloud/site-details {"metadata":{"name":"Persist Site Data"}} -->
+<div class="wp-block-wpcloud-site-details wpcloud-block-site-detail-card"><!-- wp:wpcloud/site-persist-data -->
+<!-- wp:group {"metadata":{"name":"Site Persist Data"},"className":"wpcloud-site-persist-data"} -->
+<div class="wp-block-group wpcloud-site-persist-data"><!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">Persist Site Data</h3>
+<!-- /wp:heading -->
+
+<!-- wp:wpcloud/form {"wpcloudAction":"site_persist_data_set"} -->
+<form class="wp-block-wpcloud-form wpcloud-block-form" enctype="text/plain"><!-- wp:heading {"level":4} -->
+<h4 class="wp-block-heading">Add Key Value Pair</h4>
+<!-- /wp:heading -->
+
+<!-- wp:group {"className":"wpcloud-site-persist-data__key-value-pair","layout":{"type":"flex","flexWrap":"wrap"}} -->
+<div class="wp-block-group wpcloud-site-persist-data__key-value-pair"><!-- wp:wpcloud/form-input {"name":"key","label":"Key","hideLabel":true,"uniqueId":"934c16c9-8e81-490e-9182-44149dca2c30-key"} -->
+<div class="wpcloud-block-form--input wp-block-wpcloud-form-input wpcloud-block-form--input--text"><label class="wpcloud-block-form-input__label" for="934c16c9-8e81-490e-9182-44149dca2c30-key"><input type="text" class="wpcloud-block-form-input__input" aria-label="Optional placeholder text" placeholder="Key" name="key" id="934c16c9-8e81-490e-9182-44149dca2c30-key" aria-required="false"/></label></div>
+<!-- /wp:wpcloud/form-input -->
+
+<!-- wp:wpcloud/form-input {"name":"value","label":"Value","hideLabel":true,"uniqueId":"644b6390-b8d9-489d-9ced-6ed31597f06b-value"} -->
+<div class="wpcloud-block-form--input wp-block-wpcloud-form-input wpcloud-block-form--input--text"><label class="wpcloud-block-form-input__label" for="644b6390-b8d9-489d-9ced-6ed31597f06b-value"><input type="text" class="wpcloud-block-form-input__input" aria-label="Optional placeholder text" placeholder="Value" name="value" id="644b6390-b8d9-489d-9ced-6ed31597f06b-value" aria-required="false"/></label></div>
+<!-- /wp:wpcloud/form-input --></div>
+<!-- /wp:group -->
+
+<!-- wp:wpcloud/button {"type":"submit","label":"Add"} -->
+<div class="wpcloud-block-button__content"><span class="wpcloud-block-button__label">Add</span></div>
+<!-- /wp:wpcloud/button --></form>
+<!-- /wp:wpcloud/form -->
+
+<!-- wp:wpcloud/form {"wpcloudAction":"site_persist_data_delete"} -->
+<form class="wp-block-wpcloud-form wpcloud-block-form" enctype="text/plain"><!-- wp:heading {"level":4} -->
+<h4 class="wp-block-heading">Delete Key</h4>
+<!-- /wp:heading -->
+
+<!-- wp:wpcloud/form-input {"name":"key","label":"Key","hideLabel":true,"uniqueId":"d675f828-db72-4e1d-a34e-78a3deca2f3f-key"} -->
+<div class="wpcloud-block-form--input wp-block-wpcloud-form-input wpcloud-block-form--input--text"><label class="wpcloud-block-form-input__label" for="d675f828-db72-4e1d-a34e-78a3deca2f3f-key"><input type="text" class="wpcloud-block-form-input__input" aria-label="Optional placeholder text" placeholder="Key" name="key" id="d675f828-db72-4e1d-a34e-78a3deca2f3f-key" aria-required="false"/></label></div>
+<!-- /wp:wpcloud/form-input -->
+
+<!-- wp:wpcloud/button {"type":"submit","label":"Delete"} -->
+<div class="wpcloud-block-button__content"><span class="wpcloud-block-button__label">Delete</span></div>
+<!-- /wp:wpcloud/button --></form>
+<!-- /wp:wpcloud/form --></div>
+<!-- /wp:group -->
+<!-- /wp:wpcloud/site-persist-data --></div>
+<!-- /wp:wpcloud/site-details --></div>
+<!-- /wp:column -->
+
+<!-- wp:column {"width":"634px"} -->
+<div class="wp-block-column" style="flex-basis:634px"><!-- wp:wpcloud/site-details {"metadata":{"name":"Edge Cache"}} -->
+<div class="wp-block-wpcloud-site-details wpcloud-block-site-detail-card"><!-- wp:wpcloud/site-persist-data {"metadata":{"name":"Manage Edge Cache"}} -->
+<!-- wp:group {"metadata":{"name":"Edge Cache"},"className":"wpcloud-site-persist-data"} -->
+<div class="wp-block-group wpcloud-site-persist-data"><!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">Edge Cache</h3>
+<!-- /wp:heading -->
+
+<!-- wp:wpcloud/form {"wpcloudAction":"site_update"} -->
+<form class="wp-block-wpcloud-form wpcloud-block-form" enctype="text/plain"><!-- wp:wpcloud/form-input {"type":"checkbox","name":"edge_cache_toggle","label":"","options":[],"displayAsToggle":true,"uniqueId":"4b041f1f-46e8-4ec1-960f-85422f380737-edge_cache_toggle","submitOnChange":true,"metadata":{"name":"Edge Cache Toggle"}} -->
+<div class="wpcloud-block-form--input wp-block-wpcloud-form-input wpcloud-block-form--input--toggle"><input type="checkbox" class="wpcloud-block-form-input__input is-toggle submit-on-change" aria-label="Optional placeholder text" placeholder="Optional placeholder..." name="edge_cache_toggle" id="4b041f1f-46e8-4ec1-960f-85422f380737-edge_cache_toggle" aria-required="false"/><label class="wpcloud-block-form-input__label is-toggle" for="4b041f1f-46e8-4ec1-960f-85422f380737-edge_cache_toggle"><span class="toggle-container"></span><span class="wpcloud-block-form-input__label-content"><span class="wpcloud-block-form-input__label-text"></span><!-- wp:paragraph -->
+<p>Enabled</p>
+<!-- /wp:paragraph --></span></label></div>
+<!-- /wp:wpcloud/form-input --></form>
+<!-- /wp:wpcloud/form -->
+
+<!-- wp:wpcloud/form {"wpcloudAction":"site_update"} -->
+<form class="wp-block-wpcloud-form wpcloud-block-form" enctype="text/plain"><!-- wp:wpcloud/form-input {"type":"hidden","name":"edge_cache_purge","label":"Edge Cache Purge","options":[],"uniqueId":"9fa543a0-530d-4afc-b2a7-1e6af9eae177-edge_cache_purge","metadata":{"name":"Edge Cache Purge"}} -->
+<input type="hidden" name="edge_cache_purge" value="purge"/>
+<!-- /wp:wpcloud/form-input -->
+
+<!-- wp:wpcloud/button {"type":"submit","label":"Purge"} -->
+<div class="wpcloud-block-button__content"><span class="wpcloud-block-button__label">Purge</span></div>
+<!-- /wp:wpcloud/button --></form>
+<!-- /wp:wpcloud/form --></div>
+<!-- /wp:group -->
+<!-- /wp:wpcloud/site-persist-data --></div>
+<!-- /wp:wpcloud/site-details -->
+
+<!-- wp:wpcloud/site-details {"metadata":{"name":"Defensive Mode"}} -->
+<div class="wp-block-wpcloud-site-details wpcloud-block-site-detail-card"><!-- wp:wpcloud/disable-defensive-mode -->
+<!-- wp:group {"className":"wpcloud-group-defensive-mode"} -->
+<div class="wp-block-group wpcloud-group-defensive-mode"><!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">Defensive Mode</h3>
+<!-- /wp:heading -->
+
+<!-- wp:wpcloud/site-detail {"label":"Current Defensive Mode","name":"defensive_mode","hideLabel":true,"metadata":{"name":"Current Defensive Mode"}} -->
+<div class="wpcloud-block-site-detail"><div class="wpcloud-block-site-detail__value-container"><div class="wpcloud-block-site-detail__value">{ Current Defensive Mode }</div></div></div>
+<!-- /wp:wpcloud/site-detail -->
+
+<!-- wp:wpcloud/form {"wpcloudAction":"defensive_mode_disable","metadata":{"name":"Disable Defensive Mode Form"}} -->
+<form class="wp-block-wpcloud-form wpcloud-block-form" enctype="text/plain"><!-- wp:wpcloud/button {"type":"submit","label":"Disable","metadata":{"name":"Disable"}} -->
+<div class="wpcloud-block-button__content"><span class="wpcloud-block-button__label">Disable</span></div>
+<!-- /wp:wpcloud/button --></form>
+<!-- /wp:wpcloud/form -->
+
+<!-- wp:wpcloud/form {"wpcloudAction":"defensive_mode_update","metadata":{"name":"Update Defensive Mode Form"}} -->
+<form class="wp-block-wpcloud-form wpcloud-block-form" enctype="text/plain"><!-- wp:wpcloud/form-input {"name":"timestamp","label":"Enable Defensive mode ( enter minutes; 0 to disable) ","uniqueId":"7bed0ba3-c071-41a5-9240-f2bdcfda1a95-timestamp","metadata":{"name":"Defensive Mode"}} -->
+<div class="wpcloud-block-form--input wp-block-wpcloud-form-input wpcloud-block-form--input--text"><label class="wpcloud-block-form-input__label" for="7bed0ba3-c071-41a5-9240-f2bdcfda1a95-timestamp"><span class="wpcloud-block-form-input__label-content"><span class="wpcloud-block-form-input__label-text">Enable Defensive mode ( enter minutes; 0 to disable) </span></span><input type="text" class="wpcloud-block-form-input__input" aria-label="Optional placeholder text" placeholder="Optional placeholder..." name="timestamp" id="7bed0ba3-c071-41a5-9240-f2bdcfda1a95-timestamp" aria-required="false"/></label></div>
+<!-- /wp:wpcloud/form-input -->
+
+<!-- wp:wpcloud/button {"type":"submit","label":"Update"} -->
+<div class="wpcloud-block-button__content"><span class="wpcloud-block-button__label">Update</span></div>
+<!-- /wp:wpcloud/button --></form>
+<!-- /wp:wpcloud/form --></div>
+<!-- /wp:group -->
+<!-- /wp:wpcloud/disable-defensive-mode --></div>
+<!-- /wp:wpcloud/site-details -->
+
+<!-- wp:group {"layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"right"}} -->
+<div class="wp-block-group"><!-- wp:wpcloud/site-delete -->
+<div class="wpcloud-block-site-delete wp-block-wpcloud-site-delete"><!-- wp:wpcloud/form {"wpcloudAction":"site_delete"} -->
+<form class="wp-block-wpcloud-form wpcloud-block-form" enctype="text/plain"><!-- wp:wpcloud/button {"type":"submit","label":"Delete Site","className":"wpcloud-block-button\u002d\u002dcontent"} -->
+<div class="wpcloud-block-button__content"><span class="wpcloud-block-button__label">Delete Site</span></div>
+<!-- /wp:wpcloud/button --></form>
+<!-- /wp:wpcloud/form --></div>
+<!-- /wp:wpcloud/site-delete --></div>
+<!-- /wp:group --></div>
+<!-- /wp:column --></div>
+<!-- /wp:columns --></div>
+<!-- /wp:column -->
+
+<!-- wp:column -->
+<div class="wp-block-column"></div>
+<!-- /wp:column --></div>
+<!-- /wp:columns -->
+
+<!-- wp:template-part {"slug":"footer","area":"footer","className":"wpcloud-footer"} /-->
