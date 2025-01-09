@@ -1,0 +1,31 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "wpcloud/card-section",
+	"version": "0.1.0",
+	"title": "Card Section",
+	"category": "wpcloud",
+	"icon": "cloud",
+	"description": "Card Section block",
+	"supports": {
+		"html": false
+	},
+	"textdomain": "wpcloud",
+	"editorScript": "file:./index.js",
+	"render": "file:./render.php",
+	"ancestor": ["wpcloud/card"],
+	"attributes": {
+		"section": {
+			"type": "string",
+			"default": "header"
+		},
+		"tag": {
+			"type": "string",
+			"default": "h2"
+		},
+		"text": {
+			"type": "string",
+			"default": ""
+		}
+	}
+}

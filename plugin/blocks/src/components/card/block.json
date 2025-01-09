@@ -1,0 +1,16 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "wpcloud/card",
+	"version": "0.1.0",
+	"title": "Card",
+	"category": "wpcloud",
+	"icon": "cloud",
+	"description": "Card block",
+	"supports": {
+		"html": false
+	},
+	"textdomain": "wpcloud",
+	"editorScript": "file:./index.js",
+	"render": "file:./render.php"
+}
