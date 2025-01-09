@@ -5,7 +5,7 @@
 	"version": "0.1.0",
 	"title": "Accordion",
 	"category": "wpcloud",
-	"icon": "button",
+	"icon": "cloud",
 	"description": "Accordion block",
 	"supports": {
 		"html": false
