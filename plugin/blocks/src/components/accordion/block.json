@@ -1,0 +1,42 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "wpcloud/accordion",
+	"version": "0.1.0",
+	"title": "Accordion",
+	"category": "wpcloud",
+	"icon": "button",
+	"description": "Accordion block",
+	"supports": {
+		"html": false
+	},
+	"textdomain": "wpcloud",
+	"editorScript": "file:./index.js",
+	"render": "file:./render.php",
+	"attributes": {
+		"adminOnly": {
+			"type": "boolean",
+			"default": false
+		},
+		"button": {
+			"type": "boolean",
+			"default": false
+		},
+		"openByDefault": {
+			"type": "boolean",
+			"default": false
+		},
+		"outline": {
+			"type": "boolean",
+			"default": false
+		},
+		"contrast": {
+			"type": "boolean",
+			"default": false
+		},
+		"secondary": {
+			"type": "boolean",
+			"default": false
+		}
+	}
+}
