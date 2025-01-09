@@ -2,9 +2,6 @@ const mutableOptions = window.wpcloud?.siteMutableOptions || {};
 
 export function inputTemplate(templateData) {
 	const { name, label, options, hint, type, placeholder, required, value } = templateData;
-	if (type == 'datetime') {
-		console.log(templateData);
-	}
 	let hintTemplate = null;
 	if ( hint ) {
 		hintTemplate = [
@@ -75,8 +72,5 @@ export function inputTemplate(templateData) {
 		input.push( [ hintTemplate ] );
 	}
 
-	if (type == "datetime") {
-		console.log(input);
-	}
 	return input;
 }

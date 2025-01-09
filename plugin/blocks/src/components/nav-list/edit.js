@@ -21,8 +21,6 @@ export default function Edit() {
 		template,
 	});
 
-	console.log("nav list innner blk prop", innerBlocksProps);
-
 	return (
 
 			<ul

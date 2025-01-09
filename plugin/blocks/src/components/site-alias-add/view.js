@@ -45,7 +45,6 @@
 				alert(result.message); // eslint-disable-line no-alert, no-undef
 				return;
 			}
-			console.log(form);
 			const code = result.code;
 			const actions = form.closest('.wpcloud-alias-actions');
 			const detail = actions.querySelector('.site-alias-verification-code');
