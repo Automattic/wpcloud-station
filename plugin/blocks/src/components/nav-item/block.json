@@ -1,0 +1,51 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "wpcloud/nav-item",
+	"version": "0.1.0",
+	"title": "Nav Item",
+	"category": "wpcloud",
+	"icon": "link",
+	"description": "Nav item",
+	"textdomain": "wpcloud",
+	"editorScript": "file:./index.js",
+	"render": "file:./render.php",
+
+	"attributes": {
+		"url": {
+			"type": "string",
+			"default": ""
+		},
+		"text": {
+      "type": "string"
+		},
+		"tag": {
+			"type": "string",
+			"default": "span"
+		},
+		"secondary" : {
+			"type": "boolean",
+			"default": false
+		},
+		"contrast" : {
+			"type": "boolean",
+			"default": false
+		},
+		"outline" : {
+			"type": "boolean",
+			"default": false
+		},
+		"icon": {
+			"type": "string",
+			"default": ""
+		},
+		"iconOnly": {
+			"type": "boolean",
+			"default": false
+		},
+		"asButton": {
+			"type": "boolean",
+			"default": false
+		}
+	}
+}
