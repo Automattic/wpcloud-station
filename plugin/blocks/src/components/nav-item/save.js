@@ -24,28 +24,39 @@ const Save = ( {attributes} ) => {
 		'outline': outline,
 	});
 
-	return (
-		<li {...blockProps}>
-			<Wrap
-				condition={asButton}
-				wrapper={(content) => (<button classNames={classes}> {content}</button>)}>
-				<Wrap
-					condition={url}
-					wrapper={(content) => (<a className={!asButton && classes}> {content}</a>)}>
-					<>
-						{!iconOnly && (<RichText.Content
-							tagName={tag}
-							value={text}
-						/>)}
-						{icon && (
-							<Icon icon={icons[icon]} />
-						)}
-					</>
-				</Wrap>
-			</Wrap>
-		</li>
+	let content = (
+		<>
+			{!iconOnly && (<RichText.Content
+				tagName={tag}
+				value={text}
+			/>)}
+			{icon && (
+				<Icon icon={icons[icon]} />
+			)}
+		</>
 	);
 
+	if (url) {
+		content = (
+			<a href={url} className={ asButton ? '' : classes}>
+				{content}
+			</a>
+		)
 
+		if (asButton) {
+			content = (
+				<button className={classes}>
+					{content}
+				</button>
+			)
+		}
+	}
+
+
+	return (
+		<li {...blockProps}>
+			{content}
+		</li>
+	);
 };
 export default Save;

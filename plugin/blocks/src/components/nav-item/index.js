@@ -16,5 +16,5 @@ registerBlockType( metadata.name, {
 	 * @see ./edit.js
 	 */
 	edit,
-	//save
+	save
 } );

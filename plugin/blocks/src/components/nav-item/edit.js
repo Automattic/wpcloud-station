@@ -12,7 +12,7 @@ import {
 	useBlockProps,
 	RichText,
 } from '@wordpress/block-editor';
-import { TextControl, PanelBody, ToggleControl } from '@wordpress/components';
+import { TextControl, PanelBody, ToggleControl, SelectControl } from '@wordpress/components';
 import * as icons from '@wordpress/icons';
 
 /**
@@ -20,8 +20,6 @@ import * as icons from '@wordpress/icons';
  */
 import IconControl from '../controls/iconControl.js';
 const Icon = icons.Icon;
-
-const Wrap = ({condition, wrapper, children}) => condition ? wrapper(children): children;
 
 export default function Edit({ attributes, setAttributes }) {
 	const updateAttribute = (key) => (value) => setAttributes({ [key]: value });
@@ -34,6 +32,35 @@ export default function Edit({ attributes, setAttributes }) {
 		'contrast': contrast,
 		'outline': outline,
 	});
+
+	let content = (
+		<>
+			{!iconOnly && (<RichText
+				tagName={tag}
+				value={text}
+				onChange={updateAttribute('text')}
+				placeholder={__('Item')}
+			/>)}
+			{icon && (
+				<Icon icon={icons[icon]} />
+			)}
+		</>
+	);
+
+	if (url) {
+		content =
+			<a className={asButton ? '' : classes}>
+				{content}
+			</a>;
+
+		if (asButton) {
+			content = (
+				<button className={classes}>
+					{content}
+				</button>
+			);
+		}
+	}
 
 	return (
 		<>
@@ -50,6 +77,20 @@ export default function Edit({ attributes, setAttributes }) {
 						label={__('Icon Only')}
 						checked={iconOnly}
 						onChange={updateAttribute('iconOnly')}
+					/>
+					<SelectControl
+						label={__('Tag')}
+						value={tag}
+						options={[
+							{ label: 'span', value: 'span' },
+							{ label: 'h1', value: 'h1' },
+							{ label: 'h2', value: 'h2' },
+							{ label: 'h3', value: 'h3' },
+							{ label: 'h4', value: 'h4' },
+							{ label: 'h5', value: 'h5' },
+							{ label: 'h6', value: 'h6' },
+						]}
+						onChange={updateAttribute('tag')}
 					/>
 					{url && (
 						<>
@@ -78,25 +119,7 @@ export default function Edit({ attributes, setAttributes }) {
 				</PanelBody>
 			</InspectorControls>
 			<li {...blockProps}>
-				<Wrap
-					condition={asButton}
-					wrapper={(content) => (<button classNames={classes}> {content}</button>)}>
-					<Wrap
-						condition={url}
-						wrapper={(content) => (<a className={!asButton && classes}> {content}</a>)}>
-						<>
-							{!iconOnly && (<RichText
-								tagName={tag}
-								value={text}
-								onChange={updateAttribute('text')}
-								placeholder={__('Item')}
-							/>)}
-							{icon && (
-								<Icon icon={icons[icon]} />
-							)}
-						</>
-					</Wrap>
-				</Wrap>
+				{content}
 			</li>
 		</>
 	);
