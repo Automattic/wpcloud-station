@@ -69,7 +69,6 @@ const render = (save) => ({ attributes, setAttributes }) => {
 	);
 }
 
-
 registerBlockType(metadata.name, {
 	edit: render(false),
 	save: render(true)
