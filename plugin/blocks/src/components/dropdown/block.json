@@ -1,0 +1,25 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "wpcloud/dropdown",
+	"version": "0.1.0",
+	"title": "Dropdown",
+	"category": "wpcloud",
+	"icon": "list-view",
+	"description": "Nav block",
+	"supports": {
+		"html": false
+	},
+	"textdomain": "wpcloud",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"allowedBlocks": [
+		"wpcloud/list-item"
+	],
+	"attributes": {
+		"title": {
+			"type": "string",
+			"default": ""
+		}
+	}
+}

@@ -1,0 +1,13 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "wpcloud/list-item",
+	"version": "0.1.0",
+	"title": "List Item",
+	"category": "wpcloud",
+	"icon": "link",
+	"description": "List item for navigation and dropdowns",
+	"textdomain": "wpcloud",
+	"editorScript": "file:./index.js",
+	"ancestor": ["wpcloud/nav-list", "wpcloud/dropdown"]
+}
