@@ -57,6 +57,7 @@ export default function Edit( {
 	return (
 		<>
 			<article
+				{ ...blockProps }
 				{ ...innerBlocksProps }
 			/>
 		</>

@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { registerBlockType } from '@wordpress/blocks';
-import { InnerBlocks } from '@wordpress/block-editor';
+import { InnerBlocks, useBlockProps } from '@wordpress/block-editor';
 
 /**
  * Internal dependencies
@@ -16,9 +16,12 @@ registerBlockType( metadata.name, {
 	 * @see ./edit.js
 	 */
 	edit,
-	save: () => (
-		<article>
-			<InnerBlocks.Content />
-		</article>
-	)
+	save: () => {
+
+		return (
+			<article { ...useBlockProps.save() }>
+				<InnerBlocks.Content />
+			</article>
+		)
+	}
 } );
