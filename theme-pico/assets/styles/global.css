@@ -5,3 +5,32 @@
 		justify-content: space-between;
 	}
 }
+.wpcloud-block-table-cell--wrapper {
+	white-space: nowrap;
+}
+
+.wp-block-wpcloud-nav  {
+	li {
+		white-space: nowrap;
+	}
+	a.current {
+		text-decoration: underline;
+	}
+	a.is-icon-only {
+		padding-left: 0;
+		display: flex;
+		align-items: center;
+	}
+}
+
+.wp-block-wpcloud-card {
+	header, footer {
+		h2, h3, h4, h5, h6 {
+			margin: 0;
+		}
+	}
+}
+
+button[type=submit].wpcloud-block-button {
+	width: fit-content;
+}
