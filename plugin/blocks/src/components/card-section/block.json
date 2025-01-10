@@ -5,7 +5,7 @@
 	"version": "0.1.0",
 	"title": "Card Section",
 	"category": "wpcloud",
-	"icon": "cloud",
+	"icon": "heading",
 	"description": "Card Section block",
 	"supports": {
 		"html": false

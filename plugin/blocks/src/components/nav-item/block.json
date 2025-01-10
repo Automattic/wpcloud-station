@@ -11,7 +11,6 @@
 	"editorScript": "file:./index.js",
 	"render": "file:./render.php",
 	"ancestor": ["wpcloud/nav-list"],
-
 	"attributes": {
 		"url": {
 			"type": "string",

@@ -5,7 +5,7 @@
 	"version": "0.1.0",
 	"title": "Card",
 	"category": "wpcloud",
-	"icon": "cloud",
+	"icon": "index-card",
 	"description": "Card block",
 	"supports": {
 		"html": false
