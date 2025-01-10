@@ -211,18 +211,23 @@ class WPCLOUD_Site {
 	 *
 	 * @return string The string with the attribute replaced.
 	 */
-	public function replace_attr( ?string $str, string $regex = '/{site.(.*)}/' ): string {
+	public function replace_attr( ?string $str, string $regex = '/\{site\.(\w+)\}/' ): string {
 		if ( ! $str ) {
 			return '';
 		}
-		error_log( 'replace_attr: ' . $str );
-		if ( preg_match( $regex, $str, $matches ) ) {
-			$attribute = $matches[1] ?? '';
-			$new_value = $this->$attribute;
-			if ( ! $new_value ) {
-				return $str;
+		if ( preg_match_all( $regex, $str, $matches ) ) {
+			$l = count( $matches[0] );
+			for ( $i = 0; $i < $l; $i++ ) {
+				$attribute = $matches[1][ $i ] ?? '';
+				$new_value = $this->$attribute;
+				if ( is_wp_error( $new_value ) ) {
+					return $str;
+				}
+				if ( ! $new_value ) {
+					return $str;
+				}
+				$str = str_replace( $matches[0][ $i ], $new_value, $str );
 			}
-			$str = str_replace( $matches[0], $new_value, $str );
 		}
 
 		return $str;
