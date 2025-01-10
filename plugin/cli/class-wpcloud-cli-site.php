@@ -295,7 +295,7 @@ class WPCloud_CLI_Site extends WPCloud_CLI {
 			if ( $pause_to_confirm ) {
 				WP_CLI::confirm( sprintf( 'Are you sure you want to continue deleting %d more sites?', count( $args ) - $delete_count ) );
 			}
-			$this->_delete( $site_id, $remote, $confirmed );
+			$this->_delete( (int) $site_id, $remote, $confirmed );
 			++$delete_count;
 		}
 
