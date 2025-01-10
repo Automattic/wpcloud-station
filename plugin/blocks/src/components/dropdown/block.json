@@ -20,6 +20,10 @@
 		"title": {
 			"type": "string",
 			"default": ""
+		},
+		"tag": {
+			"type": "string",
+			"default": "span"
 		}
 	}
 }

@@ -20,7 +20,7 @@ import './editor.scss';
 
 export default function Edit({ attributes, setAttributes }) {
 
-	const { title } = attributes;
+	const { title, tag } = attributes;
 	const blockProps = useBlockProps();
 
 	const template = [
@@ -36,10 +36,10 @@ export default function Edit({ attributes, setAttributes }) {
 		>
 			<summary>
 				<RichText
-          tagName="span" // The HTML tag for the editable content
-          value={title} // The current value of the editable text
-          onChange={(newTitle) => setAttributes({ title: newTitle })} // Update the attribute on change
-          placeholder={__('Dropdown', 'wpcloud')} // Placeholder when empty
+          tagName={tag}
+          value={title}
+          onChange={(newTitle) => setAttributes({ title: newTitle })}
+          placeholder={__('Dropdown', 'wpcloud')}
         />
 			</summary>
 			<ul { ...innerBlocksProps} >

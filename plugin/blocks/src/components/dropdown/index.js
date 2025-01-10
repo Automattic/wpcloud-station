@@ -18,7 +18,12 @@ registerBlockType( metadata.name, {
 	edit,
 	save: ({ attributes }) => (
 		<details {...useBlockProps.save()}>
-			<summary><RichText.Content tagName={attributes.tag} value={attributes.title} /></summary>
+			<summary>
+				<RichText.Content
+					tagName={attributes.tag}
+					value={attributes.title}
+				/>
+			</summary>
 			<InnerBlocks.Content />
 		</details>
 	)
