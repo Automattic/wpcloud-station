@@ -3,7 +3,7 @@ const path = require('path');
 const { execSync } = require('child_process');
 
 // Configuration
-const pluginDir = path.join(__dirname, '../plugin'); // Path to the plugin directory
+const pluginDir = path.join(__dirname, '/../../plugin'); // Path to the plugin directory
 const pluginFile = path.join(pluginDir, 'wpcloud-station.php'); // Path to the plugin.php file
 const githubRepo = 'automattic/wpcloud-station'; // Replace with your GitHub repo
 const baseBranch = 'trunk'; // Branch to base the release on
@@ -38,6 +38,7 @@ function releaseExists(tag) {
 }
 
 // Function to get PRs between two tags
+// @TODO: fix this
 function getPRsBetweenTags(previousTag, currentTag) {
 	if (!previousTag) {
 			console.log('No previous tag found. Cannot list PRs.');
@@ -46,17 +47,17 @@ function getPRsBetweenTags(previousTag, currentTag) {
 
 	console.log(`Fetching PRs between ${previousTag} and ${currentTag}...`);
 	const prs = execSync(
-			`gh pr list --search "merged:${previousTag}..${currentTag}" --json title,number --jq ".[] | \\\"#\\(.number) \\(.title)\\\""`
+			`gh pr list --search "merged:${previousTag}..${currentTag}" --json title,number --jq ".[] | \\\"#\\(.number) \\(.title)\\\""`, {encoding: 'utf8'}
 	);
-
+	console.log(`gh pr list --search "merged:${previousTag}..${currentTag}" --json title,number --jq ".[] | \\\"#\\(.number) \\(.title)\\\""`);
+	console.log(prs);
 	return prs ? prs.split('\n') : [];
 }
 
 // Function to get the previous tag
-function getPreviousTag() {
+function getPreviousReleaseTag() {
 	try {
-			const tags = execSync('git tag --sort=-v:refname').split('\n');
-			return tags[1] || null; // The second tag is the previous version
+			return execSync('gh release view --json tagName -q .tagName', { encoding: 'utf8' }).trim();
 	} catch {
 			console.log('No previous tags found.');
 			return null;
@@ -82,7 +83,9 @@ async function createRelease() {
 	// Get the plugin version
 	const version = getPluginVersion(pluginFile);
 	const tag = `${version}`;
-	const previousTag = getPreviousTag();
+	const previousTag = getPreviousReleaseTag();
+
+	console.log(`Current version: ${previousTag}`);
 
 	// Check if the release already exists
 	if (releaseExists(tag)) {
@@ -104,14 +107,18 @@ async function createRelease() {
 	execSync(`git tag ${tag}`);
 	execSync(`git push origin ${tag}`);
 
-		// Get PRs between tags
-	const prs = getPRsBetweenTags(previousTag, currentTag);
-	const prList = prs.length > 0 ? prs.join('\n') : 'No pull requests in this release.';
+	// Get PRs between tags
+
+	// Get the current tag
+
+	const prs = getPRsBetweenTags(previousTag, tag);
+
 
 	// Create the release
-	const releaseTitle = `Release ${currentVersion}`;
-	const releaseBody = `## Release ${currentVersion}\n\n### Changes:\n${prList}`;
-	const releaseUrl = createGitHubRelease(currentTag, releaseTitle, releaseBody);
+	const releaseTitle = `Release ${tag}`;
+	const releaseBody = `## Release ${tag}`;
+
+	const releaseUrl = createGitHubRelease(tag, releaseTitle, releaseBody);
 
 	console.log('GitHub release created successfully.');
 	console.log(releaseUrl);

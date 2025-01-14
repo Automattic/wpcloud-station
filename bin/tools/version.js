@@ -3,7 +3,7 @@ const path = require('path');
 const { execSync } = require('child_process');
 
 // Path to the versioned software
-const pluginDir = path.join(__dirname, '../plugin');
+const pluginDir = path.join(__dirname, '/../../plugin', );
 const pluginFile = path.join(pluginDir, 'wpcloud-station.php');
 
 const themeDir = path.join(__dirname, '../theme');
@@ -18,7 +18,7 @@ const baseBranch = 'trunk'; // Branch to base the pull request on
 // Function to run shell commands
 function runCommand(command, options = {}) {
 	try {
-		return execSync(command, { stdio: 'inherit', ...options });
+		return execSync(command, { stdio: 'inherit', encoding: 'utf8', ...options });
 	} catch (error) {
 		console.error(`Error running command: ${command}`);
 		process.exit(1);
@@ -122,7 +122,8 @@ async function updateVersions(type = 'patch') {
 	const prTitle = `Version bump to ${newVersion}`;
 	const prBody = `Update version to ${newVersion}.`;
 	const prCommand = `gh pr create --title "${prTitle}" --body "${prBody}" --base ${baseBranch} --head ${branchName}`;
-	const prOutput = runCommand(prCommand);
+
+	const prOutput = execSync(prCommand, { encoding: 'utf8' });
 
 	console.log('Pull request created successfully.');
 
