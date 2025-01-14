@@ -1,6 +1,6 @@
 const { execSync } = require('child_process');
-const { updateVersions } = require('./tools/version.js');
-const { createRelease } = require('./tools/release.js');
+const updateVersions = require('./tools/version.js');
+const createRelease = require('./tools/release.js');
 
 // Configuration
 const POLL_INTERVAL = 10000; // Check every 10 seconds
@@ -10,10 +10,12 @@ async function isMergeable(prNumber) {
 	try {
 		// Execute the `gh` command to get PR details
 		const output = execSync(`gh pr view ${prNumber} --json mergeable`, { encoding: 'utf8' })
+
 		// Parse the JSON output
-		const prData = JSON.parse(output)
+		const prData = JSON.parse(output);
+
 		// Return the mergeable status
-		return prData.mergeable;
+		return prData.mergeable === 'MERGEABLE';
 	} catch (error) {
 		console.error(`Error fetching PR details: ${error.message}`);
 		return null;
@@ -49,11 +51,15 @@ async function waitForMergeable(prNumber) {
 async function main() {
 	// Update the versions
 	const incrementType = process.argv[2] || 'patch'; // Default to 'patch'
-	const prNum = updateVersions(incrementType);
+	const prNum = await updateVersions(incrementType);
+
+
+
+
 	// Start the script
 	await waitForMergeable(prNum);
 
-	execSync(`gh pr merge ${prNum} --admin --auto`);
+	execSync(`gh pr merge ${prNum} --admin --squash`);
 	createRelease();
 }
 

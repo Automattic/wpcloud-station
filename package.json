@@ -6,7 +6,8 @@
   "devDependencies": {},
   "scripts": {
     "version": "node ./bin/version.js",
-    "release": "node ./bin/release.js"
+    "release": "node ./bin/release.js",
+    "cut": "node ./bin/cut.js"
   },
   "keywords": [],
   "author": "",
