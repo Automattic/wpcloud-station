@@ -65,7 +65,26 @@ function wpcloud_block_available_php_options(): array {
 		error_log( 'WP Cloud: ' . $php_versions->get_error_message() ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
 		return array( '' => __( 'No Preference' ) );
 	}
-	return (array) $php_versions;
+
+	$default_version = defined( 'DEFAULT_PHP_VERSION' ) ? DEFAULT_PHP_VERSION : '';
+
+	$options = array();
+	foreach ( (array) $php_versions as $version ) {
+		$option = array(
+			'label'   => $version,
+			'value'   => $version,
+			'default' => $default_version === $version,
+		);
+
+		if ( $default_version === $version ) {
+			$option['default'] = true;
+			$option['label']  .= __( ' (default)' );
+		}
+
+		$options[] = $option;
+	}
+
+	return $options;
 }
 
 /**

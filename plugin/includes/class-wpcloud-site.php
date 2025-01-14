@@ -481,7 +481,14 @@ class WPCLOUD_Site {
 	public static function get_detail( int|WP_Post $post, string $key, ): mixed {
 		$wpcloud_site_id = wpcloud_get_site_id( $post );
 		if ( empty( $wpcloud_site_id ) ) {
-			return null;
+
+			// Check for default values.
+			switch ( $key ) {
+				case 'php_version':
+					return DEFAULT_PHP_VERSION;
+				default:
+					return null;
+			}
 		}
 
 		$result = '';

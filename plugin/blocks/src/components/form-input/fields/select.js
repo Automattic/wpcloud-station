@@ -26,6 +26,7 @@ export default function SelectField( {
 		options = optionData;
 	}
 
+	const selected = options.find( ( option ) => option.value === value || option.default );
 	return (
 		<div className="wpcloud-form-input--select--wrapper">
 			<select
@@ -35,6 +36,7 @@ export default function SelectField( {
 				style={ inputStyle }
 				name={ name }
 				required={ required }
+				value={ selected?.value }
 			>
 				{ options.map( ( option, index ) => ( <option key={ index } value={ option.value }>{ option.label }</option> ) ) }
 			</select>
