@@ -166,7 +166,7 @@ export default function Edit() {
 							type: 'select',
 							label: __( 'PHP Version' ),
 							name: 'php_version',
-							options: formatOptions( phpVersionOptions ),
+							options: phpVersionOptions,
 							metadata: { name: 'PHP Version' },
 						},
 					],
