@@ -28,6 +28,8 @@ define( 'WPCLOUD_CATEGORY_CORE', 'wpcloud_core_pages' );
 
 define( 'WP_STATION_CLIENT_ID', '61' );
 
+define( 'DEFAULT_PHP_VERSION', '8.2' );
+
 
 // Initialize the plugin.
 require_once plugin_dir_path( __FILE__ ) . 'init.php';
