@@ -1,12 +1,25 @@
 ((wpcloud) => {
 
+	// Make sure no one tries to fire an action that's already used.
+	const blockedActions = [
+		'wpcloud_form_submit',
+		'wpcloud_expanding_section_toggle_end',
+		'wpcloud_expanding_section_toggle',
+		'wpcloud_alias_added',
+		'wpcloud_site_ssh_user_added',
+		'wpcloud_expanding_section_toggle',
+	];
 	// Bind clicks to any action buttons
 	const buttons = document.querySelectorAll('.wp-block-wpcloud-button');
 
 	function bindClick(button) {
 		const action = button.dataset.wpcloudAction;
 
-		if (action) {
+		if (blockedActions.includes(action)) {
+			console.error(`Action ${action} is blocked.`, button);
+		}
+
+		if (action && !blockedActions.includes(action)) {
 			button.addEventListener('click', (event) => {
 				const type = button.attributes.type?.value;
 
