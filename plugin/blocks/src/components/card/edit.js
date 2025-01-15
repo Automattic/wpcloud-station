@@ -10,16 +10,15 @@ import { __ } from '@wordpress/i18n';
 import {
 	useBlockProps,
 	useInnerBlocksProps,
-	InspectorControls,
+
 } from '@wordpress/block-editor';
-import { useEffect } from '@wordpress/element';
-import { ToggleControl, PanelBody, ToolbarGroup } from '@wordpress/components';
-import { useSelect } from '@wordpress/data';
+
 
 /**
  * Internal dependencies
  */
-//import './editor.scss';
+import { useSyncInnerBlockMetaName, useInnerBlocksInserter }  from '@wpcloud/hooks';
+import './editor.scss';
 
 /**
  *
@@ -28,21 +27,16 @@ import { useSelect } from '@wordpress/data';
  * @param {Object} props.setAttributes
  * @return {Element} Element to render.
  */
-export default function Edit( {
-	attributes,
-	setAttributes,
-	clientId,
-	isSelected,
-}) {
+export default function Edit( {clientId, ...props }) {
 	const blockProps = useBlockProps();
 
-	const isChildSelected = useSelect( ( select ) =>
-		select( 'core/block-editor' ).hasSelectedInnerBlock( clientId, true )
-	);
-
-	useEffect(() => {
-		setAttributes({ hideContent: ! ( isSelected || isChildSelected ) });
-	}, [ isChildSelected, setAttributes, isSelected ]);
+	useSyncInnerBlockMetaName(clientId, (children) => {
+		const target = children.find((child) => child.attributes.section === 'header');
+		if (target && target.attributes.text) {
+			return `Card: ${target.attributes.text}`;
+		}
+		return '';
+	} );
 
 	const template = [
 		['wpcloud/card-section', { section: "header", metadata: { name: "Header" } }],
@@ -50,9 +44,7 @@ export default function Edit( {
 		['wpcloud/card-section', { section: "footer", tag: "span", metadata: { name: "Footer" } }],
 	];
 
-	const innerBlocksProps = useInnerBlocksProps(blockProps, {
-		template,
-	} );
+	const innerBlocksProps = useInnerBlocksInserter( props, useInnerBlocksProps( blockProps, { template } ) );
 
 	return (
 		<>

@@ -6,27 +6,25 @@ import {
 	useBlockProps,
 	InspectorControls,
 	RichText,
+	HeadingLevelDropdown
 } from '@wordpress/block-editor';
 import { PanelBody, SelectControl } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
+import { heading as icon } from '@wordpress/icons';
+
 
 /**
  * Internal dependencies
  */
 import metadata from './block.json';
 
-const render = (save) => ({ attributes, setAttributes }) => {
+import { useSyncMetaName } from '@wpcloud/hooks';
+
+const edit = ( { clientId, attributes, setAttributes } ) => {
+	const blockProps = useBlockProps();
 	const { tag, text, section } = attributes;
-	const richText = save ? (
-		<RichText.Content tagName={tag} value={text} />
-	) : (
-		<RichText
-			tagName={tag}
-			value={text}
-			onChange={(value) => setAttributes({ text: value })}
-			placeholder={ section === 'header' ? __( 'Header' ) : __( 'Footer' ) }
-		/>
-	);
+
+	useSyncMetaName(clientId, text);
 
 	const controls = (
 	<InspectorControls>
@@ -49,27 +47,39 @@ const render = (save) => ({ attributes, setAttributes }) => {
 	</InspectorControls>
 	);
 
-	if ( section === 'header' ) {
-		return (
-			<>
-				{ save ? null : controls }
-				<header>
-					{richText}
-				</header>
-			</>
-		);
-	}
+	const Container = section === 'header' ? 'header' : 'footer';
 	return (
 		<>
-			{ save ? null : controls }
-			<footer>
-				{richText}
-			</footer>
+			{ controls }
+			<Container { ...blockProps }>
+				<RichText
+					tagName={tag}
+					value={text}
+					onChange={(value) => setAttributes({ text: value })}
+					placeholder={ section === 'header' ? __( 'Header' ) : __( 'Footer' ) }
+				/>
+			</Container>
 		</>
 	);
 }
 
 registerBlockType(metadata.name, {
-	edit: render(false),
-	save: render(true)
+	icon,
+	edit,
+	save: ({ attributes }) => {
+
+		const { tag, text, section } = attributes;
+		if ( !text ) {
+			return null;
+		}
+		const blockProps = useBlockProps.save();
+		const richText = <RichText.Content tagName={tag} value={text} />
+		const Container = section === 'header' ? 'header' : 'footer';
+
+		return (
+			<Container { ...useBlockProps.save() }>
+				{richText}
+			</Container>
+		);
+	}
 });

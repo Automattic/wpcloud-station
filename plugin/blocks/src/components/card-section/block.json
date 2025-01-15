@@ -5,15 +5,19 @@
 	"version": "0.1.0",
 	"title": "Card Section",
 	"category": "wpcloud",
-	"icon": "heading",
 	"description": "Card Section block",
 	"supports": {
-		"html": false
+		"html": false,
+		"inserter": false,
+		"color": {
+			"text" : true
+		}
 	},
 	"textdomain": "wpcloud",
 	"editorScript": "file:./index.js",
 	"render": "file:./render.php",
-	"ancestor": ["wpcloud/card"],
+	"parent": ["wpcloud/card"],
+
 	"attributes": {
 		"section": {
 			"type": "string",
