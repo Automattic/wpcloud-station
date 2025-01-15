@@ -34,3 +34,13 @@
 button[type=submit].wpcloud-block-button {
 	width: fit-content;
 }
+
+.wp-block-wpcloud-dropdown {
+	border: none;
+	&.hide-chevron  {
+		::after {
+			display: none;
+		}
+
+	}
+}
