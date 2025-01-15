@@ -8,8 +8,6 @@ import { InnerBlocks, useBlockProps, } from '@wordpress/block-editor';
  * Internal dependencies
  */
 import edit from './edit';
-import save from './save';
-//import save from './save';
 import metadata from './block.json';
 
 registerBlockType( metadata.name, {
@@ -22,5 +20,4 @@ registerBlockType( metadata.name, {
 			<InnerBlocks.Content />
 		</li>
 		)
-
 } );
