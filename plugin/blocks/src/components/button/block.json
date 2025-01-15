@@ -8,7 +8,10 @@
 	"icon": "button",
 	"description": "WP Cloud Actionable button",
 	"supports": {
-		"html": false
+		"html": false,
+		"color": {
+			"text" : true
+		}
 	},
 	"textdomain": "wpcloud",
 	"editorScript": "file:./index.js",
