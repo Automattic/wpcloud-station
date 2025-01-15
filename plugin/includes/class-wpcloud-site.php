@@ -606,7 +606,8 @@ class WPCLOUD_Site {
 
 			case 'site_name':
 			case 'name':
-				return get_the_title( $post );
+				$name = get_the_title( $post );
+				return str_replace( '.wpcloudstation.dev', ' ', $name );
 
 			case 'slug':
 				return $post->post_name;
