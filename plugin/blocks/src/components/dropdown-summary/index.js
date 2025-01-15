@@ -41,17 +41,17 @@ registerBlockType( metadata.name, {
 	save: ({ attributes }) => {
 		const { button, secondary, contrast, outline } = attributes;
 		const innerBlockProps = useInnerBlocksProps.save();
+
+		innerBlockProps.role = button ? 'button' : '';
+
 		return (
 			<summary
 				{...innerBlockProps}
-				role={button ? 'button' : ''}
-				className={classnames(
-					innerBlockProps.className,
-					{
+				className={classnames(innerBlockProps.className, {
 					'secondary': secondary,
 					'contrast': contrast,
-					'outline': outline
-				 }
-			)}/>);
+					'outline': outline,
+				})}
+			/>);
 	}
 } );
