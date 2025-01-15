@@ -6,7 +6,7 @@
 	"title": "Dropdown",
 	"category": "wpcloud",
 	"icon": "list-view",
-	"description": "Nav block",
+	"description": "Dropdown block",
 	"supports": {
 		"html": false
 	},
@@ -17,13 +17,9 @@
 		"wpcloud/list-item"
 	],
 	"attributes": {
-		"title": {
-			"type": "string",
-			"default": ""
-		},
-		"tag": {
-			"type": "string",
-			"default": "span"
+		"hideChevron": {
+			"type": "boolean",
+			"default": false
 		}
 	}
 }

@@ -1,0 +1,34 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "wpcloud/dropdown-summary",
+	"version": "0.1.0",
+	"title": "Title",
+	"category": "wpcloud",
+	"icon": "list-view",
+	"description": "Dropdown summary block",
+	"supports": {
+		"html": false
+	},
+	"textdomain": "wpcloud",
+	"editorScript": "file:./index.js",
+	"ancestor": ["wpcloud/dropdown"],
+	"attributes" :{
+		"button": {
+			"type": "boolean",
+			"default": false
+		},
+		"outline": {
+			"type": "boolean",
+			"default": false
+		},
+		"contrast": {
+			"type": "boolean",
+			"default": false
+		},
+		"secondary": {
+			"type": "boolean",
+			"default": false
+		}
+	}
+}
