@@ -25,7 +25,8 @@
 
 .wp-block-wpcloud-card {
 	header, footer {
-		h2, h3, h4, h5, h6 {
+		* {
+			color: inherit;
 			margin: 0;
 		}
 	}
