@@ -4,7 +4,7 @@
 import { __ } from '@wordpress/i18n';
 import { SelectControl, ToggleControl } from '@wordpress/components';
 
-export default function LinkableDetailSelect( {
+export default function LinkableDetailSelectControl( {
 	attributes,
 	setAttributes,
 	onChange,
