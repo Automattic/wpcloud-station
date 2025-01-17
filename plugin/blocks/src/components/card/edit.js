@@ -1,16 +1,10 @@
 /**
- * External dependencies
- */
-import classNames from 'classnames';
-
-/**
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
 import {
 	useBlockProps,
 	useInnerBlocksProps,
-
 } from '@wordpress/block-editor';
 
 
@@ -44,7 +38,7 @@ export default function Edit( {clientId, ...props }) {
 		['wpcloud/card-section', { section: "footer", tag: "span", metadata: { name: "Footer" } }],
 	];
 
-	const innerBlocksProps = useInnerBlocksInserter( props, useInnerBlocksProps( blockProps, { template } ) );
+	const innerBlocksProps =  useInnerBlocksProps( blockProps, { template } );
 
 	return (
 		<>
