@@ -9,23 +9,36 @@ import classnames from 'classnames';
 import { InnerBlocks, useBlockProps, RichText } from '@wordpress/block-editor';
 
 export default function save({ attributes }) {
+	const { hideChevron, level, summary, useIcon, icon, button, secondary, outline, contrast } = attributes;
 	const blockProps = useBlockProps.save();
-		const { hideChevron, level, summary, icon } = attributes;
-		const summaryContent = icon
-			? <span className="dropdown-icon">{icon}</span>
-			: <RichText.Content tagName={`h${level}`} value={summary} />;
 
-		return (
-			<details {...blockProps} className={ classnames('dropdown',
-				blockProps.className,
+	const summaryContent = useIcon
+		? <span className="dropdown-icon">{icon}</span>
+		: <RichText.Content tagName={`h${level}`} value={summary} />;
+
+	const summaryClassname = classnames({
+		'secondary': secondary,
+		'outline': outline,
+		'contrast': contrast
+	});
+
+	return (
+		<details {...blockProps}
+			className={classnames('dropdown',
+			blockProps.className,
 				{
 					'hide-chevron': hideChevron,
-				 }
-			)}>
-				<summary>{summaryContent}</summary>
-				<ul className="dropdown-list">
-					<InnerBlocks.Content />
-				</ul>
-			</details>
-		)
+				}
+		)}>
+			<summary
+				role={ button ? 'button' : '' }
+				className={summaryClassname}
+			>
+				{summaryContent}
+			</summary>
+			<ul>
+				<InnerBlocks.Content />
+			</ul>
+		</details>
+	)
 }

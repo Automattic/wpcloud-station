@@ -20,6 +20,7 @@ import { PanelBody, ToggleControl } from '@wordpress/components';
 /**
  * Internal dependencies
  */
+import { ButtonControls, IconControls } from '@wpcloud/controls';
 import { updateAttribute } from '@wpcloud/controls/utils';
 import './editor.scss';
 
@@ -29,7 +30,7 @@ export default function Edit({ attributes, setAttributes }) {
 	const style = blockProps.style;
 	delete blockProps.style;
 
-	const { hideChevron, summary, level, levelOptions } = attributes;
+	const { hideChevron, summary, level, levelOptions, useIcon, outline, contrast, secondary, button } = attributes;
 	const tagName = 'h' + level;
 
 	const update = updateAttribute(setAttributes);
@@ -65,11 +66,27 @@ export default function Edit({ attributes, setAttributes }) {
 						checked={hideChevron}
 						onChange={update('hideChevron')}
 					/>
+					<ButtonControls {...{ attributes, setAttributes }} />
+					<ToggleControl
+						label={__('Use Icon')}
+						checked={useIcon}
+						onChange={update('useIcon')}
+					/>
+					{ useIcon &&
+						(<IconControls {...{ attributes, setAttributes }} />)
+					}
+
 				</PanelBody>
 			</InspectorControls>
 
 			<details {...blockProps}
-				className={classnames(className, 'dropdown')}
+				role={ button ? 'button' : '' }
+				className={classnames(className, 'dropdown', {
+					'hide-chevron': hideChevron,
+					'outline': outline,
+					'contrast': contrast,
+					'secondary': secondary,
+				})}
 			>
 				<summary style={style}>
 					<RichText

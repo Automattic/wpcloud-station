@@ -18,11 +18,11 @@
 			"type": "boolean",
 			"default": false
 		},
-		"button": {
+		"openByDefault": {
 			"type": "boolean",
 			"default": false
 		},
-		"openByDefault": {
+		"button": {
 			"type": "boolean",
 			"default": false
 		},
