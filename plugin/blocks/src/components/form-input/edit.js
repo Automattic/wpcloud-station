@@ -25,7 +25,7 @@ import { useCallback, useEffect } from '@wordpress/element';
  * Internal dependencies
  */
 import './editor.scss';
-import DetailSelectControl from '../controls/site/detailSelect';
+import { DetailSelectControl } from '@wpcloud/controls/site';
 import { Text, Select, Hidden, Password } from './fields';
 
 function InputFieldBlock( { attributes, setAttributes, className, context, clientId } ) {

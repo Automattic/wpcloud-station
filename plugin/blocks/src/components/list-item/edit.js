@@ -7,7 +7,6 @@ import { __ } from '@wordpress/i18n';
 import {
 	useBlockProps,
 	useInnerBlocksProps,
-	RichText
 } from '@wordpress/block-editor';
 
 /**
@@ -17,10 +16,10 @@ import './editor.scss';
 
 export default function Edit() {
 	const blockProps = useBlockProps();
-	const template = [
-		['core/paragraph', { metadata: { name: "Item" }}],
-	];
-	const { children, ...innerBlocksProps } = useInnerBlocksProps( blockProps, { template, templateLock: false } );
+	const { children, ...innerBlocksProps } = useInnerBlocksProps(blockProps,
+		{
+			template: [['core/paragraph', { metadata: { name: "Item" }}]],
+		});
 
 	return (
 			<li { ...innerBlocksProps} >

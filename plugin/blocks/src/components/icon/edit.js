@@ -22,7 +22,7 @@ const Icon = icons.Icon;
  * Internal dependencies
  */
 
-import IconControl from '../controls/iconControl.js';
+import { IconControl }  from '@wpcloud/controls';
 
 export default function ( { attributes, setAttributes, className } ) {
 	const { icon, iconSize } = attributes;

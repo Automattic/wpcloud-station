@@ -61,7 +61,7 @@ export default function Edit( {
 	);
 
 	const innerBlocksProps = useInnerBlocksProps( blockProps, {
-		renderAppender:
+		renderappender:
 			! hasInnerBlocks || isSelected || isChildSelected
 				? InnerBlocks.DefaultBlockAppender
 				: undefined,

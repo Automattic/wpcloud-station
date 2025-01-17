@@ -24,7 +24,7 @@ import {
  *
  * Internal dependencies
  */
-import LinkableDetailSelectControl from '../controls/site/linkableDetailSelect';
+import { LinkableDetailSelectControl } from '@wpcloud/controls/site/';
 import './editor.scss';
 
 function ButtonBlock( { attributes, setAttributes } ) {

@@ -18,7 +18,7 @@ import * as icons from '@wordpress/icons';
 /**
  * Internal dependencies
  */
-import IconControl from '../controls/iconControl.js';
+import { IconControl } from '@wpcloud/controls';
 const Icon = icons.Icon;
 
 export default function Edit({ attributes, setAttributes }) {

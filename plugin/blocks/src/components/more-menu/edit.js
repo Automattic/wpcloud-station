@@ -21,7 +21,7 @@ const Icon = icons.Icon;
 /**
  * Internal dependencies
  */
-import IconControl from '../controls/iconControl.js';
+import { IconControl } from '@wpcloud/controls';
 import './editor.scss';
 
 /**
