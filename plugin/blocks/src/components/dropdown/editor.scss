@@ -1,4 +1,10 @@
 .wp-block-wpcloud-dropdown {
+	summary {
+		display: flex;
+		* {
+			margin: 0;
+		}
+	}
 	ul {
 		list-style: none;
 	}

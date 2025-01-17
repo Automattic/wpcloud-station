@@ -37,6 +37,14 @@ button[type=submit].wpcloud-block-button {
 }
 
 .wp-block-wpcloud-dropdown {
+	summary {
+		display: flex;
+    justify-content: space-between;
+    align-items: center;
+		* {
+			margin: 0;
+		}
+	}
 	border: none;
 	&.hide-chevron  {
 		::after {

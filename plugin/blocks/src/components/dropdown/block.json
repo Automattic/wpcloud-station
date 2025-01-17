@@ -8,7 +8,10 @@
 	"icon": "list-view",
 	"description": "Dropdown block",
 	"supports": {
-		"html": false
+		"html": false,
+		"color" : {
+			"text" : true
+		}
 	},
 	"textdomain": "wpcloud",
 	"editorScript": "file:./index.js",
@@ -20,6 +23,19 @@
 		"hideChevron": {
 			"type": "boolean",
 			"default": false
+		},
+		"summary": {
+			"type": "rich-text",
+			"source": "rich-text",
+			"selector": "h1,h2,h3,h4,h5,h6",
+			"role": "summary"
+		},
+		"level": {
+			"type": "number",
+			"default": 2
+		},
+		"levelOptions": {
+			"type": "array"
 		}
 	}
 }
