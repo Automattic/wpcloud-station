@@ -23,13 +23,16 @@
 			"type": "string",
 			"default": "header"
 		},
-		"tag": {
-			"type": "string",
-			"default": "h2"
-		},
 		"text": {
 			"type": "string",
 			"default": ""
+		},
+		"level": {
+			"type": "number",
+			"default": 2
+		},
+		"levelOptions": {
+			"type": "array"
 		}
 	}
 }
