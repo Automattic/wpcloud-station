@@ -17,6 +17,9 @@ import {
 	InnerBlocks
 } from '@wordpress/block-editor';
 import { PanelBody, ToggleControl } from '@wordpress/components';
+import * as icons from '@wordpress/icons';
+const Icon = icons.Icon;
+
 /**
  * Internal dependencies
  */
@@ -30,15 +33,14 @@ export default function Edit({ attributes, setAttributes }) {
 	const style = blockProps.style;
 	delete blockProps.style;
 
-	const { hideChevron, summary, level, levelOptions, useIcon, outline, contrast, secondary, button } = attributes;
-	const tagName = 'h' + level;
+	const { hideChevron, summary, level, levelOptions, useIcon, icon, iconSize, outline, contrast, secondary, button } = attributes;
 
 	const update = updateAttribute(setAttributes);
 
 	const template = [
 		['wpcloud/list-item'],
 	];
-	const innerBlocksProps  = useInnerBlocksProps(blockProps, {
+	const innerBlocksProps = useInnerBlocksProps(blockProps, {
 		template,
 		allowedBlocks: ['wpcloud/dropdown-list'],
 	});
@@ -49,13 +51,22 @@ export default function Edit({ attributes, setAttributes }) {
 		.filter((c) => !c.endsWith('-color'))
 		.join(' ');
 
+	const summaryContent = useIcon
+		? <Icon icon={icons[icon]} size={iconSize} />
+		: <RichText.Content
+			tagName={`h${level}`}
+			value={summary}
+			onChange={update('summary')}
+			placeholder={__('Title')}
+		/>;
+
 	return (
 		<>
 			<BlockControls group="block">
 				<HeadingLevelDropdown
-					value={ level }
-					options={ levelOptions }
-					onChange={ update( 'level' ) }
+					value={level}
+					options={levelOptions}
+					onChange={update('level')}
 				/>
 			</BlockControls>
 
@@ -72,7 +83,7 @@ export default function Edit({ attributes, setAttributes }) {
 						checked={useIcon}
 						onChange={update('useIcon')}
 					/>
-					{ useIcon &&
+					{useIcon &&
 						(<IconControls {...{ attributes, setAttributes }} />)
 					}
 
@@ -80,21 +91,20 @@ export default function Edit({ attributes, setAttributes }) {
 			</InspectorControls>
 
 			<details {...blockProps}
-				role={ button ? 'button' : '' }
 				className={classnames(className, 'dropdown', {
 					'hide-chevron': hideChevron,
-					'outline': outline,
-					'contrast': contrast,
-					'secondary': secondary,
 				})}
 			>
-				<summary style={style}>
-					<RichText
-						tagName={tagName}
-						value={summary}
-						onChange={update('summary')}
-						placeholder={__('Title')}
-					/>
+				<summary
+					style={style}
+					role={button ? 'button' : ''}
+					className={classnames({
+						'secondary': secondary,
+						'outline': outline,
+						'contrast': contrast
+					})}
+				>
+					{summaryContent}
 				</summary>
 				<ul>
 					<InnerBlocks {...innerBlocksProps} className="dropdown-list" />
