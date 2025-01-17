@@ -9,7 +9,6 @@ import { __ } from '@wordpress/i18n';
  */
 import { updateAttribute } from './utils';
 
-
 export default function ({ attributes, setAttributes }) {
 	const update = updateAttribute(setAttributes);
 	const { button, outline, contrast, secondary } = attributes;

@@ -1,2 +1,2 @@
-export { default as IconControl } from './iconControl';
-export { default as ButtonControl } from './buttonControl';
+export { default as IconControls } from './iconControls';
+export { default as ButtonControls } from './buttonControls';

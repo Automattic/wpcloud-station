@@ -18,7 +18,7 @@ import * as icons from '@wordpress/icons';
 /**
  * Internal dependencies
  */
-import { IconControl } from '@wpcloud/controls';
+import { IconControls } from '@wpcloud/controls';
 const Icon = icons.Icon;
 
 export default function Edit({ attributes, setAttributes }) {
@@ -72,7 +72,7 @@ export default function Edit({ attributes, setAttributes }) {
 						onChange={(value) => setAttributes({ url: value })}
 						help={__('The URL to link to. Leave blank to not render a link.')}
 					/>
-					<IconControl attributes={attributes}  setAttributes={setAttributes}  />
+					<IconControls attributes={attributes}  setAttributes={setAttributes}  />
 					<ToggleControl
 						label={__('Icon Only')}
 						checked={iconOnly}
