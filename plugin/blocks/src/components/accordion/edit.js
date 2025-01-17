@@ -13,7 +13,7 @@ import {
 	InspectorControls,
 } from '@wordpress/block-editor';
 import { useEffect } from '@wordpress/element';
-import { ToggleControl, PanelBody, ToolbarGroup } from '@wordpress/components';
+import { ToggleControl, PanelBody } from '@wordpress/components';
 import { useSelect } from '@wordpress/data';
 
 /**
