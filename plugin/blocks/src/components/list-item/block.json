@@ -9,5 +9,5 @@
 	"description": "List item for navigation and dropdowns",
 	"textdomain": "wpcloud",
 	"editorScript": "file:./index.js",
-	"ancestor": ["wpcloud/nav-list", "wpcloud/dropdown"]
+	"ancestor": ["wpcloud/dropdown"]
 }

@@ -16,10 +16,11 @@
 	"textdomain": "wpcloud",
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",
-	"allowedBlocks": [
-		"wpcloud/list-item"
-	],
 	"attributes": {
+		"accordion": {
+			"type": "boolean",
+			"default": false
+		},
 		"hideChevron": {
 			"type": "boolean",
 			"default": false

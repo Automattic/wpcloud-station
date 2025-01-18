@@ -11,7 +11,7 @@ import * as icons from '@wordpress/icons';
 const Icon = icons.Icon;
 
 export default function save({ attributes }) {
-	const { hideChevron, level, summary, useIcon, icon, iconSize, button, secondary, outline, contrast } = attributes;
+	const { accordion, hideChevron, level, summary, useIcon, icon, iconSize, button, secondary, outline, contrast } = attributes;
 	const blockProps = useBlockProps.save();
 
 	const summaryContent = useIcon
@@ -26,9 +26,10 @@ export default function save({ attributes }) {
 
 	return (
 		<details {...blockProps}
-			className={classnames('dropdown',
+			className={classnames(
 			blockProps.className,
 				{
+					'dropdown' : !accordion,
 					'hide-chevron': hideChevron,
 				}
 		)}>

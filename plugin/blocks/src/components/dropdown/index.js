@@ -1,14 +1,10 @@
-/**
- * External dependencies
- */
-import classnames from 'classnames';
-
 
 /**
  * WordPress dependencies
  */
 import { registerBlockType } from '@wordpress/blocks';
-import { InnerBlocks, useBlockProps, RichText } from '@wordpress/block-editor';
+import { details as icon } from '@wordpress/icons';
+
 
 /**
  * Internal dependencies
@@ -20,9 +16,7 @@ import save from './save';
 import metadata from './block.json';
 
 registerBlockType( metadata.name, {
-	/**
-	 * @see ./edit.js
-	 */
+	icon,
 	edit,
 	save,
 } );
