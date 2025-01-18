@@ -1,11 +1,17 @@
 <!-- wp:group {"align":"wide","style":{"spacing":{"padding":{"top":"20px","bottom":"20px"}}},"backgroundColor":"background-secondary","layout":{"type":"constrained","wideSize":"95vw"}} -->
 <div class="wp-block-group alignwide has-background-secondary-background-color has-background" style="padding-top:20px;padding-bottom:20px"><!-- wp:group {"align":"wide","layout":{"type":"flex","justifyContent":"space-between","flexWrap":"wrap"}} -->
-<div class="wp-block-group alignwide"><!-- wp:group {"style":{"spacing":{"blockGap":"var:preset|spacing|20"},"layout":{"selfStretch":"fit","flexSize":null}},"layout":{"type":"flex"}} -->
-<div class="wp-block-group"><!-- wp:site-logo {"width":206,"shouldSyncIcon":false} /-->
+<div class="wp-block-group alignwide"><!-- wp:site-logo {"width":206,"shouldSyncIcon":false} /-->
 
-<!-- wp:group {"style":{"spacing":{"blockGap":"0px"}}} -->
-<div class="wp-block-group"></div>
-<!-- /wp:group --></div>
-<!-- /wp:group --></div>
+<!-- wp:wpcloud/nav -->
+<nav class="wp-block-wpcloud-nav"><!-- wp:wpcloud/nav-list -->
+<ul class="wp-block-wpcloud-nav-list"><!-- wp:wpcloud/nav-item {"url":"/sites","text":"Sites","contrast":true} -->
+<li class="wp-block-wpcloud-nav-item"><a href="/sites" class="contrast"><span>Sites</span></a></li>
+<!-- /wp:wpcloud/nav-item -->
+
+<!-- wp:wpcloud/nav-item {"url":"/add-site","text":"Add Site","secondary":true,"contrast":true,"outline":true,"asButton":true} -->
+<li class="wp-block-wpcloud-nav-item"><button class="secondary contrast outline"><a href="/add-site" class=""><span>Add Site</span></a></button></li>
+<!-- /wp:wpcloud/nav-item --></ul>
+<!-- /wp:wpcloud/nav-list --></nav>
+<!-- /wp:wpcloud/nav --></div>
 <!-- /wp:group --></div>
 <!-- /wp:group -->

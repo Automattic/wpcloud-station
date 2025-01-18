@@ -9,92 +9,58 @@
 <div class="wp-block-column"></div>
 <!-- /wp:column -->
 
-<!-- wp:column {"width":"360px","className":"wpcloud-site-view\u002d\u002dsidebar"} -->
-<div class="wp-block-column wpcloud-site-view--sidebar" style="flex-basis:360px"><!-- wp:group {"layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"space-between"}} -->
-<div class="wp-block-group"><!-- wp:heading {"level":1} -->
-<h1 class="wp-block-heading" id="/sites"><a href="/sites/">Sites</a></h1>
-<!-- /wp:heading -->
-
-<!-- wp:wpcloud/button {"label":"Add Site","url":"/add-site","className":"wpcloud-block-button\u002d\u002dcontent"} -->
-<div class="wpcloud-block-button__content"><span class="wpcloud-block-button__label">Add Site</span></div>
-<!-- /wp:wpcloud/button --></div>
-<!-- /wp:group -->
-
-<!-- wp:spacer {"height":"19px"} -->
-<div style="height:19px" aria-hidden="true" class="wp-block-spacer"></div>
-<!-- /wp:spacer --></div>
-<!-- /wp:column -->
-
 <!-- wp:column {"width":"1100px","className":"wpcloud-site-view\u002d\u002ddetails"} -->
 <div class="wp-block-column wpcloud-site-view--details" style="flex-basis:1100px"><!-- wp:template-part {"slug":"site-header","area":"uncategorized"} /-->
 
-<!-- wp:columns {"style":{"spacing":{"padding":{"right":"0","left":"0"}}}} -->
-<div class="wp-block-columns" style="padding-right:0;padding-left:0"><!-- wp:column {"width":"634px"} -->
-<div class="wp-block-column" style="flex-basis:634px"><!-- wp:wpcloud/site-domains -->
-<div class="wpcloud-block-site-alias-add wp-block-wpcloud-site-domains"><!-- wp:group {"className":"wpcloud-domains"} -->
-<div class="wp-block-group wpcloud-domains"><!-- wp:heading {"level":3,"className":"wpcloud-domains__title"} -->
-<h3 class="wp-block-heading wpcloud-domains__title">Domains</h3>
-<!-- /wp:heading -->
+<!-- wp:wpcloud/card {"metadata":{"name":"Card: Domains"}} -->
+<article class="wp-block-wpcloud-card"><!-- wp:wpcloud/card-section {"text":"Domains","metadata":{"name":"Domains"}} -->
+<header class="wp-block-wpcloud-card-section"><h2>Domains</h2></header>
+<!-- /wp:wpcloud/card-section -->
 
-<!-- wp:wpcloud/expanding-section {"metadata":{"name":"Add Domain Form"},"className":"wpcloud-site-alias-add\u002d\u002dexpanding-section"} -->
-<div class="wp-block-wpcloud-expanding-section wpcloud-site-alias-add--expanding-section wpcloud-block-expanding-section"><!-- wp:wpcloud/expanding-header {"hideOnOpen":true} -->
-<div class="wp-block-wpcloud-expanding-header wpcloud-block-expanding-section__header-wrapper hide-on-open"><div class="wpcloud-block-expanding-section__header"><!-- wp:wpcloud/button {"type":"action","label":"Add Domain","isPrimary":false,"action":"wpcloud_expanding_section_toggle","className":"wpcloud-block-button\u002d\u002dcontent"} -->
-<div class="wpcloud-block-button__content"><span class="wpcloud-block-button__label">Add Domain</span></div>
-<!-- /wp:wpcloud/button --></div></div>
-<!-- /wp:wpcloud/expanding-header -->
+<!-- wp:wpcloud/card {"metadata":{"name":"Card: Add Domain"}} -->
+<article class="wp-block-wpcloud-card"><!-- wp:wpcloud/card-section {"text":"Add Domain","level":3,"metadata":{"name":"Add Domain"}} -->
+<header class="wp-block-wpcloud-card-section"><h3>Add Domain</h3></header>
+<!-- /wp:wpcloud/card-section -->
 
-<!-- wp:wpcloud/expanding-content {"hideHeader":true} -->
-<div class="wp-block-wpcloud-expanding-content wpcloud-block-expanding-section__content-wrapper hide-header"><div class="wpcloud-block-expanding-section__content"><div class="wpcloud-block-expanding-section__content-inner"><!-- wp:group {"layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"right"}} -->
-<div class="wp-block-group"><!-- wp:wpcloud/button {"type":"action","style":"text","label":"Cancel","isPrimary":false,"addIcon":true,"iconOnly":true,"action":"wpcloud_expanding_section_toggle","className":"wpcloud-block-button\u002d\u002dcontent"} -->
-<div class="wpcloud-block-button__content"><!-- wp:wpcloud/icon {"icon":"close"} -->
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" class="wp-block-wpcloud-icon wpcloud-block-icon" aria-hidden="true"><path d="M13 11.8l6.1-6.3-1-1-6.1 6.2-6.1-6.2-1 1 6.1 6.3-6.5 6.7 1 1 6.5-6.6 6.5 6.6 1-1z"></path></svg>
-<!-- /wp:wpcloud/icon --></div>
-<!-- /wp:wpcloud/button --></div>
-<!-- /wp:group -->
-
-<!-- wp:wpcloud/site-alias-add -->
-<div class="wp-block-wpcloud-site-alias-add wpcloud-block-site-alias-add"><!-- wp:wpcloud/form {"wpcloudAction":"site_alias_add","className":"wpcloud-block-form\u002d\u002dsite-alias-add"} -->
-<form class="wp-block-wpcloud-form wpcloud-block-form--site-alias-add wpcloud-block-form" enctype="text/plain"><!-- wp:wpcloud/form-input {"name":"site_alias","label":"Add a Domain","uniqueId":"5e5f8947-320f-4c93-82fb-9f289e2012d1-site_alias"} -->
-<div class="wpcloud-block-form--input wp-block-wpcloud-form-input wpcloud-block-form--input--text"><label class="wpcloud-block-form-input__label" for="5e5f8947-320f-4c93-82fb-9f289e2012d1-site_alias"><span class="wpcloud-block-form-input__label-content"><span class="wpcloud-block-form-input__label-text">Add a Domain</span></span><input type="text" class="wpcloud-block-form-input__input" aria-label="Optional placeholder text" placeholder="example.com" name="site_alias" id="5e5f8947-320f-4c93-82fb-9f289e2012d1-site_alias" required aria-required="true"/></label></div>
+<!-- wp:wpcloud/form {"wpcloudAction":"site_alias_add","className":"wpcloud-block-form\u002d\u002dsite-alias-add"} -->
+<form class="wp-block-wpcloud-form wpcloud-block-form--site-alias-add wpcloud-block-form" enctype="text/plain"><!-- wp:group {"layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"space-between"}} -->
+<div class="wp-block-group"><!-- wp:wpcloud/form-input {"name":"site_alias","label":"","uniqueId":"ec4f3fd2-e237-4358-9e3f-ec59f0552cf7-site_alias"} -->
+<div class="wpcloud-block-form--input wp-block-wpcloud-form-input wpcloud-block-form--input--text"><label class="wpcloud-block-form-input__label" for="ec4f3fd2-e237-4358-9e3f-ec59f0552cf7-site_alias"><span class="wpcloud-block-form-input__label-content"><span class="wpcloud-block-form-input__label-text"></span></span><input type="text" class="wpcloud-block-form-input__input" aria-label="Optional placeholder text" placeholder="example.com" name="site_alias" id="ec4f3fd2-e237-4358-9e3f-ec59f0552cf7-site_alias" required aria-required="true"/></label></div>
 <!-- /wp:wpcloud/form-input -->
 
-<!-- wp:wpcloud/button {"type":"submit","label":"Add","className":"wpcloud-block-button\u002d\u002dcontent"} -->
-<div class="wpcloud-block-button__content"><span class="wpcloud-block-button__label">Add</span></div>
-<!-- /wp:wpcloud/button --></form>
-<!-- /wp:wpcloud/form --></div>
-<!-- /wp:wpcloud/site-alias-add --></div></div></div>
-<!-- /wp:wpcloud/expanding-content --></div>
-<!-- /wp:wpcloud/expanding-section -->
+<!-- wp:wpcloud/button {"type":"submit","label":"Add"} -->
+<div class="wp-block-wpcloud-button wpcloud-block-button__content"><span class="wpcloud-block-button__label">Add</span></div>
+<!-- /wp:wpcloud/button --></div>
+<!-- /wp:group --></form>
+<!-- /wp:wpcloud/form --></article>
+<!-- /wp:wpcloud/card -->
 
-<!-- wp:wpcloud/expanding-section {"clickToToggle":true,"hideHeader":false,"metadata":{"name":"IP Address Info"},"className":"wpcloud_ip_address_info"} -->
-<div class="wp-block-wpcloud-expanding-section wpcloud_ip_address_info wpcloud-block-expanding-section click-to-toggle"><!-- wp:wpcloud/expanding-header -->
-<div class="wp-block-wpcloud-expanding-header wpcloud-block-expanding-section__header-wrapper"><div class="wpcloud-block-expanding-section__header"><!-- wp:wpcloud/icon {"icon":"info"} -->
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" class="wp-block-wpcloud-icon wpcloud-block-icon" aria-hidden="true"><path d="M12 3.2c-4.8 0-8.8 3.9-8.8 8.8 0 4.8 3.9 8.8 8.8 8.8 4.8 0 8.8-3.9 8.8-8.8 0-4.8-4-8.8-8.8-8.8zm0 16c-4 0-7.2-3.3-7.2-7.2C4.8 8 8 4.8 12 4.8s7.2 3.3 7.2 7.2c0 4-3.2 7.2-7.2 7.2zM11 17h2v-6h-2v6zm0-8h2V7h-2v2z"></path></svg>
-<!-- /wp:wpcloud/icon -->
+<!-- wp:wpcloud/card {"metadata":{"name":"Card: Domains"}} -->
+<article class="wp-block-wpcloud-card"><!-- wp:wpcloud/card-section {"text":"Domains","metadata":{"name":"Domains"}} -->
+<header class="wp-block-wpcloud-card-section"><h2>Domains</h2></header>
+<!-- /wp:wpcloud/card-section -->
 
-<!-- wp:heading {"level":4} -->
-<h4 class="wp-block-heading">IP Addresses</h4>
-<!-- /wp:heading -->
-
-<!-- wp:wpcloud/icon {"icon":"chevronRight","className":"wpcloud_expanding_section_header_chevron"} -->
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" class="wp-block-wpcloud-icon wpcloud_expanding_section_header_chevron wpcloud-block-icon" aria-hidden="true"><path d="M10.6 6L9.4 7l4.6 5-4.6 5 1.2 1 5.4-6z"></path></svg>
-<!-- /wp:wpcloud/icon --></div></div>
-<!-- /wp:wpcloud/expanding-header -->
-
-<!-- wp:wpcloud/expanding-content -->
-<div class="wp-block-wpcloud-expanding-content wpcloud-block-expanding-section__content-wrapper"><div class="wpcloud-block-expanding-section__content"><div class="wpcloud-block-expanding-section__content-inner"><!-- wp:group {"metadata":{"name":"content"},"className":"wpcloud-block-expanding-section__content","layout":{"type":"constrained"}} -->
-<div class="wp-block-group wpcloud-block-expanding-section__content"><!-- wp:paragraph -->
-<p>After adding a domain you will need to create an A record for the domain that points to one of these IP addresses:</p>
-<!-- /wp:paragraph --></div>
+<!-- wp:wpcloud/accordion -->
+<!-- wp:group {"metadata":{"name":"Heading"}} -->
+<div class="wp-block-group"><!-- wp:heading {"level":5} -->
+<h5 class="wp-block-heading">IP Address Info</h5>
+<!-- /wp:heading --></div>
 <!-- /wp:group -->
+
+<!-- wp:group {"metadata":{"name":"Content"}} -->
+<div class="wp-block-group"><!-- wp:paragraph -->
+<p>After adding a domain you will need to create an A record for the domain that points to one of these IP addresses:</p>
+<!-- /wp:paragraph -->
 
 <!-- wp:wpcloud/site-detail {"label":"IP Addresses","name":"ip_addresses","hideLabel":true,"showCopyButton":true,"metadata":{"name":"IP Addresses"},"className":"wp-block-wpcloud-site-detail"} -->
 <div class="wpcloud-block-site-detail"><div class="wpcloud-block-site-detail__value-container copy-to-clipboard"><div class="wpcloud-block-site-detail__value">{ IP Addresses }</div><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" class="wpcloud-copy-to-clipboard" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.625 5.5h9.75c.069 0 .125.056.125.125v9.75a.125.125 0 0 1-.125.125h-9.75a.125.125 0 0 1-.125-.125v-9.75c0-.069.056-.125.125-.125ZM4 5.625C4 4.728 4.728 4 5.625 4h9.75C16.273 4 17 4.728 17 5.625v9.75c0 .898-.727 1.625-1.625 1.625h-9.75A1.625 1.625 0 0 1 4 15.375v-9.75Zm14.5 11.656v-9H20v9C20 18.8 18.77 20 17.251 20H6.25v-1.5h11.001c.69 0 1.249-.528 1.249-1.219Z"></path></svg></div></div>
-<!-- /wp:wpcloud/site-detail --></div></div></div>
-<!-- /wp:wpcloud/expanding-content --></div>
-<!-- /wp:wpcloud/expanding-section -->
+<!-- /wp:wpcloud/site-detail --></div>
+<!-- /wp:group -->
+<!-- /wp:wpcloud/accordion -->
 
-<!-- wp:wpcloud/site-alias-list -->
+<!-- wp:wpcloud/site-domains -->
+<div class="wpcloud-block-site-alias-add wp-block-wpcloud-site-domains"><!-- wp:group {"className":"wpcloud-domains"} -->
+<div class="wp-block-group wpcloud-domains"><!-- wp:wpcloud/site-alias-list -->
 <div class="wp-block-wpcloud-site-alias-list wpcloud-block-site-alias-list--wrapper"><!-- wp:group {"metadata":{"name":"Site Alias List"},"className":"wpcloud-block-site-alias-list"} -->
 <div class="wp-block-group wpcloud-block-site-alias-list"><!-- wp:group {"metadata":{"name":"Primary Domain Row"},"className":"wpcloud-block-site-alias-list__row wpcloud-block-site-alias-list__row\u002d\u002dprimary","layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"space-between"}} -->
 <div class="wp-block-group wpcloud-block-site-alias-list__row wpcloud-block-site-alias-list__row--primary"><!-- wp:wpcloud/site-detail {"label":"Primary Domain","name":"domain_name","inline":true,"hideLabel":true,"metadata":{"name":"Primary Domain"},"className":"wpcloud-block-site-alias-list__item\u002d\u002dprimary"} -->
@@ -104,7 +70,7 @@
 <!-- wp:group {"layout":{"type":"flex","flexWrap":"wrap"}} -->
 <div class="wp-block-group"><!-- wp:wpcloud/form {"wpcloudAction":"retry_ssl","className":"display-none wpcloud-block-form-retry-ssl"} -->
 <form class="wp-block-wpcloud-form display-none wpcloud-block-form-retry-ssl wpcloud-block-form" enctype="text/plain"><!-- wp:wpcloud/button {"type":"submit","style":"text","label":"Retry SSL","isPrimary":false} -->
-<div class="wpcloud-block-button__content"><span class="wpcloud-block-button__label">Retry SSL</span></div>
+<div class="wp-block-wpcloud-button wpcloud-block-button__content"><span class="wpcloud-block-button__label">Retry SSL</span></div>
 <!-- /wp:wpcloud/button --></form>
 <!-- /wp:wpcloud/form -->
 
@@ -128,67 +94,81 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="-2 -2 24 24" width="24" height="24" class="wp-block-wpcloud-icon alias-warning display-none wpcloud-block-icon" aria-hidden="true"><path d="M10 2c4.42 0 8 3.58 8 8s-3.58 8-8 8-8-3.58-8-8 3.58-8 8-8zm1.13 9.38l.35-6.46H8.52l.35 6.46h2.26zm-.09 3.36c.24-.23.37-.55.37-.96 0-.42-.12-.74-.36-.97s-.59-.35-1.06-.35-.82.12-1.07.35-.37.55-.37.97c0 .41.13.73.38.96.26.23.61.34 1.06.34s.8-.11 1.05-.34z"></path></svg>
 <!-- /wp:wpcloud/icon -->
 
-<!-- wp:wpcloud/more-menu {"position":"left"} -->
-<div class="wpcloud-more-menu wp-block-wpcloud-more-menu"><button class="wpcloud-more-menu__button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M13 19h-2v-2h2v2zm0-6h-2v-2h2v2zm0-6h-2V5h2v2z"></path></svg></button><nav class="wpcloud-more-menu__nav is-closed" style="right:0"><!-- wp:heading {"level":4,"className":"wpcloud-site-list-menu__title"} -->
+<!-- wp:wpcloud/dropdown {"hideChevron":true,"useIcon":true,"icon":"moreVertical","metadata":{"name":""}} -->
+<details class="wp-block-wpcloud-dropdown dropdown hide-chevron"><summary role="" class=""><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M13 19h-2v-2h2v2zm0-6h-2v-2h2v2zm0-6h-2V5h2v2z"></path></svg></summary><ul><!-- wp:wpcloud/list-item -->
+<li class="wp-block-wpcloud-list-item"><!-- wp:heading {"level":4,"className":"wpcloud-site-list-menu__title"} -->
 <h4 class="wp-block-heading wpcloud-site-list-menu__title">Domain Options</h4>
-<!-- /wp:heading -->
+<!-- /wp:heading --></li>
+<!-- /wp:wpcloud/list-item -->
 
-<!-- wp:wpcloud/form {"wpcloudAction":"site_alias_make_primary","inline":true,"metadata":{"name":"Make Primary"},"className":"wpcloud-block-site-alias-list\u002d\u002dmake-primary wpcloud-more-menu__row"} -->
+<!-- wp:wpcloud/list-item {"metadata":{"name":"make primary"}} -->
+<li class="wp-block-wpcloud-list-item"><!-- wp:wpcloud/form {"wpcloudAction":"site_alias_make_primary","inline":true,"metadata":{"name":"Make Primary"},"className":"wpcloud-block-site-alias-list\u002d\u002dmake-primary wpcloud-more-menu__row"} -->
 <form class="wp-block-wpcloud-form wpcloud-block-site-alias-list--make-primary wpcloud-more-menu__row wpcloud-block-form is-inline" enctype="text/plain"><!-- wp:wpcloud/icon {"icon":"starEmpty"} -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" class="wp-block-wpcloud-icon wpcloud-block-icon" aria-hidden="true"><path fill-rule="evenodd" d="M9.706 8.646a.25.25 0 01-.188.137l-4.626.672a.25.25 0 00-.139.427l3.348 3.262a.25.25 0 01.072.222l-.79 4.607a.25.25 0 00.362.264l4.138-2.176a.25.25 0 01.233 0l4.137 2.175a.25.25 0 00.363-.263l-.79-4.607a.25.25 0 01.072-.222l3.347-3.262a.25.25 0 00-.139-.427l-4.626-.672a.25.25 0 01-.188-.137l-2.069-4.192a.25.25 0 00-.448 0L9.706 8.646zM12 7.39l-.948 1.921a1.75 1.75 0 01-1.317.957l-2.12.308 1.534 1.495c.412.402.6.982.503 1.55l-.362 2.11 1.896-.997a1.75 1.75 0 011.629 0l1.895.997-.362-2.11a1.75 1.75 0 01.504-1.55l1.533-1.495-2.12-.308a1.75 1.75 0 01-1.317-.957L12 7.39z" clip-rule="evenodd"></path></svg>
 <!-- /wp:wpcloud/icon -->
 
-<!-- wp:wpcloud/form-input {"type":"hidden","name":"site_alias","uniqueId":"05c0ed5f-7847-47bd-b322-69d12ea122d6-site_alias"} -->
+<!-- wp:wpcloud/form-input {"type":"hidden","name":"site_alias","uniqueId":"a770f172-cf37-4e1b-ae3a-608e9654a511-site_alias"} -->
 <input type="hidden" name="site_alias" value=""/>
 <!-- /wp:wpcloud/form-input -->
 
-<!-- wp:wpcloud/button {"type":"submit","style":"text","label":"Make Primary"} -->
-<div class="wpcloud-block-button__content"><span class="wpcloud-block-button__label">Make Primary</span></div>
+<!-- wp:wpcloud/button {"type":"submit","style":"text","label":"Make Primary","isPrimary":false} -->
+<div class="wp-block-wpcloud-button wpcloud-block-button__content"><span class="wpcloud-block-button__label">Make Primary</span></div>
 <!-- /wp:wpcloud/button --></form>
-<!-- /wp:wpcloud/form -->
+<!-- /wp:wpcloud/form --></li>
+<!-- /wp:wpcloud/list-item -->
 
-<!-- wp:wpcloud/form {"wpcloudAction":"site_alias_remove","inline":true,"metadata":{"name":"Remove Domain"},"className":"wpcloud-block-site-alias-list\u002d\u002dremove wpcloud-more-menu__row"} -->
+<!-- wp:wpcloud/list-item {"metadata":{"name":"remove"}} -->
+<li class="wp-block-wpcloud-list-item"><!-- wp:wpcloud/form {"wpcloudAction":"site_alias_remove","inline":true,"metadata":{"name":"Remove Domain"},"className":"wpcloud-block-site-alias-list\u002d\u002dremove wpcloud-more-menu__row"} -->
 <form class="wp-block-wpcloud-form wpcloud-block-site-alias-list--remove wpcloud-more-menu__row wpcloud-block-form is-inline" enctype="text/plain"><!-- wp:wpcloud/icon {"icon":"trash"} -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" class="wp-block-wpcloud-icon wpcloud-block-icon" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 5.5A2.25 2.25 0 0 0 9.878 7h4.244A2.251 2.251 0 0 0 12 5.5ZM12 4a3.751 3.751 0 0 0-3.675 3H5v1.5h1.27l.818 8.997a2.75 2.75 0 0 0 2.739 2.501h4.347a2.75 2.75 0 0 0 2.738-2.5L17.73 8.5H19V7h-3.325A3.751 3.751 0 0 0 12 4Zm4.224 4.5H7.776l.806 8.861a1.25 1.25 0 0 0 1.245 1.137h4.347a1.25 1.25 0 0 0 1.245-1.137l.805-8.861Z"></path></svg>
 <!-- /wp:wpcloud/icon -->
 
-<!-- wp:wpcloud/form-input {"type":"hidden","name":"site_alias","uniqueId":"7d45dd80-e29c-45e3-ba50-1f6e5b4f4515-site_alias"} -->
+<!-- wp:wpcloud/form-input {"type":"hidden","name":"site_alias","uniqueId":"ef678756-853e-4fd6-9566-d5f9b8f4005a-site_alias"} -->
 <input type="hidden" name="site_alias" value=""/>
 <!-- /wp:wpcloud/form-input -->
 
-<!-- wp:wpcloud/button {"type":"submit","style":"text","label":"Remove Domain"} -->
-<div class="wpcloud-block-button__content"><span class="wpcloud-block-button__label">Remove Domain</span></div>
+<!-- wp:wpcloud/button {"type":"submit","style":"text","label":"Remove Domain","isPrimary":false} -->
+<div class="wp-block-wpcloud-button wpcloud-block-button__content"><span class="wpcloud-block-button__label">Remove Domain</span></div>
 <!-- /wp:wpcloud/button --></form>
-<!-- /wp:wpcloud/form -->
+<!-- /wp:wpcloud/form --></li>
+<!-- /wp:wpcloud/list-item -->
 
-<!-- wp:wpcloud/form {"wpcloudAction":"request_txt_verification","inline":true,"metadata":{"name":"Request TXT"},"className":"display-none wpcloud-block-form-request_txt_verification wpcloud-more-menu__row"} -->
+<!-- wp:wpcloud/list-item {"metadata":{"name":"request TXT"}} -->
+<li class="wp-block-wpcloud-list-item"><!-- wp:wpcloud/form {"wpcloudAction":"request_txt_verification","inline":true,"metadata":{"name":"Request TXT"},"className":"display-none wpcloud-block-form-request_txt_verification wpcloud-more-menu__row"} -->
 <form class="wp-block-wpcloud-form display-none wpcloud-block-form-request_txt_verification wpcloud-more-menu__row wpcloud-block-form is-inline" enctype="text/plain"><!-- wp:wpcloud/icon {"icon":"warning"} -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="-2 -2 24 24" width="24" height="24" class="wp-block-wpcloud-icon wpcloud-block-icon" aria-hidden="true"><path d="M10 2c4.42 0 8 3.58 8 8s-3.58 8-8 8-8-3.58-8-8 3.58-8 8-8zm1.13 9.38l.35-6.46H8.52l.35 6.46h2.26zm-.09 3.36c.24-.23.37-.55.37-.96 0-.42-.12-.74-.36-.97s-.59-.35-1.06-.35-.82.12-1.07.35-.37.55-.37.97c0 .41.13.73.38.96.26.23.61.34 1.06.34s.8-.11 1.05-.34z"></path></svg>
 <!-- /wp:wpcloud/icon -->
 
 <!-- wp:wpcloud/button {"type":"submit","style":"text","label":"Request TXT","isPrimary":false} -->
-<div class="wpcloud-block-button__content"><span class="wpcloud-block-button__label">Request TXT</span></div>
+<div class="wp-block-wpcloud-button wpcloud-block-button__content"><span class="wpcloud-block-button__label">Request TXT</span></div>
 <!-- /wp:wpcloud/button --></form>
 <!-- /wp:wpcloud/form -->
 
-<!-- wp:wpcloud/form {"wpcloudAction":"retry_ssl","inline":true,"metadata":{"name":"Retry SSL"},"className":"display-none wpcloud-block-form-retry-ssl wpcloud-more-menu__row"} -->
+<!-- wp:paragraph -->
+<p></p>
+<!-- /wp:paragraph --></li>
+<!-- /wp:wpcloud/list-item -->
+
+<!-- wp:wpcloud/list-item {"metadata":{"name":"retry SSL"}} -->
+<li class="wp-block-wpcloud-list-item"><!-- wp:wpcloud/form {"wpcloudAction":"retry_ssl","inline":true,"metadata":{"name":"Retry SSL"},"className":"display-none wpcloud-block-form-retry-ssl wpcloud-more-menu__row"} -->
 <form class="wp-block-wpcloud-form display-none wpcloud-block-form-retry-ssl wpcloud-more-menu__row wpcloud-block-form is-inline" enctype="text/plain"><!-- wp:wpcloud/icon {"icon":"warning"} -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="-2 -2 24 24" width="24" height="24" class="wp-block-wpcloud-icon wpcloud-block-icon" aria-hidden="true"><path d="M10 2c4.42 0 8 3.58 8 8s-3.58 8-8 8-8-3.58-8-8 3.58-8 8-8zm1.13 9.38l.35-6.46H8.52l.35 6.46h2.26zm-.09 3.36c.24-.23.37-.55.37-.96 0-.42-.12-.74-.36-.97s-.59-.35-1.06-.35-.82.12-1.07.35-.37.55-.37.97c0 .41.13.73.38.96.26.23.61.34 1.06.34s.8-.11 1.05-.34z"></path></svg>
 <!-- /wp:wpcloud/icon -->
 
 <!-- wp:wpcloud/button {"type":"submit","style":"text","label":"Retry SSL","isPrimary":false} -->
-<div class="wpcloud-block-button__content"><span class="wpcloud-block-button__label">Retry SSL</span></div>
+<div class="wp-block-wpcloud-button wpcloud-block-button__content"><span class="wpcloud-block-button__label">Retry SSL</span></div>
 <!-- /wp:wpcloud/button --></form>
-<!-- /wp:wpcloud/form --></nav></div>
-<!-- /wp:wpcloud/more-menu --></div>
+<!-- /wp:wpcloud/form --></li>
+<!-- /wp:wpcloud/list-item --></ul></details>
+<!-- /wp:wpcloud/dropdown --></div>
 <!-- /wp:group --></div>
 <!-- /wp:group --></div>
 <!-- /wp:group --></div>
 <!-- /wp:wpcloud/site-alias-list --></div>
 <!-- /wp:group --></div>
-<!-- /wp:wpcloud/site-domains --></div>
-<!-- /wp:column --></div>
-<!-- /wp:columns --></div>
+<!-- /wp:wpcloud/site-domains --></article>
+<!-- /wp:wpcloud/card --></article>
+<!-- /wp:wpcloud/card --></div>
 <!-- /wp:column -->
 
 <!-- wp:column -->

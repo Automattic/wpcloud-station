@@ -1,41 +1,37 @@
-<!-- wp:group {"metadata":{"name":"header"},"layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"left","verticalAlignment":"top"}} -->
-<div class="wp-block-group"><!-- wp:wpcloud/site-detail {"label":"Site Name","name":"site_name","hideLabel":true,"metadata":{"name":"Site Name"}} -->
-<div class="wpcloud-block-site-detail"><div class="wpcloud-block-site-detail__value-container"><div class="wpcloud-block-site-detail__value">{ Site Name }</div></div></div>
-<!-- /wp:wpcloud/site-detail -->
+<!-- wp:wpcloud/nav -->
+<nav class="wp-block-wpcloud-nav"><!-- wp:wpcloud/nav-list -->
+<ul class="wp-block-wpcloud-nav-list"><!-- wp:wpcloud/nav-item {"text":"{site.name}","tag":"h2","style":{"elements":{"link":{"color":{"text":"var:preset|color|vivid-cyan-blue"}}}},"textColor":"vivid-cyan-blue"} -->
+<li class="wp-block-wpcloud-nav-item has-vivid-cyan-blue-color has-text-color has-link-color"><h2>{site.name}</h2></li>
+<!-- /wp:wpcloud/nav-item -->
 
-<!-- wp:wpcloud/site-detail {"label":"Domain Name","name":"domain_name","hideLabel":true,"metadata":{"name":"Domain Name"}} -->
-<div class="wpcloud-block-site-detail"><div class="wpcloud-block-site-detail__value-container"><div class="wpcloud-block-site-detail__value">{ Domain Name }</div></div></div>
-<!-- /wp:wpcloud/site-detail --></div>
-<!-- /wp:group -->
+<!-- wp:wpcloud/nav-item {"url":"https://{site.domain}","icon":"external","iconOnly":true,"style":{"elements":{"link":{"color":{"text":"var:preset|color|vivid-cyan-blue"}}}},"textColor":"vivid-cyan-blue"} -->
+<li class="wp-block-wpcloud-nav-item has-vivid-cyan-blue-color has-text-color has-link-color"><a href="https://{site.domain}" class="is-icon-only"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M19.5 4.5h-7V6h4.44l-5.97 5.97 1.06 1.06L18 7.06v4.44h1.5v-7Zm-13 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3H17v3a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h3V5.5h-3Z"></path></svg></a></li>
+<!-- /wp:wpcloud/nav-item --></ul>
+<!-- /wp:wpcloud/nav-list -->
 
-<!-- wp:group {"metadata":{"name":"Views"},"layout":{"type":"flex","flexWrap":"nowrap"}} -->
-<div class="wp-block-group"><!-- wp:wpcloud/site-view-link {"metadata":{"name":"Info"}} -->
-<!-- wp:heading {"fontSize":"medium"} -->
-<h2 class="wp-block-heading has-medium-font-size">Info</h2>
-<!-- /wp:heading -->
-<!-- /wp:wpcloud/site-view-link -->
+<!-- wp:wpcloud/nav-list -->
+<ul class="wp-block-wpcloud-nav-list"><!-- wp:wpcloud/nav-item {"url":"/sites/{site.slug}","text":"Info","secondary":true,"metadata":{"name":"Info"}} -->
+<li class="wp-block-wpcloud-nav-item"><a href="/sites/{site.slug}" class="secondary"><span>Info</span></a></li>
+<!-- /wp:wpcloud/nav-item -->
 
-<!-- wp:wpcloud/site-view-link {"view":"admin","adminOnly":true,"metadata":{"name":"Admin"}} -->
-<!-- wp:heading {"fontSize":"medium"} -->
-<h2 class="wp-block-heading has-medium-font-size">Admin</h2>
-<!-- /wp:heading -->
-<!-- /wp:wpcloud/site-view-link -->
+<!-- wp:wpcloud/nav-item {"url":"/sites/{site.slug}/settings","text":"Settings","secondary":true,"metadata":{"name":"Settings"}} -->
+<li class="wp-block-wpcloud-nav-item"><a href="/sites/{site.slug}/settings" class="secondary"><span>Settings</span></a></li>
+<!-- /wp:wpcloud/nav-item -->
 
-<!-- wp:wpcloud/site-view-link {"view":"users","adminOnly":true,"metadata":{"name":"Users"},"className":"site-view\u002d\u002dcurrent"} -->
-<!-- wp:heading {"fontSize":"medium"} -->
-<h2 class="wp-block-heading has-medium-font-size">Users</h2>
-<!-- /wp:heading -->
-<!-- /wp:wpcloud/site-view-link -->
+<!-- wp:wpcloud/nav-item {"url":"/sites/{site.slug}/users","text":"Users","secondary":true,"metadata":{"name":"Users"}} -->
+<li class="wp-block-wpcloud-nav-item"><a href="/sites/{site.slug}/users" class="secondary"><span>Users</span></a></li>
+<!-- /wp:wpcloud/nav-item -->
 
-<!-- wp:wpcloud/site-view-link {"view":"settings","adminOnly":true,"metadata":{"name":"Settings"}} -->
-<!-- wp:heading {"fontSize":"medium"} -->
-<h2 class="wp-block-heading has-medium-font-size">Settings</h2>
-<!-- /wp:heading -->
-<!-- /wp:wpcloud/site-view-link -->
+<!-- wp:wpcloud/nav-item {"url":"/sites/{site.slug}/domains","text":"Domains","secondary":true,"metadata":{"name":"Domains"}} -->
+<li class="wp-block-wpcloud-nav-item"><a href="/sites/{site.slug}/domains" class="secondary"><span>Domains</span></a></li>
+<!-- /wp:wpcloud/nav-item -->
 
-<!-- wp:wpcloud/site-view-link {"view":"domains","adminOnly":true,"metadata":{"name":"Domains"}} -->
-<!-- wp:heading {"fontSize":"medium"} -->
-<h2 class="wp-block-heading has-medium-font-size">Domains</h2>
-<!-- /wp:heading -->
-<!-- /wp:wpcloud/site-view-link --></div>
-<!-- /wp:group -->
+<!-- wp:wpcloud/nav-item {"url":"/sites/{site.slug}/metrics","text":"Metrics","secondary":true,"metadata":{"name":"Metrics"}} -->
+<li class="wp-block-wpcloud-nav-item"><a href="/sites/{site.slug}/metrics" class="secondary"><span>Metrics</span></a></li>
+<!-- /wp:wpcloud/nav-item -->
+
+<!-- wp:wpcloud/nav-item {"url":"/sites/{site.slug}/admin","text":"Admin","secondary":true,"metadata":{"name":"Admin"},"style":{"elements":{"link":{"color":{"text":"var:preset|color|vivid-red"}}}},"textColor":"vivid-red"} -->
+<li class="wp-block-wpcloud-nav-item has-vivid-red-color has-text-color has-link-color"><a href="/sites/{site.slug}/admin" class="secondary"><span>Admin</span></a></li>
+<!-- /wp:wpcloud/nav-item --></ul>
+<!-- /wp:wpcloud/nav-list --></nav>
+<!-- /wp:wpcloud/nav -->

@@ -1,10 +1,3 @@
-.wp-cloud-accordion {
-	summary {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-	}
-}
 .wpcloud-block-table-cell--wrapper {
 	white-space: nowrap;
 }
@@ -12,6 +5,9 @@
 .wp-block-wpcloud-nav  {
 	li {
 		white-space: nowrap;
+		* {
+			color: inherit;
+		}
 	}
 	a.current {
 		text-decoration: underline;

@@ -9,37 +9,13 @@
 <div class="wp-block-column"></div>
 <!-- /wp:column -->
 
-<!-- wp:column {"width":"360px","className":"wpcloud-site-view\u002d\u002dsidebar"} -->
-<div class="wp-block-column wpcloud-site-view--sidebar" style="flex-basis:360px"><!-- wp:group {"layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"space-between"}} -->
-<div class="wp-block-group"><!-- wp:heading {"level":1} -->
-<h1 class="wp-block-heading" id="/sites"><a href="/sites/">Sites</a></h1>
-<!-- /wp:heading -->
-
-<!-- wp:wpcloud/button {"label":"Add Site","url":"/add-site","className":"wpcloud-block-button\u002d\u002dcontent"} -->
-<div class="wpcloud-block-button__content"><span class="wpcloud-block-button__label">Add Site</span></div>
-<!-- /wp:wpcloud/button --></div>
-<!-- /wp:group -->
-
-<!-- wp:spacer {"height":"19px"} -->
-<div style="height:19px" aria-hidden="true" class="wp-block-spacer"></div>
-<!-- /wp:spacer --></div>
-<!-- /wp:column -->
-
 <!-- wp:column {"width":"1100px","className":"wpcloud-site-view\u002d\u002ddetails"} -->
 <div class="wp-block-column wpcloud-site-view--details" style="flex-basis:1100px"><!-- wp:template-part {"slug":"site-header","area":"uncategorized"} /-->
 
-<!-- wp:wpcloud/site-details {"metadata":{"name":"Admin Details"}} -->
-<div class="wp-block-wpcloud-site-details wpcloud-block-site-detail-card"><!-- wp:group {"tagName":"header","metadata":{"name":"header"},"className":"wpcloud-site-detail-card","layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"space-between"}} -->
-<header class="wp-block-group wpcloud-site-detail-card"><!-- wp:heading {"level":3,"className":"wpcloud-site-detail-card__title"} -->
-<h3 class="wp-block-heading wpcloud-site-detail-card__title">Admin</h3>
-<!-- /wp:heading -->
-
-<!-- wp:wpcloud/button {"type":"detail","label":"WP Admin","isPrimary":false,"addIcon":true,"name":"wp_admin_url","className":"wpcloud-block-button\u002d\u002dcontent"} -->
-<div class="wpcloud-block-button__content"><span class="wpcloud-block-button__label">WP Admin</span><!-- wp:wpcloud/icon {"icon":"external"} -->
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" class="wp-block-wpcloud-icon wpcloud-block-icon" aria-hidden="true"><path d="M19.5 4.5h-7V6h4.44l-5.97 5.97 1.06 1.06L18 7.06v4.44h1.5v-7Zm-13 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3H17v3a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h3V5.5h-3Z"></path></svg>
-<!-- /wp:wpcloud/icon --></div>
-<!-- /wp:wpcloud/button --></header>
-<!-- /wp:group -->
+<!-- wp:wpcloud/card {"metadata":{"name":"Card: Admin"}} -->
+<article class="wp-block-wpcloud-card"><!-- wp:wpcloud/card-section {"text":"Admin","metadata":{"name":"Admin"}} -->
+<header class="wp-block-wpcloud-card-section"><h2>Admin</h2></header>
+<!-- /wp:wpcloud/card-section -->
 
 <!-- wp:wpcloud/site-detail {"label":"WP Admin User","name":"wp_admin_user","className":"wp-block-wpcloud-site-detail"} -->
 <div class="wpcloud-block-site-detail"><div class="wpcloud-block-site-detail__title"><h5 class="wpcloud-block-site-detail__title-content">WP Admin User</h5></div><div class="wpcloud-block-site-detail__value-container"><div class="wpcloud-block-site-detail__value">{ WP Admin User }</div></div></div>
@@ -47,74 +23,58 @@
 
 <!-- wp:wpcloud/site-detail {"label":"Admin Email","name":"wp_admin_email","metadata":{"name":"Admin Email"},"className":"wp-block-wpcloud-site-detail"} -->
 <div class="wpcloud-block-site-detail"><div class="wpcloud-block-site-detail__title"><h5 class="wpcloud-block-site-detail__title-content">Admin Email</h5></div><div class="wpcloud-block-site-detail__value-container"><div class="wpcloud-block-site-detail__value">{ Admin Email }</div></div></div>
-<!-- /wp:wpcloud/site-detail --></div>
-<!-- /wp:wpcloud/site-details -->
+<!-- /wp:wpcloud/site-detail --></article>
+<!-- /wp:wpcloud/card -->
 
-<!-- wp:wpcloud/site-details {"metadata":{"name":"Site Info"},"className":"wpcloud-site-details\u002d\u002dsite-info"} -->
-<div class="wp-block-wpcloud-site-details wpcloud-site-details--site-info wpcloud-block-site-detail-card"><!-- wp:group {"tagName":"header","metadata":{"name":"header"},"className":"wpcloud-site-detail-card","layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"space-between"}} -->
-<header class="wp-block-group wpcloud-site-detail-card"><!-- wp:heading {"level":3,"className":"wpcloud-site-detail-card__title"} -->
-<h3 class="wp-block-heading wpcloud-site-detail-card__title">Site Info</h3>
-<!-- /wp:heading -->
-
-<!-- wp:wpcloud/button {"type":"detail","label":"phpMyAdmin ","isPrimary":false,"addIcon":true,"name":"phpmyadmin_url","refresh":true,"className":"wpcloud-block-button\u002d\u002dcontent"} -->
-<div class="wpcloud-block-button__content"><span class="wpcloud-block-button__label">phpMyAdmin </span><!-- wp:wpcloud/icon {"icon":"external"} -->
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" class="wp-block-wpcloud-icon wpcloud-block-icon" aria-hidden="true"><path d="M19.5 4.5h-7V6h4.44l-5.97 5.97 1.06 1.06L18 7.06v4.44h1.5v-7Zm-13 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3H17v3a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h3V5.5h-3Z"></path></svg>
-<!-- /wp:wpcloud/icon --></div>
-<!-- /wp:wpcloud/button --></header>
-<!-- /wp:group -->
+<!-- wp:wpcloud/card {"metadata":{"name":"Card: Site Info"}} -->
+<article class="wp-block-wpcloud-card"><!-- wp:wpcloud/card-section {"text":"Site Info","metadata":{"name":"Site Info"}} -->
+<header class="wp-block-wpcloud-card-section"><h2>Site Info</h2></header>
+<!-- /wp:wpcloud/card-section -->
 
 <!-- wp:wpcloud/site-update -->
 <!-- wp:wpcloud/form {"wpcloudAction":" site_update"} -->
-<form class="wp-block-wpcloud-form wpcloud-block-form" enctype="text/plain"><!-- wp:wpcloud/form-input {"type":"select","name":"static_file_404","label":"","options":[{"value":"lightweight","label":"Lightweight"},{"value":"wordpress","label":"WordPress"}],"uniqueId":"93c5f83e-aee6-4c76-b966-8daa252995b6-static_file_404","submitOnChange":true,"metadata":{"name":"static 404 page"}} -->
-<div class="wpcloud-block-form--input wp-block-wpcloud-form-input wpcloud-block-form--input--select"><label class="wpcloud-block-form-input__label" for="93c5f83e-aee6-4c76-b966-8daa252995b6-static_file_404"><span class="wpcloud-block-form-input__label-content"><span class="wpcloud-block-form-input__label-text"></span><!-- wp:group {"layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"space-between"}} -->
+<form class="wp-block-wpcloud-form wpcloud-block-form" enctype="text/plain"><!-- wp:wpcloud/form-input {"type":"select","name":"static_file_404","label":"","options":[{"value":"lightweight","label":"Lightweight"},{"value":"wordpress","label":"WordPress"}],"uniqueId":"c7766451-5091-414f-ae51-bf09971593d0-static_file_404","submitOnChange":true,"metadata":{"name":"static 404 page"}} -->
+<div class="wpcloud-block-form--input wp-block-wpcloud-form-input wpcloud-block-form--input--select"><label class="wpcloud-block-form-input__label" for="c7766451-5091-414f-ae51-bf09971593d0-static_file_404"><span class="wpcloud-block-form-input__label-content"><span class="wpcloud-block-form-input__label-text"></span><!-- wp:group {"layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"left"}} -->
 <div class="wp-block-group"><!-- wp:paragraph -->
 <p>Static 404 page</p>
 <!-- /wp:paragraph -->
 
-<!-- wp:wpcloud/more-menu {"icon":"info","iconSize":"16","position":"left"} -->
-<div class="wpcloud-more-menu wp-block-wpcloud-more-menu"><button class="wpcloud-more-menu__button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M12 3.2c-4.8 0-8.8 3.9-8.8 8.8 0 4.8 3.9 8.8 8.8 8.8 4.8 0 8.8-3.9 8.8-8.8 0-4.8-4-8.8-8.8-8.8zm0 16c-4 0-7.2-3.3-7.2-7.2C4.8 8 8 4.8 12 4.8s7.2 3.3 7.2 7.2c0 4-3.2 7.2-7.2 7.2zM11 17h2v-6h-2v6zm0-8h2V7h-2v2z"></path></svg></button><nav class="wpcloud-more-menu__nav is-closed" style="right:0"><!-- wp:paragraph -->
-<p>Set how a site responds to requests for non-existent static files. May be set to "lightweight" for simple, fast web server 404s. May be set to "wordpress" to delegate such requests to WordPress. The current default is "wordpress".</p>
-<!-- /wp:paragraph --></nav></div>
-<!-- /wp:wpcloud/more-menu --></div>
+<!-- wp:wpcloud/dropdown {"hideChevron":true,"useIcon":true,"icon":"info","metadata":{"name":""}} -->
+<details class="wp-block-wpcloud-dropdown dropdown hide-chevron"><summary role="" class=""><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 3.2c-4.8 0-8.8 3.9-8.8 8.8 0 4.8 3.9 8.8 8.8 8.8 4.8 0 8.8-3.9 8.8-8.8 0-4.8-4-8.8-8.8-8.8zm0 16c-4 0-7.2-3.3-7.2-7.2C4.8 8 8 4.8 12 4.8s7.2 3.3 7.2 7.2c0 4-3.2 7.2-7.2 7.2zM11 17h2v-6h-2v6zm0-8h2V7h-2v2z"></path></svg></summary><ul><!-- wp:wpcloud/list-item -->
+<li class="wp-block-wpcloud-list-item"><!-- wp:paragraph {"metadata":{"name":"Item"}} -->
+<p>Set how a site responds to requests for non-existent static files.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>May be set to "lightweight" for simple, fast web server 404s.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>May be set to "wordpress" to delegate such requests to WordPress. The current default is "wordpress".</p>
+<!-- /wp:paragraph --></li>
+<!-- /wp:wpcloud/list-item --></ul></details>
+<!-- /wp:wpcloud/dropdown --></div>
 <!-- /wp:group --></span><div class="wpcloud-form-input--select--wrapper"><select class="wpcloud-block-form-input__input submit-on-change wpcloud-station-form-input__select" aria-label="Select" name="static_file_404"><option value="lightweight">Lightweight</option><option value="wordpress">WordPress</option></select></div></label></div>
 <!-- /wp:wpcloud/form-input -->
 
-<!-- wp:wpcloud/form-input {"type":"select","name":"wp_version","label":"","options":[{"value":"latest","label":"latest"},{"value":"previous","label":"previous"},{"value":"beta","label":"beta"}],"uniqueId":"a3e5b5d1-ea2b-4fb2-a0db-d84bce1a2fa9-wp_version","submitOnChange":true,"metadata":{"name":"WP Version"}} -->
-<div class="wpcloud-block-form--input wp-block-wpcloud-form-input wpcloud-block-form--input--select"><label class="wpcloud-block-form-input__label" for="a3e5b5d1-ea2b-4fb2-a0db-d84bce1a2fa9-wp_version"><span class="wpcloud-block-form-input__label-content"><span class="wpcloud-block-form-input__label-text"></span><!-- wp:group {"style":{"spacing":{"blockGap":"var:preset|spacing|20"}},"layout":{"type":"flex","flexWrap":"nowrap"}} -->
+<!-- wp:wpcloud/form-input {"type":"select","name":"wp_version","label":"","options":[{"value":"latest","label":"latest"},{"value":"previous","label":"previous"},{"value":"beta","label":"beta"}],"uniqueId":"6d12c1f5-9acc-4e81-81e3-14e235ee948f-wp_version","submitOnChange":true,"metadata":{"name":"WP Version"}} -->
+<div class="wpcloud-block-form--input wp-block-wpcloud-form-input wpcloud-block-form--input--select"><label class="wpcloud-block-form-input__label" for="6d12c1f5-9acc-4e81-81e3-14e235ee948f-wp_version"><span class="wpcloud-block-form-input__label-content"><span class="wpcloud-block-form-input__label-text"></span><!-- wp:group {"style":{"spacing":{"blockGap":"var:preset|spacing|20"}},"layout":{"type":"flex","flexWrap":"nowrap"}} -->
 <div class="wp-block-group"><!-- wp:paragraph {"style":{"layout":{"selfStretch":"fit","flexSize":null}}} -->
 <p>WP Version </p>
-<!-- /wp:paragraph -->
-
-<!-- wp:wpcloud/more-menu {"icon":"info","iconSize":"16"} -->
-<div class="wpcloud-more-menu wp-block-wpcloud-more-menu"><button class="wpcloud-more-menu__button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M12 3.2c-4.8 0-8.8 3.9-8.8 8.8 0 4.8 3.9 8.8 8.8 8.8 4.8 0 8.8-3.9 8.8-8.8 0-4.8-4-8.8-8.8-8.8zm0 16c-4 0-7.2-3.3-7.2-7.2C4.8 8 8 4.8 12 4.8s7.2 3.3 7.2 7.2c0 4-3.2 7.2-7.2 7.2zM11 17h2v-6h-2v6zm0-8h2V7h-2v2z"></path></svg></button><nav class="wpcloud-more-menu__nav is-closed" style="left:0"><!-- wp:paragraph -->
-<p>Sets the sites WordPress version.</p>
-<!-- /wp:paragraph --></nav></div>
-<!-- /wp:wpcloud/more-menu --></div>
+<!-- /wp:paragraph --></div>
 <!-- /wp:group --></span><div class="wpcloud-form-input--select--wrapper"><select class="wpcloud-block-form-input__input submit-on-change wpcloud-station-form-input__select" aria-label="Select" name="wp_version"><option value="latest">latest</option><option value="previous">previous</option><option value="beta">beta</option></select></div></label></div>
 <!-- /wp:wpcloud/form-input -->
 
-<!-- wp:wpcloud/form-input {"type":"select","name":"php_version","label":"","uniqueId":"b0abf856-3ac6-49d2-aa06-c26ca5e49846-php_version","submitOnChange":true,"metadata":{"name":"PHP Version"}} -->
-<div class="wpcloud-block-form--input wp-block-wpcloud-form-input wpcloud-block-form--input--select"><label class="wpcloud-block-form-input__label" for="b0abf856-3ac6-49d2-aa06-c26ca5e49846-php_version"><span class="wpcloud-block-form-input__label-content"><span class="wpcloud-block-form-input__label-text"></span><!-- wp:wpcloud/expanding-section {"clickToToggle":true,"hideHeader":false,"metadata":{"name":"php_version hint"}} -->
-<div class="wp-block-wpcloud-expanding-section wpcloud-block-expanding-section click-to-toggle"><!-- wp:wpcloud/expanding-header -->
-<div class="wp-block-wpcloud-expanding-header wpcloud-block-expanding-section__header-wrapper"><div class="wpcloud-block-expanding-section__header"><!-- wp:heading {"level":5} -->
-<h5 class="wp-block-heading">PHP Version</h5>
-<!-- /wp:heading -->
-
-<!-- wp:wpcloud/icon {"icon":"info"} -->
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" class="wp-block-wpcloud-icon wpcloud-block-icon" aria-hidden="true"><path d="M12 3.2c-4.8 0-8.8 3.9-8.8 8.8 0 4.8 3.9 8.8 8.8 8.8 4.8 0 8.8-3.9 8.8-8.8 0-4.8-4-8.8-8.8-8.8zm0 16c-4 0-7.2-3.3-7.2-7.2C4.8 8 8 4.8 12 4.8s7.2 3.3 7.2 7.2c0 4-3.2 7.2-7.2 7.2zM11 17h2v-6h-2v6zm0-8h2V7h-2v2z"></path></svg>
-<!-- /wp:wpcloud/icon --></div></div>
-<!-- /wp:wpcloud/expanding-header -->
-
-<!-- wp:wpcloud/expanding-content -->
-<div class="wp-block-wpcloud-expanding-content wpcloud-block-expanding-section__content-wrapper"><div class="wpcloud-block-expanding-section__content"><div class="wpcloud-block-expanding-section__content-inner"><!-- wp:paragraph -->
-<p>Sets the sites PHP version.</p>
-<!-- /wp:paragraph --></div></div></div>
-<!-- /wp:wpcloud/expanding-content --></div>
-<!-- /wp:wpcloud/expanding-section --></span><div class="wpcloud-form-input--select--wrapper"><select class="wpcloud-block-form-input__input submit-on-change wpcloud-station-form-input__select" aria-label="Select" name="php_version"><option value="8.1">8.1</option><option value="8.2">8.2</option><option value="8.3">8.3</option><option value="8.4">8.4</option></select></div></label></div>
+<!-- wp:wpcloud/form-input {"type":"select","name":"php_version","label":"","uniqueId":"7b0aa53f-2821-4e51-b31c-3e20c0f86cbf-php_version","submitOnChange":true,"metadata":{"name":"PHP Version"}} -->
+<div class="wpcloud-block-form--input wp-block-wpcloud-form-input wpcloud-block-form--input--select"><label class="wpcloud-block-form-input__label" for="7b0aa53f-2821-4e51-b31c-3e20c0f86cbf-php_version"><span class="wpcloud-block-form-input__label-content"><span class="wpcloud-block-form-input__label-text"></span><!-- wp:group {"style":{"spacing":{"padding":{"top":"0","bottom":"0"},"blockGap":"var:preset|spacing|20"}},"layout":{"type":"flex","flexWrap":"nowrap"}} -->
+<div class="wp-block-group" style="padding-top:0;padding-bottom:0"><!-- wp:paragraph -->
+<p>PHP version</p>
+<!-- /wp:paragraph --></div>
+<!-- /wp:group --></span><div class="wpcloud-form-input--select--wrapper"><select class="wpcloud-block-form-input__input submit-on-change wpcloud-station-form-input__select" aria-label="Select" name="php_version"><option value="8.1">8.1</option><option value="8.2">8.2</option><option value="8.3">8.3</option><option value="8.4">8.4</option></select></div></label></div>
 <!-- /wp:wpcloud/form-input --></form>
 <!-- /wp:wpcloud/form -->
-<!-- /wp:wpcloud/site-update --></div>
-<!-- /wp:wpcloud/site-details --></div>
+<!-- /wp:wpcloud/site-update --></article>
+<!-- /wp:wpcloud/card --></div>
 <!-- /wp:column -->
 
 <!-- wp:column -->
