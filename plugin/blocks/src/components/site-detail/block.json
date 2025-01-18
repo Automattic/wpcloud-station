@@ -9,7 +9,15 @@
 	"description": "The Site Detail block displays a name-value pair for a site detail. The gray italic text is just a placeholder for the actual site detail value.",
 	"example": {},
 	"supports": {
-		"html": false
+		"html": false,
+		"color": {
+			"gradients": true,
+			"background": true,
+			"text": true,
+			"link": true,
+			"border": true,
+			"custom": true
+		}
 	},
 	"textdomain": "wpcloud",
 	"editorScript": "file:./index.js",

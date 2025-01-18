@@ -10,7 +10,12 @@
 	"supports": {
 		"html": false,
 		"color": {
-			"text" : true
+			"gradients": true,
+			"background": true,
+			"text": true,
+			"link": true,
+			"border": true,
+			"custom": true
 		}
 	},
 	"textdomain": "wpcloud",
