@@ -23,7 +23,7 @@ import { useSyncMetaName } from '@wpcloud/hooks';
 
 const edit = ( { clientId, attributes, setAttributes } ) => {
 	const blockProps = useBlockProps();
-	const { tag, text, section, level, levelOptions } = attributes;
+	const { text, section, level, levelOptions } = attributes;
 	const tagName = 'h' + level;
 
 	useSyncMetaName(clientId, text);
@@ -37,24 +37,6 @@ const edit = ( { clientId, attributes, setAttributes } ) => {
 					onChange={ (nextLevel) => setAttributes({ level: nextLevel }) }
 				/>
 			</BlockControls>
-			<InspectorControls>
-			<PanelBody label={__('Settings')}>
-				<SelectControl
-							label={__('Tag')}
-							value={tag}
-							options={[
-								{ label: 'span', value: 'span' },
-								{ label: 'h1', value: 'h1' },
-								{ label: 'h2', value: 'h2' },
-								{ label: 'h3', value: 'h3' },
-								{ label: 'h4', value: 'h4' },
-								{ label: 'h5', value: 'h5' },
-								{ label: 'h6', value: 'h6' },
-							]}
-							onChange={(value) => setAttributes({ tag: value} )}
-						/>
-			</PanelBody >
-		</InspectorControls>
 	</>
 	);
 
@@ -79,17 +61,17 @@ registerBlockType(metadata.name, {
 	edit,
 	save: ({ attributes }) => {
 
-		const { tag, text, section } = attributes;
+		const { level, text, section } = attributes;
 		if ( !text ) {
 			return null;
 		}
-		const richText = <RichText.Content tagName={tag} value={text} />
-		const Container = section === 'header' ? 'header' : 'footer';
+		const richText = <RichText.Content tagName={`h${level}`} value={text} />
+		const Section = section === 'header' ? 'header' : 'footer';
 
 		return (
-			<Container { ...useBlockProps.save() }>
+			<Section { ...useBlockProps.save() }>
 				{richText}
-			</Container>
+			</Section>
 		);
 	}
 });
