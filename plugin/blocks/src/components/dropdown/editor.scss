@@ -2,6 +2,10 @@
 	border: 1px solid #000;
 	border-radius: 0.25rem;
 
+	&.hide-chevron summary::after {
+		display: none;
+	}
+
 	&:not([open]) > summary {
 		border-bottom-left-radius: 0.25rem;
 		border-bottom-right-radius: 0.25rem;
