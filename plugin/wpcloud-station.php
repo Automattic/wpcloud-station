@@ -7,7 +7,7 @@
  * Author URI:      https://wp.cloud/
  * Text Domain:     wpcloud
  * Domain Path:     /languages
- * Version:         v1.0.0-beta.6
+ * Version:         v1.0.0-beta.7
  *
  * @package        wpcloud-station
  */
@@ -27,6 +27,8 @@ define( 'WPCLOUD_CATEGORY_PRIVATE', 'wpcloud_private' );
 define( 'WPCLOUD_CATEGORY_CORE', 'wpcloud_core_pages' );
 
 define( 'WP_STATION_CLIENT_ID', '61' );
+
+define( 'DEFAULT_PHP_VERSION', '8.2' );
 
 
 // Initialize the plugin.
