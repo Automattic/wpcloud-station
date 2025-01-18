@@ -7,6 +7,8 @@ import classnames from 'classnames';
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
+import { useEffect } from '@wordpress/element';
+import { useSelect, useDispatch } from '@wordpress/data';
 import {
 	useBlockProps,
 	useInnerBlocksProps,
@@ -34,7 +36,6 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 	const style = blockProps.style;
 	delete blockProps.style;
 
-
 	const {
 		accordion,
 		hideChevron,
@@ -52,6 +53,34 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 		contrast,
 		secondary,
 	} = attributes;
+
+	const { innerBlocks, isSingleEmptyBlock } = useSelect(
+		(select) => {
+			const { getBlock } = select('core/block-editor');
+			const block = getBlock(clientId);
+
+			if (!block) {
+				return { innerBlocks: [], isSingleEmptyBlock: false };
+			}
+
+			const innerBlocks = block.innerBlocks;
+
+			const isSingleEmptyBlock =
+				innerBlocks.length === 1 &&
+				!innerBlocks[0].attributes.content;
+
+			return { innerBlocks, isSingleEmptyBlock };
+		},
+		[clientId]
+	);
+
+	const { removeBlock } = useDispatch('core/block-editor');
+
+	useEffect(() => {
+		if (innerBlocks && isSingleEmptyBlock && accordion) {
+			removeBlock(innerBlocks[0]?.clientId);
+		}
+	}, [accordion, isSingleEmptyBlock, innerBlocks, removeBlock]);
 
 	useSyncMetaName(clientId, summary);
 	const update = updateAttribute(setAttributes);
