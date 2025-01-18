@@ -18,7 +18,7 @@
 		}
 	},
 	"usesContext": [ "queryId", "query","postId", "postTitle" ,"primaryDomain"],
-	"textdomain": "site-card",
+	"textdomain": "wpcloud",
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./style-index.css",
 	"render": "file:./render.php"
