@@ -7,7 +7,7 @@ import { SelectControl, TextControl } from '@wordpress/components';
 import * as icons from '@wordpress/icons';
 
 const iconOptions = Object.keys(icons).map((key) =>
-	key === 'Icon' ? { label: '', key: '' } : { label: key, value: key }
+	key === 'Icon' ? { label: '', value: '' } : { label: key, value: key }
 );
 
 export default function( { attributes, setAttributes } ) {
@@ -16,7 +16,7 @@ export default function( { attributes, setAttributes } ) {
 	return (
 		<>
 		<SelectControl
-				label={__('Icon')}
+			label={__('Icon')}
 			value={ icon }
 			options={ iconOptions }
 			onChange={ ( newVal ) => {

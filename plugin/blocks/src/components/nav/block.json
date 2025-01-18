@@ -1,0 +1,20 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "wpcloud/nav",
+	"version": "0.1.0",
+	"title": "WP Cloud Nav",
+	"category": "wpcloud",
+	"icon": "button",
+	"description": "Nav block",
+	"supports": {
+		"html": false
+	},
+	"textdomain": "wpcloud",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"viewScript": "file:./view.js",
+	"allowedBlocks": [
+		"wpcloud/nav-list"
+	]
+}

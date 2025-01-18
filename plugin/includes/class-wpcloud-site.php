@@ -20,6 +20,34 @@ class WPCLOUD_Site {
 	);
 
 	/**
+	 * Constructor.
+	 *
+	 * @param WP_Post $post The post object for the site.
+	 * @return void
+	 */
+	public function __construct( $post = null ) {
+		if ( ! $post ) {
+			$post = get_post();
+		}
+
+		if ( 'wpcloud_site' === $post->post_type ) {
+			$this->post = $post;
+		}
+	}
+
+	/**
+	 * Getter
+	 *
+	 * @param string $name The name of the property.
+	 * @return mixed
+	 */
+	public function __get( string $name ): mixed {
+		if ( ! $this->post ) {
+			return null;
+		}
+		return self::get_detail( $this->post, $name );
+	}
+	/**
 	 * Create a new WPCLOUD_Site.
 	 *
 	 * Example options:
@@ -100,6 +128,19 @@ class WPCLOUD_Site {
 	}
 
 	/**
+	 * Get a site
+	 *
+	 * @return WPCLOUD_Site|null
+	 */
+	public static function get(): null|WPCLOUD_Site {
+		$post = get_post();
+		if ( ! $post ) {
+			return null;
+		}
+		return new WPCLOUD_Site( $post );
+	}
+
+	/**
 	 * Get site by ID.
 	 *
 	 * @param int $wpcloud_site_id The site ID.
@@ -159,6 +200,37 @@ class WPCLOUD_Site {
 			return $post_id;
 		}
 		return get_post( $post_id );
+	}
+
+
+	/**
+	 * Replace the attribute in a string.
+	 *
+	 * @param string $str The string to replace the attribute in.
+	 * @param string $regex The regex to match the attribute. defaults to looking for {site.attribute}.
+	 *
+	 * @return string The string with the attribute replaced.
+	 */
+	public function replace_attr( ?string $str, string $regex = '/\{site\.(\w+)\}/' ): string {
+		if ( ! $str ) {
+			return '';
+		}
+		if ( preg_match_all( $regex, $str, $matches ) ) {
+			$l = count( $matches[0] );
+			for ( $i = 0; $i < $l; $i++ ) {
+				$attribute = $matches[1][ $i ] ?? '';
+				$new_value = $this->$attribute;
+				if ( is_wp_error( $new_value ) ) {
+					return $str;
+				}
+				if ( ! $new_value ) {
+					return $str;
+				}
+				$str = str_replace( $matches[0][ $i ], $new_value, $str );
+			}
+		}
+
+		return $str;
 	}
 
 	/**
@@ -493,6 +565,9 @@ class WPCLOUD_Site {
 
 		$result = '';
 		switch ( $key ) {
+			case 'id':
+				return $wpcloud_site_id;
+
 			case 'owner_sites_link':
 				$owner = get_user_by( 'id', get_post_field( 'post_author', $post ) );
 				if ( ! $owner ) {
@@ -537,7 +612,20 @@ class WPCLOUD_Site {
 				return $result->suggested ?? $result->ips ?? '';
 
 			case 'site_name':
-				return get_the_title( $post );
+			case 'name':
+				$name = get_the_title( $post );
+				return str_replace( '.wpcloudstation.dev', ' ', $name );
+
+			case 'slug':
+				return $post->post_name;
+
+			case 'domain':
+				$result = wpcloud_client_site_details( $wpcloud_site_id, true );
+				if ( is_wp_error( $result ) ) {
+					error_log( $result->get_error_message() );
+					return '';
+				}
+				return $result->domain_name;
 
 			case 'wp_admin_url':
 				$result = wpcloud_client_site_details( $wpcloud_site_id, true );

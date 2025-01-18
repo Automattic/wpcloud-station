@@ -1,0 +1,43 @@
+.wp-block-wpcloud-dropdown {
+	border: 1px solid #000;
+	border-radius: 0.25rem;
+
+	&.hide-chevron summary::after {
+		display: none;
+	}
+
+	&:not([open]) > summary {
+		border-bottom-left-radius: 0.25rem;
+		border-bottom-right-radius: 0.25rem;
+	}
+
+	> *:not(:first-child) {
+		margin: 0 0.5rem;
+	}
+	summary {
+ 		border-top-left-radius: 0.25rem;
+		border-top-right-radius: 0.25rem;
+		display: flex;
+		justify-content: space-between;
+		* {
+			margin: .25rem 0.5rem 0;
+		}
+		&::after {
+			display: block;
+   		width: 1rem;
+			margin-right: 0.5rem;
+   		margin-inline-start: .25rem;
+   		float: right;
+   		transform: rotate(0) translate(.2rem);
+   		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='rgb(136, 145, 164)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+   		background-position: right center;
+   		background-size: 1rem auto;
+   		background-repeat: no-repeat;
+   		content: "";
+		}
+	}
+	ul {
+		padding: 0;
+		list-style: none;
+	}
+}

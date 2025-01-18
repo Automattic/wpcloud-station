@@ -1,0 +1,17 @@
+.wp-block-wpcloud-card {
+		padding: 20px;
+		margin-bottom: 20px;
+		border: 1px solid #524b4b;
+		border-radius: 5px;
+		background-color: #f9f9f9;
+
+		header, footer {
+			* {
+				margin: 0;
+			}
+		}
+		header {
+			margin-bottom: 5px;
+		}
+
+}

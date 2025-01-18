@@ -4,7 +4,7 @@
 import { __ } from '@wordpress/i18n';
 import { SelectControl } from '@wordpress/components';
 
-export default function DetailSelect( {
+export default function DetailSelectControl( {
 	attributes,
 	setAttributes,
 	onChange,

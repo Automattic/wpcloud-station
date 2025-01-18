@@ -19,14 +19,19 @@ if ( ! $site_cpt ) {
 global $post;
 $post = $site_cpt; // phpcs:ignore
 
-$template_path = get_stylesheet_directory() . "/templates/$view-wpcloud_site.html";
+$template       = '';
+$theme          = get_stylesheet();
+$block_template = get_block_template( "$theme//$view-wpcloud_site" );
 
-error_log( 'Template Path: ' . $template_path ); // phpcs:ignore
-
-if ( file_exists( $template_path ) ) {
-	$template = file_get_contents( $template_path, true ); // phpcs:ignore
+// Check if there are modifications to the block template.
+if ( $block_template && ! empty( $block_template->content ) ) {
+	$template = $block_template->content;
 } else {
-	$template = '';
+	// Else check if there is a custom template in the theme.
+	$template_path = get_stylesheet_directory() . "/templates/$view-wpcloud_site.html";
+	if ( file_exists( $template_path ) ) {
+		$template = file_get_contents( $template_path ); // phpcs:ignore
+	}
 }
 
 // @NOTE we need to build the blocks in the head so the styles are enqueued.
@@ -34,7 +39,7 @@ if ( file_exists( $template_path ) ) {
 <!doctype html>
 <html <?php language_attributes(); ?>>
 <head>
-	<meta charset="<?php bloginfo( 'charset' ); ?>">
+	<meta charset=" < ? php bloginfo( 'charset' ); ?>">
 	<?php
 	$content = do_blocks( $template );
 	wp_head();

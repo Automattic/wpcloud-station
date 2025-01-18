@@ -22,7 +22,7 @@ const Icon = icons.Icon;
  * Internal dependencies
  */
 
-import IconControl from '../controls/iconControl.js';
+import { IconControls }  from '@wpcloud/controls';
 
 export default function ( { attributes, setAttributes, className } ) {
 	const { icon, iconSize } = attributes;
@@ -31,7 +31,7 @@ export default function ( { attributes, setAttributes, className } ) {
 	const controls = (
 		<InspectorControls>
 			<PanelBody label={ __( 'Settings' ) }>
-				<IconControl { ...{ attributes, setAttributes } } />
+				<IconControls { ...{ attributes, setAttributes } } />
 			</PanelBody>
 		</InspectorControls>
 	);

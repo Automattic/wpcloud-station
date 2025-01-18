@@ -12,7 +12,7 @@
 		"html": false
 	},
 	"allowedBlocks": [ "core/rich-text", "wpcloud/table-cell" ],
-	"textdomain": "site-template-header",
+	"textdomain": "wpcloud",
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",
 	"style": "file:./style-index.css"

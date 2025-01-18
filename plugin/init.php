@@ -188,7 +188,7 @@ add_filter( 'template_include', 'wpcloud_station_template_include', 50 );
  *
  * @param string $view The view.
  */
-function wpcloud_station_add_site_view_rewrite_rule( $view ) {
+function wpcloud_station_register_site_view( $view ) {
 	$query = sprintf( 'index.php?site_name=$matches[1]&view=%s', $view );
 	$regex = sprintf( 'sites/([^/]+)/%s/?$', $view );
 	add_rewrite_rule( $regex, $query, 'top' );

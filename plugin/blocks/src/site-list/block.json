@@ -11,6 +11,6 @@
 	"supports": {
 		"html": false
 	},
-	"textdomain": "site-list",
+	"textdomain": "wpcloud",
 	"editorScript": "file:./index.js"
 }

@@ -1,0 +1,51 @@
+.wpcloud-block-table-cell--wrapper {
+	white-space: nowrap;
+}
+
+.wp-block-wpcloud-nav  {
+	li {
+		white-space: nowrap;
+		* {
+			color: inherit;
+		}
+	}
+	a.current {
+		text-decoration: underline;
+	}
+	a.is-icon-only {
+		padding-left: 0;
+		display: flex;
+		align-items: center;
+	}
+}
+
+.wp-block-wpcloud-card {
+	header, footer {
+		* {
+			color: inherit;
+			margin: 0;
+		}
+	}
+}
+
+button[type=submit].wpcloud-block-button {
+	width: fit-content;
+}
+
+.wp-block-wpcloud-dropdown {
+	summary {
+		display: flex;
+    justify-content: space-between;
+    align-items: center;
+		* {
+			margin: 0;
+		}
+	}
+	border: none;
+	&.hide-chevron  {
+		::after {
+			display: none;
+		}
+
+	}
+}

@@ -1,0 +1,19 @@
+.wp-block-wpcloud-nav {
+	display: flex;
+	justify-content: space-between;
+	ul {
+		display: flex;
+		list-style: none;
+		align-items: center;
+
+		li {
+			display: inline-block;
+			margin: 0;
+			padding: var(--wp--preset--spacing--30) var(--wp--preset--spacing--40);
+			* {
+				margin: 0;
+				padding: 0;
+			}
+		}
+	}
+}

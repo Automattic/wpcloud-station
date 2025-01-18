@@ -135,23 +135,28 @@
 		}
 	}
 
+
+	async function onFormSubmit(form) {
+		// Get select values before cloning the form
+		const selects = form.querySelectorAll('select:not(.submit-on-change)');
+		let selectData = {};
+		selects.forEach((select) => { selectData[select.name] = select.value; });
+
+		// Ignore the submit on change inputs
+		const altForm = form.cloneNode(true);
+		altForm.querySelectorAll('.submit-on-change').forEach( input => input.remove() );
+		const data = Object.fromEntries(new FormData(altForm));
+
+		await submitFormData(form, {...data, ...selectData});
+	}
+
 	wpcloud.bindFormHandler = (form) => {
 		form.addEventListener('submit', async (e) => {
 			const button = form.querySelector('button[type="submit"]');
 			e.preventDefault();
 			button.setAttribute('disabled', 'disabled');
 
-			// Get select values before cloning the form
-			const selects = form.querySelectorAll('select:not(.submit-on-change)');
-			let selectData = {};
-			selects.forEach((select) => { selectData[select.name] = select.value; });
-
-			// Ignore the submit on change inputs
-			const altForm = form.cloneNode(true);
-			altForm.querySelectorAll('.submit-on-change').forEach( input => input.remove() );
-			const data = Object.fromEntries(new FormData(altForm));
-
-			await submitFormData(form, {...data, ...selectData});
+			await onFormSubmit(form);
 		});
 
 		// Bind submit on change inputs
@@ -184,7 +189,18 @@
 		.querySelectorAll( 'form.wpcloud-block-form[data-ajax]' )
 		.forEach(wpcloud.bindFormHandler);
 
-
+	wpcloud.hooks.addAction(
+		'wpcloud_form_on_submit',
+		'wpcloud',
+		async (trigger) => {
+			if (trigger.getAttribute('disabled')) {
+				return;
+			}
+			trigger.setAttribute('disabled', 'disabled');
+			const form = trigger.closest('form');
+			await onFormSubmit(form);
+		}
+	)
 	// Default handler for destructive actions
 	// if `confirmed` is defined then we can assume some other script has already handled the confirmation.
 	wpcloud.hooks.addFilter(

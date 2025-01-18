@@ -1,0 +1,75 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "wpcloud/dropdown",
+	"version": "0.1.0",
+	"title": "Dropdown",
+	"category": "wpcloud",
+	"icon": "list-view",
+	"description": "Dropdown block",
+	"supports": {
+		"html": false,
+		"color" : {
+			"gradients": true,
+			"background": true,
+			"text": true,
+			"link": true,
+			"border": true,
+			"custom": true
+		}
+	},
+	"textdomain": "wpcloud",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"attributes": {
+		"accordion": {
+			"type": "boolean",
+			"default": false
+		},
+		"hideChevron": {
+			"type": "boolean",
+			"default": false
+		},
+		"summary": {
+			"type": "rich-text",
+			"source": "rich-text",
+			"selector": "h1,h2,h3,h4,h5,h6",
+			"role": "summary"
+		},
+		"level": {
+			"type": "number",
+			"default": 2
+		},
+		"levelOptions": {
+			"type": "array"
+		},
+		"useIcon": {
+			"type": "boolean",
+			"default": false
+		},
+		"icon": {
+			"type": "string",
+			"default": "wordpress"
+		},
+		"iconSize": {
+			"type": "number",
+			"default": 20
+		},
+		"button": {
+			"type": "boolean",
+			"default": false
+		},
+		"outline": {
+			"type": "boolean",
+			"default": false
+		},
+		"contrast": {
+			"type": "boolean",
+			"default": false
+		},
+		"secondary": {
+			"type": "boolean",
+			"default": false
+		}
+	}
+}

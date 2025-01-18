@@ -19,7 +19,7 @@ import { Icon, copySmall, seen } from '@wordpress/icons';
  *
  * Internal dependencies
  */
-import DetailSelectControl from '../controls/site/detailSelect';
+import { DetailSelectControl } from '@wpcloud/controls/site';
 import './editor.scss';
 
 function SiteDetailBlock( { attributes, setAttributes, className } ) {

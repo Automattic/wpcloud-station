@@ -21,7 +21,7 @@ const Icon = icons.Icon;
 /**
  * Internal dependencies
  */
-import IconControl from '../controls/iconControl.js';
+import { IconControls } from '@wpcloud/controls';
 import './editor.scss';
 
 /**
@@ -58,7 +58,7 @@ export default function Edit( {
 	const controls = (
 		<InspectorControls>
 			<PanelBody title={__('Form Settings')}>
-				<IconControl { ...{ attributes, setAttributes } } />
+				<IconControls { ...{ attributes, setAttributes } } />
 				<ToggleControl
 					label={ __( 'Show Menu' ) }
 					checked={ showMenu }

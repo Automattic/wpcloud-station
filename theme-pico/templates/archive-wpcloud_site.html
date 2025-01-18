@@ -1,0 +1,105 @@
+<!-- wp:template-part {"slug":"header","area":"uncategorized"} /-->
+
+<!-- wp:columns -->
+<div class="wp-block-columns"><!-- wp:column {"width":""} -->
+<div class="wp-block-column"></div>
+<!-- /wp:column -->
+
+<!-- wp:column {"width":"1222px","className":"wpcloud-site-list\u002d\u002dcontent"} -->
+<div class="wp-block-column wpcloud-site-list--content" style="flex-basis:1222px"><!-- wp:query {"queryId":2,"query":{"perPage":10,"pages":0,"offset":0,"postType":"wpcloud_site","order":"desc","orderBy":"date","author":"","search":"","exclude":[],"sticky":"","inherit":false,"status":"any"},"namespace":"wpcloud/site-list"} -->
+<div class="wp-block-query"><!-- wp:wpcloud/site-template -->
+<!-- wp:wpcloud/site-template-header -->
+<span class="wp-block-wpcloud-site-template-header wpcloud-block-site-list--header"><!-- wp:wpcloud/table-cell {"isHeader":true,"metadata":{"name":"Site"}} -->
+<th class="wp-block-wpcloud-table-cell"><div class="wpcloud-block-table-cell--wrapper"><!-- wp:heading {"level":4} -->
+<h4 class="wp-block-heading">Site</h4>
+<!-- /wp:heading --></div></th>
+<!-- /wp:wpcloud/table-cell -->
+
+<!-- wp:wpcloud/table-cell {"isHeader":true,"metadata":{"name":"Space Used"}} -->
+<th class="wp-block-wpcloud-table-cell"><div class="wpcloud-block-table-cell--wrapper"><!-- wp:heading {"level":6} -->
+<h6 class="wp-block-heading">Space Used</h6>
+<!-- /wp:heading --></div></th>
+<!-- /wp:wpcloud/table-cell -->
+
+<!-- wp:wpcloud/table-cell {"isHeader":true,"metadata":{"name":"DB File Size"}} -->
+<th class="wp-block-wpcloud-table-cell"><div class="wpcloud-block-table-cell--wrapper"><!-- wp:heading {"level":6} -->
+<h6 class="wp-block-heading">DB File Size</h6>
+<!-- /wp:heading --></div></th>
+<!-- /wp:wpcloud/table-cell -->
+
+<!-- wp:wpcloud/table-cell {"isHeader":true,"metadata":{"name":"Created"}} -->
+<th class="wp-block-wpcloud-table-cell"><div class="wpcloud-block-table-cell--wrapper"><!-- wp:heading {"level":6} -->
+<h6 class="wp-block-heading">Created</h6>
+<!-- /wp:heading --></div></th>
+<!-- /wp:wpcloud/table-cell -->
+
+<!-- wp:wpcloud/table-cell {"isHeader":true,"metadata":{"name":"Actions"}} -->
+<th class="wp-block-wpcloud-table-cell"><div class="wpcloud-block-table-cell--wrapper"><!-- wp:heading {"level":6} -->
+<h6 class="wp-block-heading">Actions</h6>
+<!-- /wp:heading --></div></th>
+<!-- /wp:wpcloud/table-cell --></span>
+<!-- /wp:wpcloud/site-template-header -->
+
+<!-- wp:wpcloud/table-cell {"metadata":{"name":"Site"}} -->
+<td class="wp-block-wpcloud-table-cell"><div class="wpcloud-block-table-cell--wrapper"><!-- wp:wpcloud/nav -->
+<nav class="wp-block-wpcloud-nav"><!-- wp:wpcloud/nav-list -->
+<ul class="wp-block-wpcloud-nav-list"><!-- wp:wpcloud/nav-item {"url":"/sites/{site.slug}/","text":"{site.name}","style":{"elements":{"link":{"color":{"text":"var:preset|color|vivid-cyan-blue"}}}},"textColor":"vivid-cyan-blue"} -->
+<li class="wp-block-wpcloud-nav-item has-vivid-cyan-blue-color has-text-color has-link-color"><a href="/sites/{site.slug}/" class=""><span>{site.name}</span></a></li>
+<!-- /wp:wpcloud/nav-item --></ul>
+<!-- /wp:wpcloud/nav-list --></nav>
+<!-- /wp:wpcloud/nav --></div></td>
+<!-- /wp:wpcloud/table-cell -->
+
+<!-- wp:wpcloud/table-cell {"metadata":{"name":"Space Used"}} -->
+<td class="wp-block-wpcloud-table-cell"><div class="wpcloud-block-table-cell--wrapper"><!-- wp:wpcloud/site-detail {"label":"Space Used","name":"space_used","hideLabel":true,"metadata":{"name":"Space Used"},"className":"wp-block-wpcloud-site-detail"} -->
+<div class="wpcloud-block-site-detail"><div class="wpcloud-block-site-detail__value-container"><div class="wpcloud-block-site-detail__value">{ Space Used }</div></div></div>
+<!-- /wp:wpcloud/site-detail --></div></td>
+<!-- /wp:wpcloud/table-cell -->
+
+<!-- wp:wpcloud/table-cell {"metadata":{"name":"DB File Size"}} -->
+<td class="wp-block-wpcloud-table-cell"><div class="wpcloud-block-table-cell--wrapper"><!-- wp:wpcloud/site-detail {"label":"DB File Size","name":"db_file_size","hideLabel":true,"metadata":{"name":"DB File Size"},"className":"wp-block-wpcloud-site-detail"} -->
+<div class="wpcloud-block-site-detail"><div class="wpcloud-block-site-detail__value-container"><div class="wpcloud-block-site-detail__value">{ DB File Size }</div></div></div>
+<!-- /wp:wpcloud/site-detail --></div></td>
+<!-- /wp:wpcloud/table-cell -->
+
+<!-- wp:wpcloud/table-cell {"metadata":{"name":"Created"}} -->
+<td class="wp-block-wpcloud-table-cell"><div class="wpcloud-block-table-cell--wrapper"><!-- wp:post-date {"textAlign":"left","format":"n/j/Y"} /--></div></td>
+<!-- /wp:wpcloud/table-cell -->
+
+<!-- wp:wpcloud/table-cell {"metadata":{"name":"Actions"}} -->
+<td class="wp-block-wpcloud-table-cell"><div class="wpcloud-block-table-cell--wrapper"><!-- wp:wpcloud/button {"type":"detail","style":"text","label":"WP Admin","isPrimary":false,"addIcon":true,"name":"wp_admin_url"} -->
+<div class="wp-block-wpcloud-button wpcloud-block-button__content"><span class="wpcloud-block-button__label">WP Admin</span><!-- wp:wpcloud/icon {"icon":"external","iconSize":"16"} -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" class="wp-block-wpcloud-icon wpcloud-block-icon" aria-hidden="true"><path d="M19.5 4.5h-7V6h4.44l-5.97 5.97 1.06 1.06L18 7.06v4.44h1.5v-7Zm-13 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3H17v3a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h3V5.5h-3Z"></path></svg>
+<!-- /wp:wpcloud/icon --></div>
+<!-- /wp:wpcloud/button -->
+
+<!-- wp:wpcloud/button {"type":"detail","style":"text","label":"phpMyAdmin","isPrimary":false,"addIcon":true,"name":"phpmyadmin_url","refresh":true} -->
+<div class="wp-block-wpcloud-button wpcloud-block-button__content"><span class="wpcloud-block-button__label">phpMyAdmin</span><!-- wp:wpcloud/icon {"icon":"external","iconSize":"16"} -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" class="wp-block-wpcloud-icon wpcloud-block-icon" aria-hidden="true"><path d="M19.5 4.5h-7V6h4.44l-5.97 5.97 1.06 1.06L18 7.06v4.44h1.5v-7Zm-13 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3H17v3a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h3V5.5h-3Z"></path></svg>
+<!-- /wp:wpcloud/icon --></div>
+<!-- /wp:wpcloud/button --></div></td>
+<!-- /wp:wpcloud/table-cell -->
+<!-- /wp:wpcloud/site-template -->
+
+<!-- wp:query-pagination -->
+<!-- wp:query-pagination-previous /-->
+
+<!-- wp:query-pagination-numbers /-->
+
+<!-- wp:query-pagination-next /-->
+<!-- /wp:query-pagination -->
+
+<!-- wp:query-no-results -->
+<!-- wp:paragraph {"placeholder":"Add text or blocks that will display when a query returns no results."} -->
+<p></p>
+<!-- /wp:paragraph -->
+<!-- /wp:query-no-results --></div>
+<!-- /wp:query --></div>
+<!-- /wp:column -->
+
+<!-- wp:column {"width":""} -->
+<div class="wp-block-column"></div>
+<!-- /wp:column --></div>
+<!-- /wp:columns -->
+
+<!-- wp:template-part {"slug":"footer","area":"uncategorized","className":"wpcloud-footer"} /-->
