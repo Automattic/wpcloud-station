@@ -11,7 +11,21 @@ import * as icons from '@wordpress/icons';
 const Icon = icons.Icon;
 
 export default function save({ attributes }) {
-	const { accordion, hideChevron, level, summary, useIcon, icon, iconSize, button, secondary, outline, contrast } = attributes;
+	const {
+		accordion,
+		hideChevron,
+		level,
+		summary,
+		useIcon,
+		icon,
+		iconSize,
+		button,
+		secondary,
+		outline,
+		contrast,
+		onRight
+	} = attributes;
+
 	const blockProps = useBlockProps.save();
 
 	const summaryContent = useIcon
@@ -31,6 +45,7 @@ export default function save({ attributes }) {
 				{
 					'dropdown' : !accordion,
 					'hide-chevron': hideChevron,
+					'open-right': onRight
 				}
 		)}>
 			<summary
@@ -39,9 +54,14 @@ export default function save({ attributes }) {
 			>
 				{summaryContent}
 			</summary>
-			<ul>
-				<InnerBlocks.Content />
-			</ul>
+			{ accordion
+				? ( <InnerBlocks.Content /> )
+				: (
+					<ul>
+						<InnerBlocks.Content />
+					</ul>
+				)
+			}
 		</details>
 	)
 }

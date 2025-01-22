@@ -40,6 +40,7 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 		accordion,
 		hideChevron,
 		summary,
+		onRight,
 
 		level,
 		levelOptions,
@@ -141,6 +142,11 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 						checked={hideChevron}
 						onChange={update('hideChevron')}
 					/>
+					<ToggleControl
+						label={__('Open On Right')}
+						checked={onRight}
+						onChange={update('onRight')}
+					/>
 					<ButtonControls {...{ attributes, setAttributes }} />
 					<ToggleControl
 						label={__('Use Icon')}
@@ -158,6 +164,7 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 				className={classnames(className, {
 					'dropdown': !accordion,
 					'hide-chevron': hideChevron,
+					'open-right': onRight
 				})}
 			>
 				<summary

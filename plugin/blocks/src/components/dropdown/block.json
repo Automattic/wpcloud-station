@@ -70,6 +70,10 @@
 		"secondary": {
 			"type": "boolean",
 			"default": false
+		},
+		"onRight": {
+			"type": "boolean",
+			"default": false
 		}
 	}
 }
