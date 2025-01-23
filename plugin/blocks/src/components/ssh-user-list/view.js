@@ -1,4 +1,7 @@
-( ( wpcloud ) => {
+/**
+ * Wpcloud SSH User List Block.
+ */
+((wpcloud) => {
 	const updateSshUserInputs = (sshUserRow) => {
 		const sshUserInputs = sshUserRow.querySelectorAll(
 			'form input[name=ssh_user]'
@@ -66,6 +69,9 @@
 
 		const form = document.querySelector('.wpcloud-form-ssh-user');
 
+		if (!form) {
+			return;
+		}
 
 		const nameInput = form.querySelector('input[name="user"]');
 		nameInput.value = sshUserName;
@@ -110,11 +116,10 @@
 
 
 	// Disable the confirmation dialog for removing SSH users.
-	/*
 	wpcloud.hooks.addFilter(
 		'wpcloud_form_should_submit_site_ssh_user_remove',
 		'wpcloud',
 		() => true
 	);
-	*/
+
 } )( window.wpcloud );
