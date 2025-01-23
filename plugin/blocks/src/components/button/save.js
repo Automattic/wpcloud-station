@@ -1,24 +1,18 @@
-/**
- * External dependencies
- */
-import classNames from 'classnames';
+
 
 /**
  * WordPress dependencies
  */
 import { InnerBlocks, useBlockProps, RichText } from '@wordpress/block-editor';
 
-export default function save( { attributes, className } ) {
+export default function save( { attributes } ) {
 	const { label, iconOnly } = attributes;
 	const blockProps = useBlockProps.save();
 
 	return (
 		<div
 			{ ...blockProps }
-			className={classNames(
-				blockProps.className,
-				'wpcloud-block-button__content',
-			) }
+			className={'wpcloud-block-button__content'}
 		>
 
 			{!iconOnly && (
