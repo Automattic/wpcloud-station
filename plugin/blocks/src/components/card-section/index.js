@@ -26,7 +26,7 @@ const edit = ( { clientId, attributes, setAttributes } ) => {
 	const { text, section, level, levelOptions } = attributes;
 	const tagName = 'h' + level;
 
-	useSyncMetaName(clientId, text);
+	useSyncMetaName(clientId, text || section[0].toUpperCase() + section.slice(1));
 
 	const controls = (
 		<>
