@@ -1,3 +1,46 @@
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  }
+  50% {
+    transform: scale(1.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  }
+}
+
+.pulse {
+  animation: pulse 0.5s ease-in-out;
+}
+
+@keyframes hilight {
+  0%, 100% { filter: brightness(0.5); }
+  50% { filter: brightness(2); } /* Lightens the text */
+}
+
+.highlight {
+  animation: hilight 2.5s ease-in-out /*infinite;*/
+  /*animation-iteration-count: 1; */
+}
+
+.hidden {
+	display: none;
+}
+
+.wp-block-site-logo img.custom-logo {
+	@media (prefers-color-scheme: light) {
+		filter: brightness(0.4) saturate(1.1) contrast(1.2) hue-rotate(210deg);
+	}
+	@media (prefers-color-scheme: dark) {
+		/* filter: brightness(1) saturate(1.1) contrast(1.2) hue-rotate(210deg); */
+		filter: invert(25%) sepia(80%) saturate(700%) hue-rotate(190deg) brightness(95%) contrast(100%);
+	}
+}
+
 .wpcloud-block-table-cell--wrapper {
 	white-space: nowrap;
 }
@@ -46,6 +89,34 @@ button[type=submit].wpcloud-block-button {
 		::after {
 			display: none;
 		}
+	}
 
+	&.open-right {
+		ul {
+			right: 0;
+			left: unset;
+		}
+	}
+}
+
+button.wpcloud-block-button {
+	border: 1px solid transparent;
+  background-clip: padding-box;
+}
+.wpcloud-block-button {
+	cursor: pointer;
+}
+
+.wpcloud-block-form {
+	input:read-only, textarea:read-only {
+		background-color: transparent;
+		border: none;
+	}
+}
+
+.wpcloud-form-message {
+	p {
+		margin: 0;
+		color: inherit;
 	}
 }
