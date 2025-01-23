@@ -1,12 +1,12 @@
 ( ( wpcloud ) => {
-	const updateSshUserInputs = ( sshUserRow ) => {
+	const updateSshUserInputs = (sshUserRow) => {
 		const sshUserInputs = sshUserRow.querySelectorAll(
 			'form input[name=ssh_user]'
 		);
 		const sshUserName = sshUserRow.dataset.siteSshUser;
 		sshUserInputs.forEach( ( input ) => {
 			input.value = sshUserName;
-		});
+		} );
 
 	};
 
@@ -21,16 +21,17 @@
 		.forEach( updateSshUserInputs );
 
 	function onSshUserAdded( { user } ) {
+
 		const newRow = sshUserList
 			.querySelector(
 				'.wpcloud-block-ssh-user-list__row[style*="display:none"]'
 			)
-			.cloneNode( true );
+			.cloneNode(true);
 		newRow.dataset.siteSshUser = user;
 		newRow.querySelector(
 			'.wpcloud-block-site-detail__value'
 		).textContent = user;
-		updateSshUserInputs( newRow );
+		updateSshUserInputs(newRow);
 		newRow.style.display = 'flex';
 		sshUserList.appendChild(newRow);
 
@@ -39,17 +40,54 @@
 		newRow.classList.add('wpcloud-block-ssh-user-list__row--new');
 	}
 
-	function onSshUserRemove( result, form ) {
-		if ( ! result.success ) {
-			alert( result.message ); // eslint-disable-line no-alert, no-undef
+	function onSshUserRemove(result, form) {
+		console.log('onSshUserRemove');
+		if (!result.success) {
+			alert(result.message); // eslint-disable-line no-alert, no-undef
 			return;
 		}
 
-		const row = form.closest( '.wpcloud-block-ssh-user-list__row' );
+		const row = form.closest('.wpcloud-block-ssh-user-list__row');
 
 		row.ontransitionend = row.remove;
 
-		row.classList.add( 'wpcloud-hide' );
+		row.classList.add('wpcloud-hide');
+	}
+
+	function onSshUserUpdate(button) {
+		const sshUser = button.closest(
+			'.wpcloud-block-ssh-user-list__row'
+		);
+
+		const sshUserName = sshUser.dataset.siteSshUser;
+
+		const details = button.closest('details');
+		details && ( details.open = false );
+
+		const form = document.querySelector('.wpcloud-form-ssh-user');
+
+
+		const nameInput = form.querySelector('input[name="user"]');
+		nameInput.value = sshUserName;
+		nameInput.readOnly = true;
+
+		// Clear the other inputs on the form
+		const inputs = form.querySelectorAll('input[type="password"], textarea');
+		inputs.forEach( input => input.value = '' );
+
+		const submit = form.querySelector('button[type="submit"]');
+		submit.querySelector('.wpcloud-block-button__label').textContent =
+			'Update';
+
+		const wpCloudAction = form.querySelector(
+			'input[name="wpcloud_action"]'
+		);
+		wpCloudAction.value = 'site_ssh_user_update';
+
+		// @TODO Open the form section if it's not open already.
+
+		// scroll to the form
+		wpcloud.scrollTo(form).andHighlight('input[name="user"]');
 	}
 
 	wpcloud.hooks.addAction(
@@ -64,10 +102,19 @@
 		onSshUserAdded
 	);
 
+	wpcloud.hooks.addAction(
+		'wpcloud_ssh_user_update_button_click',
+		'wpcloud',
+		onSshUserUpdate
+	);
+
+
 	// Disable the confirmation dialog for removing SSH users.
+	/*
 	wpcloud.hooks.addFilter(
 		'wpcloud_form_should_submit_site_ssh_user_remove',
 		'wpcloud',
 		() => true
 	);
+	*/
 } )( window.wpcloud );
