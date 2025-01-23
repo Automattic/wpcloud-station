@@ -4,10 +4,8 @@
 	const blockedActions = [
 		'wpcloud_form_submit',
 		'wpcloud_expanding_section_toggle_end',
-		'wpcloud_expanding_section_toggle',
 		'wpcloud_alias_added',
 		'wpcloud_site_ssh_user_added',
-		'wpcloud_expanding_section_toggle',
 	];
 	// Bind clicks to any action buttons
 	const buttons = document.querySelectorAll('.wp-block-wpcloud-button');

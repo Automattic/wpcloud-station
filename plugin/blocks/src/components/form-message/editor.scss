@@ -1,0 +1,21 @@
+.wpcloud-form-message {
+	border: 1px dashed #e5e5e5;
+	border-radius: 2px;
+	padding: 10px;
+	margin: 10px 0;
+
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+
+	svg {
+		fill: currentColor;
+	}
+
+	&.wpcloud-form-message--success {
+		border-color: green;
+	}
+	&.wpcloud-form-message--error {
+		border-color: red;
+	}
+}

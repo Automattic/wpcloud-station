@@ -1,4 +1,7 @@
-( ( wpcloud ) => {
+/**
+ * WP Cloud: Site SSH Users
+ */
+((wpcloud) => {
 	wpcloud.hooks.addAction(
 		'wpcloud_ssh_user_update_button_click',
 		'wpcloud',
@@ -13,10 +16,13 @@
 				'.wpcloud-block-ssh-users'
 			);
 
-			const form = sshUserContainer.querySelector(
-				'.wpcloud-block-form'
-			);
-			const nameInput = form.querySelector( 'input[name="user"]' );
+			const form = sshUserContainer.querySelector('[data-original-action="site_ssh_user_add"]');
+
+			const nameInput = form.querySelector('input[name="user"]');
+			if (!nameInput) {
+				console.error('Could not find the user input field');
+				return;
+			}
 			nameInput.value = sshUserName;
 			nameInput.readOnly = true;
 

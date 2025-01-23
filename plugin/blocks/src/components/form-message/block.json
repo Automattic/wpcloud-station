@@ -1,0 +1,63 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "wpcloud/form-message",
+	"version": "0.1.0",
+	"title": "Form Message",
+	"category": "wpcloud",
+	"icon": "forms",
+	"description": "WP Cloud Form Message block",
+	"example": {},
+	"textdomain": "wpcloud",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"viewScript": "file:./view.js",
+	"attributes": {
+		"success": {
+			"type": "boolean",
+			"default": true
+		},
+		"action": {
+			"type": "string",
+			"default": ""
+		},
+		"dismiss":{
+			"type": "boolean",
+			"default": true
+		},
+		"icon" :{
+			"type": "string",
+			"default": "close"
+		},
+		"iconSize": {
+			"type": "number",
+			"default": 20
+		},
+		"message": {
+			"type": "string",
+			"default": ""
+		}
+	},
+	"supports": {
+		"anchor": true,
+		"reusable": false,
+		"color": {
+			"gradients": true,
+			"background": true,
+			"text": true,
+			"link": true,
+			"border": true,
+			"custom": true
+		},
+		"spacing": {
+			"margin": [ "top", "bottom" ]
+		},
+		"__experimentalBorder": {
+			"radius": true,
+			"__experimentalSkipSerialization": true,
+			"__experimentalDefaultControls": {
+				"radius": true
+			}
+		}
+	}
+}

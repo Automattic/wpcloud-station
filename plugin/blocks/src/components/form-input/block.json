@@ -93,6 +93,14 @@
 	"supports": {
 		"anchor": true,
 		"reusable": false,
+		"color": {
+			"gradients": true,
+			"background": true,
+			"text": true,
+			"link": true,
+			"border": true,
+			"custom": true
+		},
 		"spacing": {
 			"margin": [ "top", "bottom" ]
 		},
