@@ -32,6 +32,19 @@
 	display: none;
 }
 
+.copy-to-clipboard {
+	display: flex;
+  align-items: center;
+  gap: 2px;
+	svg {
+		cursor: pointer;
+		&:hover {
+			filter: brightness(3);
+		}
+	}
+
+}
+
 .wp-block-site-logo img.custom-logo {
 	@media (prefers-color-scheme: light) {
 		filter: brightness(0.4) saturate(1.1) contrast(1.2) hue-rotate(210deg);
@@ -83,6 +96,11 @@ button[type=submit].wpcloud-block-button {
 		* {
 			margin: 0;
 		}
+		svg {
+			&:hover {
+				filter: brightness(3);
+			}
+		}
 	}
 	border: none;
 	&.hide-chevron  {
@@ -123,6 +141,9 @@ button.wpcloud-block-button {
 	.dismiss {
 		cursor: pointer;
 		fill: currentColor;
+		&:hover {
+			filter: brightness(3);
+		}
 	}
 	p {
 		margin: 0;
