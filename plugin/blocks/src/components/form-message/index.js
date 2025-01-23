@@ -29,7 +29,7 @@ import './editor.scss';
 
 registerBlockType( metadata.name, {
 	edit: ({ attributes, setAttributes }) => {
-		const { success, action }	= attributes;
+		const { success, action, message }	= attributes;
 		const template = [ ['core/paragraph'] ];
 
 		const blockProps = useBlockProps();
@@ -43,7 +43,6 @@ registerBlockType( metadata.name, {
 					<PanelBody title={__('Message Settings')}>
 						<RadioControl
 							label={ __( 'Message Type' ) }
-							help="Dropdown or Accordion. Dropdown will open over the content, Accordion will push the content down."
 							selected={ success }
 							options={ [
 								{ label: __( 'Success' ), value: true },
@@ -57,32 +56,35 @@ registerBlockType( metadata.name, {
 							label={ __( 'WP Cloud Action' ) }
 							value={ action }
 							onChange={update('action')}
-							help={ __( 'The WP Cloud form action to respond to. Use the template {response.message} in the rich text to display the form response.' ) }
+							help={ __( 'The WP Cloud form action to respond to. Use JavaScript templates to render response information. For example `${response.message}` will display the response message' ) }
 						/>
 					</PanelBody>
 				</InspectorControls>
-				<article {...innerBlocksProps}
+				<article {...blockProps}
 					className={classnames(
 						blockProps.className,
 						'wpcloud-form-message',
 						{ 'wpcloud-form-message--success': success },
 						{ 'wpcloud-form-message--error': !success })
 					}
-			data-wpcloud-action={action}/>
+					data-wpcloud-action={action}
+				>
+					<RichText tagName="p" value={message} onChange={update('message')} />
+			</article>
 			</>
 		)
 
 	},
 	save: ({ attributes, innerBlocks }) => {
-		const { success, action } = attributes;
+		const { success, action, message } = attributes;
 		const blockProps = useBlockProps.save();
-		const innerBlocksProps = useInnerBlocksProps.save(blockProps);
+
 		const role = success ? 'status' : 'alert';
 		const ariaLive = success ? 'polite' : 'assertive';
 
-		console.log(innerBlocks);
+
 		return (
-			<article  {...innerBlocksProps}
+			<article  {...blockProps}
 				className={classnames(
 					blockProps.className,
 					'hidden',
@@ -93,7 +95,10 @@ registerBlockType( metadata.name, {
 				data-message-type={success ? 'success' : 'error'}
 				role={role}
 				aria-live={ariaLive}
-			/>
+				data-message-template={message}
+			>
+				<p />
+			</article>
 		);
 	},
 } );

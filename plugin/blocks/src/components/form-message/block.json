@@ -24,6 +24,10 @@
 		"dismiss":{
 			"type": "boolean",
 			"default": true
+		},
+		"message": {
+			"type": "string",
+			"default": ""
 		}
 	},
 
