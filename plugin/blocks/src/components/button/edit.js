@@ -96,6 +96,7 @@ function ButtonBlock( { attributes, setAttributes } ) {
 							{ label: __( 'Detail' ), value: 'detail' },
 							{ label: __('Action'), value: 'action' },
 							{ label: __( 'Submit' ), value: 'submit' },
+							{ label: __( 'Reset' ), value: 'reset' },
 						] }
 						onChange={ updateAttribute( 'type' ) }
 					/>

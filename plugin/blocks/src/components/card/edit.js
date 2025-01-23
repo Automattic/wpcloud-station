@@ -11,7 +11,7 @@ import {
 /**
  * Internal dependencies
  */
-import { useSyncInnerBlockMetaName, useInnerBlocksInserter }  from '@wpcloud/hooks';
+import { useSyncInnerBlockMetaName }  from '@wpcloud/hooks';
 import './editor.scss';
 
 /**
@@ -21,8 +21,9 @@ import './editor.scss';
  * @param {Object} props.setAttributes
  * @return {Element} Element to render.
  */
-export default function Edit( {clientId, ...props }) {
-	const blockProps = useBlockProps();
+export default function Edit({ clientId, attributes }) {
+	const { style } = attributes;
+	const blockProps = useBlockProps({ style });
 
 	useSyncInnerBlockMetaName(clientId, (children) => {
 		const target = children.find((child) => child.attributes.section === 'header');

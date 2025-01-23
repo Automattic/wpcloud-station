@@ -74,9 +74,11 @@ switch ( $block_type ) {
 		}
 		break;
 
+	case 'reset':
+		// fall through.
 	case 'submit':
-		$classes[]                 = 'wpcloud-block-button__submit';
-		$button_attributes['type'] = 'submit';
+		$classes[]                 = "wpcloud-block-button__$block_type";
+		$button_attributes['type'] = $block_type;
 		if ( isset( $attributes['action'] ) ) {
 			$button_attributes['data-wpcloud-action'] = $attributes['action'];
 		}
@@ -111,7 +113,7 @@ if ( $url ) {
 }
 $wrapper_attributes = get_block_wrapper_attributes( $button_attributes );
 
-if ( 'button' === $style || 'submit' === $block_type ) {
+if ( 'button' === $style || 'submit' === $block_type || 'reset' === $block_type ) {
 	$wrapper = 'button';
 } else {
 	$wrapper = 'div';

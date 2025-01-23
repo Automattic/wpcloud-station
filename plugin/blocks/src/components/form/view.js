@@ -172,8 +172,9 @@
 		});
 	}
 
-	// Fill in any missing hidden inputs closest data attribute
-	document.querySelectorAll( 'form.wpcloud-block-form' ).forEach( ( form ) => {
+
+	document.querySelectorAll('form.wpcloud-block-form').forEach((form) => {
+		// Fill in any missing hidden inputs closest data attribute
 		const emptyHiddenInputs = form.querySelectorAll( 'input[type="hidden"][value=""]' );
 		emptyHiddenInputs.forEach( ( input ) => {
 			const dataName = `data-${input.name}`.replace(/_/g, '-');
@@ -181,6 +182,40 @@
 			if ( closestData ) {
 				input.value = closestData.getAttribute( dataName );
 			}
+		});
+
+		const resetButtons = form.querySelectorAll('button[type="reset"]');
+
+		// fire reset event when reset button is clicked
+		form.addEventListener('reset', () => {
+			wpcloud.hooks.doAction('wpcloud_form_reset', form);
+			resetButtons.forEach((button) => {
+				button.classList.add('hidden');
+			});
+
+			// re-enable any was writable inputs
+			form.querySelectorAll('input[data-was-writable]').forEach((input) => {
+				input.readOnly = false;
+			});
+
+			// reset any original labels
+			form.querySelectorAll('[data-original-label').forEach((el) => {
+				el.querySelector('.wpcloud-block-button__label').textContent = el.dataset.originalLabel;
+			});
+
+			// reset the original wpcloud action
+			const originalAction = form.dataset.originalAction;
+			if (originalAction) {
+				const wpCloudAction = form.querySelector('input[name="wpcloud_action"]');
+				wpCloudAction.value = originalAction;
+			}
+		});
+
+		// Show any reset buttons if they exist on a dirty form
+		form.addEventListener('input', () => {
+			resetButtons.forEach((button) => {
+				button.classList.remove('hidden');
+			});
 		});
 	} );
 

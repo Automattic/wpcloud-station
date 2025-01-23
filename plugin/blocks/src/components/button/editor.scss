@@ -2,6 +2,7 @@
 	&.is-secondary {
 		.wpcloud-block-button__content {
 			background: none;
+			color: var(--wp--preset--color--primary);
 		}
 		&:not(.is-text) {
 			padding:0;
