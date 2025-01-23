@@ -18,4 +18,13 @@ formMessages.forEach((formMessage) => {
 			}
 		}
 	);
+
+	// clear out any existing messages
+	wpcloud.hooks.addAction(
+		`wpcloud_form_submit_${wpcloudAction}`,
+		'wpcloud',
+		() => {
+			formMessage.classList.add('hidden');
+		}
+	);
 });
