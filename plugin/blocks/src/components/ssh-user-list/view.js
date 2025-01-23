@@ -90,8 +90,6 @@
 		);
 		wpCloudAction.value = 'site_ssh_user_update';
 
-		// @TODO Open the form section if it's not open already.
-
 		// scroll to the form
 		wpcloud.scrollTo(form).andHighlight('input[name="user"]');
 	}
