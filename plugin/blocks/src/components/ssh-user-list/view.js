@@ -23,8 +23,7 @@
 		)
 		.forEach( updateSshUserInputs );
 
-	function onSshUserAdded( { user } ) {
-
+	function onSshUserAdded({ user }) {
 		const newRow = sshUserList
 			.querySelector(
 				'.wpcloud-block-ssh-user-list__row[style*="display:none"]'
@@ -34,6 +33,7 @@
 		newRow.querySelector(
 			'.wpcloud-block-site-detail__value'
 		).textContent = user;
+
 		updateSshUserInputs(newRow);
 		newRow.style.display = 'flex';
 		sshUserList.appendChild(newRow);
@@ -44,9 +44,7 @@
 	}
 
 	function onSshUserRemove(result, form) {
-		console.log('onSshUserRemove');
 		if (!result.success) {
-			alert(result.message); // eslint-disable-line no-alert, no-undef
 			return;
 		}
 
@@ -57,7 +55,7 @@
 		row.classList.add('wpcloud-hide');
 	}
 
-	function onSshUserUpdate(button) {
+	function onSshUserInitUpdate(button) {
 		const sshUser = button.closest(
 			'.wpcloud-block-ssh-user-list__row'
 		);
@@ -75,6 +73,7 @@
 
 		const nameInput = form.querySelector('input[name="user"]');
 		nameInput.value = sshUserName;
+		nameInput.dataset.wasWritable = true;
 		nameInput.readOnly = true;
 
 		// Clear the other inputs on the form
@@ -92,6 +91,12 @@
 
 		// scroll to the form
 		wpcloud.scrollTo(form).andHighlight('input[name="user"]');
+
+		// show any hidden reset buttons
+		const resetButtons = form.querySelectorAll('button[type="reset"]');
+		resetButtons.forEach((button) => {
+			button.classList.remove('hidden');
+		});
 	}
 
 	wpcloud.hooks.addAction(
@@ -109,7 +114,7 @@
 	wpcloud.hooks.addAction(
 		'wpcloud_ssh_user_update_button_click',
 		'wpcloud',
-		onSshUserUpdate
+		onSshUserInitUpdate
 	);
 
 

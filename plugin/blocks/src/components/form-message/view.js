@@ -48,4 +48,13 @@ formMessages.forEach((formMessage) => {
 			formMessage.classList.add('hidden');
 		});
 	}
+
+	// bind reset event
+	wpcloud.hooks.addAction(
+		'wpcloud_form_reset',
+		'wpcloud',
+		() => {
+			formMessage.classList.add('hidden');
+		}
+	)
 });
