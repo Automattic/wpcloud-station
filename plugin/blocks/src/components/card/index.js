@@ -16,10 +16,10 @@ registerBlockType( metadata.name, {
 	 * @see ./edit.js
 	 */
 	edit,
-	save: () => {
-
+	save: ({ attributes }) => {
+		const { style } = attributes;
 		return (
-			<article { ...useBlockProps.save() }>
+			<article { ...useBlockProps.save({style}) }>
 				<InnerBlocks.Content />
 			</article>
 		)

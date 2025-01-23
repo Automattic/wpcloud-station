@@ -8,7 +8,18 @@
 	"icon": "index-card",
 	"description": "Card block",
 	"supports": {
-		"html": false
+		"html": false,
+		"spacing": {
+			"margin": true,
+			"padding": true,
+			"blockGap": true,
+			"units": [ "px", "em", "rem", "%"]
+		}
+	},
+	"attributes": {
+		"style" : {
+			"type": "object"
+		}
 	},
 	"textdomain": "wpcloud",
 	"editorScript": "file:./index.js",
