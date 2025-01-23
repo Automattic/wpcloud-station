@@ -17,24 +17,24 @@ import {
 	RichText,
 	InnerBlocks
 } from '@wordpress/block-editor';
-import { PanelBody, TextControl, RadioControl } from '@wordpress/components';
+import { PanelBody, TextControl, RadioControl, ToggleControl } from '@wordpress/components';
+
+import * as icons from '@wordpress/icons';
+const Icon = icons.Icon;
 
 /**
  * Internal dependencies
  */
 import { updateAttribute } from '@wpcloud/controls/utils';
+import { IconControls } from '@wpcloud/controls';
 import metadata from './block.json';
 import './editor.scss';
 
 
 registerBlockType( metadata.name, {
 	edit: ({ attributes, setAttributes }) => {
-		const { success, action, message }	= attributes;
-		const template = [ ['core/paragraph'] ];
-
+		const { success, action, message, dismiss, icon, iconSize }	= attributes;
 		const blockProps = useBlockProps();
-
-		const innerBlocksProps = useInnerBlocksProps(blockProps, { template, templateLock: 'insert' });
 		const update = updateAttribute(setAttributes);
 
 		return (
@@ -58,6 +58,12 @@ registerBlockType( metadata.name, {
 							onChange={update('action')}
 							help={ __( 'The WP Cloud form action to respond to. Use JavaScript templates to render response information. For example `${response.message}` will display the response message' ) }
 						/>
+						<ToggleControl
+							label={__('Dismissable')}
+							checked={dismiss}
+							onChange={update('dismiss')}
+						/>
+					{       dismiss && <IconControls {...{ attributes, setAttributes }} /> }
 					</PanelBody>
 				</InspectorControls>
 				<article {...blockProps}
@@ -70,18 +76,18 @@ registerBlockType( metadata.name, {
 					data-wpcloud-action={action}
 				>
 					<RichText tagName="p" value={message} onChange={update('message')} />
+					{ dismiss && <Icon icon={ icons[icon] } size={iconSize} /> }
 			</article>
 			</>
 		)
 
 	},
-	save: ({ attributes, innerBlocks }) => {
-		const { success, action, message } = attributes;
+	save: ({ attributes }) => {
+		const { success, action, message, dismiss, icon, iconSize } = attributes;
 		const blockProps = useBlockProps.save();
 
 		const role = success ? 'status' : 'alert';
 		const ariaLive = success ? 'polite' : 'assertive';
-
 
 		return (
 			<article  {...blockProps}
@@ -98,6 +104,8 @@ registerBlockType( metadata.name, {
 				data-message-template={message}
 			>
 				<p />
+				{ dismiss && <Icon icon={ icons[icon] } size={iconSize}  class="dismiss" /> }
+
 			</article>
 		);
 	},

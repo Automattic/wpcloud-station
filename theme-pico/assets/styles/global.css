@@ -115,6 +115,15 @@ button.wpcloud-block-button {
 }
 
 .wpcloud-form-message {
+	&:not(.hidden) {
+		display: flex;
+	}
+	align-items: center;
+	justify-content: space-between;
+	.dismiss {
+		cursor: pointer;
+		fill: currentColor;
+	}
 	p {
 		margin: 0;
 		color: inherit;

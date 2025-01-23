@@ -25,12 +25,19 @@
 			"type": "boolean",
 			"default": true
 		},
+		"icon" :{
+			"type": "string",
+			"default": "close"
+		},
+		"iconSize": {
+			"type": "number",
+			"default": 20
+		},
 		"message": {
 			"type": "string",
 			"default": ""
 		}
 	},
-
 	"supports": {
 		"anchor": true,
 		"reusable": false,

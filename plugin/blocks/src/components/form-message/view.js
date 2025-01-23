@@ -8,7 +8,6 @@ formMessages.forEach((formMessage) => {
 		`wpcloud_form_response_${wpcloudAction}`,
 		'wpcloud',
 		(response) => {
-			console.log('response', response);
 			const render = new Function('response', `return \`${messageTemplate}\`;`);
 			const p = formMessage.querySelector('p');
 			try {
@@ -36,4 +35,12 @@ formMessages.forEach((formMessage) => {
 			formMessage.classList.add('hidden');
 		}
 	);
+
+	// bind the close element
+	const dismiss = formMessage.querySelector('.dismiss');
+	if (dismiss) {
+		dismiss.addEventListener('click', () => {
+			formMessage.classList.add('hidden');
+		});
+	}
 });
