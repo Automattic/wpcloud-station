@@ -18,13 +18,14 @@
 }
 
 @keyframes hilight {
-  0%, 100% { filter: brightness(0.5); }
-  50% { filter: brightness(2); } /* Lightens the text */
+  50% {
+		filter: brightness(3);
+		transform: scale(1.01);
+	}
 }
 
 .highlight {
-  animation: hilight 2.5s ease-in-out /*infinite;*/
-  /*animation-iteration-count: 1; */
+  animation: hilight 0.5s ease-in-out
 }
 
 .hidden {
@@ -36,7 +37,6 @@
 		filter: brightness(0.4) saturate(1.1) contrast(1.2) hue-rotate(210deg);
 	}
 	@media (prefers-color-scheme: dark) {
-		/* filter: brightness(1) saturate(1.1) contrast(1.2) hue-rotate(210deg); */
 		filter: invert(25%) sepia(80%) saturate(700%) hue-rotate(190deg) brightness(95%) contrast(100%);
 	}
 }
