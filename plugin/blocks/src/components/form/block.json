@@ -38,6 +38,10 @@
 		"active": {
 			"type": "boolean",
 			"default": false
+		},
+		"resetOnSuccess": {
+			"type": "boolean",
+			"default": false
 		}
 	},
 	"providesContext": {

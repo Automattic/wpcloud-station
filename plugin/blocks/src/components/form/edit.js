@@ -38,7 +38,7 @@ export default function Edit( {
 	clientId,
 	isSelected,
 } ) {
-	const { action, ajax, wpcloudAction, inline, redirect } = attributes;
+	const { action, ajax, wpcloudAction, inline, redirect, resetOnSuccess } = attributes;
 	const blockProps = useBlockProps();
 
 	const isChildSelected = useSelect( ( select ) =>
@@ -99,6 +99,16 @@ export default function Edit( {
 						help={ __(
 							'Enable AJAX form submission for a smoother experience.'
 						) }
+					/>
+					<ToggleControl
+						label={ __( 'Reset on Success' ) }
+						checked={ resetOnSuccess }
+						onChange={ ( newValue ) =>
+							setAttributes( { resetOnSuccess: newValue } )
+						}
+						help={ __(
+							'Clear the form fields after a successful submission.'
+						)}
 					/>
 					<TextControl
 						label={ __( 'Redirect' ) }

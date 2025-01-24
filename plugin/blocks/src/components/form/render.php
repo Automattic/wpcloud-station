@@ -40,6 +40,10 @@ if ( isset( $attributes['redirect'] ) ) {
 	$processed_content->set_attribute( 'data-redirect', esc_url( $attributes['redirect'] ) );
 }
 
+if ( isset( $attributes['resetOnSuccess'] ) ) {
+	$processed_content->set_attribute( 'data-reset-on-success', 'true' );
+}
+
 $processed_content->set_attribute( 'action', esc_attr( $form_action ) );
 
 $method = empty( $attributes['method'] ) ? 'post' : $attributes['method'];
