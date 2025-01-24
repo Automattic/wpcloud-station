@@ -22,18 +22,15 @@
 
 	function onSiteAliasRemove( result, form ) {
 		if ( ! result.success ) {
-			//@TODO: update how error is handled here
-			alert( result.message ); // eslint-disable-line no-alert, no-undef
 			return;
 		}
 
 		const row = form.closest( '.wpcloud-block-site-alias-list__row' );
-
+		row.style.transition = 'transform 0.5s ease-out';
+		row.style.transform = 'scaleY(0)';
 		row.ontransitionend = () => {
 			row.remove();
 		};
-
-		row.classList.add( 'wpcloud-hide' );
 	}
 
 	function onSiteAliasAdded( alias, needsVerification ) {
@@ -150,6 +147,9 @@
 		if (action === 'site_alias_make_primary') {
 			primaryValueNode.classList.toggle('is-pending');
 		}
+
+		const details = form.closest('details');
+		details && ( details.open = false );
 	}
 	wpcloud.hooks.addAction(
 		'wpcloud_form_submit_site_alias_make_primary',
