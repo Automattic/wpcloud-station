@@ -86,8 +86,8 @@ if ( ! class_exists( 'WPCLOUD_Domains_Controller' ) ) {
 		 * @return bool|WP_Error
 		 */
 		public function get_permissions_check( $request ) {
-			if ( ! logged_in() ) {
-				return new WP_Error( 'rest_forbidden', esc_html__( 'You are not currently logged in.', 'wpcloud' ), $this->authorization_status_code() );
+			if ( ! is_user_logged_in() ) {
+				return new WP_Error( 'rest_forbidden', esc_html__( 'You are not currently logged in.', 'wpcloud' ), rest_authorization_required_code() );
 			}
 			return true;
 		}
