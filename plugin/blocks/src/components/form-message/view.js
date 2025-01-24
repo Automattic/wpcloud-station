@@ -23,11 +23,11 @@ formMessages.forEach((formMessage) => {
 			const success = response.success;
 			if (messageType === 'success' && success) {
 				renderTemplate();
-				formMessage.classList.remove('hidden');
+				formMessage.classList.remove('display-none');
 			}
 			if (messageType === 'error' && !success) {
 				renderTemplate();
-				formMessage.classList.remove('hidden');
+				formMessage.classList.remove('display-none');
 			}
 		}
 	);
@@ -37,7 +37,7 @@ formMessages.forEach((formMessage) => {
 		`wpcloud_form_submit_${wpcloudAction}`,
 		'wpcloud',
 		() => {
-			formMessage.classList.add('hidden');
+			formMessage.classList.add('display-none');
 		}
 	);
 
@@ -45,7 +45,7 @@ formMessages.forEach((formMessage) => {
 	const dismiss = formMessage.querySelector('.dismiss');
 	if (dismiss) {
 		dismiss.addEventListener('click', () => {
-			formMessage.classList.add('hidden');
+			formMessage.classList.add('display-none');
 		});
 	}
 
@@ -54,7 +54,7 @@ formMessages.forEach((formMessage) => {
 		'wpcloud_form_reset',
 		'wpcloud',
 		() => {
-			formMessage.classList.add('hidden');
+			formMessage.classList.add('display-none');
 		}
 	)
 });
