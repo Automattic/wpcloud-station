@@ -40,5 +40,10 @@ wpcloud.stationFetch = async (route, queryParams = null, version = 'v1') => {
 	if (queryParams) {
 		path = addQueryArgs(path, queryParams);
 	}
-	return apiFetch({ path });
+	const response = apiFetch({ path });
+	response.then((data) => {
+		wpcloud.hooks.doAction(`wpcloud_station_fetch_${route}`, data);
+		wpcloud.hooks.doAction('wpcloud_station_fetch', data);
+	});
+	return response;
 }
