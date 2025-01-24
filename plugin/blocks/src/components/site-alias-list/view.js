@@ -1,5 +1,4 @@
 ((wpcloud) => {
-
 	const demo_domain = 'wpcloudstation.dev';
 	const aliasList = document.querySelector(
 		'.wpcloud-block-site-alias-list'
@@ -200,9 +199,9 @@
 		if ( ! domain || domain.includes( demo_domain ) ) {
 			return;
 		}
-		const response = await fetch(`/wp-json/wpcloud/v1/domains/ssl-status?domain=${domain}`);
-		const result = await response.json();
-		if ( result.success && ! result.valid ) {
+		const { success, valid } = await wpcloud.stationFetch('/domains/ssl-status', { domain });
+
+		if ( success && ! valid ) {
 			form.classList.remove('display-none');
 			form.closest('.wpcloud-block-site-alias-list__row').querySelector('.alias-warning')?.classList.remove('display-none');
 		} else {
