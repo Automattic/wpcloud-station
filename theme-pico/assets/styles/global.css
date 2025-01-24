@@ -25,13 +25,6 @@
 	100% {opacity: 0.0;}
 }
 
-.wpcloud-hide {
-	opacity: 0;
-	display: none;
-	height: 0 !important;
-	padding: 0 !important;
-}
-
 .pulse {
   animation: pulse 0.5s ease-in-out;
 }
@@ -47,8 +40,11 @@
   animation: hilight 0.5s ease-in-out
 }
 
-.hidden {
+.display-none {
+	opacity: 0;
 	display: none;
+	height: 0 !important;
+	padding: 0 !important;
 }
 
 .copy-to-clipboard {
@@ -61,7 +57,10 @@
 			filter: brightness(3);
 		}
 	}
+}
 
+.is-pending {
+	opacity: 0.5;
 }
 
 .wp-block-site-logo img.custom-logo {
@@ -134,12 +133,21 @@ button[type=submit].wpcloud-block-button {
 			left: unset;
 		}
 	}
+
+	li {
+		/* squash the spacing if the li has *any* hidden content */
+		&:has(*.display-none) {
+			margin: 0;
+			padding: 0;
+		}
+	}
 }
 
 button.wpcloud-block-button {
 	border: 1px solid transparent;
   background-clip: padding-box;
 }
+
 .wpcloud-block-button {
 	cursor: pointer;
 }
@@ -149,10 +157,32 @@ button.wpcloud-block-button {
 		background-color: transparent;
 		border: none;
 	}
+
+	&.is-inline:not(.display-none) {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+
+		.wpcloud-block-form-input__label, .wpcloud-block-form-input__input, .wpcloud-block-form-input__label-text {
+			margin: 0;
+		}
+		.wpcloud-block-form-input__label {
+			padding-top: 0;
+			padding-bottom: 0;
+		}
+		.wpcloud-block-form-input__label.is-label-inline .wpcloud-block-form-input__label-text {
+			margin-bottom: 0;
+		}
+	}
+
+	.wpcloud-block-button {
+		margin-bottom: 0;
+	}
 }
 
 .wpcloud-form-message {
-	&:not(.hidden) {
+	&:not(.display-none) {
 		display: flex;
 	}
 	align-items: center;
@@ -168,4 +198,8 @@ button.wpcloud-block-button {
 		margin: 0;
 		color: inherit;
 	}
+}
+
+.add-site-alias--input {
+	width: 100%;
 }
