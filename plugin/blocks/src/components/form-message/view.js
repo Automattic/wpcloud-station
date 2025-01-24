@@ -4,32 +4,40 @@ const formMessages = document.querySelectorAll('.wpcloud-form-message');
 formMessages.forEach((formMessage) => {
 	const { wpcloudAction, messageType, messageTemplate } = formMessage.dataset;
 
+	function renderAndShowMessage(response) {
+		const render = new Function('response', `return \`${messageTemplate}\`;`);
+		const p = formMessage.querySelector('p');
+
+		const renderTemplate = () => {
+			try {
+				p.innerHTML = render(response);
+			} catch (error) {
+				console.error(error);
+				p.innerHTML = messageTemplate;
+			}
+		}
+
+		const success = response.success;
+		if (messageType === 'success' && success) {
+			renderTemplate();
+			formMessage.classList.remove('display-none');
+		}
+		if (messageType === 'error' && !success) {
+			renderTemplate();
+			formMessage.classList.remove('display-none');
+		}
+	}
+
 	wpcloud.hooks.addAction(
 		`wpcloud_form_response_${wpcloudAction}`,
 		'wpcloud',
-		(response) => {
-			const render = new Function('response', `return \`${messageTemplate}\`;`);
-			const p = formMessage.querySelector('p');
+		renderAndShowMessage
+	);
 
-			const renderTemplate = () => {
-				try {
-					p.innerHTML = render(response);
-				} catch (error) {
-					console.error(error);
-					p.innerHTML = messageTemplate;
-				}
-			}
-
-			const success = response.success;
-			if (messageType === 'success' && success) {
-				renderTemplate();
-				formMessage.classList.remove('hidden');
-			}
-			if (messageType === 'error' && !success) {
-				renderTemplate();
-				formMessage.classList.remove('hidden');
-			}
-		}
+	wpcloud.hooks.addAction(
+		`wpcloud_display_message_${wpcloudAction}`,
+		'wpcloud',
+		renderAndShowMessage
 	);
 
 	// clear out any existing messages
@@ -37,7 +45,7 @@ formMessages.forEach((formMessage) => {
 		`wpcloud_form_submit_${wpcloudAction}`,
 		'wpcloud',
 		() => {
-			formMessage.classList.add('hidden');
+			formMessage.classList.add('display-none');
 		}
 	);
 
@@ -45,7 +53,7 @@ formMessages.forEach((formMessage) => {
 	const dismiss = formMessage.querySelector('.dismiss');
 	if (dismiss) {
 		dismiss.addEventListener('click', () => {
-			formMessage.classList.add('hidden');
+			formMessage.classList.add('display-none');
 		});
 	}
 
@@ -54,7 +62,7 @@ formMessages.forEach((formMessage) => {
 		'wpcloud_form_reset',
 		'wpcloud',
 		() => {
-			formMessage.classList.add('hidden');
+			formMessage.classList.add('display-none');
 		}
 	)
 });

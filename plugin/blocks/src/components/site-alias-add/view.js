@@ -42,7 +42,6 @@
 		'request_txt_verification',
 		(result, form) => {
 			if (!result.success) {
-				alert(result.message); // eslint-disable-line no-alert, no-undef
 				return;
 			}
 			const code = result.code;

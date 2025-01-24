@@ -30,13 +30,30 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
 }
 
 if ( ! is_admin() ) {
-	require_once plugin_dir_path( __FILE__ ) . 'assets/js/build/index.asset.php';
+
 	add_action(
 		'wp_enqueue_scripts',
 		function (): void {
-			wp_enqueue_script( 'wpcloud', plugin_dir_url( __FILE__ ) . 'assets/js/build/index.js', array( 'wp-hooks' ), '1.0.0', true );
+			$script_info = require_once plugin_dir_path( __FILE__ ) . 'assets/js/build/index.asset.php';
+			wp_enqueue_script(
+				'wpcloud',
+				plugin_dir_url( __FILE__ ) . 'assets/js/build/index.js',
+				$script_info['dependencies'],
+				$script_info['version'] ?? '1.0.0',
+				true
+			);
+
+			wp_localize_script(
+				'wpcloud',
+				'wpcloudStationApi',
+				array(
+					'nonce' => wp_create_nonce( 'wpcloud_station_api' ),
+				)
+			);
 		}
 	);
+
+
 }
 
 /**

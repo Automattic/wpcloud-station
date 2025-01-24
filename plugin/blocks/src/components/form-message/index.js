@@ -75,7 +75,7 @@ registerBlockType( metadata.name, {
 					}
 					data-wpcloud-action={action}
 				>
-					<RichText tagName="p" value={message} onChange={update('message')} />
+					<RichText tagName="p" value={message} onChange={update('message')} placeholder={__( `${success ? 'Success' : 'Error'} message.` )} />
 					{ dismiss && <Icon icon={ icons[icon] } size={iconSize} /> }
 			</article>
 			</>
@@ -93,7 +93,7 @@ registerBlockType( metadata.name, {
 			<article  {...blockProps}
 				className={classnames(
 					blockProps.className,
-					'hidden',
+					'display-none',
 					'wpcloud-form-message',
 					{ 'wpcloud-form-message--success': success },
 					{ 'wpcloud-form-message--error': !success })}
