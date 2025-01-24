@@ -44,6 +44,18 @@ if ( ! class_exists( 'WPCLOUD_Domains_Controller' ) ) {
 					),
 				)
 			);
+
+			register_rest_route(
+				$this->namespace,
+				'/' . $this->rest_base . '/txt-verification',
+				array(
+					array(
+						'methods'             => WP_REST_Server::READABLE,
+						'callback'            => array( $this, 'get_txt_verification' ),
+						'permission_callback' => array( $this, 'get_permissions_check' ),
+					),
+				)
+			);
 		}
 
 		/**
@@ -73,6 +85,39 @@ if ( ! class_exists( 'WPCLOUD_Domains_Controller' ) ) {
 				array(
 					'success' => true,
 					'valid'   => $ssl_valid,
+				),
+				200
+			);
+		}
+
+		/**
+		 * Get the TXT verification for a domain.
+		 *
+		 * @param WP_REST_Request $request The request object.
+		 *
+		 * @return WP_REST_Response
+		 */
+		public function get_txt_verification( $request ) {
+			$params = $request->get_params();
+			$domain = $params['domain'] ?? '';
+
+			$verification = wpcloud_client_domain_verification_record( $domain );
+
+			if ( is_wp_error( $verification ) ) {
+				return new WP_REST_Response(
+					array(
+						'success' => false,
+						'message' => $verification->get_error_message(),
+					),
+					500
+				);
+			}
+
+			return new WP_REST_Response(
+				array(
+					'success'      => true,
+					'verification' => $verification,
+					'domain'  => $domain,
 				),
 				200
 			);
