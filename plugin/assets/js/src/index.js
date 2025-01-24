@@ -1,4 +1,7 @@
 import { createHooks } from '@wordpress/hooks';
+import apiFetch from '@wordpress/api-fetch';
+import { addQueryArgs } from '@wordpress/url';
+
 
 window.wpcloud = window.wpcloud || {};
 wpcloud.hooks = wpcloud.hooks || createHooks();
@@ -25,4 +28,17 @@ wpcloud.scrollTo = (element) => {
 	}
 
 	return { andPulse: animate("pulse"), andHighlight: animate("highlight") };
+}
+
+// set up the station api fetch.
+const stationApi = window.wpcloudStationApi;
+apiFetch.use(apiFetch.createNonceMiddleware(stationApi.nonce));
+
+wpcloud.stationFetch = async (route, queryParams = null, version = 'v1') => {
+	const slashRoute = route.startsWith('/') ? route : '/' + route;
+	let path = `/wpcloud-station/${version}${slashRoute}`;
+	if (queryParams) {
+		path = addQueryArgs(path, queryParams);
 	}
+	return apiFetch({ path });
+}
