@@ -26,18 +26,20 @@
 		}
 
 		const row = form.closest( '.wpcloud-block-site-alias-list__row' );
-		row.style.transition = 'transform 0.5s ease-out';
+		row.style.transition = 'transform 0.5s ease';
 		row.style.transform = 'scaleY(0)';
 		row.ontransitionend = () => {
 			row.remove();
 		};
 	}
 
-	function onSiteAliasAdded( alias, needsVerification ) {
+	async function onSiteAliasAdded({ site_alias: alias, needsVerification }) {
+
 		const row = aliasList
 			.querySelector(
 				'.wpcloud-block-site-alias-list__row[style*="display:none"]'
-			)
+		);
+
 		if (!row) {
 			return;
 			}
@@ -50,20 +52,39 @@
 		).textContent = alias;
 
 		// Set up the new forms
-		newRow.querySelectorAll( 'form' ).forEach( ( form ) => {
-			const inputSiteAlias = form.querySelector('input[name=site_alias]');
-			if (inputSiteAlias) {
-				inputSiteAlias.value = alias;
-			}
+		newRow.querySelectorAll('form').forEach((form) => {
+			const inputs = form.querySelectorAll('input[name=site_alias]');
+			inputs.forEach((input) => {
+				input.value = alias;
+			});
 			wpcloud.bindFormHandler(form);
 		});
 
 		if (needsVerification) {
 			['.wpcloud-block-form-request_txt_verification', '.alias-warning'].forEach((selector) => {
-				newRow.querySelector(selector).classList.remove('display-none');
+				newRow.querySelector(selector)?.classList.remove('display-none');
 			});
-		}
 
+			// Backwards compatibility with the old form flow.
+			// If the form is not there go ahead and fetch the verification code.
+			if (!newRow.querySelector('.wpcloud-block-form-request_txt_verification')) {
+
+				const { verification, success, domain } = await wpcloud.stationFetch('/domains/txt-verification', { domain: alias });
+				wpcloud.hooks.doAction('wpcloud_display_message_request_txt_verification', { success, domain, verification });
+
+				if (success) {
+					const detail = newRow.querySelector('.site-alias-verification-code');
+					detail.dataset.clipboardPattern = verification;
+
+					newRow.querySelector('.wpcloud-copy-to-clipboard')?.addEventListener('click', wpcloud.copyToClipboard);
+
+					const value = detail.querySelector('.wpcloud-block-site-detail__value');
+					value.textContent = `Verification code`;
+
+					detail.classList.remove('display-none');
+				}
+			}
+		}
 
 		const aliasValueNode = newRow.querySelector('.wpcloud-block-site-detail__value');
 		const anchor = document.createElement('a');
@@ -128,7 +149,7 @@
 	);
 
 	wpcloud.hooks.addAction(
-		'wpcloud_alias_added',
+		'wpcloud_form_response_site_alias_add',
 		'site_alias_list',
 		onSiteAliasAdded
 	);
@@ -141,8 +162,7 @@
 
 	function setPending( form, action ) {
 		const aliasRow = form.closest('.wpcloud-block-site-alias-list__row');
-		const alias = aliasRow.querySelector('.wpcloud-block-site-detail__value');
-		alias.classList.toggle('is-pending');
+		aliasRow.classList.toggle('is-pending');
 
 		if (action === 'site_alias_make_primary') {
 			primaryValueNode.classList.toggle('is-pending');
