@@ -70,6 +70,30 @@
 		"refresh": {
 			"type": "boolean",
 			"default": false
+		},
+		"addSpinner": {
+			"type": "boolean",
+			"default": false
+		},
+		"spinnerSpinner": {
+			"type": "string",
+			"default": "ring180"
+		},
+		"spinnerSpeed": {
+			"type": "number",
+			"default": 1
+		},
+		"spinnerBackground": {
+			"type": "boolean",
+			"default": true
+		},
+		"spinnerSize": {
+			"type": "string",
+			"default": "24px"
+		},
+		"previewSpinner": {
+			"type": "boolean",
+			"default": true
 		}
 	}
 }

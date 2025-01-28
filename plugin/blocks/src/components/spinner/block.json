@@ -1,0 +1,51 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "wpcloud/spinner",
+	"version": "0.1.0",
+	"title": "Spinner",
+	"category": "wpcloud",
+	"icon": "button",
+	"description": "WP Cloud Spinner",
+	"textdomain": "wpcloud",
+	"editorScript": "file:./index.js",
+	"viewScript": "file:./view.js",
+	"supports": {
+		"html": false,
+		"color": {
+			"gradients": true,
+			"background": true,
+			"text": true,
+			"link": true,
+			"custom": true
+		},
+		"__experimentalSize": {
+			"min": "0px",
+			"max": "500px",
+			"step": "10px",
+			"units": ["px", "em", "%"]
+		}
+	},
+	"attributes": {
+		"size": {
+			"type": "string",
+			"default": "24px"
+		},
+		"spinner": {
+			"type": "string",
+			"default": "ringResize"
+		},
+		"background" : {
+			"type": "boolean",
+			"default": false
+		},
+		"speed": {
+			"type": "number",
+			"default": 1
+		},
+		"hide": {
+			"type": "boolean",
+			"default": true
+		}
+	}
+}
