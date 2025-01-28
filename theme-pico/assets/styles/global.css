@@ -46,6 +46,16 @@
 	height: 0 !important;
 	padding: 0 !important;
 }
+.position-absolute-center {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.visibility-hidden {
+	visibility: hidden;
+}
 
 .copy-to-clipboard {
 	display: flex;
@@ -104,6 +114,9 @@
 
 button[type=submit].wpcloud-block-button {
 	width: fit-content;
+	&:has(.wpcloud-block-button__spinner) {
+		opacity: 1;
+	}
 }
 
 .wp-block-wpcloud-dropdown {
@@ -136,7 +149,7 @@ button[type=submit].wpcloud-block-button {
 
 	li {
 		/* squash the spacing if the li has *any* hidden content */
-		&:has(*.display-none) {
+		&:where(:has(*.display-none)) {
 			margin: 0;
 			padding: 0;
 		}
