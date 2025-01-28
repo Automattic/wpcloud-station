@@ -66,7 +66,7 @@
 		}
 
 		if (confirmed === false) {
-			button.removeAttribute('disabled');
+			toggleButton(button);
 			form.classList.remove('is-loading');
 			return;
 		}
@@ -129,9 +129,7 @@
 				}
 			}
 
-			form.querySelectorAll('button[type="submit"]').forEach((button) => {
-				button.removeAttribute('disabled');
-			});
+			toggleButton(form.querySelector('button[type="submit"]'));
 			form.classList.remove('is-loading');
 
 			if (!response.ok) {
@@ -142,7 +140,6 @@
 			console.error(error);
 		}
 	}
-
 
 	async function onFormSubmit(form) {
 		// Get select values before cloning the form
@@ -188,12 +185,34 @@
 		});
 	}
 
+	function toggleButton(button) {
+		if (!button) {
+			return;
+		}
+		const disabled = button.getAttribute('disabled');
+		const spinner = button.querySelector('.wpcloud-block-button__spinner');
+		if (disabled) {
+			button.removeAttribute('disabled');
+			if (spinner) {
+				spinner.classList.add('display-none');
+				button.querySelector('.wpcloud-block-button__label').classList.remove('visibility-hidden');
+			}
+		} else {
+			button.setAttribute('disabled', 'disabled');
+			if (spinner) {
+				spinner.classList.remove('display-none');
+				button.querySelector('.wpcloud-block-button__label').classList.add('visibility-hidden');
+			}
+		}
+	}
+
+	wpcloud.toggleButton = toggleButton;
+
 	wpcloud.bindFormHandler = (form) => {
 		form.addEventListener('submit', async (e) => {
 			const button = form.querySelector('button[type="submit"]');
 			e.preventDefault();
-			button.setAttribute('disabled', 'disabled');
-
+			toggleButton(button);
 			await onFormSubmit(form);
 		});
 
@@ -247,7 +266,7 @@
 			if (trigger.getAttribute('disabled')) {
 				return;
 			}
-			trigger.setAttribute('disabled', 'disabled');
+			toggleButton(trigger);
 			const form = trigger.closest('form');
 			await onFormSubmit(form);
 		}
