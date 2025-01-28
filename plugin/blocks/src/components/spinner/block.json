@@ -18,6 +18,12 @@
 			"text": true,
 			"link": true,
 			"custom": true
+		},
+		"__experimentalSize": {
+			"min": "0px",
+			"max": "500px",
+			"step": "10px",
+			"units": ["px", "em", "%"]
 		}
 	},
 	"attributes": {

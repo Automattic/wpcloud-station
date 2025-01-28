@@ -2,20 +2,19 @@
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { SelectControl, ToggleControl } from '@wordpress/components';
+import { SelectControl, ToggleControl, TextControl } from '@wordpress/components';
 
 import * as spinners from '@wpcloud/components/spinner/library';
 
-import { updateAttribute } from '@wpcloud/controls/utils';
 
 const spinnerOptions = Object.keys(spinners)
 	.filter((key) => key !== 'Spinner')
 	.map((key) => ({ label: key.replace(/([a-z])([A-Z])/g, '$1 $2').toLowerCase(), value: key })
 );
 
-export default function( { attributes, setAttributes } ) {
-	const { spinner, background, speed, hide} = attributes;
-	const update = updateAttribute( setAttributes );
+export default function( { attributes, updateAttribute } ) {
+	const { spinner, background, speed, hide, size} = attributes;
+
 
 	return (
 		<>
@@ -23,7 +22,12 @@ export default function( { attributes, setAttributes } ) {
 				label={__('Spinner Style')}
 				value={ spinner }
 				options={ spinnerOptions }
-				onChange={ update('spinner') }
+				onChange={ updateAttribute('spinner') }
+			/>
+			<TextControl
+				label={__('Size')}
+				value={size}
+				onChange={updateAttribute('size')}
 			/>
 			<SelectControl
 				label={__('Speed')}
@@ -33,18 +37,18 @@ export default function( { attributes, setAttributes } ) {
 					{ label: 'Normal', value: 1},
 					{ label: 'Fast', value: 0.5 },
 				]}
-				onChange={update('speed')}
+				onChange={updateAttribute('speed')}
 			/>
 			<ToggleControl
 				label={__('Background')}
 				checked={background}
 				help={ __('Show background if available') }
-				onChange={update('background')}
+				onChange={updateAttribute('background')}
 			/>
 			<ToggleControl
 				label={__('Hide by default')}
 				checked={hide}
-				onChange={update('hide')}
+				onChange={updateAttribute('hide')}
 			/>
 		</>
 	);

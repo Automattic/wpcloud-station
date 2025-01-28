@@ -12,7 +12,7 @@ import { PanelBody, TextControl, SelectControl } from '@wordpress/components';
 
 import metadata from './block.json';
 import { updateAttribute } from '@wpcloud/controls';
-import SpinnerControl from './controls';
+import SpinnerControls from './controls';
 import * as spinners from './library';
 import { Spinner } from './library';
 
@@ -20,41 +20,25 @@ registerBlockType(metadata.name, {
 	icon: (<Spinner spinner={spinners.barsRotateFade} animation={false} speed={0}  />),
 	edit: ({ attributes, setAttributes }) => {
 		const { size, spinner, background, speed } = attributes;
-		const style = {
-			width:size, height:size
-		}
-		const blockProps = useBlockProps({style});
+		const blockProps = useBlockProps();
 		const update = updateAttribute(setAttributes);
 		return (
 			<>
 				<InspectorControls>
 					<PanelBody title={__('Spinner Settings')}>
-						<TextControl
-							label={__('size')}
-							value={size}
-							onChange={update('size')}
-						/>
-						<SelectControl
-							label={__('Speed')}
-							value={speed}
-							onChange={update('speed')}
-						/>
-						<SpinnerControl {...{ attributes, setAttributes }} />
+						<SpinnerControls {...{ attributes, updateAttribute: update }} />
 					</PanelBody>
 
 				</InspectorControls>
 				<div {...blockProps}>
-					<Spinner spinner={spinners[spinner]} background={background} speed={speed} />
+					<Spinner spinner={spinners[spinner]} background={background} speed={speed} size={size} />
 				</div>
 			</>
 		)
 	},
 	save: ({ attributes }) => {
 		const { size, spinner, background, speed, hide} = attributes;
-		const style = {
-			width: size, height: size,
-			//stroke: 'currentColor'
-		}
+		const style = { }
 		if (hide) {
 			style.display = 'none';
 		}
@@ -62,7 +46,7 @@ registerBlockType(metadata.name, {
 
 		return (
 			<div {...blockProps}>
-				<Spinner spinner={spinners[spinner]} background={background} speed={speed} foo="bar" />
+				<Spinner spinner={spinners[spinner]} background={background} speed={speed} size={size} />
 			</div>
 		)
 	}

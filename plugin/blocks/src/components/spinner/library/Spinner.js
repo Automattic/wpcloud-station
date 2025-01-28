@@ -3,10 +3,11 @@
  */
 import { cloneElement } from '@wordpress/element';
 
-function Spinner({ spinner, ...props }, ref) {
-	console.log(props);
+function Spinner({ spinner, size, ...props }, ref) {
+	const height = size || '100%';
+	const width = size || '100%';
 	const Spin = spinner;
-	return cloneElement(<Spin />, { ...props }, ref);
+	return cloneElement(<Spin />, { width, height, ...props }, ref);
 }
 
 export default Spinner;
