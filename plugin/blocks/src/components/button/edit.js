@@ -24,24 +24,54 @@ import {
  *
  * Internal dependencies
  */
-import { LinkableDetailSelectControl } from '@wpcloud/controls/site/';
+import { updateAttribute } from '@wpcloud/controls/utils';
+
+import { LinkableDetailSelectControl } from '@wpcloud/controls/site';
+import { SpinnerControls } from '@wpcloud/controls';
+import * as spinners from '@wpcloud/components/spinner/library';
+import { Spinner } from '@wpcloud/components/spinner/library';
 import './editor.scss';
 
 function ButtonBlock( { attributes, setAttributes } ) {
-	const { type, style, adminOnly, target, addIcon, iconOnly, url, label, action, isPrimary } =
-		attributes;
-	const blockProps = useBlockProps();
+	const {
+		type,
+		style,
+		adminOnly,
+		target,
+		addIcon,
+		iconOnly,
+		url,
+		label,
+		action,
+		isPrimary,
+		addSpinner,
+		spinnerSpinner,
+		spinnerSpeed,
+		spinnerBackground,
+		spinnerSize,
+		previewSpinner,
+	} = attributes;
 
-	const updateAttribute = ( key ) => ( val ) => {
-		setAttributes( { [ key ]: val } );
+	const spinnerAttributes = {
+		spinner: spinnerSpinner,
+		speed: spinnerSpeed,
+		background: spinnerBackground,
+		size: spinnerSize,
+	}
+	const updateSpinnerAttribute = (key) => (val) => {
+		const spinnerKey = 'spinner' + key.charAt(0).toUpperCase() + key.slice(1);
+		setAttributes({ [spinnerKey]: val });
 	};
+
+	const blockProps = useBlockProps();
+	const update = updateAttribute(setAttributes);
 
 	const LinkControls = (
 		<>
 			<TextControl
 				label={ __( 'Custom URL' ) }
 				value={ url }
-				onChange={ updateAttribute( 'url' ) }
+				onChange={ update( 'url' ) }
 				help={ __(
 					'Add a custom URL for this link. Just use the path for internal links i.e. `/sites` '
 				) }
@@ -76,7 +106,7 @@ function ButtonBlock( { attributes, setAttributes } ) {
 			<TextControl
 				label={ __( 'Action' ) }
 				value={ action }
-				onChange={ updateAttribute( 'action' ) }
+				onChange={ update( 'action' ) }
 				help={ __(
 					'Add an action for this link. This will be used to trigger JS actions'
 				) }
@@ -98,7 +128,7 @@ function ButtonBlock( { attributes, setAttributes } ) {
 							{ label: __( 'Submit' ), value: 'submit' },
 							{ label: __( 'Reset' ), value: 'reset' },
 						] }
-						onChange={ updateAttribute( 'type' ) }
+						onChange={ update( 'type' ) }
 					/>
 					<SelectControl
 						label={ __( 'Button Style' ) }
@@ -107,36 +137,49 @@ function ButtonBlock( { attributes, setAttributes } ) {
 							{ label: __( 'Text' ), value: 'text' },
 							{ label: __( 'Button' ), value: 'button' },
 						] }
-						onChange={updateAttribute('style')}
+						onChange={update('style')}
 					/>
 					<ToggleControl
 						label={ __( 'Primary Button' ) }
 						checked={ isPrimary }
-						onChange={ updateAttribute( 'isPrimary' ) }
+						onChange={ update( 'isPrimary' ) }
 						help={ __( 'Use the primary button style if enabled. Otherwise use secondary button style' ) }
 					/>
 					<ToggleControl
+						label={ __( 'Add Spinner' ) }
+						checked={ addSpinner }
+						onChange={ update( 'addSpinner' ) }
+						help={ __( 'Replaces the button text with a spinner while the button is disabled. Mouse-over to see the replacement in the editor.' ) }
+					/>
+					{addSpinner && (
+						<>
+							<ToggleControl
+								label={__('Preview Spinner')}
+								checked={previewSpinner}
+								onChange={update('previewSpinner')}
+								help={__('Preview the spinner in the editor')}
+							/>
+							<SpinnerControls attributes={spinnerAttributes} updateAttribute={updateSpinnerAttribute} />
+						</>
+					)}
+					<ToggleControl
 						label={ __( 'Add Icon' ) }
 						checked={ addIcon }
-						onChange={ updateAttribute( 'addIcon' ) }
+						onChange={ update( 'addIcon' ) }
 						help={ __( 'Add Icon to the button' ) }
 					/>
 
 					 <ToggleControl
 						label={__('Icon Only')}
 						checked={ iconOnly }
-						onChange={updateAttribute('iconOnly')}
+						onChange={update('iconOnly')}
 						help={__('Only show the icon, no text label')}
 					/>
 
 					<ToggleControl
 						label={ __( 'Limit to Admins' ) }
 						checked={ adminOnly }
-						onChange={ ( newVal ) => {
-							setAttributes( {
-								adminOnly: newVal,
-							} );
-						} }
+						onChange={ update( 'adminOnly' ) }
 						help={ __(
 							'Only admins will see this field. Inputs marked as admin only will appear with a dashed border in the editor'
 						) }
@@ -186,7 +229,12 @@ function ButtonBlock( { attributes, setAttributes } ) {
 						<div className="wpcloud-block-button__icon">
 							<InnerBlocks allowedBlocks={ [ 'wpcloud/icon' ] } />
 						</div>
-					) }
+					)}
+					{addSpinner && (
+						<Spinner
+							className={classNames('wpcloud-block-button__spinner', { 'preview-spinner': previewSpinner })}
+							{...{ ...spinnerAttributes, spinner: spinners[spinnerSpinner] }} />
+					)}
 				</span>
 			</div>
 		</>
