@@ -42,10 +42,12 @@ formMessages.forEach((formMessage) => {
 
 	// clear out any existing messages
 	wpcloud.hooks.addAction(
-		`wpcloud_form_submit_${wpcloudAction}`,
+		`wpcloud_form_response`,
 		'wpcloud',
 		() => {
-			formMessage.classList.add('display-none');
+			if (formMessage.classList.contains('wpcloud-form-message--dismissable')) {
+				formMessage.classList.add('display-none');
+			}
 		}
 	);
 

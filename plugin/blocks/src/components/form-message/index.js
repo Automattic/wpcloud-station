@@ -95,8 +95,11 @@ registerBlockType( metadata.name, {
 					blockProps.className,
 					'display-none',
 					'wpcloud-form-message',
-					{ 'wpcloud-form-message--success': success },
-					{ 'wpcloud-form-message--error': !success })}
+					{
+						'wpcloud-form-message--success': success,
+						'wpcloud-form-message--error': !success,
+						'wpcloud-form-message--dismissable': dismiss
+					})}
 				data-wpcloud-action={action}
 				data-message-type={success ? 'success' : 'error'}
 				role={role}
