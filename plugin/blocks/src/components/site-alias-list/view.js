@@ -20,14 +20,19 @@
 
 	aliasList.querySelectorAll( '[data-a' ).forEach( wpcloud.bindFormHandler );
 
-	function onSiteAliasRemove( result, form ) {
+	function onSiteAliasRemove(result, form) {
 		if ( ! result.success ) {
 			return;
 		}
 
 		const row = form.closest( '.wpcloud-block-site-alias-list__row' );
-		row.style.transition = 'transform 0.5s ease';
+		const details = form.closest('details');
+		details && (details.open = false);
+
+		row.style.transition = 'transform 1s ease,  opacity 0.8s ease, height 1.5s ease';
 		row.style.transform = 'scaleY(0)';
+		row.style.opacity = '0';
+		row.style.height = '0';
 		row.ontransitionend = () => {
 			row.remove();
 		};
@@ -58,6 +63,13 @@
 				input.value = alias;
 			});
 			wpcloud.bindFormHandler(form);
+			const actionButtons = form.querySelectorAll('[data-wpcloud-action="wpcloud_form_on_submit"]');
+			actionButtons.forEach((button) => {
+				button.addEventListener('click', () => {
+					const form = button.closest('form');
+					wpcloud.hooks.doAction('wpcloud_form_on_submit', form);
+				});
+			});
 		});
 
 		if (needsVerification) {
@@ -111,6 +123,8 @@
 
 		const newPrimary = result.site_alias;
 		const alias = form.closest('.wpcloud-block-site-alias-list__row');
+		const details = alias.querySelector('details');
+		details && (details.open = false);
 
 		const oldPrimary = primary.dataset.domainName;
 
@@ -161,15 +175,12 @@
 	);
 
 	function setPending( form, action ) {
-		const aliasRow = form.closest('.wpcloud-block-site-alias-list__row');
-		aliasRow.classList.toggle('is-pending');
 
 		if (action === 'site_alias_make_primary') {
 			primaryValueNode.classList.toggle('is-pending');
 		}
 
-		const details = form.closest('details');
-		details && ( details.open = false );
+
 	}
 	wpcloud.hooks.addAction(
 		'wpcloud_form_submit_site_alias_make_primary',
@@ -242,22 +253,14 @@
 		'wpcloud_form_response_retry_ssl',
 		'wpcloud',
 		(result, form) => {
-			if ( result.success ) {
-
-				const button = form.querySelector('.wpcloud-block-button__label');
-				if ( button ) {
-					button.innerText = 'Queued';
-				}
-				setTimeout(() => {
-					form.classList.add('wpcloud-hide');
-				}, 1000);
-				return;
-			}
+			const button = form.querySelector('.wp-block-wpcloud-button');
+			wpcloud.toggleButton(button);
+			const details = form.closest('details');
+			details && (details.open = false);
 		}
 	);
 
 	// Check the status of the existing domains.
 	aliasList.querySelectorAll('.wpcloud-block-form-retry-ssl').forEach( verifySSL );
-
 
 })(window.wpcloud);

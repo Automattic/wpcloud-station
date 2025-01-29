@@ -89,6 +89,7 @@ add_filter( 'wpcloud_block_form_submitted_fields_retry_ssl', 'wpcloud_block_form
 function wpcloud_block_form_retry_ssl( $response, $data ) {
 	// Check if we need to retry the SSL certificate request.
 	$ssl_valid = WPCLOUD_Site::is_domain_ssl_valid( $data['domain_name'] );
+	$response['domain'] = $data['domain_name'];
 
 	if ( is_wp_error( $ssl_valid ) ) {
 		$response['success'] = false;
