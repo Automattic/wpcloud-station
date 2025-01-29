@@ -57,6 +57,16 @@
 	visibility: hidden;
 }
 
+.is-inline {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	* {
+		margin: 0;
+	}
+}
+
 .copy-to-clipboard {
 	display: flex;
   align-items: center;
@@ -215,4 +225,18 @@ button.wpcloud-block-button {
 
 .add-site-alias--input {
 	width: 100%;
+}
+
+.wp-block-group-is-layout-flex:not(.is-vertical) {
+		* {
+			margin-top: 0;
+			margin-bottom: 0;
+		}
+}
+
+.wpcloud-block-site-alias-list__row {
+	.wp-block-wpcloud-form.is-inline {
+		justify-content: start;
+		gap: 20px;
+	}
 }
