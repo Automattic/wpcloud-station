@@ -90,10 +90,6 @@
 		"spinnerSize": {
 			"type": "string",
 			"default": "24px"
-		},
-		"previewSpinner": {
-			"type": "boolean",
-			"default": true
 		}
 	}
 }
