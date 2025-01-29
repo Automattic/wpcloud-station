@@ -49,10 +49,16 @@
 		}
 
 		const row = form.closest('.wpcloud-block-ssh-user-list__row');
+		const details = form.closest('details');
+		details && (details.open = false);
 
-		row.ontransitionend = row.remove;
-
-		row.classList.add('wpcloud-hide');
+		row.style.transition = 'transform 1s ease,  opacity 0.8s ease, height 1.5s ease';
+		row.style.transform = 'scaleY(0)';
+		row.style.opacity = '0';
+		row.style.height = '0';
+		row.ontransitionend = () => {
+			row.remove();
+		};
 	}
 
 	function onSshUserInitUpdate(button) {
