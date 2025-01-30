@@ -52,8 +52,6 @@ if ( ! is_admin() ) {
 			);
 		}
 	);
-
-
 }
 
 /**
@@ -67,6 +65,17 @@ function wpcloud_get_api_key_from_env(): string {
 
 	$api_key = apply_filters( 'wpcloud_api_key', $api_key );
 	return $api_key ? $api_key : '';
+}
+
+/**
+ * Check if using environment settings.
+ *
+ * @param string $config_name The config name.
+ * @return bool
+ */
+function wpcloud_using_env_settings( $config_name ): bool {
+	$config = apply_filters( "wpcloud_{$config_name}", '' );
+	return ! empty( $config );
 }
 
 /**

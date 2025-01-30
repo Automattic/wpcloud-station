@@ -16,13 +16,8 @@ $GLOBALS['wpcloud_client_cache'] = new stdClass();
  * @return string|null Client Name on success. WP_Error on error.
  */
 function wpcloud_get_client_name(): mixed {
-	$wpcloud_settings = get_option( 'wpcloud_settings' );
-
-	if ( ! $wpcloud_settings ) {
-		return null;
-	}
-
-	return $wpcloud_settings['wpcloud_client'] ?? null;
+	$wpcloud_settings = get_option( 'wpcloud_settings', array() );
+	return apply_filters( 'wpcloud_client_name', $wpcloud_settings['wpcloud_client'] ?? null );
 }
 
 /**
@@ -31,12 +26,8 @@ function wpcloud_get_client_name(): mixed {
  * @return string|null Client API Key on success. WP_Error on error.
  */
 function wpcloud_get_client_api_key(): mixed {
-	$api_key = wpcloud_get_api_key_from_env();
-	if ( $api_key ) {
-		return $api_key;
-	}
 	$settings = get_option( 'wpcloud_settings', array() );
-	return $settings['wpcloud_api_key'] ?? null;
+	return apply_filters( 'wpcloud_api_key', $settings['wpcloud_api_key'] ?? null );
 }
 
 /**
