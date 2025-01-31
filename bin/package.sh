@@ -20,7 +20,7 @@ fi
 function build() {
 	local build_package=${1:-""}
 
-	if [ "$build_package" != "plugin" ] && [ "$build_package" != "theme" &&  [ "$build_package" != "theme-pico" ] ] ; then
+	if [ "$build_package" != "plugin" ] && [ "$build_package" != "theme" ] && [ "$build_package" != "theme-pico" ] ; then
 		echo "Invalid package type: $build_package"
 		exit 1
 	fi
@@ -32,15 +32,16 @@ function build() {
 		rm "$dist/$build_package.zip"
 	fi
 
-	mkdir -p "$script_dir/temp/wpcloud-station"
+	temp="$script_dir/temp/wpcloud-station-$build_package"
+	mkdir -p "$temp"
 	pushd "$build_package"
-	zip -r "$script_dir/temp/wpcloud-station/$build_package.zip" . -x@.distignore
+	zip -r "$temp/$build_package.zip" . -x@.distignore
 	popd
-	pushd "$script_dir/temp/wpcloud-station"
+	pushd "$temp"
 	unzip "$build_package.zip"
 	rm "$build_package.zip"
 	cd ..
-	zip -r "$dist/$build_package.zip" wpcloud-station
+	zip -r "$dist/wpcloud-station-$build_package.zip" "wpcloud-station-$build_package"
 	popd
 }
 
