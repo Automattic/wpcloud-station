@@ -1,10 +1,14 @@
 /**
+ * External dependencies
+ */
+import { classNames } from 'classnames';
+/**
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
 import { registerBlockType } from '@wordpress/blocks';
 import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
-import { PanelBody, TextControl, SelectControl } from '@wordpress/components';
+import { PanelBody } from '@wordpress/components';
 
 /**
  * Internal dependencies
@@ -37,15 +41,16 @@ registerBlockType(metadata.name, {
 		)
 	},
 	save: ({ attributes }) => {
-		const { size, spinner, background, speed, hide} = attributes;
-		const style = { }
-		if (hide) {
-			style.display = 'none';
-		}
-		const blockProps = useBlockProps.save({ style });
+		const { size, spinner, background, speed, hide } = attributes;
+		const blockProps = useBlockProps.save();
+		const className = classNames(
+			blockProps.className,
+			{ 'visibility-none': hide }
+		);
+
 
 		return (
-			<div {...blockProps}>
+			<div {...blockProps} className={className}>
 				<Spinner spinner={spinners[spinner]} background={background} speed={speed} size={size} />
 			</div>
 		)

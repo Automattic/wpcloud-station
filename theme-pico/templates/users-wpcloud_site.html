@@ -12,57 +12,72 @@
 <!-- wp:column {"width":"1100px","className":"wpcloud-site-view\u002d\u002ddetails"} -->
 <div class="wp-block-column wpcloud-site-view--details" style="flex-basis:1100px"><!-- wp:template-part {"slug":"site-header","area":"uncategorized"} /-->
 
-<!-- wp:wpcloud/card {"metadata":{"name":"Card: SSH Users"}} -->
-<article class="wp-block-wpcloud-card"><!-- wp:wpcloud/card-section {"text":"SSH Users","metadata":{"name":"SSH Users"}} -->
+<!-- wp:group {"metadata":{"name":"Notifications"},"style":{"dimensions":{"minHeight":"80px"},"spacing":{"margin":{"top":"0","bottom":"0"},"blockGap":"var:preset|spacing|20"}},"layout":{"type":"constrained"}} -->
+<div class="wp-block-group" style="min-height:80px;margin-top:0;margin-bottom:0"><!-- wp:wpcloud/form-message {"action":"site_ssh_user_update","message":"User ${response.user?.user} updated.","metadata":{"name":"User updated success"},"className":"hidden","style":{"color":{"background":"#079d66"},"elements":{"link":{"color":{"text":"var:preset|color|white"}}}},"textColor":"white"} -->
+<article class="wp-block-wpcloud-form-message hidden has-white-color has-text-color has-background has-link-color display-none wpcloud-form-message wpcloud-form-message--success wpcloud-form-message--dismissable" style="background-color:#079d66" data-wpcloud-action="site_ssh_user_update" data-message-type="success" role="status" aria-live="polite" data-message-template="User ${response.user?.user} updated."><p></p><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" class="dismiss" aria-hidden="true"><path d="M13 11.8l6.1-6.3-1-1-6.1 6.2-6.1-6.2-1 1 6.1 6.3-6.5 6.7 1 1 6.5-6.6 6.5 6.6 1-1z"></path></svg></article>
+<!-- /wp:wpcloud/form-message -->
+
+<!-- wp:wpcloud/form-message {"action":"site_ssh_user_add","message":"User ${response.user?.user} added.","metadata":{"name":"User updated success"},"className":"hidden","style":{"color":{"background":"#079d66"},"elements":{"link":{"color":{"text":"var:preset|color|white"}}}},"textColor":"white"} -->
+<article class="wp-block-wpcloud-form-message hidden has-white-color has-text-color has-background has-link-color display-none wpcloud-form-message wpcloud-form-message--success wpcloud-form-message--dismissable" style="background-color:#079d66" data-wpcloud-action="site_ssh_user_add" data-message-type="success" role="status" aria-live="polite" data-message-template="User ${response.user?.user} added."><p></p><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" class="dismiss" aria-hidden="true"><path d="M13 11.8l6.1-6.3-1-1-6.1 6.2-6.1-6.2-1 1 6.1 6.3-6.5 6.7 1 1 6.5-6.6 6.5 6.6 1-1z"></path></svg></article>
+<!-- /wp:wpcloud/form-message -->
+
+<!-- wp:wpcloud/form-message {"success":false,"action":"site_ssh_user_update","message":"Update Failed: ${response.message} ","metadata":{"name":"User updated failed"},"className":"hidden","style":{"elements":{"link":{"color":{"text":"var:preset|color|white"}}}},"backgroundColor":"vivid-red","textColor":"white"} -->
+<article class="wp-block-wpcloud-form-message hidden has-white-color has-vivid-red-background-color has-text-color has-background has-link-color display-none wpcloud-form-message wpcloud-form-message--error wpcloud-form-message--dismissable" data-wpcloud-action="site_ssh_user_update" data-message-type="error" role="alert" aria-live="assertive" data-message-template="Update Failed: ${response.message} "><p></p><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" class="dismiss" aria-hidden="true"><path d="M13 11.8l6.1-6.3-1-1-6.1 6.2-6.1-6.2-1 1 6.1 6.3-6.5 6.7 1 1 6.5-6.6 6.5 6.6 1-1z"></path></svg></article>
+<!-- /wp:wpcloud/form-message -->
+
+<!-- wp:wpcloud/form-message {"success":false,"action":"site_ssh_user_add","message":"Add User failed: ${response.message} ","metadata":{"name":"User updated failed"},"className":"hidden","style":{"elements":{"link":{"color":{"text":"var:preset|color|white"}}}},"backgroundColor":"vivid-red","textColor":"white"} -->
+<article class="wp-block-wpcloud-form-message hidden has-white-color has-vivid-red-background-color has-text-color has-background has-link-color display-none wpcloud-form-message wpcloud-form-message--error wpcloud-form-message--dismissable" data-wpcloud-action="site_ssh_user_add" data-message-type="error" role="alert" aria-live="assertive" data-message-template="Add User failed: ${response.message} "><p></p><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" class="dismiss" aria-hidden="true"><path d="M13 11.8l6.1-6.3-1-1-6.1 6.2-6.1-6.2-1 1 6.1 6.3-6.5 6.7 1 1 6.5-6.6 6.5 6.6 1-1z"></path></svg></article>
+<!-- /wp:wpcloud/form-message -->
+
+<!-- wp:wpcloud/form-message {"action":"site_ssh_user_remove","message":"${response.user} removed.","metadata":{"name":"user removed success"},"className":"hidden","style":{"elements":{"link":{"color":{"text":"var:preset|color|white"}}}},"backgroundColor":"vivid-green-cyan","textColor":"white"} -->
+<article class="wp-block-wpcloud-form-message hidden has-white-color has-vivid-green-cyan-background-color has-text-color has-background has-link-color display-none wpcloud-form-message wpcloud-form-message--success wpcloud-form-message--dismissable" data-wpcloud-action="site_ssh_user_remove" data-message-type="success" role="status" aria-live="polite" data-message-template="${response.user} removed."><p></p><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" class="dismiss" aria-hidden="true"><path d="M13 11.8l6.1-6.3-1-1-6.1 6.2-6.1-6.2-1 1 6.1 6.3-6.5 6.7 1 1 6.5-6.6 6.5 6.6 1-1z"></path></svg></article>
+<!-- /wp:wpcloud/form-message -->
+
+<!-- wp:wpcloud/form-message {"success":false,"action":"site_ssh_user_remove","message":"Failed to remove ${response.user} : ${response.message}","metadata":{"name":"user removed failed"},"className":"hidden","style":{"elements":{"link":{"color":{"text":"var:preset|color|white"}}}},"backgroundColor":"vivid-red","textColor":"white"} -->
+<article class="wp-block-wpcloud-form-message hidden has-white-color has-vivid-red-background-color has-text-color has-background has-link-color display-none wpcloud-form-message wpcloud-form-message--error wpcloud-form-message--dismissable" data-wpcloud-action="site_ssh_user_remove" data-message-type="error" role="alert" aria-live="assertive" data-message-template="Failed to remove ${response.user} : ${response.message}"><p></p><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" class="dismiss" aria-hidden="true"><path d="M13 11.8l6.1-6.3-1-1-6.1 6.2-6.1-6.2-1 1 6.1 6.3-6.5 6.7 1 1 6.5-6.6 6.5 6.6 1-1z"></path></svg></article>
+<!-- /wp:wpcloud/form-message --></div>
+<!-- /wp:group -->
+
+<!-- wp:wpcloud/card {"style":{"spacing":{"margin":{"top":"var:preset|spacing|20","bottom":"var:preset|spacing|20"}}},"metadata":{"name":"Card: SSH Users"}} -->
+<article style="margin-top:var(--wp--preset--spacing--20);margin-bottom:var(--wp--preset--spacing--20);spacing:[object Object]" class="wp-block-wpcloud-card"><!-- wp:wpcloud/card-section {"text":"SSH Users","metadata":{"name":"SSH Users"}} -->
 <header class="wp-block-wpcloud-card-section"><h2>SSH Users</h2></header>
 <!-- /wp:wpcloud/card-section -->
 
-<!-- wp:wpcloud/card {"metadata":{"name":"Card: Add User"}} -->
-<article class="wp-block-wpcloud-card"><!-- wp:wpcloud/card-section {"text":"Add User","level":3,"metadata":{"name":"Add User"}} -->
-<header class="wp-block-wpcloud-card-section"><h3>Add User</h3></header>
-<!-- /wp:wpcloud/card-section -->
-
-<!-- wp:wpcloud/form {"wpcloudAction":"site_ssh_user_add"} -->
-<form class="wp-block-wpcloud-form wpcloud-block-form" enctype="text/plain"><!-- wp:wpcloud/form-input {"name":"user","label":"User","uniqueId":"fb2d9eaa-5fb5-4ba2-8aed-01c7b0da35ad-user"} -->
-<div class="wpcloud-block-form--input wp-block-wpcloud-form-input wpcloud-block-form--input--text"><label class="wpcloud-block-form-input__label" for="fb2d9eaa-5fb5-4ba2-8aed-01c7b0da35ad-user"><span class="wpcloud-block-form-input__label-content"><span class="wpcloud-block-form-input__label-text">User</span></span><input type="text" class="wpcloud-block-form-input__input" aria-label="Optional placeholder text" placeholder="Optional placeholder..." name="user" id="fb2d9eaa-5fb5-4ba2-8aed-01c7b0da35ad-user" aria-required="false"/></label></div>
+<!-- wp:wpcloud/card {"style":{"spacing":{"margin":{"top":"var:preset|spacing|50","bottom":"var:preset|spacing|50"}}},"metadata":{"name":"Card: Add User"}} -->
+<article style="margin-top:var(--wp--preset--spacing--50);margin-bottom:var(--wp--preset--spacing--50);spacing:[object Object]" class="wp-block-wpcloud-card"><!-- wp:wpcloud/ssh-user-form -->
+<div class="wpcloud-ssh-form wp-block-wpcloud-ssh-user-form"><!-- wp:wpcloud/form {"wpcloudAction":"site_ssh_user_add","metadata":{"name":"SSH User Form"},"className":"wpcloud-form-ssh-user"} -->
+<form class="wp-block-wpcloud-form wpcloud-form-ssh-user wpcloud-block-form" enctype="text/plain"><!-- wp:wpcloud/form-input {"name":"user","label":"User","uniqueId":"a15ecb68-2d69-474f-809a-28e87563f829-user"} -->
+<div class="wpcloud-block-form--input wp-block-wpcloud-form-input wpcloud-block-form--input--text"><label class="wpcloud-block-form-input__label" for="a15ecb68-2d69-474f-809a-28e87563f829-user"><span class="wpcloud-block-form-input__label-content"><span class="wpcloud-block-form-input__label-text">User</span></span><input type="text" class="wpcloud-block-form-input__input" aria-label="Optional placeholder text" placeholder=" " name="user" id="a15ecb68-2d69-474f-809a-28e87563f829-user" aria-required="false"/></label></div>
 <!-- /wp:wpcloud/form-input -->
 
-<!-- wp:wpcloud/form-input {"type":"password","name":"pass","label":"Password","uniqueId":"dd80a9d5-4070-4bb5-8275-814f3826dcfb-pass"} -->
-<div class="wpcloud-block-form--input wp-block-wpcloud-form-input wpcloud-block-form--input--password"><label class="wpcloud-block-form-input__label" for="dd80a9d5-4070-4bb5-8275-814f3826dcfb-pass"><span class="wpcloud-block-form-input__label-content"><span class="wpcloud-block-form-input__label-text">Password</span></span><span class="wpcloud-block-form-input--password"><input type="password" class="wpcloud-block-form-input__input" aria-label="Optional placeholder text" name="pass" id="dd80a9d5-4070-4bb5-8275-814f3826dcfb-pass" aria-required="false"/><span class="wpcloud-block-form-input--toggle-hidden"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="wpcloud-block-form-input--toggle-hidden--seen" aria-hidden="true"><path d="M3.99961 13C4.67043 13.3354 4.6703 13.3357 4.67017 13.3359L4.67298 13.3305C4.67621 13.3242 4.68184 13.3135 4.68988 13.2985C4.70595 13.2686 4.7316 13.2218 4.76695 13.1608C4.8377 13.0385 4.94692 12.8592 5.09541 12.6419C5.39312 12.2062 5.84436 11.624 6.45435 11.0431C7.67308 9.88241 9.49719 8.75 11.9996 8.75C14.502 8.75 16.3261 9.88241 17.5449 11.0431C18.1549 11.624 18.6061 12.2062 18.9038 12.6419C19.0523 12.8592 19.1615 13.0385 19.2323 13.1608C19.2676 13.2218 19.2933 13.2686 19.3093 13.2985C19.3174 13.3135 19.323 13.3242 19.3262 13.3305L19.3291 13.3359C19.3289 13.3357 19.3288 13.3354 19.9996 13C20.6704 12.6646 20.6703 12.6643 20.6701 12.664L20.6697 12.6632L20.6688 12.6614L20.6662 12.6563L20.6583 12.6408C20.6517 12.6282 20.6427 12.6108 20.631 12.5892C20.6078 12.5459 20.5744 12.4852 20.5306 12.4096C20.4432 12.2584 20.3141 12.0471 20.1423 11.7956C19.7994 11.2938 19.2819 10.626 18.5794 9.9569C17.1731 8.61759 14.9972 7.25 11.9996 7.25C9.00203 7.25 6.82614 8.61759 5.41987 9.9569C4.71736 10.626 4.19984 11.2938 3.85694 11.7956C3.68511 12.0471 3.55605 12.2584 3.4686 12.4096C3.42484 12.4852 3.39142 12.5459 3.36818 12.5892C3.35656 12.6108 3.34748 12.6282 3.34092 12.6408L3.33297 12.6563L3.33041 12.6614L3.32948 12.6632L3.32911 12.664C3.32894 12.6643 3.32879 12.6646 3.99961 13ZM11.9996 16C13.9326 16 15.4996 14.433 15.4996 12.5C15.4996 10.567 13.9326 9 11.9996 9C10.0666 9 8.49961 10.567 8.49961 12.5C8.49961 14.433 10.0666 16 11.9996 16Z"></path></svg><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="16" height="16" style="display:none" class="wpcloud-block-form-input--toggle-hidden--unseen" aria-hidden="true"><path d="M4.67 10.664s-2.09 1.11-2.917 1.582l.494.87 1.608-.914.002.002c.343.502.86 1.17 1.563 1.84.348.33.742.663 1.185.976L5.57 16.744l.858.515 1.02-1.701a9.1 9.1 0 0 0 4.051 1.18V19h1v-2.263a9.1 9.1 0 0 0 4.05-1.18l1.021 1.7.858-.514-1.034-1.723c.442-.313.837-.646 1.184-.977.703-.669 1.22-1.337 1.563-1.839l.002-.003 1.61.914.493-.87c-1.75-.994-2.918-1.58-2.918-1.58l-.003.005a8.29 8.29 0 0 1-.422.689 10.097 10.097 0 0 1-1.36 1.598c-1.218 1.16-3.042 2.293-5.544 2.293-2.503 0-4.327-1.132-5.546-2.293a10.099 10.099 0 0 1-1.359-1.599 8.267 8.267 0 0 1-.422-.689l-.003-.005Z"></path></svg></span></span></label></div>
+<!-- wp:wpcloud/form-input {"type":"password","name":"pass","label":"Password","uniqueId":"d149e4cf-0df9-4e01-ae80-e87949e3ac9a-pass"} -->
+<div class="wpcloud-block-form--input wp-block-wpcloud-form-input wpcloud-block-form--input--password"><label class="wpcloud-block-form-input__label" for="d149e4cf-0df9-4e01-ae80-e87949e3ac9a-pass"><span class="wpcloud-block-form-input__label-content"><span class="wpcloud-block-form-input__label-text">Password</span></span><span class="wpcloud-block-form-input--password"><input type="password" class="wpcloud-block-form-input__input" aria-label="Optional placeholder text" name="pass" id="d149e4cf-0df9-4e01-ae80-e87949e3ac9a-pass" aria-required="false"/><span class="wpcloud-block-form-input--toggle-hidden"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="wpcloud-block-form-input--toggle-hidden--seen" aria-hidden="true"><path d="M3.99961 13C4.67043 13.3354 4.6703 13.3357 4.67017 13.3359L4.67298 13.3305C4.67621 13.3242 4.68184 13.3135 4.68988 13.2985C4.70595 13.2686 4.7316 13.2218 4.76695 13.1608C4.8377 13.0385 4.94692 12.8592 5.09541 12.6419C5.39312 12.2062 5.84436 11.624 6.45435 11.0431C7.67308 9.88241 9.49719 8.75 11.9996 8.75C14.502 8.75 16.3261 9.88241 17.5449 11.0431C18.1549 11.624 18.6061 12.2062 18.9038 12.6419C19.0523 12.8592 19.1615 13.0385 19.2323 13.1608C19.2676 13.2218 19.2933 13.2686 19.3093 13.2985C19.3174 13.3135 19.323 13.3242 19.3262 13.3305L19.3291 13.3359C19.3289 13.3357 19.3288 13.3354 19.9996 13C20.6704 12.6646 20.6703 12.6643 20.6701 12.664L20.6697 12.6632L20.6688 12.6614L20.6662 12.6563L20.6583 12.6408C20.6517 12.6282 20.6427 12.6108 20.631 12.5892C20.6078 12.5459 20.5744 12.4852 20.5306 12.4096C20.4432 12.2584 20.3141 12.0471 20.1423 11.7956C19.7994 11.2938 19.2819 10.626 18.5794 9.9569C17.1731 8.61759 14.9972 7.25 11.9996 7.25C9.00203 7.25 6.82614 8.61759 5.41987 9.9569C4.71736 10.626 4.19984 11.2938 3.85694 11.7956C3.68511 12.0471 3.55605 12.2584 3.4686 12.4096C3.42484 12.4852 3.39142 12.5459 3.36818 12.5892C3.35656 12.6108 3.34748 12.6282 3.34092 12.6408L3.33297 12.6563L3.33041 12.6614L3.32948 12.6632L3.32911 12.664C3.32894 12.6643 3.32879 12.6646 3.99961 13ZM11.9996 16C13.9326 16 15.4996 14.433 15.4996 12.5C15.4996 10.567 13.9326 9 11.9996 9C10.0666 9 8.49961 10.567 8.49961 12.5C8.49961 14.433 10.0666 16 11.9996 16Z"></path></svg><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="16" height="16" style="display:none" class="wpcloud-block-form-input--toggle-hidden--unseen" aria-hidden="true"><path d="M4.67 10.664s-2.09 1.11-2.917 1.582l.494.87 1.608-.914.002.002c.343.502.86 1.17 1.563 1.84.348.33.742.663 1.185.976L5.57 16.744l.858.515 1.02-1.701a9.1 9.1 0 0 0 4.051 1.18V19h1v-2.263a9.1 9.1 0 0 0 4.05-1.18l1.021 1.7.858-.514-1.034-1.723c.442-.313.837-.646 1.184-.977.703-.669 1.22-1.337 1.563-1.839l.002-.003 1.61.914.493-.87c-1.75-.994-2.918-1.58-2.918-1.58l-.003.005a8.29 8.29 0 0 1-.422.689 10.097 10.097 0 0 1-1.36 1.598c-1.218 1.16-3.042 2.293-5.544 2.293-2.503 0-4.327-1.132-5.546-2.293a10.099 10.099 0 0 1-1.359-1.599 8.267 8.267 0 0 1-.422-.689l-.003-.005Z"></path></svg></span></span></label></div>
 <!-- /wp:wpcloud/form-input -->
 
-<!-- wp:wpcloud/form-input {"type":"textarea","name":"pkey","label":"Public Key","uniqueId":"0ced8e8c-2a87-4e34-b8b1-86b4455d8f0a-pkey"} -->
-<div class="wpcloud-block-form--input wp-block-wpcloud-form-input wpcloud-block-form--input--textarea"><label class="wpcloud-block-form-input__label" for="0ced8e8c-2a87-4e34-b8b1-86b4455d8f0a-pkey"><span class="wpcloud-block-form-input__label-content"><span class="wpcloud-block-form-input__label-text">Public Key</span></span><textarea class="wpcloud-block-form-input__input" aria-label="Optional placeholder text" placeholder="Optional placeholder..." name="pkey" id="0ced8e8c-2a87-4e34-b8b1-86b4455d8f0a-pkey" aria-required="false"></textarea></label></div>
+<!-- wp:wpcloud/form-input {"type":"textarea","name":"pkey","label":"Public Key","uniqueId":"83f78388-9e4c-45e8-a488-54adc8225c49-pkey"} -->
+<div class="wpcloud-block-form--input wp-block-wpcloud-form-input wpcloud-block-form--input--textarea"><label class="wpcloud-block-form-input__label" for="83f78388-9e4c-45e8-a488-54adc8225c49-pkey"><span class="wpcloud-block-form-input__label-content"><span class="wpcloud-block-form-input__label-text">Public Key</span></span><textarea class="wpcloud-block-form-input__input" aria-label="Optional placeholder text" placeholder=" " name="pkey" id="83f78388-9e4c-45e8-a488-54adc8225c49-pkey" aria-required="false"></textarea></label></div>
 <!-- /wp:wpcloud/form-input -->
 
 <!-- wp:group {"layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"right"}} -->
-<div class="wp-block-group"><!-- wp:wpcloud/button {"type":"submit","label":"Add"} -->
-<div class="wp-block-wpcloud-button wpcloud-block-button__content"><span class="wpcloud-block-button__label">Add</span></div>
+<div class="wp-block-group"><!-- wp:wpcloud/button {"type":"reset","label":"Reset","isPrimary":false,"className":"display-none"} -->
+<div class="wpcloud-block-button__content" style="position:relative"><span class="wpcloud-block-button__label">Reset</span></div>
+<!-- /wp:wpcloud/button -->
+
+<!-- wp:wpcloud/button {"type":"submit","label":"Add","addSpinner":true,"spinnerSpinner":"barsRotateFade","spinnerBackground":false,"spinnerSize":"30px"} -->
+<div class="wpcloud-block-button__content" style="position:relative"><span class="wpcloud-block-button__label">Add</span><svg width="30px" height="30px" viewBox="0 0 24 24" stroke="currentColor" xmlns="http://www.w3.org/2000/svg" class="wpcloud-block-button__spinner visibility-none position-absolute-center" aria-hidden="true"><g><rect x="11" y="1" width="2" height="5" fill="currentColor" transform="rotate(270 12 12)" opacity="0.1"></rect><rect x="11" y="1" width="2" height="5" fill="currentColor" transform="rotate(300 12 12)" opacity="0.2"></rect><rect x="11" y="1" width="2" height="5" fill="currentColor" transform="rotate(330 12 12)" opacity="0.3"></rect><rect x="11" y="1" width="2" height="5" fill="currentColor" opacity="0.4"></rect><rect x="11" y="1" width="2" height="5" fill="currentColor" transform="rotate(30 12 12)" opacity="0.5"></rect><rect x="11" y="1" width="2" height="5" fill="currentColor" transform="rotate(60 12 12)" opacity="0.6"></rect><rect x="11" y="1" width="2" height="5" fill="currentColor" transform="rotate(90 12 12)" opacity="0.7"></rect><rect x="11" y="1" width="2" height="5" fill="currentColor" transform="rotate(120 12 12)" opacity="0.8"></rect><rect x="11" y="1" width="2" height="5" fill="currentColor" transform="rotate(150 12 12)" opacity="0.9"></rect><rect x="11" y="1" width="2" height="5" fill="currentColor" transform="rotate(180 12 12)"></rect><animateTransform attributeName="transform" type="rotate" calcMode="discrete" dur="0.75" values="0 12 12;30 12 12;60 12 12;90 12 12;120 12 12;150 12 12;180 12 12;210 12 12;240 12 12;270 12 12;300 12 12;330 12 12;360 12 12" repeatCount="indefinite"></animateTransform></g></svg></div>
 <!-- /wp:wpcloud/button --></div>
 <!-- /wp:group --></form>
-<!-- /wp:wpcloud/form -->
+<!-- /wp:wpcloud/form --></div>
+<!-- /wp:wpcloud/ssh-user-form -->
 
 <!-- wp:spacer {"height":"38px"} -->
 <div style="height:38px" aria-hidden="true" class="wp-block-spacer"></div>
-<!-- /wp:spacer -->
-
-<!-- wp:wpcloud/dropdown {"accordion":true,"level":4,"button":true,"outline":true,"metadata":{"name":"Settings"}} -->
-<details class="wp-block-wpcloud-dropdown"><summary role="button" class="outline"><h4>Settings</h4></summary><ul><!-- wp:wpcloud/form {"wpcloudAction":"site_ssh_disconnect_all_users","metadata":{"name":"Disconnect"}} -->
-<form class="wp-block-wpcloud-form wpcloud-block-form" enctype="text/plain"><!-- wp:wpcloud/button {"type":"submit","label":"Disconnect All Users"} -->
-<div class="wp-block-wpcloud-button wpcloud-block-button__content"><span class="wpcloud-block-button__label">Disconnect All Users</span></div>
-<!-- /wp:wpcloud/button --></form>
-<!-- /wp:wpcloud/form -->
-
-<!-- wp:wpcloud/form {"wpcloudAction":"site_access_type","metadata":{"name":"Connection Type"}} -->
-<form class="wp-block-wpcloud-form wpcloud-block-form" enctype="text/plain"><!-- wp:wpcloud/form-input {"type":"checkbox","name":"site_access_with_ssh","label":"Access via SSH (if disabled, SFTP will be used)","displayAsToggle":true,"uniqueId":"6b695aae-213e-453e-b9ff-ac7927fb5fea-site_access_with_ssh","submitOnChange":true} -->
-<div class="wpcloud-block-form--input wp-block-wpcloud-form-input wpcloud-block-form--input--toggle"><input type="checkbox" class="wpcloud-block-form-input__input is-toggle submit-on-change" aria-label="Optional placeholder text" placeholder="Optional placeholder..." name="site_access_with_ssh" id="6b695aae-213e-453e-b9ff-ac7927fb5fea-site_access_with_ssh" aria-required="false"/><label class="wpcloud-block-form-input__label is-toggle" for="6b695aae-213e-453e-b9ff-ac7927fb5fea-site_access_with_ssh"><span class="toggle-container"></span><span class="wpcloud-block-form-input__label-content"><span class="wpcloud-block-form-input__label-text">Access via SSH (if disabled, SFTP will be used)</span></span></label></div>
-<!-- /wp:wpcloud/form-input --></form>
-<!-- /wp:wpcloud/form --></ul></details>
-<!-- /wp:wpcloud/dropdown --></article>
+<!-- /wp:spacer --></article>
 <!-- /wp:wpcloud/card -->
 
-<!-- wp:wpcloud/dropdown {"accordion":true,"metadata":{"name":"SSH Connection Info"}} -->
-<details class="wp-block-wpcloud-dropdown"><summary role="" class=""><h2>SSH Connection Info</h2></summary><ul><!-- wp:paragraph -->
+<!-- wp:wpcloud/card {"style":{"spacing":{"margin":{"top":"var:preset|spacing|50","bottom":"var:preset|spacing|50"},"blockGap":"var:preset|spacing|40","padding":{"top":"0","bottom":"0"}}},"metadata":{"name":"Card: Info/options"}} -->
+<article style="margin-top:var(--wp--preset--spacing--50);margin-bottom:var(--wp--preset--spacing--50);padding-top:0;padding-bottom:0;spacing:[object Object]" class="wp-block-wpcloud-card"><!-- wp:wpcloud/dropdown {"accordion":true,"level":3,"metadata":{"name":"SSH Connection Info"}} -->
+<details class="wp-block-wpcloud-dropdown"><summary role="" class=""><h3>SSH Connection Info</h3></summary><!-- wp:paragraph -->
 <p>Use the following url to connect to the site with ssh:</p>
 <!-- /wp:paragraph -->
 
@@ -94,11 +109,26 @@
 <!-- wp:list-item -->
 <li><code>ssh-ed25519</code>  – 256 bits</li>
 <!-- /wp:list-item --></ul>
-<!-- /wp:list --></ul></details>
+<!-- /wp:list --></details>
 <!-- /wp:wpcloud/dropdown -->
 
-<!-- wp:wpcloud/card {"lock":{"move":false,"remove":false},"metadata":{"name":"Card: Users"}} -->
-<article class="wp-block-wpcloud-card"><!-- wp:wpcloud/card-section {"text":"Users","metadata":{"name":"Users"}} -->
+<!-- wp:wpcloud/dropdown {"accordion":true,"level":4,"button":true,"outline":true,"metadata":{"name":"Settings"}} -->
+<details class="wp-block-wpcloud-dropdown"><summary role="button" class="outline"><h4>Settings</h4></summary><!-- wp:wpcloud/form {"wpcloudAction":"site_ssh_disconnect_all_users","metadata":{"name":"Disconnect"}} -->
+<form class="wp-block-wpcloud-form wpcloud-block-form" enctype="text/plain"><!-- wp:wpcloud/button {"type":"submit","label":"Disconnect All Users","className":"wp-block-wpcloud-button"} -->
+<div class="wpcloud-block-button__content"><span class="wpcloud-block-button__label">Disconnect All Users</span></div>
+<!-- /wp:wpcloud/button --></form>
+<!-- /wp:wpcloud/form -->
+
+<!-- wp:wpcloud/form {"wpcloudAction":"site_access_type","metadata":{"name":"Connection Type"}} -->
+<form class="wp-block-wpcloud-form wpcloud-block-form" enctype="text/plain"><!-- wp:wpcloud/form-input {"type":"checkbox","name":"site_access_with_ssh","label":"Access via SSH (if disabled, SFTP will be used)","displayAsToggle":true,"uniqueId":"a16fa3ef-bea6-4259-8ff3-48c0f21b2414-site_access_with_ssh","submitOnChange":true} -->
+<div class="wpcloud-block-form--input wp-block-wpcloud-form-input wpcloud-block-form--input--toggle"><input type="checkbox" class="wpcloud-block-form-input__input is-toggle submit-on-change" aria-label="Optional placeholder text" placeholder="Optional placeholder..." name="site_access_with_ssh" id="a16fa3ef-bea6-4259-8ff3-48c0f21b2414-site_access_with_ssh" aria-required="false"/><label class="wpcloud-block-form-input__label is-toggle" for="a16fa3ef-bea6-4259-8ff3-48c0f21b2414-site_access_with_ssh"><span class="toggle-container"></span><span class="wpcloud-block-form-input__label-content"><span class="wpcloud-block-form-input__label-text">Access via SSH (if disabled, SFTP will be used)</span></span></label></div>
+<!-- /wp:wpcloud/form-input --></form>
+<!-- /wp:wpcloud/form --></details>
+<!-- /wp:wpcloud/dropdown --></article>
+<!-- /wp:wpcloud/card -->
+
+<!-- wp:wpcloud/card {"style":{"spacing":{"margin":{"top":"var:preset|spacing|50","bottom":"var:preset|spacing|50"}}},"lock":{"move":false,"remove":false},"metadata":{"name":"Card: Users"}} -->
+<article style="margin-top:var(--wp--preset--spacing--50);margin-bottom:var(--wp--preset--spacing--50);spacing:[object Object]" class="wp-block-wpcloud-card"><!-- wp:wpcloud/card-section {"text":"Users","metadata":{"name":"Users"}} -->
 <header class="wp-block-wpcloud-card-section"><h2>Users</h2></header>
 <!-- /wp:wpcloud/card-section -->
 
@@ -108,53 +138,42 @@
 <div class="wpcloud-block-site-detail is-inline"><div class="wpcloud-block-site-detail__value-container copy-to-clipboard"><div class="wpcloud-block-site-detail__value">{ SSH User }</div><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" class="wpcloud-copy-to-clipboard" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.625 5.5h9.75c.069 0 .125.056.125.125v9.75a.125.125 0 0 1-.125.125h-9.75a.125.125 0 0 1-.125-.125v-9.75c0-.069.056-.125.125-.125ZM4 5.625C4 4.728 4.728 4 5.625 4h9.75C16.273 4 17 4.728 17 5.625v9.75c0 .898-.727 1.625-1.625 1.625h-9.75A1.625 1.625 0 0 1 4 15.375v-9.75Zm14.5 11.656v-9H20v9C20 18.8 18.77 20 17.251 20H6.25v-1.5h11.001c.69 0 1.249-.528 1.249-1.219Z"></path></svg></div></div>
 <!-- /wp:wpcloud/site-detail -->
 
-<!-- wp:wpcloud/dropdown {"hideChevron":true,"level":4,"useIcon":true,"icon":"moreVertical","metadata":{"name":""}} -->
-<details class="wp-block-wpcloud-dropdown dropdown hide-chevron"><summary role="" class=""><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M13 19h-2v-2h2v2zm0-6h-2v-2h2v2zm0-6h-2V5h2v2z"></path></svg></summary><ul><!-- wp:wpcloud/dropdown-list -->
-<ul class="wp-block-wpcloud-dropdown-list">
-<!-- wp:wpcloud/list-item -->
-<li class="wp-block-wpcloud-list-item">
-<!-- wp:heading {"level":4,"className":"wpcloud-site-list-menu__title"} -->
+<!-- wp:wpcloud/dropdown {"hideChevron":true,"level":4,"useIcon":true,"icon":"moreVertical","onRight":true,"metadata":{"name":""}} -->
+<details class="wp-block-wpcloud-dropdown dropdown hide-chevron open-right"><summary role="" class=""><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M13 19h-2v-2h2v2zm0-6h-2v-2h2v2zm0-6h-2V5h2v2z"></path></svg></summary><ul><!-- wp:wpcloud/list-item -->
+<li class="wp-block-wpcloud-list-item"><!-- wp:heading {"level":4,"className":"wpcloud-site-list-menu__title"} -->
 <h4 class="wp-block-heading wpcloud-site-list-menu__title">SSH User Options</h4>
-<!-- /wp:heading -->
-</li>
+<!-- /wp:heading --></li>
 <!-- /wp:wpcloud/list-item -->
+
 <!-- wp:wpcloud/list-item -->
-<li class="wp-block-wpcloud-list-item">
-<!-- wp:group {"className":"wpcloud-more-menu__row","layout":{"type":"flex","flexWrap":"wrap"}} -->
-<div class="wp-block-group wpcloud-more-menu__row">
-<!-- wp:wpcloud/icon {"icon":"update"} -->
+<li class="wp-block-wpcloud-list-item"><!-- wp:group {"className":"wpcloud-more-menu__row","layout":{"type":"flex","flexWrap":"wrap"}} -->
+<div class="wp-block-group wpcloud-more-menu__row"><!-- wp:wpcloud/icon {"icon":"update"} -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" class="wp-block-wpcloud-icon wpcloud-block-icon" aria-hidden="true"><path d="m11.3 17.2-5-5c-.1-.1-.1-.3 0-.4l2.3-2.3-1.1-1-2.3 2.3c-.7.7-.7 1.8 0 2.5l5 5H7.5v1.5h5.3v-5.2h-1.5v2.6zm7.5-6.4-5-5h2.7V4.2h-5.2v5.2h1.5V6.8l5 5c.1.1.1.3 0 .4l-2.3 2.3 1.1 1.1 2.3-2.3c.6-.7.6-1.9-.1-2.5z"></path></svg>
 <!-- /wp:wpcloud/icon -->
-<!-- wp:wpcloud/button {"type":"action","style":"text","label":"Update","action":"wpcloud_ssh_user_update_button_click"} -->
-<div class="wp-block-wpcloud-button wpcloud-block-button__content"><span class="wpcloud-block-button__label">Update</span></div>
-<!-- /wp:wpcloud/button -->
-</div>
-<!-- /wp:group -->
-</li>
+
+<!-- wp:wpcloud/button {"type":"action","style":"text","label":"Update","action":"wpcloud_ssh_user_update_button_click","spinnerSpinner":"ringResize","spinnerSize":"18px"} -->
+<div class="wpcloud-block-button__content" style="position:relative"><span class="wpcloud-block-button__label">Update</span></div>
+<!-- /wp:wpcloud/button --></div>
+<!-- /wp:group --></li>
 <!-- /wp:wpcloud/list-item -->
+
 <!-- wp:wpcloud/list-item -->
-<li class="wp-block-wpcloud-list-item">
-<!-- wp:wpcloud/form {"wpcloudAction":"site_ssh_user_remove","inline":true,"className":"wpcloud-block-site-ssh-user\u002d\u002dremove wpcloud-more-menu__row"} -->
-<form class="wp-block-wpcloud-form wpcloud-block-site-ssh-user--remove wpcloud-more-menu__row wpcloud-block-form is-inline" enctype="text/plain">
-<!-- wp:wpcloud/form-input {"type":"hidden","name":"ssh_user","uniqueId":"462f442f-49e8-4dbd-a04d-850eae73eee5-ssh_user"} -->
+<li class="wp-block-wpcloud-list-item"><!-- wp:wpcloud/form {"wpcloudAction":"site_ssh_user_remove","inline":true,"className":"wpcloud-block-site-ssh-user\u002d\u002dremove wpcloud-more-menu__row"} -->
+<form class="wp-block-wpcloud-form wpcloud-block-site-ssh-user--remove wpcloud-more-menu__row wpcloud-block-form is-inline" enctype="text/plain"><!-- wp:wpcloud/form-input {"type":"hidden","name":"ssh_user","uniqueId":"ff2e0e89-b22c-41ad-8d58-66e3089f662d-ssh_user"} -->
 <input type="hidden" name="ssh_user" value=""/>
 <!-- /wp:wpcloud/form-input -->
+
 <!-- wp:group {"layout":{"type":"flex","flexWrap":"nowrap"}} -->
-<div class="wp-block-group">
-<!-- wp:wpcloud/icon {"icon":"trash"} -->
+<div class="wp-block-group"><!-- wp:wpcloud/icon {"icon":"trash"} -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" class="wp-block-wpcloud-icon wpcloud-block-icon" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 5.5A2.25 2.25 0 0 0 9.878 7h4.244A2.251 2.251 0 0 0 12 5.5ZM12 4a3.751 3.751 0 0 0-3.675 3H5v1.5h1.27l.818 8.997a2.75 2.75 0 0 0 2.739 2.501h4.347a2.75 2.75 0 0 0 2.738-2.5L17.73 8.5H19V7h-3.325A3.751 3.751 0 0 0 12 4Zm4.224 4.5H7.776l.806 8.861a1.25 1.25 0 0 0 1.245 1.137h4.347a1.25 1.25 0 0 0 1.245-1.137l.805-8.861Z"></path></svg>
 <!-- /wp:wpcloud/icon -->
-<!-- wp:wpcloud/button {"type":"action","style":"text","label":"Remove User","isPrimary":false,"action":"wpcloud_form_on_submit"} -->
-<div class="wp-block-wpcloud-button wpcloud-block-button__content"><span class="wpcloud-block-button__label">Remove User</span></div>
-<!-- /wp:wpcloud/button -->
-</div>
-<!-- /wp:group -->
-</form>
-<!-- /wp:wpcloud/form -->
-</li>
-<!-- /wp:wpcloud/list-item -->
-</ul>
-<!-- /wp:wpcloud/dropdown-list --></ul></details>
+
+<!-- wp:wpcloud/button {"type":"action","style":"text","label":"Remove","isPrimary":false,"action":"wpcloud_form_on_submit","addSpinner":true,"spinnerSpinner":"barsRotateFade","spinnerSize":"18px"} -->
+<div class="wpcloud-block-button__content" style="position:relative"><span class="wpcloud-block-button__label">Remove</span><svg width="18px" height="18px" viewBox="0 0 24 24" stroke="currentColor" xmlns="http://www.w3.org/2000/svg" class="wpcloud-block-button__spinner visibility-none position-absolute-center" aria-hidden="true"><g><rect x="11" y="1" width="2" height="5" fill="currentColor" transform="rotate(270 12 12)" opacity="0.1"></rect><rect x="11" y="1" width="2" height="5" fill="currentColor" transform="rotate(300 12 12)" opacity="0.2"></rect><rect x="11" y="1" width="2" height="5" fill="currentColor" transform="rotate(330 12 12)" opacity="0.3"></rect><rect x="11" y="1" width="2" height="5" fill="currentColor" opacity="0.4"></rect><rect x="11" y="1" width="2" height="5" fill="currentColor" transform="rotate(30 12 12)" opacity="0.5"></rect><rect x="11" y="1" width="2" height="5" fill="currentColor" transform="rotate(60 12 12)" opacity="0.6"></rect><rect x="11" y="1" width="2" height="5" fill="currentColor" transform="rotate(90 12 12)" opacity="0.7"></rect><rect x="11" y="1" width="2" height="5" fill="currentColor" transform="rotate(120 12 12)" opacity="0.8"></rect><rect x="11" y="1" width="2" height="5" fill="currentColor" transform="rotate(150 12 12)" opacity="0.9"></rect><rect x="11" y="1" width="2" height="5" fill="currentColor" transform="rotate(180 12 12)"></rect><animateTransform attributeName="transform" type="rotate" calcMode="discrete" dur="0.75" values="0 12 12;30 12 12;60 12 12;90 12 12;120 12 12;150 12 12;180 12 12;210 12 12;240 12 12;270 12 12;300 12 12;330 12 12;360 12 12" repeatCount="indefinite"></animateTransform></g></svg></div>
+<!-- /wp:wpcloud/button --></div>
+<!-- /wp:group --></form>
+<!-- /wp:wpcloud/form --></li>
+<!-- /wp:wpcloud/list-item --></ul></details>
 <!-- /wp:wpcloud/dropdown --></div>
 <!-- /wp:group --></div>
 <!-- /wp:wpcloud/ssh-user-list --></article>

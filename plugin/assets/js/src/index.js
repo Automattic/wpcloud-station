@@ -1,14 +1,21 @@
+/**
+ * WordPress dependencies
+ */
 import { createHooks } from '@wordpress/hooks';
-import apiFetch from '@wordpress/api-fetch';
-import { addQueryArgs } from '@wordpress/url';
 
+/**
+ * Local dependencies
+ */
+
+import form from './form';
+import api, { configuredApiFetch as apiFetch } from './api';
 
 window.wpcloud = window.wpcloud || {};
 wpcloud.hooks = wpcloud.hooks || createHooks();
 
-wpcloud.hooks.addAction('all', 'wpcloud', (hookName, ...args) => {
-	console.log('Hook:', hookName, 'Args:', args);
-});
+wpcloud.form = form;
+wpcloud.stationApi = api;
+wpcloud.apiFetch = apiFetch;
 
 wpcloud.scrollTo = (element) => {
 	element.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -31,19 +38,26 @@ wpcloud.scrollTo = (element) => {
 }
 
 // set up the station api fetch.
+// @deprecated TODO remove
 const stationApi = window.wpcloudStationApi;
 apiFetch.use(apiFetch.createNonceMiddleware(stationApi.nonce));
 
-wpcloud.stationFetch = async (route, queryParams = null, version = 'v1') => {
-	const slashRoute = route.startsWith('/') ? route : '/' + route;
-	let path = `/wpcloud-station/${version}${slashRoute}`;
-	if (queryParams) {
-		path = addQueryArgs(path, queryParams);
+wpcloud.stationFetch = () => {
+	console.warn('wpcloud.stationFetch is deprecated. Use wpcloud.stationApi.get or wpcloud.stationApi.post instead.');
+}
+
+wpcloud.renderTemplate = (template, data = {}) => {
+	const site = wpcloud.site ?? {};
+		const templateData = {
+		...data,
+		...site
 	}
-	const response = apiFetch({ path });
-	response.then((data) => {
-		wpcloud.hooks.doAction(`wpcloud_station_fetch_${route}`, data);
-		wpcloud.hooks.doAction('wpcloud_station_fetch', data);
-	});
-	return response;
+	const render = new Function('templateData', `return \`${template}\`;`);
+
+	try {
+		return render(templateData);
+	} catch (error) {
+		console.error(error);
+		return template;
+	}
 }

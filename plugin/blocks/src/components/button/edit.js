@@ -20,6 +20,8 @@ import {
 	SelectControl,
 } from '@wordpress/components';
 
+import { useState } from '@wordpress/element';
+
 /**
  *
  * Internal dependencies
@@ -49,8 +51,9 @@ function ButtonBlock( { attributes, setAttributes } ) {
 		spinnerSpeed,
 		spinnerBackground,
 		spinnerSize,
-		previewSpinner,
 	} = attributes;
+
+	const [ previewSpinner, setPreviewSpinner ] = useState(false);
 
 	const spinnerAttributes = {
 		spinner: spinnerSpinner,
@@ -156,7 +159,7 @@ function ButtonBlock( { attributes, setAttributes } ) {
 							<ToggleControl
 								label={__('Preview Spinner')}
 								checked={previewSpinner}
-								onChange={update('previewSpinner')}
+								onChange={ checked => setPreviewSpinner(checked) }
 								help={__('Preview the spinner in the editor')}
 							/>
 							<SpinnerControls attributes={spinnerAttributes} updateAttribute={updateSpinnerAttribute} />
@@ -221,7 +224,7 @@ function ButtonBlock( { attributes, setAttributes } ) {
 					{ !iconOnly && (<RichText
 						className={'wpcloud-block-button__label'}
 						value={label}
-						onChange={updateAttribute('label')}
+						onChange={update('label')}
 						placeholder={__('Button')}
 					/>
 					)}

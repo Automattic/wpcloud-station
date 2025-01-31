@@ -1,0 +1,53 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "wpcloud/form-rest-api",
+	"version": "0.1.0",
+	"title": "Form Rest API",
+	"category": "wpcloud",
+	"icon": "feedback",
+	"description": "WP Cloud REST API Form",
+	"example": {},
+	"supports": {
+		"html": false
+	},
+	"textdomain": "wpcloud",
+	"editorScript": "file:./index.js",
+	"viewScript": "file:./view.js",
+	"attributes": {
+		"endpoint": {
+			"type": "string",
+			"default": ""
+		},
+		"useStationApi":{
+			"type": "boolean",
+			"default": true
+		},
+		"version": {
+			"type": "string",
+			"default": "v1"
+		},
+		"inline": {
+			"type": "boolean",
+			"default": false
+		},
+		"redirect": {
+			"type": "string"
+		},
+		"active": {
+			"type": "boolean",
+			"default": false
+		},
+		"resetOnSuccess": {
+			"type": "boolean",
+			"default": false
+		},
+		"method": {
+			"type": "string",
+			"default": "POST"
+		}
+	},
+	"providesContext": {
+		"wpcloud-form/isActive": "active"
+	}
+}

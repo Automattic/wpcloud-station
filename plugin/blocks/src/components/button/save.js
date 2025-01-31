@@ -32,7 +32,7 @@ export default function save( { attributes } ) {
 				</span>
 			)}
 			<InnerBlocks.Content />
-			{ addSpinner && (<Spinner className="wpcloud-block-button__spinner display-none position-absolute-center" {...{spinner, background, speed, size }} />) }
+			{ addSpinner && (<Spinner className="wpcloud-block-button__spinner visibility-none position-absolute-center" {...{spinner, background, speed, size }} />) }
 		</div>
 	);
 }

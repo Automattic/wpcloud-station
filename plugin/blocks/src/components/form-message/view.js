@@ -5,6 +5,10 @@ formMessages.forEach((formMessage) => {
 	const { wpcloudAction, messageType, messageTemplate } = formMessage.dataset;
 
 	function renderAndShowMessage(response) {
+		// handle both admin-ajax and REST API responses
+		const success = response.success || response.ok;
+		response = response.data || response;
+
 		const render = new Function('response', `return \`${messageTemplate}\`;`);
 		const p = formMessage.querySelector('p');
 
@@ -17,7 +21,6 @@ formMessages.forEach((formMessage) => {
 			}
 		}
 
-		const success = response.success;
 		if (messageType === 'success' && success) {
 			renderTemplate();
 			formMessage.classList.remove('display-none');
@@ -42,10 +45,12 @@ formMessages.forEach((formMessage) => {
 
 	// clear out any existing messages
 	wpcloud.hooks.addAction(
-		`wpcloud_form_submit_${wpcloudAction}`,
+		`wpcloud_form_response`,
 		'wpcloud',
 		() => {
-			formMessage.classList.add('display-none');
+			if (formMessage.classList.contains('wpcloud-form-message--dismissable')) {
+				formMessage.classList.add('display-none');
+			}
 		}
 	);
 

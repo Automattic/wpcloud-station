@@ -55,6 +55,24 @@
 
 .visibility-hidden {
 	visibility: hidden;
+	opacity: 0;
+}
+
+.visibility-none {
+	visibility: hidden;
+	opacity: 0;
+	height: 0 !important;
+	padding: 0 !important;
+}
+
+.is-inline {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	* {
+		margin: 0;
+	}
 }
 
 .copy-to-clipboard {
@@ -89,8 +107,11 @@
 .wp-block-wpcloud-nav  {
 	li {
 		white-space: nowrap;
+		display: flex;
+		align-items: center;
 		* {
 			color: inherit;
+			margin: 0;
 		}
 	}
 	a.current {
@@ -215,4 +236,56 @@ button.wpcloud-block-button {
 
 .add-site-alias--input {
 	width: 100%;
+}
+
+.wp-block-group-is-layout-flex:not(.is-vertical) {
+		* {
+			margin-top: 0;
+			margin-bottom: 0;
+		}
+}
+
+.wpcloud-block-site-alias-list__row {
+	.wp-block-wpcloud-form.is-inline {
+		justify-content: start;
+		gap: 20px;
+	}
+}
+
+.wpcloud-block-form-input--password {
+	input {
+		box-shadow: -5px 0 10px rgba(0, 0, 0, 0.1), 0 5px 10px rgba(0, 0, 0, 0.1);
+		border-right: 0;
+	}
+	input:focus ~ .wpcloud-block-form-input--toggle-hidden {
+		background-color: var(--pico-form-element-active-background-color);
+		border-color: var(--pico-form-element-active-border-color);
+	}
+
+	.wpcloud-block-form-input--toggle-hidden {
+		all: unset;
+		box-sizing: border-box;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		border: var(--pico-border-width) solid var(--pico-form-element-border-color);
+		border-top-right-radius: var(--pico-border-radius);
+		border-bottom-right-radius: var(--pico-border-radius);
+		border-left: 0;
+    inset: 0;
+    height: calc(1rem* var(--pico-line-height) + var(--pico-form-element-spacing-vertical)* 2 + var(--pico-border-width)* 2);
+		width: calc(1rem* var(--pico-line-height) + var(--pico-form-element-spacing-vertical)* 2 + var(--pico-border-width)* 2);
+    background-color: var(--pico-form-element-background-color);
+    transition: background-color var(--pico-transition), border-color var(--pico-transition), color var(--pico-transition), box-shadow var(--pico-transition);
+		&:hover {
+			background-color: var(--pico-form-element-active-background-color);
+		}
+
+		svg {
+			fill: currentColor;
+			width: 30px;
+			height: 30px;
+		}
+	}
 }
