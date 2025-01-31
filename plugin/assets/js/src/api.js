@@ -31,6 +31,7 @@ async function handler( nextOptions ) {
 		return Promise.reject({ response, ok: false, data: json, headers: response.headers });
 	};
 
+	response.data = json;
 	return Promise.resolve({ data: json, headers: response.headers, ok: response.ok, response });
 }
 
