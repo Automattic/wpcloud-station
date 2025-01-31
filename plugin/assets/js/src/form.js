@@ -122,7 +122,6 @@ async function onSubmit(form) {
 		formData = wpcloud.hooks.applyFilters(`wpcloud_form_data_${action}`, formData );
 	}
 
-
 	try {
 		const result = await submit(form, { data: formData, foo: 'bar' });
 		const { response, headers, data } = result;
@@ -134,9 +133,9 @@ async function onSubmit(form) {
 			data = { action: 'download' };
 		}
 
-		wpcloud.hooks.doAction('wpcloud_form_response', data, form );
+		wpcloud.hooks.doAction('wpcloud_form_response', response, form );
 		if (action) {
-			wpcloud.hooks.doAction(`wpcloud_form_response_${action}`, data, form );
+			wpcloud.hooks.doAction(`wpcloud_form_response_${action}`, response, form );
 		}
 
 		resetOnResponse(form, { resetInputs: resetOnSuccess });
