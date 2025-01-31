@@ -5,7 +5,6 @@
  * @package wpcloud-station
  */
 
-
 // We don't want to show the admin bar in the front end.
 add_filter( 'show_admin_bar', '__return_false' );
 
@@ -32,10 +31,14 @@ if ( function_exists( 'register_block_pattern_category' ) ) {
 add_action(
 	'init',
 	function () {
+		if ( ! function_exists( 'wpcloud_station_register_site_view' ) ) {
+			return;
+		}
 		wpcloud_station_register_site_view( 'admin' );
 		wpcloud_station_register_site_view( 'domains' );
 		wpcloud_station_register_site_view( 'settings' );
 		wpcloud_station_register_site_view( 'users' );
+		wpcloud_station_register_site_view( 'metrics' );
 		flush_rewrite_rules();
 	}
 );

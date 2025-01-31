@@ -249,28 +249,6 @@ button.wpcloud-block-button {
 	}
 }
 
-
-
-/*
-    position: absolute;
-    right: 0;
-
-    top: calc(50% -(var(--pico-spacing) / 2));
-    transform: translate(0%, -50%);
-    height: calc(100% - var(--pico-spacing));
-
-    border-left: 1px solid var(--pico-form-element-border-color);
-    width: 60px;
-		*/
-
-:root {
-	--pico-custom-calculated-input-hieght: calc(
-		1rem * var(--pico-line-height, 1.5) +
-		var(--pico-form-element-spacing-vertical, 0.5rem) * 2 +
-		var(--pico-border-width, 1px) * 2
-	);
-}
-
 .wpcloud-block-form-input--password {
 	input {
 		box-shadow: -5px 0 10px rgba(0, 0, 0, 0.1), 0 5px 10px rgba(0, 0, 0, 0.1);
