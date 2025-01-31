@@ -29,6 +29,9 @@ jobs:
       - name: Package Theme
         run: './bin/package.sh theme'
 
+      - name: Package Pico Theme
+        run: './bin/package.sh theme-pico'
+
       - name: Setup Node for plugin
         uses: actions/setup-node@v2
         with:
@@ -69,4 +72,15 @@ jobs:
           upload_url: ${{steps.get_release.outputs.upload_url }}
           asset_path: ./theme.zip
           asset_name: wpcloud-station-theme.zip
+          asset_content_type: application/zip
+
+      - name: Upload Pico Theme Artifact
+        id: upload-pico-theme-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{steps.get_release.outputs.upload_url }}
+          asset_path: ./theme-pico.zip
+          asset_name: wpcloud-station-pico-theme.zip
           asset_content_type: application/zip

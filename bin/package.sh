@@ -20,7 +20,7 @@ fi
 function build() {
 	local build_package=${1:-""}
 
-	if [ "$build_package" != "plugin" ] && [ "$build_package" != "theme" ] ; then
+	if [ "$build_package" != "plugin" ] && [ "$build_package" != "theme" &&  [ "$build_package" != "theme-pico" ] ] ; then
 		echo "Invalid package type: $build_package"
 		exit 1
 	fi
@@ -47,6 +47,7 @@ function build() {
 if [ "$package" == "all" ]; then
 	build "plugin"
 	build "theme"
+	build "theme-pico"
 else
 	build "$package"
 fi
