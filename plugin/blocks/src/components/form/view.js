@@ -194,13 +194,13 @@
 		if (disabled) {
 			button.removeAttribute('disabled');
 			if (spinner) {
-				spinner.classList.add('display-none');
+				spinner.classList.add('visibility-none');
 				button.querySelector('.wpcloud-block-button__label').classList.remove('visibility-hidden');
 			}
 		} else {
 			button.setAttribute('disabled', 'disabled');
 			if (spinner) {
-				spinner.classList.remove('display-none');
+				spinner.classList.remove('visibility-none');
 				button.querySelector('.wpcloud-block-button__label').classList.add('visibility-hidden');
 			}
 		}
