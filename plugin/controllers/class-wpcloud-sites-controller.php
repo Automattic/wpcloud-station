@@ -251,7 +251,7 @@ if ( ! class_exists( 'WPCLOUD_Sites_Controller' ) ) {
 		public function create_item( $request ): WP_REST_Response {
 			$site_data = $request->get_params();
 
-			$owner = $this->get_owner( $site_data['owner'] );
+			$owner = $this->get_owner( $site_data['owner'] ?? $site_data['site_owner_id'] );
 			if ( is_wp_error( $owner ) ) {
 				return $owner;
 			}
@@ -524,6 +524,7 @@ if ( ! class_exists( 'WPCLOUD_Sites_Controller' ) ) {
 				'owner'  => get_the_author_meta( 'user_nicename', $post->post_author ),
 				'date'   => $post->post_date,
 				'status' => ( 'draft' === $post->post_status ? 'provisioning' : 'active' ),
+				'slug'   => $post->post_name,
 			);
 
 			$wpcloud_site_id = get_post_meta( $post->ID, 'wpcloud_site_id', true );
