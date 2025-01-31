@@ -55,6 +55,14 @@
 
 .visibility-hidden {
 	visibility: hidden;
+	opacity: 0;
+}
+
+.visibility-none {
+	visibility: hidden;
+	opacity: 0;
+	height: 0 !important;
+	padding: 0 !important;
 }
 
 .is-inline {
