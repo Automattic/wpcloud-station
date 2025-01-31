@@ -1,0 +1,19 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "wpcloud/form-messages",
+	"version": "0.1.0",
+	"title": "Form Messages Container",
+	"category": "wpcloud",
+	"icon": "menu",
+	"description": "WP Cloud Form Message Container",
+	"example": {},
+	"textdomain": "wpcloud",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"attributes": {
+	},
+	"allowedBlocks": [
+		"wpcloud/form-message"
+	]
+}
