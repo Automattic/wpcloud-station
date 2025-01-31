@@ -5,7 +5,10 @@
  * Categories: wpcloud_forms
  * Keywords: starter
  * Description: Login form.
+ *
+ * @package wpcloud-station
  */
+
 ?>
 
 <!-- wp:wpcloud/site-details -->
