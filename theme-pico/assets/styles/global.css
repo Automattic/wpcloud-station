@@ -107,8 +107,11 @@
 .wp-block-wpcloud-nav  {
 	li {
 		white-space: nowrap;
+		display: flex;
+		align-items: center;
 		* {
 			color: inherit;
+			margin: 0;
 		}
 	}
 	a.current {
