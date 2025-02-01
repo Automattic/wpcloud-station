@@ -1,5 +1,3 @@
-
-
 /**
  * WordPress dependencies
  */

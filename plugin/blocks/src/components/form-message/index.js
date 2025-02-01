@@ -10,12 +10,8 @@ import { __ } from '@wordpress/i18n';
 import { registerBlockType } from '@wordpress/blocks';
 import {
 	useBlockProps,
-	useInnerBlocksProps,
 	InspectorControls,
-	HeadingLevelDropdown,
-	BlockControls,
 	RichText,
-	InnerBlocks
 } from '@wordpress/block-editor';
 import { PanelBody, TextControl, RadioControl, ToggleControl } from '@wordpress/components';
 
@@ -32,10 +28,21 @@ import './editor.scss';
 
 
 registerBlockType( metadata.name, {
-	edit: ({ attributes, setAttributes }) => {
+	edit: ({ attributes, setAttributes, context }) => {
 		const { success, action, message, dismiss, icon, iconSize }	= attributes;
 		const blockProps = useBlockProps();
 		const update = updateAttribute(setAttributes);
+		const {
+			'wpcloud-form-message/previewAction': previewAction,
+			'wpcloud-form-message/previewType': previewType
+		 } = context;
+		let style = {};
+		if (previewAction && previewAction !== action) {
+			style = { display: 'none' };
+		}
+		if (previewType && previewType !== (success ? 'success' : 'error')) {
+			style = { display: 'none' };
+		}
 
 		return (
 			<>
@@ -74,6 +81,7 @@ registerBlockType( metadata.name, {
 						{ 'wpcloud-form-message--error': !success })
 					}
 					data-wpcloud-action={action}
+					style={style}
 				>
 					<RichText tagName="p" value={message} onChange={update('message')} placeholder={__( `${success ? 'Success' : 'Error'} message.` )} />
 					{ dismiss && <Icon icon={ icons[icon] } size={iconSize} /> }

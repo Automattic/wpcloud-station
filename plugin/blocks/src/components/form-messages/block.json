@@ -11,9 +11,21 @@
 	"textdomain": "wpcloud",
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",
-	"attributes": {
-	},
 	"allowedBlocks": [
 		"wpcloud/form-message"
-	]
+	],
+	"attributes": {
+		"previewAction": {
+			"type": "string",
+			"default": ""
+		},
+		"previewType": {
+			"type": "string",
+			"default": ""
+		}
+	},
+	"providesContext": {
+		"wpcloud-form-message/previewAction": "previewAction",
+		"wpcloud-form-message/previewType": "previewType"
+	}
 }
