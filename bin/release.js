@@ -1,3 +1,3 @@
-const { createRelease } = require('./tools/release.js');
+const createRelease = require('./tools/release.js');
 
 createRelease();
