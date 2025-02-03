@@ -1,0 +1,13 @@
+.wp-block-wpcloud-form-messages {
+	border: 1px dashed ;
+	border-radius: 2px;
+
+	summary {
+		text-align: center;
+		font-style: italic;
+		&::marker {
+			display: none;
+			content: "";
+		}
+	}
+}
