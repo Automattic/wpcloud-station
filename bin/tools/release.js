@@ -121,7 +121,7 @@ async function createRelease() {
 	const releaseUrl = createGitHubRelease(tag, releaseTitle, releaseBody);
 
 	console.log('GitHub release created successfully.');
-	console.log(releaseUrl);
+	console.log(releaseUrl.toString());
 }
 
 // Run the script
