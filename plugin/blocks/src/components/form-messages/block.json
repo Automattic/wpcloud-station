@@ -11,6 +11,15 @@
 	"textdomain": "wpcloud",
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",
+	"supports": {
+		"spacing": {
+			"margin": true,
+			"padding": true
+		},
+		"dimensions": {
+			"minHeight": true
+		}
+  },
 	"allowedBlocks": [
 		"wpcloud/form-message"
 	],

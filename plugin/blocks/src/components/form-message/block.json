@@ -63,7 +63,8 @@
 	},
 	"usesContext" : [
 		"wpcloud-form-message/previewAction",
-		"wpcloud-form-message/previewType"
+		"wpcloud-form-message/previewType",
+		"wpcloud-form-message/previewSchema"
 	]
 
 }

@@ -1,6 +1,16 @@
 
 const formMessages = document.querySelectorAll('.wpcloud-form-message');
 
+export function renderMessage(template, data) {
+	let result = '';
+	for (const key in data) {
+		const render = new Function(key, `return \`${template}\`;`);
+		result += render(data[key]);
+	}
+
+	return result;
+}
+
 formMessages.forEach((formMessage) => {
 	const { wpcloudAction, messageType, messageTemplate } = formMessage.dataset;
 
@@ -8,13 +18,11 @@ formMessages.forEach((formMessage) => {
 		// handle both admin-ajax and REST API responses
 		const success = response.success || response.ok;
 		response = response.data || response;
-
-		const render = new Function('response', `return \`${messageTemplate}\`;`);
 		const p = formMessage.querySelector('p');
 
 		const renderTemplate = () => {
 			try {
-				p.innerHTML = render(response);
+				p.innerHTML = renderMessage(messageTemplate, { response });
 			} catch (error) {
 				console.error(error);
 				p.innerHTML = messageTemplate;
