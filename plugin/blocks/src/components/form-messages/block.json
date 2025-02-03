@@ -22,10 +22,15 @@
 		"previewType": {
 			"type": "string",
 			"default": ""
+		},
+		"previewSchema": {
+			"type": "object",
+			"default": {}
 		}
 	},
 	"providesContext": {
 		"wpcloud-form-message/previewAction": "previewAction",
-		"wpcloud-form-message/previewType": "previewType"
+		"wpcloud-form-message/previewType": "previewType",
+		"wpcloud-form-message/previewSchema": "previewSchema"
 	}
 }
