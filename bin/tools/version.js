@@ -111,8 +111,6 @@ async function updateVersions(type = 'patch') {
 		runCommand(`git add ${file}`);
 	});
 
-	return;
-
 	// Commit the changes
 	console.log('Committing the changes...');
 	runCommand(`git commit -m "Version bump to ${newVersion}"`);
