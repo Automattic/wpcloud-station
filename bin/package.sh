@@ -5,11 +5,15 @@ script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd -P)
 trap cleanup SIGINT SIGTERM ERR EXIT
 
 cleanup() {
-	rm -rf "$script_dir/temp"
+	if [ -d "$script_dir/temp" ] &&  [ -z $no_cleanup ]; then
+		echo "Cleaning up $script_dir/temp"
+		rm -rf "$script_dir/temp"
+	fi
 }
 
 package=$1
 dist=${2:-""}
+no_cleanup=${3:-""}
 dist=$(echo "$(pwd)/$dist" | sed "s,/$,,")
 
 if [ -z "$package" ]; then
@@ -28,20 +32,26 @@ function build() {
 		mkdir -p "$dist"
 	fi
 
-	if [ -f "$dist/$build_package.zip" ]; then
-		rm "$dist/$build_package.zip"
+	package_zip="wpcloud-station"
+	if [ "$build_package" != "plugin" ] && [ "$build_package" != "theme" ]; then
+		package_zip="$package_zip-$build_package"
 	fi
 
-	temp="$script_dir/temp/wpcloud-station-$build_package"
+	if [ -f "$dist/$package_zip.zip" ]; then
+		rm "$dist/$package_zip.zip"
+	fi
+
+	temp="$script_dir/temp/$package_zip"
+
 	mkdir -p "$temp"
 	pushd "$build_package"
-	zip -r "$temp/$build_package.zip" . -x@.distignore
+	zip -r "$temp/$package_zip.zip" . -x@.distignore
 	popd
 	pushd "$temp"
-	unzip "$build_package.zip"
-	rm "$build_package.zip"
+	unzip "$package_zip.zip"
+	rm "$package_zip.zip"
 	cd ..
-	zip -r "$dist/wpcloud-station-$build_package.zip" "wpcloud-station-$build_package"
+	zip -r "$dist/$build_package.zip" "$package_zip"
 	popd
 }
 
