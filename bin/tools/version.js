@@ -6,10 +6,12 @@ const { execSync } = require('child_process');
 const pluginDir = path.join(__dirname, '/../../plugin', );
 const pluginFile = path.join(pluginDir, 'wpcloud-station.php');
 
-const themeDir = path.join(__dirname, '../theme');
+const themeDir = path.join(__dirname, '../../theme');
 const themeFile = path.join(themeDir, 'style.css');
 
-const software = [pluginFile, themeFile];
+const picoThemeDir = path.join(__dirname, '../../theme-pico');
+const picoThemeFile = path.join(picoThemeDir, 'style.css');
+const software = [pluginFile, themeFile, picoThemeFile];
 
 
 // GitHub repository details
@@ -108,6 +110,8 @@ async function updateVersions(type = 'patch') {
 		updateVersionInFile(file, newVersion);
 		runCommand(`git add ${file}`);
 	});
+
+	return;
 
 	// Commit the changes
 	console.log('Committing the changes...');
