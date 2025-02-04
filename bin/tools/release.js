@@ -49,8 +49,6 @@ function getPRsBetweenTags(previousTag, currentTag) {
 	const prs = execSync(
 			`gh pr list --search "merged:${previousTag}..${currentTag}" --json title,number --jq ".[] | \\\"#\\(.number) \\(.title)\\\""`, {encoding: 'utf8'}
 	);
-	console.log(`gh pr list --search "merged:${previousTag}..${currentTag}" --json title,number --jq ".[] | \\\"#\\(.number) \\(.title)\\\""`);
-	console.log(prs);
 	return prs ? prs.split('\n') : [];
 }
 
@@ -105,13 +103,20 @@ async function createRelease() {
 	// Create a new tag
 	console.log(`Creating a new tag: ${tag}`);
 	execSync(`git tag ${tag}`);
-	execSync(`git push origin ${tag}`);
+	//execSync(`git push origin ${tag}`);
 
 	// Get PRs between tags
 
 	// Get the current tag
 
+	// make sure we have the previous tag
+	execSync(`git fetch origin tag ${previousTag}`);
+
 	const prs = getPRsBetweenTags(previousTag, tag);
+
+	console.log('PRs included in this release:');
+	console.log(prs);
+	return
 
 
 	// Create the release
