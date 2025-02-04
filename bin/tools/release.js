@@ -46,11 +46,11 @@ function getPRsBetweenTags(previousTag, currentTag) {
 	}
 
 	console.log(`Fetching PRs between ${previousTag} and ${currentTag}...`);
+	const previousTagDate = execSync( `git log -1 --format=%ci ${previousTag}`, { encoding: 'utf8' }).split(' ')[0];
+	const currentTagDate = execSync( `git log -1 --format=%ci ${currentTag}`, { encoding: 'utf8' }).split(' ')[0];
 	const prs = execSync(
-			`gh pr list --search "merged:${previousTag}..${currentTag}" --json title,number --jq ".[] | \\\"#\\(.number) \\(.title)\\\""`, {encoding: 'utf8'}
+			`gh pr list --search "merged:${previousTagDate}..${currentTagDate}" --json title,number --jq ".[] | \\\"#\\(.number) \\(.title)\\\""`, {encoding: 'utf8'}
 	);
-	console.log(`gh pr list --search "merged:${previousTag}..${currentTag}" --json title,number --jq ".[] | \\\"#\\(.number) \\(.title)\\\""`);
-	console.log(prs);
 	return prs ? prs.split('\n') : [];
 }
 
@@ -80,9 +80,9 @@ async function createRelease() {
 	console.log('Fetching the latest changes...');
 	execSync(`git pull origin ${baseBranch}`);
 
-	// Get the plugin version
-	const version = getPluginVersion(pluginFile);
-	const tag = `${version}`;
+	// Get the plugin version tag
+	const tag  = getPluginVersion(pluginFile);
+
 	const previousTag = getPreviousReleaseTag();
 
 	console.log(`Current version: ${previousTag}`);
@@ -107,16 +107,20 @@ async function createRelease() {
 	execSync(`git tag ${tag}`);
 	execSync(`git push origin ${tag}`);
 
-	// Get PRs between tags
-
-	// Get the current tag
+	// Make sure we have the previous tag
+	execSync(`git fetch origin tag ${previousTag}`);
 
 	const prs = getPRsBetweenTags(previousTag, tag);
 
+	console.log('PRs included in this release:');
+	console.log(prs);
 
 	// Create the release
 	const releaseTitle = `Release ${tag}`;
-	const releaseBody = `## Release ${tag}`;
+	const releaseBody = `
+	## Release ${tag}
+	${prs.join('\n')}
+	`;
 
 	const releaseUrl = createGitHubRelease(tag, releaseTitle, releaseBody);
 
