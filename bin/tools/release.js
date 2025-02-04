@@ -46,10 +46,11 @@ function getPRsBetweenTags(previousTag, currentTag) {
 	}
 
 	console.log(`Fetching PRs between ${previousTag} and ${currentTag}...`);
+	const previousTagDate = execSync(`git log -1 --format=%ai ${previousTag}`, { encoding: 'utf8' }).split(' ')[0];
+	const currentTagDate = execSync(`git log -1 --format=%ai ${currentTag}`, { encoding: 'utf8' }).split(' ')[0];
 	const prs = execSync(
-			`gh pr list --search "merged:${previousTag}..${currentTag}" --json title,number --jq ".[] | \\\"#\\(.number) \\(.title)\\\""`, {encoding: 'utf8'}
+			`gh pr list --search "merged:${previousTagDate}..${currentTagDate}" --json title,number --jq ".[] | \\\"#\\(.number) \\(.title)\\\""`, {encoding: 'utf8'}
 	);
-	console.log(`gh pr list --search "merged:${previousTag}..${currentTag}" --json title,number --jq ".[] | \\\"#\\(.number) \\(.title)\\\""`);
 	console.log(prs);
 	return prs ? prs.split('\n') : [];
 }
