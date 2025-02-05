@@ -7,8 +7,8 @@ import { createHooks } from '@wordpress/hooks';
  * Local dependencies
  */
 
-import form from './form';
-import api, { configuredApiFetch as apiFetch } from './api';
+import form from '@wpcloud/utils/form';
+import api, { configuredApiFetch as apiFetch } from '@wpcloud/utils/api';
 
 window.wpcloud = window.wpcloud || {};
 wpcloud.hooks = wpcloud.hooks || createHooks();

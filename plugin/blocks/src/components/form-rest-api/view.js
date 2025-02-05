@@ -1,31 +1,4 @@
 ((wpcloud) => {
-	/*
-	document.querySelectorAll('form.wpcloud-block-form').forEach((form) => {
-		// Fill in any missing hidden inputs closest data attribute
-		const emptyHiddenInputs = form.querySelectorAll( 'input[type="hidden"][value=""]' );
-		emptyHiddenInputs.forEach( ( input ) => {
-			const dataName = `data-${input.name}`.replace(/_/g, '-');
-			const closestData = input.closest( `[${dataName}]` );
-			if ( closestData ) {
-				input.value = closestData.getAttribute( dataName );
-			}
-		});
-
-		form.addEventListener('reset', () => {
-			wpcloud.hooks.doAction('wpcloud_form_reset', form);
-			resetForm(form);
-		});
-
-		const resetButtons = form.querySelectorAll('button[type="reset"]');
-		// Show any reset buttons if they exist on a dirty form
-		form.addEventListener('input', () => {
-			resetButtons.forEach((button) => {
-				button.classList.remove('display-none');
-			});
-		});
-
-	} );
-*/
 	// Bind form handlers to all forms with the `data-ajax` attribute
 	document
 		.querySelectorAll( '[data-rest-api-endpoint]' )
