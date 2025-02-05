@@ -6,7 +6,7 @@ apiFetch.use(apiFetch.createNonceMiddleware(stationApi.nonce));
 
 
 async function handler( nextOptions ) {
-	const { url, path, data, parse = true, ...remainingOptions } = nextOptions;
+	const { url, path, data, parse = false, ...remainingOptions } = nextOptions;
 	let { body, headers } = nextOptions;
 
 	headers = { Accept: 'application/json, */*;q=0.1', ...headers };
@@ -30,6 +30,10 @@ async function handler( nextOptions ) {
 	if (!response.ok) {
 		return Promise.reject({ response, ok: false, data: json, headers: response.headers });
 	};
+
+	if (parse) {
+		return Promise.resolve(json);
+	}
 
 	response.data = json;
 	return Promise.resolve({ data: json, headers: response.headers, ok: response.ok, response });

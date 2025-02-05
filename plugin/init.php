@@ -50,6 +50,19 @@ if ( ! is_admin() ) {
 					'nonce' => wp_create_nonce( 'wpcloud_station_api' ),
 				)
 			);
+
+
+			global $post;
+			$site_id = wpcloud_get_site_id( $post );
+			error_log('site id: ' . $site_id);
+			if ( $site_id ) {
+				wp_localize_script(
+					'wpcloud',
+					'wpcloudSite',
+					array( 'id' => $site_id )
+				);
+			}
+
 		}
 	);
 }
