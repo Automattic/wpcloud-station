@@ -8,10 +8,9 @@ document.addEventListener('DOMContentLoaded', () => {
 	const container = document.getElementById('metrics');
 	const graphs = Array.from(container.querySelectorAll('.wp-block-wpcloud-graph')).map((graph) => {
 		const data = JSON.parse(graph.dataset.graphAttributes);
-		container.removeChild(graph);
+		graph.parentNode?.removeChild(graph);
 		return data;
 	});
-
 
 	const root = createRoot(container);
 	root.render(<Metrics graphs={graphs} site={siteId} interval={{ start: "1h" }} />);
