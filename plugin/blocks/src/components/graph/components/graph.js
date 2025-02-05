@@ -10,8 +10,6 @@ import 'uplot/dist/uPlot.min.css';
  * WordPress dependencies
  */
 import { useRef, useEffect, useState } from "@wordpress/element";
-import apiFetch from "@wordpress/api-fetch";
-
 
 /**
  * Internal dependencies
@@ -20,8 +18,8 @@ import Loader from './loader';
 import { seriesBarsPlugin } from './lib/uplot-plugins';
 import { stack, buildUrl } from './lib/utils';
 
-const api = window.wpcloudStationApi;
-apiFetch.use( apiFetch.createNonceMiddleware( api.nonce ) );
+import stationApi from '@wpcloud/utils/api';
+
 
 // Remove this amount from the container height to fit the graph legend.
 const fitGraphHeight = 75;
@@ -72,11 +70,13 @@ export default function Graph( { site, metric, type, title, interval } ) {
 
 	useEffect(() => {
 		async function fetchData() {
-			const url = buildUrl( metric, { site, start, end } );
-			const { data, series } = await apiFetch( { url } );
-
-			setData(data);
-			setSeries(series);
+			try {
+				const { data, series } = await stationApi.get(`metrics/${metric}`, { query: { site, start, end }, parse: true });
+				setData(data);
+				setSeries(series);
+			} catch (error) {
+				console.error(error);
+			}
 		}
 
 		fetchData();
