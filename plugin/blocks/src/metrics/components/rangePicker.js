@@ -71,7 +71,7 @@ export default ({ interval, onIntervalUpdate = () => { } }) => {
 				const detailsElement = detailsRef.current;
 				if (detailsElement && detailsElement.hasAttribute('open')) {
 					setRefresh(true);
-					onRefresh();
+					onFilter();
 				}
 			}
 		};
@@ -95,7 +95,7 @@ export default ({ interval, onIntervalUpdate = () => { } }) => {
 	// Refresh the data when the refresh state is set
 	useEffect(() => {
 		if (refresh) {
-			onRefresh();
+			onFilter();
 			setRefresh(false);
 		}
 	}, [refresh, start, end]);
@@ -140,7 +140,7 @@ export default ({ interval, onIntervalUpdate = () => { } }) => {
 		setSummaryText(newSummary);
 	}
 
-	const onRefresh = () => {
+	const onFilter = () => {
 		let isValid = true;
 
 		const newStart = new Date(parseRelativeTime(start) || start);
@@ -209,7 +209,7 @@ export default ({ interval, onIntervalUpdate = () => { } }) => {
 		setRangeOptionValue(selected);
 		setStart(selected);
 		setRefresh(true);
-		onRefresh();
+		onFilter();
 	}
 
 	return (
@@ -254,7 +254,7 @@ export default ({ interval, onIntervalUpdate = () => { } }) => {
 								<div className="wpcloud-metrics-datetime-picker__refresh">
 									<button onClick={() => {
 											setRefresh(true);
-											onRefresh()
+											onFilter()
 										} } >
 										{__('filter')}
 									</button>
