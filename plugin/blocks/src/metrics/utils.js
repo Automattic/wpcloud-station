@@ -21,6 +21,10 @@ export function getFromNow(date) {
 	if (amount && !unit) {
 		return [];
 	}
+	// units are one character
+	if (unit.length !== 1) {
+		return [];
+	}
 	// 'now-1s' is valid
 	return [now, amount, unit];
 }

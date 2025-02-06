@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback, useId} from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { __, _n, sprintf } from '@wordpress/i18n';
 
 
@@ -34,18 +34,61 @@ export default ({ interval, onIntervalUpdate = () => { } }) => {
 
 	const [start, setStart] = useState( interval.start || 'now-1h' );
 	const [end, setEnd] = useState( interval.end || 'now' );
-	const [isStartInvalid, setIsStartInvalid] = useState(false);
-	const [isEndInvalid, setIsEndInvalid] = useState(false);
+
+	const [startErrorMessage, setStartErrorMessage] = useState('');
+	const [endErrorMessage, setEndErrorMessage] = useState('');
+	const [startAfterEndError, setStartAfterEndError] = useState(false);
 
 	const [summaryText, setSummaryText] = useState('Last 1 Hour');
-
 	const [openedCalRef, setOpenedCalRef] = useState(null);
 
 	// @TODO: figure out how to reset this when using the inputs
 	const [rangeOptionValue, setRangeOptionValue] = useState('now-1h');
 
 	const[ refresh, setRefresh ] = useState(false);
-	const [error, setError] = useState([]);
+
+	// Effects
+	// Bind dom events
+	useEffect(() => {
+		// Allow enter to trigger a refresh
+		const handleKeyDown = (event) => {
+			if (event.key === 'Enter') {
+				const detailsElement = detailsRef.current;
+				if (detailsElement && detailsElement.hasAttribute('open')) {
+					setRefresh(true);
+					onRefresh();
+				}
+			}
+		};
+		document.addEventListener('keydown', handleKeyDown);
+
+		// Clean up after the details element is closed
+		const handleDetailsToggle = () => {
+			if (detailsRef.current.hasAttribute('open')) {
+				setOpenedCalRef(null);
+			}
+		};
+
+		detailsRef?.current?.addEventListener('toggle', handleDetailsToggle);
+
+		return () => {
+			document.removeEventListener('keydown', handleKeyDown);
+			detailsRef?.current?.removeEventListener('toggle', handleDetailsToggle);
+		};
+	}, [start, end, detailsRef]);
+
+	// Refresh the data when the refresh state is set
+	useEffect(() => {
+		if (refresh) {
+			onRefresh();
+			setRefresh(false);
+		}
+	}, [refresh, start, end]);
+
+	// Initialize the summary message
+	useEffect(() => {
+		buildSummaryMessage(start, end);
+	}, []);
 
 	const buildSummaryMessage = (start, end) => {
 		let from, to;
@@ -82,119 +125,68 @@ export default ({ interval, onIntervalUpdate = () => { } }) => {
 		setSummaryText(newSummary);
 	}
 
-	// Initialize the summary message
-	useEffect(() => {
-		buildSummaryMessage(start, end);
-	}, []);
-
-	// Bind dom events
-	useEffect(() => {
-		// Allow enter to trigger a refresh
-		const handleKeyDown = (event) => {
-			if (event.key === 'Enter') {
-				const detailsElement = detailsRef.current;
-				if (detailsElement && detailsElement.hasAttribute('open')) {
-					setRefresh(true);
-					onRefresh();
-				}
-			}
-		};
-		document.addEventListener('keydown', handleKeyDown);
-
-		// Clean up after the details element is closed
-		const handleDetailsToggle = () => {
-			if (detailsRef.current.hasAttribute('open')) {
-				setOpenedCalRef(null);
-				setError([]);
-			}
-		};
-
-		detailsRef?.current?.addEventListener('toggle', handleDetailsToggle);
-
-		return () => {
-			document.removeEventListener('keydown', handleKeyDown);
-			detailsRef?.current?.removeEventListener('toggle', handleDetailsToggle);
-		};
-	 }, [start, end, detailsRef]);
-
 	const onRefresh = () => {
-		const errors = [];
-		setError([]);
-		const parsedStart = Date.parse(start);
-		const parsedEnd = Date.parse(end);
+		let isValid = true;
 
-		const [endNow, endAmount, endUnit] = getFromNow(end);
-		const [startNow, startAmount, startUnit] = getFromNow(start);
+		const newStart = new Date(parseRelativeTime(start) || start);
+		const newEnd = new Date(parseRelativeTime(end) || end);
 
-		if (isNaN(parsedStart)) {
-			if (!startAmount) {
-				errors.push(__('Invalid start date'));
-				setIsStartInvalid(true);
-			}
+		if (isNaN(newStart.getTime())) {
+			setStartErrorMessage(__('Invalid start date'));
+			isValid = false;
 		}
 
-		if (isNaN(parsedEnd)) {
-			if (!endNow) {
-				errors.push(__('Invalid end date'));
-				setIsEndInvalid(true);
-			}
-
-			//make sure the end amount/unit is less than the start amount/unit
-			const unitOrder = Object.keys(units);
-			if (unitOrder.indexOf(endUnit) > unitOrder.indexOf(startUnit)) {
-				errors.push(__('End date must be before start date'));
-			}
-			if (endUnit === startUnit && endAmount > startAmount) {
-				errors.push(__('End date must be before start date'));
-			}
+		if (isNaN(newEnd.getTime())) {
+			setEndErrorMessage(__('Invalid end date'));
+			isValid = false;
 		}
 
-		if ( !isNaN(parsedStart) && !isNaN(parsedEnd) && parsedStart > parsedEnd) {
-			errors.push(__('Start date must be before end date'));
+		if (newStart > newEnd) {
+			setStartAfterEndError(true);
+			setStartErrorMessage(__('Start date must be before end date'));
+			setEndErrorMessage(__(' '));
+			isValid = false;
 		}
 
-		// @TODO: validate when one is now-... and the the other is a date
+		if (isValid) {
+			detailsRef.current?.removeAttribute('open');
+			buildSummaryMessage(start, end);
+			onIntervalUpdate({ start, end });
 
-		if (errors.length) {
-			setError(errors);
-			return;
+			setStartErrorMessage('');
+			setEndErrorMessage('');
+			setStartAfterEndError(false);
 		}
-
-		detailsRef.current?.removeAttribute('open');
-		buildSummaryMessage(start, end);
-		onIntervalUpdate({ start, end })
 	};
 
-	useEffect(() => {
-		if (refresh) {
-			onRefresh();
-			setRefresh(false);
+	const updateBoundaryAt = (boundary) => (date) => {
+		if (boundary === 'start') {
+			setStart(date);
+			if (startAfterEndError) {
+				setEndErrorMessage('');
+				setStartAfterEndError(false);
+			}
+			setStartErrorMessage('');
+		} else {
+			setEnd(date);
+			setEndErrorMessage('');
 		}
-	}, [refresh, start, end]);
+		setRangeOptionValue('');
+	};
 
-	const onSelectOption = useCallback((evt) => {
+	// Uses for invalidating dates in the BoundryInput component
+	const byCheckingBoundary = (boundary) => (date) => {
+		const shouldBeLess = boundary === 'start' ? new Date(end) : date;
+		const shouldBeMore = boundary === 'start' ? date : new Date(start);
+		return shouldBeLess > shouldBeMore || date > Date.now();
+	}
+
+	const onSelectOption = (evt) => {
 		setEnd('now');
 		setRangeOptionValue(evt.target.value);
 		setStart(evt.target.value);
 		setRefresh(true);
 		onRefresh();
-	}, [start, end]);
-
-	const showErrors = () => {
-		if (!error.length) {
-			return null;
-		}
-		return (
-			<li>
-				<article className="wpcloud-metrics-toolbar__errors">
-					<ul>
-					{error.map((msg, index) => (
-						<li key={index} className="error">{msg}</li>
-					))}
-					</ul>
-				</article>
-			</li>
-		);
 	}
 
 	return (
@@ -203,7 +195,6 @@ export default ({ interval, onIntervalUpdate = () => { } }) => {
 				<summary>{summaryText}</summary>
 				<ul className="wpcloud-metrics-datetime-picker__ranges"
 				>
-					{showErrors()}
 					<li>
 						<div className="wpcloud-metrics-datetime-picker__controls">
 							<div className="wpcloud-metrics-datetime-picker__options">
@@ -222,20 +213,18 @@ export default ({ interval, onIntervalUpdate = () => { } }) => {
 								<BoundaryInput
 									label={__('Start')}
 									value={start}
-									isInvalid={isStartInvalid}
-									errorMessage={__('Invalid start date')}
-									onChange={setStart}
-									isInvalidDate={date => date > new Date(end) || date > Date.now()}
+									errorMessage={startErrorMessage}
+									onChange={updateBoundaryAt('start')}
+									isInvalidDate={byCheckingBoundary('start')}
 									openedCalRef={openedCalRef}
 									openingCalendar={setOpenedCalRef}
 								/>
 								<BoundaryInput
 									label={__('End')}
 									value={end}
-									isInvalid={isEndInvalid}
-									errorMessage={__('Invalid end date')}
-									onChange={setEnd}
-									isInvalidDate={date => date < new Date(start) || date > Date.now() }
+									errorMessage={endErrorMessage}
+									onChange={updateBoundaryAt('end')}
+									isInvalidDate={byCheckingBoundary('end') }
 									openedCalRef={openedCalRef}
 									openingCalendar={setOpenedCalRef}
 								/>
@@ -244,11 +233,11 @@ export default ({ interval, onIntervalUpdate = () => { } }) => {
 											setRefresh(true);
 											onRefresh()
 										} } >
-										{__('Refresh')}
+										{__('filter')}
 									</button>
 								</div>
 							</div>
-							</div>
+						</div>
 					</li>
 				</ul>
 			</details>

@@ -322,6 +322,11 @@ button.wpcloud-block-button {
 			justify-content: flex-end;
 		}
 	}
+	small {
+		grid-column: 2;
+		grid-row: 2;
+		margin: 3px 0;
+	}
 }
 .wpcloud-datepicker {
 	position: absolute;

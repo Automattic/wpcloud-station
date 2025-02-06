@@ -9,12 +9,10 @@ import { parseRelativeTime } from '../utils';
 
 const identity = (v) => v;
 
-export default function ({ label, isInvalid, errorMessage, value, openedCalRef, onChange = identity, isInvalidDate = identity, openingCalendar = identity,  }) {
+export default function ({ label, errorMessage, value, openedCalRef, onChange = identity, isInvalidDate = identity, openingCalendar = identity,  }) {
 	const [showDatePicker, setShowDatePicker] = useState(false);
 	const id = useId();
 	const calRef = useRef(null);
-
-	const calValue = parseRelativeTime(value) || value || new Date();
 
 	useEffect(() => {
 		if ( openedCalRef?.current !== calRef?.current ) {
@@ -22,41 +20,28 @@ export default function ({ label, isInvalid, errorMessage, value, openedCalRef, 
 		}
 	}, [openedCalRef, calRef]);
 
-	const input = () => {
-		if (! isInvalid) {
-			return (
-				<input
-					type="text"
-					value={value}
-					onChange={evt => onChange(evt.target.value)} />
-			);
-		}
-
-		return (
-			<>
-				<input
-					type="text"
-					value={value}
-					id={id}
-					aria-invalid={true}
-					onChange={evt => onChange(evt.target.value)} />
-				{errorMessage && <small id={id} >{errorMessage}</small>}
-			</>
-		)
-	}
+	const isValid = !errorMessage.length;
+	const ariaInvalid = isValid ? {} : { 'aria-invalid': true };
+	const calValue = parseRelativeTime(value) || value || new Date();
 
 	return (
 		<div className="wpcloud-metrics-input">
 			<label>
 				{label}
-				{input()}
+				<input
+					type="text"
+					value={value}
+					id={id}
+					onChange={evt => onChange(evt.target.value)}
+					{...ariaInvalid}
+				/>
+				{!isValid && <small id={id}>{errorMessage}</small>}
 				<Icon icon={icons.calendar} size={30} onClick={() => {
 					setShowDatePicker(!showDatePicker);
 					openingCalendar(calRef);
 				}
 				} />
 			</label>
-
 				{showDatePicker && (
 					<div className="wpcloud-datepicker" ref={calRef}>
 						<DatePicker
