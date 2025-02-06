@@ -18,5 +18,5 @@ document.addEventListener('DOMContentLoaded', () => {
 	});
 
 	const root = createRoot(container);
-	root.render(<Metrics graphs={graphs} site={siteId} interval={{ start: "now-1h", end: "now" }} />);
+	root.render(<Metrics graphs={graphs} site={siteId} />);
 });

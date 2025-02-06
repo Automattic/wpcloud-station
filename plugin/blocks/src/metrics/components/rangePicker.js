@@ -15,10 +15,11 @@ import BoundaryInput from './boundaryInput';
 import { isValidDate, getFromNow, parseRelativeTime } from '../utils';
 
 const rangeOptions = {
-	'now-1h': __('Last 1 Hour'), // default
+	'': '',
 	'now-5m': __('Last 5 Minutes'),
 	'now-15m': __('Last 15 Minutes'),
 	'now-30m': __('Last 30 Minutes'),
+	'now-1h': __('Last 1 Hour'), // default
 	'now-3h': __('Last 3 Hours'),
 	'now-6h': __('Last 6 Hours'),
 	'now-12h': __('Last 12 Hours'),
@@ -39,11 +40,10 @@ const units = {
 }
 
 export default ({ interval, onIntervalUpdate = () => { } }) => {
-
 	const detailsRef = useRef(null);
 
-	const [start, setStart] = useState( interval.start || 'now-1h' );
-	const [end, setEnd] = useState( interval.end || 'now' );
+	const [start, setStart] = useState('now-1h');
+	const [end, setEnd] = useState('now');
 
 	const [startErrorMessage, setStartErrorMessage] = useState('');
 	const [endErrorMessage, setEndErrorMessage] = useState('');
@@ -55,7 +55,12 @@ export default ({ interval, onIntervalUpdate = () => { } }) => {
 	// @TODO: figure out how to reset this when using the inputs
 	const [rangeOptionValue, setRangeOptionValue] = useState('now-1h');
 
-	const[ refresh, setRefresh ] = useState(false);
+	const [refresh, setRefresh] = useState(false);
+
+	useEffect(() => {
+		setStart(interval.start || 'now-1h');
+		setEnd(interval.end || 'now');
+	}, [interval]);
 
 	// Effects
 	// Bind dom events
@@ -98,7 +103,7 @@ export default ({ interval, onIntervalUpdate = () => { } }) => {
 	// Initialize the summary message
 	useEffect(() => {
 		buildSummaryMessage(start, end);
-	}, []);
+	}, [start, end]);
 
 	const buildSummaryMessage = (start, end) => {
 		let from, to;
@@ -184,17 +189,25 @@ export default ({ interval, onIntervalUpdate = () => { } }) => {
 		setRangeOptionValue('');
 	};
 
-	// Uses for invalidating dates in the BoundryInput component
+	// Uses for invalidating dates in the BoundaryInput component
 	const byCheckingBoundary = (boundary) => (date) => {
-		const shouldBeLess = boundary === 'start' ? new Date(end) : date;
-		const shouldBeMore = boundary === 'start' ? date : new Date(start);
-		return shouldBeLess > shouldBeMore || date > Date.now();
+		if ( date > Date.now() ){
+			return true;
+		}
+		if (boundary === 'start') {
+			return date > new Date(end);
+		}
+		return date < new Date(start);
 	}
 
 	const onSelectOption = (evt) => {
+		const selected = evt.target.value;
+		if (selected === '') {
+			return;
+		}
 		setEnd('now');
-		setRangeOptionValue(evt.target.value);
-		setStart(evt.target.value);
+		setRangeOptionValue(selected);
+		setStart(selected);
 		setRefresh(true);
 		onRefresh();
 	}
