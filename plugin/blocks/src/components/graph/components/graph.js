@@ -16,7 +16,7 @@ import { useRef, useEffect, useState } from "@wordpress/element";
  */
 import Loader from './loader';
 import { seriesBarsPlugin } from './lib/uplot-plugins';
-import { stack, buildUrl } from './lib/utils';
+import { stack } from './lib/utils';
 
 import stationApi from '@wpcloud/utils/api';
 
@@ -69,6 +69,7 @@ export default function Graph( { site, metric, type, title, interval } ) {
 	}, [containerRef, data]);
 
 	useEffect(() => {
+		setData([]);
 		async function fetchData() {
 			try {
 				const { data, series } = await stationApi.get(`metrics/${metric}`, { query: { site, start, end }, parse: true });
