@@ -4,12 +4,17 @@ import { DatePicker } from '@wordpress/components';
 import * as icons from '@wordpress/icons';
 const Icon = icons.Icon;
 
+
+import { parseRelativeTime } from '../utils';
+
 const identity = (v) => v;
 
 export default function ({ label, isInvalid, errorMessage, value, openedCalRef, onChange = identity, isInvalidDate = identity, openingCalendar = identity,  }) {
 	const [showDatePicker, setShowDatePicker] = useState(false);
 	const id = useId();
 	const calRef = useRef(null);
+
+	const calValue = parseRelativeTime(value) || value || new Date();
 
 	useEffect(() => {
 		if ( openedCalRef?.current !== calRef?.current ) {
@@ -59,7 +64,8 @@ export default function ({ label, isInvalid, errorMessage, value, openedCalRef, 
 								onChange(date.replace('T', ' '));
 								setShowDatePicker(false);
 							}}
-								isInvalidDate={isInvalidDate}
+							currentDate={calValue}
+							isInvalidDate={isInvalidDate}
 						/>
 					</div>
 				)}

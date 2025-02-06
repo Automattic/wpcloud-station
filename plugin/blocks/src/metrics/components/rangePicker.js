@@ -3,6 +3,7 @@ import { __, _n, sprintf } from '@wordpress/i18n';
 
 
 import BoundaryInput from './boundaryInput';
+import { isValidDate, getFromNow, parseRelativeTime } from '../utils';
 const rangeOptions = {
 	'now-1h': __('Last 1 Hour'), // default
 	'now-5m': __('Last 5 Minutes'),
@@ -26,67 +27,6 @@ const units = {
 	'w': __('week'),
 	'M': __('month'),
 }
-
-function getFromNow(date) {
-	const [match, now, dash, amount, unit] = date.match(/(now)(.?)(?:(\d+)([smhdMy]+))?/) || [];
-
-	if (!match) {
-		return [];
-	}
-	// make sure the dash is a dash
-	if (dash && dash !== '-') {
-
-		return [];
-	}
-	// 'now-' is not valid
-	if (dash && !amount) {
-		return [];
-	}
-	// 'now' is valid
-	if (!amount) {
-		return [now];
-	}
-	// 'now-1' is not valid
-	if (amount && !unit) {
-		return [];
-	}
-	// 'now-1s' is valid
-	return [now, amount, unit];
-}
-
-function isValidDate(date) {
-	// try parsing the date
-	const parsed = Date.parse(date);
-	if (!isNaN(parsed)) {
-		return true;
-	}
-	const nowDate = getFromNow(date);
-	if (nowDate.length) {
-		return true;
-	}
-	return false;
-}
-
-function parseRelativeTime(input) {
-	const [isNow, amount, unit] = getFromNow(input);
-	if (!isNow) {
-		return null
-	}
-	let now = new Date();
-
-	switch (unit) {
-		case "s": now.setSeconds(now.getSeconds() - amount); break;
-		case "m": now.setMinutes(now.getMinutes() - amount); break;
-		case "h": now.setHours(now.getHours() - amount); break;
-		case "d": now.setDate(now.getDate() - amount); break;
-		case "w": now.setDate(now.getDate() - amount * 7); break;
-		case "M": now.setMonth(now.getMonth() - amount); break;
-		case "y": now.setFullYear(now.getFullYear() - amount); break;
-	}
-
-	return now.toISOString().replace("T", " ").split(".")[0];
-}
-
 
 export default ({ interval, onIntervalUpdate = () => { } }) => {
 
@@ -161,10 +101,11 @@ export default ({ interval, onIntervalUpdate = () => { } }) => {
 		};
 		document.addEventListener('keydown', handleKeyDown);
 
-		// Close any open calendars when the details is closed
+		// Clean up after the details element is closed
 		const handleDetailsToggle = () => {
 			if (detailsRef.current.hasAttribute('open')) {
 				setOpenedCalRef(null);
+				setError([]);
 			}
 		};
 
@@ -284,7 +225,7 @@ export default ({ interval, onIntervalUpdate = () => { } }) => {
 									isInvalid={isStartInvalid}
 									errorMessage={__('Invalid start date')}
 									onChange={setStart}
-									isInvalidDate={date => date > end || date > Date.now()}
+									isInvalidDate={date => date > new Date(end) || date > Date.now()}
 									openedCalRef={openedCalRef}
 									openingCalendar={setOpenedCalRef}
 								/>
@@ -294,7 +235,7 @@ export default ({ interval, onIntervalUpdate = () => { } }) => {
 									isInvalid={isEndInvalid}
 									errorMessage={__('Invalid end date')}
 									onChange={setEnd}
-									isInvalidDate={date => date < start || date > Date.now()}
+									isInvalidDate={date => date < new Date(start) || date > Date.now() }
 									openedCalRef={openedCalRef}
 									openingCalendar={setOpenedCalRef}
 								/>
