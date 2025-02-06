@@ -100,6 +100,8 @@ export default ({ rangeOptions, interval, onIntervalUpdate = () => { } }) => {
 	const [isEndInvalid, setIsEndInvalid] = useState(false);
 
 	const [summaryText, setSummaryText] = useState('Last 1 Hour');
+
+	// @TODO: figure out how to reset this when using the inputs
 	const [rangeOptionValue, setRangeOptionValue] = useState('now-1h');
 
 	const[ refresh, setRefresh ] = useState(false);
