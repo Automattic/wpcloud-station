@@ -37,7 +37,7 @@ if ( ! class_exists( 'WPCLOUD_Metrics_Controller' ) ) {
 				$this->rest_base . '/(?<metric>[\w]+)',
 				array(
 					'args'                => array(
-						'site'     => array(
+						'site'   => array(
 							'description' => esc_html__( 'Unique identifier for the site.', 'wpcloud' ),
 							'type'        => 'integer',
 						),
@@ -130,14 +130,20 @@ if ( ! class_exists( 'WPCLOUD_Metrics_Controller' ) ) {
 				'm' => 'minutes',
 				'h' => 'hours',
 				'd' => 'days',
+				'M' => 'months',
 			);
 
+			// check if it's now-{some value} format.
+			if ( 0 === strpos( $time, 'now-' ) ) {
+				$time = substr( $time, 3 );
+			}
 			$unit = substr( $time, -1 );
 			$ts   = null;
 
 			if ( array_key_exists( $unit, $units ) ) {
 				$value = ltrim( substr( $time, 0, -1 ), '-' );
-				$ts    = strtotime( sprintf( '-%s %s', $value, $units[ $unit ] ) );
+				error_log( sprintf( '-%s %s', $value, $units[ $unit ] ) );
+				$ts = strtotime( sprintf( '-%s %s', $value, $units[ $unit ] ) );
 			} else {
 				$ts = strtotime( $time );
 			}
