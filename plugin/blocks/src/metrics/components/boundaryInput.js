@@ -1,12 +1,21 @@
-import { useState, useId } from 'react';
+import { useState, useId, useRef, useEffect } from 'react';
 
 import { DatePicker } from '@wordpress/components';
 import * as icons from '@wordpress/icons';
 const Icon = icons.Icon;
 
-export default function ({ label, isInvalid, onChange, errorMessage, value, isInvalidDate }) {
+const identity = (v) => v;
+
+export default function ({ label, isInvalid, errorMessage, value, openedCalRef, onChange = identity, isInvalidDate = identity, openingCalendar = identity,  }) {
 	const [showDatePicker, setShowDatePicker] = useState(false);
 	const id = useId();
+	const calRef = useRef(null);
+
+	useEffect(() => {
+		if ( openedCalRef?.current !== calRef?.current ) {
+			setShowDatePicker(false);
+		}
+	}, [openedCalRef, calRef]);
 
 	const input = () => {
 		if (! isInvalid) {
@@ -36,14 +45,18 @@ export default function ({ label, isInvalid, onChange, errorMessage, value, isIn
 			<label>
 				{label}
 				{input()}
-				<Icon icon={icons.calendar} size={30} onClick={() => setShowDatePicker(!showDatePicker)} />
+				<Icon icon={icons.calendar} size={30} onClick={() => {
+					setShowDatePicker(!showDatePicker);
+					openingCalendar(calRef);
+				}
+				} />
 			</label>
 
 				{showDatePicker && (
-					<div className="wpcloud-datepicker">
+					<div className="wpcloud-datepicker" ref={calRef}>
 						<DatePicker
 							onChange={(date) => {
-								onChange(date);
+								onChange(date.replace('T', ' '));
 								setShowDatePicker(false);
 							}}
 								isInvalidDate={isInvalidDate}

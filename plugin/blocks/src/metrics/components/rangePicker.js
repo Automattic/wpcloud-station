@@ -3,7 +3,7 @@ import { __, _n, sprintf } from '@wordpress/i18n';
 
 
 import BoundaryInput from './boundaryInput';
-const defaultRangeOptions = {
+const rangeOptions = {
 	'now-1h': __('Last 1 Hour'), // default
 	'now-5m': __('Last 5 Minutes'),
 	'now-15m': __('Last 15 Minutes'),
@@ -16,8 +16,6 @@ const defaultRangeOptions = {
 	'now-30d': __('Last 30 Days'),
 	'now-90d': __('Last 90 Days'),
 	'now-6M': __('Last 6 Months'),
-	'now-1y': __('Last Year'),
-	'now-2y': __('Last 2 Years'),
 }
 
 const units = {
@@ -27,7 +25,6 @@ const units = {
 	'd': __('day'),
 	'w': __('week'),
 	'M': __('month'),
-	'y': __('year'),
 }
 
 function getFromNow(date) {
@@ -90,7 +87,8 @@ function parseRelativeTime(input) {
 	return now.toISOString().replace("T", " ").split(".")[0];
 }
 
-export default ({ rangeOptions, interval, onIntervalUpdate = () => { } }) => {
+
+export default ({ interval, onIntervalUpdate = () => { } }) => {
 
 	const detailsRef = useRef(null);
 
@@ -101,15 +99,16 @@ export default ({ rangeOptions, interval, onIntervalUpdate = () => { } }) => {
 
 	const [summaryText, setSummaryText] = useState('Last 1 Hour');
 
+	const [openedCalRef, setOpenedCalRef] = useState(null);
+
 	// @TODO: figure out how to reset this when using the inputs
 	const [rangeOptionValue, setRangeOptionValue] = useState('now-1h');
 
 	const[ refresh, setRefresh ] = useState(false);
 	const [error, setError] = useState([]);
 
-	let from, to;
-
 	const buildSummaryMessage = (start, end) => {
+		let from, to;
 		if (!isValidDate(start) || !isValidDate(end)) {
 			return;
 		}
@@ -118,6 +117,8 @@ export default ({ rangeOptions, interval, onIntervalUpdate = () => { } }) => {
 		const [startNow, startAmount, startUnit] = getFromNow(start);
 
 		if (endNow && startNow) {
+
+			// If there's no end amount, the build a "quick" summary.
 			if (!endAmount) {
 				if (!startUnit) {
 					return;
@@ -133,7 +134,6 @@ export default ({ rangeOptions, interval, onIntervalUpdate = () => { } }) => {
 				newSummary = `${from} → ${to}`;
 			}
 
-			// @TODO: handle the case where the end is using now-*
 		} else {
 			from = start.replace('T', ' ');
 			to = end.replace('T', ' ');
@@ -142,12 +142,14 @@ export default ({ rangeOptions, interval, onIntervalUpdate = () => { } }) => {
 		setSummaryText(newSummary);
 	}
 
+	// Initialize the summary message
 	useEffect(() => {
 		buildSummaryMessage(start, end);
 	}, []);
 
-	// Add a global keydown listener to trigger the refresh function when the user presses Enter
+	// Bind dom events
 	useEffect(() => {
+		// Allow enter to trigger a refresh
 		const handleKeyDown = (event) => {
 			if (event.key === 'Enter') {
 				const detailsElement = detailsRef.current;
@@ -157,13 +159,22 @@ export default ({ rangeOptions, interval, onIntervalUpdate = () => { } }) => {
 				}
 			}
 		};
-
 		document.addEventListener('keydown', handleKeyDown);
+
+		// Close any open calendars when the details is closed
+		const handleDetailsToggle = () => {
+			if (detailsRef.current.hasAttribute('open')) {
+				setOpenedCalRef(null);
+			}
+		};
+
+		detailsRef?.current?.addEventListener('toggle', handleDetailsToggle);
 
 		return () => {
 			document.removeEventListener('keydown', handleKeyDown);
+			detailsRef?.current?.removeEventListener('toggle', handleDetailsToggle);
 		};
-	 }, [start, end]);
+	 }, [start, end, detailsRef]);
 
 	const onRefresh = () => {
 		const errors = [];
@@ -245,7 +256,6 @@ export default ({ rangeOptions, interval, onIntervalUpdate = () => { } }) => {
 		);
 	}
 
-	rangeOptions = { ...defaultRangeOptions, ...rangeOptions };
 	return (
 		<div className="wpcloud-metrics-toolbar">
 			<details className="wpcloud-metrics-datetime-picker dropdown" ref={detailsRef}>
@@ -257,7 +267,11 @@ export default ({ rangeOptions, interval, onIntervalUpdate = () => { } }) => {
 						<div className="wpcloud-metrics-datetime-picker__controls">
 							<div className="wpcloud-metrics-datetime-picker__options">
 								<p>{__('Quick Range')}</p>
-								<select value={ rangeOptionValue } onChange={onSelectOption}>
+								<select
+									value={rangeOptionValue}
+									onChange={onSelectOption}
+									onClick={() => setOpenedCalRef(null)}
+								>
 									{Object.entries(rangeOptions).map(([value, label]) => (
 										<option key={value} value={value}>{label}</option>
 									))}
@@ -271,6 +285,8 @@ export default ({ rangeOptions, interval, onIntervalUpdate = () => { } }) => {
 									errorMessage={__('Invalid start date')}
 									onChange={setStart}
 									isInvalidDate={date => date > end || date > Date.now()}
+									openedCalRef={openedCalRef}
+									openingCalendar={setOpenedCalRef}
 								/>
 								<BoundaryInput
 									label={__('End')}
@@ -278,7 +294,10 @@ export default ({ rangeOptions, interval, onIntervalUpdate = () => { } }) => {
 									isInvalid={isEndInvalid}
 									errorMessage={__('Invalid end date')}
 									onChange={setEnd}
-									isInvalidDate={date => date < start || date > Date.now()} />
+									isInvalidDate={date => date < start || date > Date.now()}
+									openedCalRef={openedCalRef}
+									openingCalendar={setOpenedCalRef}
+								/>
 								<div className="wpcloud-metrics-datetime-picker__refresh">
 									<button onClick={() => {
 											setRefresh(true);
