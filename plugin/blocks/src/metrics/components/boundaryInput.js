@@ -1,15 +1,23 @@
+/**
+ * External dependencies
+ */
 import { useState, useId, useRef, useEffect } from 'react';
 
+/**
+ * WordPress dependencies
+ */
 import { DatePicker } from '@wordpress/components';
 import * as icons from '@wordpress/icons';
 const Icon = icons.Icon;
 
-
+/**
+ * Internal dependencies
+ */
 import { parseRelativeTime } from '../utils';
 
 const identity = (v) => v;
 
-export default function ({ label, errorMessage, value, openedCalRef, onChange = identity, isInvalidDate = identity, openingCalendar = identity,  }) {
+export default function ({ label, errorMessage, value, openedCalRef, onChange = identity, isInvalidDate = identity, openingCalendar = identity }) {
 	const [showDatePicker, setShowDatePicker] = useState(false);
 	const id = useId();
 	const calRef = useRef(null);

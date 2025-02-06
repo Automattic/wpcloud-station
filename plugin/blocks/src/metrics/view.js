@@ -1,4 +1,11 @@
+/**
+ * External dependencies
+ */
 import { createRoot } from 'react-dom/client';
+
+/**
+ * Internal dependencies
+ */
 import Metrics from './components/metrics.js';
 
 document.addEventListener('DOMContentLoaded', () => {

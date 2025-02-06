@@ -4,7 +4,6 @@ import { addQueryArgs } from '@wordpress/url';
 const stationApi = window.wpcloudStationApi;
 apiFetch.use(apiFetch.createNonceMiddleware(stationApi.nonce));
 
-
 async function handler( nextOptions ) {
 	const { url, path, data, parse = false, ...remainingOptions } = nextOptions;
 	let { body, headers } = nextOptions;

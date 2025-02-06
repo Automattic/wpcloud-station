@@ -1,9 +1,19 @@
+/**
+ * External dependencies
+ */
 import { useState, useRef, useEffect } from 'react';
+
+/**
+ * WordPress dependencies
+ */
 import { __, _n, sprintf } from '@wordpress/i18n';
 
-
+/**
+ * Internal dependencies
+ */
 import BoundaryInput from './boundaryInput';
 import { isValidDate, getFromNow, parseRelativeTime } from '../utils';
+
 const rangeOptions = {
 	'now-1h': __('Last 1 Hour'), // default
 	'now-5m': __('Last 5 Minutes'),

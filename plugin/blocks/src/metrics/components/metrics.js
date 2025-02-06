@@ -1,5 +1,11 @@
-import React, { useState } from 'react';
+/**
+ * External dependencies
+ */
+import React, { useState, useEffect } from 'react';
 
+/**
+ * Internal dependencies
+ */
 import Graph from '@wpcloud/components/graph/components/graph.js';
 import Toolbar from './toolbar';
 
