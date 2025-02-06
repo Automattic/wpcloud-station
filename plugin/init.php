@@ -60,7 +60,6 @@ if ( ! is_admin() ) {
 					array( 'id' => $site_id )
 				);
 			}
-
 		}
 	);
 }

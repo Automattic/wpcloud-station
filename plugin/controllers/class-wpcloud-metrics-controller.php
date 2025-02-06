@@ -142,7 +142,6 @@ if ( ! class_exists( 'WPCLOUD_Metrics_Controller' ) ) {
 
 			if ( array_key_exists( $unit, $units ) ) {
 				$value = ltrim( substr( $time, 0, -1 ), '-' );
-				error_log( sprintf( '-%s %s', $value, $units[ $unit ] ) );
 				$ts = strtotime( sprintf( '-%s %s', $value, $units[ $unit ] ) );
 			} else {
 				$ts = strtotime( $time );
