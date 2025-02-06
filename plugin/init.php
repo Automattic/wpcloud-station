@@ -51,10 +51,8 @@ if ( ! is_admin() ) {
 				)
 			);
 
-
 			global $post;
 			$site_id = wpcloud_get_site_id( $post );
-			error_log('site id: ' . $site_id);
 			if ( $site_id ) {
 				wp_localize_script(
 					'wpcloud',
