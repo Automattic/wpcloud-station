@@ -52,16 +52,17 @@ export default ({ interval, onIntervalUpdate = () => { } }) => {
 	const [summaryText, setSummaryText] = useState('Last 1 Hour');
 	const [openedCalRef, setOpenedCalRef] = useState(null);
 
-	const [rangeOptionValue, setRangeOptionValue] = useState('now-1h');
+	const [rangeOptionValue, setRangeOptionValue] = useState('');
 
 	const [refresh, setRefresh] = useState(false);
 
+	// interval change effect.
 	useEffect(() => {
-		setStart(interval.start || 'now-1h');
-		setEnd(interval.end || 'now');
+		setStart(interval.start);
+		setEnd(interval.end);
+		buildSummaryMessage(interval);
 	}, [interval]);
 
-	// Effects
 	// Bind dom events
 	useEffect(() => {
 		// Allow enter to trigger a refresh
@@ -98,12 +99,7 @@ export default ({ interval, onIntervalUpdate = () => { } }) => {
 		}
 	}, [refresh, start, end]);
 
-	// Initialize the summary message
-	useEffect(() => {
-		buildSummaryMessage(start, end);
-	}, [start, end]);
-
-	const buildSummaryMessage = (start, end) => {
+	const buildSummaryMessage = ({ start, end }) => {
 		let from, to;
 		if (!isValidDate(start) || !isValidDate(end)) {
 			return;
@@ -162,7 +158,7 @@ export default ({ interval, onIntervalUpdate = () => { } }) => {
 
 		if (isValid) {
 			detailsRef.current?.removeAttribute('open');
-			buildSummaryMessage(start, end);
+			buildSummaryMessage({ start, end });
 			onIntervalUpdate({ start, end });
 
 			setStartErrorMessage('');
