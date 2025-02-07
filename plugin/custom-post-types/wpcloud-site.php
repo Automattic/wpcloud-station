@@ -166,7 +166,10 @@ function wpcloud_get_current_site_id(): int {
  *
  * @return int The site ID.
  */
-function wpcloud_get_site_id( int|WP_Post $post ): int {
+function wpcloud_get_site_id( int|WP_Post|null $post ): int {
+	if ( ! $post ) {
+		return 0;
+	}
 	if ( $post instanceof WP_Post ) {
 		$post_id = $post->ID;
 	} else {
