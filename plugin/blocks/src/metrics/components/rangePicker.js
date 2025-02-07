@@ -52,7 +52,6 @@ export default ({ interval, onIntervalUpdate = () => { } }) => {
 	const [summaryText, setSummaryText] = useState('Last 1 Hour');
 	const [openedCalRef, setOpenedCalRef] = useState(null);
 
-	// @TODO: figure out how to reset this when using the inputs
 	const [rangeOptionValue, setRangeOptionValue] = useState('now-1h');
 
 	const [refresh, setRefresh] = useState(false);
@@ -213,11 +212,10 @@ export default ({ interval, onIntervalUpdate = () => { } }) => {
 	}
 
 	return (
-		<div className="wpcloud-metrics-toolbar">
+		<div className="wpcloud-metrics-toolbar__range-picker">
 			<details className="wpcloud-metrics-datetime-picker dropdown" ref={detailsRef}>
 				<summary>{summaryText}</summary>
-				<ul className="wpcloud-metrics-datetime-picker__ranges"
-				>
+				<ul className="wpcloud-metrics-datetime-picker__ranges" >
 					<li>
 						<div className="wpcloud-metrics-datetime-picker__controls">
 							<div className="wpcloud-metrics-datetime-picker__options">

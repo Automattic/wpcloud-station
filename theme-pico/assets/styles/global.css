@@ -290,20 +290,18 @@ button.wpcloud-block-button {
 	}
 }
 
+.wpcloud-metrics-toolbar {
+	display: flex;
+	gap: 20px;
 
-
-.wpcloud-metrics-toolbar__errors {
-	background-color: red;
-	color: white;
-	margin-bottom: 0;
-	ul {
-		margin-bottom: 0;
-		li {
-			list-style: disc !important;
-			color: white;
-			padding: 0;
-		}
+	.wpcloud-metrics-toolbar__range-picker {
+		flex:1;
 	}
+	.wpcloud-metrics-toolbar__refresh {
+		/* Match the pico details > summary height */
+		height: calc(1rem* var(--pico-line-height) + var(--pico-form-element-spacing-vertical)* 2 + var(--pico-border-width)* 2);
+	}
+
 }
 
 .wpcloud-metrics-datetime-picker__controls {

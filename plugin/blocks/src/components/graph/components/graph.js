@@ -38,7 +38,7 @@ function addSeriesFill( series, idx ) {
 	return series;
 }
 
-export default function Graph( { site, metric, type, title, interval } ) {
+export default function Graph( { site, metric, type, title, interval, refresh } ) {
 	const { start, end } = interval || {};
 	const [ data, setData ] = useState([]);
 	const [ series, setSeries ] = useState([]);
@@ -86,7 +86,7 @@ export default function Graph( { site, metric, type, title, interval } ) {
 
 		fetchData();
 		return () => controller.abort();
-	}, [ site, metric, start, end ] );
+	}, [ site, metric, start, end, refresh ] );
 
 	if ( data.length === 0 ) {
 		return (
