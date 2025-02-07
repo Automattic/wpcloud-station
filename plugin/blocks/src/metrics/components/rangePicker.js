@@ -70,7 +70,6 @@ export default ({ interval, onIntervalUpdate = () => { } }) => {
 				const detailsElement = detailsRef.current;
 				if (detailsElement && detailsElement.hasAttribute('open')) {
 					setRefresh(true);
-					onFilter();
 				}
 			}
 		};
@@ -114,7 +113,6 @@ export default ({ interval, onIntervalUpdate = () => { } }) => {
 		const [startNow, startAmount, startUnit] = getFromNow(start);
 
 		if (endNow && startNow) {
-
 			// If there's no end amount, the build a "quick" summary.
 			if (!endAmount) {
 				if (!startUnit) {
@@ -208,7 +206,6 @@ export default ({ interval, onIntervalUpdate = () => { } }) => {
 		setRangeOptionValue(selected);
 		setStart(selected);
 		setRefresh(true);
-		onFilter();
 	}
 
 	return (
@@ -250,10 +247,7 @@ export default ({ interval, onIntervalUpdate = () => { } }) => {
 									openingCalendar={setOpenedCalRef}
 								/>
 								<div className="wpcloud-metrics-datetime-picker__refresh">
-									<button onClick={() => {
-											setRefresh(true);
-											onFilter()
-										} } >
+									<button onClick={() => setRefresh(true) } >
 										{__('filter')}
 									</button>
 								</div>
