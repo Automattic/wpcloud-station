@@ -12,7 +12,7 @@ import { __, _n, sprintf } from '@wordpress/i18n';
  * Internal dependencies
  */
 import BoundaryInput from './boundaryInput';
-import { isValidDate, getFromNow, parseRelativeTime } from '../utils';
+import { isValidDate, getFromNow, parseTime } from '../utils';
 
 const rangeOptions = {
 	'': '',
@@ -58,8 +58,8 @@ export default ({ interval, onIntervalUpdate = () => { } }) => {
 
 	// interval change effect.
 	useEffect(() => {
-		setStart(interval.start);
-		setEnd(interval.end);
+		setStart(interval.start?.trim());
+		setEnd(interval.end?.trim());
 		buildSummaryMessage(interval);
 	}, [interval]);
 
@@ -120,8 +120,8 @@ export default ({ interval, onIntervalUpdate = () => { } }) => {
 					units[startUnit]
 				);
 			} else {
-				from = parseRelativeTime(start);
-				to = parseRelativeTime(end);
+				from = parseTime(start);
+				to = parseTime(end);
 				newSummary = `${from} → ${to}`;
 			}
 
@@ -136,20 +136,20 @@ export default ({ interval, onIntervalUpdate = () => { } }) => {
 	const onFilter = () => {
 		let isValid = true;
 
-		const newStart = new Date(parseRelativeTime(start) || start);
-		const newEnd = new Date(parseRelativeTime(end) || end);
+		const parsedStart = parseTime(start);
+		const parsedEnd = parseTime(end);
 
-		if (isNaN(newStart.getTime())) {
+		if (!parsedStart) {
 			setStartErrorMessage(__('Invalid start date'));
 			isValid = false;
 		}
 
-		if (isNaN(newEnd.getTime())) {
+		if (!parsedEnd) {
 			setEndErrorMessage(__('Invalid end date'));
 			isValid = false;
 		}
 
-		if (newStart > newEnd) {
+		if (new Date(parsedStart) > new Date(parsedEnd)) {
 			setStartAfterEndError(true);
 			setStartErrorMessage(__('Start date must be before end date'));
 			setEndErrorMessage(__(' '));
@@ -169,14 +169,14 @@ export default ({ interval, onIntervalUpdate = () => { } }) => {
 
 	const updateBoundaryAt = (boundary) => (date) => {
 		if (boundary === 'start') {
-			setStart(date);
+			setStart(date?.trim());
 			if (startAfterEndError) {
 				setEndErrorMessage('');
 				setStartAfterEndError(false);
 			}
 			setStartErrorMessage('');
 		} else {
-			setEnd(date);
+			setEnd(date?.trim());
 			setEndErrorMessage('');
 		}
 		setRangeOptionValue('');
