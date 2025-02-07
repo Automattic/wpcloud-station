@@ -1,7 +1,13 @@
 /**
  * External dependencies
  */
-import { useState,useEffect } from 'react';
+import { useState, useEffect } from 'react';
+
+
+/**
+ * Internal dependencies
+ */
+import { parseTime } from './utils';
 
 export function useQueryParams()  {
 	const [queryParams, setQueryParams] = useState(new URLSearchParams(window.location.search));
@@ -22,5 +28,11 @@ export function useQueryParams()  {
 
 export function useQueryBoundary(boundary, defaultValue) {
 	const queryParams = useQueryParams();
-	return queryParams.get(boundary) || defaultValue;
+	const boundaryValue = queryParams.get(boundary);
+
+	if (!parseTime(boundaryValue)) {
+		return defaultValue;
+	}
+
+	return boundaryValue;
 }
