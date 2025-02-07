@@ -13,7 +13,7 @@ const Icon = icons.Icon;
 /**
  * Internal dependencies
  */
-import { parseRelativeTime } from '../utils';
+import { parseTime } from '../utils';
 
 const identity = (v) => v;
 
@@ -30,7 +30,7 @@ export default function ({ label, errorMessage, value, openedCalRef, onChange = 
 
 	const isValid = !errorMessage.length;
 	const ariaInvalid = isValid ? {} : { 'aria-invalid': true };
-	const calValue = parseRelativeTime(value) || value || new Date();
+	const calValue = parseTime(value) || value || new Date();
 
 	return (
 		<div className="wpcloud-metrics-input">
