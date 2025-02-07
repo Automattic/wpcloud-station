@@ -42,11 +42,17 @@ export function isValidDate(date) {
 	return false;
 }
 
-export function parseRelativeTime(input) {
+export function parseTime(input) {
+	const iso8601WithoutTRegex = /^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})(\.\d+)?(Z|([+-]\d{2}:\d{2}))?$/;
+	if (iso8601WithoutTRegex.test(input)) {
+		return input;
+	}
+
 	const [isNow, amount, unit] = getFromNow(input);
 	if (!isNow) {
 		return null
 	}
+
 	let now = new Date();
 
 	switch (unit) {
