@@ -1,13 +1,4 @@
 
-export function buildUrl(metric, options) {
-	const api = window.wpcloudStationApi;
-	const queryParams = new URLSearchParams( Object.fromEntries(
-    Object.entries( options ).filter(([key, value]) => value)
-  ));
-
-	return `${window.location.origin}${api?.root}/metrics/${metric}` + '?' + queryParams.toString();
-}
-
 export function stack(data) {
 	if (data.length < 2) {
 		return [];

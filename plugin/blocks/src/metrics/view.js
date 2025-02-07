@@ -1,7 +1,12 @@
+/**
+ * External dependencies
+ */
 import { createRoot } from 'react-dom/client';
 
-import Metrics from './metrics.js';
-
+/**
+ * Internal dependencies
+ */
+import Metrics from './components/metrics.js';
 
 document.addEventListener('DOMContentLoaded', () => {
 	const siteId = wpcloudSite?.id;
@@ -13,5 +18,5 @@ document.addEventListener('DOMContentLoaded', () => {
 	});
 
 	const root = createRoot(container);
-	root.render(<Metrics graphs={graphs} site={siteId} interval={{ start: "1h" }} />);
+	root.render(<Metrics graphs={graphs} site={siteId} />);
 });

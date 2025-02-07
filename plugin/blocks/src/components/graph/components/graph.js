@@ -16,7 +16,7 @@ import { useRef, useEffect, useState } from "@wordpress/element";
  */
 import Loader from './loader';
 import { seriesBarsPlugin } from './lib/uplot-plugins';
-import { stack, buildUrl } from './lib/utils';
+import { stack } from './lib/utils';
 
 import stationApi from '@wpcloud/utils/api';
 
@@ -38,7 +38,7 @@ function addSeriesFill( series, idx ) {
 	return series;
 }
 
-export default function Graph( { site, metric, type, title, interval } ) {
+export default function Graph( { site, metric, type, title, interval, refresh } ) {
 	const { start, end } = interval || {};
 	const [ data, setData ] = useState([]);
 	const [ series, setSeries ] = useState([]);
@@ -69,18 +69,24 @@ export default function Graph( { site, metric, type, title, interval } ) {
 	}, [containerRef, data]);
 
 	useEffect(() => {
+		const controller = new AbortController();
+		const signal = controller.signal;
+		setData([]);
 		async function fetchData() {
 			try {
-				const { data, series } = await stationApi.get(`metrics/${metric}`, { query: { site, start, end }, parse: true });
+				const { data, series } = await stationApi.get(`metrics/${metric}`, { query: { site, start, end }, parse: true, signal });
 				setData(data);
 				setSeries(series);
 			} catch (error) {
-				console.error(error);
+				if (error.name !== 'AbortError') {
+					console.error(error);
+				}
 			}
 		}
 
 		fetchData();
-	}, [ site, metric, start, end ] );
+		return () => controller.abort();
+	}, [ site, metric, start, end, refresh ] );
 
 	if ( data.length === 0 ) {
 		return (

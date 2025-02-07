@@ -289,3 +289,86 @@ button.wpcloud-block-button {
 		}
 	}
 }
+
+.wpcloud-metrics-toolbar {
+	display: flex;
+	gap: 20px;
+
+	.wpcloud-metrics-toolbar__range-picker {
+		flex:1;
+	}
+	.wpcloud-metrics-toolbar__refresh {
+		/* Match the pico details > summary height */
+		height: calc(1rem* var(--pico-line-height) + var(--pico-form-element-spacing-vertical)* 2 + var(--pico-border-width)* 2);
+	}
+
+}
+
+.wpcloud-metrics-datetime-picker__controls {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 10px;
+	.wpcloud-metrics-datetime-picker__options {
+		width: 80%;
+	}
+	.wpcloud-metrics-datetime-picker__inputs {
+		width: 100%;
+		.wpcloud-metrics-datetime-picker__refresh {
+			margin-top: 20px;
+			width: 100%;
+			display: flex;
+			justify-content: flex-end;
+		}
+	}
+	small {
+		grid-column: 2;
+		grid-row: 2;
+		margin: 3px 0;
+	}
+}
+.wpcloud-datepicker {
+	position: absolute;
+	padding: 20px;
+	background: var(--pico-color);
+	border-radius: var(--pico-border-radius);
+	button.components-datetime__date__day {
+		padding: 0;
+		font-size: 0.8rem;
+		border: none;
+		color: rgb(30, 30, 30);
+		background-color: transparent;
+	}
+	&:has(div div) div div {
+		button {
+			display: flex;
+			background: transparent;
+			padding: 0 14px;
+			margin: 0;
+			box-shadow: none;
+			border: var(--pico-border-width) solid var(--pico-form-element-border-color);
+		}
+	}
+}
+
+.wpcloud-metrics-input {
+	position: relative;
+	label {
+		display: grid;
+		grid-template-columns: 13% 1fr 10%;
+		gap: 10px;
+		justify-items: center;
+		align-items: center;
+	}
+	input {
+		margin-bottom: 0 !important;
+	}
+
+	.wpcloud-datepicker {
+		left : calc(13% + 10px);
+		z-index: 10;
+	}
+}
+/* @TODO : This should use the spacing styles in from the editor */
+.wpcloud-graph {
+	margin: 20px 0;
+}
