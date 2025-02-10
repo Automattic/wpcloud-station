@@ -16,7 +16,8 @@
 	"viewScript": "file:./view.js",
 	"allowedBlocks": [
 		"core/group",
-		"wpcloud/graph"
+		"wpcloud/graph",
+		"wpcloud/graph-v2"
 	],
 	"attributes": {
 		"id": {

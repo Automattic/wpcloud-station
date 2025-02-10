@@ -32,6 +32,17 @@ if ( ! class_exists( 'WPCLOUD_Metrics_Controller' ) ) {
 		 * Register the routes for the objects of the controller.
 		 */
 		public function register_routes() {
+
+			register_rest_route(
+				$this->namespace,
+				$this->rest_base . '/available',
+				array(
+					'methods'             => WP_REST_Server::READABLE,
+					'callback'            => array( $this, 'get_available_metrics' ),
+					'permission_callback' => array( $this, 'user_access_check' ),
+				)
+			);
+
 			register_rest_route(
 				$this->namespace,
 				$this->rest_base . '/(?<metric>[\w]+)',
@@ -64,6 +75,21 @@ if ( ! class_exists( 'WPCLOUD_Metrics_Controller' ) ) {
 					'callback'            => array( $this, 'get_site_metric' ),
 					'permission_callback' => array( $this, 'user_access_check' ),
 				)
+			);
+		}
+
+		/**
+		 * Get available metrics
+		 *
+		 * @return WP_REST_Response
+		 */
+		public function get_available_metrics(): WP_REST_Response {
+			return new WP_REST_Response(
+				array(
+					'dimensions' => WPCLOUD_Metrics::get_available_dimensions(),
+					'metrics'    => WPCLOUD_Metrics::get_available_metrics(),
+				),
+				200
 			);
 		}
 
@@ -142,7 +168,7 @@ if ( ! class_exists( 'WPCLOUD_Metrics_Controller' ) ) {
 
 			if ( array_key_exists( $unit, $units ) ) {
 				$value = ltrim( substr( $time, 0, -1 ), '-' );
-				$ts = strtotime( sprintf( '-%s %s', $value, $units[ $unit ] ) );
+				$ts    = strtotime( sprintf( '-%s %s', $value, $units[ $unit ] ) );
 			} else {
 				$ts = strtotime( $time );
 			}

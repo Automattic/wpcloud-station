@@ -1,9 +1,9 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
-	"name": "wpcloud/graph",
+	"name": "wpcloud/graph-v2",
 	"version": "0.1.0",
-	"title": "graph",
+	"title": "graph v2",
 	"category": "wpcloud",
 	"icon": "chart-line",
 	"description": "Graph block for WPCloud plot blocks",
@@ -19,7 +19,11 @@
 	"attributes" : {
 		"metric" : {
 			"type" : "string",
-			"default" : "status_codes"
+			"default" : "requests"
+		},
+		"dimension" : {
+			"type" : "string",
+			"default" : "https_status"
 		},
 		"type": {
 			"type": "string",
