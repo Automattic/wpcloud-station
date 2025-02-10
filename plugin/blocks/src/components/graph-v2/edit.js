@@ -57,9 +57,9 @@ export default function Edit( { attributes, setAttributes } ) {
 						/>
 						<SelectControl
 							label={__('Dimension')}
-							value={metric}
+							value={dimension}
 							options={Object.keys(dimensions).map((key) => ({ label: dimensions[key], value: key })) }
-							onChange={update('metric')}
+							onChange={update('dimension')}
 						/>
 					</>)}
 				<SelectControl
