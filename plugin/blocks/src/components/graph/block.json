@@ -6,7 +6,7 @@
 	"title": "graph",
 	"category": "wpcloud",
 	"icon": "chart-line",
-	"description": "Example block scaffolded with Create Block tool.",
+	"description": "Graph block for WPCloud plot blocks",
 	"example": {},
 	"supports": {
 		"html": false
