@@ -3,10 +3,10 @@
 	"apiVersion": 3,
 	"name": "wpcloud/graph-v2",
 	"version": "0.1.0",
-	"title": "graph",
+	"title": "graph v2",
 	"category": "wpcloud",
 	"icon": "chart-line",
-	"description": "Example block scaffolded with Create Block tool.",
+	"description": "Graph block for WPCloud plot blocks",
 	"example": {},
 	"supports": {
 		"html": false
