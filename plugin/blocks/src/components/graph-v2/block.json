@@ -1,0 +1,41 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "wpcloud/graph-v2",
+	"version": "0.1.0",
+	"title": "graph",
+	"category": "wpcloud",
+	"icon": "chart-line",
+	"description": "Example block scaffolded with Create Block tool.",
+	"example": {},
+	"supports": {
+		"html": false
+	},
+	"textdomain": "graph",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"ancestor": ["wpcloud/metrics"],
+	"attributes" : {
+		"metric" : {
+			"type" : "string",
+			"default" : "requests"
+		},
+		"dimension" : {
+			"type" : "string",
+			"default" : "https_status"
+		},
+		"type": {
+			"type": "string",
+			"default": "line"
+		},
+		"title" : {
+			"type" : "string",
+			"default" : "Status Codes"
+		},
+		"showLegend" : {
+			"type" : "boolean",
+			"default" : true
+		}
+	}
+}
