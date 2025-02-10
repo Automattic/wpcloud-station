@@ -1,4 +1,5 @@
 
+
 /**
  * External dependencies
  */
@@ -15,6 +16,7 @@ import { useRef, useEffect, useState } from "@wordpress/element";
  * Internal dependencies
  */
 import Loader from './loader';
+import Error from './error';
 import { seriesBarsPlugin } from './lib/uplot-plugins';
 import { stack } from './lib/utils';
 
@@ -38,14 +40,17 @@ function addSeriesFill( series, idx ) {
 	return series;
 }
 
-export default function Graph( { site, metric, type, title, interval, refresh } ) {
+export default function Graph( { site, metric, dimension, type:typeView, title, interval, refresh } ) {
 	const { start, end } = interval || {};
 	const [ data, setData ] = useState([]);
-	const [ series, setSeries ] = useState([]);
+	const [series, setSeries] = useState([]);
+	const [ isError, setIsError ] = useState(false);
 
 	const containerRef = useRef(null);
 	const [ graphWidth, setGraphWidth ] = useState( 808 );
-	const [ graphHeight, setGraphHeight ] = useState( 404 );
+	const [graphHeight, setGraphHeight] = useState(404);
+
+	const type = typeView.split( '_' )[0];
 
 	useEffect(() => {
 		const updateSize = () => {
@@ -71,27 +76,43 @@ export default function Graph( { site, metric, type, title, interval, refresh } 
 	useEffect(() => {
 		const controller = new AbortController();
 		const signal = controller.signal;
-		setData([]);
 		async function fetchData() {
 			try {
-				const { data, series } = await stationApi.get(`metrics/${metric}`, { query: { site, start, end }, parse: true, signal });
+				const { data, series } = await stationApi.get(`metrics/${metric}`,
+					{
+						query:
+							{ dimension, type: typeView, site, start, end },
+						parse: true,
+						signal
+					});
 				setData(data);
 				setSeries(series);
 			} catch (error) {
 				if (error.name !== 'AbortError') {
 					console.error(error);
+					setIsError(true);
 				}
 			}
 		}
 
 		fetchData();
 		return () => controller.abort();
-	}, [ site, metric, start, end, refresh ] );
+	}, [site, metric, start, end, refresh])
 
-	if ( data.length === 0 ) {
+	const loading = () => {
+		if (data.length === 0) {
+			return (
+				<div className="wpcloud-graph" style={{ width: "100%", height: "500px", position: "absolute", top: 0, left: 0}}>
+					<Loader />
+				</div>
+			);
+		}
+	}
+
+	if (isError) {
 		return (
-			<div className="wpcloud-graph" style={{ width: "100%", height: "500px", position:"relative" }}>
-				<Loader />
+			<div className="wpcloud-graph" style={{ width: "100%", height: "500px", position: "relative", backgroundColor: "white" }}>
+				<Error />
 			</div>
 		);
 	}
@@ -137,6 +158,7 @@ export default function Graph( { site, metric, type, title, interval, refresh } 
 
 	return (
 		<div ref={containerRef} className="wpcloud-graph" style={{ width: "100%", height: "500px", backgroundColor: "white", position: "relative" }}>
+			{ loading() }
 			<UplotReact
 				options={options}
 				data={d} />
