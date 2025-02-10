@@ -6,7 +6,7 @@ import React, { useState, useEffect } from 'react';
 /**
  * Internal dependencies
  */
-import Graph from '@wpcloud/components/graph/components/graph.js';
+import Graph from '@wpcloud/components/graph/graph.js';
 import Toolbar from './toolbar';
 import { useQueryBoundary } from '../hooks';
 
@@ -48,7 +48,9 @@ function Metrics({ graphs, site }) {
 		<div className="wpcloud-metrics">
 			<h3>Metrics</h3>
 			<Toolbar onIntervalUpdate={updateQueryParams} interval={interval} onRefresh={onRefresh} />
-			{graphComponents}
+			<div className="wpcloud-metrics__graphs">
+				{graphComponents}
+			</div>
 		</div>
 	);
 }
