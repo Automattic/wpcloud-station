@@ -372,3 +372,9 @@ button.wpcloud-block-button {
 .wpcloud-graph {
 	margin: 20px 0;
 }
+
+.wpcloud-metrics__graphs {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 20px;
+}

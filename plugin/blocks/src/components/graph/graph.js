@@ -15,7 +15,7 @@ export default function ({ interval, refresh, ...props }) {
 
   useEffect(() => {
     setResetKey((prev) => prev + 1); // Change key to force reset
-  }, [interval, refresh]);
+  }, [refresh]);
 
 	const error = () => (
 		<div className="wpcloud-graph" style={{ width: "100%", height: "500px", position: "relative", backgroundColor: "white" }}>

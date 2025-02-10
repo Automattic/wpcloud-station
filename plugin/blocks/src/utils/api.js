@@ -2,9 +2,9 @@ import apiFetch from '@wordpress/api-fetch';
 import { addQueryArgs } from '@wordpress/url';
 
 const stationApi = window.wpcloudStationApi;
-apiFetch.use(apiFetch.createNonceMiddleware(stationApi.nonce));
+apiFetch.use(apiFetch.createNonceMiddleware(stationApi?.nonce));
 
-async function handler( nextOptions ) {
+async function handler(nextOptions) {
 	const { url, path, data, parse = false, ...remainingOptions } = nextOptions;
 	let { body, headers } = nextOptions;
 
@@ -25,6 +25,7 @@ async function handler( nextOptions ) {
 		}
 	);
 
+	console.log('response', response);
 	const json = await response.json();
 	if (!response.ok) {
 		return Promise.reject({ response, ok: false, data: json, headers: response.headers });

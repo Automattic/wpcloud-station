@@ -34,6 +34,16 @@ if ( ! class_exists( 'WPCLOUD_Metrics_Controller' ) ) {
 		public function register_routes() {
 			register_rest_route(
 				$this->namespace,
+				$this->rest_base . '/available',
+				array(
+					'methods'             => WP_REST_Server::READABLE,
+					'callback'            => array( $this, 'get_available_metrics' ),
+					'permission_callback' => array( $this, 'user_access_check' ),
+				)
+			);
+
+			register_rest_route(
+				$this->namespace,
 				$this->rest_base . '/(?<metric>[\w]+)',
 				array(
 					'args'                => array(
@@ -43,6 +53,10 @@ if ( ! class_exists( 'WPCLOUD_Metrics_Controller' ) ) {
 						),
 						'metric' => array(
 							'description' => esc_html__( 'The metric to retrieve.', 'wpcloud' ),
+							'type'        => 'string',
+						),
+						'dimension' => array(
+							'description' => esc_html__( 'The dimension to retrieve.', 'wpcloud' ),
 							'type'        => 'string',
 						),
 						'start'  => array(
@@ -75,11 +89,15 @@ if ( ! class_exists( 'WPCLOUD_Metrics_Controller' ) ) {
 		 * @return WP_REST_Response
 		 */
 		public function get_site_metric( WP_REST_Request $request ): WP_REST_Response {
-			$params  = $request->get_params();
-			$site_id = $params['site'];
-			$metric  = $params['metric'];
-			$start   = $this->parseTime( $params['start'] ?? null, 'start' );
-			$end     = $this->parseTime( $params['end'] ?? null, 'end' );
+			$params = $request->get_params();
+
+			$site_id   = $params['site'];
+			$metric    = $params['metric'];
+			$dimension = $params['dimension'];
+			$type      = $params['type'] ?? 'line';
+
+			$start = $this->parseTime( $params['start'] ?? null, 'start' );
+			$end   = $this->parseTime( $params['end'] ?? null, 'end' );
 
 			if ( is_wp_error( $start ) || is_wp_error( $end ) ) {
 				return new WP_REST_Response( $start->get_error_message(), 400 );
@@ -88,28 +106,52 @@ if ( ! class_exists( 'WPCLOUD_Metrics_Controller' ) ) {
 			$site = WPCLOUD_Site::get_by_id( $site_id );
 
 			if ( ! $site ) {
-				return new WP_REST_Response( esc_html__( 'Site not found', 'wpcloud' ), 404 );
+				return new WP_REST_Response( esc_html__( 'Site not found????', 'wpcloud' ), 404 );
 			}
 
 			$view = new WPCLOUD_Metric_Data_View( site: $site_id, start: $start, end: $end );
 
-			if ( ! method_exists( $view, $metric ) ) {
+			if ( ! $view->has_support_for( $metric ) ) {
 				// translators: %s: metric.
 				return new WP_REST_Response( wp_sprintf( esc_html__( 'Invalid metric: %s', 'wpcloud' ), $metric ), 400 );
 			}
 
-			call_user_func( array( $view, $metric ), plot_view: true );
+			$view_result = null;
+			switch ( $type ) {
+				case 'bar_stacked':
+					$view_result = $view->stacked( $metric, $dimension );
+					break;
+				default:
+					$view_result = $view->default( $metric, $dimension );
+					break;
+			}
 
-			if ( is_wp_error( $view->result ) ) {
-				return new WP_REST_Response( $view->result->get_error_message(), 500 );
+			if ( is_wp_error( $view_result ) ) {
+				return new WP_REST_Response( $view_result->get_error_message(), 500 );
 			}
 			$response = array(
-				'meta'   => $view->meta,
-				'map'    => $view->map,
-				'series' => $view->series,
-				'data'   => $view->data,
+				'meta'   => $view_result->meta,
+				'map'    => $view_result->map,
+				'series' => $view_result->series,
+				'data'   => $view_result->data,
+				'_raw'   => $view_result->result,
 			);
 			return new WP_REST_Response( $response, 200 );
+		}
+
+		/**
+		 * Get available metrics
+		 *
+		 * @return WP_REST_Response
+		 */
+		public function get_available_metrics(): WP_REST_Response {
+			return new WP_REST_Response(
+				array(
+					'dimensions' => WPCLOUD_Metrics::get_available_dimensions(),
+					'metrics'    => WPCLOUD_Metrics::get_available_metrics(),
+				),
+				200
+			);
 		}
 
 		/**
@@ -120,7 +162,7 @@ if ( ! class_exists( 'WPCLOUD_Metrics_Controller' ) ) {
 		 *
 		 * @return int|null|WP_Error a timestamp.
 		 */
-		public function parseTime( ?string $time, string $position ): int|null|WP_Error {
+		private function parseTime( ?string $time, string $position ): int|null|WP_Error {
 			if ( is_null( $time ) ) {
 				return null;
 			}
