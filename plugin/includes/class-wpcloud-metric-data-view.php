@@ -112,16 +112,16 @@ class WPCLOUD_Metric_Data_View extends WPCLOUD_Metrics {
 	private function set_series(): void {
 		$series = array();
 
+		// Just stub out the series. Let the JS handle the configuration.
 		foreach ( $this->dimensions as $dim ) {
 			$series[] = array(
 				'label' => $dim,
-				'width' => 0,
-				'fill'  => true,
 			);
 		}
 		ksort( $series );
-		// Add an empty series for the x-axis.
-		array_unshift( $series, array() );
+		// Add an empty series (as an object )for the x-axis.
+		// See the note about using flat arrays here https://github.com/leeoniya/uPlot/blob/master/docs/README.md#series-scales-axes-grid .
+		array_unshift( $series, (object) array() );
 		$this->series = $series;
 	}
 
