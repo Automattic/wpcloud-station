@@ -229,3 +229,47 @@ function wpcloud_station_register_site_view( $view ) {
 	$regex = sprintf( 'sites/([^/]+)/%s/?$', $view );
 	add_rewrite_rule( $regex, $query, 'top' );
 }
+
+/**
+ * Log only once. Useful for debugging.
+ *
+ * @param mixed ...$stuff The stuff to log.
+ */
+function wpcloud_lo( ...$stuff ) {
+	static $callers = array();
+	// Don't log on Atomic sites.
+	if ( defined( 'IS_ATOMIC' ) && IS_ATOMIC ) {
+		return;
+	}
+	$backtrace = debug_backtrace( 0 ); // phpcs:ignore
+	$caller    = md5( $backtrace[0]['file'] . $backtrace[0]['line'] );
+	if ( isset( $callers[ $caller ] ) ) {
+		return;
+	}
+	$callers[ $caller ] = true;
+	return wpcloud_l( $stuff );
+}
+
+/**
+ * Log to error log. Useful for debugging.
+ *
+ * @param mixed ...$stuff The stuff to log.
+ */
+function wpcloud_l( ...$stuff ) {
+	if ( defined( 'IS_ATOMIC' ) && IS_ATOMIC ) {
+		return;
+	}
+	$strings_of_stuff = array();
+	foreach ( $stuff as $thing ) {
+		if ( is_array( $thing ) || is_object( $thing ) ) {
+			$strings_of_stuff[] =
+			$strings_of_stuff[] = sprintf( "\n %s", json_encode( $thing, JSON_PRETTY_PRINT )); // phpcs:ignore
+		} elseif ( is_bool( $thing ) ) {
+			$strings_of_stuff[] = $thing ? 'true' : 'false';
+		} else {
+			$strings_of_stuff[] = $thing;
+		}
+	}
+
+	error_log( print_r( implode( ' ', $strings_of_stuff), true ) ); // phpcs:ignore
+}
