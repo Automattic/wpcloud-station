@@ -19,21 +19,35 @@ class WPCloud_Metrics {
 	 *
 	 * @var int
 	 */
-	private int $site;
+	protected int $site;
+
+	/**
+	 * The metric.
+	 *
+	 * @var string
+	 */
+	protected string $metric;
+
+	/**
+	 * The dimension.
+	 *
+	 * @var string
+	 */
+	protected string $dimension;
 
 	/**
 	 * The start.
 	 *
 	 * @var int|null
 	 */
-	private ?int $start;
+	protected ?int $start;
 
 	/**
 	 * The end.
 	 *
 	 * @var int|null
 	 */
-	private ?int $end;
+	protected ?int $end;
 
 	/**
 	 * The result.
@@ -70,15 +84,19 @@ class WPCloud_Metrics {
 	 * Constructor.
 	 *
 	 * @param int      $site     The site.
+	 * @param string   $metric   The metric.
+	 * @param string   $dimension The dimension.
 	 * @param int|null $start    The start.
 	 * @param int|null $end      The end.
 	 *
 	 * @throws Exception If the type is invalid.
 	 */
-	public function __construct( int $site, ?int $start = null, ?int $end = null ) {
-		$this->site  = $site;
-		$this->start = $start ?? strtotime( '-24 hours' );
-		$this->end   = $end ?? time();
+	public function __construct( int $site, string $metric, string $dimension, ?int $start = null, ?int $end = null ) {
+		$this->site      = $site;
+		$this->metric    = $metric;
+		$this->dimension = $dimension;
+		$this->start     = $start ?? strtotime( '-24 hours' );
+		$this->end       = $end ?? time();
 	}
 
 	/**
@@ -146,12 +164,15 @@ class WPCloud_Metrics {
 	 *
 	 * @return WP_Error|array The data
 	 */
-	private function get_data( array $options ): WP_Error|array {
-
-		$options['dimension'] = $this->get_dimension( $options['dimension'] );
-		if ( is_wp_error( $options['dimension'] ) ) {
-			return $options['dimension'];
-		}
+	public function fetch( array $options = array() ): WP_Error|WPCloud_Metrics {
+		$options = array_merge(
+			array(
+				'metric'    => $this->metric,
+				'dimension' => $this->dimension,
+				'summarize' => false,
+			),
+			$options
+		);
 
 		$this->result = wpcloud_client_site_metrics( $this->site, $this->start, $this->end, $options );
 		if ( is_wp_error( $this->result ) ) {
@@ -159,40 +180,7 @@ class WPCloud_Metrics {
 		}
 		$this->meta    = (array) $this->result->_meta;
 		$this->periods = json_decode( wp_json_encode( $this->result->periods ), true );
-		return $this->periods;
-	}
-
-	/**
-	 * Get the server metrics.
-	 *
-	 * @param string $dimension The dimension.
-	 *
-	 * @return WP_Error|array
-	 */
-	private function get_dimension( ?string $dimension = null ): WP_Error|string {
-
-		if ( is_null( $dimension ) ) {
-			return 'http_host';
-		}
-
-		$dimensions = array(
-			'http_version',
-			'http_verb',
-			'http_host', // Default.
-			'http_status',
-			'page_renderer',
-			'page_is_cached',
-			'wp_admin_ajax_action',
-			'visitor_asn',
-			'visitor_country_code',
-			'visitor_is_crawler',
-		);
-
-		if ( ! in_array( $dimension, $dimensions, true ) ) {
-			echo "not in array ?\n";
-			return new WP_Error( 'invalid_dimension', 'Invalid dimension' );
-		}
-		return $dimension;
+		return $this;
 	}
 
 	/**

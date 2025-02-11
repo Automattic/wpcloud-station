@@ -48,22 +48,26 @@ if ( ! class_exists( 'WPCLOUD_Metrics_Controller' ) ) {
 				$this->rest_base . '/(?<metric>[\w]+)',
 				array(
 					'args'                => array(
-						'site'   => array(
+						'site'      => array(
 							'description' => esc_html__( 'Unique identifier for the site.', 'wpcloud' ),
 							'type'        => 'integer',
 						),
-						'metric' => array(
+						'metric'    => array(
 							'description' => esc_html__( 'The metric to retrieve.', 'wpcloud' ),
 							'type'        => 'string',
 						),
-						'start'  => array(
+						'dimension' => array(
+							'description' => esc_html__( 'The dimension to retrieve.', 'wpcloud' ),
+							'type'        => 'string',
+						),
+						'start'     => array(
 							'description' => esc_html__( 'The start time.', 'wpcloud' ),
 							'type'        => 'string',
 							'options'     => array(
 								'default' => null,
 							),
 						),
-						'end'    => array(
+						'end'       => array(
 							'description' => esc_html__( 'The end time.', 'wpcloud' ),
 							'type'        => 'string',
 							'options'     => array(
@@ -101,11 +105,12 @@ if ( ! class_exists( 'WPCLOUD_Metrics_Controller' ) ) {
 		 * @return WP_REST_Response
 		 */
 		public function get_site_metric( WP_REST_Request $request ): WP_REST_Response {
-			$params  = $request->get_params();
-			$site_id = $params['site'];
-			$metric  = $params['metric'];
-			$start   = $this->parseTime( $params['start'] ?? null, 'start' );
-			$end     = $this->parseTime( $params['end'] ?? null, 'end' );
+			$params    = $request->get_params();
+			$site_id   = $params['site'];
+			$metric    = $params['metric'];
+			$dimension = $params['dimension'] ?? null;
+			$start     = $this->parseTime( $params['start'] ?? null, 'start' );
+			$end       = $this->parseTime( $params['end'] ?? null, 'end' );
 
 			if ( is_wp_error( $start ) || is_wp_error( $end ) ) {
 				return new WP_REST_Response( $start->get_error_message(), 400 );
@@ -117,23 +122,24 @@ if ( ! class_exists( 'WPCLOUD_Metrics_Controller' ) ) {
 				return new WP_REST_Response( esc_html__( 'Site not found', 'wpcloud' ), 404 );
 			}
 
-			$view = new WPCLOUD_Metric_Data_View( site: $site_id, start: $start, end: $end );
+			$view = WPCLOUD_Metric_Data_View::load(
+				site: $site_id,
+				metric: $metric,
+				dimension: $dimension,
+				start: $start,
+				end: $end,
+			);
 
-			if ( ! method_exists( $view, $metric ) ) {
-				// translators: %s: metric.
-				return new WP_REST_Response( wp_sprintf( esc_html__( 'Invalid metric: %s', 'wpcloud' ), $metric ), 400 );
+			if ( is_wp_error( $view ) ) {
+				return new WP_REST_Response( $view->get_error_message(), 500 );
 			}
 
-			call_user_func( array( $view, $metric ), plot_view: true );
+			$result = $view->default();
 
-			if ( is_wp_error( $view->result ) ) {
-				return new WP_REST_Response( $view->result->get_error_message(), 500 );
-			}
 			$response = array(
-				'meta'   => $view->meta,
-				'map'    => $view->map,
-				'series' => $view->series,
-				'data'   => $view->data,
+				'meta'   => $result->meta,
+				'series' => $result->series,
+				'data'   => $result->data,
 			);
 			return new WP_REST_Response( $response, 200 );
 		}
@@ -180,7 +186,6 @@ if ( ! class_exists( 'WPCLOUD_Metrics_Controller' ) ) {
 			}
 			return $ts;
 		}
-
 
 		/**
 		 * Check permissions for the current request.

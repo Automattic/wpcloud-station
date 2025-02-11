@@ -35,69 +35,123 @@ class WPCLOUD_Metric_Data_View extends WPCLOUD_Metrics {
 	 */
 	public $data;
 
+	/**
+	 * The dimensions.
+	 *
+	 * @var array
+	 */
+	public $dimensions;
 
 	/**
-	 * Get status codes
+	 * Generate the view.
 	 *
-	 * @param bool $plot_view Whether to return a plot view.
+	 * @param int    $site      The site.
+	 * @param string $metric    The metric.
+	 * @param string $dimension The dimension.
+	 * @param int    $start     The start.
+	 * @param int    $end       The end.
 	 *
 	 * @return WP_Error|WPCLOUD_Metric_Data
 	 */
-	public function status_codes( $plot_view = true ): WP_Error|WPCLOUD_Metric_Data_View {
-		$this->requests( 'http_status' );
-
-		if ( ! $plot_view ) {
-			return $this;
-		}
-		if ( is_wp_error( $this->result ) ) {
-			return $this->result;
+	public static function load( int $site, string $metric, string $dimension, int $start, int $end ): WP_Error|WPCLOUD_Metric_Data_View {
+		// validate the metric and dimension.
+		$view = new self( $site, $metric, $dimension, $start, $end );
+		if ( ! array_key_exists( $view->metric, $view->get_available_metrics() ) ) {
+			return new WP_Error( 'invalid_metric', 'Invalid metric', array( 'status' => 400 ) );
 		}
 
-		// First set up the x axis, noting how many status codes we encounter.
-		$status_codes = array();
-		$x            = array();
+		if ( ! array_key_exists( $view->dimension, $view->get_available_dimensions() ) ) {
+			return new WP_Error( 'invalid_dimension', 'Invalid dimension', array( 'status' => 400 ) );
+		}
+
+		$view->fetch();
+		if ( is_wp_error( $view->result ) ) {
+			return $view->result;
+		}
+		return $view;
+	}
+
+	/**
+	 * Get the default view.
+	 *
+	 * @return WP_Error|WPCLOUD_Metric_Data_View
+	 */
+	public function default(): WP_Error|WPCLOUD_Metric_Data_View {
+		$this->set_dimensions();
+		if ( empty( $this->dimensions ) ) {
+			return new WP_Error( 'no_dimensions', 'No dimensions found', array( 'status' => 400 ) );
+		}
+
+		$this->set_series();
+		$this->set_data();
+		return $this;
+	}
+
+	/**
+	 * Get the dimensions
+	 *
+	 * @return void
+	 */
+	private function set_dimensions(): void {
+		$dimensions = array();
 		foreach ( $this->periods as $row ) {
-			$x[]          = $row['timestamp'];
-			$status_codes = array_unique( array_merge( $status_codes, array_keys( $row['dimension'] ) ) );
+			if ( empty( $row['timestamp'] ) ) {
+				continue;
+			}
+			$new_dimensions = array_map( 'strval', array_keys( $row['dimension'] ) );
+			$dimensions     = array_merge( $dimensions, $new_dimensions );
 		}
-		$this->data = array( $x );
+		$this->dimensions = array_unique( $dimensions );
+	}
 
-		$this->map = array_merge( array( 'timestamp' ), array_map( 'strval', $status_codes ) );
-		$series    = array();
-		foreach ( $status_codes as $status ) {
-			$series[ $status ] = array(
-				'label' => $status,
+	/**
+	 * Set the series.
+	 *
+	 * @return void
+	 */
+	private function set_series(): void {
+		$series = array();
+
+		foreach ( $this->dimensions as $dim ) {
+			$series[] = array(
+				'label' => $dim,
 				'width' => 0,
-				'fill'  => true, // color is assigned by the client.
+				'fill'  => true,
 			);
 		}
 		ksort( $series );
-
+		// Add an empty series for the x-axis.
 		array_unshift( $series, array() );
 		$this->series = $series;
+	}
 
-		// Set up y axis data.
-		$status_code_data = array();
-		foreach ( $status_codes as $status ) {
-			$status_code_data[ $status ] = array();
+	/**
+	 * Set the data.
+	 *
+	 * @return void
+	 */
+	private function set_data(): void {
+
+		// Set up all timestamp and dimensions container.
+		$data = array(
+			'timestamp' => array(),
+		);
+		foreach ( $this->dimensions as $dim ) {
+			$data[ $dim ] = array();
 		}
 
-		$resolution = $this->meta['resolution'];
 		foreach ( $this->periods as $row ) {
-			foreach ( $status_codes as $status ) {
-				$data_point = null;
-				if ( isset( $row['dimension'][ $status ] ) ) {
-					// Normalize the data to the resolution to get a total data point.
-					$data_point = $resolution * $row['dimension'][ $status ];
-				}
-				$status_code_data[ $status ][] = $data_point;
+			$x = $row['timestamp'];
+			if ( empty( $x ) ) {
+				continue;
+			}
+			array_push( $data['timestamp'], $x );
+			foreach ( $this->dimensions as $dim ) {
+				$value = $row['dimension'][ $dim ] ?? null;
+				array_push( $data[ $dim ], (float) $value );
 			}
 		}
-		ksort( $status_code_data );
-		foreach ( $status_code_data as $status => $data ) {
-			$this->data[] = $data;
-		}
 
-		return $this;
+		$this->data = array_values( $data );
 	}
 }

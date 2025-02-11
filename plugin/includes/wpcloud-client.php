@@ -935,36 +935,6 @@ function wpcloud_client_site_metrics( int $wpcloud_site_id, int $start, int $end
 		$endpoint .= '/summarize/';
 		unset( $options['summarize'] );
 	}
-	$supported_metrics = array(
-		'requests_persec',
-		'response_bytes_persec',
-		'response_bytes_average',
-		'response_time_average',
-	);
-	if ( isset( $options['metric'] ) && $options['metric'] ) {
-		if ( ! in_array( $options['metric'], $supported_metrics, true ) ) {
-			return WP_Error( 'bad_request', 'Invalid metric', array( 'status' => 400 ) );
-		}
-	}
-
-	$supported_dimensions = array(
-		'http_version',
-		'http_verb',
-		'http_host',
-		'http_status',
-		'page_renderer',
-		'page_is_cached',
-		'wp_admin_ajax_action',
-		'visitor_asn',
-		'visitor_country_code',
-		'visitor_is_crawler',
-	);
-	if ( isset( $options['dimension'] ) && $options['dimension'] ) {
-		if ( ! in_array( $options['dimension'], $supported_dimensions, true ) ) {
-			return WP_Error( 'bad_request', 'Invalid dimension', array( 'status' => 400 ) );
-		}
-	}
-
 	$args = wp_parse_args(
 		$options,
 		array(
