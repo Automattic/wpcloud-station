@@ -28,14 +28,14 @@ export default function Graph( { site, metric, dimension, type, title, interval,
 	const [ series, setSeries ] = useState([]);
 
 	const containerRef = useRef(null);
-	const [ graphWidth, setGraphWidth ] = useState( 808 );
-	const [ graphHeight, setGraphHeight ] = useState( 404 );
+	const [ width, setWidth ] = useState( 808 );
+	const [ height, setHeight ] = useState( 404 );
 
 	useEffect(() => {
 		const updateSize = () => {
 			if ( containerRef.current ) {
-				setGraphWidth( containerRef.current.offsetWidth - fitGraphWidth );
-				setGraphHeight( containerRef.current.offsetHeight - fitGraphHeight );
+				setWidth( containerRef.current.offsetWidth - fitGraphWidth );
+				setHeight( containerRef.current.offsetHeight - fitGraphHeight );
 			}
 		};
 
@@ -81,8 +81,7 @@ export default function Graph( { site, metric, dimension, type, title, interval,
 	}
 	let graphOptions = {};
 	if ( type.startsWith('stacked') ) {
-		console.log("about to stack", data);
-		 graphOptions = stackedOptions({ graphWidth, graphHeight, series, data, title });
+		graphOptions = stackedOptions({ width, height, series, data, title });
 	}
 
 	const { data: d, ...options } = graphOptions;
