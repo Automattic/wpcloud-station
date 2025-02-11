@@ -1,5 +1,6 @@
 
 export function stack(data) {
+	console.log("stack", data);
 	if (data.length < 2) {
 		return [];
 	}

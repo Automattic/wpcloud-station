@@ -3,7 +3,7 @@
  * External dependencies
  */
 import UplotReact from 'uplot-react';
-import chroma from 'chroma-js';
+
 import 'uplot/dist/uPlot.min.css';
 
 /**
@@ -15,30 +15,14 @@ import { useRef, useEffect, useState } from "@wordpress/element";
  * Internal dependencies
  */
 import Loader from './loader';
-import { seriesBarsPlugin } from './lib/uplot-plugins';
-import { stack } from './lib/utils';
-
+import { stackedOptions } from './lib/options';
 import stationApi from '@wpcloud/utils/api';
-
 
 // Remove this amount from the container height to fit the graph legend.
 const fitGraphHeight = 75;
 const fitGraphWidth = 20;
 
-const statusScale = chroma.scale( [ 'green', 'yellow', 'orange', 'red' ] ).domain( [ 200, 300, 400, 500 ] );
-const indexScale = chroma.scale( [ 'yellow', '008ae5'] ).domain( [ 0, 100 ] );
-
-function addSeriesFill( series, idx ) {
-	if ( isNaN( parseInt( series.label || '' ) ) ) {
-		series.fill = indexScale( idx ).hex();
-	} else {
-		series.fill = statusScale( series.label ).hex();
-	}
-	series.fillTo = () => 0;
-	return series;
-}
-
-export default function Graph( { site, metric, type, title, interval, refresh } ) {
+export default function Graph( { site, metric, dimension, type, title, interval, refresh } ) {
 	const { start, end } = interval || {};
 	const [ data, setData ] = useState([]);
 	const [ series, setSeries ] = useState([]);
@@ -74,7 +58,7 @@ export default function Graph( { site, metric, type, title, interval, refresh } 
 		setData([]);
 		async function fetchData() {
 			try {
-				const { data, series } = await stationApi.get(`metrics/${metric}`, { query: { site, start, end }, parse: true, signal });
+				const { data, series } = await stationApi.get(`metrics/${metric}`, { query: { site, start, end, dimension }, parse: true, signal });
 				setData(data);
 				setSeries(series);
 			} catch (error) {
@@ -95,46 +79,13 @@ export default function Graph( { site, metric, type, title, interval, refresh } 
 			</div>
 		);
 	}
-
-	let options = {
-		title,
-		width: graphWidth,
-		height: graphHeight,
-		scales: {
-			y: {
-				range: [ 0, null ],
-				ori: 1
-			  }
-		},
-
-		axes: [
-			{
-			 // See the stacked series plugin for changing the x axis labels.
-			},
-			{
-				side: 3,
-			}
-		],
-		legend: {
-			live: false,
-			markers: {
-				width: 0,
-			}
-		},
-		padding: [ null, 0, null, 0 ],
-		series: series.map( addSeriesFill ),
-		ori: 0,
-	};
-
-	let d, bands;
-	if ( 'bar' === type ) {
-		( { bands, data:d } = stack( data ) );
-		options.bands = bands;
-		options.plugins = [ seriesBarsPlugin( { stacked: true } ) ];
-	} else {
-		d = data;
+	let graphOptions = {};
+	if ( type.startsWith('stacked') ) {
+		console.log("about to stack", data);
+		 graphOptions = stackedOptions({ graphWidth, graphHeight, series, data, title });
 	}
 
+	const { data: d, ...options } = graphOptions;
 	return (
 		<div ref={containerRef} className="wpcloud-graph" style={{ width: "100%", height: "500px", backgroundColor: "white", position: "relative" }}>
 			<UplotReact

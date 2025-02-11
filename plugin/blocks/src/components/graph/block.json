@@ -19,7 +19,11 @@
 	"attributes" : {
 		"metric" : {
 			"type" : "string",
-			"default" : "status_codes"
+			"default" : "requests"
+		},
+		"dimension" : {
+			"type" : "string",
+			"default" : "https_status"
 		},
 		"type": {
 			"type": "string",
