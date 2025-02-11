@@ -277,8 +277,6 @@ export function seriesBarsPlugin(opts) {
 
 				if (i > 0 && !ignore.includes(i)) {
 					uPlot.assign(s, {
-					//	pxAlign: false,
-					//	stroke: "rgba(255,0,0,0.5)",
 						paths: barsBuilder,
 						points: {
 							show:  (i == opts.series.length-1  && drawPoints)
