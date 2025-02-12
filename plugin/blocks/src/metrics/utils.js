@@ -1,5 +1,5 @@
 export function getFromNow(date) {
-	const [match, now, dash, amount, unit] = date.match(/(now)(.?)(?:(\d+)([smhdMy]+))?/) || [];
+	const [match, now, dash, amount, unit] = date?.match(/(now)(.?)(?:(\d+)([smhdMy]+))?/) || [];
 
 	if (!match) {
 		return [];

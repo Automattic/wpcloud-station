@@ -6,7 +6,7 @@
 	"title": "graph",
 	"category": "wpcloud",
 	"icon": "chart-line",
-	"description": "Example block scaffolded with Create Block tool.",
+	"description": "Graph block for WPCloud plot blocks",
 	"example": {},
 	"supports": {
 		"html": false
@@ -19,7 +19,11 @@
 	"attributes" : {
 		"metric" : {
 			"type" : "string",
-			"default" : "status_codes"
+			"default" : "requests"
+		},
+		"dimension" : {
+			"type" : "string",
+			"default" : "https_status"
 		},
 		"type": {
 			"type": "string",

@@ -117,7 +117,7 @@ if ( ! class_exists( 'WPCLOUD_Domains_Controller' ) ) {
 				array(
 					'success'      => true,
 					'verification' => $verification,
-					'domain'  => $domain,
+					'domain'       => $domain,
 				),
 				200
 			);
