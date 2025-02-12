@@ -9,7 +9,7 @@ import { distr, SPACE_BETWEEN } from './distr.js';
 /**
  * This from https://github.com/leeoniya/uPlot/blob/4315544c319a2c9d561ebd29f54d06a034fb16f6/demos/grouped-bars.js
  */
-export function seriesBarsPlugin(opts) {
+export function seriesBarsPlugin(opts = {}) {
 	let pxRatio;
 	let font;
 
