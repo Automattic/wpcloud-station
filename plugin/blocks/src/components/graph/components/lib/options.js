@@ -38,7 +38,6 @@ function buildSeries(series, options = {}) {
 }
 
 function withDefaultOptions(opts) {
-	console.log(opts);
 	return {
 		padding: [null, 0, null, 0],
 		ori: 0,
