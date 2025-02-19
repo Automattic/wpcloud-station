@@ -265,10 +265,10 @@ function wpcloud_webhook_proxy( $event, $timestamp, $atomic_site_id, $data ): vo
 		return;
 	}
 
-	wp_remote_post(
+	$response = wp_remote_post(
 		$proxy_webhook_url,
 		array(
-			'body' => wp_json_encode(
+			'body'    => wp_json_encode(
 				array(
 					'event'          => $event,
 					'timestamp'      => $timestamp,
@@ -276,8 +276,12 @@ function wpcloud_webhook_proxy( $event, $timestamp, $atomic_site_id, $data ): vo
 					'data'           => $data,
 				)
 			),
+			'headers' => array(
+				'Content-Type' => 'application/json',
+			),
 		)
 	);
+	wpcloud_l( $response );
 }
 add_action( 'wpcloud_webhook', 'wpcloud_webhook_proxy', 10, 4 );
 
