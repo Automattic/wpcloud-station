@@ -251,6 +251,37 @@ function wpcloud_lo( ...$stuff ) {
 }
 
 /**
+ * Proxy webhook to another endpoint.
+ *
+ * @param string $event The event.
+ * @param int    $timestamp The timestamp.
+ * @param string $atomic_site_id The site id.
+ * @param mixed  $data The data.
+ */
+function wpcloud_webhook_proxy( $event, $timestamp, $atomic_site_id, $data ): void {
+	$options           = get_option( 'wpcloud_settings', array() );
+	$proxy_webhook_url = $options['wpcloud_proxy_webhook_url'] ?? '';
+	if ( ! $proxy_webhook_url ) {
+		return;
+	}
+
+	wp_remote_post(
+		$proxy_webhook_url,
+		array(
+			'body' => wp_json_encode(
+				array(
+					'event'          => $event,
+					'timestamp'      => $timestamp,
+					'atomic_site_id' => $atomic_site_id,
+					'data'           => $data,
+				)
+			),
+		)
+	);
+}
+add_action( 'wpcloud_webhook', 'wpcloud_webhook_proxy', 10, 4 );
+
+/**
  * Log to error log. Useful for debugging.
  *
  * @param mixed ...$stuff The stuff to log.
