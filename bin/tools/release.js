@@ -68,8 +68,13 @@ function getPreviousReleaseTag() {
 function createGitHubRelease(tag, releaseTitle, releaseBody) {
 	console.log(`Creating GitHub release for tag: ${tag}`);
 
-	const releaseCommand = `gh release create ${tag} --title "${releaseTitle}" --notes "${releaseBody}" --repo ${githubRepo}`;
-	return execSync(releaseCommand);
+	const releaseNotesPath = path.join(__dirname, "release-notes.md");
+	fs.writeFileSync(releaseNotesPath, releaseBody);
+
+	const releaseCommand = `gh release create ${tag} --title "${releaseTitle}" --notes-file "${releaseNotesPath}" --repo ${githubRepo}`;
+	const result = execSync( releaseCommand, { stdio: "inherit" } );
+	fs.unlinkSync(releaseNotesPath);
+	return result;
 }
 
 // Main function
@@ -111,21 +116,14 @@ async function createRelease() {
 	execSync(`git fetch origin tag ${previousTag}`);
 
 	const prs = getPRsBetweenTags(previousTag, tag);
-
-	console.log('PRs included in this release:');
-	console.log(prs);
-
 	// Create the release
 	const releaseTitle = `Release ${tag}`;
-	const releaseBody = `
-	## Release ${tag}
-	${prs.join('\n')}
-	`;
+	const releaseBody = `## Changelog
+${prs.filter(i => i).join('\n')}
+`;
 
-	const releaseUrl = createGitHubRelease(tag, releaseTitle, releaseBody);
-
-	console.log('GitHub release created successfully.');
-	console.log(releaseUrl.toString());
+createGitHubRelease(tag, releaseTitle, releaseBody);
+console.log(`GitHub release ${tag} created successfully.`);
 }
 
 // Run the script
