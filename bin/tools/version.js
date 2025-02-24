@@ -70,7 +70,7 @@ function updateVersionInFile(filePath, newVersion) {
 
 
 // Main function
-async function updateVersions(type = 'patch') {
+async function updateVersions(type = 'patch', localOnly = true) {
 	console.log('Checking out the trunk branch...');
 	runCommand(`git checkout ${baseBranch}`);
 
@@ -114,6 +114,11 @@ async function updateVersions(type = 'patch') {
 	// Commit the changes
 	console.log('Committing the changes...');
 	runCommand(`git commit -m "Version bump to ${newVersion}"`);
+
+	if ( localOnly ) {
+		console.log('Local changes committed. Skipping push and PR creation.');
+		return;
+	}
 
 	// Push the branch
 	console.log('Pushing the branch...');
