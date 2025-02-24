@@ -331,6 +331,7 @@ class WPCloud_CLI_Site extends WPCloud_CLI {
 	 *
 	 *  wp cloud site create --name=example.com --email=admin@example.com --pass=*******
 	 *
+	 * @param array $args     The arguments.
 	 * @param array $switches The switches.
 	 */
 	public function create( $args, $switches ) {
@@ -360,7 +361,7 @@ class WPCloud_CLI_Site extends WPCloud_CLI {
 			}
 		}
 
-		$user = get_user_by( 'email', $email );
+		$user        = get_user_by( 'email', $email );
 		$create_user = $switches['create-user'] ?? false;
 		if ( ! $user && $create_user ) {
 			$user_id = wp_create_user( $email, $pass, $email );
