@@ -42,7 +42,7 @@ function incrementVersion(version, type = 'patch') {
 	if (type === 'major') return `v${major + 1}.0.0`;
 	if (type === 'minor') return `v${major}.${minor + 1}.0`;
 	if (type === 'patch') return `v${major}.${minor}.${patch + 1}`;
-	if (type === 'beta') {
+	if (type === 'beta' || type === 'test') {
 		const newBeta = betaNumber !== undefined ? betaNumber + 1 : 1;
 		return `v${major}.${minor}.${patch}-beta.${newBeta}`;
 	}
@@ -68,11 +68,14 @@ function updateVersionInFile(filePath, newVersion) {
 	return true;
 }
 
-
 // Main function
-async function updateVersions(type = 'patch', localOnly = true) {
-	console.log('Checking out the trunk branch...');
-	runCommand(`git checkout ${baseBranch}`);
+async function updateVersions(type = 'patch') {
+	const currentBranch = execSync('git branch --show-current', { encoding: 'utf8' });
+	const testBuild = type === 'test';
+	if ( ! testBuild ) {
+		console.log('Checking out the trunk branch...');
+		runCommand(`git checkout ${baseBranch}`);
+	}
 
 	// get plugin version
 	const pluginContent = fs.readFileSync(pluginFile, 'utf8');
@@ -84,10 +87,20 @@ async function updateVersions(type = 'patch', localOnly = true) {
 	}
 	const currentVersion = versionMatch[1];
 	const newVersion = incrementVersion(currentVersion, type);
-	const branchName = `version-bump-${newVersion}`;
+	const branchName = testBuild ? `test-${currentBranch}` : `version-bump-${newVersion}`;
 
-	console.log(`Creating a new branch: ${branchName}`);
-	runCommand(`git checkout -b ${branchName}`);
+	const branches = execSync('git branch', { encoding: 'utf8' });
+	console.log('branches', branches);
+	const branchExists = branches.includes(branchName);
+	if (testBuild && branchExists) {
+		// if the test branch exists, switch and merge in current branch changes.
+		console.log(`Switching to branch: ${branchName}`);
+		runCommand(`git checkout ${branchName}`);
+		runCommand(`git merge -X theirs ${currentBranch} `);
+	} else {
+		console.log(`Creating a new branch: ${branchName}`);
+		runCommand(`git checkout -b ${branchName}`);
+	}
 
 	// update the software versions
 	software.forEach((file) => {
@@ -108,18 +121,16 @@ async function updateVersions(type = 'patch', localOnly = true) {
 
 		// Update the version in the plugin file and readme file
 		updateVersionInFile(file, newVersion);
+
 		runCommand(`git add ${file}`);
 	});
 
 	// Commit the changes
 	console.log('Committing the changes...');
 	runCommand(`git commit -m "Version bump to ${newVersion}"`);
-
-	if ( localOnly ) {
-		console.log('Local changes committed. Skipping push and PR creation.');
-		return;
+	if (testBuild) {
+		return 0;
 	}
-
 	// Push the branch
 	console.log('Pushing the branch...');
 	runCommand(`git push -u origin ${branchName}`);
@@ -151,7 +162,4 @@ async function updateVersions(type = 'patch', localOnly = true) {
 	return prNumber;
 }
 
-// Run the script with the desired increment type
-//const incrementType = process.argv[2] || 'patch'; // Default to 'patch'
-//updateVersions(incrementType);
 module.exports = updateVersions;

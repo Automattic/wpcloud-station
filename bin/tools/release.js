@@ -81,7 +81,7 @@ async function createRelease() {
 	execSync(`git pull origin ${baseBranch}`);
 
 	// Get the plugin version tag
-	const tag  = getPluginVersion(pluginFile);
+	const tag = getPluginVersion(pluginFile);
 
 	const previousTag = getPreviousReleaseTag();
 
