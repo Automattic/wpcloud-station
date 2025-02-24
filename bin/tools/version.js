@@ -43,6 +43,7 @@ function incrementVersion(version, type = 'patch') {
 	if (type === 'minor') return `v${major}.${minor + 1}.0`;
 	if (type === 'patch') return `v${major}.${minor}.${patch + 1}`;
 	if (type === 'beta' || type === 'test') {
+		console.log('Incrementing beta version...', betaNumber);
 		const newBeta = betaNumber !== undefined ? betaNumber + 1 : 1;
 		return `v${major}.${minor}.${patch}-beta.${newBeta}`;
 	}
@@ -70,16 +71,29 @@ function updateVersionInFile(filePath, newVersion) {
 
 // Main function
 async function updateVersions(type = 'patch') {
-	const currentBranch = execSync('git branch --show-current', { encoding: 'utf8' });
+	const currentBranch = execSync('git branch --show-current', { encoding: 'utf8' }).trim();
 	const testBuild = type === 'test';
+
 	if ( ! testBuild ) {
 		console.log('Checking out the trunk branch...');
 		runCommand(`git checkout ${baseBranch}`);
-	}
+	} else {
+		const testBranch = `test-${currentBranch}`;
+		const branches = execSync('git branch', { encoding: 'utf8' });
+		if ( branches.includes(testBranch)) {
+			// if the test branch exists, switch and merge in current branch changes.
 
+			runCommand(`git switch ${testBranch}`);
+			runCommand(`git merge -X theirs ${currentBranch} --no-edit`);
+		} else {
+			// if the test branch does not exist, create it.
+			runCommand(`git checkout -b ${currentBranch}`);
+		}
+	}
 	// get plugin version
 	const pluginContent = fs.readFileSync(pluginFile, 'utf8');
 	const versionMatch = pluginContent.match(/Version:\s*(v?\d+\.\d+\.\d+(-beta\.\d+)?)/i);
+	console.log('versionMatch', versionMatch);
 
 	if (!versionMatch) {
 		console.error('Version not found in file.');
@@ -87,17 +101,9 @@ async function updateVersions(type = 'patch') {
 	}
 	const currentVersion = versionMatch[1];
 	const newVersion = incrementVersion(currentVersion, type);
-	const branchName = testBuild ? `test-${currentBranch}` : `version-bump-${newVersion}`;
 
-	const branches = execSync('git branch', { encoding: 'utf8' });
-	console.log('branches', branches);
-	const branchExists = branches.includes(branchName);
-	if (testBuild && branchExists) {
-		// if the test branch exists, switch and merge in current branch changes.
-		console.log(`Switching to branch: ${branchName}`);
-		runCommand(`git checkout ${branchName}`);
-		runCommand(`git merge -X theirs ${currentBranch.trim()} --no-edit`);
-	} else {
+	if (!testBuild) {
+		const branchName = `version-bump-${newVersion}`;
 		console.log(`Creating a new branch: ${branchName}`);
 		runCommand(`git checkout -b ${branchName}`);
 	}

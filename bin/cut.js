@@ -58,7 +58,6 @@ async function main() {
 		execSync(`npm run package -- plugin ${dist}`);
 		execSync(`npm run package -- theme ${dist}`);
 		execSync(`npm run package -- theme-pico ${dist}`);
-		console.log(`Switching back to the previous branch`);
 		execSync(`git switch -`);
 		return;
 	}
