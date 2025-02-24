@@ -96,7 +96,7 @@ async function updateVersions(type = 'patch') {
 		// if the test branch exists, switch and merge in current branch changes.
 		console.log(`Switching to branch: ${branchName}`);
 		runCommand(`git checkout ${branchName}`);
-		runCommand(`git merge -X theirs ${currentBranch} `);
+		runCommand(`git merge -X theirs ${currentBranch.trim()} --no-edit`);
 	} else {
 		console.log(`Creating a new branch: ${branchName}`);
 		runCommand(`git checkout -b ${branchName}`);
