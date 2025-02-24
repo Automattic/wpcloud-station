@@ -18,7 +18,7 @@ require_once __DIR__ . '/class-wpcloud-cli-site.php';
 require_once __DIR__ . '/class-wpcloud-cli-site-domain.php';
 require_once __DIR__ . '/class-wpcloud-cli-site-ssh-user.php';
 
-require_once __DIR__ . '/class-wpcloud-cli-station-setup.php';
+require_once __DIR__ . '/class-wpcloud-cli-station.php';
 
 
 add_action(
