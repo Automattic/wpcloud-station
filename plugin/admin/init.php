@@ -141,7 +141,19 @@ function wpcloud_settings_init(): void {
 			'disabled'        => ! $wpcloud_api_healthy,
 		)
 	);
-
+	add_settings_field(
+		'wpcloud_field_proxy_webhook',
+		__( 'Proxy Webhook URL', 'wpcloud' ),
+		'wpcloud_client_meta_field_input_cb',
+		'wpcloud',
+		'wpcloud_section_settings',
+		array(
+			'label_for'       => 'wpcloud_proxy_webhook_url',
+			'class'           => 'wpcloud_row',
+			'description'     => __( 'The URL to proxy webhook events to.' ),
+			'client_meta_key' => 'proxy_webhook_url',
+		)
+	);
 	/*
 	@TODO Still need to implement the secret key handshake on wp cloud.
 	add_settings_field(
