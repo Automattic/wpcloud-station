@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: WP Cloud Config
- * Description: Applies WP Cloud Station configurations .
+ * Description: Applies WP Cloud Station configurations.
  * Version: 1.0
  * Author: Automattic
  * License: GPLv3 or later
@@ -25,6 +25,20 @@ add_filter(
 	1
 );
 
+// Retrieve Client Name from ADP.
+add_filter(
+	'wpcloud_client_name',
+	function ( $name ) {
+		$apd = new Atomic_Persistent_Data();
+		if ( ! empty( $apd->WP_CLOUD_CLIENT_NAME ) ) {
+			return $apd->WP_CLOUD_CLIENT_NAME;
+		}
+		return $name;
+	},
+	10,
+	1
+);
+
 // Force Jetpack SSO module on.
 add_filter(
 	'option_jetpack_active_modules',
@@ -35,7 +49,21 @@ add_filter(
 	1
 );
 
-// Requre Jetpack SSO & 2FA.
+// Try auto-connecting Jetpack.
+add_action(
+	'init',
+	function () {
+		if ( ! class_exists( 'Jetpack' ) ) {
+			return;
+		}
+
+		if ( method_exists( 'Jetpack', 'try_connection' ) && ! Jetpack::is_active() ) {
+			Jetpack::try_connection();
+		}
+	}
+);
+
+// Require Jetpack SSO & 2FA.
 add_filter( 'jetpack_remove_login_form', '__return_true' );
 add_filter( 'jetpack_sso_require_two_step', '__return_true' );
 add_filter( 'jetpack_sso_match_by_email', '__return_true' );
@@ -72,4 +100,14 @@ add_filter(
 	},
 	10,
 	1
+);
+
+// Add robots.txt.
+add_filter(
+	'robots_txt',
+	function () {
+		return "User-agent: *\nDisallow: /";
+	},
+	10,
+	0
 );
