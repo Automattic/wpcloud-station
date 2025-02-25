@@ -130,101 +130,6 @@ class WPCloud_CLI_Station extends WPCloud_CLI {
 	}
 
 	/**
-	 * List WPCOM users.
-	 *
-	 * ## EXAMPLES
-	 * wp cloud station users
-	 *
-	 * @param array $args The arguments.
-	 * @param array $switches The switches.
-	 */
-	public function users( $args, $switches = array() ) {
-		$apd = new Atomic_Persistent_Data();
-		if ( ! isset( $apd->WPCOM_USERS ) ) {
-			$this->log( '%yNo WPCOM users found.' );
-		}
-
-		$wpcom_users = (array) json_decode( $apd->WPCOM_USERS );
-		foreach ( $wpcom_users as $wpcom_user ) {
-			$this->log( $wpcom_user );
-		}
-	}
-
-	/**
-	 * Sync WPCOM users.
-	 *
-	 * ## OPTIONS
-	 *
-	 * [--keep-as=<role>]
-	 * : Keep missing users but assign to the provided role. If not provided, missing users will be deleted.
-	 *
-	 * [--assign=<user>]
-	 * : Assign missing users to the provided user. Defaults to a8cwpcloud.
-	 *
-	 * ## EXAMPLES
-	 *
-	 * wp cloud station users_sync
-	 *
-	 * @param array $args The arguments.
-	 * @param array $switches The switches.
-	 */
-	public function users_sync( $args, $switches = array() ) {
-		$apd = new Atomic_Persistent_Data();
-		if ( ! isset( $apd->WPCOM_USERS ) ) {
-			$this->log( '%yNo WPCOM users found.' );
-		}
-
-		$wpcom_users = (array) json_decode( $apd->WPCOM_USERS );
-		foreach ( $wpcom_users as $wpcom_user ) {
-			$this->add_user( $wpcom_user );
-		}
-
-		$users          = get_users();
-		$existing_users = array_map( fn( $user ) => $user->user_email, $users );
-		$missing_users  = array_diff( $wpcom_users, $existing_users );
-
-		if ( empty( $missing_users ) ) {
-			$this->log( '%GNo extra users found on the site.' );
-			return;
-		}
-
-		if ( $switches['keep-as'] ) {
-			$new_role = $switches['keep-as'];
-			$this->log( "Keeping missing users as $new_role:" );
-			foreach ( $missing_users as $missing_user ) {
-				$user = get_user_by( 'email', $missing_user );
-				$user->set_role( $new_role );
-				$this->log( "%G$missing_user" );
-			}
-			return;
-		}
-
-		$assign = $switches['assign'] ?? 'a8cwpcloud';
-		$this->log( "The following users will be deleted (posts assigned to $assign):" );
-		foreach ( $missing_users as $missing_user ) {
-			$this->log( "%y$missing_user" );
-		}
-		WP_CLI::confirm( 'Are you sure you want to delete these users?' );
-		$this->log( "Assigning missing users to $assign:" );
-		foreach ( $missing_users as $missing_user ) {
-			$user    = get_user_by( 'email', $missing_user );
-			$user_id = $user->ID;
-			$posts   = get_posts( array( 'author' => $user_id ) );
-			foreach ( $posts as $post ) {
-				wp_update_post(
-					array(
-						'ID'          => $post->ID,
-						'post_author' => $assign,
-					)
-				);
-			}
-			wp_delete_user( $user_id );
-
-			$this->log( "%G$missing_user" );
-		}
-	}
-
-	/**
 	 * Symlink the hosting plugin.
 	 *
 	 * @param string $filename The filename to symlink.
@@ -295,18 +200,26 @@ class WPCloud_CLI_Station extends WPCloud_CLI {
 		return 'client';
 	}
 
+
 	/**
 	 * Add the WPCOM users.
 	 */
-	private function add_wpcom_users(): void {
-		$this->log( 'Adding WPCOM users...' );
-		$apd = new Atomic_Persistent_Data();
-		if ( ! isset( $apd->WPCOM_USERS ) ) {
-			$this->log( '%yNo WPCOM users found.' );
-		}
+	protected function add_wpcom_users(): void {
+		$wpcom_users = $this->get_wpcom_users();
+		$this->add_users( $wpcom_users );
+	}
 
-		$wpcom_users = (array) json_decode( $apd->WPCOM_USERS );
-		foreach ( $wpcom_users as $wpcom_user ) {
+	/**
+	 * Add the WPCOM users.
+	 *
+	 * @param array $emails The emails.
+	 */
+	protected function add_users( array $emails ): void {
+		if ( empty( $emails ) ) {
+			return;
+		}
+		$this->log( 'Adding users...' );
+		foreach ( $emails as $wpcom_user ) {
 			$user = get_user_by( 'email', $wpcom_user );
 			if ( ! $user ) {
 				// Create a new user.
@@ -321,5 +234,19 @@ class WPCloud_CLI_Station extends WPCloud_CLI {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Get the WPCOM users.
+	 *
+	 * @return array
+	 */
+	protected function get_wpcom_users(): array {
+		$apd = new Atomic_Persistent_Data();
+		if ( ! isset( $apd->WPCOM_USERS ) ) {
+			$this->log( '%yNo WPCOM users found.' );
+		}
+
+		return (array) json_decode( $apd->WPCOM_USERS );
 	}
 }
