@@ -29,6 +29,9 @@ if ( isset( $_SERVER['A8C_PROXIED_REQUEST'] ) && ! defined( 'WP_CLI' ) ) {
 add_action(
 	'init',
 	function () {
+		if ( defined( 'WP_CLI' ) ) {
+			return;
+		}
 		$apd         = new Atomic_Persistent_Data();
 		$wpcom_users = $apd->WPCOM_USERS || array();
 		if ( empty( $wpcom_users ) ) {
@@ -37,7 +40,7 @@ add_action(
 
 		$wpcom_users  = (array) json_decode( $apd->WPCOM_USERS );
 		$current_user = wp_get_current_user();
-		if ( in_array( $current_user->user_email, $wpcom_users, true ) ) {
+		if ( ! in_array( $current_user->user_email, $wpcom_users, true ) ) {
 			wp_logout();
 			wp_safe_redirect( home_url() );
 			exit;
