@@ -5,6 +5,7 @@
  * @package wpcloud
  */
 
+ // phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 declare( strict_types = 1 );
 
 require_once __DIR__ . '/class-wpcloud-cli.php';
@@ -19,7 +20,7 @@ class WPCloud_CLI_Station extends WPCloud_CLI {
 	 *
 	 * ## OPTIONS
 	 *
-	 * [--internal=<internal>]
+	 * [--internal]
 	 * : Setup the site for an internal Automattic Station.
 	 *
 	 * [--site-name=<site-name>]
@@ -27,6 +28,9 @@ class WPCloud_CLI_Station extends WPCloud_CLI {
 	 *
 	 * [--site-logo=<site-logo>]
 	 * : The URL of the site logo. If not provided, the site logo will default to the wp cloud logo.
+	 *
+	 * [--sync-users]
+	 * : Sync the WPCOM users from the Atomic Persistent Data.
 	 *
 	 * ## EXAMPLES
 	 * wp cloud station setup --internal
@@ -38,15 +42,24 @@ class WPCloud_CLI_Station extends WPCloud_CLI {
 
 		// Setup the mu hosting plugins.
 		$this->symlink_hosting( 'wpcloud-station.php' );
+		$internal   = $switches['internal'] ?? false;
+		$sync_users = $switches['sync-users'] ?? false;
 
-		switch ( $switches['internal'] ?? 'client' ) {
+		$station_type = $this->get_station_type( $internal );
+
+		switch ( $station_type ) {
 			case 'atomic-team':
 				break;
 			case 'a8c':
+				if ( $sync_users ) {
+					$this->add_wpcom_users();
+				}
 				$this->symlink_hosting( 'a8c-station.php' );
 				// No break, include client setup.
 			case 'client':
 				$this->symlink_hosting( 'client-station.php' );
+				WP_CLI::runcommand( 'config set DISALLOW_FILE_EDIT true --raw' );
+				WP_CLI::runcommand( 'config set DISALLOW_FILE_MODS true --raw' );
 				break;
 			default:
 				WP_CLI::error( 'Please provide a valid internal switch.' );
@@ -75,7 +88,7 @@ class WPCloud_CLI_Station extends WPCloud_CLI {
 			'add-site' => array(
 				'post_title'    => 'Add Site',
 				'post_content'  => '<!-- wp:pattern {"slug":"wpcloud-station/form-add-site"} /-->',
-				'post_category' => array( wpcloud_core_cat->term_id, get_category_by_slug( WPCLOUD_CATEGORY_PRIVATE )->term_id ),
+				'post_category' => array( $wpcloud_core_cat->term_id, get_category_by_slug( WPCLOUD_CATEGORY_PRIVATE )->term_id ),
 			),
 		);
 		$query      = new WP_Query(
@@ -117,6 +130,101 @@ class WPCloud_CLI_Station extends WPCloud_CLI {
 	}
 
 	/**
+	 * List WPCOM users.
+	 *
+	 * ## EXAMPLES
+	 * wp cloud station users
+	 *
+	 * @param array $args The arguments.
+	 * @param array $switches The switches.
+	 */
+	public function users( $args, $switches = array() ) {
+		$apd = new Atomic_Persistent_Data();
+		if ( ! isset( $apd->WPCOM_USERS ) ) {
+			$this->log( '%yNo WPCOM users found.' );
+		}
+
+		$wpcom_users = (array) json_decode( $apd->WPCOM_USERS );
+		foreach ( $wpcom_users as $wpcom_user ) {
+			$this->log( $wpcom_user );
+		}
+	}
+
+	/**
+	 * Sync WPCOM users.
+	 *
+	 * ## OPTIONS
+	 *
+	 * [--keep-as=<role>]
+	 * : Keep missing users but assign to the provided role. If not provided, missing users will be deleted.
+	 *
+	 * [--assign=<user>]
+	 * : Assign missing users to the provided user. Defaults to a8cwpcloud.
+	 *
+	 * ## EXAMPLES
+	 *
+	 * wp cloud station users_sync
+	 *
+	 * @param array $args The arguments.
+	 * @param array $switches The switches.
+	 */
+	public function users_sync( $args, $switches = array() ) {
+		$apd = new Atomic_Persistent_Data();
+		if ( ! isset( $apd->WPCOM_USERS ) ) {
+			$this->log( '%yNo WPCOM users found.' );
+		}
+
+		$wpcom_users = (array) json_decode( $apd->WPCOM_USERS );
+		foreach ( $wpcom_users as $wpcom_user ) {
+			$this->add_user( $wpcom_user );
+		}
+
+		$users          = get_users();
+		$existing_users = array_map( fn( $user ) => $user->user_email, $users );
+		$missing_users  = array_diff( $wpcom_users, $existing_users );
+
+		if ( empty( $missing_users ) ) {
+			$this->log( '%GNo extra users found on the site.' );
+			return;
+		}
+
+		if ( $switches['keep-as'] ) {
+			$new_role = $switches['keep-as'];
+			$this->log( "Keeping missing users as $new_role:" );
+			foreach ( $missing_users as $missing_user ) {
+				$user = get_user_by( 'email', $missing_user );
+				$user->set_role( $new_role );
+				$this->log( "%G$missing_user" );
+			}
+			return;
+		}
+
+		$assign = $switches['assign'] ?? 'a8cwpcloud';
+		$this->log( "The following users will be deleted (posts assigned to $assign):" );
+		foreach ( $missing_users as $missing_user ) {
+			$this->log( "%y$missing_user" );
+		}
+		WP_CLI::confirm( 'Are you sure you want to delete these users?' );
+		$this->log( "Assigning missing users to $assign:" );
+		foreach ( $missing_users as $missing_user ) {
+			$user    = get_user_by( 'email', $missing_user );
+			$user_id = $user->ID;
+			$posts   = get_posts( array( 'author' => $user_id ) );
+			foreach ( $posts as $post ) {
+				wp_update_post(
+					array(
+						'ID'          => $post->ID,
+						'post_author' => $assign,
+					)
+				);
+			}
+			wp_delete_user( $user_id );
+
+			$this->log( "%G$missing_user" );
+		}
+	}
+
+	/**
 	 * Symlink the hosting plugin.
 	 *
 	 * @param string $filename The filename to symlink.
@@ -153,22 +261,65 @@ class WPCloud_CLI_Station extends WPCloud_CLI {
 		copy( $logo_path, $logo_path_upload );
 
 		$attachment = array(
-			'post_mime_type' => 'image/png',
+			'post_mime_type' => 'image/svg+xml',
 			'post_title'     => 'WP Cloud Logo',
 			'post_content'   => ' ',
 			'post_status'    => 'inherit',
 		);
 
-		$attachment_id = wp_insert_attachment( $attachment, 'wpcloud_logo.svg', 0, false, false );
+		$attachment_id = wp_insert_attachment( $attachment, $logo_path_upload, 0 );
 		if ( is_wp_error( $attachment_id ) ) {
 			return $attachment_id;
 		}
-		require_once ABSPATH . 'wp-admin/includes/image.php';
-		$attach_data = wp_generate_attachment_metadata( $attachment_id, $logo_path_upload );
-		if ( ! wp_update_attachment_metadata( $attachment_id, $attach_data ) ) {
-			return new WP_Error( 'wpcloud-cli', 'Failed to update attachment metadata' );
+		return $attachment_id;
+	}
+
+	/**
+	 * Get the station type.
+	 *
+	 * @param bool $internal_flag The internal flag.
+	 * @return string
+	 */
+	private function get_station_type( bool $internal_flag ): string {
+
+		if ( $internal_flag ) {
+			return 'a8c';
 		}
 
-		return $attachment_id;
+		$apd           = new Atomic_Persistent_Data();
+		$internal_type = $apd->WP_CLOUD_STATION_INTERNAL;
+		if ( $internal_type ) {
+			return $internal_type;
+		}
+
+		return 'client';
+	}
+
+	/**
+	 * Add the WPCOM users.
+	 */
+	private function add_wpcom_users(): void {
+		$this->log( 'Adding WPCOM users...' );
+		$apd = new Atomic_Persistent_Data();
+		if ( ! isset( $apd->WPCOM_USERS ) ) {
+			$this->log( '%yNo WPCOM users found.' );
+		}
+
+		$wpcom_users = (array) json_decode( $apd->WPCOM_USERS );
+		foreach ( $wpcom_users as $wpcom_user ) {
+			$user = get_user_by( 'email', $wpcom_user );
+			if ( ! $user ) {
+				// Create a new user.
+				$user_id = wp_create_user( $wpcom_user, wp_generate_password(), $wpcom_user );
+				if ( is_wp_error( $user_id ) ) {
+					$this->log( '%y' . $user_id->get_error_message() );
+				} else {
+					$user = get_user_by( 'id', $user_id );
+					$user->set_role( 'administrator' );
+
+					$this->log( 'Added user: ' . $wpcom_user );
+				}
+			}
+		}
 	}
 }
