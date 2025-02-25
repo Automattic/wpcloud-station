@@ -75,7 +75,7 @@ class WPCloud_CLI_Station extends WPCloud_CLI {
 			'add-site' => array(
 				'post_title'    => 'Add Site',
 				'post_content'  => '<!-- wp:pattern {"slug":"wpcloud-station/form-add-site"} /-->',
-				'post_category' => array( wpcloud_get_core_category()->term_id, get_category_by_slug( WPCLOUD_CATEGORY_PRIVATE )->term_id ),
+				'post_category' => array( wpcloud_core_cat->term_id, get_category_by_slug( WPCLOUD_CATEGORY_PRIVATE )->term_id ),
 			),
 		);
 		$query      = new WP_Query(
