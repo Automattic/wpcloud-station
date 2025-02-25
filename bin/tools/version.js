@@ -93,7 +93,6 @@ async function updateVersions(type = 'patch') {
 	// get plugin version
 	const pluginContent = fs.readFileSync(pluginFile, 'utf8');
 	const versionMatch = pluginContent.match(/Version:\s*(v?\d+\.\d+\.\d+(-beta\.\d+)?)/i);
-	console.log('versionMatch', versionMatch);
 
 	if (!versionMatch) {
 		console.error('Version not found in file.');
@@ -104,13 +103,11 @@ async function updateVersions(type = 'patch') {
 
 	if (!testBuild) {
 		const branchName = `version-bump-${newVersion}`;
-		console.log(`Creating a new branch: ${branchName}`);
 		runCommand(`git checkout -b ${branchName}`);
 	}
 
 	// update the software versions
 	software.forEach((file) => {
-
 		// Read the current version from the plugin file
 		if (!fs.existsSync(file)) {
 			console.error(`Software file not found: ${file}`);
