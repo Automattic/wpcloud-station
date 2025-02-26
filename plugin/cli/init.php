@@ -32,7 +32,7 @@ add_action(
 		WP_CLI::add_command( 'cloud site', 'WPCloud_CLI_Site' );
 		WP_CLI::add_command( 'cloud site domain', 'WPCloud_CLI_Site_Domain' );
 		WP_CLI::add_command( 'cloud site ssh-user', 'WPCloud_CLI_Site_SSH_User' );
-		WP_CLI::add_command( 'cloud station', 'WPCloud_CLI_Station' );
+		WP_CLI::add_command( 'cloud station setup', 'WPCloud_CLI_Station' );
 		WP_CLI::add_command( 'cloud station user', 'WPCloud_CLI_Station_User' );
 	}
 );
