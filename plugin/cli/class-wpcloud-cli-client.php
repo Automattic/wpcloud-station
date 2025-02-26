@@ -110,48 +110,6 @@ class WPCloud_CLI_Client extends WPCloud_CLI {
 	}
 
 	/**
-	 * Run the headstart.
-	 *
-	 * @param array $args The arguments.
-	 * @param array $switches The switches.
-	 */
-	public function headstart( $args, $switches ) {
-		if ( ! empty( $switches ) ) {
-			$options  = get_option( 'wpcloud_settings', array() );
-			$settings = array();
-
-			if ( isset( $switches['client'] ) ) {
-				if ( isset( $options['wpcloud_client'] ) ) {
-					WP_CLI::confirm( 'Are you sure you want to change the client?' );
-				}
-				$settings['wpcloud_client'] = $switches['client'];
-			}
-
-			if ( isset( $switches['api_key'] ) ) {
-				if ( wpcloud_get_api_key_from_env() ) {
-					WP_CLI::error( 'Cannot set the API key when it is set in the environment' );
-					exit( 1 );
-				}
-				if ( isset( $options['wpcloud_api_key'] ) ) {
-					WP_CLI::confirm( 'Are you sure you want to change the API key?' );
-				}
-				$settings['wpcloud_api_key'] = $switches['api_key'];
-			}
-			if ( ! empty( $settings ) ) {
-				update_option( 'wpcloud_settings', array_merge( $options, $settings ) );
-			}
-		}
-
-		$result = wpcloud_headstart( new WPCloud_CLI_Skin() );
-
-		if ( is_wp_error( $result ) ) {
-			WP_CLI::error( $result->get_error_message() );
-		}
-
-		WP_CLI::success( 'Headstart installed' );
-	}
-
-	/**
 	 * Test the status.
 	 *
 	 * @param array $args The arguments.

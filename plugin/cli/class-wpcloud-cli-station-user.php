@@ -8,12 +8,13 @@
  // phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 declare( strict_types = 1 );
 
-require_once __DIR__ . '/class-wpcloud-cli.php';
+require_once __DIR__ . '/class-wpcloud-cli-station.php';
 
 /**
  * WP Cloud CLI Station
  */
 class WPCloud_CLI_Station_User extends WPCloud_CLI_Station {
+
 		/**
 		 * List WPCOM users.
 		 *
@@ -24,12 +25,12 @@ class WPCloud_CLI_Station_User extends WPCloud_CLI_Station {
 		 * @param array $switches The switches.
 		 */
 	public function list( $args, $switches = array() ) {
-		$apd = new Atomic_Persistent_Data();
-		if ( ! isset( $apd->WPCOM_USERS ) ) {
-			$this->log( '%yNo WPCOM users found.' );
+		$wpcom_users = $this->station->wpcom_users;
+		if ( empty( $wpcom_users ) ) {
+			$this->log( '%YNo WPCOM users found.' );
+			return;
 		}
-
-		$wpcom_users = (array) json_decode( $apd->WPCOM_USERS );
+		$this->log( 'WPCOM users:' );
 		foreach ( $wpcom_users as $wpcom_user ) {
 			$this->log( $wpcom_user );
 		}
@@ -56,14 +57,13 @@ class WPCloud_CLI_Station_User extends WPCloud_CLI_Station {
 	 * @param array $switches The switches.
 	 */
 	public function sync( $args, $switches = array() ) {
-		$apd = new Atomic_Persistent_Data();
-		if ( ! isset( $apd->WPCOM_USERS ) ) {
-			$this->log( '%yNo WPCOM users found.' );
+
+		$wpcom_users = $this->station->wpcom_users;
+		if ( empty( $wpcom_users ) ) {
+			$this->log( '%YNo WPCOM users found.' );
+		} else {
+			$this->add_users( $wpcom_users );
 		}
-
-		$wpcom_users = $this->get_wpcom_users();
-
-		$this->add_users( $wpcom_users );
 
 		$users          = get_users();
 		$existing_users = array_map( fn( $user ) => $user->user_email, $users );
