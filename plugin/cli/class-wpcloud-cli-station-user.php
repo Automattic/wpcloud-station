@@ -67,14 +67,14 @@ class WPCloud_CLI_Station_User extends WPCloud_CLI_Station {
 
 		$users          = get_users();
 		$existing_users = array_map( fn( $user ) => $user->user_email, $users );
-		$missing_users  = array_diff( $wpcom_users, $existing_users );
+		$missing_users  = array_diff( $existing_users, $wpcom_users );
 
 		if ( empty( $missing_users ) ) {
-			$this->log( '%GNo extra users found on the site.' );
+			$this->log( '%GNo excluded users found on the site.' );
 			return;
 		}
 
-		if ( $switches['keep-as'] ) {
+		if ( $switches['keep-as'] ?? '' ) {
 			$new_role = $switches['keep-as'];
 			$this->log( "Keeping missing users as $new_role:" );
 			foreach ( $missing_users as $missing_user ) {
