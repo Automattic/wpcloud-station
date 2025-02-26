@@ -9,17 +9,20 @@
  * @package wpcloud - station
  */
 
-// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+ // phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
-// Retrieve Key from ADP.
+require_once WP_PLUGIN_DIR . '/wpcloud-station/includes/class-wpcloud-station.php';
+
+require_once // Retrieve Key from ADP.
 add_filter(
 	'wpcloud_api_key',
 	function ( $key ) {
-		$apd = new Atomic_Persistent_Data();
-		if ( ! empty( $apd->WP_CLOUD_API_KEY ) ) {
-			return $apd->WP_CLOUD_API_KEY;
-		}
-		return $key;
+		$station = new WPCloud_Station();
+		$env_key = $station->wp_cloud_api_key;
+		return $env_key ? $env_key : $key;
 	},
 	10,
 	1
@@ -29,11 +32,9 @@ add_filter(
 add_filter(
 	'wpcloud_client_name',
 	function ( $name ) {
-		$apd = new Atomic_Persistent_Data();
-		if ( ! empty( $apd->WP_CLOUD_CLIENT_NAME ) ) {
-			return $apd->WP_CLOUD_CLIENT_NAME;
-		}
-		return $name;
+		$station  = new WPCloud_Station();
+		$env_name = $station->wp_cloud_client_name;
+		return $env_name ? $env_name : $name;
 	},
 	10,
 	1

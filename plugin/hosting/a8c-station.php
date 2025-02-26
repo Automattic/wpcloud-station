@@ -14,6 +14,8 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+require_once WP_PLUGIN_DIR . '/wpcloud-station/includes/class-wpcloud-station.php';
+
 // Die if not proxied.
 if ( isset( $_SERVER['A8C_PROXIED_REQUEST'] ) && ! defined( 'WP_CLI' ) ) {
 	if ( '1' !== sanitize_text_field( wp_unslash( $_SERVER['A8C_PROXIED_REQUEST'] ) ) ) {
@@ -32,13 +34,11 @@ add_action(
 		if ( defined( 'WP_CLI' ) ) {
 			return;
 		}
-		$apd         = new Atomic_Persistent_Data();
-		$wpcom_users = $apd->WPCOM_USERS || array();
+		$station     = new WPCloud_Station();
+		$wpcom_users = $station->wpcom_users;
 		if ( empty( $wpcom_users ) ) {
 			wp_logout();
 		}
-
-		$wpcom_users  = (array) json_decode( $apd->WPCOM_USERS );
 		$current_user = wp_get_current_user();
 		if ( ! in_array( $current_user->user_email, $wpcom_users, true ) ) {
 			wp_logout();
