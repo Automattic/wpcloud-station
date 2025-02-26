@@ -29,8 +29,6 @@ class WPCloud_CLI_Station extends WPCloud_CLI {
 	 * [--site-logo=<site-logo>]
 	 * : The URL of the site logo. If not provided, the site logo will default to the wp cloud logo.
 	 *
-	 * [--sync-users]
-	 * : Sync the WPCOM users from the Atomic Persistent Data.
 	 *
 	 * ## EXAMPLES
 	 * wp cloud station setup --internal
@@ -38,7 +36,7 @@ class WPCloud_CLI_Station extends WPCloud_CLI {
 	 * @param array $args       The arguments.
 	 * @param array $switches The switches.
 	 */
-	public function setup( $args, $switches = array() ) {
+	public function __invoke( $args, $switches = array() ) {
 
 		// Setup the mu hosting plugins.
 		$this->symlink_hosting( 'wpcloud-station.php' );
@@ -51,9 +49,7 @@ class WPCloud_CLI_Station extends WPCloud_CLI {
 			case 'atomic-team':
 				break;
 			case 'a8c':
-				if ( $sync_users ) {
-					$this->add_wpcom_users();
-				}
+				$this->add_wpcom_users();
 				$this->symlink_hosting( 'a8c-station.php' );
 				// No break, include client setup.
 			case 'client':
@@ -205,6 +201,7 @@ class WPCloud_CLI_Station extends WPCloud_CLI {
 	 * Add the WPCOM users.
 	 */
 	protected function add_wpcom_users(): void {
+		$this->log( 'Adding WPCOM users...' );
 		$wpcom_users = $this->get_wpcom_users();
 		$this->add_users( $wpcom_users );
 	}
@@ -218,7 +215,6 @@ class WPCloud_CLI_Station extends WPCloud_CLI {
 		if ( empty( $emails ) ) {
 			return;
 		}
-		$this->log( 'Adding users...' );
 		foreach ( $emails as $wpcom_user ) {
 			$user = get_user_by( 'email', $wpcom_user );
 			if ( ! $user ) {
