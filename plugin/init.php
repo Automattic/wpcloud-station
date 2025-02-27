@@ -161,7 +161,7 @@ function wpcloud_verify_logged_in(): void {
 	if ( $is_wpcloud_site_archive || $is_wpcloud_private_page ) {
 		if ( ! is_user_logged_in() ) {
 			global $wp;
-			$url = add_query_arg( array( 'ref' => $wp->request ), '/login' );
+			$url = add_query_arg( array( 'ref' => $wp->request ), '/wp-login.php' );
 			wp_safe_redirect( $url );
 			exit();
 		}

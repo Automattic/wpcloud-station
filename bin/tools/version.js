@@ -42,7 +42,8 @@ function incrementVersion(version, type = 'patch') {
 	if (type === 'major') return `v${major + 1}.0.0`;
 	if (type === 'minor') return `v${major}.${minor + 1}.0`;
 	if (type === 'patch') return `v${major}.${minor}.${patch + 1}`;
-	if (type === 'beta') {
+	if (type === 'beta' || type === 'test') {
+		console.log('Incrementing beta version...', betaNumber);
 		const newBeta = betaNumber !== undefined ? betaNumber + 1 : 1;
 		return `v${major}.${minor}.${patch}-beta.${newBeta}`;
 	}
@@ -68,12 +69,27 @@ function updateVersionInFile(filePath, newVersion) {
 	return true;
 }
 
-
 // Main function
 async function updateVersions(type = 'patch') {
-	console.log('Checking out the trunk branch...');
-	runCommand(`git checkout ${baseBranch}`);
+	const currentBranch = execSync('git branch --show-current', { encoding: 'utf8' }).trim();
+	const testBuild = type === 'test';
 
+	if ( ! testBuild ) {
+		console.log('Checking out the trunk branch...');
+		runCommand(`git checkout ${baseBranch}`);
+	} else {
+		const testBranch = `test-${currentBranch}`;
+		const branches = execSync('git branch', { encoding: 'utf8' });
+		if ( branches.includes(testBranch)) {
+			// if the test branch exists, switch and merge in current branch changes.
+
+			runCommand(`git switch ${testBranch}`);
+			runCommand(`git merge -X theirs ${currentBranch} --no-edit`);
+		} else {
+			// if the test branch does not exist, create it.
+			runCommand(`git checkout -b ${currentBranch}`);
+		}
+	}
 	// get plugin version
 	const pluginContent = fs.readFileSync(pluginFile, 'utf8');
 	const versionMatch = pluginContent.match(/Version:\s*(v?\d+\.\d+\.\d+(-beta\.\d+)?)/i);
@@ -84,14 +100,14 @@ async function updateVersions(type = 'patch') {
 	}
 	const currentVersion = versionMatch[1];
 	const newVersion = incrementVersion(currentVersion, type);
-	const branchName = `version-bump-${newVersion}`;
 
-	console.log(`Creating a new branch: ${branchName}`);
-	runCommand(`git checkout -b ${branchName}`);
+	if (!testBuild) {
+		const branchName = `version-bump-${newVersion}`;
+		runCommand(`git checkout -b ${branchName}`);
+	}
 
 	// update the software versions
 	software.forEach((file) => {
-
 		// Read the current version from the plugin file
 		if (!fs.existsSync(file)) {
 			console.error(`Software file not found: ${file}`);
@@ -108,13 +124,16 @@ async function updateVersions(type = 'patch') {
 
 		// Update the version in the plugin file and readme file
 		updateVersionInFile(file, newVersion);
+
 		runCommand(`git add ${file}`);
 	});
 
 	// Commit the changes
 	console.log('Committing the changes...');
 	runCommand(`git commit -m "Version bump to ${newVersion}"`);
-
+	if (testBuild) {
+		return 0;
+	}
 	// Push the branch
 	console.log('Pushing the branch...');
 	runCommand(`git push -u origin ${branchName}`);
@@ -146,7 +165,4 @@ async function updateVersions(type = 'patch') {
 	return prNumber;
 }
 
-// Run the script with the desired increment type
-//const incrementType = process.argv[2] || 'patch'; // Default to 'patch'
-//updateVersions(incrementType);
 module.exports = updateVersions;

@@ -18,6 +18,9 @@ require_once __DIR__ . '/class-wpcloud-cli-site.php';
 require_once __DIR__ . '/class-wpcloud-cli-site-domain.php';
 require_once __DIR__ . '/class-wpcloud-cli-site-ssh-user.php';
 
+require_once __DIR__ . '/class-wpcloud-cli-station-setup.php';
+require_once __DIR__ . '/class-wpcloud-cli-station-user.php';
+
 
 add_action(
 	'cli_init',
@@ -29,5 +32,7 @@ add_action(
 		WP_CLI::add_command( 'cloud site', 'WPCloud_CLI_Site' );
 		WP_CLI::add_command( 'cloud site domain', 'WPCloud_CLI_Site_Domain' );
 		WP_CLI::add_command( 'cloud site ssh-user', 'WPCloud_CLI_Site_SSH_User' );
+		WP_CLI::add_command( 'cloud station setup', 'WPCloud_CLI_Station_Setup' );
+		WP_CLI::add_command( 'cloud station user', 'WPCloud_CLI_Station_User' );
 	}
 );

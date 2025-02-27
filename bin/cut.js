@@ -47,14 +47,20 @@ async function waitForMergeable(prNumber) {
 	}
 }
 
-
 async function main() {
 	// Update the versions
 	const incrementType = process.argv[2] || 'patch'; // Default to 'patch'
+	const dist = process.argv[3] || './dist'; // Default to './dist'
 	const prNum = await updateVersions(incrementType);
 
-
-
+	if (incrementType === 'test') {
+		console.log(`Zipping software to ${dist}`);
+		execSync(`npm run package -- plugin ${dist}`);
+		execSync(`npm run package -- theme ${dist}`);
+		execSync(`npm run package -- theme-pico ${dist}`);
+		execSync(`git switch -`);
+		return;
+	}
 
 	// Start the script
 	await waitForMergeable(prNum);
@@ -62,7 +68,6 @@ async function main() {
 	execSync(`gh pr merge ${prNum} --admin --squash`);
 	createRelease();
 }
-
 
 // Run the script
 main();

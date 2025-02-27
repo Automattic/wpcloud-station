@@ -372,3 +372,19 @@ button.wpcloud-block-button {
 .wpcloud-graph {
 	margin: 20px 0;
 }
+
+.wp-block-site-logo.hero-logo {
+	display: flex;
+	margin: 0 20px;
+	a {
+		flex-grow: 1;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		img {
+			width: 100%;
+			max-width: 550px;
+			height: auto;
+		}
+	}
+}
