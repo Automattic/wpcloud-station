@@ -29,6 +29,9 @@ class WPCloud_CLI_Station_Setup extends WPCloud_CLI_Station {
 	 * [--site-logo=<site-logo>]
 	 * : The URL of the site logo. If not provided, the site logo will default to the wp cloud logo.
 	 *
+	 * [--set-debug]
+	 * : Set the site to debug mode.
+	 *
 	 *
 	 * ## EXAMPLES
 	 * wp cloud station setup --internal
@@ -63,6 +66,12 @@ class WPCloud_CLI_Station_Setup extends WPCloud_CLI_Station {
 				break;
 			default:
 				WP_CLI::error( 'Please provide a valid internal switch.' );
+		}
+
+		if ( $switches['set-debug'] ?? false ) {
+			WP_CLI::runcommand( 'config set WP_DEBUG true --raw' );
+			WP_CLI::runcommand( 'config set WP_DEBUG_LOG true --raw' );
+			WP_CLI::runcommand( 'config set WP_DEBUG_DISPLAY false --raw' );
 		}
 
 		$errors = $this->station->setup( $switches );
@@ -106,8 +115,7 @@ class WPCloud_CLI_Station_Setup extends WPCloud_CLI_Station {
 		if ( $internal_flag ) {
 			return 'a8c';
 		}
-
-		$internal_type = $this->station->wp_cloud_station_internal;
+		$internal_type = $this->station->WP_CLOUD_STATION_INTERNAL;
 		if ( $internal_type ) {
 			return $internal_type;
 		}
