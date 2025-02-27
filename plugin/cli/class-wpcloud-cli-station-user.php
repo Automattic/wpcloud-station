@@ -57,7 +57,6 @@ class WPCloud_CLI_Station_User extends WPCloud_CLI_Station {
 	 * @param array $switches The switches.
 	 */
 	public function sync( $args, $switches = array() ) {
-
 		$wpcom_users = $this->station->wpcom_users;
 		if ( empty( $wpcom_users ) ) {
 			$this->log( '%YNo WPCOM users found.' );

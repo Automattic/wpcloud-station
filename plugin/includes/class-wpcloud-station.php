@@ -12,12 +12,21 @@ declare( strict_types = 1 );
  */
 class WPCloud_Station {
 
-		/**
-		 * The persistent data.
-		 *
-		 * @var Atomic_Persistent_Data
-		 */
+	/**
+	 * The persistent data.
+	 *
+	 * @var Atomic_Persistent_Data
+	 */
 	protected $apd;
+
+	/**
+	 * Constructor.
+	 */
+	public function __construct() {
+		if ( class_exists( 'Atomic_Persistent_Data' ) ) {
+			$this->apd = new Atomic_Persistent_Data();
+		}
+	}
 
 	/**
 	 * Setup the site .
@@ -92,10 +101,10 @@ class WPCloud_Station {
 	}
 
 	/**
-	 * Add getter to fetch persistent data.
+	 * Add getter to fetch persistent data .
 	 *
-	 * @param string $name The name.
-	 * @return mixed The persistent data.
+	 * @param string $name The name .
+	 * @return mixed The persistent data .
 	 */
 	public function __get( string $name ): mixed {
 		$as_upper = $this->get_persistent_data( strtoupper( $name ) );
@@ -115,15 +124,13 @@ class WPCloud_Station {
 		if ( ! class_exists( 'Atomic_Persistent_Data' ) ) {
 			return '';
 		}
-		if ( ! $this->apd ) {
-			$this->apd = new Atomic_Persistent_Data();
-		}
 
 		if ( ! $key ) {
 			return $this->apd;
 		}
 
-		if ( ! isset( $this->apd->$key ) ) {
+		$value = $this->apd->$key;
+		if ( ! is_string( $value ) ) {
 			return '';
 		}
 
@@ -135,12 +142,12 @@ class WPCloud_Station {
 		return $this->apd->$key;
 	}
 
-		/**
-		 * Set the site logo.
-		 *
-		 * @param string $image_url The image URL.
-		 * @return WP_Error|int
-		 */
+	/**
+	 * Set the site logo.
+	 *
+	 * @param string $image_url The image URL.
+	 * @return WP_Error|int
+	 */
 	private function add_logo_attachment( string $image_url ): WP_Error|int {
 		if ( $image_url ) {
 			// Try downloading the logo.
