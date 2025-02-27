@@ -32,7 +32,6 @@ class WPCloud_Station {
 		// Setup the site name.
 		$site_name = $options['site-name'] ?? $this->wp_cloud_client_name;
 		if ( $site_name ) {
-			$this->log( 'Setting up the site name: ' . $site_name );
 			update_option( 'blogname', $site_name );
 		}
 		// Setup the site logo.
@@ -99,9 +98,9 @@ class WPCloud_Station {
 	 * @return mixed The persistent data.
 	 */
 	public function __get( string $name ): mixed {
-		$as_lower = $this->get_persistent_data( strtolower( $name ) );
-		if ( $as_lower ) {
-			return $as_lower;
+		$as_upper = $this->get_persistent_data( strtoupper( $name ) );
+		if ( $as_upper ) {
+			return $as_upper;
 		}
 		return $this->get_persistent_data( $name );
 	}
