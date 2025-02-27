@@ -13,10 +13,8 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
-
 require_once WP_PLUGIN_DIR . '/wpcloud-station/includes/class-wpcloud-station.php';
 
-require_once // Retrieve Key from ADP.
 add_filter(
 	'wpcloud_api_key',
 	function ( $key ) {

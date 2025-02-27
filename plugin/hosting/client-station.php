@@ -9,6 +9,10 @@
  * @package wpcloud - station
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 // Prevent Jetpack & WP Cloud Station plugins from being deactivated.
 add_filter(
 	'plugin_action_links',
@@ -16,7 +20,7 @@ add_filter(
 		// Define the plugins you want to protect from being deactivated.
 		$protected_plugins = array(
 			'jetpack/jetpack.php',
-			'wpcloud-station-plugin/wpcloud-station.php', // Add your plugin paths here.
+			'wpcloud-station/wpcloud-station.php', // Add your plugin paths here.
 		);
 		if ( in_array( $plugin_file, $protected_plugins, true ) ) {
 			unset( $actions['deactivate'] );
