@@ -101,8 +101,8 @@ async function updateVersions(type = 'patch') {
 	const currentVersion = versionMatch[1];
 	const newVersion = incrementVersion(currentVersion, type);
 
+	const branchName = `version-bump-${newVersion}`;
 	if (!testBuild) {
-		const branchName = `version-bump-${newVersion}`;
 		runCommand(`git checkout -b ${branchName}`);
 	}
 
