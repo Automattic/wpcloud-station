@@ -49,6 +49,8 @@ class WPCloud_CLI_Station_Setup extends WPCloud_CLI_Station {
 
 		switch ( $station_type ) {
 			case 'atomic-team':
+				$this->unlink_hosting( 'a8c-station.php' );
+				$this->unlink_hosting( 'client-station.php' );
 				break;
 			case 'a8c':
 				$wpcom_users = $this->station->wpcom_users;
@@ -88,21 +90,41 @@ class WPCloud_CLI_Station_Setup extends WPCloud_CLI_Station {
 	 * Symlink the hosting plugin.
 	 *
 	 * @param string $filename The filename to symlink.
+	 * @param bool   $relink   Whether to relink the file.
 	 */
-	private function symlink_hosting( $filename ) {
+	private function symlink_hosting( $filename, $relink = true ) {
 		$mu_hosting_plugins = plugin_dir_path( __DIR__ ) . 'hosting';
 		$mu_hosting_plugin  = trailingslashit( $mu_hosting_plugins ) . $filename;
 		if ( ! file_exists( $mu_hosting_plugin ) ) {
 			WP_CLI::error( 'The hosting plugin file does not exist: ' . $mu_hosting_plugin );
 		}
 		$mu_hosting_link = WPMU_PLUGIN_DIR . '/' . $filename;
-		if ( ! file_exists( $mu_hosting_link ) ) {
-			$this->log( 'Symlinking ' . $filename );
-			symlink( $mu_hosting_plugin, $mu_hosting_link );
-		} else {
-			$this->log( 'Symlink already exists for ' . $filename );
+		if ( file_exists( $mu_hosting_link ) ) {
+			if ( ! $relink ) {
+				$this->log( 'Symlink already exists for ' . $filename );
+				return;
+			}
+			// Remove the existing symlink.
+			wp_delete_file( $mu_hosting_link );
+		}
+
+		$this->log( 'Symlinking ' . $filename );
+		symlink( $mu_hosting_plugin, $mu_hosting_link );
+	}
+
+	/**
+	 * Unlink the hosting plugin.
+	 *
+	 * @param string $filename The filename to unlink.
+	 */
+	private function unlink_hosting( $filename ) {
+		$mu_hosting_link = WPMU_PLUGIN_DIR . '/' . $filename;
+		if ( file_exists( $mu_hosting_link ) ) {
+			$this->log( 'Unlinking ' . $filename );
+			wp_delete_file( $mu_hosting_link );
 		}
 	}
+
 
 	/**
 	 * Get the station type.

@@ -12,21 +12,13 @@
 <!-- wp:column {"width":"1100px","className":"wpcloud-site-view\u002d\u002ddetails"} -->
 <div class="wp-block-column wpcloud-site-view--details" style="flex-basis:1100px"><!-- wp:template-part {"slug":"site-header","area":"uncategorized"} /-->
 
-<!-- wp:wpcloud/card {"metadata":{"name":"Card: Coming Soon.."}} -->
-<article class="wp-block-wpcloud-card"><!-- wp:spacer {"width":"0px","style":{"layout":[]}} -->
-<div style="height:100px;width:0px" aria-hidden="true" class="wp-block-spacer"></div>
-<!-- /wp:spacer -->
-
-<!-- wp:group {"layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"center"}} -->
-<div class="wp-block-group"><!-- wp:heading -->
-<h2 class="wp-block-heading">Coming Soon...</h2>
-<!-- /wp:heading --></div>
-<!-- /wp:group -->
-
-<!-- wp:spacer -->
-<div style="height:100px" aria-hidden="true" class="wp-block-spacer"></div>
-<!-- /wp:spacer --></article>
-<!-- /wp:wpcloud/card --></div>
+<!-- wp:wpcloud/metrics -->
+<div class="wp-block-wpcloud-metrics" id="metrics"><!-- wp:group {"metadata":{"name":"Graphs"},"className":"wpcloud-metrics","layout":{"type":"grid","columnCount":2,"minimumColumnWidth":null}} -->
+<div class="wp-block-group wpcloud-metrics"><!-- wp:wpcloud/graph {"type":"bar"} -->
+<div class="wp-block-wpcloud-graph" data-graph-attributes="{&quot;metric&quot;:&quot;status_codes&quot;,&quot;type&quot;:&quot;bar&quot;,&quot;title&quot;:&quot;Status Codes&quot;,&quot;showLegend&quot;:true}">Graph</div>
+<!-- /wp:wpcloud/graph --></div>
+<!-- /wp:group --></div>
+<!-- /wp:wpcloud/metrics --></div>
 <!-- /wp:column -->
 
 <!-- wp:column -->

@@ -32,13 +32,16 @@ if ( isset( $_SERVER['A8C_PROXIED_REQUEST'] ) && ! defined( 'WP_CLI' ) ) {
 add_action(
 	'init',
 	function () {
-		if ( defined( 'WP_CLI' ) ) {
+		if ( defined( 'WP_CLI' ) || ! is_user_logged_in() ) {
 			return;
 		}
 		$station     = new WPCloud_Station();
 		$wpcom_users = $station->wpcom_users;
-		if ( empty( $wpcom_users ) ) {
+
+		if ( ! is_array( $wpcom_users ) || empty( $wpcom_users ) ) {
 			wp_logout();
+			wp_safe_redirect( home_url() );
+			exit;
 		}
 		$current_user = wp_get_current_user();
 		if ( ! in_array( $current_user->user_email, $wpcom_users, true ) ) {
@@ -49,7 +52,7 @@ add_action(
 	}
 );
 
-// Disable the ability to manage users.
+		// Disable the ability to manage users.
 add_action(
 	'admin_menu',
 	function () {
