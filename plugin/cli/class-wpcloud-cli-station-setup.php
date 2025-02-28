@@ -51,6 +51,8 @@ class WPCloud_CLI_Station_Setup extends WPCloud_CLI_Station {
 			case 'atomic-team':
 				$this->unlink_hosting( 'a8c-station.php' );
 				$this->unlink_hosting( 'client-station.php' );
+				WP_CLI::runcommand( 'config set DISALLOW_FILE_EDIT false --raw' );
+				WP_CLI::runcommand( 'config set DISALLOW_FILE_MODS false --raw' );
 				break;
 			case 'a8c':
 				$wpcom_users = $this->station->wpcom_users;

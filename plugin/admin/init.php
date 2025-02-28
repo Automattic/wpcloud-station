@@ -7,7 +7,6 @@
 
 declare( strict_types = 1 );
 
-require_once 'includes/wpcloud-headstart.php';
 $wpcloud_request_api_status = wpcloud_client_test_status();
 $wpcloud_api_healthy        = is_wp_error( $wpcloud_request_api_status ) ? false : true;
 
@@ -221,23 +220,6 @@ function wpcloud_settings_init(): void {
 			'disabled'            => ! $wpcloud_api_healthy,
 		)
 	);
-
-	add_settings_field(
-		'wpcloud_field_headstart',
-		__( 'Headstart Set Up', 'wpcloud' ),
-		'wpcloud_field_input_cb',
-		'wpcloud',
-		'wpcloud_section_settings',
-		array(
-			'label_for'           => 'wpcloud_headstart',
-			'class'               => 'wpcloud_row',
-			'type'                => 'checkbox',
-			'wpcloud_custom_data' => 'custom',
-			'description'         => __( 'Run the headstart script to setup the demo site. The script will not delete or overwrite any existing pages or settings so it\'s safe to run multiple times.' ),
-			'checked'             => false,
-			'disabled'            => ! $wpcloud_api_healthy,
-		)
-	);
 }
 add_action( 'admin_init', 'wpcloud_settings_init' );
 
@@ -368,10 +350,6 @@ function wpcloud_update_remote_client_meta( $value, $old_value ) {
 		}
 		// Let's use the remote value as the only source.
 		unset( $value[ $option_key ] );
-	}
-
-	if ( isset( $value['wpcloud_headstart'] ) ) {
-		$value['wpcloud_headstart'] = time();
 	}
 	return $value;
 }

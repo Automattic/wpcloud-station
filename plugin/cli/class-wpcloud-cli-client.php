@@ -9,7 +9,6 @@ declare( strict_types = 1 );
 
 require_once __DIR__ . '/class-wpcloud-cli.php';
 require_once __DIR__ . '/class-wpcloud-cli-skin.php';
-require_once __DIR__ . '/../admin/includes/wpcloud-headstart.php';
 
 /**
  * WP Cloud CLI Client
