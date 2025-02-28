@@ -13,6 +13,7 @@
 	"mappings": {
 		 "wp-content/plugins/wpcloud-station-plugin": "./plugin",
 		 "wp-content/themes/wpcloud-station": "./theme",
-		 "wp-content/themes/wpcloud-station-pico": "./theme-pico"
+		 "wp-content/themes/wpcloud-station-pico": "./theme-pico",
+		 "wp-content/mu-plugins/0_atomic.php": "/hosting/0_atomic.php"
 		}
 }
