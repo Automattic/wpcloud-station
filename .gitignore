@@ -13,3 +13,4 @@ node_modules/
 docker-compose.yml
 /dist/
 /bin/temp
+plugin/hosting/0_atomic.php
