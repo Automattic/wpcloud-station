@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 // Require the WPCOM Station class.
-require_once WP_PLUGIN_DIR . '/wpcloud-station/includes/class-wpcloud-station.php';
+require_once WP_PLUGIN_DIR . '/wpcloud-station-plugin/includes/class-wpcloud-station.php';
 
 // Die if not proxied.
 if ( isset( $_SERVER['A8C_PROXIED_REQUEST'] ) && ! defined( 'WP_CLI' ) ) {
