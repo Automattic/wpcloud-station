@@ -30,3 +30,27 @@ add_filter(
 	10,
 	2
 );
+
+// Force Jetpack SSO module on .
+add_filter(
+	'option_jetpack_active_modules',
+	function ( $modules ) {
+		return array_values( array_merge( $modules, array( 'sso' ) ) );
+	},
+	10,
+	1
+);
+
+// Try auto-connecting Jetpack.
+add_action(
+	'init',
+	function () {
+		if ( ! class_exists( 'Jetpack' ) ) {
+			return;
+		}
+
+		if ( method_exists( 'Jetpack', 'try_connection' ) && ! Jetpack::is_active() ) {
+			Jetpack::try_connection();
+		}
+	}
+);
