@@ -13,4 +13,5 @@ node_modules/
 docker-compose.yml
 /dist/
 /bin/temp
-plugin/hosting/0_atomic.php
+/wp-env-mu-plugins
+!/wp-env-mu-plugins/0_atomic.php.example
