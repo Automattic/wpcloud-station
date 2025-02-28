@@ -87,7 +87,7 @@ async function updateVersions(type = 'patch') {
 			runCommand(`git merge -X theirs ${currentBranch} --no-edit`);
 		} else {
 			// if the test branch does not exist, create it.
-			runCommand(`git checkout -b ${currentBranch}`);
+			runCommand(`git checkout -b ${testBranch}`);
 		}
 	}
 	// get plugin version
