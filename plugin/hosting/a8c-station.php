@@ -17,8 +17,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 // Require the WPCOM Station class.
 require_once WP_PLUGIN_DIR . '/wpcloud-station-plugin/includes/class-wpcloud-station.php';
 
-// Die if not proxied.
-if ( isset( $_SERVER['A8C_PROXIED_REQUEST'] ) && ! defined( 'WP_CLI' ) ) {
+// Die if not proxied, but allow webhook requests.
+$is_webhook_request = false;
+if ( isset( $_SERVER['REQUEST_URI'] ) ) {
+	$request_uri = '';
+	// phpcs:disable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+	$request_uri = wp_unslash( $_SERVER['REQUEST_URI'] );
+	// phpcs:enable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+	$request_uri        = sanitize_text_field( $request_uri );
+	$is_webhook_request = strpos( $request_uri, '/wp-json/wpcloud-station/v1/webhook' ) !== false;
+}
+
+if ( isset( $_SERVER['A8C_PROXIED_REQUEST'] ) && ! defined( 'WP_CLI' ) && ! $is_webhook_request ) {
 	if ( '1' !== sanitize_text_field( wp_unslash( $_SERVER['A8C_PROXIED_REQUEST'] ) ) ) {
 		if ( function_exists( 'wp_die' ) ) {
 			wp_die( 'Your IP is not special enough. Please proxy.', 'Please Proxy' );
