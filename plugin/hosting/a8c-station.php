@@ -28,10 +28,20 @@ if ( isset( $_SERVER['REQUEST_URI'] ) ) {
 	$is_webhook_request = strpos( $request_uri, '/wp-json/wpcloud-station/v1/webhook' ) !== false;
 }
 
+// Check for status query parameter.
+$status_ok = false;
+if ( isset( $_GET['status'] ) && 'ok' === sanitize_text_field( wp_unslash( $_GET['status'] ) ) ) {
+	$status_ok = true;
+}
+
 if ( isset( $_SERVER['A8C_PROXIED_REQUEST'] ) && ! defined( 'WP_CLI' ) && ! $is_webhook_request ) {
 	if ( '1' !== sanitize_text_field( wp_unslash( $_SERVER['A8C_PROXIED_REQUEST'] ) ) ) {
 		if ( function_exists( 'wp_die' ) ) {
-			wp_die( 'Your IP is not special enough. Please proxy.', 'Please Proxy' );
+			if ( $status_ok ) {
+				wp_die( 'Your IP is not special enough. Please proxy.', 'Please Proxy', array( 'response' => 200 ) );
+			} else {
+				wp_die( 'Your IP is not special enough. Please proxy.', 'Please Proxy' );
+			}
 		} else {
 			die( 'Your IP is not special enough. Please proxy.' );
 		}
