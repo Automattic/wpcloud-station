@@ -14,14 +14,64 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
-// Require the WPCOM Station class.
-require_once WP_PLUGIN_DIR . '/wpcloud-station-plugin/includes/class-wpcloud-station.php';
 
-// Die if not proxied.
-if ( isset( $_SERVER['A8C_PROXIED_REQUEST'] ) && ! defined( 'WP_CLI' ) ) {
+if ( file_exists( WP_PLUGIN_DIR . '/wpcloud-station-plugin/includes/class-wpcloud-station.php' ) ) {
+	require_once WP_PLUGIN_DIR . '/wpcloud-station-plugin/includes/class-wpcloud-station.php';
+} else {
+	return;
+}
+
+// Die if not proxied, but allow webhook and Jetpack requests.
+$is_allowed_request = false;
+if ( isset( $_SERVER['REQUEST_URI'] ) ) {
+	$request_uri = '';
+	// phpcs:disable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+	$request_uri = wp_unslash( $_SERVER['REQUEST_URI'] );
+	// phpcs:enable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+	$request_uri = sanitize_text_field( $request_uri );
+
+	// Check for webhook requests.
+	$is_webhook_request = strpos( $request_uri, '/wp-json/wpcloud-station/v1/webhook' ) !== false;
+
+	// Check for specific Jetpack requests that need to bypass the proxy check.
+	// XML-RPC is used by Jetpack for the WordPress.com connection.
+	$is_xmlrpc_request = strpos( $request_uri, '/xmlrpc.php' ) !== false;
+
+	// Only allow specific Jetpack endpoints that are necessary for the connection.
+	// This is more secure than allowing all /wp-json/jetpack/ requests.
+	$is_jetpack_connection_request = false;
+	$jetpack_allowed_endpoints     = array(
+		'/wp-json/jetpack/v4/connection',
+		'/wp-json/jetpack/v4/verify_registration',
+		'/wp-json/jetpack/v4/remote_connect',
+		'/wp-json/jetpack/v4/remote_provision',
+	);
+
+	foreach ( $jetpack_allowed_endpoints as $endpoint ) {
+		if ( strpos( $request_uri, $endpoint ) !== false ) {
+			$is_jetpack_connection_request = true;
+			break;
+		}
+	}
+
+	// Allow webhook and specific Jetpack requests.
+	$is_allowed_request = $is_webhook_request || $is_xmlrpc_request || $is_jetpack_connection_request;
+}
+
+// Check for status query parameter.
+$status_ok = false;
+if ( isset( $_GET['status'] ) && 'ok' === sanitize_text_field( wp_unslash( $_GET['status'] ) ) ) {
+	$status_ok = true;
+}
+
+if ( isset( $_SERVER['A8C_PROXIED_REQUEST'] ) && ! defined( 'WP_CLI' ) && ! $is_allowed_request ) {
 	if ( '1' !== sanitize_text_field( wp_unslash( $_SERVER['A8C_PROXIED_REQUEST'] ) ) ) {
 		if ( function_exists( 'wp_die' ) ) {
-			wp_die( 'Your IP is not special enough. Please proxy.', 'Please Proxy' );
+			if ( $status_ok ) {
+				wp_die( 'Your IP is not special enough. Please proxy.', 'Please Proxy', array( 'response' => 200 ) );
+			} else {
+				wp_die( 'Your IP is not special enough. Please proxy.', 'Please Proxy' );
+			}
 		} else {
 			die( 'Your IP is not special enough. Please proxy.' );
 		}
@@ -95,5 +145,7 @@ add_action(
 	}
 );
 
-add_filter( 'wp_pre_insert_user_data', '__return_empty_array', 10, 0 );
-add_filter( 'pre_user_login', '__return_empty_string', 10, 0 );
+if ( ! defined( 'WP_CLI' ) ) {
+	add_filter( 'wp_pre_insert_user_data', '__return_empty_array', 10, 0 );
+	add_filter( 'pre_user_login', '__return_empty_string', 10, 0 );
+}
