@@ -14,8 +14,12 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
-// Require the WPCOM Station class.
-require_once WP_PLUGIN_DIR . '/wpcloud-station-plugin/includes/class-wpcloud-station.php';
+
+if ( exists( WP_PLUGIN_DIR . '/wpcloud-station-plugin/includes/class-wpcloud-station.php' ) ) {
+	require_once WP_PLUGIN_DIR . '/wpcloud-station-plugin/includes/class-wpcloud-station.php';
+} else {
+	return;
+}
 
 // Die if not proxied, but allow webhook requests.
 $is_webhook_request = false;
