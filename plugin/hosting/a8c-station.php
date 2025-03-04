@@ -145,5 +145,7 @@ add_action(
 	}
 );
 
-add_filter( 'wp_pre_insert_user_data', '__return_empty_array', 10, 0 );
-add_filter( 'pre_user_login', '__return_empty_string', 10, 0 );
+if ( ! defined( 'WP_CLI' ) ) {
+	add_filter( 'wp_pre_insert_user_data', '__return_empty_array', 10, 0 );
+	add_filter( 'pre_user_login', '__return_empty_string', 10, 0 );
+}
