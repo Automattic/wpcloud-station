@@ -128,34 +128,69 @@ function wpcloud_settings_init(): void {
 
 	add_settings_field(
 		'wpcloud_field_webhook',
-		__( 'Webhook URL', 'wpcloud' ),
+		__( 'Webhook: URL', 'wpcloud' ),
 		'wpcloud_client_meta_field_input_cb',
 		'wpcloud',
 		'wpcloud_section_settings',
 		array(
 			'label_for'       => 'wpcloud_webhook_url',
 			'class'           => 'wpcloud_row',
-			'description'     => __( 'The URL to send site creation events to. This can be used to trigger actions on site creation.' ),
+			'description'     => __( 'The URL to receive WP Cloud webhook events. This can be used to trigger actions on site creation.' ),
 			'client_meta_key' => 'webhook_url',
 			'disabled'        => ! $wpcloud_api_healthy,
 		)
 	);
-	add_settings_field(
-		'wpcloud_field_proxy_webhook',
-		__( 'Proxy Webhook URL', 'wpcloud' ),
-		'wpcloud_client_meta_field_input_cb',
-		'wpcloud',
-		'wpcloud_section_settings',
-		array(
-			'label_for'       => 'wpcloud_proxy_webhook_url',
-			'class'           => 'wpcloud_row',
-			'description'     => __( 'The URL to proxy webhook events to.' ),
-			'client_meta_key' => 'proxy_webhook_url',
-		)
-	);
-	/*
-	@TODO Still need to implement the secret key handshake on wp cloud.
-	add_settings_field(
+
+		add_settings_field(
+			'wpcloud_field_proxy_webhook',
+			__( 'Webhook: Proxy URL', 'wpcloud' ),
+			'wpcloud_client_meta_field_input_cb',
+			'wpcloud',
+			'wpcloud_section_settings',
+			array(
+				'label_for'       => 'wpcloud_proxy_webhook_url',
+				'class'           => 'wpcloud_row',
+				'description'     => __( 'The URL to proxy webhook events to.' ),
+				'client_meta_key' => 'proxy_webhook_url',
+			)
+		);
+
+		add_settings_field(
+			'wpcloud_field_proxy_webhook_create_site',
+			__( 'Webhook: Create Site', 'wpcloud' ),
+			'wpcloud_field_input_cb',
+			'wpcloud',
+			'wpcloud_section_settings',
+			array(
+				'label_for'           => 'proxy_webhook_create_site',
+				'class'               => 'wpcloud_row',
+				'wpcloud_custom_data' => 'custom',
+				'description'         => __( 'Create a new local site record when receiving a WP Cloud site provisioned webhook event. The site will only be created if a corresponding site does not exist.' ),
+				'type'                => 'checkbox',
+				'checked'             => get_option( 'wpcloud_settings', array() )['proxy_webhook_create_site'] ?? false,
+				'disabled'            => ! $wpcloud_api_healthy,
+			)
+		);
+
+		add_settings_field(
+			'wpcloud_field_proxy_webhook_default_owner',
+			__( 'Webhook: Default Owner', 'wpcloud' ),
+			'wpcloud_field_user_list',
+			'wpcloud',
+			'wpcloud_section_settings',
+			array(
+				'label_for'           => 'proxy_webhook_default_owner',
+				'class'               => 'wpcloud_row',
+				'wpcloud_custom_data' => 'custom',
+				'description'         => __( 'The default owner for new sites created by a WP Cloud webhook event.' ),
+				'value'               => get_option( 'wpcloud_settings', array() )['proxy_webhook_default_owner'] ?? '',
+				'disabled'            => ! $wpcloud_api_healthy,
+			)
+		);
+
+		/*
+		@TODO Still need to implement the secret key handshake on wp cloud.
+		add_settings_field(
 		'wpcloud_field_webhook_secret_key',
 		__( 'Webhook Secret Key', 'wpcloud' ),
 		'wpcloud_client_meta_field_input_cb',
@@ -167,67 +202,67 @@ function wpcloud_settings_init(): void {
 			'client_meta_key' => 'webhook_secret_key',
 			'description'       => __( 'The secret key to use when sending site creation events to the webhook URL. This can be used to verify the request came from WP Cloud.' ),
 		]
-	);
-	*/
+		);
+		*/
 
-	$themes = wpcloud_admin_get_available_themes();
-	add_settings_field(
-		'wpcloud_field_default_theme',
-		__( 'Default Theme', 'wpcloud' ),
-		'wpcloud_field_select_cb',
-		'wpcloud',
-		'wpcloud_section_settings',
-		array(
-			'label_for'           => 'wpcloud_default_theme',
-			'class'               => 'wpcloud_row',
-			'wpcloud_custom_data' => 'custom',
-			'description'         => __( 'The default theme to install on new sites.' ),
-			'items'               => $themes,
-			'default'             => array_keys( $themes )[0],
-			'disabled'            => ! $wpcloud_api_healthy,
-		)
-	);
+		$themes = wpcloud_admin_get_available_themes();
+		add_settings_field(
+			'wpcloud_field_default_theme',
+			__( 'Default Theme', 'wpcloud' ),
+			'wpcloud_field_select_cb',
+			'wpcloud',
+			'wpcloud_section_settings',
+			array(
+				'label_for'           => 'wpcloud_default_theme',
+				'class'               => 'wpcloud_row',
+				'wpcloud_custom_data' => 'custom',
+				'description'         => __( 'The default theme to install on new sites.' ),
+				'items'               => $themes,
+				'default'             => array_keys( $themes )[0],
+				'disabled'            => ! $wpcloud_api_healthy,
+			)
+		);
 
-	add_settings_field(
-		'wpcloud_field_plugins',
-		__( 'Default Plugins', 'wpcloud' ),
-		'wpcloud_field_software_cb',
-		'wpcloud',
-		'wpcloud_section_settings',
-		array(
-			'label_for'           => 'software',
-			'class'               => 'wpcloud_row',
-			'wpcloud_custom_data' => 'custom',
-			'description'         => __( 'Plugins available to install or activate with new installs. ' ),
-			'items'               => wpcloud_admin_get_available_plugins(),
-			'disabled'            => ! $wpcloud_api_healthy,
-		)
-	);
+		add_settings_field(
+			'wpcloud_field_plugins',
+			__( 'Default Plugins', 'wpcloud' ),
+			'wpcloud_field_software_cb',
+			'wpcloud',
+			'wpcloud_section_settings',
+			array(
+				'label_for'           => 'software',
+				'class'               => 'wpcloud_row',
+				'wpcloud_custom_data' => 'custom',
+				'description'         => __( 'Plugins available to install or activate with new installs. ' ),
+				'items'               => wpcloud_admin_get_available_plugins(),
+				'disabled'            => ! $wpcloud_api_healthy,
+			)
+		);
 
-	add_settings_field(
-		'wpcloud_field_client_cache',
-		__( 'Enable client request caching', 'wpcloud' ),
-		'wpcloud_field_input_cb',
-		'wpcloud',
-		'wpcloud_section_settings',
-		array(
-			'label_for'           => 'client_cache',
-			'class'               => 'wpcloud_row',
-			'wpcloud_custom_data' => 'custom',
-			'description'         => __( 'Enable caching of common client requests to reduce the number of requests to the WP Cloud API and speed up page loads. The cache is stored in memory per request.' ),
-			'type'                => 'checkbox',
-			'checked'             => get_option( 'wpcloud_settings', array() )['client_cache'] ?? true,
-			'disabled'            => ! $wpcloud_api_healthy,
-		)
-	);
+		add_settings_field(
+			'wpcloud_field_client_cache',
+			__( 'Enable client request caching', 'wpcloud' ),
+			'wpcloud_field_input_cb',
+			'wpcloud',
+			'wpcloud_section_settings',
+			array(
+				'label_for'           => 'client_cache',
+				'class'               => 'wpcloud_row',
+				'wpcloud_custom_data' => 'custom',
+				'description'         => __( 'Enable caching of common client requests to reduce the number of requests to the WP Cloud API and speed up page loads. The cache is stored in memory per request.' ),
+				'type'                => 'checkbox',
+				'checked'             => get_option( 'wpcloud_settings', array() )['client_cache'] ?? true,
+				'disabled'            => ! $wpcloud_api_healthy,
+			)
+		);
 }
-add_action( 'admin_init', 'wpcloud_settings_init' );
+	add_action( 'admin_init', 'wpcloud_settings_init' );
 
-/**
- * Add the options page
- *
- * @return void
- */
+	/**
+	 * Add the options page
+	 *
+	 * @return void
+	 */
 function wpcloud_options_page(): void {
 	add_menu_page(
 		'WP Cloud',
@@ -257,13 +292,13 @@ function wpcloud_options_page(): void {
 		'wpcloud_admin_options_controller',
 	);
 }
-add_action( 'admin_menu', 'wpcloud_options_page' );
+	add_action( 'admin_menu', 'wpcloud_options_page' );
 
-/**
- * Get the action from the request
- *
- * @return string The action.
- */
+	/**
+	 * Get the action from the request
+	 *
+	 * @return string The action.
+	 */
 function wpcloud_get_action() {
 	$action = '';
 	if ( isset( $_REQUEST['action'] ) ) {
@@ -272,12 +307,12 @@ function wpcloud_get_action() {
 	return $action;
 }
 
-/**
- * Get the site id from the request
- *
- * @param array $args The request args.
- * @return void.
- */
+	/**
+	 * Get the site id from the request
+	 *
+	 * @param array $args The request args.
+	 * @return void.
+	 */
 function wpcloud_field_input_cb( array $args ): void {
 	$label   = $args['label_for'] ?? '';
 	$options = get_option( 'wpcloud_settings' );
@@ -297,29 +332,29 @@ function wpcloud_field_input_cb( array $args ): void {
 			id="<?php echo esc_attr( $args['label_for'] ); ?>"
 			name="wpcloud_settings[<?php echo esc_attr( $args['label_for'] ); ?>]"
 			value="<?php echo esc_attr( $value ); ?>"
-			<?php
-			if ( 'checkbox' === $type && $checked ) {
-				echo ' checked '; }
-			?>
-			<?php echo esc_attr( $disabled ); ?>
-		>
-	<?php if ( isset( $args['description'] ) ) { ?>
-		<p class="description <?php echo esc_attr( $disabled ); ?>"><?php echo esc_html( $args['description'] ); ?></p>
 		<?php
-	}
-	if ( isset( $args['error'] ) ) {
+		if ( 'checkbox' === $type && $checked ) {
+			echo ' checked '; }
 		?>
+		<?php echo esc_attr( $disabled ); ?>
+		>
+		<?php if ( isset( $args['description'] ) ) { ?>
+		<p class="description <?php echo esc_attr( $disabled ); ?>"><?php echo esc_html( $args['description'] ); ?></p>
+			<?php
+		}
+		if ( isset( $args['error'] ) ) {
+			?>
 		<p class="error"><?php echo esc_html( $args['error'] ); ?></p>
-		<?php
-	}
+			<?php
+		}
 }
 
-/**
- * Get the client meta field input
- *
- * @param array $args The args.
- * @return void.
- */
+	/**
+	 * Get the client meta field input
+	 *
+	 * @param array $args The args.
+	 * @return void.
+	 */
 function wpcloud_client_meta_field_input_cb( array $args ): void {
 	$disabled = $args['{disabled'] ?? false;
 	if ( ! $disabled ) {
@@ -333,13 +368,13 @@ function wpcloud_client_meta_field_input_cb( array $args ): void {
 	wpcloud_field_input_cb( $args );
 }
 
-/**
- * Hook to update the client meta when the option is updated.
- *
- * @param array $value The new value.
- * @param array $old_value The old value.
- * @return array The new value.
- */
+	/**
+	 * Hook to update the client meta when the option is updated.
+	 *
+	 * @param array $value The new value.
+	 * @param array $old_value The old value.
+	 * @return array The new value.
+	 */
 function wpcloud_update_remote_client_meta( $value, $old_value ) {
 	foreach ( array( 'webhook_url', 'webhook_secret_key' ) as $meta_key ) {
 		$option_key = 'wpcloud_' . $meta_key;
@@ -353,14 +388,14 @@ function wpcloud_update_remote_client_meta( $value, $old_value ) {
 	}
 	return $value;
 }
-add_action( 'pre_update_option_wpcloud_settings', 'wpcloud_update_remote_client_meta', 10, 2 );
+	add_action( 'pre_update_option_wpcloud_settings', 'wpcloud_update_remote_client_meta', 10, 2 );
 
-/**
- * Get the client meta field input
- *
- * @param array $args The args.
- * @return void.
- */
+	/**
+	 * Get the client meta field input
+	 *
+	 * @param array $args The args.
+	 * @return void.
+	 */
 function wpcloud_field_select_cb( array $args ): void {
 	$options   = get_option( 'wpcloud_settings' );
 	$label_for = esc_attr( $args['label_for'] );
@@ -374,25 +409,25 @@ function wpcloud_field_select_cb( array $args ): void {
 	?>
 	<select name="<?php echo esc_attr( $name ); ?>" id="<?php echo esc_attr( $label_for ); ?>" <?php echo esc_attr( $disabled ); ?> >
 		<option value=''></option>
-	<?php
-	foreach ( $items as $item_value => $item_label ) {
-		$selected = $item_value === $value ? 'selected' : '';
-		echo '<option value="' . esc_attr( $item_value ) . '"' . esc_attr( $selected ) . '>' . esc_html( $item_label ) . '</option>';
-	}
-	?>
-	</select>
-	<?php if ( isset( $args['description'] ) ) { ?>
-		<p class="description <?php echo esc_attr( $disabled ); ?>"><?php echo esc_html( $args['description'] ); ?></p>
 		<?php
-	}
+		foreach ( $items as $item_value => $item_label ) {
+			$selected = $item_value === $value ? 'selected' : '';
+			echo '<option value="' . esc_attr( $item_value ) . '"' . esc_attr( $selected ) . '>' . esc_html( $item_label ) . '</option>';
+		}
+		?>
+	</select>
+		<?php if ( isset( $args['description'] ) ) { ?>
+		<p class="description <?php echo esc_attr( $disabled ); ?>"><?php echo esc_html( $args['description'] ); ?></p>
+			<?php
+		}
 }
 
-/**
- * Get the client meta field input
- *
- * @param array $args The args.
- * @return void.
- */
+	/**
+	 * Get the client meta field input
+	 *
+	 * @param array $args The args.
+	 * @return void.
+	 */
 function wpcloud_field_software_cb( array $args ): void {
 	$options   = get_option( 'wpcloud_settings' );
 	$label_for = esc_attr( $args['label_for'] );
@@ -411,7 +446,7 @@ function wpcloud_field_software_cb( array $args ): void {
 			</td>
 			<td style="padding: 5px;">
 				<select name="<?php echo esc_attr( $name ); ?>" id="<?php echo esc_attr( $name ); ?>"
-				<?php echo esc_attr( $disabled ); ?>
+			<?php echo esc_attr( $disabled ); ?>
 				>
 					<option value=""></option>
 					<option value="install" <?php echo ( 'install' === $value ) ? 'selected' : ''; ?>>Install</option>
@@ -419,41 +454,62 @@ function wpcloud_field_software_cb( array $args ): void {
 				</select>
 			</td>
 		</tr>
-		<?php
+			<?php
 	}
 	echo '</table>';
 	if ( isset( $args['description'] ) ) {
 		?>
 		<p class="description <?php echo esc_attr( $disabled ); ?>"><?php echo esc_html( $args['description'] ); ?></p>
+			<?php
+	}
+}
+
+	/**
+	 * Field for selecting a user
+	 *
+	 * @param array $args The args.
+	 * @return void.
+	 */
+function wpcloud_field_user_list( array $args ): void {
+	wp_dropdown_users(
+		array(
+			'name'     => sprintf( 'wpcloud_settings[%s]', $args['label_for'] ),
+			'selected' => $args['value'],
+			'role'     => 'administrator',
+		)
+	);
+	if ( isset( $args['description'] ) ) {
+		?>
+		<p class="description"><?php echo esc_html( $args['description'] ); ?></p>
 		<?php
 	}
 }
 
-/**
- * Get the client meta field input
- *
- * @param int $wpcloud_site_id The site id.
- * @return void.
- */
+	/**
+	 * Get the client meta field input
+	 *
+	 * @param int $wpcloud_site_id The site id.
+	 * @return void.
+	 */
 function site_created__success( int $wpcloud_site_id ): void {
 	$wpcloud_site = get_post( $wpcloud_site_id );
 	?>
 <div class="notice notice-success is-dismissible">
 	<p>
-		<?php
-		/* translators: %s: name of the site */
-		printf( esc_html__( 'Provisioning  %s', 'wpcloud' ), esc_html( $wpcloud_site->post_title ) )
-		?>
+	<?php
+	/* translators: %s: name of the site */
+	printf( esc_html__( 'Provisioning  %s', 'wpcloud' ), esc_html( $wpcloud_site->post_title ) )
+	?>
 	</p>
 </div>
 	<?php
 }
 
-/**
- * Get the client meta field input
- *
- * @return void.
- */
+	/**
+	 * Get the client meta field input
+	 *
+	 * @return void.
+	 */
 function wpcloud_admin_controller(): void {
 	// check user capabilities
 	// @TODO make this a wpcloud capability...
@@ -464,11 +520,11 @@ function wpcloud_admin_controller(): void {
 	wpcloud_admin_list_sites();
 }
 
-/**
- * Get the client meta field input
- *
- * @return void.
- */
+	/**
+	 * Get the client meta field input
+	 *
+	 * @return void.
+	 */
 function wpcloud_admin_list_sites(): void {
 	do_action( 'admin_notices' );
 
@@ -492,18 +548,18 @@ function wpcloud_admin_list_sites(): void {
 		});
 	})();
 	</script>
-	<?php
+		<?php
 }
 
-/**
- * Get the client meta field input
- *
- * @return void.
- */
+	/**
+	 * Get the client meta field input
+	 *
+	 * @return void.
+	 */
 function wpcloud_admin_options_controller(): void {
-		// Check user capabilities.
+	// Check user capabilities.
 	if ( ! current_user_can( 'manage_options' ) ) {
-			return;
+		return;
 	}
 
 	if ( isset( $_GET['settings-updated'] ) ) {
@@ -511,48 +567,48 @@ function wpcloud_admin_options_controller(): void {
 		add_settings_error( 'wpcloud_messages', 'wpcloud_message', __( 'Settings Saved', 'wpcloud' ), 'updated' );
 	}
 
-		settings_errors( 'wpcloud_messages' );
-		require_once plugin_dir_path( __FILE__ ) . 'options.php';
+	settings_errors( 'wpcloud_messages' );
+	require_once plugin_dir_path( __FILE__ ) . 'options.php';
 }
 
-// Allow SVG.
-add_filter(
-	'wp_check_filetype_and_ext',
-	function ( $data, $file, $filename, $mimes ) {
-		$filetype = wp_check_filetype( $filename, $mimes );
+	// Allow SVG.
+	add_filter(
+		'wp_check_filetype_and_ext',
+		function ( $data, $file, $filename, $mimes ) {
+			$filetype = wp_check_filetype( $filename, $mimes );
 
-		return array(
-			'ext'             => $filetype['ext'],
-			'type'            => $filetype['type'],
-			'proper_filename' => $data['proper_filename'],
-		);
-	},
-	10,
-	4
-);
+			return array(
+				'ext'             => $filetype['ext'],
+				'type'            => $filetype['type'],
+				'proper_filename' => $data['proper_filename'],
+			);
+		},
+		10,
+		4
+	);
 
-/**
- * Add SVG support
- *
- * @param array $mimes The mime types.
- * @return array The mime types.
- */
-function cc_mime_types( $mimes ) {
-	$mimes['svg'] = 'image/svg+xml';
-	return $mimes;
-}
-add_filter( 'upload_mimes', 'cc_mime_types' );
-
-
-/**
- * Enqueue the admin styles
- *
- * @return void
- */
-add_action(
-	'admin_enqueue_scripts',
-	function () {
-		$config = require_once plugin_dir_path( __FILE__ ) . 'assets/js/build/index.asset.php';
-		wp_enqueue_script( 'wpcloud-admin', plugin_dir_url( __FILE__ ) . 'assets/js/build/index.js', $config['dependencies'], $config['version'], true );
+	/**
+	 * Add SVG support
+	 *
+	 * @param array $mimes The mime types.
+	 * @return array The mime types.
+	 */
+	function cc_mime_types( $mimes ) {
+		$mimes['svg'] = 'image/svg+xml';
+		return $mimes;
 	}
-);
+	add_filter( 'upload_mimes', 'cc_mime_types' );
+
+
+	/**
+	 * Enqueue the admin styles
+	 *
+	 * @return void
+	 */
+	add_action(
+		'admin_enqueue_scripts',
+		function () {
+			$config = require_once plugin_dir_path( __FILE__ ) . 'assets/js/build/index.asset.php';
+			wp_enqueue_script( 'wpcloud-admin', plugin_dir_url( __FILE__ ) . 'assets/js/build/index.js', $config['dependencies'], $config['version'], true );
+		}
+	);
