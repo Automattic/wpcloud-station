@@ -135,9 +135,10 @@ function wpcloud_on_site_provisioned( int $timestamp, int $wpcloud_site_id ): vo
 	$post = wpcloud_lookup_post_by_site_id( $wpcloud_site_id );
 	if ( ! $post ) {
 		// Check the webhook settings to see if we should create a site.
-		$wp_cloud_options = get_option( 'wp_cloud_options', array() );
+		$wp_cloud_options = get_option( 'wpcloud_settings', array() );
 		$create_site      = $wp_cloud_options['proxy_webhook_create_site'] ?? false;
-		$owner            = $wp_cloud_options['proxy_webhook_default_owner'] ?? null;
+		$owner_id         = $wp_cloud_options['proxy_webhook_default_owner'] ?? null;
+		$owner            = get_user_by( 'id', $owner_id );
 		if ( ! $create_site || ! $owner ) {
 			return;
 		}
