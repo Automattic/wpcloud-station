@@ -5,7 +5,7 @@
  * @package wpcloud-station
  */
 
- declare( strict_types = 1 );
+declare( strict_types = 1 );
 
 if ( ! class_exists( 'WPCLOUD_Webhook_Controller' ) ) {
 
@@ -37,8 +37,8 @@ if ( ! class_exists( 'WPCLOUD_Webhook_Controller' ) ) {
 				'/' . $this->rest_base,
 				array(
 					array(
-						'methods'  => WP_REST_Server::CREATABLE,
-						'callback' => array( $this, 'post_webhook' ),
+						'methods'             => WP_REST_Server::CREATABLE,
+						'callback'            => array( $this, 'post_webhook' ),
 						'permission_callback' => '__return_true',
 					),
 				)
@@ -53,9 +53,10 @@ if ( ! class_exists( 'WPCLOUD_Webhook_Controller' ) ) {
 		 */
 		public function post_webhook( $request ) {
 			$params          = $request->get_params();
+			$event           = $params['event'] ?? 'noop';
 			$event           = str_replace( '-', '_', $params['event'] );
-			$timestamp       = $params['timestamp'];
-			$wpcloud_site_id = $params['atomic_site_id'];
+			$timestamp       = $params['timestamp'] ?? 0;
+			$wpcloud_site_id = $params['atomic_site_id'] ?? 0;
 			$data            = $params['data'] ?? array();
 
 			/**
