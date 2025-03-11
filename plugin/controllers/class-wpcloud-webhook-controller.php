@@ -58,6 +58,7 @@ if ( ! class_exists( 'WPCLOUD_Webhook_Controller' ) ) {
 			$timestamp       = $params['timestamp'] ?? 0;
 			$wpcloud_site_id = $params['atomic_site_id'] ?? 0;
 			$data            = $params['data'] ?? array();
+			$user_agent      = $request->get_header( 'user-agent' );
 
 			/**
 			 * General action for events.
@@ -67,7 +68,7 @@ if ( ! class_exists( 'WPCLOUD_Webhook_Controller' ) ) {
 			 * @param int    $wpcloud_site_id The WP Cloud Site Id.
 			 * @param array  $data            An array of data sent with the event.
 			 */
-			do_action( 'wpcloud_webhook', $event, $timestamp, $wpcloud_site_id, $data );
+			do_action( 'wpcloud_webhook', $event, $timestamp, $wpcloud_site_id, $data, $user_agent );
 
 			/**
 			 * Specific action for events (e.g. `site_provisioned`, `on-demand-backup`).
