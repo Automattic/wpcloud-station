@@ -187,22 +187,6 @@ function wpcloud_settings_init(): void {
 				'disabled'            => ! $wpcloud_api_healthy,
 			)
 		);
-		add_settings_field(
-			'wpcloud_field_proxy_webhook_delete_site',
-			__( 'Webhook: Delete Site', 'wpcloud' ),
-			'wpcloud_field_input_cb',
-			'wpcloud',
-			'wpcloud_section_settings',
-			array(
-				'label_for'           => 'proxy_webhook_delete_site',
-				'class'               => 'wpcloud_row',
-				'wpcloud_custom_data' => 'custom',
-				'description'         => __( 'Delete a site when receiving a WP Cloud site deleted webhook event.' ),
-				'type'                => 'checkbox',
-				'checked'             => get_option( 'wpcloud_settings', array() )['proxy_webhook_delete_site'] ?? false,
-				'disabled'            => ! $wpcloud_api_healthy,
-			)
-		);
 
 		/*
 		@TODO Still need to implement the secret key handshake on wp cloud.
