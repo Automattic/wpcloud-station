@@ -290,19 +290,43 @@ function wpcloud_lo( ...$stuff ) {
 }
 
 /**
+ * Log WP_Errors
+ *
+ * @param mixed ...$stuff The stuff to log.
+ */
+function wpcloud_le( ...$stuff ) {
+	$stuff = array_map(
+		function ( $thing ) {
+			if ( is_wp_error( $thing ) ) {
+				return $thing->get_error_message();
+			}
+			return $thing;
+		},
+		$stuff
+	);
+	return wpcloud_l( ...$stuff );
+}
+
+/**
  * Log to error log. Useful for debugging.
  *
  * @param mixed ...$stuff The stuff to log.
  */
 function wpcloud_l( ...$stuff ) {
-	if ( ! defined( 'WP_DEBUG_LOG' ) && ! WP_DEBUG_LOG ) {
+	// Check if we're in test mode and verbose logging is not enabled.
+	if ( defined( 'WPCLOUD_TESTING' ) && WPCLOUD_TESTING && ! defined( 'WPCLOUD_VERBOSE_LOGGING' ) ) {
 		return;
 	}
+
+	// Check if WP_DEBUG_LOG is enabled.
+	if ( ! defined( 'WP_DEBUG_LOG' ) || ! WP_DEBUG_LOG ) {
+		return;
+	}
+
 	$strings_of_stuff = array();
 	foreach ( $stuff as $thing ) {
 		if ( is_array( $thing ) || is_object( $thing ) ) {
-			$strings_of_stuff[] =
-			$strings_of_stuff[] = sprintf( "\n %s", json_encode( $thing, JSON_PRETTY_PRINT )); // phpcs:ignore
+			$strings_of_stuff[] = sprintf( "\n%s", json_encode( $thing, JSON_PRETTY_PRINT ) ); // phpcs:ignore
 		} elseif ( is_bool( $thing ) ) {
 			$strings_of_stuff[] = $thing ? 'true' : 'false';
 		} else {
@@ -310,5 +334,5 @@ function wpcloud_l( ...$stuff ) {
 		}
 	}
 
-	error_log( print_r( implode( ' ', $strings_of_stuff), true ) ); // phpcs:ignore
+	error_log( print_r( implode( ' ', $strings_of_stuff ), true ) ); // phpcs:ignore
 }
