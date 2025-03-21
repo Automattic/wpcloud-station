@@ -5,8 +5,6 @@
  * @package wpcloud-station
  */
 
-// phpcs:disable WordPress.PHP.DevelopmentFunctions.error_log_error_log
-
 declare( strict_types = 1 );
 
 /**
@@ -71,6 +69,7 @@ class WPCLOUD_Site {
 			return $post;
 		}
 
+		$api_client = new WPCloud_API_Client();
 		// Unpack the options.
 		$php_version = $options['php_version'] ?? get_post_meta( $post->ID, 'php_version', true );
 		$data_center = $options['data_center'] ?? get_post_meta( $post->ID, 'data_center', true );
@@ -97,7 +96,17 @@ class WPCLOUD_Site {
 		if ( empty( $domain ) ) {
 			$data['demo_domain'] = true;
 		} else {
-			$data['domain_name'] = $domain;
+			// Make sure the client can host the domain.
+			$hosting_domain = $api_client->get( 'check-can-host-domain/:client', $domain );
+			if ( $hosting_domain->is_ok() ) {
+				if ( $hosting_domain->allowed ) {
+					$data['domain_name'] = $domain;
+				} else {
+					return new WP_Error( 'domain_not_allowed', __( 'Domain not allowed.', 'wpcloud' ) );
+				}
+			} else {
+				return new WP_Error( $hosting_domain->get_error_message() );
+			}
 		}
 
 		$data = apply_filters( 'wpcloud_site_create_data', $data, $post );
@@ -112,12 +121,22 @@ class WPCLOUD_Site {
 		$software = apply_filters( 'wpcloud_site_create_software', $software, $post );
 
 		$author = get_user_by( 'id', $post->post_author );
-		$result = wpcloud_client_site_create( $author->user_login, $author->user_email, $data, $software, $meta );
 
-		if ( is_wp_error( $result ) ) {
-			error_log( 'WP Cloud: Error creating site: ' . $result->get_error_message() );
+		$data = array_merge(
+			$data,
+			array(
+				'admin_user'  => $author->user_login,
+				'admin_email' => $author->user_email,
+				'software'    => $software,
+				'meta'        => $meta,
+			)
+		);
+
+		$result = $api_client->post( 'create-site/:client', $data );
+
+		if ( ! $result->is_ok() ) {
 			update_post_meta( $post->ID, 'wpcloud_site_error', $result->get_error_message() );
-			return $result;
+			return new WP_Error( $result->get_error_message() );
 		}
 
 		update_post_meta( $post->ID, 'wpcloud_site_id', $result->atomic_site_id );
@@ -308,6 +327,20 @@ class WPCLOUD_Site {
 	 * @return array
 	 */
 	public static function get_mutable_options(): array {
+
+		$php_versions = WPCloud_API_Client::call( 'get-php-versions/:client' );
+		if ( $php_versions->is_ok() ) {
+			$php_versions = array_reduce(
+				$php_versions->result, // get-php-versions returns a non-assoc array.
+				function ( $versions, $version ) {
+					$versions[ $version->version ] = $version->version;
+					return $versions;
+				},
+				array()
+			);
+		} else {
+			$php_versions = array();
+		}
 		$options = array(
 			// db_charset and db_collate should be paired ?
 			'db_charset'           => array(
@@ -359,7 +392,7 @@ class WPCLOUD_Site {
 			'php_version'          => array(
 				'label'   => __( 'PHP Version' ),
 				'type'    => 'select',
-				'options' => wpcloud_client_php_versions_available(),
+				'options' => $php_versions,
 				'default' => '',
 				'hint'    => 'Sets the sites PHP version.',
 			),
@@ -505,17 +538,6 @@ class WPCLOUD_Site {
 		return array_intersect_key( self::get_detail_options(), array_flip( self::LINKABLE_DETAIL_KEYS ) );
 	}
 
-	/**
-	 * Check if the API is connected.
-	 *
-	 * @TODO This should be moved to a more appropriate location.
-	 *
-	 * @return bool True if the API is connected.
-	 */
-	public static function is_api_connected(): bool {
-		$api_health = wpcloud_client_test_status();
-		return ! is_wp_error( $api_health );
-	}
 
 	/**
 	 * Refresh a linkable detail for a site.
@@ -532,13 +554,15 @@ class WPCLOUD_Site {
 
 		switch ( $detail ) {
 			case 'phpmyadmin_url':
-				$site_id        = get_post_meta( $post_id, 'wpcloud_site_id', true );
-				$phpmyadmin_url = wpcloud_client_site_phpmyadmin_url( (int) $site_id );
-				if ( is_wp_error( $phpmyadmin_url ) ) {
-					error_log( 'Error fetching phpMyAdmin URL: ' . $phpmyadmin_url->get_error_message() ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+				$site_id         = get_post_meta( $post_id, 'wpcloud_site_id', true );
+				$api_client      = new WPCloud_API_Client( site_id: $site_id );
+				$site_phpmyadmin = $api_client->post( 'site-phpmyadmin/:site_id' );
+
+				if ( ! $site_phpmyadmin->is_ok() ) {
+					wpcloud_l( 'Error fetching phpMyAdmin URL: ' . $site_phpmyadmin->get_error_message() ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
 					return '';
 				}
-				return $phpmyadmin_url;
+				return $site_phpmyadmin->url;
 		}
 		return '';
 	}
@@ -563,145 +587,92 @@ class WPCLOUD_Site {
 			}
 		}
 
-		$result = '';
-		switch ( $key ) {
-			case 'id':
-				return $wpcloud_site_id;
+		$api_client = new WPCloud_API_Client( site_id: $wpcloud_site_id, throw_exception: true );
+		try {
+			$result = '';
+			switch ( $key ) {
+				case 'id':
+					return $wpcloud_site_id;
 
-			case 'owner_sites_link':
-				$owner = get_user_by( 'id', get_post_field( 'post_author', $post ) );
-				if ( ! $owner ) {
-					return '';
-				}
-				return sprintf( '<a href="/sites?owner=%s">%s</a>', $owner->user_nicename, $owner->display_name );
-			case 'phpmyadmin_url':
-				$result = wpcloud_client_site_phpmyadmin_url( $wpcloud_site_id );
-				return $result;
+				case 'owner_sites_link':
+					$owner = get_user_by( 'id', get_post_field( 'post_author', $post ) );
+					if ( ! $owner ) {
+						return '';
+					}
+					return sprintf( '<a href="/sites?owner=%s">%s</a>', $owner->user_nicename, $owner->display_name );
 
-			case 'ssl_status':
-				$details = wpcloud_client_site_details( $wpcloud_site_id );
-				if ( is_wp_error( $details ) ) {
-					error_log( $details->get_error_message() );
-					return '';
-				}
-				$result = wpcloud_client_site_ssl_info( $details->domain_name );
-				if ( is_wp_error( $result ) ) {
-						error_log( $result->get_error_message() );
-					return '';
-				}
-				$invalid = $result->broken_record || $result->broken_check;
+				case 'phpmyadmin_url':
+					$site_phpmyadmin = $api_client->post( 'site-phpmyadmin/:site_id' );
+					return $site_phpmyadmin->url;
 
-				if ( $invalid ) {
-					return $invalid;
-				}
-				return 'OK';
+				case 'ssl_status':
+					$details = $api_client->get( 'get-site/:site_id' );
+					$result  = $api_client->get( 'ssl-info', $details->domain_name );
+					$invalid = $result->broken_record || $result->broken_check;
 
-			case 'ip_addresses':
-				$details = wpcloud_client_site_details( $wpcloud_site_id );
-				if ( is_wp_error( $details ) ) {
-					error_log( $details->get_error_message() );
-					return '';
-				}
-				$domain = $details->domain_name;
-				$result = wpcloud_client_site_ip_addresses( $domain );
+					if ( $invalid ) {
+						return $invalid;
+					}
+					return 'OK';
 
-				if ( is_wp_error( $result ) ) {
-					error_log( $result->get_error_message() );
-					return '';
-				}
-				return $result->suggested ?? $result->ips ?? '';
+				case 'ip_addresses':
+					$details = $api_client->get( 'get-site/:site_id' );
+					$domain  = $details->domain_name;
+					$result  = $api_client->get( 'get-ips/:client', $domain );
+					return $result->suggested ?? $result->ips ?? '';
 
-			case 'site_name':
-			case 'name':
-				$name = get_the_title( $post );
-				return str_replace( '.wpcloudstation.dev', ' ', $name );
+				case 'site_name':
+				case 'name':
+					$name = get_the_title( $post );
+					return str_replace( '.wpcloudstation.dev', ' ', $name );
 
-			case 'slug':
-				return $post->post_name;
+				case 'slug':
+					return $post->post_name;
 
-			case 'domain':
-				$result = wpcloud_client_site_details( $wpcloud_site_id, true );
-				if ( is_wp_error( $result ) ) {
-					error_log( $result->get_error_message() );
-					return '';
-				}
-				return $result->domain_name;
+				case 'domain':
+					$details = $api_client->get( 'get-site/:site_id/extra' );
+					return $details->domain_name;
 
-			case 'wp_admin_url':
-				$result = wpcloud_client_site_details( $wpcloud_site_id, true );
-				if ( is_wp_error( $result ) ) {
-					error_log( $result->get_error_message() );
-					return '';
-				}
+				case 'wp_admin_url':
+					$details = $api_client->get( 'get-site/:site_id/extra' );
+					return 'https://' . $details->domain_name . '/wp-admin';
 
-				return 'https://' . $result->domain_name . '/wp-admin';
+				case 'space_used':
+					$space_used = $api_client->get( 'site-meta/:site_id/space_used/get' ) ?? 0;
+					return self::readable_size( (float) $space_used );
 
-			case 'space_used':
-				$result = wpcloud_client_get_site_meta( $wpcloud_site_id, 'space_used' );
-				if ( is_wp_error( $result ) ) {
-					error_log( $result->get_error_message() );
-					return '';
-				}
+				case 'db_file_size':
+					$db_file_size = $api_client->get( 'site-meta/:site_id/db_file_size/get' ) ?? 0;
+					return self::readable_size( (float) $db_file_size );
 
-				$space_used = ! isset( $result->space_used ) ? 0 : $result->space_used;
+				case 'space_quota':
+					$space_quota = $api_client->get( 'site-meta/:site_id/space_quota/get' ) ?? 0;
+					return self::readable_size( (float) $space_quota );
 
-				return self::readable_size( (float) $space_used );
+				case 'site_access_with_ssh':
+					$ssh_port = $api_client->get( 'site-meta/:site_id/ssh_port/get' ) ?? -1;
+					// @TODO: Confirm that this is always the case, it appears that the port will be 2223 for ssh and 2221 for sftp
+					return 2223 === $ssh_port;
 
-			case 'db_file_size':
-				$result = wpcloud_client_get_site_meta( $wpcloud_site_id, 'db_file_size' );
-				if ( is_wp_error( $result ) ) {
-					error_log( $result->get_error_message() );
-					return '';
-				}
-				$db_file_size = ! isset( $result->db_file_size ) ? 0 : $result->db_file_size;
-				return self::readable_size( (float) $db_file_size );
+					// @TODO: Not sure why this is edge_cache_toggle and not edge_cache
+				case 'edge_cache_toggle':
+					$edge_cache = $api_client->get( 'edge-cache/:site_id' );
+					return (bool) $edge_cache->status;
 
-			case 'space_quota':
-				$result = wpcloud_client_get_site_meta( $wpcloud_site_id, 'space_quota' );
-				if ( is_wp_error( $result ) ) {
-					error_log( $result->get_error_message() );
-					return '';
-				}
+				case 'defensive_mode':
+					$edge_cache = $api_client->get( 'edge-cache/:site_id' );
+					return $edge_cache->ddos_until ?? '';
 
-				return self::readable_size( (float) $result->space_quota );
-
-			case 'site_access_with_ssh':
-				$result = wpcloud_client_get_site_meta( $wpcloud_site_id, 'ssh_port' );
-				if ( is_wp_error( $result ) ) {
-					error_log( $result->get_error_message() );
-					return '';
-				}
-				$ssh_port = $result->ssh_port ?? -1;
-				// @TODO: Confirm that this is always the case, it appears that the port will be 2223 for ssh and 2221 for sftp
-				return 2223 === $ssh_port;
-
-			case 'edge_cache_toggle':
-				$result = wpcloud_client_edge_cache_status( $wpcloud_site_id );
-				if ( is_wp_error( $result ) ) {
-					error_log( $result->get_error_message() );
-					return '';
-				}
-				return (bool) $result->status;
-
-			case 'defensive_mode':
-				$result = wpcloud_client_edge_cache_status( $wpcloud_site_id );
-
-				if ( is_wp_error( $result ) ) {
-					error_log( $result->get_error_message() );
-					return '';
-				}
-				return $result->ddos_until ?? '';
-
-			case 'data_center':
-				$key = 'geo_affinity';
-				// Fallthrough intentional to set the result.
-			default:
-				$result = wpcloud_client_site_details( $wpcloud_site_id, true );
+				case 'data_center':
+					$key = 'geo_affinity';
+					// Fallthrough intentional to set the result.
+				default:
+					$result = $api_client->get( 'get-site/:site_id/extra' );
+			}
+		} catch ( Exception $e ) {
+			return '';
 		}
 
-		if ( is_wp_error( $result ) ) {
-			return $result;
-		}
 		if ( 'geo_affinity' === $key ) {
 			return $result->extra->server_pool->geo_affinity;
 		}
@@ -741,43 +712,51 @@ class WPCLOUD_Site {
 
 		$result = null;
 
-		foreach ( $site_mutable_fields as $key => $value ) {
-			switch ( $key ) {
-				case 'canonical_aliases':
-					// canonicalize_aliases doesn't like "truthy" values.
-					$value = $value ? 'true' : 'false';
-					break;
+		$api_client = new WPCloud_API_Client( site_id: $wpcloud_site_id, throw_exception: true );
+		try {
 
-				case 'suspend_after':
-					// Don't set the suspend_after value if it's the same as the current value or is not set.
-					$current_suspend_value = self::get_detail( $site_id, 'suspend_after' );
-					if ( is_null( $current_suspend_value ) ) {
-						$current_suspend_value = '';
-					}
-					if ( ! is_null( $current_suspend_value ) && $value === $current_suspend_value ) {
-						continue 2;
-					}
-					break;
+			foreach ( $site_mutable_fields as $key => $value ) {
+				switch ( $key ) {
+					case 'canonical_aliases':
+						// canonicalize_aliases doesn't like "truthy" values.
+						$value = $value ? 'true' : 'false';
+						break;
 
-				case 'space_quota':
-					$value = intval( $value ) . 'G';
-					break;
+					case 'suspend_after':
+						// Don't set the suspend_after value if it's the same as the current value or is not set.
+						$current_suspend_value = self::get_detail( $site_id, 'suspend_after' );
+						if ( is_null( $current_suspend_value ) ) {
+							$current_suspend_value = '';
+						}
+						if ( ! is_null( $current_suspend_value ) && $value === $current_suspend_value ) {
+							continue 2;
+						}
+						break;
 
-				case 'edge_cache_toggle':
-					$value = $value ? 'on' : 'off';
-					// Fallthrough intentional to make edge cache call.
-				case 'edge_cache_purge':
-					$result = wpcloud_client_edge_cache_update( $wpcloud_site_id, $value );
-					break;
+					case 'space_quota':
+						$value = intval( $value ) . 'G';
+						break;
+
+					case 'edge_cache_toggle':
+						$value = $value ? 'on' : 'off';
+						// Fallthrough intentional to make edge cache call.
+					case 'edge_cache_purge':
+						$api_client->post( 'edge-cache/:site_id', $value );
+						return true;
+
+					case 'wp_version':
+						$api_client->post( 'site-wordpress-version/:site_id', $value );
+						return true;
+				}
+
+				if ( $value ) {
+					$api_client->post( 'site-meta/:site_id', $key, 'update', array( 'value' => $value ) );
+				} else {
+					$api_client->post( 'site-meta/:site_id', $key, 'delete' );
+				}
 			}
-
-			if ( is_null( $result ) ) {
-				$result = $value ? wpcloud_client_update_site_meta( $wpcloud_site_id, $key, $value ) : wpcloud_client_delete_site_meta( $wpcloud_site_id, $key );
-			}
-
-			if ( is_wp_error( $result ) ) {
-				return $result;
-			}
+		} catch ( Exception $e ) {
+			return new WP_Error( 'Update detail failed', $e->get_error_message() );
 		}
 		return true;
 	}
@@ -803,12 +782,11 @@ class WPCLOUD_Site {
 	 * @return bool|WP_Error True if the domain has a valid SSL certificate.
 	 */
 	public static function is_domain_ssl_valid( string $domain ): bool|WP_Error {
-		$ssl_status = wpcloud_client_site_ssl_info( $domain );
-		if ( is_wp_error( $ssl_status ) ) {
-			error_log( $ssl_status->get_error_message() );
-			return $ssl_status;
+		$ssl_info = WPCloud_API_Client::call( 'ssl-info', $domain );
+		if ( $ssl_info->not_ok() ) {
+			return new WP_Error( $ssl_info->get_error_message() );
 		}
-		return ! $ssl_status->broken_record && ! $ssl_status->broken_check;
+		return ! $ssl_info->broken_record && ! $ssl_info->broken_check;
 	}
 
 	/**
@@ -841,7 +819,7 @@ class WPCLOUD_Site {
 	 */
 	public static function import( int|string $wpcloud_site_id, WP_User $owner ): bool|WP_Error {
 		// Verify that the site exists before importing.
-		$site = wpcloud_client_site_details( (int) $wpcloud_site_id, true, false );
+		$site = WPCloud_API_Client::call( 'get-site', $wpcloud_site_id, 'extra' );
 		if ( is_wp_error( $site ) ) {
 			return $site;
 		}
