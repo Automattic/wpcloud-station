@@ -29,6 +29,13 @@ class Mock_WPCloud_API_Request implements WPCloud_API_Request_Interface {
 	private stdClass $result;
 
 	/**
+	 * Error
+	 *
+	 * @var WP_Error|null
+	 */
+	private ?WP_Error $error = null;
+
+	/**
 	 * Call the API.
 	 *
 	 * @param string $path   The path to the API endpoint.
@@ -61,6 +68,30 @@ class Mock_WPCloud_API_Request implements WPCloud_API_Request_Interface {
 			return $this->result->$name;
 		}
 		return null;
+	}
+
+	/**
+	 * Get the error
+	 *
+	 * @return WP_Error
+	 */
+	public function get_error(): WP_Error {
+		if ( ! $this->error ) {
+			return new WP_Error( 'no_error', 'No error' );
+		}
+		return $this->error;
+	}
+
+	/**
+	 * Get the error message.
+	 *
+	 * @return string
+	 */
+	public function get_error_message(): string {
+		if ( ! $this->error ) {
+			return 'No error';
+		}
+		return $this->error->get_error_message();
 	}
 
 	/**

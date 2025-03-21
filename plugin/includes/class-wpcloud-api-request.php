@@ -43,6 +43,14 @@ class WPCloud_API_Request implements WPCloud_API_Request_Interface {
 	private ?bool $did_succeed = null;
 
 	/**
+	 * Error
+	 *
+	 * @var WP_Error|null
+	 */
+	private ?WP_Error $error = null;
+
+
+	/**
 	 * Constructor.
 	 *
 	 * @param string $client_name The client name.
@@ -74,7 +82,7 @@ class WPCloud_API_Request implements WPCloud_API_Request_Interface {
 	 * @param array  $body The data to send to the API.
 	 * @return WPCloud_API_Request_Interface|WP_Error The response from the API or a WP_Error object.
 	 */
-	public function call( string $path, string $method = 'GET', array $body = array() ): WPCloud_API_Request_Interface|WP_Error {
+	public function call( string $path, string $method = 'GET', array $body = array() ): WPCloud_API_Request_Interface {
 		$host = 'atomic-api.wordpress.com';
 		$path = ltrim( $path, '/' );
 		$url  = "https://$host/api/v1.0/$path";
@@ -141,16 +149,43 @@ class WPCloud_API_Request implements WPCloud_API_Request_Interface {
 	}
 
 	/**
+	 * Get the error
+	 *
+	 * @return WP_Error
+	 */
+	public function get_error(): WP_Error {
+		if ( ! $this->error ) {
+			return new WP_Error( 'no_error', 'No error' );
+		}
+		return $this->error;
+	}
+
+	/**
+	 * Get the error message.
+	 *
+	 * @return string
+	 */
+	public function get_error_message(): string {
+		if ( ! $this->error ) {
+			return 'No error';
+		}
+		return $this->error->get_error_message();
+	}
+
+	/**
 	 * Return failure.
 	 *
 	 * @param mixed ...$args The error arguments.
-	 * @return WP_Error The error object.
+	 * @return WPCloud_API_Request_Interface
 	 */
-	private function fail( mixed ...$args ): WP_Error {
+	private function fail( mixed ...$args ): WPCloud_API_Request_Interface {
 		$this->did_succeed = false;
 		if ( is_wp_error( $args[0] ) ) {
-			return $args[0];
+			$this->error = $args[0];
+		} else {
+			$this->error = new WP_Error( $args[0], $args[1] ?? 'Unknown error', $args[2] ?? null );
 		}
-		return new WP_Error( $args[0], $args[1] ?? 'Unknown error', $args[2] ?? null );
+
+		return $this;
 	}
 }
