@@ -15,49 +15,48 @@ require_once __DIR__ . '/../includes/wpcloud-client.php';
 class WPCLOUD_CLI_Api {
 
 	/**
-	 * The logger.
+	 * Call the API.
 	 *
-	 * @var callable|null
+	 * ## OPTIONS
+	 *
+	 * <endpoint>...
+	 * : The API endpoint to call.
+	 *
+	 * ## EXAMPLES
+	 *
+	 *     wp cloud api client-meta/:client/a-key/get
+	 *
+	 * @param array $args The command arguments.
+	 * @param array $assoc_args The command options.
+	 * @return void
 	 */
-	private $logger;
+	public function __invoke( $args, $assoc_args ) {
+		$endpoint = implode( '/', $args );
+		$site_id  = $assoc_args['site'] ?? 0;
+		unset( $assoc_args['site'] );
+		$client = new WPCloud_API_Client( $site_id );
 
-	/**
-	 * The result.
-	 *
-	 * @var mixed
-	 */
-	public $result;
-
-	/**
-	 * Constructor.
-	 *
-	 * @param callable|null $logger The logger.
-	 */
-	public function __construct( ?callable $logger ) {
-		$this->logger = $logger;
-	}
-
-	/**
-	 * Call logger with the result
-	 *
-	 * @param string $success The success message to log.
-	 */
-	public function log( string $success = '' ): void {
-		if ( $this->logger ) {
-			( $this->logger )( $this->result, $success );
+		$post      = $assoc_args['post'] ?? null;
+		$post_data = array();
+		unset( $assoc_args['post'] );
+		if ( $post ) {
+			$post_data = json_decode( $post, true );
+			if ( ! $post_data ) {
+				$post_data = array();
+			}
 		}
-	}
+		if ( ! empty( $assoc_args ) || $post ) {
+			$post_data = array_merge( $post_data, $assoc_args );
 
-	/**
-	 * Call wpcloud client function.
-	 *
-	 * @param string $name The name of the function.
-	 * @param array  $arguments The arguments.
-	 *
-	 * @return mixed The result.
-	 */
-	public function __call( string $name, array $arguments ): mixed {
-		$this->result = call_user_func_array( 'wpcloud_client_' . $name, $arguments );
-		return $this;
+			$response = $client->post( $endpoint, $post_data );
+		} else {
+			$response = $client->get( $endpoint );
+		}
+
+		if ( is_wp_error( $response ) ) {
+			WP_CLI::error( $response->get_error_message() );
+		} else {
+			WP_CLI::line( json_encode( $response, JSON_PRETTY_PRINT ) );
+		}
 	}
 }

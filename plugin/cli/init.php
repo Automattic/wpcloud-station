@@ -7,6 +7,8 @@
 
 declare( strict_types = 1 );
 
+require_once __DIR__ . '/class-wpcloud-cli-api.php';
+
 require_once __DIR__ . '/class-wpcloud-cli-client.php';
 require_once __DIR__ . '/class-wpcloud-cli-client-meta.php';
 
@@ -25,6 +27,7 @@ require_once __DIR__ . '/class-wpcloud-cli-station-user.php';
 add_action(
 	'cli_init',
 	function () {
+		WP_CLI::add_command( 'cloud api', 'WPCloud_CLI_API' );
 		WP_CLI::add_command( 'cloud client', 'WPCloud_CLI_Client' );
 		WP_CLI::add_command( 'cloud client meta', 'WPCloud_CLI_Client_Meta' );
 		WP_CLI::add_command( 'cloud job', 'WPCloud_CLI_Job' );
