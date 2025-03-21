@@ -16,6 +16,7 @@ require_once plugin_dir_path( __FILE__ ) . 'controllers/class-wpcloud-webhook-co
 require_once plugin_dir_path( __FILE__ ) . 'controllers/class-wpcloud-metrics-controller.php';
 
 require_once plugin_dir_path( __FILE__ ) . 'custom-post-types/wpcloud-site.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/class-wpcloud-api-client.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/class-wpcloud-site.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/wpcloud-client.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/class-wpcloud-metrics.php';
@@ -237,6 +238,7 @@ function wpcloud_station_register_site_view( $view ) {
  * @param int    $timestamp The timestamp.
  * @param string $atomic_site_id The site id.
  * @param mixed  $data The data.
+ * @param string $user_agent The user agent.
  */
 function wpcloud_webhook_proxy( $event, $timestamp, $atomic_site_id, $data, $user_agent ): void {
 	if ( ! str_starts_with( $user_agent, 'atomic-webhooks' ) ) {
