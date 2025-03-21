@@ -11,6 +11,7 @@
  * WP Cloud API request interface.
  */
 interface WPCloud_API_Request_Interface {
+
 	/**
 	 * Call the API.
 	 *
@@ -20,4 +21,20 @@ interface WPCloud_API_Request_Interface {
 	 * @return mixed|WP_Error The response from the API or a WP_Error object.
 	 */
 	public function call( string $path, string $method = 'GET', array $body = array() ): array|stdClass|WP_Error;
+
+	/**
+	 * Check if the request was successful.
+	 *
+	 * @return bool
+	 */
+	public function is_ok(): bool;
+
+
+	/**
+	 * Get a property from the result.
+	 *
+	 * @param string $name The property name.
+	 * @return mixed The property value.
+	 */
+	public function __get( string $name ): mixed;
 }

@@ -26,6 +26,22 @@ class WPCloud_API_Request implements WPCloud_API_Request_Interface {
 	 */
 	private string $api_key;
 
+
+	/**
+	 * The result.
+	 *
+	 * @var stdClass
+	 */
+	private stdClass $result;
+
+
+	/**
+	 * Success state.
+	 *
+	 * @var bool|null
+	 */
+	private ?bool $did_succeed = null;
+
 	/**
 	 * Constructor.
 	 *
@@ -35,6 +51,19 @@ class WPCloud_API_Request implements WPCloud_API_Request_Interface {
 	public function __construct( string $client_name, string $api_key ) {
 		$this->client_name = $client_name;
 		$this->api_key     = $api_key;
+	}
+
+	/**
+	 * Get a property from the result.
+	 *
+	 * @param string $name The property name.
+	 * @return mixed The property value.
+	 */
+	public function __get( string $name ): mixed {
+		if ( isset( $this->result->$name ) ) {
+			return $this->result->$name;
+		}
+		return null;
 	}
 
 	/**
@@ -70,7 +99,7 @@ class WPCloud_API_Request implements WPCloud_API_Request_Interface {
 
 		// Check for errors.
 		if ( is_wp_error( $response ) ) {
-			return $response;
+			return $this->fail( $response );
 		}
 
 		// Get the response code.
@@ -81,22 +110,47 @@ class WPCloud_API_Request implements WPCloud_API_Request_Interface {
 			$body = wp_remote_retrieve_body( $response );
 			$data = json_decode( $body );
 			if ( $data && isset( $data->error ) ) {
-				return new WP_Error( $data->error, $data->message ?? 'Unknown error' );
+				return $this->fail( $data->error, $data->message ?? 'Unknown error' );
 			}
-			return new WP_Error( 'api_error', 'API error: ' . $response_code );
+			return $this->fail( 'api_error', 'API error: ' . $response_code );
 		}
 
 		// Get the response body.
 		$body = wp_remote_retrieve_body( $response );
 
 		// Decode the response.
-		$data = json_decode( $body );
+		$this->result = json_decode( $body );
 
 		// Check for JSON errors.
 		if ( json_last_error() !== JSON_ERROR_NONE ) {
-			return new WP_Error( 'json_error', 'JSON error: ' . json_last_error_msg() );
+			return $this->fail( 'json_error', 'JSON error: ' . json_last_error_msg() );
 		}
 
-		return $data;
+		$this->did_succeed = true;
+
+		return self;
+	}
+
+	/**
+	 * Check if the request was successful.
+	 *
+	 * @return bool
+	 */
+	public function is_ok(): bool {
+		return $this->did_succeed ?? false;
+	}
+
+	/**
+	 * Return failure.
+	 *
+	 * @param mixed ...$args The error arguments.
+	 * @return WP_Error The error object.
+	 */
+	private function fail( mixed ...$args ): WP_Error {
+		$this->did_succeed = false;
+		if ( is_wp_error( $args[0] ) ) {
+			return $args[0];
+		}
+		return new WP_Error( $args[0], $args[1] ?? 'Unknown error', $args[2] ?? null );
 	}
 }
