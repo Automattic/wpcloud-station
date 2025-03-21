@@ -30,9 +30,9 @@ class WPCloud_API_Request implements WPCloud_API_Request_Interface {
 	/**
 	 * The result.
 	 *
-	 * @var stdClass
+	 * @var stdClass|null
 	 */
-	private stdClass $result;
+	private ?stdClass $result = null;
 
 
 	/**
@@ -72,9 +72,9 @@ class WPCloud_API_Request implements WPCloud_API_Request_Interface {
 	 * @param string $path The path to the API endpoint.
 	 * @param string $method The HTTP method to use.
 	 * @param array  $body The data to send to the API.
-	 * @return mixed|WP_Error The response from the API or a WP_Error object.
+	 * @return WPCloud_API_Request_Interface|WP_Error The response from the API or a WP_Error object.
 	 */
-	public function call( string $path, string $method = 'GET', array $body = array() ): array|stdClass|WP_Error {
+	public function call( string $path, string $method = 'GET', array $body = array() ): WPCloud_API_Request_Interface|WP_Error {
 		$host = 'atomic-api.wordpress.com';
 		$path = ltrim( $path, '/' );
 		$url  = "https://$host/api/v1.0/$path";
@@ -128,7 +128,7 @@ class WPCloud_API_Request implements WPCloud_API_Request_Interface {
 
 		$this->did_succeed = true;
 
-		return self;
+		return $this;
 	}
 
 	/**
