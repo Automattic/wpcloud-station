@@ -44,24 +44,55 @@ class Mock_Helper {
 		$expectation = $mock->shouldReceive( 'call' )
 		->withAnyArgs()
 		->andReturnUsing(
-			function ( ...$args ) {
+			function ( ...$args ) use ( $mock ) {
 				$arg0 = reset( $args );
 
-				wpcloud_l( 'Mocked API request: ' . $arg0 );
+				wpcloud_l( 'Mocked API request: ' . $arg0 . '.' );
 
 				// Check if we have a mock for this path.
 				foreach ( Mock_Helper::$mocked_responses as $mocked_path => $mocked_response ) {
 					if ( $arg0 === $mocked_path ) {
-						wpcloud_l( 'Mocked API response for ' . $mocked_path );
-						return $mocked_response;
+						wpcloud_l( 'Mocked API response for ' . $mocked_path . '.' );
+
+						// Set up the mock to return success for is_ok() method.
+						$mock->shouldReceive( 'is_ok' )
+							->andReturn( true );
+
+						// Set up the mock to return properties from the response.
+						if ( is_object( $mocked_response ) ) {
+							foreach ( get_object_vars( $mocked_response ) as $key => $value ) {
+								$mock->shouldReceive( '__get' )
+									->with( $key )
+									->andReturn( $value );
+							}
+						}
+
+						// Store the response in the mock object for __get to access.
+						$mock->result = (object) $mocked_response;
+						return $mock;
 					}
 				}
 
-				return (object) array(
+				// Set up the mock to return success for is_ok() method.
+				$mock->shouldReceive( 'is_ok' )
+					->andReturn( true );
+
+				$default_response = (object) array(
 					'success' => true,
 					'mocked'  => true,
 					'message' => 'No mock match',
 				);
+
+				// Set up the mock to return properties from the default response.
+				foreach ( get_object_vars( $default_response ) as $key => $value ) {
+					$mock->shouldReceive( '__get' )
+						->with( $key )
+						->andReturn( $value );
+				}
+
+				// Store the default response in the mock object for __get to access.
+				$mock->result = $default_response;
+				return $mock;
 			}
 		);
 

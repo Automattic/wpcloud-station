@@ -126,52 +126,19 @@ class WPCloud_API_ClientTest extends WP_UnitTestCase {
 		$this->assertEquals( 'test-endpoint/test-client', $result );
 	}
 
-	/**
-	 * Test the validate method.
-	 */
-	public function test_validate() {
-
-		// Mock the get method to return a specific response.
-		$mock_client = $this->getMockBuilder( WPCloud_API_Client::class )
-			->setMethods( array( 'get' ) )
-			->disableOriginalConstructor()
-			->getMock();
-
-		$mock_client->expects( $this->once() )
-			->method( 'get' )
-			->willReturn( (object) array( 'success' => true ) );
-
-		$result = $mock_client->validate( 'test-endpoint' );
-		$this->assertTrue( $result );
-
-		// Test with WP_Error response.
-		$mock_client = $this->getMockBuilder( WPCloud_API_Client::class )
-			->setMethods( array( 'get' ) )
-			->disableOriginalConstructor()
-			->getMock();
-
-		$mock_client->expects( $this->once() )
-			->method( 'get' )
-			->willReturn( new WP_Error( 'error', 'Error message' ) );
-
-		$result = $mock_client->validate( 'test-endpoint' );
-		$this->assertFalse( $result );
-	}
 
 	/**
-	 * Test the init method.
+	 * Test the call method with is_ok.
 	 */
-	public function test_init() {
-		// Test with default parameters.
-		$client = WPCloud_API_Client::init();
-		$this->assertInstanceOf( WPCloud_API_Client::class, $client );
+	public function test_call_with_is_ok() {
+		// Use the Mock_Helper to set up a mock.
+		Mock_Helper::mock_api_request( 'test-endpoint', array( 'success' => true ) );
 
-		// Test with site_id parameter.
-		$client = WPCloud_API_Client::init( 123 );
-		$this->assertInstanceOf( WPCloud_API_Client::class, $client );
+		// Test the call method with is_ok.
+		$result = WPCloud_API_Client::call( 'test-endpoint' );
+		$this->assertTrue( $result->is_ok(), 'call() with is_ok() should return true for a successful request' );
 
-		// Test with use_cache parameter.
-		$client = WPCloud_API_Client::init( 0, false );
-		$this->assertInstanceOf( WPCloud_API_Client::class, $client );
+		// Clean up.
+		Mock_Helper::clear_responses();
 	}
 }

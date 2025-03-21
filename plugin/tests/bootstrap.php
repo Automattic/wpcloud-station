@@ -6,6 +6,8 @@
  */
 
 require_once dirname( __DIR__ ) . '/tests/class-mock-wpcloud-api-request.php';
+require_once dirname( __DIR__ ) . '/includes/class-wpcloud-api-client.php';
+require_once dirname( __DIR__ ) . '/includes/class-wpcloud-api-request.php';
 
 $_tests_dir = getenv( 'WP_TESTS_DIR' );
 

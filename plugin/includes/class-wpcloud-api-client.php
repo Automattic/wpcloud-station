@@ -3,6 +3,8 @@
  * WP Cloud API client library.
  *
  * @package wpcloud-client
+ *
+ * $client->get('foobar' )->successeful;
  */
 
 declare( strict_types = 1 );
@@ -90,25 +92,15 @@ class WPCloud_API_Client {
 		}
 	}
 
-	/**
-	 * Get an instance of the WP Cloud API client.
-	 *
-	 * @param string|int $site_id The site ID.
-	 * @param bool       $use_cache Whether to use cache.
-	 * @return WPCloud_API_Client
-	 */
-	public static function init( string|int $site_id = 0, bool $use_cache = true ): WPCloud_API_Client {
-		return new self( $site_id, $use_cache );
-	}
 
 	/**
 	 * Call the WP Cloud API.
 	 *
 	 * @param string     $endpoint  The endpoint.
 	 * @param string|int ...$arguments The arguments.
-	 * @return array|stdClass|WP_Error
+	 * @return WPCloud_API_Request_Interface|WP_Error
 	 */
-	public static function call( string $endpoint, string|int ...$arguments ): array|stdClass|WP_Error {
+	public static function call( string $endpoint, string|int ...$arguments ): WPCloud_API_Request_Interface|WP_Error {
 		$client    = new self();
 		$post_data = end( $arguments );
 		$method    = 'get';
@@ -117,11 +109,17 @@ class WPCloud_API_Client {
 			$method    = 'post';
 		}
 
-		if ( 'get' === $method ) {
-			return $client->get( $endpoint, ...$arguments );
-		}
 		$path = $client->parse_path( $endpoint, $arguments );
-		return $client->post( $path, (array) $post_data );
+
+		// Make the API call.
+		if ( 'get' === $method ) {
+			$client->api->call( $path );
+		} else {
+			$client->api->call( $path, 'POST', (array) $post_data );
+		}
+
+		// Return the API request object directly.
+		return $client->api;
 	}
 
 	/**
@@ -152,9 +150,9 @@ class WPCloud_API_Client {
 	 * @param string     $endpoint  The endpoint.
 	 * @param string|int ...$arguments The arguments.
 	 *
-	 * @return stdClass|WP_Error
+	 * @return WPCloud_API_Request_Interface|WP_Error
 	 */
-	public function get( string $endpoint, string|int ...$arguments ): array|stdClass|WP_Error {
+	public function get( string $endpoint, string|int ...$arguments ): WPCloud_API_Request_Interface|WP_Error {
 		$path = $this->parse_path( $endpoint, $arguments );
 		if ( ! $this->use_cache ) {
 			return $this->api->call( $path );
@@ -171,28 +169,13 @@ class WPCloud_API_Client {
 	}
 
 	/**
-	 * Validate if GET request returns a non-error response.
-	 *
-	 * @param string     $endpoint The endpoint.
-	 * @param string|int ...$arguments The arguments.
-	 * @return bool
-	 */
-	public function validate( string $endpoint, string|int ...$arguments ): bool {
-		$result = $this->get( $endpoint, ...$arguments );
-		if ( is_wp_error( $result ) ) {
-			return false;
-		}
-		return true;
-	}
-
-	/**
 	 * Make POST request to WP Cloud API.
 	 *
 	 * @param string $endpoint The endpoint.
 	 * @param mixed  ...$arguments The arguments.
-	 * @return stdClass|WP_Error
+	 * @return WPCloud_API_Request_Interface|WP_Error
 	 */
-	public function post( string $endpoint, mixed ...$arguments ): array|stdClass|WP_Error {
+	public function post( string $endpoint, mixed ...$arguments ): WPCloud_API_Request_Interface|WP_Error {
 		$data = array();
 		if ( $this->is_post( $arguments ) ) {
 			$data      = end( $arguments );
