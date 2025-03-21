@@ -71,18 +71,6 @@ class Mock_WPCloud_API_Request implements WPCloud_API_Request_Interface {
 	}
 
 	/**
-	 * Get the error
-	 *
-	 * @return WP_Error
-	 */
-	public function get_error(): WP_Error {
-		if ( ! $this->error ) {
-			return new WP_Error( 'no_error', 'No error' );
-		}
-		return $this->error;
-	}
-
-	/**
 	 * Get the error message.
 	 *
 	 * @return string

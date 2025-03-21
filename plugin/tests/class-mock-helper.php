@@ -58,10 +58,6 @@ class Mock_Helper {
 						$mock->shouldReceive( 'is_ok' )
 							->andReturn( true );
 
-						// Set up the mock to return empty error.
-						$mock->shouldReceive( 'get_error' )
-							->andReturn( new WP_Error( 'no_error', 'No error' ) );
-
 						// Set up the mock to return empty error message.
 						$mock->shouldReceive( 'get_error_message' )
 							->andReturn( 'No error' );
@@ -84,10 +80,6 @@ class Mock_Helper {
 				// Set up the mock to return success for is_ok() method.
 				$mock->shouldReceive( 'is_ok' )
 					->andReturn( true );
-
-				// Set up the mock to return empty error.
-				$mock->shouldReceive( 'get_error' )
-					->andReturn( new WP_Error( 'no_error', 'No error' ) );
 
 				// Set up the mock to return empty error message.
 				$mock->shouldReceive( 'get_error_message' )

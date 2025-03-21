@@ -114,7 +114,7 @@ class WPCloud_API_ClientTest extends WP_UnitTestCase {
 
 		// Test with site ID.
 		$client->set_site_id( 123 );
-		$result = $method->invokeArgs( $client, array( 'test-endpoint/:id', array() ) );
+		$result = $method->invokeArgs( $client, array( 'test-endpoint/:site_id', array() ) );
 		$this->assertEquals( 'test-endpoint/123', $result );
 
 		// Test with domain name.
