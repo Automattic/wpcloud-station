@@ -56,7 +56,7 @@ class WPCLOUD_CLI_Api {
 		if ( is_wp_error( $response ) ) {
 			WP_CLI::error( $response->get_error_message() );
 		} else {
-			WP_CLI::line( json_encode( $response, JSON_PRETTY_PRINT ) );
+			WP_CLI::line( wp_json_encode( $response->data, JSON_PRETTY_PRINT ) );
 		}
 	}
 }
