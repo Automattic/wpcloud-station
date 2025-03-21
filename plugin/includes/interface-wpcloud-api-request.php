@@ -32,13 +32,6 @@ interface WPCloud_API_Request_Interface {
 	public function is_ok(): bool;
 
 	/**
-	 * Check if the request was an error.
-	 *
-	 * @return WP_Error
-	 */
-	public function get_error(): WP_Error;
-
-	/**
 	 * Get the error message.
 	 *
 	 * @return string

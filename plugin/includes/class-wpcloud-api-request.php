@@ -7,6 +7,8 @@
 
 declare( strict_types = 1 );
 
+require_once 'interface-wpcloud-api-request.php';
+
 /**
  * WP Cloud API Request.
  */
@@ -68,8 +70,19 @@ class WPCloud_API_Request implements WPCloud_API_Request_Interface {
 	 * @return mixed The property value.
 	 */
 	public function __get( string $name ): mixed {
-		if ( isset( $this->result->$name ) ) {
-			return $this->result->$name;
+		if ( 'result' === $name ) {
+			return $this->result;
+		}
+		if ( 'error' === $name ) {
+			return $this->error;
+		}
+		if ( 'data' === $name ) {
+			return $this->result->data;
+		}
+
+		$data = $this->result->data ?? stdObject();
+		if ( isset( $data->$name ) ) {
+			return $data->$name;
 		}
 		return null;
 	}
@@ -149,15 +162,12 @@ class WPCloud_API_Request implements WPCloud_API_Request_Interface {
 	}
 
 	/**
-	 * Get the error
+	 * Check if the request was not successful.
 	 *
-	 * @return WP_Error
+	 * @return bool
 	 */
-	public function get_error(): WP_Error {
-		if ( ! $this->error ) {
-			return new WP_Error( 'no_error', 'No error' );
-		}
-		return $this->error;
+	public function not_ok(): bool {
+		return ! $this->is_ok();
 	}
 
 	/**
@@ -186,6 +196,7 @@ class WPCloud_API_Request implements WPCloud_API_Request_Interface {
 			$this->error = new WP_Error( $args[0], $args[1] ?? 'Unknown error', $args[2] ?? null );
 		}
 
+		wpcloud_l( 'API error: ' . $this->error->get_error_message() );
 		return $this;
 	}
 }
