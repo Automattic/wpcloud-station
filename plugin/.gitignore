@@ -33,3 +33,6 @@ node_modules/
 *.map
 
 build/
+
+vendor/
+.phpunit.result.cache
