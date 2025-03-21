@@ -18,7 +18,8 @@
 		"build:frontend": "wp-scripts build --webpack-src-dir=assets/js/src/ --output-path=assets/js/build/",
 		"start:frontend": "wp-scripts start --webpack-src-dir=assets/js/src/ --output-path=assets/js/build/",
 		"build:admin": "wp-scripts build --webpack-src-dir=admin/assets/js/src/ --output-path=admin/assets/js/build/",
-		"start:admin": "wp-scripts start --webpack-src-dir=admin/assets/js/src/ --output-path=admin/assets/js/build/"
+		"start:admin": "wp-scripts start --webpack-src-dir=admin/assets/js/src/ --output-path=admin/assets/js/build/",
+		"test": "wp-scripts test-unit-js --config=jest.config.js"
 	},
 	"engines": {
 		"node": ">=20.10.0",
