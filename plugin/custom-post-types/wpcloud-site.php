@@ -93,10 +93,10 @@ function wpcloud_on_delete_site( int $post_id ): void {
 	}
 
 	$wpcloud_site_id = intval( $wpcloud_site_id );
-
-	$result = wpcloud_client_site_delete( $wpcloud_site_id );
-	if ( is_wp_error( $result ) ) {
-		error_log( 'Error while deleting WP Cloud Site: ' . print_r( $result, true ) ); // phpcs:ignore
+	$api_client      = new WPCloud_API_Client( site_id: $wpcloud_site_id );
+	$result          = $api_client->post( 'delete-site/:client/:site_id' );
+	if ( $result->not_ok() ) {
+		wpcloud_l( 'Error while deleting WP Cloud Site: ' . $result->get_error_message() );
 	}
 }
 add_action( 'before_delete_post', 'wpcloud_on_delete_site', 10, 1 );
