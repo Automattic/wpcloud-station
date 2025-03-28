@@ -70,17 +70,19 @@ class WPCloud_API_Request implements WPCloud_API_Request_Interface {
 	 * @return mixed The property value.
 	 */
 	public function __get( string $name ): mixed {
-		if ( 'result' === $name ) {
-			return $this->result;
+		$data = $this->result->data ?? new stdClass();
+		switch ( $name ) {
+			case 'result':
+				return $this->result;
+			case 'error':
+				return $this->error;
+			case 'data':
+				return $data;
+			case 'success':
+				return $this->result->success ?? false;
+			case 'message':
+				return $this->result->message ?? '';
 		}
-		if ( 'error' === $name ) {
-			return $this->error;
-		}
-		if ( 'data' === $name ) {
-			return $this->result->data;
-		}
-
-		$data = $this->result->data ?? stdObject();
 		if ( isset( $data->$name ) ) {
 			return $data->$name;
 		}
