@@ -47,9 +47,9 @@ class WPCloud_API_Request implements WPCloud_API_Request_Interface {
 	/**
 	 * The data.
 	 *
-	 * @var stdClass|array|null
+	 * @var mixed
 	 */
-	public stdClass|array|null $data = null;
+	public mixed $data = null;
 
 	/**
 	 * Error
@@ -138,7 +138,7 @@ class WPCloud_API_Request implements WPCloud_API_Request_Interface {
 			if ( $data && isset( $data->error ) ) {
 				return $this->fail( $data->error, $data->message ?? 'Unknown error' );
 			}
-			return $this->fail( 'api_error', 'API error: ' . $response_code );
+			return $this->fail( 'api_error', $response_code );
 		}
 
 		// Get the response body.
@@ -207,7 +207,7 @@ class WPCloud_API_Request implements WPCloud_API_Request_Interface {
 			$this->error = new WP_Error( $args[0], $args[1] ?? 'Unknown error', $args[2] ?? null );
 		}
 
-		wpcloud_l( 'API error: ' . $this->error->get_error_message() );
+		wpcloud_l( 'API Request error: ' . $this->error->get_error_message() );
 		return $this;
 	}
 }
