@@ -7,7 +7,7 @@
 
 declare( strict_types = 1 );
 
-require_once __DIR__ . 'class-wpcloud-cli-api.php';
+require_once __DIR__ . '/class-wpcloud-cli-api.php';
 require_once __DIR__ . '/class-wpcloud-cli-client.php';
 require_once __DIR__ . '/class-wpcloud-cli-client-meta.php';
 
