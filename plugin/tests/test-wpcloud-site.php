@@ -152,7 +152,6 @@ class WPCloud_SiteTest extends WP_UnitTestCase {
 		$this->assertEquals( 456, get_post_meta( $result->ID, 'wpcloud_site_id', true ) );
 	}
 
-
 	/**
 	 * Test get method.
 	 */
@@ -169,8 +168,6 @@ class WPCloud_SiteTest extends WP_UnitTestCase {
 		$site = WPCloud_Site::get();
 		$this->assertNull( $site );
 	}
-
-
 
 	/**
 	 * Test get_detail_options method.
@@ -242,7 +239,7 @@ class WPCloud_SiteTest extends WP_UnitTestCase {
 	 * Test get_detail method.
 	 */
 	public function test_get_detail() {
-		$mock_response = (object) array(
+		$mock_details = (object) array(
 			'data' => (object) array(
 				'domain_name' => 'test-site.example.com',
 				'php_version' => '8.1',
@@ -254,11 +251,10 @@ class WPCloud_SiteTest extends WP_UnitTestCase {
 			),
 		);
 
-		Mock_Helper::mock_api_request( 'get-site/123/extra', $mock_response );
+		Mock_Helper::mock_api_request( 'get-site/123/extra', $mock_details );
 
 		$domain = WPCloud_Site::get_detail( $this->post, 'domain_name' );
 
-		wpcloud_l( 'Domain: ' . $domain );
 		$this->assertEquals( 'test-site.example.com', $domain );
 
 		$php_version = WPCloud_Site::get_detail( $this->post, 'php_version' );
@@ -266,6 +262,49 @@ class WPCloud_SiteTest extends WP_UnitTestCase {
 
 		$data_center = WPCloud_Site::get_detail( $this->post, 'data_center' );
 		$this->assertEquals( 'us-east', $data_center );
+
+		// Test site meta requests.
+		$about_a_gig = 1073741824;
+		Mock_Helper::mock_api_requests(
+			array(
+				'site-meta/123/space_used/get'   => (object) array(
+					'data' => (object) array(
+						'space_used' => $about_a_gig,
+					),
+				),
+				'site-meta/123/db_file_size/get' => (object) array(
+					'data' => (object) array(
+						'db_file_size' => $about_a_gig,
+					),
+				),
+				// Check for empty values.
+				'site-meta/123/space_quota/get'  => (object) array(
+					'data' => (object) array(),
+				),
+			)
+		);
+		foreach ( array( 'space_used', 'db_file_size' ) as $meta_key ) {
+			$space_used = WPCloud_Site::get_detail( $this->post, $meta_key );
+			$this->assertEquals( '1 GB', $space_used );
+		}
+		$no_value = WPCloud_Site::get_detail( $this->post, 'space_quota' );
+		$this->assertEquals( '0 B', $no_value );
+
+		// Check edge cache.
+		Mock_Helper::mock_api_request(
+			'edge-cache/123',
+			(object) array(
+				'data' => (object) array(
+					'status'     => 'enabled',
+					'ddos_until' => 1743453005,
+				),
+			)
+		);
+		$edge_cache_status = WPCloud_Site::get_detail( $this->post, 'edge_cache_status' );
+		$this->assertEquals( 'enabled', $edge_cache_status );
+		$ddos_until = WPCloud_Site::get_detail( $this->post, 'defensive_mode' );
+		wpcloud_l( $ddos_until );
+		$this->assertEquals( 1743453005, $ddos_until );
 	}
 
 	/**
@@ -344,7 +383,6 @@ class WPCloud_SiteTest extends WP_UnitTestCase {
 			)
 		);
 
-		/*
 		$result = WPCloud_Site::update_detail(
 			array(
 				'site_id'         => $this->post->ID,
@@ -354,7 +392,7 @@ class WPCloud_SiteTest extends WP_UnitTestCase {
 			)
 		);
 		$this->assertTrue( $result );
-		*/
+
 		$result = WPCloud_Site::update_detail(
 			array(
 				'site_id'         => $this->post->ID,

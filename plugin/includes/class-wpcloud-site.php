@@ -642,30 +642,24 @@ class WPCLOUD_Site {
 					return 'https://' . $details->domain_name . '/wp-admin';
 
 				case 'space_used':
-					$space_used = $api_client->get( 'site-meta/:site_id/space_used/get' ) ?? 0;
-					return self::readable_size( (float) $space_used );
-
 				case 'db_file_size':
-					$db_file_size = $api_client->get( 'site-meta/:site_id/db_file_size/get' ) ?? 0;
-					return self::readable_size( (float) $db_file_size );
-
 				case 'space_quota':
-					$space_quota = $api_client->get( 'site-meta/:site_id/space_quota/get' ) ?? 0;
-					return self::readable_size( (float) $space_quota );
+					$site_meta   = $api_client->get( "site-meta/:site_id/$key/get" );
+					$space_value = $site_meta->data->$key ?? 0;
+					return self::readable_size( (float) $space_value );
 
 				case 'site_access_with_ssh':
 					$ssh_port = $api_client->get( 'site-meta/:site_id/ssh_port/get' ) ?? -1;
 					// @TODO: Confirm that this is always the case, it appears that the port will be 2223 for ssh and 2221 for sftp
 					return 2223 === $ssh_port;
 
-					// @TODO: Not sure why this is edge_cache_toggle and not edge_cache
-				case 'edge_cache_toggle':
+				case 'edge_cache_status':
 					$edge_cache = $api_client->get( 'edge-cache/:site_id' );
-					return (bool) $edge_cache->status;
+					return $edge_cache->status;
 
 				case 'defensive_mode':
 					$edge_cache = $api_client->get( 'edge-cache/:site_id' );
-					return $edge_cache->ddos_until ?? '';
+					return $edge_cache->data->ddos_until ?? '';
 
 				case 'data_center':
 					$key = 'geo_affinity';
@@ -682,7 +676,8 @@ class WPCLOUD_Site {
 		}
 
 		if ( ! isset( $result->data->$key ) ) {
-			return $result->data->domain_name;
+			wpcloud_l( "Key $key not found in result" );
+			return '';
 		}
 
 		return $result->data->$key;
