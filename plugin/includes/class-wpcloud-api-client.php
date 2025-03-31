@@ -198,7 +198,7 @@ class WPCloud_API_Client {
 		$path     = $this->parse_path( $endpoint, $arguments );
 		$response = $this->api->call( $path, 'POST', $data );
 		if ( $response->not_ok() && $this->throw_exception ) {
-			throw new Exception( $response->error ); // phpcs:ignore
+			throw new Exception( $response->get_error_message() ); // phpcs:ignore
 		}
 		return $response;
 	}
