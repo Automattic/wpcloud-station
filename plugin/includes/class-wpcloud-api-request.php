@@ -34,7 +34,7 @@ class WPCloud_API_Request implements WPCloud_API_Request_Interface {
 	 *
 	 * @var stdClass|null
 	 */
-	private ?stdClass $result = null;
+	public ?stdClass $result = null;
 
 
 	/**
@@ -42,14 +42,21 @@ class WPCloud_API_Request implements WPCloud_API_Request_Interface {
 	 *
 	 * @var bool|null
 	 */
-	private ?bool $did_succeed = null;
+	protected ?bool $did_succeed = null;
+
+	/**
+	 * The data.
+	 *
+	 * @var stdClass|array|null
+	 */
+	public stdClass|array|null $data = null;
 
 	/**
 	 * Error
 	 *
 	 * @var WP_Error|null
 	 */
-	private ?WP_Error $error = null;
+	protected ?WP_Error $error = null;
 
 
 	/**
@@ -72,12 +79,8 @@ class WPCloud_API_Request implements WPCloud_API_Request_Interface {
 	public function __get( string $name ): mixed {
 		$data = $this->result->data ?? new stdClass();
 		switch ( $name ) {
-			case 'result':
-				return $this->result;
 			case 'error':
 				return $this->error;
-			case 'data':
-				return $data;
 			case 'success':
 				return $this->result->success ?? false;
 			case 'message':
@@ -143,6 +146,12 @@ class WPCloud_API_Request implements WPCloud_API_Request_Interface {
 
 		// Decode the response.
 		$this->result = json_decode( $body );
+
+		if ( isset( $this->result->data ) ) {
+			$this->data = $this->result->data;
+		} else {
+			$this->data = new stdClass();
+		}
 
 		// Check for JSON errors.
 		if ( json_last_error() !== JSON_ERROR_NONE ) {

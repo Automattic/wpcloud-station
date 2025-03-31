@@ -18,6 +18,13 @@ class WPCLOUD_Site {
 	);
 
 	/**
+	 * The post object.
+	 *
+	 * @var WP_Post
+	 */
+	protected $post;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param WP_Post $post The post object for the site.
@@ -108,6 +115,7 @@ class WPCLOUD_Site {
 				return new WP_Error( $hosting_domain->get_error_message() );
 			}
 		}
+		wpcloud_l( 'Creating site with domain: ' . $data['domain_name'] );
 
 		$data = apply_filters( 'wpcloud_site_create_data', $data, $post );
 
@@ -133,7 +141,6 @@ class WPCLOUD_Site {
 		);
 
 		$result = $api_client->post( 'create-site/:client', $data );
-
 		if ( ! $result->is_ok() ) {
 			update_post_meta( $post->ID, 'wpcloud_site_error', $result->get_error_message() );
 			return new WP_Error( $result->get_error_message() );
@@ -329,15 +336,9 @@ class WPCLOUD_Site {
 	public static function get_mutable_options(): array {
 
 		$php_versions = WPCloud_API_Client::call( 'get-php-versions/:client' );
+
 		if ( $php_versions->is_ok() ) {
-			$php_versions = array_reduce(
-				$php_versions->result, // get-php-versions returns a non-assoc array.
-				function ( $versions, $version ) {
-					$versions[ $version->version ] = $version->version;
-					return $versions;
-				},
-				array()
-			);
+			$php_versions = array_combine( $php_versions->data, $php_versions->data );
 		} else {
 			$php_versions = array();
 		}
@@ -575,7 +576,9 @@ class WPCLOUD_Site {
 	 * @return mixed The detail value. WP_Error on error.
 	 */
 	public static function get_detail( int|WP_Post $post, string $key, ): mixed {
+
 		$wpcloud_site_id = wpcloud_get_site_id( $post );
+
 		if ( empty( $wpcloud_site_id ) ) {
 
 			// Check for default values.
@@ -588,6 +591,7 @@ class WPCLOUD_Site {
 		}
 
 		$api_client = new WPCloud_API_Client( site_id: $wpcloud_site_id, throw_exception: true );
+
 		try {
 			$result = '';
 			switch ( $key ) {
@@ -677,11 +681,11 @@ class WPCLOUD_Site {
 			return $result->extra->server_pool->geo_affinity;
 		}
 
-		if ( ! isset( $result->$key ) ) {
-			return null;
+		if ( ! isset( $result->data->$key ) ) {
+			return $result->data->domain_name;
 		}
 
-		return $result->$key;
+		return $result->data->$key;
 	}
 
 	/**
@@ -710,11 +714,11 @@ class WPCLOUD_Site {
 			ARRAY_FILTER_USE_BOTH
 		);
 
-		$result = null;
-
 		$api_client = new WPCloud_API_Client( site_id: $wpcloud_site_id, throw_exception: true );
 		try {
-
+			if ( empty( $site_mutable_fields ) ) {
+				return new WP_Error( 'no_mutable_fields', __( 'No mutable fields to update.', 'wpcloud' ) );
+			}
 			foreach ( $site_mutable_fields as $key => $value ) {
 				switch ( $key ) {
 					case 'canonical_aliases':

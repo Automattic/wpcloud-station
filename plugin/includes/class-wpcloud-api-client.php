@@ -77,19 +77,22 @@ class WPCloud_API_Client {
 	/**
 	 * Constructor.
 	 *
-	 * @param string|int                         $site_id The site ID.
-	 * @param bool                               $use_cache Whether to use cache.
-	 * @param WPCloud_API_Request_Interface|null $api_request The API request object.
+	 * @param string|int $site_id The site ID.
+	 * @param bool       $use_cache Whether to use cache.
+	 * @param bool       $throw_exception Whether to throw exception on error.
+	 *
+	 * @throws Exception If the API request object is invalid.
 	 */
-	public function __construct( string|int $site_id = 0, bool $use_cache = true, mixed $api_request = null, bool $throw_exception = false ) {
+	public function __construct( string|int $site_id = 0, bool $use_cache = true, bool $throw_exception = false ) {
 		$this->site_id         = $site_id;
 		$settings              = get_option( 'wpcloud_settings', array() );
 		$this->client_name     = apply_filters( 'wpcloud_client_name', $settings['wpcloud_client'] ?? '' );
 		$this->api_key         = apply_filters( 'wpcloud_api_key', $settings['wpcloud_api_key'] ?? '' );
 		$this->throw_exception = $throw_exception;
 
-		if ( is_null( $api_request ) ) {
-			$api_request = apply_filters( 'wpcloud_api_request', new WPCloud_API_Request( $this->client_name, $this->api_key ) );
+		$api_request = apply_filters( 'wpcloud_api_request_instance', new WPCloud_API_Request( $this->client_name, $this->api_key ) );
+		if ( ! $api_request instanceof WPCloud_API_Request_Interface ) {
+			throw new Exception( 'Invalid API request object' );
 		}
 
 		$this->api = $api_request;
@@ -159,8 +162,10 @@ class WPCloud_API_Client {
 	 */
 	public function get( string $endpoint, string|int ...$arguments ): WPCloud_API_Request_Interface {
 		$path = $this->parse_path( $endpoint, $arguments );
+
 		if ( ! $this->use_cache ) {
-			return $this->api->call( $path );
+			$response = $this->api->call( $path );
+			return $response;
 		}
 		$cache_key = md5( $path );
 		$response  = get_transient( $cache_key );

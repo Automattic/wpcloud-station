@@ -16,6 +16,27 @@ class Mock_Helper {
 	 */
 	private static $mocked_responses = array();
 
+
+	/**
+	 * The global request mock instance.
+	 *
+	 * @var Mock_WPCloud_API_Request|null
+	 */
+	public static $request_mock = null;
+
+	/**
+	 * Get the global request mock instance.
+	 *
+	 * @return Mock_WPCloud_API_Request The global request mock instance.
+	 */
+	public static function get_request_mock() {
+		if ( ! self::$request_mock ) {
+			self::$request_mock = Mockery::mock( 'Mock_WPCloud_API_Request', array( 'test_client', 'test_api_key' ) )->makePartial();
+			self::$request_mock->shouldAllowMockingMethod( '__get' );
+		}
+		return self::$request_mock;
+	}
+
 	/**
 	 * Creates a mock for WPCloud_API_Request with a default return value.
 	 *
@@ -28,6 +49,16 @@ class Mock_Helper {
 	}
 
 	/**
+	 * Gets the global API mock object.
+	 *
+	 * @return Mock_WPCloud_API_Request|null The global API mock object.
+	 */
+	public static function get_api_mock() {
+		global $mock_api_request;
+		return $mock_api_request;
+	}
+
+	/**
 	 * Creates a mock for WPCloud_API_Request with a default return value.
 	 *
 	 * @param string       $path The path to the API endpoint.
@@ -35,82 +66,16 @@ class Mock_Helper {
 	 * @param int|null     $times The number of times the method should be called.
 	 */
 	public static function mock_api_request( string $path = '', array|object $response = array(), ?int $times = null ) {
-		// Store the path and response in our static array.
-		self::$mocked_responses[ $path ] = $response;
-
-		// Create a mock of our Mock_WPCloud_API_Request class.
-		$mock = Mockery::mock( 'Mock_WPCloud_API_Request', array( 'test_client', 'test_api_key' ) )->makePartial();
-
-		$expectation = $mock->shouldReceive( 'call' )
-		->withAnyArgs()
-		->andReturnUsing(
-			function ( ...$args ) use ( $mock ) {
-				$arg0 = reset( $args );
-
-				wpcloud_l( 'Mocked API request: ' . $arg0 . '.' );
-
-				// Check if we have a mock for this path.
-				foreach ( Mock_Helper::$mocked_responses as $mocked_path => $mocked_response ) {
-					if ( $arg0 === $mocked_path ) {
-						wpcloud_l( 'Mocked API response for ' . $mocked_path . '.' );
-
-						// Set up the mock to return success for is_ok() method.
-						$mock->shouldReceive( 'is_ok' )
-							->andReturn( true );
-
-						// Set up the mock to return empty error message.
-						$mock->shouldReceive( 'get_error_message' )
-							->andReturn( 'No error' );
-
-						// Set up the mock to return properties from the response.
-						if ( is_object( $mocked_response ) ) {
-							foreach ( get_object_vars( $mocked_response ) as $key => $value ) {
-								$mock->shouldReceive( '__get' )
-									->with( $key )
-									->andReturn( $value );
-							}
-						}
-
-						// Store the response in the mock object for __get to access.
-						$mock->result = (object) $mocked_response;
-						return $mock;
-					}
-				}
-
-				// Set up the mock to return success for is_ok() method.
-				$mock->shouldReceive( 'is_ok' )
-					->andReturn( true );
-
-				// Set up the mock to return empty error message.
-				$mock->shouldReceive( 'get_error_message' )
-					->andReturn( 'No error' );
-
-				$default_response = (object) array(
-					'success' => true,
-					'mocked'  => true,
-					'message' => 'No mock match',
-				);
-
-				// Set up the mock to return properties from the default response.
-				foreach ( get_object_vars( $default_response ) as $key => $value ) {
-					$mock->shouldReceive( '__get' )
-						->with( $key )
-						->andReturn( $value );
-				}
-
-				// Store the default response in the mock object for __get to access.
-				$mock->result = $default_response;
-				return $mock;
-			}
-		);
-
-		if ( ! is_null( $times ) ) {
-			$expectation = $expectation->times( $times );
+		if ( ! self::$request_mock ) {
+			self::$request_mock = Mockery::mock( 'Mock_WPCloud_API_Request', array( 'test_client', 'test_api_key' ) )->makePartial();
+			self::$request_mock->shouldAllowMockingMethod( '__get' );
 		}
 
-		// Store the mock globally so it can be used by WPCloud_API_Client.
-		global $mock_api_request;
-		$mock_api_request = $mock;
+		if ( is_array( $response ) ) {
+			$response = (object) $response;
+		}
+
+		self::$request_mock->mock_api_request( $path, $response );
 	}
 
 	/**
@@ -121,7 +86,7 @@ class Mock_Helper {
 	}
 
 	/**
-	 * Resets all Mockery mocks.
+	 * Resets all Mockey mocks.
 	 */
 	public static function shutdown() {
 		self::$mocked_responses = array();
