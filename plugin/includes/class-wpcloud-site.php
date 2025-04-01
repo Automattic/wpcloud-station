@@ -115,8 +115,6 @@ class WPCLOUD_Site {
 				return new WP_Error( $hosting_domain->get_error_message() );
 			}
 		}
-		wpcloud_l( 'Creating site with domain: ' . $data['domain_name'] );
-
 		$data = apply_filters( 'wpcloud_site_create_data', $data, $post );
 
 		// Set up default software.

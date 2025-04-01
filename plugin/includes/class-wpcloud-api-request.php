@@ -118,7 +118,7 @@ class WPCloud_API_Request implements WPCloud_API_Request_Interface {
 
 		// Add the body if it's not empty.
 		if ( ! empty( $body ) ) {
-			$args['body'] = wp_json_encode( $body );
+			$args['body'] = $body;
 		}
 		// Make the request.
 		$response = wp_remote_request( $url, $args );
@@ -133,12 +133,10 @@ class WPCloud_API_Request implements WPCloud_API_Request_Interface {
 
 		// Check for error response codes.
 		if ( $response_code >= 400 ) {
-			$body = wp_remote_retrieve_body( $response );
-			$data = json_decode( $body );
-			if ( $data && isset( $data->error ) ) {
-				return $this->fail( $data->error, $data->message ?? 'Unknown error' );
-			}
-			return $this->fail( 'api_error', $response_code );
+			$body    = wp_remote_retrieve_body( $response );
+			$data    = json_decode( $body );
+			$message = $data->message ?? 'Unknown error';
+			return $this->fail( $response_code, $message, $data->data );
 		}
 
 		// Get the response body.
@@ -207,7 +205,7 @@ class WPCloud_API_Request implements WPCloud_API_Request_Interface {
 			$this->error = new WP_Error( $args[0], $args[1] ?? 'Unknown error', $args[2] ?? null );
 		}
 
-		wpcloud_l( 'API Request error: ' . $this->error->get_error_message() );
+		wpcloud_l( 'API Request error: ', $this->error->get_error_message() );
 		return $this;
 	}
 }
