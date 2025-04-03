@@ -487,7 +487,7 @@ class WPCLOUD_Site {
 				'options' => array(
 					''         => '',
 					'staging'  => __( 'Staging' ),
-					'billing'  => __( 'Billing' ),
+					'billable' => __( 'Billable' ),
 					'internal' => __( 'Internal' ),
 				),
 				'hint'    => __( 'Site data' ),
