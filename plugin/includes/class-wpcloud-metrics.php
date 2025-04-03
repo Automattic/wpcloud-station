@@ -15,6 +15,13 @@ require_once __DIR__ . '/wpcloud-client.php';
 class WPCloud_Metrics {
 
 	/**
+	 * Client ID or Name
+	 *
+	 * @var string
+	 */
+	protected string $client;
+
+	/**
 	 * The site.
 	 *
 	 * @var int
@@ -97,6 +104,11 @@ class WPCloud_Metrics {
 		$this->dimension = $dimension;
 		$this->start     = $start ?? strtotime( '-24 hours' );
 		$this->end       = $end ?? time();
+
+		// TODO - Is this already available without option lookup?
+		$options = get_option( 'wpcloud_settings' );
+		$this->client = $options['wpcloud_client'] ?? null;
+
 	}
 
 	/**
@@ -173,11 +185,18 @@ class WPCloud_Metrics {
 			),
 			$options
 		);
-
-		$this->result = wpcloud_client_site_metrics( $this->site, $this->start, $this->end, $options );
+		// TODO - Hack to switch endpoint as same metrics can be pulled per client or site
+		if ( $options['request_type'] == 'client' ) {
+			unset( $options['type'] );
+			$this->result = wpcloud_client_metrics( $this->client, $this->start, $this->end, $options );
+		} else {
+			unset( $options['type'] );
+			$this->result = wpcloud_client_site_metrics($this->site, $this->start, $this->end, $options);
+		}
 		if ( is_wp_error( $this->result ) ) {
 			return $this->result;
 		}
+
 		$this->meta    = (array) $this->result->_meta;
 		$this->periods = json_decode( wp_json_encode( $this->result->periods ), true );
 		return $this;

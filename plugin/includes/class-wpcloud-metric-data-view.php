@@ -53,7 +53,7 @@ class WPCLOUD_Metric_Data_View extends WPCLOUD_Metrics {
 	 *
 	 * @return WP_Error|WPCLOUD_Metric_Data
 	 */
-	public static function load( int $site, string $metric, string $dimension, int $start, int $end ): WP_Error|WPCLOUD_Metric_Data_View {
+	public static function load( int $site, string $metric, string $dimension, int $start, int $end, string $request_type = 'site', int $resolution = 10, int $top_x = 20, bool $summarize = false, array $filters = null ): WP_Error|WPCLOUD_Metric_Data_View {
 		// validate the metric and dimension.
 		$view = new self( $site, $metric, $dimension, $start, $end );
 		if ( ! array_key_exists( $view->metric, $view->get_available_metrics() ) ) {
@@ -63,8 +63,13 @@ class WPCLOUD_Metric_Data_View extends WPCLOUD_Metrics {
 		if ( ! array_key_exists( $view->dimension, $view->get_available_dimensions() ) ) {
 			return new WP_Error( 'invalid_dimension', 'Invalid dimension', array( 'status' => 400 ) );
 		}
-
-		$view->fetch();
+		$view->fetch( [
+			'request_type' => $request_type,
+			'resolution' => $resolution,
+			'top_x' => $top_x,
+			'summarize' => $summarize,
+			'filters' => $filters,
+		] );
 		if ( is_wp_error( $view->result ) ) {
 			return $view->result;
 		}

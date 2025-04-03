@@ -20,7 +20,7 @@ import useGraphOptions from './lib/useGraphOptions';
 import stationApi from '@wpcloud/utils/api';
 
 
-export default function Graph({ site, metric, dimension, type, title, interval, refresh, showLegend }) {
+export default function Graph({ site, request_type, metric, dimension, type, title, interval, refresh, showLegend, top_x, resolution, summarize, filters }) {
 	const { start, end } = interval || {};
 	const [ data, setData ] = useState([]);
 	const [ series, setSeries ] = useState([]);
@@ -37,10 +37,15 @@ export default function Graph({ site, metric, dimension, type, title, interval, 
 			try {
 				const { data, series, meta } = await stationApi.get(`metrics/${metric}`, {
 					query: {
+						request_type,
 						site,
 						start,
 						end,
-						dimension
+						dimension,
+						top_x,
+						resolution,
+						summarize,
+						filters,
 					}, parse: true, signal
 				});
 				setData(data);

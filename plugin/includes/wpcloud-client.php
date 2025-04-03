@@ -930,7 +930,7 @@ function wpcloud_client_site_logs( int $wpcloud_site_id, ?int $start, ?int $end,
  * @return stdClass|WP_Error Site metrics on success. WP_Error on error.
  */
 function wpcloud_client_site_metrics( int $wpcloud_site_id, int $start, int $end, $options = array() ): stdClass|WP_Error {
-	$endpoint = "site-metrics/$wpcloud_site_id";
+	$endpoint = "metrics/site/$wpcloud_site_id";
 	if ( isset( $options['summarize'] ) && $options['summarize'] ) {
 		$endpoint .= '/summarize/';
 		unset( $options['summarize'] );
@@ -944,6 +944,34 @@ function wpcloud_client_site_metrics( int $wpcloud_site_id, int $start, int $end
 	);
 	return wpcloud_client_post( $wpcloud_site_id, $endpoint, $args );
 }
+
+/**
+ * Fetch the site metrics.
+ *
+ * @param string|integer $wpcloud_client_id_or_name  The WP Cloud Client ID or Name.
+ * @param integer $start           The start time of the metrics to fetch.
+ * @param integer $end             The end time of the metrics to fetch.
+ * @param array   $options         Optional. Additional options for the metrics query.
+ *
+ * @return stdClass|WP_Error Site metrics on success. WP_Error on error.
+ */
+function wpcloud_client_metrics( $wpcloud_client_id_or_name, int $start, int $end, $options = array() ): stdClass|WP_Error {
+	$endpoint = "metrics/client/$wpcloud_client_id_or_name";
+	if ( isset( $options['summarize'] ) && $options['summarize'] ) {
+		$endpoint .= '/summarize/';
+	}
+	unset( $options['summarize'] );
+	$args = wp_parse_args(
+		$options,
+		array(
+			'start' => $start,
+			'end'   => $end,
+		)
+	);
+
+	return wpcloud_client_post( null, $endpoint, $args );
+}
+
 /**
  * Make a GET request the WP Cloud API.
  *

@@ -1,0 +1,48 @@
+<!-- wp:template-part {"slug":"header","tagName":"header","area":"header"} /-->
+
+<!-- wp:spacer {"height":"12px","className":"wpcloud-site-view\u002d\u002dcontent\u002d\u002dspacer"} -->
+<div style="height:12px" aria-hidden="true" class="wp-block-spacer wpcloud-site-view--content--spacer"></div>
+<!-- /wp:spacer -->
+
+<!-- wp:columns {"className":"wpcloud-site-view\u002d\u002dcontent"} -->
+<div class="wp-block-columns wpcloud-site-view--content"><!-- wp:column {"width":""} -->
+	<div class="wp-block-column">
+<!-- /wp:column -->
+
+<!-- wp:wpcloud/metrics -->
+<div class="wp-block-wpcloud-metrics" id="metrics"><!-- wp:group {"metadata":{"name":"Graphs"},"className":"wpcloud-metrics","layout":{"type":"grid","columnCount":2,"minimumColumnWidth":null}} -->
+	<div class="wp-block-group wpcloud-metrics"><!-- wp:wpcloud/graph {"type":"bar"} -->
+
+		<!-- 'requests', 'http_status' -->
+		<!-- We want a stacked bar chart see: https://github.com/leeoniya/uPlot/blob/211f06d6d258833d025952e890a612b254b0a9fb/demos/bars-grouped-stacked.html -->
+		<div class="wp-block-wpcloud-graph" data-graph-attributes="{&quot;site&quot;:0,&quot;request_type&quot;:&quot;client&quot;,&quot;metric&quot;:&quot;requests&quot;,&quot;dimension&quot;:&quot;http_status&quot;,&quot;type&quot;:&quot;bar&quot;,&quot;stacked&quot;:&quot;true&quot;,&quot;title&quot;:&quot;Requests by HTTP Response Code&quot;,&quot;showLegend&quot;:true,&quot;resolution&quot;:60}">Graph</div>
+		<!-- 'response_time_average', 'http_verb' -->
+		<div class="wp-block-wpcloud-graph" data-graph-attributes="{&quot;site&quot;:0,&quot;request_type&quot;:&quot;client&quot;,&quot;metric&quot;:&quot;response_time_average&quot;,&quot;dimension&quot;:&quot;http_verb&quot;,&quot;type&quot;:&quot;line&quot;,&quot;title&quot;:&quot;HTTP Response Time&quot;,&quot;showLegend&quot;:true,&quot;resolution&quot;:60}">Graph</div>
+
+		<!-- Top X Bars -->
+		<!-- Top 20 Sites by Request -->
+		<div class="wp-block-wpcloud-graph" data-graph-attributes="{&quot;site&quot;:0,&quot;request_type&quot;:&quot;client&quot;,&quot;metric&quot;:&quot;requests&quot;,&quot;dimension&quot;:&quot;http_host&quot;,&quot;type&quot;:&quot;bar&quot;,&quot;title&quot;:&quot;Top 20 Sites by Requests&quot;,&quot;showLegend&quot;:true,&quot;top_x&quot;:20,&quot;summarize&quot;:true}">Graph</div>
+
+		<!-- Top 10 Resource-Limited Sites (599) -->
+		<div class="wp-block-wpcloud-graph" data-graph-attributes="{&quot;site&quot;:0,&quot;request_type&quot;:&quot;client&quot;,&quot;metric&quot;:&quot;requests&quot;,&quot;dimension&quot;:&quot;http_host&quot;,&quot;type&quot;:&quot;bar&quot;,&quot;title&quot;:&quot;Top 10 Resource-Limited Sites (599)&quot;,&quot;showLegend&quot;:true,&quot;top_x&quot;:10,&quot;filters&quot;:&quot;%5B%7B%22column%22%3A%22http_status%22%2C%22operator%22%3A%22%3D%22%2C%22value%22%3A429%7D%5D&quot;,&quot;summarize&quot;:true}">Graph</div>
+
+		<!-- Top 10 Sites with 5XX -->
+		<div class="wp-block-wpcloud-graph" data-graph-attributes="{&quot;site&quot;:0,&quot;request_type&quot;:&quot;client&quot;,&quot;metric&quot;:&quot;requests&quot;,&quot;dimension&quot;:&quot;http_host&quot;,&quot;type&quot;:&quot;bar&quot;,&quot;title&quot;:&quot;Top 10 Sites with 5XX&quot;,&quot;showLegend&quot;:true,&quot;top_x&quot;:10,&quot;summarize&quot;:true,&quot;filters&quot;:&quot;%5B%7B%22column%22%3A%22http_status%22%2C%22operator%22%3A%22%3E%3D%22%2C%22value%22%3A500%7D%2C%7B%22column%22%3A%22http_status%22%2C%22operator%22%3A%22%3C%22%2C%22value%22%3A600%7D%5D&quot;}">Graph</div>
+
+
+		<!-- 'php_cpu_time_persec', 'http_host' -->
+		<div class="wp-block-wpcloud-graph" data-graph-attributes="{&quot;site&quot;:0,&quot;request_type&quot;:&quot;client&quot;,&quot;metric&quot;:&quot;php_cpu_time_persec&quot;,&quot;dimension&quot;:&quot;http_host&quot;,&quot;type&quot;:&quot;line&quot;,&quot;title&quot;:&quot;Top 10 Sites by CPU Cores&quot;,&quot;showLegend&quot;:true,&quot;resolution&quot;:60,&quot;top_x&quot;:10}">Graph</div>
+
+		<!-- 'php_response_time_sum', 'http_host' -->
+		<div class="wp-block-wpcloud-graph" data-graph-attributes="{&quot;site&quot;:0,&quot;request_type&quot;:&quot;client&quot;,&quot;metric&quot;:&quot;php_response_time_sum&quot;,&quot;dimension&quot;:&quot;http_host&quot;,&quot;type&quot;:&quot;line&quot;,&quot;title&quot;:&quot;Top 10 Sites by Request Time&quot;,&quot;showLegend&quot;:true,&quot;resolution&quot;:300,&quot;top_x&quot;:10}">Graph</div>
+
+		<!-- 'response_bytes', 'http_host' -->
+		<div class="wp-block-wpcloud-graph" data-graph-attributes="{&quot;site&quot;:0,&quot;request_type&quot;:&quot;client&quot;,&quot;metric&quot;:&quot;response_bytes&quot;,&quot;dimension&quot;:&quot;http_host&quot;,&quot;type&quot;:&quot;line&quot;,&quot;title&quot;:&quot;Top 10 Sites by Bandwidth&quot;,&quot;showLegend&quot;:true,&quot;resolution&quot;:300,&quot;top_x&quot;:10}">Graph</div>
+
+
+	</div><!-- /wp:group -->
+</div><!-- /wp:wpcloud/metrics -->
+</div><!-- /wp:column -->
+</div><!-- /wp:columns -->
+
+<!-- wp:template-part {"slug":"footer","area":"footer","className":"wpcloud-footer"} /-->

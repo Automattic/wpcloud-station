@@ -50,7 +50,45 @@ if ( ! class_exists( 'WPCLOUD_Metrics_Controller' ) ) {
 					'args'                => array(
 						'site'      => array(
 							'description' => esc_html__( 'Unique identifier for the site.', 'wpcloud' ),
-							'type'        => 'integer',
+							'type'        => 'string',
+							'options'     => array(
+								'default' => 0,
+							),
+						),
+						'resolution'      => array(
+							'description' => esc_html__( 'Unique identifier for the site.', 'wpcloud' ),
+							'type'        => 'int',
+							'options'     => array(
+								'default' => 0,
+							),
+						),
+						'top_x'      => array(
+							'description' => esc_html__( 'Unique identifier for the site.', 'wpcloud' ),
+							'type'        => 'int',
+							'options'     => array(
+								'default' => 0,
+							),
+						),
+						'filters'	=> array(
+							'description' => esc_html__( 'Filters to be applied to the metric query', 'wpcloud' ),
+							'type'        => 'string', // This is an associated array but to make it easier to handle accept json_encoded( array ) aka string
+							'options'     => array(
+								'default' => null,
+							),
+						),
+						'summarize'      => array(
+							'description' => esc_html__( 'Retrieve a summary vs time based results', 'wpcloud' ),
+							'type'        => 'boolean',
+							'options'     => array(
+								'default' => false,
+							),
+						),
+						'request_type' => array(
+							'description' => esc_html__( 'Type of Metric Request.', 'wpcloud' ),
+							'type'        => 'string',
+							'options'     => array(
+								'default' => 'site',
+							)
 						),
 						'metric'    => array(
 							'description' => esc_html__( 'The metric to retrieve.', 'wpcloud' ),
@@ -105,21 +143,37 @@ if ( ! class_exists( 'WPCLOUD_Metrics_Controller' ) ) {
 		 * @return WP_REST_Response
 		 */
 		public function get_site_metric( WP_REST_Request $request ): WP_REST_Response {
+
 			$params    = $request->get_params();
+
 			$site_id   = $params['site'];
 			$metric    = $params['metric'];
+			$request_type = $params['request_type'];
+			$resolution = isset( $params['resolution'] ) ? intval( $params['resolution'] ) : 10;
+			$top_x     = isset( $params['top_x'] ) ? intval( $params['top_x'] ) : 20;
 			$dimension = $params['dimension'] ?? null;
 			$start     = $this->parseTime( $params['start'] ?? null, 'start' );
 			$end       = $this->parseTime( $params['end'] ?? null, 'end' );
+			$summarize = isset( $params['summarize'] ) ? true : false;
+
+			$filters = $params['filters'] ?? null;
+			if ( ! empty ( $filters ) ) {
+				// TODO - validation and error handling, change in type?
+				$filters = json_decode( urldecode( $filters ) );
+			}
 
 			if ( is_wp_error( $start ) || is_wp_error( $end ) ) {
 				return new WP_REST_Response( $start->get_error_message(), 400 );
 			}
 
-			$site = WPCLOUD_Site::get_by_id( $site_id );
+			if ( $site_id > 0 ) {
+				$site = WPCLOUD_Site::get_by_id($site_id);
 
-			if ( ! $site ) {
-				return new WP_REST_Response( esc_html__( 'Site not found', 'wpcloud' ), 404 );
+				if (!$site) {
+					return new WP_REST_Response(esc_html__('Site not found', 'wpcloud'), 404);
+				}
+			} else {
+				$site_id = 0;
 			}
 
 			$view = WPCLOUD_Metric_Data_View::load(
@@ -128,6 +182,11 @@ if ( ! class_exists( 'WPCLOUD_Metrics_Controller' ) ) {
 				dimension: $dimension,
 				start: $start,
 				end: $end,
+				request_type: $request_type,
+				resolution: $resolution,
+				top_x: $top_x,
+				summarize: $summarize,
+				filters: $filters,
 			);
 
 			if ( is_wp_error( $view ) ) {
@@ -135,7 +194,9 @@ if ( ! class_exists( 'WPCLOUD_Metrics_Controller' ) ) {
 			}
 
 			$result = $view->default();
-
+			if ( is_wp_error( $result ) ) {
+				return new WP_REST_Response( $result->get_error_message(), 500 );
+			}
 			$response = array(
 				'meta'   => $result->meta,
 				'series' => $result->series,
