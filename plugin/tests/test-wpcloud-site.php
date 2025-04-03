@@ -303,7 +303,6 @@ class WPCloud_SiteTest extends WP_UnitTestCase {
 		$edge_cache_status = WPCloud_Site::get_detail( $this->post, 'edge_cache_status' );
 		$this->assertEquals( 'enabled', $edge_cache_status );
 		$ddos_until = WPCloud_Site::get_detail( $this->post, 'defensive_mode' );
-		wpcloud_l( $ddos_until );
 		$this->assertEquals( 1743453005, $ddos_until );
 	}
 

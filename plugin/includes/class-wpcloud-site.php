@@ -68,7 +68,7 @@ class WPCLOUD_Site {
 	 * @param WP_Post $post The post object for the site.
 	 * @return WP_Post|WP_Error
 	 */
-	public static function create( array $options, WP_Post $post = null ): WP_Post|WP_Error {
+	public static function create( array $options, ?WP_Post $post = null ): WP_Post|WP_Error {
 		if ( ! $post ) {
 			$post = self::create_post( $options );
 		}
@@ -632,6 +632,7 @@ class WPCLOUD_Site {
 					return $post->post_name;
 
 				case 'domain':
+				case 'domain_name':
 					$details = $api_client->get( 'get-site/:site_id/extra' );
 					return $details->domain_name;
 
