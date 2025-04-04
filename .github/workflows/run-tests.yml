@@ -55,7 +55,9 @@ jobs:
           restore-keys: ${{ runner.os }}-composer-
 
       - name: Install dependencies
-        run: composer install --prefer-dist --no-progress
+        run: |
+          composer install --prefer-dist --no-progress
+          composer update mockery/mockery --with-dependencies
 
       - name: Get changed PHP files
         id: changed-php-files
@@ -225,7 +227,9 @@ jobs:
           restore-keys: ${{ runner.os }}-composer-
 
       - name: Install PHP dependencies
-        run: composer install --prefer-dist --no-progress
+        run: |
+          composer install --prefer-dist --no-progress
+          composer update mockery/mockery --with-dependencies
 
       - name: Cache WordPress test suite
         id: cache-wp-tests
