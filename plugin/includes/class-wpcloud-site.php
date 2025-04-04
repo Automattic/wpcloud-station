@@ -643,6 +643,7 @@ class WPCLOUD_Site {
 				case 'space_used':
 				case 'db_file_size':
 				case 'space_quota':
+				case 'max_space_quota':
 					$site_meta   = $api_client->get( "site-meta/:site_id/$key/get" );
 					$space_value = $site_meta->data->$key ?? 0;
 					return self::readable_size( (float) $space_value );
@@ -651,6 +652,24 @@ class WPCLOUD_Site {
 					$ssh_port = $api_client->get( 'site-meta/:site_id/ssh_port/get' ) ?? -1;
 					// @TODO: Confirm that this is always the case, it appears that the port will be 2223 for ssh and 2221 for sftp
 					return 2223 === $ssh_port;
+
+				case 'suspended':
+				case 'suspend_after':
+				case 'wp_version':
+				case 'do_not_delete':
+				case 'photon_subsizes':
+				case 'privacy_model':
+				case 'static_file_404':
+				case 'default_php_conns':
+				case 'burst_php_conns':
+				case 'php_fs_permissions':
+				case 'canonicalize_aliases':
+				case '_data':
+					$site_meta = $api_client->get( "site-meta/:site_id/$key/get" );
+					if ( ! $site_meta->is_ok() ) {
+						return '';
+					}
+					return $site_meta->data->$key ?? null;
 
 				case 'edge_cache_status':
 					$edge_cache = $api_client->get( 'edge-cache/:site_id' );
@@ -675,7 +694,7 @@ class WPCLOUD_Site {
 		}
 
 		if ( ! isset( $result->data->$key ) ) {
-			wpcloud_l( "Key $key not found in result" );
+			wpcloud_l( "Key $key not found in result", $result );
 			return '';
 		}
 
