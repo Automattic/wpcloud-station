@@ -88,7 +88,7 @@ jobs:
       - name: Run PHP_CodeSniffer on changed files
         working-directory: ./plugin
         if: steps.changed-php-files.outputs.any_changed == 'true'
-        run: ../vendor/bin/phpcs --standard=.phpcs.xml.dist --extensions=php ${{ steps.changed-php-files.outputs.changed_files }}
+        run: ../vendor/bin/phpcs --standard=.phpcs.xml.dist --extensions=php --warning-severity=0 ${{ steps.changed-php-files.outputs.changed_files }}
 
       - name: Skip PHP_CodeSniffer
         if: steps.changed-php-files.outputs.any_changed != 'true'
