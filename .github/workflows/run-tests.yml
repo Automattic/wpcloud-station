@@ -253,7 +253,7 @@ jobs:
           export WP_TESTS_DIR=/tmp/wordpress-tests-lib
 
           # Run tests directly with PHPUnit
-          php -d memory_limit=256M ../vendor/bin/phpunit
+          php -d memory_limit=256M vendor/bin/phpunit
 
       - name: Clean up
         run: rm -f plugin/tests/verbose_logging_enabled
