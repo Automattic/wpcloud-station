@@ -185,10 +185,19 @@ jobs:
         if: steps.changed-js-css-files.outputs.css_changed != 'true'
         run: echo "No CSS files changed, skipping CSS linting"
 
-  test:
-    name: WordPress Tests
+  test-php:
+    name: PHP Tests
     runs-on: ubuntu-latest
-    needs: [validate, lint-php, lint-js]
+    needs: [validate, lint-php]
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress_test
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
       - name: Checkout code
@@ -215,40 +224,58 @@ jobs:
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: ${{ runner.os }}-composer-
 
+      - name: Install PHP dependencies
+        run: composer install --prefer-dist --no-progress
+
+      - name: Cache WordPress test suite
+        id: cache-wp-tests
+        uses: actions/cache@v3
+        with:
+          path: /tmp/wordpress-tests-lib
+          key: ${{ runner.os }}-wp-tests-lib-${{ hashFiles('plugin/bin/install-wp-tests.sh') }}
+
+      - name: Install WordPress test suite
+        if: steps.cache-wp-tests.outputs.cache-hit != 'true'
+        run: |
+          bash plugin/bin/install-wp-tests.sh wordpress_test root root localhost latest true
+
+      - name: Create verbose logging flag file
+        run: touch plugin/tests/verbose_logging_enabled
+
+      - name: Run PHPUnit tests
+        working-directory: ./plugin
+        run: |
+          # Set environment variables for WordPress tests
+          export WP_TESTS_DIR=/tmp/wordpress-tests-lib
+
+          # Run tests directly with PHPUnit
+          php -d memory_limit=256M ../vendor/bin/phpunit
+
+      - name: Clean up
+        run: rm -f plugin/tests/verbose_logging_enabled
+        if: always()
+
+  test-js:
+    name: JavaScript Tests
+    runs-on: ubuntu-latest
+    needs: [validate, lint-js]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '20.11'
           cache: 'npm'
+          cache-dependency-path: plugin/package-lock.json
 
-      - name: Install global dependencies
-        run: npm install -g @wordpress/env
-
-      - name: Install PHP dependencies
-        run: composer install --prefer-dist --no-progress
-
-      - name: Install Node.js dependencies
+      - name: Install dependencies
         working-directory: ./plugin
         run: npm ci
-
-      - name: Start WordPress environment
-        run: wp-env start
-
-      - name: Run PHPUnit tests
-        run: |
-          # Create verbose logging flag file if needed
-          touch plugin/tests/verbose_logging_enabled
-
-          # Run tests using wp-env
-          wp-env run tests-cli --env-cwd=wp-content/plugins/wpcloud-station-plugin php -d memory_limit=256M vendor/bin/phpunit
-
-          # Clean up
-          rm -f plugin/tests/verbose_logging_enabled
 
       - name: Run JavaScript tests
         working-directory: ./plugin
         run: npm run test
-
-      - name: Stop WordPress environment
-        run: wp-env stop
-        if: always()
