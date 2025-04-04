@@ -2,9 +2,9 @@ name: Run Tests
 
 on:
   pull_request:
-    branches: [ main, master ]
+    branches: [ trunk ]
   push:
-    branches: [ main, master ]
+    branches: [ trunk ]
 
 jobs:
   validate:
