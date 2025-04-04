@@ -232,7 +232,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: /tmp/wordpress-tests-lib
-          key: ${{ runner.os }}-wp-tests-lib-${{ hashFiles('plugin/bin/install-wp-tests.sh') }}
+          key: ${{ runner.os }}-wp-tests-lib-127.0.0.1-${{ hashFiles('plugin/bin/install-wp-tests.sh') }}
 
       - name: Install Subversion
         if: steps.cache-wp-tests.outputs.cache-hit != 'true'
@@ -241,7 +241,14 @@ jobs:
       - name: Install WordPress test suite
         if: steps.cache-wp-tests.outputs.cache-hit != 'true'
         run: |
-          bash plugin/bin/install-wp-tests.sh wordpress_test root root localhost latest true
+          bash plugin/bin/install-wp-tests.sh wordpress_test root root 127.0.0.1 latest true
+
+      - name: Verify MySQL connection
+        run: |
+          # Wait for MySQL to be ready
+          echo "Waiting for MySQL to be ready..."
+          timeout 15 bash -c "until mysql -h127.0.0.1 -uroot -proot -e 'SELECT 1'; do sleep 1; done"
+          echo "MySQL is up and running!"
 
       - name: Create verbose logging flag file
         run: touch plugin/tests/verbose_logging_enabled
@@ -251,6 +258,11 @@ jobs:
         run: |
           # Set environment variables for WordPress tests
           export WP_TESTS_DIR=/tmp/wordpress-tests-lib
+
+          # Update wp-tests-config.php to use 127.0.0.1 instead of localhost
+          if [ -f "$WP_TESTS_DIR/wp-tests-config.php" ]; then
+            sed -i 's|localhost|127.0.0.1|' "$WP_TESTS_DIR/wp-tests-config.php"
+          fi
 
           # Run tests directly with PHPUnit
           php -d memory_limit=256M ../vendor/bin/phpunit
