@@ -18,7 +18,7 @@ if ( ! $_tests_dir ) {
 
 // Forward custom PHPUnit Polyfills autoloader file for WP < 5.9.
 if ( ! defined( 'WP_TESTS_PHPUNIT_POLYFILLS_PATH' ) ) {
-	define( 'WP_TESTS_PHPUNIT_POLYFILLS_PATH', __DIR__ . '/../vendor/yoast/phpunit-polyfills/phpunitpolyfills-autoload.php' );
+	define( 'WP_TESTS_PHPUNIT_POLYFILLS_PATH', dirname( dirname( __DIR__ ) ) . '/vendor/yoast/phpunit-polyfills/phpunitpolyfills-autoload.php' );
 }
 
 if ( ! file_exists( "{$_tests_dir}/includes/functions.php" ) ) {
@@ -29,7 +29,7 @@ if ( ! file_exists( "{$_tests_dir}/includes/functions.php" ) ) {
 
 require_once "{$_tests_dir}/includes/functions.php";
 
-require_once dirname( __DIR__ ) . '/vendor/autoload.php';
+require_once dirname( dirname( __DIR__ ) ) . '/vendor/autoload.php';
 require_once dirname( __DIR__ ) . '/tests/class-mock-helper.php';
 
 /**
