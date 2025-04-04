@@ -55,7 +55,7 @@ jobs:
 
       - name: Run PHP_CodeSniffer
         working-directory: ./plugin
-        run: vendor/bin/phpcs --standard=.phpcs.xml.dist --extensions=php .
+        run: ../vendor/bin/phpcs --standard=.phpcs.xml.dist --extensions=php .
 
   lint-js:
     name: JavaScript/CSS Lint
