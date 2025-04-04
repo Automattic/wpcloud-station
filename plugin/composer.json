@@ -1,0 +1,29 @@
+{
+    "name": "automattic/wpcloud-station-plugin",
+    "description": "WP Cloud Station Plugin",
+    "type": "wordpress-plugin",
+    "authors": [
+        {
+            "name": "Automattic Inc"
+        }
+    ],
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
+    },
+    "require": {
+        "php": ">=7.4"
+    },
+    "require-dev": {
+        "wp-coding-standards/wpcs": "^3.0",
+        "phpunit/phpunit": "^9.0",
+        "mockery/mockery": "^1.5",
+        "yoast/phpunit-polyfills": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "WPCloud\\": "includes/"
+        }
+    }
+}

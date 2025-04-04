@@ -138,11 +138,94 @@ jobs:
           # Create verbose logging flag file if needed
           touch plugin/tests/verbose_logging_enabled
 
+          # Create a custom bootstrap file
+          cat > custom-bootstrap.php << 'EOF'
+          <?php
+          /**
+           * PHPUnit bootstrap file.
+           *
+           * @package wpcloud-client
+           */
+
+          require_once '/var/www/html/wp-content/plugins/wpcloud-station-plugin/tests/class-mock-wpcloud-api-request.php';
+          require_once '/var/www/html/wp-content/plugins/wpcloud-station-plugin/includes/class-wpcloud-api-client.php';
+          require_once '/var/www/html/wp-content/plugins/wpcloud-station-plugin/includes/class-wpcloud-api-request.php';
+
+          $_tests_dir = getenv( 'WP_TESTS_DIR' );
+
+          if ( ! $_tests_dir ) {
+            $_tests_dir = rtrim( sys_get_temp_dir(), '/\\' ) . '/wordpress-tests-lib';
+          }
+
+          // Forward custom PHPUnit Polyfills autoloader file for WP < 5.9.
+          if ( ! defined( 'WP_TESTS_PHPUNIT_POLYFILLS_PATH' ) ) {
+            define( 'WP_TESTS_PHPUNIT_POLYFILLS_PATH', '/var/www/html/wp-content/plugins/wpcloud-station-plugin/vendor/yoast/phpunit-polyfills/phpunitpolyfills-autoload.php' );
+          }
+
+          if ( ! file_exists( "{$_tests_dir}/includes/functions.php" ) ) {
+            echo "Could not find {$_tests_dir}/includes/functions.php, have you run bin/install-wp-tests.sh ?" . PHP_EOL; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+            exit( 1 );
+          }
+
+          require_once "{$_tests_dir}/includes/functions.php";
+
+          require_once '/var/www/html/wp-content/plugins/wpcloud-station-plugin/vendor/autoload.php';
+          require_once '/var/www/html/wp-content/plugins/wpcloud-station-plugin/tests/class-mock-helper.php';
+
+          /**
+           * Manually load the plugin being tested.
+           */
+          function _manually_load_plugin() {
+            require '/var/www/html/wp-content/plugins/wpcloud-station-plugin/wpcloud-station.php';
+          }
+
+          tests_add_filter( 'muplugins_loaded', '_manually_load_plugin' );
+
+          // Start up the WP testing environment.
+          require "{$_tests_dir}/includes/bootstrap.php";
+
+          // Define WPCLOUD_TESTING constant to enable mocking in wpcloud_client functions.
+          if ( ! defined( 'WPCLOUD_TESTING' ) ) {
+            define( 'WPCLOUD_TESTING', true );
+          }
+
+          // Add a filter to provide a mock API key for testing.
+          add_filter(
+            'wpcloud_api_key',
+            function ( $api_key ) {
+              return 'test_api_key';
+            }
+          );
+
+          // Add a filter to provide a mock client name for testing.
+          add_filter(
+            'wpcloud_client_name',
+            function ( $client_name ) {
+              return 'test_client';
+            }
+          );
+
+          // Add a filter to provide a mock WPCloud_API_Request.
+          add_filter(
+            'wpcloud_api_request_instance',
+            function ( $request ) {
+              return Mock_Helper::get_request_mock();
+            }
+          );
+          EOF
+
+          # Copy the custom bootstrap file to the Docker container
+          wp-env run tests-cli --env-cwd=/ cp /var/www/html/custom-bootstrap.php /tmp/bootstrap.php
+
+          # Verify the MySQL connection
+          wp-env run tests-cli bash -c "mysql -hdb -uroot -proot -e 'SELECT 1;'"
+
           # Run tests using wp-env
-          wp-env run tests-cli --env-cwd=wp-content/plugins/wpcloud-station-plugin php -d memory_limit=256M vendor/bin/phpunit
+          wp-env run tests-cli --env-cwd=wp-content/plugins/wpcloud-station-plugin php -d memory_limit=256M vendor/bin/phpunit --bootstrap=/tmp/bootstrap.php
 
           # Clean up
           rm -f plugin/tests/verbose_logging_enabled
+          rm -f custom-bootstrap.php
 
       - name: Run JavaScript tests
         working-directory: ./plugin
