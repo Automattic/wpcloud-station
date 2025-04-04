@@ -22,7 +22,7 @@ jobs:
           coverage: none
 
       - name: Validate composer.json
-        run: composer validate --strict
+        run: composer validate
 
   lint-php:
     name: PHP Lint

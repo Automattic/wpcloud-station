@@ -2,6 +2,7 @@
     "name": "automattic/wpcloud-station",
     "description": "\"WP Cloud Station\"",
     "type": "project",
+    "license": "GPL-2.0-or-later",
     "authors": [
         {
             "name": "Automattic Inc"
