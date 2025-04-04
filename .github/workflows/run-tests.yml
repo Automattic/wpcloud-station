@@ -226,6 +226,11 @@ jobs:
           mysql user: 'root'
           mysql password: 'root'
 
+      - name: Install Subversion
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y subversion
+
       - name: Set up WordPress test suite
         run: |
           # Create verbose logging flag file if needed
