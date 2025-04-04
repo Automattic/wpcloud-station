@@ -750,11 +750,11 @@ class WPCLOUD_Site {
 				if ( $value ) {
 					$api_client->post( 'site-meta/:site_id', $key, 'update', array( 'value' => $value ) );
 				} else {
-					$api_client->post( 'site-meta/:site_id', $key, 'delete' );
+					$api_client->post( 'site-meta/:site_id', $key, 'remove' );
 				}
 			}
 		} catch ( Exception $e ) {
-			return new WP_Error( 'Update detail failed', $e->get_error_message() );
+			return new WP_Error( 'Update detail failed', $e->getMessage() );
 		}
 		return true;
 	}
