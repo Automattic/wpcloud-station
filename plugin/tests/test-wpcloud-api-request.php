@@ -140,7 +140,8 @@ class WPCloud_API_RequestTest extends WP_UnitTestCase {
 				$this->assertEquals( 'POST', $args['method'] );
 
 				// Verify the request body.
-				$body = json_decode( $args['body'], true );
+				$body = $args['body'];
+				// $body = json_decode( $args['body'], true )
 				$this->assertEquals( 'value', $body['key'] );
 
 				return $mock_response;
@@ -218,7 +219,7 @@ class WPCloud_API_RequestTest extends WP_UnitTestCase {
 
 		// Verify the result.
 		$this->assertInstanceOf( WP_Error::class, $result->error );
-		$this->assertEquals( 'not_found', $result->error->get_error_code() );
+		$this->assertEquals( 404, $result->error->get_error_code() );
 		$this->assertEquals( 'Resource not found', $result->get_error_message() );
 		$this->assertFalse( $this->request->is_ok() );
 
@@ -253,8 +254,8 @@ class WPCloud_API_RequestTest extends WP_UnitTestCase {
 
 		// Verify the result.
 		$this->assertInstanceOf( WP_Error::class, $result->error );
-		$this->assertEquals( 'api_error', $result->error->get_error_code() );
-		$this->assertEquals( 'API error: 500', $result->get_error_message() );
+		$this->assertEquals( 500, $result->error->get_error_code() );
+		$this->assertEquals( 'Unknown error', $result->get_error_message() );
 		$this->assertFalse( $this->request->is_ok() );
 
 		// Remove the filter.

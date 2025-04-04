@@ -136,7 +136,7 @@ class WPCloud_API_Request implements WPCloud_API_Request_Interface {
 			$body    = wp_remote_retrieve_body( $response );
 			$data    = json_decode( $body );
 			$message = $data->message ?? 'Unknown error';
-			return $this->fail( $response_code, $message, $data->data );
+			return $this->fail( $response_code, $message, $data->data ?? new stdClass() );
 		}
 
 		// Get the response body.
