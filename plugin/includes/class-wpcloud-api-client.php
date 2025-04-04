@@ -9,7 +9,7 @@
 
 declare( strict_types = 1 );
 
-require_once 'interface-wpcloud-api-request.php';
+require_once 'class-wpcloud-api-request.php';
 
 /**
  * WP Cloud API client library.
@@ -66,22 +66,33 @@ class WPCloud_API_Client {
 	 */
 	private mixed $api;
 
+	/**
+	 * Throw exception if API call fails.
+	 *
+	 * @var bool
+	 */
+	private bool $throw_exception = false;
+
 
 	/**
 	 * Constructor.
 	 *
-	 * @param string|int                         $site_id The site ID.
-	 * @param bool                               $use_cache Whether to use cache.
-	 * @param WPCloud_API_Request_Interface|null $api_request The API request object.
+	 * @param string|int $site_id The site ID.
+	 * @param bool       $use_cache Whether to use cache.
+	 * @param bool       $throw_exception Whether to throw exception on error.
+	 *
+	 * @throws Exception If the API request object is invalid.
 	 */
-	public function __construct( string|int $site_id = 0, bool $use_cache = true, mixed $api_request = null ) {
-		$this->site_id     = $site_id;
-		$settings          = get_option( 'wpcloud_settings', array() );
-		$this->client_name = apply_filters( 'wpcloud_client_name', $settings['wpcloud_client'] ?? '' );
-		$this->api_key     = apply_filters( 'wpcloud_api_key', $settings['wpcloud_api_key'] ?? '' );
+	public function __construct( string|int $site_id = 0, bool $use_cache = true, bool $throw_exception = false ) {
+		$this->site_id         = $site_id;
+		$settings              = get_option( 'wpcloud_settings', array() );
+		$this->client_name     = apply_filters( 'wpcloud_client_name', $settings['wpcloud_client'] ?? '' );
+		$this->api_key         = apply_filters( 'wpcloud_api_key', $settings['wpcloud_api_key'] ?? '' );
+		$this->throw_exception = $throw_exception;
 
-		if ( is_null( $api_request ) ) {
-			$api_request = apply_filters( 'wpcloud_api_request', new WPCloud_API_Request( $this->client_name, $this->api_key ) );
+		$api_request = apply_filters( 'wpcloud_api_request_instance', new WPCloud_API_Request( $this->client_name, $this->api_key ) );
+		if ( ! $api_request instanceof WPCloud_API_Request_Interface ) {
+			throw new Exception( 'Invalid API request object' );
 		}
 
 		$this->api = $api_request;
@@ -113,13 +124,9 @@ class WPCloud_API_Client {
 
 		// Make the API call.
 		if ( 'get' === $method ) {
-			$client->api->call( $path );
-		} else {
-			$client->api->call( $path, 'POST', (array) $post_data );
+			return $client->api->call( $path );
 		}
-
-		// Return the API request object directly.
-		return $client->api;
+		return $client->api->call( $path, 'POST', (array) $post_data );
 	}
 
 	/**
@@ -150,22 +157,27 @@ class WPCloud_API_Client {
 	 * @param string     $endpoint  The endpoint.
 	 * @param string|int ...$arguments The arguments.
 	 *
-	 * @return WPCloud_API_Request_Interface|WP_Error
+	 * @return WPCloud_API_Request_Interface
+	 * @throws Exception If the API call fails and throw_exception is set to true.
 	 */
-	public function get( string $endpoint, string|int ...$arguments ): WPCloud_API_Request_Interface|WP_Error {
+	public function get( string $endpoint, string|int ...$arguments ): WPCloud_API_Request_Interface {
 		$path = $this->parse_path( $endpoint, $arguments );
+
 		if ( ! $this->use_cache ) {
-			return $this->api->call( $path );
+			$response = $this->api->call( $path );
+			return $response;
 		}
 		$cache_key = md5( $path );
-		$cache     = get_transient( $cache_key );
-		if ( false === $cache ) {
-			$cache = $this->api->call( $path );
-			if ( ! is_wp_error( $cache ) ) {
-				set_transient( $cache_key, $cache, self::CACHE_TTL );
+		$response  = get_transient( $cache_key );
+		if ( false === $response ) {
+			$response = $this->api->call( $path );
+			if ( $response->is_ok() ) {
+				set_transient( $cache_key, $response, self::CACHE_TTL );
+			} elseif ( $this->throw_exception ) {
+				throw new Exception( $response->error ); // phpcs:ignore
 			}
 		}
-		return $cache;
+		return $response;
 	}
 
 	/**
@@ -173,16 +185,22 @@ class WPCloud_API_Client {
 	 *
 	 * @param string $endpoint The endpoint.
 	 * @param mixed  ...$arguments The arguments.
-	 * @return WPCloud_API_Request_Interface|WP_Error
+	 *
+	 * @return WPCloud_API_Request_Interface
+	 * @throws Exception If the API call fails and throw_exception is set to true.
 	 */
-	public function post( string $endpoint, mixed ...$arguments ): WPCloud_API_Request_Interface|WP_Error {
+	public function post( string $endpoint, mixed ...$arguments ): WPCloud_API_Request_Interface {
 		$data = array();
 		if ( $this->is_post( $arguments ) ) {
 			$data      = end( $arguments );
 			$arguments = array_slice( $arguments, 0, -1 );
 		}
-		$path = $this->parse_path( $endpoint, $arguments );
-		return $this->api->call( $path, 'POST', $data );
+		$path     = $this->parse_path( $endpoint, $arguments );
+		$response = $this->api->call( $path, 'POST', $data );
+		if ( $response->not_ok() && $this->throw_exception ) {
+			throw new Exception( $response->get_error_message() ); // phpcs:ignore
+		}
+		return $response;
 	}
 
 	/**
@@ -198,12 +216,10 @@ class WPCloud_API_Client {
 		if ( ! empty( $arguments ) ) {
 			$endpoint .= implode( '/', $arguments );
 		}
-		$id_or_domain = $this->site_id ?? $this->domain_name;
 		$replacements = array(
-			':id_or_domain' => $id_or_domain,
-			':id'           => $this->site_id,
-			':domain'       => $this->domain_name,
-			':client'       => $this->client_name,
+			':client'  => $this->client_name,
+			':site_id' => $this->site_id,
+			':domain'  => $this->domain_name,
 		);
 
 		$parsed = str_replace( array_keys( $replacements ), array_values( $replacements ), $endpoint );

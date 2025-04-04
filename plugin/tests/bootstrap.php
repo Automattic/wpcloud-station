@@ -11,6 +11,7 @@ require_once dirname( __DIR__ ) . '/includes/class-wpcloud-api-request.php';
 
 $_tests_dir = getenv( 'WP_TESTS_DIR' );
 
+
 if ( ! $_tests_dir ) {
 	$_tests_dir = rtrim( sys_get_temp_dir(), '/\\' ) . '/wordpress-tests-lib';
 }
@@ -54,13 +55,6 @@ if ( ! defined( 'WPCLOUD_TESTING' ) ) {
 	define( 'WPCLOUD_TESTING', true );
 }
 
-// Add a filter to provide a mock API key for testing.
-add_filter(
-	'wpcloud_client_key',
-	function ( $api_key ) {
-		return 'test_api_key';
-	}
-);
 
 // Add a filter to provide a mock API key for testing.
 add_filter(
@@ -78,32 +72,10 @@ add_filter(
 	}
 );
 
-// Mock the WPCloud_API_Client::init method.
-add_filter(
-	'wpcloud_api_client_init',
-	function ( $client, $site_id, $use_cache ) {
-		global $mock_api_client;
-		return $mock_api_client;
-	},
-	10,
-	3
-);
-
 // Add a filter to provide a mock WPCloud_API_Request.
 add_filter(
-	'wpcloud_api_request',
+	'wpcloud_api_request_instance',
 	function ( $request ) {
-		global $mock_api_request;
-		return $mock_api_request ?? $request;
-	}
-);
-
-// Make sure no api calls are made during tests.
-Mock_Helper::mock_api_request();
-
-// Set up teardown to clean up Mockery.
-register_shutdown_function(
-	function () {
-		Mock_Helper::shutdown();
+		return Mock_Helper::get_request_mock();
 	}
 );

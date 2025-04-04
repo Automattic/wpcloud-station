@@ -7,7 +7,7 @@
 
 declare( strict_types = 1 );
 
-require_once __DIR__ . '/class-wpcloud-cli-api.php';
+require_once __DIR__ . '/class-wpcloud-cli-api-client.php';
 
 /**
  * WP Cloud CLI
@@ -94,8 +94,8 @@ class WPCloud_CLI {
 	/**
 	 * WP Cloud CLI Api
 	 */
-	public static function api(): WPCloud_CLI_Api {
-		return new WPCloud_CLI_Api(
+	public static function api(): WPCloud_CLI_Api_Client {
+		return new WPCloud_CLI_Api_Client(
 			logger: function ( $result, $message = '' ) {
 				if ( $message ) {
 					self::log_success( $result, $message );

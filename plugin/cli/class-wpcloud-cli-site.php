@@ -81,15 +81,15 @@ class WPCloud_CLI_Site extends WPCloud_CLI {
 	 * @param bool $remote_only Whether to list only remote sites.
 	 */
 	private function list_remote( $limit, $after, $remote_only = false ): int {
-		$sites = $this->api()->site_list( $limit, $after )->result;
+		$sites = WPCloud_API_Client::call( 'get-sites/:client' );
 
-		if ( is_wp_error( $sites ) ) {
+		if ( $sites->not_ok() ) {
 			WP_CLI::error( $sites->get_error_message() );
 		}
 
 		if ( $remote_only ) {
 			$sites = array_filter(
-				$sites,
+				$sites->data,
 				function ( $site ) {
 					return ! WPCLOUD_Site::get_by_id( $site->atomic_site_id );
 				}

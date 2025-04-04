@@ -62,9 +62,9 @@ class WPCloud_API_RequestTest extends WP_UnitTestCase {
 		$this->request->call( 'test-endpoint' );
 
 		// Test getting properties from the result.
-		$this->assertTrue( $this->request->success );
+		$this->assertTrue( $this->request->is_ok() );
 		$this->assertIsObject( $this->request->data );
-		$this->assertEquals( 123, $this->request->data->id );
+		$this->assertEquals( 123, $this->request->id );
 		$this->assertEquals( 'Test', $this->request->data->name );
 		$this->assertNull( $this->request->non_existent_property );
 
@@ -111,8 +111,7 @@ class WPCloud_API_RequestTest extends WP_UnitTestCase {
 		// Verify the result.
 		$this->assertSame( $this->request, $result );
 		$this->assertTrue( $this->request->is_ok() );
-		$this->assertTrue( $this->request->success );
-		$this->assertEquals( 'OK', $this->request->message );
+		$this->assertEquals( 'OK', $this->request->result->message );
 
 		// Remove the filter.
 		remove_all_filters( 'pre_http_request' );
@@ -141,7 +140,8 @@ class WPCloud_API_RequestTest extends WP_UnitTestCase {
 				$this->assertEquals( 'POST', $args['method'] );
 
 				// Verify the request body.
-				$body = json_decode( $args['body'], true );
+				$body = $args['body'];
+				// $body = json_decode( $args['body'], true )
 				$this->assertEquals( 'value', $body['key'] );
 
 				return $mock_response;
@@ -156,7 +156,6 @@ class WPCloud_API_RequestTest extends WP_UnitTestCase {
 		// Verify the result.
 		$this->assertSame( $this->request, $result );
 		$this->assertTrue( $this->request->is_ok() );
-		$this->assertTrue( $this->request->success );
 		$this->assertEquals( 'Created', $this->request->message );
 
 		// Remove the filter.
@@ -184,8 +183,8 @@ class WPCloud_API_RequestTest extends WP_UnitTestCase {
 		$result = $this->request->call( 'test-endpoint' );
 
 		// Verify the result.
-		$this->assertInstanceOf( WP_Error::class, $result );
-		$this->assertEquals( 'http_request_failed', $result->get_error_code() );
+		$this->assertInstanceOf( WP_Error::class, $result->error );
+		$this->assertEquals( 'http_request_failed', $result->error->get_error_code() );
 		$this->assertEquals( 'Connection failed', $result->get_error_message() );
 		$this->assertFalse( $this->request->is_ok() );
 
@@ -219,8 +218,8 @@ class WPCloud_API_RequestTest extends WP_UnitTestCase {
 		$result = $this->request->call( 'test-endpoint' );
 
 		// Verify the result.
-		$this->assertInstanceOf( WP_Error::class, $result );
-		$this->assertEquals( 'not_found', $result->get_error_code() );
+		$this->assertInstanceOf( WP_Error::class, $result->error );
+		$this->assertEquals( 404, $result->error->get_error_code() );
 		$this->assertEquals( 'Resource not found', $result->get_error_message() );
 		$this->assertFalse( $this->request->is_ok() );
 
@@ -254,9 +253,9 @@ class WPCloud_API_RequestTest extends WP_UnitTestCase {
 		$result = $this->request->call( 'test-endpoint' );
 
 		// Verify the result.
-		$this->assertInstanceOf( WP_Error::class, $result );
-		$this->assertEquals( 'api_error', $result->get_error_code() );
-		$this->assertEquals( 'API error: 500', $result->get_error_message() );
+		$this->assertInstanceOf( WP_Error::class, $result->error );
+		$this->assertEquals( 500, $result->error->get_error_code() );
+		$this->assertEquals( 'Unknown error', $result->get_error_message() );
 		$this->assertFalse( $this->request->is_ok() );
 
 		// Remove the filter.
@@ -289,8 +288,8 @@ class WPCloud_API_RequestTest extends WP_UnitTestCase {
 		$result = $this->request->call( 'test-endpoint' );
 
 		// Verify the result.
-		$this->assertInstanceOf( WP_Error::class, $result );
-		$this->assertEquals( 'json_error', $result->get_error_code() );
+		$this->assertInstanceOf( WP_Error::class, $result->error );
+		$this->assertEquals( 'json_error', $result->error->get_error_code() );
 		$this->assertStringContainsString( 'JSON error:', $result->get_error_message() );
 		$this->assertFalse( $this->request->is_ok() );
 

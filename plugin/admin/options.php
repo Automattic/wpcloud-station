@@ -12,8 +12,8 @@ $client_ips = null;
 $server_ip  = filter_var( wp_unslash( $_SERVER['SERVER_ADDR'] ?? '' ), FILTER_VALIDATE_IP );
 $ip_error   = false;
 
-global $wpcloud_request_api_status;
 global $wpcloud_api_healthy;
+global $wpcloud_api_status;
 
 // Check for hosted Station sites.
 $wpcloud_is_atomic         = defined( 'IS_ATOMIC' ) && IS_ATOMIC;
@@ -22,7 +22,7 @@ $wpcloud_is_hosted_station = defined( 'ATOMIC_CLIENT_ID' ) && defined( 'WP_STATI
 $wpcloud_api_error = '';
 
 if ( ! $wpcloud_api_healthy ) {
-	$wpcloud_api_error = $wpcloud_request_api_status->get_error_message();
+	$wpcloud_api_error = $wpcloud_api_status->get_error_message();
 	$ip_error          = str_contains( $wpcloud_api_error, 'not allowed' );
 } else {
 	$client_ips_request = wpcloud_client_domain_ip_addresses( null );

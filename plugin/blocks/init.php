@@ -139,7 +139,7 @@ function wpcloud_block_admin_enqueue_scripts( $current_screen ): void {
 			'wpcloud.linkableSiteDetails=' . wp_json_encode( WPCloud_Site::get_linkable_detail_options() ) . ';' .
 			'wpcloud.siteMutableOptions=' . wp_json_encode( WPCloud_Site::get_mutable_options() ) . ';' .
 			'wpcloud.siteMutableFields=' . wp_json_encode( WPCloud_Site::get_mutable_fields() ) . ';' .
-			'wpcloud.apiConnected=' . wp_json_encode( WPCloud_Site::is_api_connected() ) . ';'
+			'wpcloud.apiConnected=' . wp_json_encode( WPCloud_API_Client::call( 'test-status/200/OK' )->is_ok() ) . ';'
 		);
 	}
 }

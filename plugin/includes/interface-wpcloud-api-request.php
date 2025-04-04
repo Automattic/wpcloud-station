@@ -7,6 +7,8 @@
  * @package wpcloud-client
  */
 
+declare( strict_types = 1 );
+
 /**
  * WP Cloud API request interface.
  */
@@ -29,6 +31,12 @@ interface WPCloud_API_Request_Interface {
 	 */
 	public function is_ok(): bool;
 
+	/**
+	 * Get the error message.
+	 *
+	 * @return string
+	 */
+	public function get_error_message(): string;
 
 	/**
 	 * Get a property from the result.

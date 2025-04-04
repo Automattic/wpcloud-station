@@ -7,9 +7,8 @@
 
 declare( strict_types = 1 );
 
-$wpcloud_request_api_status = wpcloud_client_test_status();
-$wpcloud_api_healthy        = is_wp_error( $wpcloud_request_api_status ) ? false : true;
-
+$wpcloud_api_status  = WPCloud_API_Client::call( 'test-status/200/OK' );
+$wpcloud_api_healthy = $wpcloud_api_status->is_ok();
 /**
  * Get the available themes.
  *
