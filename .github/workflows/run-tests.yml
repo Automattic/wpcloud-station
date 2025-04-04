@@ -22,7 +22,6 @@ jobs:
           coverage: none
 
       - name: Validate composer.json
-        working-directory: ./plugin
         run: composer validate --strict
 
   lint-php:
@@ -52,7 +51,6 @@ jobs:
           restore-keys: ${{ runner.os }}-composer-
 
       - name: Install dependencies
-        working-directory: ./plugin
         run: composer install --prefer-dist --no-progress
 
       - name: Run PHP_CodeSniffer
@@ -123,7 +121,6 @@ jobs:
         run: npm install -g @wordpress/env
 
       - name: Install PHP dependencies
-        working-directory: ./plugin
         run: composer install --prefer-dist --no-progress
 
       - name: Install Node.js dependencies
