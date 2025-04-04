@@ -53,7 +53,6 @@ class WPCloud_CLI {
 		$padding = $padding ? $padding : ( max( array_map( 'strlen', array_keys( $result ) ) ) + 1 );
 
 		foreach ( $result as $key => $value ) {
-
 			if ( is_array( $value ) && ! array_is_list( $value ) ) {
 				return self::log_result( $value, $padding );
 			}
