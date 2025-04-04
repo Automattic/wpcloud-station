@@ -663,7 +663,6 @@ function wpcloud_client_update_site_meta( int $wpcloud_site_id, string $key, str
 	}
 	if ( is_null( $value ) ) {
 		$endpoint = "site-meta/$wpcloud_site_id/$key/remove";
-
 	}
 	return wpcloud_client_post( $wpcloud_site_id, $endpoint, array( 'value' => $value ) );
 }

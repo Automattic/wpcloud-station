@@ -31,7 +31,6 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
 }
 
 if ( ! is_admin() ) {
-
 	add_action(
 		'wp_enqueue_scripts',
 		function (): void {

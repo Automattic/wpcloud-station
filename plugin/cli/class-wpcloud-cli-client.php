@@ -24,7 +24,6 @@ class WPCloud_CLI_Client extends WPCloud_CLI {
 		$options      = get_option( 'wpcloud_settings' );
 		$root_options = array();
 		foreach ( $options as $key => $value ) {
-
 			$root_options[ preg_replace( '/^wpcloud_/', '', $key ) ] = $value;
 		}
 

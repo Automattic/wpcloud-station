@@ -55,10 +55,12 @@ class WPCLOUD_Site_List extends WP_List_Table {
 		$this->_column_headers = array( $columns, $hidden, $sortable );
 		$results               = new WP_Query( $options );
 
-		$this->set_pagination_args( array(
-			'total_items' => $results->found_posts,
-			'per_page'    => $per_page,
-		) );
+		$this->set_pagination_args(
+			array(
+				'total_items' => $results->found_posts,
+				'per_page'    => $per_page,
+			)
+		);
 
 		$this->items = $results->posts;
 	}

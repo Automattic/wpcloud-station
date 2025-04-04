@@ -46,7 +46,7 @@ class WPCloud_CLI_Metrics extends WPCloud_CLI {
 	public function status_codes( array $args, array $options ) {
 		$site_id = $args[0];
 
-		$view = $this->init_view( $site_id, $options );
+		$view   = $this->init_view( $site_id, $options );
 		$format = $options['format'] ?? null;
 
 		$view->status_codes( plot_view: 'plot' === $format );

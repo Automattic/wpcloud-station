@@ -519,7 +519,7 @@ class WPCLOUD_Site {
 				'options' => array(
 					''         => '',
 					'staging'  => __( 'Staging' ),
-					'billable'  => __( 'Billable' ),
+					'billable' => __( 'Billable' ),
 					'internal' => __( 'Internal' ),
 				),
 				'hint'    => __( 'Site data' ),

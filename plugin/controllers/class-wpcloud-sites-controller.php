@@ -392,7 +392,6 @@ if ( ! class_exists( 'WPCLOUD_Sites_Controller' ) ) {
 					$field['options'] = $detail['options'];
 				}
 				$list[] = $field;
-
 			}
 
 			$read_only_details = WPCloud_Site::get_read_only_fields();
