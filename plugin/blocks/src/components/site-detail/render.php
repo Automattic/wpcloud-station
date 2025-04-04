@@ -21,7 +21,7 @@ $value  = apply_filters( "wpcloud_block_site_detail_value_$name", $value );
 $detail = '';
 
 if ( is_wp_error( $value ) ) {
-	error_log( 'WP Cloud Site Detail Block: ' . $value->get_error_message() ); // phpcs:disable WordPress.PHP.DevelopmentFunctions.error_log_error_log
+	wpcloud_l( 'WP Cloud Site Detail Block: ' . $value->get_error_message() ); // phpcs:disable WordPress.PHP.DevelopmentFunctions.error_log_error_log
 	return '';
 }
 $node_attributes = array();
