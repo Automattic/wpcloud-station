@@ -10,7 +10,6 @@
 		"format": "wp-scripts format",
 		"lint:css": "wp-scripts lint-style ./blocks/src/**/*.css",
 		"lint:js": "wp-scripts lint-js ./blocks/src/**/*.js",
-		"lint:changed": "../bin/lint-changed.sh",
 		"packages-update": "wp-scripts packages-update",
 		"plugin-zip": "wp-scripts plugin-zip",
 		"start": "npm run build && npm run start:blocks & npm run start:frontend & npm run start:admin",

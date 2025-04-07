@@ -9,7 +9,8 @@
     "release": "node ./bin/release.js",
     "cut": "node ./bin/cut.js",
     "package": "./bin/package.sh",
-    "test:php": "./bin/test.sh $*"
+    "test:php": "./bin/test.sh $*",
+    "lint:changed": "./bin/lint-changed.sh"
   },
   "keywords": [],
   "author": "",
