@@ -356,14 +356,25 @@ jobs:
         working-directory: ./plugin
         run: npm install
 
-      - name: Check for test files
+      - name: Check for test files and config
         id: check_test_files
         run: |
-          # Check if the test directory exists
-          if [ -d "./plugin/tests/js" ] && [ "$(find ./plugin/tests/js -name "*.test.js" | wc -l)" -gt 0 ]; then
+          # Check if the test directory exists and contains test files
+          if [ -d "./plugin/tests/js" ] && [ "$(find ./plugin/tests/js -name "*.test.js" | wc -l)" -gt 0 ] && [ -f "./plugin/jest.config.js" ]; then
             echo "exists=true" >> $GITHUB_OUTPUT
           else
             echo "exists=false" >> $GITHUB_OUTPUT
+
+            # Print more detailed information about what's missing
+            if [ ! -d "./plugin/tests/js" ]; then
+              echo "Warning: ./plugin/tests/js directory does not exist"
+            elif [ "$(find ./plugin/tests/js -name "*.test.js" | wc -l)" -eq 0 ]; then
+              echo "Warning: No *.test.js files found in ./plugin/tests/js"
+            fi
+
+            if [ ! -f "./plugin/jest.config.js" ]; then
+              echo "Warning: ./plugin/jest.config.js does not exist"
+            fi
           fi
 
       - name: Run JavaScript tests
