@@ -195,8 +195,25 @@ jobs:
         run: |
           # Create a temporary file with the list of files to lint
           echo "${{ steps.changed-js-css-files.outputs.js_files }}" > js_files_to_lint.txt
-          # Run lint:js only on the changed files
-          npx wp-scripts lint-js $(cat js_files_to_lint.txt)
+
+          # Filter out files that don't exist
+          EXISTING_FILES=""
+          for file in $(cat js_files_to_lint.txt); do
+            if [ -f "$file" ]; then
+              EXISTING_FILES="$EXISTING_FILES $file"
+            else
+              echo "Warning: File $file does not exist, skipping"
+            fi
+          done
+
+          # Only run lint if there are existing files
+          if [ -n "$EXISTING_FILES" ]; then
+            echo "Linting files: $EXISTING_FILES"
+            npx wp-scripts lint-js $EXISTING_FILES
+          else
+            echo "No existing JS files to lint"
+          fi
+
           rm js_files_to_lint.txt
 
       - name: Skip JavaScript Lint
@@ -209,8 +226,25 @@ jobs:
         run: |
           # Create a temporary file with the list of files to lint
           echo "${{ steps.changed-js-css-files.outputs.css_files }}" > css_files_to_lint.txt
-          # Run lint:css only on the changed files
-          npx wp-scripts lint-style $(cat css_files_to_lint.txt)
+
+          # Filter out files that don't exist
+          EXISTING_FILES=""
+          for file in $(cat css_files_to_lint.txt); do
+            if [ -f "$file" ]; then
+              EXISTING_FILES="$EXISTING_FILES $file"
+            else
+              echo "Warning: File $file does not exist, skipping"
+            fi
+          done
+
+          # Only run lint if there are existing files
+          if [ -n "$EXISTING_FILES" ]; then
+            echo "Linting files: $EXISTING_FILES"
+            npx wp-scripts lint-style $EXISTING_FILES
+          else
+            echo "No existing CSS files to lint"
+          fi
+
           rm css_files_to_lint.txt
 
       - name: Skip CSS Lint
@@ -322,6 +356,21 @@ jobs:
         working-directory: ./plugin
         run: npm install
 
+      - name: Check for test files
+        id: check_test_files
+        run: |
+          # Check if the test directory exists
+          if [ -d "./plugin/tests/js" ] && [ "$(find ./plugin/tests/js -name "*.test.js" | wc -l)" -gt 0 ]; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Run JavaScript tests
         working-directory: ./plugin
+        if: steps.check_test_files.outputs.exists == 'true'
         run: npm run test
+
+      - name: Skip JavaScript tests
+        if: steps.check_test_files.outputs.exists != 'true'
+        run: echo "No JavaScript test files found, skipping tests"
