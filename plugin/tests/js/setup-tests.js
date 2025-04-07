@@ -1,25 +1,67 @@
 /**
- * Set up test environment for Jest
+ * External dependencies
  */
+import '@testing-library/jest-dom';
 
-// Set up global mocks
-global.wpcloud = {
-    copyToClipboard: jest.fn(),
-    revealValue: jest.fn(),
+/**
+ * WordPress dependencies
+ */
+import { setFetchHandler } from '@wordpress/api-fetch';
+
+// Mock the WordPress API fetch
+setFetchHandler( ( options ) => {
+    return Promise.reject( {
+        code: 'fetch_error',
+        message: 'API Fetch not implemented in tests',
+    } );
+} );
+
+// Mock ResizeObserver
+global.ResizeObserver = class ResizeObserver {
+    constructor(callback) {
+        this.callback = callback;
+    }
+    observe() {}
+    unobserve() {}
+    disconnect() {}
 };
 
-// Mock the navigator.clipboard API
-Object.defineProperty(navigator, 'clipboard', {
-    value: {
-        writeText: jest.fn().mockResolvedValue(undefined),
-    },
-    configurable: true,
+// Mock the WordPress element module
+jest.mock('@wordpress/element', () => {
+    return {
+        ...jest.requireActual('@wordpress/element'),
+        useEffect: jest.fn((callback, deps) => {
+            callback();
+            return undefined;
+        }),
+    };
 });
 
-// Mock console methods to prevent noise during tests
-global.console = {
-    ...console,
-    error: jest.fn(),
-    warn: jest.fn(),
-    log: jest.fn(),
-};
+// Mock the WordPress components module
+jest.mock('@wordpress/components', () => {
+    return {
+        Spinner: () => <div data-testid="spinner">Loading...</div>,
+    };
+});
+
+// Mock the uplot-react module
+jest.mock('uplot-react', () => {
+    return {
+        __esModule: true,
+        default: jest.fn(() => <div data-testid="uplot-graph">Graph</div>),
+    };
+});
+
+// Mock the stationApi
+jest.mock('@wpcloud/utils/api', () => {
+    return {
+        __esModule: true,
+        default: {
+            get: jest.fn(() => Promise.resolve({
+                data: [],
+                series: [],
+                meta: {},
+            })),
+        },
+    };
+});

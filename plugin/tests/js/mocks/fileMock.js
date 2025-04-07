@@ -1,2 +1,2 @@
-// Mock file for image/file imports
+// File mock for Jest
 module.exports = 'test-file-stub';

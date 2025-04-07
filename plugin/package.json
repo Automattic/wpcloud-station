@@ -26,7 +26,10 @@
 		"npm": ">=10.2.3"
 	},
 	"devDependencies": {
-		"@wordpress/scripts": "^30.10.0"
+		"@testing-library/jest-dom": "^6.4.2",
+		"@testing-library/react": "^14.2.1",
+		"@wordpress/scripts": "^30.10.0",
+		"jest-environment-jsdom": "^29.7.0"
 	},
 	"dependencies": {
 		"@wordpress/icons": "~9.49.0",
