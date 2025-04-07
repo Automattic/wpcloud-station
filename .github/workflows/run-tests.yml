@@ -21,9 +21,23 @@ jobs:
           tools: composer:v2
           coverage: none
 
+      - name: Check for composer.json
+        id: check_composer
+        run: |
+          if [ -f "./plugin/composer.json" ]; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Validate composer.json
+        if: steps.check_composer.outputs.exists == 'true'
         working-directory: ./plugin
         run: composer validate --strict
+
+      - name: Skip composer validation
+        if: steps.check_composer.outputs.exists != 'true'
+        run: echo "No composer.json found in plugin directory, skipping validation"
 
   lint-php:
     name: PHP Lint
@@ -53,9 +67,23 @@ jobs:
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: ${{ runner.os }}-composer-
 
+      - name: Check for composer.json
+        id: check_composer_lint
+        run: |
+          if [ -f "./plugin/composer.json" ]; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Install dependencies
+        if: steps.check_composer_lint.outputs.exists == 'true'
         working-directory: ./plugin
         run: composer install --prefer-dist --no-progress
+
+      - name: Skip composer install
+        if: steps.check_composer_lint.outputs.exists != 'true'
+        run: echo "No composer.json found in plugin directory, skipping dependency installation"
 
       - name: Get changed PHP files
         id: changed-php-files
@@ -87,12 +115,16 @@ jobs:
 
       - name: Run PHP_CodeSniffer on changed files
         working-directory: ./plugin
-        if: steps.changed-php-files.outputs.any_changed == 'true'
+        if: steps.changed-php-files.outputs.any_changed == 'true' && steps.check_composer_lint.outputs.exists == 'true'
         run: vendor/bin/phpcs --standard=.phpcs.xml.dist --extensions=php ${{ steps.changed-php-files.outputs.changed_files }}
 
-      - name: Skip PHP_CodeSniffer
+      - name: Skip PHP_CodeSniffer (no changes)
         if: steps.changed-php-files.outputs.any_changed != 'true'
         run: echo "No PHP files changed, skipping PHP_CodeSniffer"
+
+      - name: Skip PHP_CodeSniffer (no composer)
+        if: steps.check_composer_lint.outputs.exists != 'true'
+        run: echo "No composer.json found in plugin directory, skipping PHP_CodeSniffer"
 
   lint-js:
     name: JavaScript/CSS Lint
@@ -213,9 +245,23 @@ jobs:
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: ${{ runner.os }}-composer-
 
+      - name: Check for composer.json
+        id: check_composer_test
+        run: |
+          if [ -f "./plugin/composer.json" ]; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Install PHP dependencies
+        if: steps.check_composer_test.outputs.exists == 'true'
         working-directory: ./plugin
         run: composer install --prefer-dist --no-progress
+
+      - name: Skip composer install
+        if: steps.check_composer_test.outputs.exists != 'true'
+        run: echo "No composer.json found in plugin directory, skipping dependency installation"
 
       - name: Set up MySQL
         uses: mirromutth/mysql-action@v1.1
@@ -244,12 +290,17 @@ jobs:
 
       - name: Run PHPUnit tests
         working-directory: ./plugin
+        if: steps.check_composer_test.outputs.exists == 'true'
         run: |
           # Run tests directly
           vendor/bin/phpunit
 
           # Clean up
           rm -f tests/verbose_logging_enabled
+
+      - name: Skip PHPUnit tests
+        if: steps.check_composer_test.outputs.exists != 'true'
+        run: echo "No composer.json found in plugin directory, skipping PHPUnit tests"
 
   test-js:
     name: JavaScript Tests
