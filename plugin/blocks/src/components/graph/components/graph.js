@@ -35,7 +35,7 @@ export default function Graph({ site, metric, dimension, type, title, interval, 
 		setLoading(true);
 		async function fetchData() {
 			try {
-				const { data, series, meta } = await stationApi.get(`metrics/${metric}`, {
+				const { data, series, meta } = await stationApi.get(`metrics/site/${metric}`, {
 					query: {
 						site,
 						start,
