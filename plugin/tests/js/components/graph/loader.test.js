@@ -22,8 +22,8 @@ describe('Loader Component', () => {
 
     it('renders a semi-transparent overlay', () => {
         const { container } = render(<Loader />);
-        // First div should be the overlay
-        const overlay = container.firstChild.firstChild;
+        // The first child should be the overlay div
+        const overlay = container.firstChild;
         expect(overlay).toHaveStyle({
             width: '100%',
             height: '100%',
@@ -34,8 +34,8 @@ describe('Loader Component', () => {
 
     it('centers the spinner', () => {
         const { container } = render(<Loader />);
-        // Second div should be the spinner container
-        const spinnerContainer = container.firstChild.lastChild;
+        // The second child should be the spinner container
+        const spinnerContainer = container.childNodes[1];
         expect(spinnerContainer).toHaveStyle({
             position: 'absolute',
             top: '50%',
