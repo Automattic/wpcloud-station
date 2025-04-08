@@ -645,7 +645,7 @@ class WPCLOUD_Site {
 				case 'space_quota':
 				case 'max_space_quota':
 					$site_meta   = $api_client->get( "site-meta/:site_id/$key/get" );
-					$space_value = $site_meta->data->$key ?? 0;
+					$space_value = $site_meta->data ?? 0;
 					return self::readable_size( (float) $space_value );
 
 				case 'site_access_with_ssh':
@@ -669,7 +669,7 @@ class WPCLOUD_Site {
 					if ( ! $site_meta->is_ok() ) {
 						return '';
 					}
-					return $site_meta->data ?? null;
+					return $site_meta->data ?? '';
 
 				case 'edge_cache_status':
 					$edge_cache = $api_client->get( 'edge-cache/:site_id' );
