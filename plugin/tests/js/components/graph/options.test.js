@@ -21,12 +21,15 @@ jest.mock('../../../../blocks/src/components/graph/components/lib/utils', () => 
 
 // Mock chroma-js
 jest.mock('chroma-js', () => {
-    const mockScale = {
-        domain: jest.fn().mockReturnThis(),
-        mode: jest.fn().mockReturnThis(),
-        alpha: jest.fn().mockReturnThis(),
-        css: jest.fn().mockReturnValue('#mock-color'),
+    const mockScale = function(idx) {
+        return {
+            alpha: jest.fn().mockReturnThis(),
+            css: jest.fn().mockReturnValue('#mock-color'),
+        };
     };
+
+    mockScale.domain = jest.fn().mockReturnThis();
+    mockScale.mode = jest.fn().mockReturnThis();
 
     return {
         __esModule: true,
