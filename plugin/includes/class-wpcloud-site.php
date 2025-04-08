@@ -519,7 +519,7 @@ class WPCLOUD_Site {
 				'options' => array(
 					''         => '',
 					'staging'  => __( 'Staging' ),
-					'billable'  => __( 'Billable' ),
+					'billable' => __( 'Billable' ),
 					'internal' => __( 'Internal' ),
 				),
 				'hint'    => __( 'Site data' ),
@@ -669,11 +669,16 @@ class WPCLOUD_Site {
 					if ( ! $site_meta->is_ok() ) {
 						return '';
 					}
-					return $site_meta->data->$key ?? null;
+					return $site_meta->data ?? null;
 
 				case 'edge_cache_status':
 					$edge_cache = $api_client->get( 'edge-cache/:site_id' );
 					return $edge_cache->status;
+
+				// These can just fall through.
+				case 'edge_cache_purge':
+				case 'edge_cache_toggle':
+					return '';
 
 				case 'defensive_mode':
 					$edge_cache = $api_client->get( 'edge-cache/:site_id' );
