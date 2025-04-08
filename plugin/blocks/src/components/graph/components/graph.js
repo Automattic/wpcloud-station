@@ -35,7 +35,7 @@ export default function Graph({ site, metric, dimension, type, title, interval, 
 		setLoading(true);
 		async function fetchData() {
 			try {
-				const { data, series, meta } = await stationApi.get(`metrics/${metric}`, {
+				const { data, series, meta } = await stationApi.get(`metrics/site/${metric}`, {
 					query: {
 						site,
 						start,
@@ -61,12 +61,21 @@ export default function Graph({ site, metric, dimension, type, title, interval, 
 
 	const { data: d, ...options } = useGraphOptions({ title, data, series, meta, containerRef, showLegend, type });
 	const hasData = data.length > 0;
+
+	// Force loading to false after data is loaded
+	useEffect(() => {
+		if (hasData && loading) {
+			setLoading(false);
+		}
+	}, [hasData, loading]);
+
 	return (
 		<div ref={containerRef} className="wpcloud-graph" style={{ width: "100%", height: "500px", backgroundColor: "white", position: "relative" }}>
-			{ loading && <Loader />}
-			{ hasData && <UplotReact
-				options={options}
-				data={d} />}
+			{ loading ? <Loader /> : (
+				hasData && <UplotReact
+					options={options}
+					data={d} />
+			)}
 		</div>
 	);
 }

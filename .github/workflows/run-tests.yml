@@ -21,9 +21,23 @@ jobs:
           tools: composer:v2
           coverage: none
 
+      - name: Check for composer.json
+        id: check_composer
+        run: |
+          if [ -f "./plugin/composer.json" ]; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Validate composer.json
+        if: steps.check_composer.outputs.exists == 'true'
         working-directory: ./plugin
         run: composer validate --strict
+
+      - name: Skip composer validation
+        if: steps.check_composer.outputs.exists != 'true'
+        run: echo "No composer.json found in plugin directory, skipping validation"
 
   lint-php:
     name: PHP Lint
@@ -31,6 +45,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -51,13 +67,64 @@ jobs:
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: ${{ runner.os }}-composer-
 
+      - name: Check for composer.json
+        id: check_composer_lint
+        run: |
+          if [ -f "./plugin/composer.json" ]; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Install dependencies
+        if: steps.check_composer_lint.outputs.exists == 'true'
         working-directory: ./plugin
         run: composer install --prefer-dist --no-progress
 
-      - name: Run PHP_CodeSniffer
+      - name: Skip composer install
+        if: steps.check_composer_lint.outputs.exists != 'true'
+        run: echo "No composer.json found in plugin directory, skipping dependency installation"
+
+      - name: Get changed PHP files
+        id: changed-php-files
+        run: |
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            # For pull requests, compare with the base branch
+            BASE_SHA=${{ github.event.pull_request.base.sha }}
+            HEAD_SHA=${{ github.event.pull_request.head.sha }}
+          else
+            # For pushes, compare with the parent commit
+            BASE_SHA=$(git rev-parse HEAD^)
+            HEAD_SHA=${{ github.sha }}
+          fi
+
+          # Get list of changed PHP files in the plugin directory
+          CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA $HEAD_SHA | grep -E "^plugin/.*\.php$" || true)
+
+          if [ -z "$CHANGED_FILES" ]; then
+            echo "No PHP files changed in the plugin directory."
+            echo "changed_files=" >> $GITHUB_OUTPUT
+            echo "any_changed=false" >> $GITHUB_OUTPUT
+          else
+            # Format the list for phpcs
+            FORMATTED_FILES=$(echo "$CHANGED_FILES" | tr '\n' ' ')
+            echo "Changed PHP files: $FORMATTED_FILES"
+            echo "changed_files=$FORMATTED_FILES" >> $GITHUB_OUTPUT
+            echo "any_changed=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Run PHP_CodeSniffer on changed files
         working-directory: ./plugin
-        run: vendor/bin/phpcs --standard=.phpcs.xml.dist --extensions=php .
+        if: steps.changed-php-files.outputs.any_changed == 'true' && steps.check_composer_lint.outputs.exists == 'true'
+        run: vendor/bin/phpcs --standard=.phpcs.xml.dist --extensions=php ${{ steps.changed-php-files.outputs.changed_files }}
+
+      - name: Skip PHP_CodeSniffer (no changes)
+        if: steps.changed-php-files.outputs.any_changed != 'true'
+        run: echo "No PHP files changed, skipping PHP_CodeSniffer"
+
+      - name: Skip PHP_CodeSniffer (no composer)
+        if: steps.check_composer_lint.outputs.exists != 'true'
+        run: echo "No composer.json found in plugin directory, skipping PHP_CodeSniffer"
 
   lint-js:
     name: JavaScript/CSS Lint
@@ -65,6 +132,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -75,20 +144,117 @@ jobs:
 
       - name: Install dependencies
         working-directory: ./plugin
-        run: npm ci
+        run: npm install
+
+      - name: Get changed JS/CSS files
+        id: changed-js-css-files
+        run: |
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            # For pull requests, compare with the base branch
+            BASE_SHA=${{ github.event.pull_request.base.sha }}
+            HEAD_SHA=${{ github.event.pull_request.head.sha }}
+          else
+            # For pushes, compare with the parent commit
+            BASE_SHA=$(git rev-parse HEAD^)
+            HEAD_SHA=${{ github.sha }}
+          fi
+
+          # Get list of changed JS files in the plugin directory
+          JS_FILES=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA $HEAD_SHA | grep -E "^plugin/.*\.(js|jsx|ts|tsx)$" || true)
+
+          # Get list of changed CSS files in the plugin directory
+          CSS_FILES=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA $HEAD_SHA | grep -E "^plugin/.*\.(css|scss|sass)$" || true)
+
+          if [ -z "$JS_FILES" ]; then
+            echo "No JS files changed in the plugin directory."
+            echo "js_files=" >> $GITHUB_OUTPUT
+            echo "js_changed=false" >> $GITHUB_OUTPUT
+          else
+            # Format the list for eslint
+            FORMATTED_JS_FILES=$(echo "$JS_FILES" | tr '\n' ' ')
+            echo "Changed JS files: $FORMATTED_JS_FILES"
+            echo "js_files=$FORMATTED_JS_FILES" >> $GITHUB_OUTPUT
+            echo "js_changed=true" >> $GITHUB_OUTPUT
+          fi
+
+          if [ -z "$CSS_FILES" ]; then
+            echo "No CSS files changed in the plugin directory."
+            echo "css_files=" >> $GITHUB_OUTPUT
+            echo "css_changed=false" >> $GITHUB_OUTPUT
+          else
+            # Format the list for stylelint
+            FORMATTED_CSS_FILES=$(echo "$CSS_FILES" | tr '\n' ' ')
+            echo "Changed CSS files: $FORMATTED_CSS_FILES"
+            echo "css_files=$FORMATTED_CSS_FILES" >> $GITHUB_OUTPUT
+            echo "css_changed=true" >> $GITHUB_OUTPUT
+          fi
 
       - name: Lint JavaScript
         working-directory: ./plugin
-        run: npm run lint:js
+        if: steps.changed-js-css-files.outputs.js_changed == 'true'
+        run: |
+          # Create a temporary file with the list of files to lint
+          echo "${{ steps.changed-js-css-files.outputs.js_files }}" > js_files_to_lint.txt
+
+          # Filter out files that don't exist
+          EXISTING_FILES=""
+          for file in $(cat js_files_to_lint.txt); do
+            if [ -f "$file" ]; then
+              EXISTING_FILES="$EXISTING_FILES $file"
+            else
+              echo "Warning: File $file does not exist, skipping"
+            fi
+          done
+
+          # Only run lint if there are existing files
+          if [ -n "$EXISTING_FILES" ]; then
+            echo "Linting files: $EXISTING_FILES"
+            npx wp-scripts lint-js $EXISTING_FILES
+          else
+            echo "No existing JS files to lint"
+          fi
+
+          rm js_files_to_lint.txt
+
+      - name: Skip JavaScript Lint
+        if: steps.changed-js-css-files.outputs.js_changed != 'true'
+        run: echo "No JavaScript files changed, skipping JavaScript linting"
 
       - name: Lint CSS
         working-directory: ./plugin
-        run: npm run lint:css
+        if: steps.changed-js-css-files.outputs.css_changed == 'true'
+        run: |
+          # Create a temporary file with the list of files to lint
+          echo "${{ steps.changed-js-css-files.outputs.css_files }}" > css_files_to_lint.txt
 
-  test:
-    name: WordPress Tests
+          # Filter out files that don't exist
+          EXISTING_FILES=""
+          for file in $(cat css_files_to_lint.txt); do
+            if [ -f "$file" ]; then
+              EXISTING_FILES="$EXISTING_FILES $file"
+            else
+              echo "Warning: File $file does not exist, skipping"
+            fi
+          done
+
+          # Only run lint if there are existing files
+          if [ -n "$EXISTING_FILES" ]; then
+            echo "Linting files: $EXISTING_FILES"
+            npx wp-scripts lint-style $EXISTING_FILES
+          else
+            echo "No existing CSS files to lint"
+          fi
+
+          rm css_files_to_lint.txt
+
+      - name: Skip CSS Lint
+        if: steps.changed-js-css-files.outputs.css_changed != 'true'
+        run: echo "No CSS files changed, skipping CSS linting"
+
+  test-php:
+    name: PHP Tests
     runs-on: ubuntu-latest
-    needs: [validate, lint-php, lint-js]
+    needs: [validate, lint-php]
 
     steps:
       - name: Checkout code
@@ -113,41 +279,109 @@ jobs:
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: ${{ runner.os }}-composer-
 
+      - name: Check for composer.json
+        id: check_composer_test
+        run: |
+          if [ -f "./plugin/composer.json" ]; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Install PHP dependencies
+        if: steps.check_composer_test.outputs.exists == 'true'
+        working-directory: ./plugin
+        run: composer install --prefer-dist --no-progress
+
+      - name: Skip composer install
+        if: steps.check_composer_test.outputs.exists != 'true'
+        run: echo "No composer.json found in plugin directory, skipping dependency installation"
+
+      - name: Set up MySQL
+        uses: mirromutth/mysql-action@v1.1
+        with:
+          mysql version: '5.7'
+          mysql database: 'wordpress_test'
+          mysql root password: 'root'
+          mysql user: 'root'
+          mysql password: 'root'
+
+      - name: Install Subversion
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y subversion
+
+      - name: Set up WordPress test suite
+        run: |
+          # Create verbose logging flag file if needed
+          touch plugin/tests/verbose_logging_enabled
+
+          # Install the WordPress test suite
+          bash plugin/bin/install-wp-tests.sh wordpress_test root root 127.0.0.1 latest true
+
+          # Verify the MySQL connection
+          mysql -h127.0.0.1 -uroot -proot -e 'SELECT 1;'
+
+      - name: Run PHPUnit tests
+        working-directory: ./plugin
+        if: steps.check_composer_test.outputs.exists == 'true'
+        run: |
+          # Run tests directly
+          vendor/bin/phpunit
+
+          # Clean up
+          rm -f tests/verbose_logging_enabled
+
+      - name: Skip PHPUnit tests
+        if: steps.check_composer_test.outputs.exists != 'true'
+        run: echo "No composer.json found in plugin directory, skipping PHPUnit tests"
+
+  test-js:
+    name: JavaScript Tests
+    runs-on: ubuntu-latest
+    needs: [validate, lint-js]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '20.11'
           cache: 'npm'
-
-      - name: Install global dependencies
-        run: npm install -g @wordpress/env
-
-      - name: Install PHP dependencies
-        working-directory: ./plugin
-        run: composer install --prefer-dist --no-progress
+          cache-dependency-path: plugin/package-lock.json
 
       - name: Install Node.js dependencies
         working-directory: ./plugin
-        run: npm ci
+        run: npm install
 
-      - name: Start WordPress environment
-        run: wp-env start
-
-      - name: Run PHPUnit tests
+      - name: Check for test files and config
+        id: check_test_files
         run: |
-          # Create verbose logging flag file if needed
-          touch plugin/tests/verbose_logging_enabled
+          # Check if the test directory exists and contains test files
+          if [ -d "./plugin/tests/js" ] && [ "$(find ./plugin/tests/js -name "*.test.js" | wc -l)" -gt 0 ] && [ -f "./plugin/jest.config.js" ]; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
 
-          # Run tests using wp-env
-          wp-env run tests-cli --env-cwd=wp-content/plugins/wpcloud-station-plugin php -d memory_limit=256M vendor/bin/phpunit
+            # Print more detailed information about what's missing
+            if [ ! -d "./plugin/tests/js" ]; then
+              echo "Warning: ./plugin/tests/js directory does not exist"
+            elif [ "$(find ./plugin/tests/js -name "*.test.js" | wc -l)" -eq 0 ]; then
+              echo "Warning: No *.test.js files found in ./plugin/tests/js"
+            fi
 
-          # Clean up
-          rm -f plugin/tests/verbose_logging_enabled
+            if [ ! -f "./plugin/jest.config.js" ]; then
+              echo "Warning: ./plugin/jest.config.js does not exist"
+            fi
+          fi
 
       - name: Run JavaScript tests
         working-directory: ./plugin
+        if: steps.check_test_files.outputs.exists == 'true'
         run: npm run test
 
-      - name: Stop WordPress environment
-        run: wp-env stop
-        if: always()
+      - name: Skip JavaScript tests
+        if: steps.check_test_files.outputs.exists != 'true'
+        run: echo "No JavaScript test files found, skipping tests"

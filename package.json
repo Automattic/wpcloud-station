@@ -3,13 +3,19 @@
   "version": "1.0.0",
   "description": "WP Cloud Station is a client plugin to manage WP Cloud sites.",
   "main": "index.js",
-  "devDependencies": {},
+  "devDependencies": {
+    "@wordpress/api-fetch": "^7.21.0",
+    "@wordpress/element": "^6.21.0",
+    "@wordpress/i18n": "^5.21.0",
+    "@wordpress/icons": "^10.21.0"
+  },
   "scripts": {
     "version": "node ./bin/version.js",
     "release": "node ./bin/release.js",
     "cut": "node ./bin/cut.js",
     "package": "./bin/package.sh",
-    "test:php": "./bin/test.sh $*"
+    "test:php": "./bin/test.sh $*",
+    "lint:changed": "./bin/lint-changed.sh"
   },
   "keywords": [],
   "author": "",

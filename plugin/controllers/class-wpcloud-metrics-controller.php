@@ -45,7 +45,7 @@ if ( ! class_exists( 'WPCLOUD_Metrics_Controller' ) ) {
 
 			register_rest_route(
 				$this->namespace,
-				$this->rest_base . '/(?<metric>[\w]+)',
+				$this->rest_base . '/site/(?<metric>[\w]+)',
 				array(
 					'args'                => array(
 						'site'      => array(
