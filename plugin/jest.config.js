@@ -78,5 +78,7 @@ module.exports = {
         '\\.(gif|ttf|eot|svg|png)$': '<rootDir>/tests/js/mocks/fileMock.js',
         '^@wordpress/(.*)$': '<rootDir>/tests/js/mocks/wordpress/$1.js',
         '^@wpcloud/(.*)$': '<rootDir>/tests/js/mocks/wpcloud/$1.js',
+        '^uplot$': '<rootDir>/tests/js/mocks/uplot.js',
+        '.*uplot-plugins$': '<rootDir>/tests/js/mocks/uplot-plugins.js',
     },
 };
