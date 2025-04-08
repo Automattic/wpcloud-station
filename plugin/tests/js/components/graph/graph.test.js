@@ -69,11 +69,15 @@ describe('Graph Component', () => {
 
         render(<Graph site="test-site" metric="test-metric" />);
 
-        // Check if the graph is rendered without waiting for the spinner to disappear
-        // since the mock API response is resolved immediately
+        // Wait for the API call to complete
+        await waitFor(() => {
+            expect(stationApi.get).toHaveBeenCalled();
+        });
+
+        // Wait for the loading state to be removed and the graph to be rendered
         await waitFor(() => {
             expect(screen.getByTestId('uplot-graph')).toBeInTheDocument();
-        });
+        }, { timeout: 3000 });
     });
 
     it('handles refresh prop changes', async () => {

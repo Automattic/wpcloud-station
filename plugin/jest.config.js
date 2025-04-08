@@ -82,5 +82,6 @@ module.exports = {
         '.*uplot-plugins$': '<rootDir>/tests/js/mocks/uplot-plugins.js',
         '^chroma-js$': '<rootDir>/tests/js/mocks/chroma.js',
         '^croma$': '<rootDir>/tests/js/mocks/chroma.js',
+        '^uplot-react$': '<rootDir>/tests/js/mocks/uplot-react.js',
     },
 };
