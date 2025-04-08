@@ -80,5 +80,7 @@ module.exports = {
         '^@wpcloud/(.*)$': '<rootDir>/tests/js/mocks/wpcloud/$1.js',
         '^uplot$': '<rootDir>/tests/js/mocks/uplot.js',
         '.*uplot-plugins$': '<rootDir>/tests/js/mocks/uplot-plugins.js',
+        '^chroma-js$': '<rootDir>/tests/js/mocks/chroma.js',
+        '^croma$': '<rootDir>/tests/js/mocks/chroma.js',
     },
 };
