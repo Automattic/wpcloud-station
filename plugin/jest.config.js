@@ -83,5 +83,6 @@ module.exports = {
         '^chroma-js$': '<rootDir>/tests/js/mocks/chroma.js',
         '^croma$': '<rootDir>/tests/js/mocks/chroma.js',
         '^uplot-react$': '<rootDir>/tests/js/mocks/uplot-react.js',
+        '.*useGraphOptions$': '<rootDir>/tests/js/mocks/useGraphOptions.js',
     },
 };
