@@ -36,7 +36,8 @@
 			data[input.name] = input.value;
 		});
 
-		form.querySelectorAll('input[type="checkbox"]').forEach((input) => {
+		// grab any checkboxes that are not submit on change
+		form.querySelectorAll('input[type="checkbox"]:not(.submit-on-change)').forEach((input) => {
 			data[input.name] = input.checked ? 1 : 0;
 		});
 
