@@ -76,5 +76,7 @@ module.exports = {
     moduleNameMapper: {
         '\\.(css|less|scss|sass)$': '<rootDir>/tests/js/mocks/styleMock.js',
         '\\.(gif|ttf|eot|svg|png)$': '<rootDir>/tests/js/mocks/fileMock.js',
+        '^@wordpress/(.*)$': '<rootDir>/tests/js/mocks/wordpress/$1.js',
+        '^@wpcloud/(.*)$': '<rootDir>/tests/js/mocks/wpcloud/$1.js',
     },
 };
