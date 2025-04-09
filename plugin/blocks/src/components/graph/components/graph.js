@@ -14,7 +14,7 @@ import { useRef, useEffect, useState } from "@wordpress/element";
 /**
  * Internal dependencies
  */
-import Loader from './loader';
+import Overlay from './overlay';
 // import { stackedOptions, defaultOptions, barOptions, lineOptions, areaOptions } from './lib/options';
 import useGraphOptions from './lib/useGraphOptions';
 import stationApi from '@wpcloud/utils/api';
@@ -59,7 +59,7 @@ export default function Graph({ apiPath, dimension, type, title, interval, refre
 
 
 	const { data: d, ...options } = useGraphOptions({ title, data, series, meta, containerRef, showLegend, type });
-	const hasData = data.length > 0;
+	const hasData = data.length > 0 && data[0].length > 0;
 
 	// Force loading to false after data is loaded
 	useEffect(() => {
@@ -68,13 +68,11 @@ export default function Graph({ apiPath, dimension, type, title, interval, refre
 		}
 	}, [hasData, loading]);
 
+	const showOverlay = loading || !hasData;
 	return (
 		<div ref={containerRef} className="wpcloud-graph" style={{ width: "100%", height: "500px", backgroundColor: "white", position: "relative" }}>
-			{ loading ? <Loader /> : (
-				hasData && <UplotReact
-					options={options}
-					data={d} />
-			)}
+			{showOverlay && <Overlay loading={loading} title={title} /> }
+			{ hasData && <UplotReact options={options} data={d} /> }
 		</div>
 	);
 }
