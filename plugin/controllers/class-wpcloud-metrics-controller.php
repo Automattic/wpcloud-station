@@ -166,10 +166,18 @@ if ( ! class_exists( 'WPCLOUD_Metrics_Controller' ) ) {
 				$summarize = $params['summarize'] ?? false;
 
 				$options = array(
-					'filters'    => $params['filters'] ?? null,
 					'top_x'      => $params['top_x'] ?? 20,
 					'resolution' => $params['resolution'] ?? 10,
 				);
+
+				$filters = $params['filters'] ?? null;
+				if ( $filters ) {
+					$filters = json_decode( urldecode( $filters ), true );
+					if ( json_last_error() !== JSON_ERROR_NONE ) {
+						return new WP_REST_Response( esc_html__( 'Invalid filters', 'wpcloud' ), 400 );
+					}
+					$options['filters'] = $filters;
+				}
 
 				$site_id = $params['site_id'] ?? null;
 				if ( $site_id ) {
