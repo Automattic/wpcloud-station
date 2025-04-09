@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import croma from 'chroma-js';
-import { stackedOptions, defaultOptions, barOptions, lineOptions, areaOptions } from './options';
+import { stackedOptions, defaultOptions, barOptions, horizontalBarOptions, lineOptions, areaOptions } from './options';
 
 // Remove this amount from the container height to fit the graph legend.
 const fitGraphHeight = 75;
@@ -65,6 +65,10 @@ export default (options) => {
 		case 'bar':
 			seriesOptions = { fillScale: () => croma('blue') };
 			return barOptions({ ...graphOptions, seriesOptions });
+
+		case 'horizontal-bar':
+			seriesOptions = { fillScale: () => croma('blue') };
+			return horizontalBarOptions({ ...graphOptions, seriesOptions });
 
 		case 'line':
 			seriesOptions = { points: { show: false } };

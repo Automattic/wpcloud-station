@@ -5,7 +5,7 @@
 <!-- /wp:spacer -->
 
 <!-- wp:columns {"className":"wpcloud-site-view\u002d\u002dcontent"} -->
-<div class="wp-block-columns wpcloud-site-view--content"><!-- wp:column {"width":""} -->
+<div class="wp-block-columns">
 	<div class="wp-block-column">
 <!-- /wp:column -->
 
@@ -15,19 +15,21 @@
 
 		<!-- 'requests', 'http_status' -->
 		<!-- We want a stacked bar chart see: https://github.com/leeoniya/uPlot/blob/211f06d6d258833d025952e890a612b254b0a9fb/demos/bars-grouped-stacked.html -->
-		<div class="wp-block-wpcloud-graph" data-graph-attributes="{&quot;site&quot;:0,&quot;request_type&quot;:&quot;client&quot;,&quot;metric&quot;:&quot;requests&quot;,&quot;dimension&quot;:&quot;http_status&quot;,&quot;type&quot;:&quot;bar&quot;,&quot;stacked&quot;:&quot;true&quot;,&quot;title&quot;:&quot;Requests by HTTP Response Code&quot;,&quot;showLegend&quot;:true,&quot;resolution&quot;:60}">Graph</div>
+		<div class="wp-block-wpcloud-graph " data-graph-attributes="{&quot;displayClass&quot;:&quot;graph-50&quot;,&quot;site&quot;:0,&quot;request_type&quot;:&quot;client&quot;,&quot;metric&quot;:&quot;requests&quot;,&quot;dimension&quot;:&quot;http_status&quot;,&quot;type&quot;:&quot;stacked-bar&quot;,&quot;stacked&quot;:&quot;true&quot;,&quot;title&quot;:&quot;Requests by HTTP Response Code&quot;,&quot;showLegend&quot;:true,&quot;resolution&quot;:60}">Graph</div>
+
 		<!-- 'response_time_average', 'http_verb' -->
-		<div class="wp-block-wpcloud-graph" data-graph-attributes="{&quot;site&quot;:0,&quot;request_type&quot;:&quot;client&quot;,&quot;metric&quot;:&quot;response_time_average&quot;,&quot;dimension&quot;:&quot;http_verb&quot;,&quot;type&quot;:&quot;line&quot;,&quot;title&quot;:&quot;HTTP Response Time&quot;,&quot;showLegend&quot;:true,&quot;resolution&quot;:60}">Graph</div>
+		<div class="wp-block-wpcloud-graph" data-graph-attributes="{&quot;displayClass&quot;:&quot;graph-50&quot;,&quot;site&quot;:0,&quot;request_type&quot;:&quot;client&quot;,&quot;metric&quot;:&quot;response_time_average&quot;,&quot;dimension&quot;:&quot;http_verb&quot;,&quot;type&quot;:&quot;line&quot;,&quot;title&quot;:&quot;HTTP Response Time&quot;,&quot;showLegend&quot;:true,&quot;resolution&quot;:60}">Graph</div>
 
 		<!-- Top X Bars -->
+
 		<!-- Top 20 Sites by Request -->
-		<div class="wp-block-wpcloud-graph" data-graph-attributes="{&quot;site&quot;:0,&quot;request_type&quot;:&quot;client&quot;,&quot;metric&quot;:&quot;requests&quot;,&quot;dimension&quot;:&quot;http_host&quot;,&quot;type&quot;:&quot;bar&quot;,&quot;title&quot;:&quot;Top 20 Sites by Requests&quot;,&quot;showLegend&quot;:true,&quot;top_x&quot;:20,&quot;summarize&quot;:true}">Graph</div>
+		<div class="wp-block-wpcloud-graph" data-graph-attributes="{&quot;displayClass&quot;:&quot;graph-50 graph-tall&quot;,&quot;site&quot;:0,&quot;request_type&quot;:&quot;client&quot;,&quot;metric&quot;:&quot;requests&quot;,&quot;dimension&quot;:&quot;http_host&quot;,&quot;type&quot;:&quot;horizontal-bar&quot;,&quot;title&quot;:&quot;Top 20 Sites by Requests&quot;,&quot;showLegend&quot;:true,&quot;top_x&quot;:20,&quot;summarize&quot;:true}">Graph</div>
 
 		<!-- Top 10 Resource-Limited Sites (599) -->
-		<div class="wp-block-wpcloud-graph" data-graph-attributes="{&quot;site&quot;:0,&quot;request_type&quot;:&quot;client&quot;,&quot;metric&quot;:&quot;requests&quot;,&quot;dimension&quot;:&quot;http_host&quot;,&quot;type&quot;:&quot;bar&quot;,&quot;title&quot;:&quot;Top 10 Resource-Limited Sites (599)&quot;,&quot;showLegend&quot;:true,&quot;top_x&quot;:10,&quot;filters&quot;:&quot;%5B%7B%22column%22%3A%22http_status%22%2C%22operator%22%3A%22%3D%22%2C%22value%22%3A429%7D%5D&quot;,&quot;summarize&quot;:true}">Graph</div>
+		<div class="wp-block-wpcloud-graph" data-graph-attributes="{&quot;displayClass&quot;:&quot;graph-50&quot;,&quot;site&quot;:0,&quot;request_type&quot;:&quot;client&quot;,&quot;metric&quot;:&quot;requests&quot;,&quot;dimension&quot;:&quot;http_host&quot;,&quot;type&quot;:&quot;horizontal-bar&quot;,&quot;title&quot;:&quot;Top 10 Resource-Limited Sites (599)&quot;,&quot;showLegend&quot;:true,&quot;top_x&quot;:10,&quot;filters&quot;:&quot;%5B%7B%22column%22%3A%22http_status%22%2C%22operator%22%3A%22%3D%22%2C%22value%22%3A429%7D%5D&quot;,&quot;summarize&quot;:true}">Graph</div>
 
 		<!-- Top 10 Sites with 5XX -->
-		<div class="wp-block-wpcloud-graph" data-graph-attributes="{&quot;site&quot;:0,&quot;request_type&quot;:&quot;client&quot;,&quot;metric&quot;:&quot;requests&quot;,&quot;dimension&quot;:&quot;http_host&quot;,&quot;type&quot;:&quot;bar&quot;,&quot;title&quot;:&quot;Top 10 Sites with 5XX&quot;,&quot;showLegend&quot;:true,&quot;top_x&quot;:10,&quot;summarize&quot;:true,&quot;filters&quot;:&quot;%5B%7B%22column%22%3A%22http_status%22%2C%22operator%22%3A%22%3E%3D%22%2C%22value%22%3A500%7D%2C%7B%22column%22%3A%22http_status%22%2C%22operator%22%3A%22%3C%22%2C%22value%22%3A600%7D%5D&quot;}">Graph</div>
+		<div class="wp-block-wpcloud-graph" data-graph-attributes="{&quot;displayClass&quot;:&quot;graph-50&quot;,&quot;site&quot;:0,&quot;request_type&quot;:&quot;client&quot;,&quot;metric&quot;:&quot;requests&quot;,&quot;dimension&quot;:&quot;http_host&quot;,&quot;type&quot;:&quot;horizontal-bar&quot;,&quot;title&quot;:&quot;Top 10 Sites with 5XX&quot;,&quot;showLegend&quot;:true,&quot;top_x&quot;:10,&quot;summarize&quot;:true,&quot;filters&quot;:&quot;%5B%7B%22column%22%3A%22http_status%22%2C%22operator%22%3A%22%3E%3D%22%2C%22value%22%3A500%7D%2C%7B%22column%22%3A%22http_status%22%2C%22operator%22%3A%22%3C%22%2C%22value%22%3A600%7D%5D&quot;}">Graph</div>
 
 
 		<!-- 'php_cpu_time_persec', 'http_host' -->

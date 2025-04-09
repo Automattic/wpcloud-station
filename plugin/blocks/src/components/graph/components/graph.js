@@ -20,7 +20,7 @@ import useGraphOptions from './lib/useGraphOptions';
 import stationApi from '@wpcloud/utils/api';
 
 
-export default function Graph({ site, request_type, metric, dimension, type, title, interval, refresh, showLegend, top_x, resolution, summarize, filters }) {
+export default function Graph({ site, request_type, metric, dimension, type, title, interval, refresh, showLegend, top_x, resolution, summarize, filters, displayClass }) {
 	const { start, end } = interval || {};
 	const [ data, setData ] = useState([]);
 	const [ series, setSeries ] = useState([]);
@@ -63,11 +63,16 @@ export default function Graph({ site, request_type, metric, dimension, type, tit
 		return () => controller.abort();
 	}, [ site, metric, start, end, refresh ] );
 
+	if ( typeof displayClass === 'string' || displayClass instanceof String ) {
+		//
+	} else {
+		displayClass = 'graph-100';
+	}
 
 	const { data: d, ...options } = useGraphOptions({ title, data, series, meta, containerRef, showLegend, type });
 	const hasData = data.length > 0;
 	return (
-		<div ref={containerRef} className="wpcloud-graph" style={{ width: "100%", height: "500px", backgroundColor: "white", position: "relative" }}>
+		<div ref={containerRef} className={`wpcloud-graph ${displayClass}`} style={{ backgroundColor: "white", position: "relative" }}>
 			{ loading && <Loader />}
 			{ hasData && <UplotReact
 				options={options}

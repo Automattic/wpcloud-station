@@ -373,6 +373,31 @@ button.wpcloud-block-button {
 	margin: 20px 0;
 }
 
+.wpcloud-graph  {
+	width: 100%;
+	height: 500px;
+	vertical-align: top;
+}
+
+.wpcloud-graph.graph-tall {
+	height: 1000px;
+}
+
+/* Styling for Graph Layouts */
+@media(min-width: 1024px) {
+	.wpcloud-graph.graph-50 {
+		display: inline-block;
+		width: calc(50% - 10px);
+		margin-right: 10px;
+	}
+
+	.wpcloud-graph.graph-33 {
+		display: inline-block;
+		width: calc(33.33% - 10px);
+		margin-right: 10px;
+	}
+}
+
 .wp-block-site-logo.hero-logo {
 	display: flex;
 	margin: 0 20px;

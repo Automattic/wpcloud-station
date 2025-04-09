@@ -50,6 +50,20 @@ function withDefaultOptions(opts) {
 	};
 }
 
+function withHorizontalOptions(opts) {
+	return {
+		padding: [null, 0, null, 0],
+		//ori: 0,
+		axes: [{ side: 3 }, { side: 0}],
+		legend: { live: false, markers: { width: 2 } },
+		scales: {
+			y: { range: [0, null], ori: 0, dir: 1 },
+			x: { ori: -1, dir: 1 }
+		},
+		...opts
+	};
+}
+
 
 function scaleFunc(options) {
  	const { series, useStatus = false, seriesOptions = {} } = options;
@@ -70,6 +84,13 @@ export function barOptions({ series:s, useStatus, seriesOptions, ...options }) {
 	const fillScale = scaleFunc({ series: s, useStatus, seriesOptions });
 	const series = buildSeries(s, { fillScale, ...seriesOptions });
 	return withDefaultOptions({ series, plugins, ...options });
+}
+
+export function horizontalBarOptions({ series:s, useStatus, seriesOptions, ...options }) {
+	const plugins = [seriesBarsPlugin()];
+	const fillScale = scaleFunc({ series: s, useStatus, seriesOptions });
+	const series = buildSeries(s, { fillScale, ...seriesOptions });
+	return withHorizontalOptions({ series, plugins, ...options });
 }
 
 export function lineOptions({ series, useStatus, seriesOptions, ...options }) {
