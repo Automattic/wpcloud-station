@@ -16,9 +16,12 @@ if ( $attributes['adminOnly'] && ! current_user_can( 'manage_options' ) ) {
 }
 // Grab the detail name and value.
 $name   = $attributes['name'] ?? '';
-$value  = WPCLOUD_Site::get_detail( get_the_ID(), $name ) ?? '';
-$value  = apply_filters( "wpcloud_block_site_detail_value_$name", $value );
+$value  = '';
 $detail = '';
+if ( $name ) {
+	$value = WPCLOUD_Site::get_detail( get_the_ID(), $name ) ?? '';
+}
+$value = apply_filters( "wpcloud_block_site_detail_value_$name", $value );
 
 if ( is_wp_error( $value ) ) {
 	wpcloud_l( 'WP Cloud Site Detail Block: ' . $value->get_error_message() ); // phpcs:disable WordPress.PHP.DevelopmentFunctions.error_log_error_log
