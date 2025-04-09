@@ -68,7 +68,20 @@ if ( ! class_exists( 'WPCLOUD_Metrics_Controller' ) ) {
 				),
 			);
 
-			// Route for site ID in path with metric in path.
+			// Client metrics.
+			register_rest_route(
+				$this->namespace,
+				$this->rest_base . '/client/(?<metric>[\w]+)',
+				array(
+					'args'                =>
+					array_merge( $common_args, array( /** client spepcific args */ ) ),
+					'methods'             => WP_REST_Server::READABLE,
+					'callback'            => array( $this, 'get_site_metric' ),
+					'permission_callback' => array( $this, 'user_access_check' ),
+				)
+			);
+
+			// Site metrics.
 			register_rest_route(
 				$this->namespace,
 				$this->rest_base . '/site/(?<site_id>[\d]+)/(?<metric>[\w]+)',
@@ -124,25 +137,31 @@ if ( ! class_exists( 'WPCLOUD_Metrics_Controller' ) ) {
 				return new WP_REST_Response( $start->get_error_message(), 400 );
 			}
 
-			$site = WPCLOUD_Site::get_by_id( $site_id );
+			$site = new WPCLOUD_Site( $site_id );
 
-			if ( ! $site ) {
+			if ( ! $site->post ) {
 				return new WP_REST_Response( esc_html__( 'Site not found', 'wpcloud' ), 404 );
 			}
 
-			$view = WPCLOUD_Metric_Data_View::load(
+			$view = new WPCLOUD_Metric_Data_View(
 				site: $site_id,
 				metric: $metric,
 				dimension: $dimension,
 				start: $start,
 				end: $end,
 			);
+			wpcloud_l( 'call load!!!!!!' );
+			$view = $view->load();
 
 			if ( is_wp_error( $view ) ) {
 				return new WP_REST_Response( $view->get_error_message(), 500 );
 			}
 
 			$result = $view->default();
+
+			if ( is_wp_error( $result ) ) {
+				return new WP_REST_Response( $result->get_error_message(), 500 );
+			}
 
 			$response = array(
 				'meta'   => $result->meta,
