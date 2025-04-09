@@ -225,6 +225,9 @@
 
 			input.addEventListener('change', () => {
 				const data = { [input.name]: input.value };
+				if (input.type === 'checkbox') {
+					data[input.name] = input.checked ? 1 : 0;
+				}
 				submitFormData(form, data);
 			});
 		});
