@@ -28,28 +28,26 @@ describe('Graph Component', () => {
     });
 
     it('renders without crashing', () => {
-        render(<Graph site="test-site" metric="test-metric" />);
+        render(<Graph apiPath="metrics/site/test-site/test-metric" />);
         expect(screen.getByTestId('spinner')).toBeInTheDocument();
     });
 
     it('shows loading state initially', () => {
-        render(<Graph site="test-site" metric="test-metric" />);
+        render(<Graph apiPath="metrics/site/test-site/test-metric" />);
         expect(screen.getByTestId('spinner')).toBeInTheDocument();
     });
 
     it('fetches data with correct parameters', () => {
         const props = {
-            site: 'test-site',
-            metric: 'test-metric',
+            apiPath: 'metrics/site/test-site/test-metric',
             dimension: 'status',
             interval: { start: '2023-01-01', end: '2023-01-31' },
         };
 
         render(<Graph {...props} />);
 
-        expect(stationApi.get).toHaveBeenCalledWith('metrics/site/test-metric', {
+        expect(stationApi.get).toHaveBeenCalledWith('metrics/site/test-site/test-metric', {
             query: {
-                site: 'test-site',
                 start: '2023-01-01',
                 end: '2023-01-31',
                 dimension: 'status',
@@ -68,7 +66,7 @@ describe('Graph Component', () => {
         });
 
         // Render the component
-        const { container } = render(<Graph site="test-site" metric="test-metric" />);
+        const { container } = render(<Graph apiPath="metrics/site/test-site/test-metric" />);
 
         // First, verify the loading state is shown
         expect(screen.getByTestId('spinner')).toBeInTheDocument();
@@ -89,7 +87,7 @@ describe('Graph Component', () => {
         // Reset the mock to ensure we start with a clean slate
         stationApi.get.mockReset();
 
-        const { rerender } = render(<Graph site="test-site" metric="test-metric" refresh={1} />);
+        const { rerender } = render(<Graph apiPath="metrics/site/test-site/test-metric" refresh={1} />);
 
         // First API call
         expect(stationApi.get).toHaveBeenCalledTimes(1);
@@ -98,7 +96,7 @@ describe('Graph Component', () => {
         stationApi.get.mockClear();
 
         // Rerender with a different refresh value
-        rerender(<Graph site="test-site" metric="test-metric" refresh={2} />);
+        rerender(<Graph apiPath="metrics/site/test-site/test-metric" refresh={2} />);
 
         // Should trigger another API call
         expect(stationApi.get).toHaveBeenCalledTimes(1);
@@ -118,7 +116,7 @@ describe('Graph Component', () => {
             });
 
             // Render the component with this graph type
-            const { unmount, container } = render(<Graph site="test-site" metric="test-metric" type={type} />);
+            const { unmount, container } = render(<Graph apiPath="metrics/site/test-site/test-metric" type={type} />);
 
             // Wait for the API call to complete
             await waitFor(() => {
@@ -144,7 +142,7 @@ describe('Graph Component', () => {
         const originalConsoleError = console.error;
         console.error = jest.fn();
 
-        render(<Graph site="test-site" metric="test-metric" />);
+        render(<Graph apiPath="metrics/site/test-site/test-metric" />);
 
         // Wait for the API call to complete
         await waitFor(() => {
@@ -167,7 +165,7 @@ describe('Graph Component', () => {
         // Spy on console.error
         const consoleSpy = jest.spyOn(console, 'error');
 
-        render(<Graph site="test-site" metric="test-metric" />);
+        render(<Graph apiPath="metrics/site/test-site/test-metric" />);
 
         // Wait for the API call to complete
         await waitFor(() => {
@@ -193,7 +191,7 @@ describe('Graph Component', () => {
             }
         };
 
-        const { unmount } = render(<Graph site="test-site" metric="test-metric" />);
+        const { unmount } = render(<Graph apiPath="metrics/site/test-site/test-metric" />);
 
         // Wait for the component to mount and useEffect to run
         await waitFor(() => {

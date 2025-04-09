@@ -28,7 +28,12 @@ document.addEventListener('DOMContentLoaded', () => {
 	}
 	const graphs = Array.from(container.querySelectorAll('.wp-block-wpcloud-graph')).map((graph) => {
 		const data = JSON.parse(graph.dataset.graphAttributes);
-		data.apiPath = apiPath;
+		const { metric } = data;
+		if ( ! metric ) {
+			console.error('No metric found in the graph attributes.');
+			return null;
+		}
+		data.apiPath = `${apiPath}/${metric}`;
 		graph.parentNode?.removeChild(graph);
 		return data;
 	});

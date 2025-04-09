@@ -20,7 +20,7 @@ import useGraphOptions from './lib/useGraphOptions';
 import stationApi from '@wpcloud/utils/api';
 
 
-export default function Graph({ apiPath, metric, dimension, type, title, interval, refresh, showLegend }) {
+export default function Graph({ apiPath, dimension, type, title, interval, refresh, showLegend }) {
 	const { start, end } = interval || {};
 	const [ data, setData ] = useState([]);
 	const [ series, setSeries ] = useState([]);
@@ -55,7 +55,7 @@ export default function Graph({ apiPath, metric, dimension, type, title, interva
 
 		fetchData();
 		return () => controller.abort();
-	}, [ metric, start, end, refresh ] );
+	}, [ apiPath,start, end, refresh ] );
 
 
 	const { data: d, ...options } = useGraphOptions({ title, data, series, meta, containerRef, showLegend, type });
