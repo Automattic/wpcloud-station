@@ -7,10 +7,12 @@ import React, { useState, useEffect, useCallback } from 'react';
  * Internal dependencies
  */
 import Graph from '@wpcloud/components/graph/components/graph.js';
+import { ApiContext } from './apiContext.js';
 import Toolbar from './toolbar';
 import { useQueryBoundary } from '../hooks';
 
 function renderNodeWithProps(node, key, props) {
+
 	if ('graph' === node.type) {
 		return (<Graph key={key} style={node.style} {...node.attributes} className={node.classNames.join(' ')} {...props} />);
 	}
@@ -54,6 +56,7 @@ function Metrics({ tree, apiPath }) {
 	}, [interval, toggleRefresh]);
 
 	return (
+		<ApiContext.Provider value={{ apiPath }}>
 			<div className="wpcloud-metrics">
 				<h3>Metrics</h3>
 				<Toolbar onIntervalUpdate={updateQueryParams} interval={interval} onRefresh={onRefresh} />
@@ -61,6 +64,7 @@ function Metrics({ tree, apiPath }) {
 					{tree.children.map(renderNode)}
 				</div>
 			</div>
+		</ApiContext.Provider>
 	);
 }
 

@@ -18,9 +18,11 @@ import Overlay from './overlay';
 // import { stackedOptions, defaultOptions, barOptions, lineOptions, areaOptions } from './lib/options';
 import useGraphOptions from './lib/useGraphOptions';
 import stationApi from '@wpcloud/utils/api';
+import { useApiContext } from '@wpcloud/metrics/components/apiContext';
 
 
-export default function Graph({ apiPath, dimension, type, title, interval, refresh, showLegend }) {
+export default function Graph({ dimension, type, title, interval, refresh, showLegend }) {
+	const { apiPath } = useApiContext();
 	const { start, end } = interval || {};
 	const [ data, setData ] = useState([]);
 	const [ series, setSeries ] = useState([]);
