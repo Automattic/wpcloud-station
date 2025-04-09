@@ -43,32 +43,25 @@ class WPCLOUD_Metric_Data_View extends WPCLOUD_Metrics {
 	public $dimensions;
 
 	/**
-	 * Generate the view.
+	 * Load data.
 	 *
-	 * @param int    $site      The site.
-	 * @param string $metric    The metric.
-	 * @param string $dimension The dimension.
-	 * @param int    $start     The start.
-	 * @param int    $end       The end.
-	 *
-	 * @return WP_Error|WPCLOUD_Metric_Data
+	 * @return WP_Error|WPCLOUD_Metric_Data_View
 	 */
-	public static function load( int $site, string $metric, string $dimension, int $start, int $end ): WP_Error|WPCLOUD_Metric_Data_View {
-		// validate the metric and dimension.
-		$view = new self( $site, $metric, $dimension, $start, $end );
-		if ( ! array_key_exists( $view->metric, $view->get_available_metrics() ) ) {
+	public function load(): WP_Error|WPCLOUD_Metric_Data_View {
+		// Validate the metric and dimension.
+		if ( ! array_key_exists( $this->metric, $this->get_available_metrics() ) ) {
 			return new WP_Error( 'invalid_metric', 'Invalid metric', array( 'status' => 400 ) );
 		}
 
-		if ( ! array_key_exists( $view->dimension, $view->get_available_dimensions() ) ) {
+		if ( ! array_key_exists( $this->dimension, $this->get_available_dimensions() ) ) {
 			return new WP_Error( 'invalid_dimension', 'Invalid dimension', array( 'status' => 400 ) );
 		}
 
-		$view->fetch();
-		if ( is_wp_error( $view->result ) ) {
-			return $view->result;
+		$this->fetch();
+		if ( is_wp_error( $this->result ) ) {
+			return $this->result;
 		}
-		return $view;
+		return $this;
 	}
 
 	/**
@@ -78,10 +71,6 @@ class WPCLOUD_Metric_Data_View extends WPCLOUD_Metrics {
 	 */
 	public function default(): WP_Error|WPCLOUD_Metric_Data_View {
 		$this->set_dimensions();
-		if ( empty( $this->dimensions ) ) {
-			return new WP_Error( 'no_dimensions', 'No dimensions found', array( 'status' => 400 ) );
-		}
-
 		$this->set_series();
 		$this->set_data();
 		return $this;
@@ -141,7 +130,7 @@ class WPCLOUD_Metric_Data_View extends WPCLOUD_Metrics {
 		}
 
 		foreach ( $this->periods as $row ) {
-			$x = $row['timestamp'];
+			$x = $row['timestamp'] ?? '';
 			if ( empty( $x ) ) {
 				continue;
 			}

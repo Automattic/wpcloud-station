@@ -15,13 +15,6 @@ require_once __DIR__ . '/wpcloud-client.php';
 class WPCloud_Metrics {
 
 	/**
-	 * The site.
-	 *
-	 * @var int
-	 */
-	protected int $site;
-
-	/**
 	 * The metric.
 	 *
 	 * @var string
@@ -36,6 +29,13 @@ class WPCloud_Metrics {
 	protected string $dimension;
 
 	/**
+	 * The metric options.
+	 *
+	 * @var array
+	 */
+	protected array $options;
+
+	/**
 	 * The start.
 	 *
 	 * @var int|null
@@ -48,6 +48,13 @@ class WPCloud_Metrics {
 	 * @var int|null
 	 */
 	protected ?int $end;
+
+	/**
+	 * Summarize the data.
+	 *
+	 * @var bool
+	 */
+	protected bool $summarize;
 
 	/**
 	 * The result.
@@ -83,79 +90,23 @@ class WPCloud_Metrics {
 	/**
 	 * Constructor.
 	 *
-	 * @param int      $site     The site.
-	 * @param string   $metric   The metric.
-	 * @param string   $dimension The dimension.
-	 * @param int|null $start    The start.
-	 * @param int|null $end      The end.
+	 * @param string $metric   The metric.
+	 * @param string $dimension The dimension.
+	 * @param array  $interval The interval.
+	 * @param bool   $summarize Whether to summarize the data.
+	 * @param array  $options  The metric options.
 	 *
 	 * @throws Exception If the type is invalid.
 	 */
-	public function __construct( int $site, string $metric, string $dimension, ?int $start = null, ?int $end = null ) {
-		$this->site      = $site;
+	public function __construct( string $metric, string $dimension, array $interval, bool $summarize = false, array $options = array() ) {
+
 		$this->metric    = $metric;
 		$this->dimension = $dimension;
-		$this->start     = $start ?? strtotime( '-24 hours' );
-		$this->end       = $end ?? time();
+		$this->start     = $interval['start'];
+		$this->end       = $interval['end'];
+		$this->options   = $options;
+		$this->summarize = $summarize;
 	}
-
-	/**
-	 * Get the requests.
-	 *
-	 * @param string $dimension The dimension.
-	 * @param bool   $summarize Summarize the data.
-	 *
-	 * @return WP_Error|array The data
-	 */
-	public function requests( ?string $dimension = null, bool $summarize = false ): WP_Error|array {
-		$options = array(
-			'metric'    => 'requests_persec',
-			'dimension' => $dimension,
-			'summarize' => $summarize,
-		);
-
-		return $this->get_data( $options );
-	}
-
-	/**
-	 * Get the response bytes.
-	 *
-	 * @param string $dimension The dimension.
-	 * @param bool   $average   Average the data.
-	 * @param bool   $summarize Summarize the data.
-	 *
-	 * @return WP_Error|array The data
-	 */
-	public function response_bytes( ?string $dimension = null, bool $average = false, bool $summarize = false ): array {
-		$metric = $average ? 'response_bytes_average' : 'response_bytes_persec';
-
-		$options = array(
-			'metric'    => $metric,
-			'dimension' => $dimension,
-			'summarize' => $summarize,
-		);
-
-		return $this->get_data( $options );
-	}
-
-	/**
-	 * Get the response time.
-	 *
-	 * @param string $dimension The dimension.
-	 * @param bool   $summarize Summarize the data.
-	 *
-	 * @return WP_Error|array The data
-	 */
-	public function response_time( ?string $dimension = null, bool $summarize = false ): array {
-		$options = array(
-			'metric'    => 'response_time_average',
-			'dimension' => $dimension,
-			'summarize' => $summarize,
-		);
-
-		return $this->get_data( $options );
-	}
-
 
 	/**
 	 * Get the data.
@@ -169,17 +120,39 @@ class WPCloud_Metrics {
 			array(
 				'metric'    => $this->metric,
 				'dimension' => $this->dimension,
-				'summarize' => false,
+				'start'     => $this->start,
+				'end'       => $this->end,
 			),
+			$this->options,
 			$options
 		);
 
-		$this->result = wpcloud_client_site_metrics( $this->site, $this->start, $this->end, $options );
-		if ( is_wp_error( $this->result ) ) {
-			return $this->result;
+		$site_id = $options['site_id'] ?? 0;
+		unset( $options['site_id'] );
+
+		$wpcloud_client = new WPCloud_API_Client( site_id: $site_id, use_cache: false );
+		if ( $site_id ) {
+			$path = 'metrics/site/:site_id';
+		} else {
+			$path = 'metrics/client/:client';
 		}
-		$this->meta    = (array) $this->result->_meta;
-		$this->periods = json_decode( wp_json_encode( $this->result->periods ), true );
+
+		if ( $this->summarize ) {
+			$path .= '/summarize';
+		}
+
+		$result = $wpcloud_client->post( $path, $options );
+		wpcloud_l( 'metrics results', $result->data );
+
+		if ( ! $result->is_ok() ) {
+			$this->result = $result->error;
+			return $result->error;
+		}
+
+		$this->result  = $result;
+		$this->meta    = (array) $result->_meta;
+		$this->periods = json_decode( wp_json_encode( $result->periods ), true );
+
 		return $this;
 	}
 

@@ -22,20 +22,28 @@ class WPCLOUD_Site {
 	 *
 	 * @var WP_Post
 	 */
-	protected $post;
+	protected $post = null;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param WP_Post $post The post object for the site.
+	 * @param WP_Post|string|int $post_or_id The post object or id for the site.
 	 * @return void
 	 */
-	public function __construct( $post = null ) {
-		if ( ! $post ) {
+	public function __construct( $post_or_id = null ) {
+		if ( $post_or_id instanceof WP_Post ) {
+			$post = $post_or_id;
+		} elseif ( is_numeric( $post_or_id ) ) {
+			// Try to find the post by atomic site id.
+			$post = self::get_by_id( $post_or_id );
+			if ( ! $post ) {
+				$post = get_post( $post_or_id );
+			}
+		} else {
 			$post = get_post();
 		}
 
-		if ( 'wpcloud_site' === $post->post_type ) {
+		if ( ( $post instanceof WP_Post ) && 'wpcloud_site' === $post->post_type ) {
 			$this->post = $post;
 		}
 	}
@@ -47,6 +55,9 @@ class WPCLOUD_Site {
 	 * @return mixed
 	 */
 	public function __get( string $name ): mixed {
+		if ( 'post' === $name ) {
+			return $this->post;
+		}
 		if ( ! $this->post ) {
 			return null;
 		}
@@ -188,6 +199,15 @@ class WPCLOUD_Site {
 		return $site[0];
 	}
 
+	/**
+	 * Get the site post.
+	 *
+	 * @param int $wpcloud_site_id The site ID.
+	 * @return null|WP_Post
+	 */
+	public function get_site_post( ?int $wpcloud_site_id ): null|WP_Post {
+		return self::get_by_id( $wpcloud_site_id );
+	}
 
 	/**
 	 * Create a new wpcloud_site custom post type.

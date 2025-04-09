@@ -267,18 +267,18 @@ class WPCloud_SiteTest extends WP_UnitTestCase {
 		$about_a_gig = 1073741824;
 		Mock_Helper::mock_api_requests(
 			array(
-				'site-meta/123/space_used/get'      => (object) array(
+				'site-meta/123/space_used/get'        => (object) array(
 					'data' => $about_a_gig,
 				),
-				'site-meta/123/db_file_size/get'    => (object) array(
+				'site-meta/123/db_file_size/get'      => (object) array(
 					'data' => $about_a_gig,
 				),
 				// Check for empty values.
-				'site-meta/123/space_quota/get'     => (object) array(
+				'site-meta/123/space_quota/get'       => (object) array(
 					'data' => '',
 				),
 				// Test other site meta.
-				'site-meta/123/burst_php_conns/get' => (object) array(
+				'site-meta/123/default_php_conns/get' => (object) array(
 					'data' => '6',
 				),
 			)
@@ -291,8 +291,8 @@ class WPCloud_SiteTest extends WP_UnitTestCase {
 		$this->assertEquals( '0 B', $no_value );
 
 		// Test that raw metadata is returned correctly.
-		$burst_php_conns = WPCloud_Site::get_detail( $this->post, 'burst_php_conns' );
-		$this->assertEquals( '6', $burst_php_conns );
+		$default_php_conns = WPCloud_Site::get_detail( $this->post, 'default_php_conns' );
+		$this->assertEquals( '6', $default_php_conns );
 
 		// Check edge cache.
 		Mock_Helper::mock_api_request(
