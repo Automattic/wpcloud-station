@@ -67,3 +67,47 @@ export function parseTime(input) {
 
 	return now.toISOString().replace("T", " ").split(".")[0];
 }
+
+export function buildTree(element, apiPath) {
+	const isGroup = element.classList.contains("wp-block-group");
+	const isGraph = element.classList.contains("wp-block-wpcloud-graph");
+
+	const classNames = Array.from(element.classList)
+	const style = styleToObject(element);
+
+	if ( isGraph ) {
+		return {
+			type: "graph",
+			attributes: JSON.parse(element.dataset.graphAttributes),
+			classNames,
+			apiPath,
+			style,
+		};
+	}
+	if (isGroup) {
+		return {
+			type: "group",
+			classNames,
+			style,
+			children: Array.from(element.children)
+				.map((child) => buildTree(child, apiPath))
+				.filter(Boolean),
+		};
+	}
+	return null;
+}
+
+export function styleToObject(element) {
+	const style = element.getAttribute("style");
+	if (!style) {
+		return {};
+	}
+	const styleObject = {};
+	const styles = style.split(";").filter(Boolean);
+	styles.forEach((style) => {
+		const [key, value] = style.split(":").map((s) => s.trim());
+		const camelCased = key.replace(/-([a-z])/g, (match, letter) => letter.toUpperCase());
+		styleObject[camelCased] = value;
+	});
+	return styleObject;
+}

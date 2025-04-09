@@ -8,36 +8,34 @@ import { createRoot } from 'react-dom/client';
  */
 import Metrics from './components/metrics.js';
 
+import { buildTree } from './utils.js';
+
 document.addEventListener('DOMContentLoaded', () => {
 	const container = document.getElementById('metrics');
 	const metricsAttributes = container.dataset.metricsAttributes;
-	if ( !metricsAttributes ) {
+	if (!metricsAttributes) {
 		console.error('No metrics attributes found in the container.');
 		return;
 	}
 	const { type } = JSON.parse(metricsAttributes);
 	let apiPath = `metrics/${type}`;
-	if ( 'site' == type ) {
+	if ('site' == type) {
 		const siteId = window.wpcloudSite?.id;
-		if ( ! siteId ) {
-			console.error( 'No site ID found in the window object.' );
+		if (!siteId) {
+			console.error('No site ID found in the window object.');
 			return;
 		}
 
 		apiPath += `/${siteId}`;
 	}
-	const graphs = Array.from(container.querySelectorAll('.wp-block-wpcloud-graph')).map((graph) => {
-		const data = JSON.parse(graph.dataset.graphAttributes);
-		const { metric } = data;
-		if ( ! metric ) {
-			console.error('No metric found in the graph attributes.');
-			return null;
-		}
-		data.apiPath = `${apiPath}/${metric}`;
-		graph.parentNode?.removeChild(graph);
-		return data;
-	});
+
+	const tree = {
+		type: 'metric',
+		children: Array.from(container.children)
+			.map((child) => buildTree(child))
+			.filter(Boolean),
+	}
 
 	const root = createRoot(container);
-	root.render(<Metrics graphs={graphs} />);
+	root.render(<Metrics { ...{ tree, apiPath } }/>);
 });
