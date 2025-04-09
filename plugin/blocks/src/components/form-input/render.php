@@ -38,10 +38,14 @@ if ( array_key_exists( $name, $site_mutable_options ) ) {
 	$current_value = WPCLOUD_Site::get_detail( get_the_ID(), $name );
 
 	if ( is_wp_error( $current_value ) ) {
-		error_log( 'WP Cloud: ' . $current_value->get_error_message() );
+		wpcloud_l( 'WP Cloud: ' . $current_value->get_error_message() );
 		$current_value = '';
 	}
-	if ( ! $current_value ) {
+
+	$use_default = is_null( $current_value )
+		|| ( $current_value instanceof stdClass && empty( (array) $current_value ) );
+
+	if ( $use_default ) {
 		$current_value = $site_mutable_options[ $name ]['default'] ?? '';
 	}
 

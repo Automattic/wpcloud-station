@@ -577,6 +577,11 @@ class WPCLOUD_Site {
 
 		$wpcloud_site_id = wpcloud_get_site_id( $post );
 
+		if ( ! $key ) {
+			wpcloud_l( 'missing key for site detail' );
+			return '';
+		}
+
 		if ( empty( $wpcloud_site_id ) ) {
 
 			// Check for default values.
@@ -589,7 +594,6 @@ class WPCLOUD_Site {
 		}
 
 		$api_client = new WPCloud_API_Client( site_id: $wpcloud_site_id, throw_exception: true );
-
 		try {
 			$result = '';
 			switch ( $key ) {
@@ -636,6 +640,11 @@ class WPCLOUD_Site {
 					$details = $api_client->get( 'get-site/:site_id/extra' );
 					return $details->domain_name;
 
+				case 'site_alias':
+				case 'alias':
+					// This is a stub until https://github.com/Automattic/wpcloud-station/issues/308 is resolved.
+					return '';
+
 				case 'wp_admin_url':
 					$details = $api_client->get( 'get-site/:site_id/extra' );
 					return 'https://' . $details->domain_name . '/wp-admin';
@@ -657,19 +666,36 @@ class WPCLOUD_Site {
 				case 'suspend_after':
 				case 'wp_version':
 				case 'do_not_delete':
-				case 'photon_subsizes':
 				case 'privacy_model':
-				case 'static_file_404':
 				case 'default_php_conns':
-				case 'burst_php_conns':
 				case 'php_fs_permissions':
-				case 'canonicalize_aliases':
 				case '_data':
 					$site_meta = $api_client->get( "site-meta/:site_id/$key/get" );
 					if ( ! $site_meta->is_ok() ) {
 						return '';
 					}
 					return $site_meta->data ?? '';
+
+				case 'burst_php_conns':
+				case 'photon_subsizes':
+				case 'canonicalize_aliases':
+					$site_meta = $api_client->get( "site-meta/:site_id/$key/get" );
+					wpcloud_l( 'get checkbox meta', $key, $site_meta->data );
+					if ( ! $site_meta->is_ok() ) {
+						return false;
+					}
+					if ( '1' === $site_meta->data || 'true' === $site_meta->data ) {
+						return true;
+					}
+					return false;
+
+				case 'static_file_404':
+					$site_meta = $api_client->get( 'site-meta/:site_id/static_file_404/get' );
+					wpcloud_l( 'static_file_404', $site_meta );
+					if ( ! $site_meta->is_ok() ) {
+						return '';
+					}
+					return $site_meta->data ?? 'WordPress';
 
 				case 'edge_cache_status':
 					$edge_cache = $api_client->get( 'edge-cache/:site_id' );
@@ -737,10 +763,10 @@ class WPCLOUD_Site {
 			if ( empty( $site_mutable_fields ) ) {
 				return new WP_Error( 'no_mutable_fields', __( 'No mutable fields to update.', 'wpcloud' ) );
 			}
+			wpcloud_l( 'update detail', $site_mutable_fields );
 			foreach ( $site_mutable_fields as $key => $value ) {
 				switch ( $key ) {
-					case 'canonical_aliases':
-						// canonicalize_aliases doesn't like "truthy" values.
+					case 'canonicalize_aliases':
 						$value = $value ? 'true' : 'false';
 						break;
 
