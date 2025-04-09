@@ -43,35 +43,43 @@ if ( ! class_exists( 'WPCLOUD_Metrics_Controller' ) ) {
 				)
 			);
 
+			$common_args = array(
+				'metric'    => array(
+					'description' => esc_html__( 'The metric to retrieve.', 'wpcloud' ),
+					'type'        => 'string',
+				),
+				'dimension' => array(
+					'description' => esc_html__( 'The dimension to retrieve.', 'wpcloud' ),
+					'type'        => 'string',
+				),
+				'start'     => array(
+					'description' => esc_html__( 'The start time.', 'wpcloud' ),
+					'type'        => 'string',
+					'options'     => array(
+						'default' => null,
+					),
+				),
+				'end'       => array(
+					'description' => esc_html__( 'The end time.', 'wpcloud' ),
+					'type'        => 'string',
+					'options'     => array(
+						'default' => null,
+					),
+				),
+			);
+
+			// Route for site ID in path with metric in path.
 			register_rest_route(
 				$this->namespace,
-				$this->rest_base . '/site/(?<metric>[\w]+)',
+				$this->rest_base . '/site/(?<site_id>[\d]+)/(?<metric>[\w]+)',
 				array(
-					'args'                => array(
-						'site'      => array(
-							'description' => esc_html__( 'Unique identifier for the site.', 'wpcloud' ),
-							'type'        => 'integer',
-						),
-						'metric'    => array(
-							'description' => esc_html__( 'The metric to retrieve.', 'wpcloud' ),
-							'type'        => 'string',
-						),
-						'dimension' => array(
-							'description' => esc_html__( 'The dimension to retrieve.', 'wpcloud' ),
-							'type'        => 'string',
-						),
-						'start'     => array(
-							'description' => esc_html__( 'The start time.', 'wpcloud' ),
-							'type'        => 'string',
-							'options'     => array(
-								'default' => null,
-							),
-						),
-						'end'       => array(
-							'description' => esc_html__( 'The end time.', 'wpcloud' ),
-							'type'        => 'string',
-							'options'     => array(
-								'default' => null,
+					'args'                =>
+					array_merge(
+						$common_args,
+						array(
+							'site_id' => array(
+								'description' => esc_html__( 'Unique identifier for the site.', 'wpcloud' ),
+								'type'        => 'integer',
 							),
 						),
 					),
@@ -83,7 +91,7 @@ if ( ! class_exists( 'WPCLOUD_Metrics_Controller' ) ) {
 		}
 
 		/**
-		 * Get available metrics
+		 * Get available metrics.
 		 *
 		 * @return WP_REST_Response
 		 */
@@ -98,7 +106,7 @@ if ( ! class_exists( 'WPCLOUD_Metrics_Controller' ) ) {
 		}
 
 		/**
-		 * Get site metric
+		 * Get site metric.
 		 *
 		 * @param WP_REST_Request $request The request.
 		 *
@@ -106,7 +114,7 @@ if ( ! class_exists( 'WPCLOUD_Metrics_Controller' ) ) {
 		 */
 		public function get_site_metric( WP_REST_Request $request ): WP_REST_Response {
 			$params    = $request->get_params();
-			$site_id   = $params['site'];
+			$site_id   = $params['site_id'];
 			$metric    = $params['metric'];
 			$dimension = $params['dimension'] ?? null;
 			$start     = $this->parseTime( $params['start'] ?? null, 'start' );
@@ -145,7 +153,7 @@ if ( ! class_exists( 'WPCLOUD_Metrics_Controller' ) ) {
 		}
 
 		/**
-		 * Parse time
+		 * Parse time.
 		 *
 		 * @param string $time The time.
 		 * @param string $position The position.
@@ -165,7 +173,7 @@ if ( ! class_exists( 'WPCLOUD_Metrics_Controller' ) ) {
 				'M' => 'months',
 			);
 
-			// check if it's now-{some value} format.
+			// Check if it's now-{some value} format.
 			if ( 0 === strpos( $time, 'now-' ) ) {
 				$time = substr( $time, 3 );
 			}

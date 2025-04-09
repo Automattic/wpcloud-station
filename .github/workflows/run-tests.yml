@@ -311,6 +311,21 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y subversion
 
+      - name: Wait for MySQL to be ready
+        run: |
+          # Wait for MySQL to be ready
+          for i in {1..30}; do
+            if mysql -h127.0.0.1 -uroot -proot -e 'SELECT 1;' &> /dev/null; then
+              echo "MySQL is ready!"
+              break
+            fi
+            echo "Waiting for MySQL to be ready... ($i/30)"
+            sleep 2
+          done
+
+          # Verify the MySQL connection
+          mysql -h127.0.0.1 -uroot -proot -e 'SELECT 1;'
+
       - name: Set up WordPress test suite
         run: |
           # Create verbose logging flag file if needed
@@ -318,9 +333,6 @@ jobs:
 
           # Install the WordPress test suite
           bash plugin/bin/install-wp-tests.sh wordpress_test root root 127.0.0.1 latest true
-
-          # Verify the MySQL connection
-          mysql -h127.0.0.1 -uroot -proot -e 'SELECT 1;'
 
       - name: Run PHPUnit tests
         working-directory: ./plugin
