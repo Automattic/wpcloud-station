@@ -140,7 +140,26 @@ recreate_db() {
 }
 
 create_db() {
-	mysqladmin create $DB_NAME --user="$DB_USER" --password="$DB_PASS"$EXTRA
+	# Try to create the database with retries
+	local max_retries=5
+	local retry_count=0
+	local success=false
+
+	while [ $retry_count -lt $max_retries ] && [ "$success" = "false" ]; do
+		if mysqladmin create $DB_NAME --user="$DB_USER" --password="$DB_PASS"$EXTRA; then
+			success=true
+			echo "Database created successfully."
+		else
+			retry_count=$((retry_count+1))
+			if [ $retry_count -lt $max_retries ]; then
+				echo "Failed to create database. Retrying in 5 seconds... (Attempt $retry_count of $max_retries)"
+				sleep 5
+			else
+				echo "Failed to create database after $max_retries attempts."
+				return 1
+			fi
+		fi
+	done
 }
 
 install_db() {
@@ -165,12 +184,42 @@ install_db() {
 		fi
 	fi
 
-	# create database
-	if [ $(mysql --user="$DB_USER" --password="$DB_PASS"$EXTRA --execute='show databases;' | grep ^$DB_NAME$) ]
-	then
-		echo "Reinstalling will delete the existing test database ($DB_NAME)"
-		read -p 'Are you sure you want to proceed? [y/N]: ' DELETE_EXISTING_DB
-		recreate_db $DELETE_EXISTING_DB
+	# Check if database exists with retries
+	local max_retries=5
+	local retry_count=0
+	local db_exists=false
+	local check_success=false
+
+	while [ $retry_count -lt $max_retries ] && [ "$check_success" = "false" ]; do
+		if db_list=$(mysql --user="$DB_USER" --password="$DB_PASS"$EXTRA --execute='show databases;' 2>/dev/null); then
+			check_success=true
+			if echo "$db_list" | grep -q "^$DB_NAME$"; then
+				db_exists=true
+			fi
+		else
+			retry_count=$((retry_count+1))
+			if [ $retry_count -lt $max_retries ]; then
+				echo "Failed to check if database exists. Retrying in 5 seconds... (Attempt $retry_count of $max_retries)"
+				sleep 5
+			else
+				echo "Failed to check if database exists after $max_retries attempts."
+				echo "Proceeding with database creation anyway..."
+			fi
+		fi
+	done
+
+	# Create or recreate database
+	if [ "$db_exists" = "true" ] && [ "$check_success" = "true" ]; then
+		if [ -t 0 ]; then
+			# Running in interactive mode, ask for confirmation
+			echo "Reinstalling will delete the existing test database ($DB_NAME)"
+			read -p 'Are you sure you want to proceed? [y/N]: ' DELETE_EXISTING_DB
+			recreate_db $DELETE_EXISTING_DB
+		else
+			# Running in non-interactive mode (CI), proceed with recreation
+			echo "Recreating existing database ($DB_NAME) without confirmation (non-interactive mode)"
+			recreate_db "y"
+		fi
 	else
 		create_db
 	fi
