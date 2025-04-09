@@ -37,7 +37,7 @@ function Metrics({ graphs, site }) {
 	const interval = { start, end };
 
 	const graphComponents = graphs.map((graph, index) => {
-		return <Graph key={index} {...graph} site={site} interval={interval} refresh={ toggleRefresh } />;
+		return <Graph key={index} {...graph} interval={interval} refresh={ toggleRefresh } />;
 	});
 
 	const onRefresh = () => {

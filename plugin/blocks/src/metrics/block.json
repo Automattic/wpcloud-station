@@ -23,6 +23,10 @@
 		"id": {
 			"type": "string",
 			"default": "metrics"
+		},
+		"type": {
+			"type": "string",
+			"default": "client"
 		}
 	}
 }
