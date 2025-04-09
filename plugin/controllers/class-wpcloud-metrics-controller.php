@@ -59,7 +59,7 @@ if ( ! class_exists( 'WPCLOUD_Metrics_Controller' ) ) {
 					'description' => esc_html__( 'The start time.', 'wpcloud' ),
 					'type'        => 'string',
 					'options'     => array(
-						'default' => '-24 hours',
+						'default' => 'now-24h',
 					),
 				),
 				'end'        => array(
