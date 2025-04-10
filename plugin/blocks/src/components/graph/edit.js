@@ -116,10 +116,10 @@ export default function Edit( { attributes, setAttributes } ) {
 							value={topX}
 							onChange={update('topX')}
 							min={1}
-							max={100}
+							max={20}
 							step={1}
 							isShiftStepEnabled={true}
-							shiftStep={5}
+							shiftStep={1}
 						/>
 
 						<ToggleControl
