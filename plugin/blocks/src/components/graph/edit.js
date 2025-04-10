@@ -14,6 +14,7 @@ import {
 	TextControl,
 	ToggleControl,
 	SelectControl,
+	__experimentalNumberControl as NumberControl,
 	Spinner
 } from '@wordpress/components';
 
@@ -25,7 +26,7 @@ import './editor.scss';
 
 export default function Edit( { attributes, setAttributes } ) {
 
-	const { metric, dimension, resolution, type, title, showLegend, minWidth, summarize } = attributes;
+	const { metric, dimension, resolution, topX, type, title, showLegend, minWidth, summarize } = attributes;
 	const update = updateAttribute(setAttributes);
 
 	const [metrics, setMetrics] = useState({});
@@ -45,7 +46,29 @@ export default function Edit( { attributes, setAttributes } ) {
 	const controls = (
 		<InspectorControls>
 			<PanelBody title={__('graph Settings')}>
-
+				<SelectControl
+					label={ __( 'Type' ) }
+					value={ type }
+					options={ [
+						{ label: __( 'Area' ), value: 'area' },
+						{ label: __( 'Line' ), value: 'line' },
+						{ label: __('Bar'), value: 'bar' },
+						{ label: __('Stacked Bar'), value: 'stacked-bar' },
+					] }
+					onChange={ update('type') }
+				/>
+				<TextControl
+					label={ __( 'Title' ) }
+					value={ title }
+					onChange={ update('title') }
+				/>
+				<ToggleControl
+					label={ __( 'Show Legend' ) }
+					checked={ showLegend }
+					onChange={ update('showLegend') }
+				/>
+			</PanelBody>
+			<PanelBody title={__('Graph Data')}>
 				{loading && <Spinner />}
 				{!loading && (
 					<>
@@ -88,34 +111,26 @@ export default function Edit( { attributes, setAttributes } ) {
 							]}
 							onChange={update('resolution')}
 						/>
+						<NumberControl
+							label={__('Top X')}
+							value={topX}
+							onChange={update('topX')}
+							min={1}
+							max={100}
+							step={1}
+							isShiftStepEnabled={true}
+							shiftStep={5}
+						/>
+
 						<ToggleControl
 							label={__('Summarize')}
 							checked={summarize}
 							onChange={update('summarize')}
 						/>
 					</>)}
-				<SelectControl
-					label={ __( 'Type' ) }
-					value={ type }
-					options={ [
-						{ label: __( 'Area' ), value: 'area' },
-						{ label: __( 'Line' ), value: 'line' },
-						{ label: __('Bar'), value: 'bar' },
-						{ label: __('Stacked Bar'), value: 'stacked-bar' },
-					] }
-					onChange={ update('type') }
-				/>
-				<TextControl
-					label={ __( 'Title' ) }
-					value={ title }
-					onChange={ update('title') }
-				/>
-				<ToggleControl
-					label={ __( 'Show Legend' ) }
-					checked={ showLegend }
-					onChange={ update('showLegend') }
-				/>
+
 			</PanelBody>
+
 			<PanelBody title={__('Graph Size')}>
 				<TextControl
 					label={ __( 'Minimum Width' ) }

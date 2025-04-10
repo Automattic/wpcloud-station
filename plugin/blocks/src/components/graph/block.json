@@ -68,6 +68,10 @@
 			"type": "boolean",
 			"default": false
 		},
+		"topX": {
+			"type": "number",
+			"default": 20
+		},
 		"type": {
 			"type": "string",
 			"default": "line"
