@@ -25,7 +25,7 @@ import './editor.scss';
 
 export default function Edit( { attributes, setAttributes } ) {
 
-	const { metric, dimension, resolution, type, title, showLegend, minWidth } = attributes;
+	const { metric, dimension, resolution, type, title, showLegend, minWidth, summarize } = attributes;
 	const update = updateAttribute(setAttributes);
 
 	const [metrics, setMetrics] = useState({});
@@ -87,6 +87,11 @@ export default function Edit( { attributes, setAttributes } ) {
 								{ label: __('1 Day'), value: '86400' },
 							]}
 							onChange={update('resolution')}
+						/>
+						<ToggleControl
+							label={__('Summarize')}
+							checked={summarize}
+							onChange={update('summarize')}
 						/>
 					</>)}
 				<SelectControl

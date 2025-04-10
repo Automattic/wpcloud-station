@@ -64,7 +64,10 @@
 				86400
 			]
 		},
-
+		"summarize": {
+			"type": "boolean",
+			"default": false
+		},
 		"type": {
 			"type": "string",
 			"default": "line"
