@@ -105,14 +105,14 @@ export function stackedOptions({ series:s, data:d, useStatus, seriesOptions, dir
 	const plugins = [seriesBarsPlugin({ stacked: true, dir, ori })];
 	const fillScale = scaleFunc({ series: s, useStatus, seriesOptions });
 	const series = buildSeries(s, { fillScale, ...seriesOptions });
-	return withDefaultBarOptions({ bands, data, plugins, series, ...options });
+	return withDefaultBarOptions({ bands, data, plugins, series, ori, ...options });
 }
 
 export function barOptions({ series: s, useStatus, seriesOptions, dir, ori, ...options }) {
 	const plugins = [seriesBarsPlugin({ dir, ori })];
 	const fillScale = scaleFunc({ series: s, useStatus, seriesOptions });
 	const series = buildSeries(s, { fillScale, ...seriesOptions });
-	return withDefaultBarOptions({ series, plugins, ...options });
+	return withDefaultBarOptions({ series, plugins, ori, ...options });
 }
 
 export function lineOptions({ series, useStatus, seriesOptions, ...options }) {
