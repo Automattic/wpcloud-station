@@ -26,7 +26,7 @@ import './editor.scss';
 
 export default function Edit( { attributes, setAttributes } ) {
 
-	const { metric, dimension, resolution, topX, type, title, showLegend, minWidth, summarize } = attributes;
+	const { title, type, orientation, showLegend, metric, dimension, resolution, topX, summarize, minWidth  } = attributes;
 	const update = updateAttribute(setAttributes);
 
 	const [metrics, setMetrics] = useState({});
@@ -46,6 +46,11 @@ export default function Edit( { attributes, setAttributes } ) {
 	const controls = (
 		<InspectorControls>
 			<PanelBody title={__('Graph Settings')}>
+				<TextControl
+					label={ __( 'Title' ) }
+					value={ title }
+					onChange={ update('title') }
+				/>
 				<SelectControl
 					label={ __( 'Type' ) }
 					value={ type }
@@ -57,10 +62,14 @@ export default function Edit( { attributes, setAttributes } ) {
 					] }
 					onChange={ update('type') }
 				/>
-				<TextControl
-					label={ __( 'Title' ) }
-					value={ title }
-					onChange={ update('title') }
+				<SelectControl
+					label={__('Orientation')}
+					value={orientation}
+					options={[
+						{ label: __('Vertical'), value: 'vertical' },
+						{ label: __('Horizontal'), value: 'horizontal' },
+					]}
+					onChange={ update('orientation') }
 				/>
 				<ToggleControl
 					label={ __( 'Show Legend' ) }

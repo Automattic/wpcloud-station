@@ -20,7 +20,31 @@ import useGraphOptions from './lib/useGraphOptions';
 import stationApi from '@wpcloud/utils/api';
 import { useApiContext } from '@wpcloud/metrics/components/apiContext';
 
-export default function Graph({ metric, dimension, resolution, summarize, topX, type, title, interval, refresh, showLegend, styles = {}, className = '', minWidth='500px' } ) {
+export default function Graph( props ) {
+
+	const {
+		// Core props.
+		title,
+		type,
+		showLegend,
+
+		// Styling props.
+		styles = {},
+		className = '',
+		minWidth = '500px',
+
+		// Static metric props.
+		metric,
+		dimension,
+		resolution,
+		summarize,
+		topX,
+		orientation,
+
+		// Dynamic metric props.
+		interval, refresh
+
+	} = props;
 
 	const { apiPath } = useApiContext();
 	const { start, end } = interval || {};
@@ -68,7 +92,7 @@ export default function Graph({ metric, dimension, resolution, summarize, topX, 
 	}, [ apiPath, start, end, refresh ] );
 
 
-	const { data: d, ...options } = useGraphOptions({ title, data, series, meta, containerRef, showLegend, type });
+	const { data: d, ...options } = useGraphOptions({ title, data, series, meta, containerRef, showLegend, type, orientation });
 	const hasData = data.length > 0 && data[0].length > 0;
 
 	// Force loading to false after data is loaded

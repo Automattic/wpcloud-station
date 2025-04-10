@@ -76,6 +76,10 @@
 			"type": "string",
 			"default": "line"
 		},
+		"orientation": {
+			"type": "string",
+			"default": "vertical"
+		},
 		"title" : {
 			"type" : "string",
 			"default" : "Status Codes"

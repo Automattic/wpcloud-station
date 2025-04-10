@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import croma from 'chroma-js';
 import { stackedOptions, defaultOptions, barOptions, lineOptions, areaOptions } from './options';
 
 // Remove this amount from the container height to fit the graph legend.
@@ -7,7 +6,6 @@ const fitGraphHeight = 75;
 const fitGraphWidth = 20;
 
 export default (options) => {
-
 	const {
 		title,
 		series,
@@ -16,6 +14,7 @@ export default (options) => {
 		containerRef,
 		showLegend,
 		type,
+		orientation,
 	} = options;
 
 	const [width, setWidth] = useState(808);
@@ -48,8 +47,12 @@ export default (options) => {
 		height,
 		series,
 		data,
-		useStatus: meta.dimension?.includes('status')
+		useStatus: meta.dimension?.includes('status'),
+		ori: 'vertical' === orientation ? 0 : 1,
+		dir: 'vertical' === orientation ? 1 : -1,
 	};
+
+	console.log('graphOptions', orientation, graphOptions);
 
 	if (!showLegend) {
 		graphOptions.legend = { live: false };
@@ -63,7 +66,6 @@ export default (options) => {
 			return stackedOptions({...graphOptions, seriesOptions });
 
 		case 'bar':
-			seriesOptions = { fillScale: () => croma('blue') };
 			return barOptions({ ...graphOptions, seriesOptions });
 
 		case 'line':
