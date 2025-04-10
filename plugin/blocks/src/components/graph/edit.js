@@ -25,7 +25,7 @@ import './editor.scss';
 
 export default function Edit( { attributes, setAttributes } ) {
 
-	const { metric, dimension, type, title, showLegend } = attributes;
+	const { metric, dimension, type, title, showLegend, minWidth } = attributes;
 	const update = updateAttribute(setAttributes);
 
 	const [metrics, setMetrics] = useState({});
@@ -84,6 +84,13 @@ export default function Edit( { attributes, setAttributes } ) {
 					onChange={ update('showLegend') }
 				/>
 			</PanelBody>
+			<PanelBody title={__('Graph Size')}>
+				<TextControl
+					label={ __( 'Minimum Width' ) }
+					value={ minWidth }
+					onChange={ update('minWidth') }
+				/>
+				</PanelBody>
 		</InspectorControls>
 	)
 	return (

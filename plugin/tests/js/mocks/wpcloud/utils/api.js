@@ -1,9 +1,12 @@
-const api = {
-  get: jest.fn(() => Promise.resolve({
-    data: [],
-    series: [],
-    meta: {},
-  })),
+/**
+ * Mock for the station API
+ */
+
+const stationApi = {
+    get: jest.fn(),
+    post: jest.fn(),
+    put: jest.fn(),
+    delete: jest.fn()
 };
 
-export default api;
+export default stationApi;

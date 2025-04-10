@@ -18,9 +18,12 @@ import Overlay from './overlay';
 // import { stackedOptions, defaultOptions, barOptions, lineOptions, areaOptions } from './lib/options';
 import useGraphOptions from './lib/useGraphOptions';
 import stationApi from '@wpcloud/utils/api';
+import { useApiContext } from '@wpcloud/metrics/components/apiContext';
 
 
-export default function Graph({ apiPath, dimension, type, title, interval, refresh, showLegend }) {
+export default function Graph({ metric, dimension, type, title, interval, refresh, showLegend, styles = {}, className = '', minWidth='500px' } ) {
+
+	const { apiPath } = useApiContext();
 	const { start, end } = interval || {};
 	const [ data, setData ] = useState([]);
 	const [ series, setSeries ] = useState([]);
@@ -28,6 +31,11 @@ export default function Graph({ apiPath, dimension, type, title, interval, refre
 	const [ loading, setLoading ] = useState( true );
 
 	const containerRef = useRef(null);
+	const style = { position: "relative", minWidth, minHeight: '500px', ...styles };
+	// if the className does not contain has-background add a background color
+	if ( ! className.includes( 'has-background' ) ) {
+		styles.backgroundColor = 'white';
+	}
 
 	useEffect(() => {
 		const controller = new AbortController();
@@ -35,7 +43,7 @@ export default function Graph({ apiPath, dimension, type, title, interval, refre
 		setLoading(true);
 		async function fetchData() {
 			try {
-				const { data, series, meta } = await stationApi.get( apiPath, {
+				const { data, series, meta } = await stationApi.get( `${apiPath}/${metric}`, {
 					query: {
 						start,
 						end,
@@ -69,8 +77,9 @@ export default function Graph({ apiPath, dimension, type, title, interval, refre
 	}, [hasData, loading]);
 
 	const showOverlay = loading || !hasData;
+	//
 	return (
-		<div ref={containerRef} className="wpcloud-graph" style={{ width: "100%", height: "500px", backgroundColor: "white", position: "relative" }}>
+		<div ref={containerRef} className={className} style={style}>
 			{showOverlay && <Overlay loading={loading} title={title} /> }
 			{ hasData && <UplotReact options={options} data={d} /> }
 		</div>

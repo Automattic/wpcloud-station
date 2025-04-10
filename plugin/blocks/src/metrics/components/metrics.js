@@ -1,16 +1,29 @@
 /**
  * External dependencies
  */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 /**
  * Internal dependencies
  */
 import Graph from '@wpcloud/components/graph/components/graph.js';
+import { ApiContext } from './apiContext.js';
 import Toolbar from './toolbar';
 import { useQueryBoundary } from '../hooks';
 
-function Metrics({ graphs, site }) {
+function renderNodeWithProps(node, key, props) {
+
+	if ('graph' === node.type) {
+		console.log('node.style', node.style);
+		return (<Graph key={key} styles={node.style} {...node.attributes} className={node.classNames.join(' ')} {...props} />);
+	}
+	if ('group' === node.type) {
+		return (<div key={key} style={node.style} className={node.classNames.join(' ')}>{node.children.map((child, index) => renderNodeWithProps(child, index, props))}</div>);
+	}
+	return null;
+}
+
+function Metrics({ tree, apiPath }) {
 	const [start, setStart] = useState('now-1h');
 	const [end, setEnd] = useState('now');
 	const [toggleRefresh, setToggleRefresh] = useState(false);
@@ -35,21 +48,24 @@ function Metrics({ graphs, site }) {
 	};
 
 	const interval = { start, end };
-
-	const graphComponents = graphs.map((graph, index) => {
-		return <Graph key={index} {...graph} interval={interval} refresh={ toggleRefresh } />;
-	});
-
 	const onRefresh = () => {
 		setToggleRefresh(!toggleRefresh);
 	};
 
+	const renderNode = useCallback((node, index) => {
+		return renderNodeWithProps(node, index, { interval, refresh: toggleRefresh });
+	}, [interval, toggleRefresh]);
+
 	return (
-		<div className="wpcloud-metrics">
-			<h3>Metrics</h3>
-			<Toolbar onIntervalUpdate={updateQueryParams} interval={interval} onRefresh={onRefresh} />
-			{graphComponents}
-		</div>
+		<ApiContext.Provider value={{ apiPath }}>
+			<div className="wpcloud-metrics">
+				<h3>Metrics</h3>
+				<Toolbar onIntervalUpdate={updateQueryParams} interval={interval} onRefresh={onRefresh} />
+				<div className="wpcloud-metrics__graphs">
+					{tree.children.map(renderNode)}
+				</div>
+			</div>
+		</ApiContext.Provider>
 	);
 }
 

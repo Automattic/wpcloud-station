@@ -9,7 +9,20 @@
 	"description": "Graph block for WPCloud plot blocks",
 	"example": {},
 	"supports": {
-		"html": false
+		"html": false,
+		"dimensions": {
+			"minHeight": true,
+			"minWidth": true
+		},
+		"spacing": {
+			"margin": true,
+			"padding": false,
+			"blockGap": true
+		},
+		"color": {
+			"textColor": true,
+			"backgroundColor": true
+		}
 	},
 	"textdomain": "graph",
 	"editorScript": "file:./index.js",
@@ -36,6 +49,10 @@
 		"showLegend" : {
 			"type" : "boolean",
 			"default" : true
+		},
+		"minWidth" : {
+			"type" : "string",
+			"default" : "500px"
 		}
 	}
 }
