@@ -37,19 +37,29 @@ function buildSeries(series, options = {}) {
 	return [series[0], ...ySeries];
 }
 
-function withDefaultOptions(opts) {
+function withDefaultOptions({ ori = 0, ...opts }) {
+	// if horizontal ( ori === 1 ) place the y axis marks on the top (0)
+	// if vertical ( ori === 0 ) place the y axis marks on the right (3)
+	const side = ori === 0 ? 3 : 0;
+	// if horizontal ( ori === 1 ) set the y axis to read from top to bottom (1)
+	// if vertical ( ori === 0 ) set the y axis to read from left to right (0)
+	const yOri = ori === 0 ? 1 : 0;
 	return {
 		padding: [null, 0, null, 0],
-		ori: 0,
-		axes: [{}, {}],
+		ori,
+		axes: [{}, {
+			side
+		}],
 		legend: { live: false, markers: { width: 2 } },
 		scales: {
-			y: { range: [0, null], ori: 1 }
+			y: {
+				range: [0, null],
+				ori: yOri,
+			}
 		},
 		...opts
 	};
 }
-
 
 function scaleFunc(options) {
  	const { series, useStatus = false, seriesOptions = {} } = options;
@@ -57,19 +67,20 @@ function scaleFunc(options) {
 	return useStatus ? statusScale({seriesOptions}) : indexScale({ domainEnd, ...seriesOptions } );
 }
 
-export function stackedOptions({ series:s, data:d, useStatus, seriesOptions, ...options}) {
-	const { bands, data  } = stack(d);
-	const plugins = [seriesBarsPlugin({ stacked: true })];
+export function stackedOptions({ series:s, data:d, useStatus, seriesOptions, dir, ori, ...options}) {
+	const { bands, data } = stack(d);
+	const plugins = [seriesBarsPlugin({ stacked: true, dir, ori })];
 	const fillScale = scaleFunc({ series: s, useStatus, seriesOptions });
 	const series = buildSeries(s, { fillScale, ...seriesOptions });
-	return withDefaultOptions({ bands, data, plugins, series, ...options });
+	return withDefaultOptions({ bands, data, plugins, series, ori, ...options });
 }
 
-export function barOptions({ series:s, useStatus, seriesOptions, ...options }) {
-	const plugins = [seriesBarsPlugin()];
+export function barOptions({ series: s, useStatus, seriesOptions, dir, ori, ...options }) {
+	console.log('barOptions', dir, ori);
+	const plugins = [seriesBarsPlugin({ dir, ori })];
 	const fillScale = scaleFunc({ series: s, useStatus, seriesOptions });
 	const series = buildSeries(s, { fillScale, ...seriesOptions });
-	return withDefaultOptions({ series, plugins, ...options });
+	return withDefaultOptions({ series, plugins, ori, ...options });
 }
 
 export function lineOptions({ series, useStatus, seriesOptions, ...options }) {
