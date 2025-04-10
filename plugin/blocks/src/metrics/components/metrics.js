@@ -14,7 +14,8 @@ import { useQueryBoundary } from '../hooks';
 function renderNodeWithProps(node, key, props) {
 
 	if ('graph' === node.type) {
-		return (<Graph key={key} style={node.style} {...node.attributes} className={node.classNames.join(' ')} {...props} />);
+		console.log('node.style', node.style);
+		return (<Graph key={key} styles={node.style} {...node.attributes} className={node.classNames.join(' ')} {...props} />);
 	}
 	if ('group' === node.type) {
 		return (<div key={key} style={node.style} className={node.classNames.join(' ')}>{node.children.map((child, index) => renderNodeWithProps(child, index, props))}</div>);
