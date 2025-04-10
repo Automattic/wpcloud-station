@@ -21,7 +21,7 @@ import stationApi from '@wpcloud/utils/api';
 import { useApiContext } from '@wpcloud/metrics/components/apiContext';
 
 
-export default function Graph({ metric, dimension, type, title, interval, refresh, showLegend, styles, className, minWidth='500px' } ) {
+export default function Graph({ metric, dimension, type, title, interval, refresh, showLegend, styles = {}, className = '', minWidth='500px' } ) {
 
 	const { apiPath } = useApiContext();
 	const { start, end } = interval || {};

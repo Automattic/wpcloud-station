@@ -1,6 +1,7 @@
 /**
  * External dependencies
  */
+import React from 'react';
 import { render, screen, waitFor, act } from '@testing-library/react';
 
 /**
@@ -8,11 +9,25 @@ import { render, screen, waitFor, act } from '@testing-library/react';
  */
 import Graph from '../../../../blocks/src/components/graph/components/graph';
 import stationApi from '@wpcloud/utils/api';
+import { ApiContext } from '@wpcloud/metrics/components/apiContext';
 
 // Mock the stationApi.get method
 jest.mock('@wpcloud/utils/api', () => ({
     get: jest.fn(),
 }));
+
+// Mock ApiContext wrapper component
+const renderWithApiContext = (ui, { apiPath = 'metrics/site/test-site', ...renderOptions } = {}) => {
+    // Add className prop to the Graph component to avoid "Cannot read properties of undefined (reading 'includes')" error
+    const uiWithClassName = React.cloneElement(ui, { className: ui.props.className || 'wpcloud-graph' });
+
+    return render(
+        <ApiContext.Provider value={{ apiPath }}>
+            {uiWithClassName}
+        </ApiContext.Provider>,
+        renderOptions
+    );
+};
 
 describe('Graph Component', () => {
     beforeEach(() => {
@@ -28,23 +43,23 @@ describe('Graph Component', () => {
     });
 
     it('renders without crashing', () => {
-        render(<Graph apiPath="metrics/site/test-site/test-metric" />);
-        expect(screen.getByTestId('spinner')).toBeInTheDocument();
+        renderWithApiContext(<Graph metric="test-metric" />);
+        expect(screen.getByRole('status')).toBeInTheDocument();
     });
 
     it('shows loading state initially', () => {
-        render(<Graph apiPath="metrics/site/test-site/test-metric" />);
-        expect(screen.getByTestId('spinner')).toBeInTheDocument();
+        renderWithApiContext(<Graph metric="test-metric" />);
+        expect(screen.getByRole('status')).toBeInTheDocument();
     });
 
     it('fetches data with correct parameters', () => {
         const props = {
-            apiPath: 'metrics/site/test-site/test-metric',
+            metric: 'test-metric',
             dimension: 'status',
             interval: { start: '2023-01-01', end: '2023-01-31' },
         };
 
-        render(<Graph {...props} />);
+        renderWithApiContext(<Graph {...props} />);
 
         expect(stationApi.get).toHaveBeenCalledWith('metrics/site/test-site/test-metric', {
             query: {
@@ -66,10 +81,10 @@ describe('Graph Component', () => {
         });
 
         // Render the component
-        const { container } = render(<Graph apiPath="metrics/site/test-site/test-metric" />);
+        const { container } = renderWithApiContext(<Graph metric="test-metric" />);
 
         // First, verify the loading state is shown
-        expect(screen.getByTestId('spinner')).toBeInTheDocument();
+        expect(screen.getByRole('status')).toBeInTheDocument();
 
         // Wait for the API call to complete
         await waitFor(() => {
@@ -87,7 +102,7 @@ describe('Graph Component', () => {
         // Reset the mock to ensure we start with a clean slate
         stationApi.get.mockReset();
 
-        const { rerender } = render(<Graph apiPath="metrics/site/test-site/test-metric" refresh={1} />);
+        const { rerender } = renderWithApiContext(<Graph metric="test-metric" refresh={1} />);
 
         // First API call
         expect(stationApi.get).toHaveBeenCalledTimes(1);
@@ -96,7 +111,11 @@ describe('Graph Component', () => {
         stationApi.get.mockClear();
 
         // Rerender with a different refresh value
-        rerender(<Graph apiPath="metrics/site/test-site/test-metric" refresh={2} />);
+        rerender(
+            <ApiContext.Provider value={{ apiPath: 'metrics/site/test-site' }}>
+                <Graph metric="test-metric" refresh={2} className="wpcloud-graph" />
+            </ApiContext.Provider>
+        );
 
         // Should trigger another API call
         expect(stationApi.get).toHaveBeenCalledTimes(1);
@@ -116,7 +135,7 @@ describe('Graph Component', () => {
             });
 
             // Render the component with this graph type
-            const { unmount, container } = render(<Graph apiPath="metrics/site/test-site/test-metric" type={type} />);
+            const { unmount, container } = renderWithApiContext(<Graph metric="test-metric" type={type} />);
 
             // Wait for the API call to complete
             await waitFor(() => {
@@ -142,7 +161,7 @@ describe('Graph Component', () => {
         const originalConsoleError = console.error;
         console.error = jest.fn();
 
-        render(<Graph apiPath="metrics/site/test-site/test-metric" />);
+        renderWithApiContext(<Graph metric="test-metric" />);
 
         // Wait for the API call to complete
         await waitFor(() => {
@@ -150,7 +169,7 @@ describe('Graph Component', () => {
         });
 
         // Loading spinner should still be visible
-        expect(screen.getByTestId('spinner')).toBeInTheDocument();
+        expect(screen.getByRole('status')).toBeInTheDocument();
 
         // Restore console.error
         console.error = originalConsoleError;
@@ -165,7 +184,7 @@ describe('Graph Component', () => {
         // Spy on console.error
         const consoleSpy = jest.spyOn(console, 'error');
 
-        render(<Graph apiPath="metrics/site/test-site/test-metric" />);
+        renderWithApiContext(<Graph metric="test-metric" />);
 
         // Wait for the API call to complete
         await waitFor(() => {
@@ -191,7 +210,7 @@ describe('Graph Component', () => {
             }
         };
 
-        const { unmount } = render(<Graph apiPath="metrics/site/test-site/test-metric" />);
+        const { unmount } = renderWithApiContext(<Graph metric="test-metric" />);
 
         // Wait for the component to mount and useEffect to run
         await waitFor(() => {
