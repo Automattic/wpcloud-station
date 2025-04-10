@@ -14,6 +14,7 @@ import {
 	TextControl,
 	ToggleControl,
 	SelectControl,
+	__experimentalNumberControl as NumberControl,
 	Spinner
 } from '@wordpress/components';
 
@@ -25,7 +26,7 @@ import './editor.scss';
 
 export default function Edit( { attributes, setAttributes } ) {
 
-	const { metric, dimension, type, title, showLegend, minWidth } = attributes;
+	const { metric, dimension, resolution, topX, type, title, showLegend, minWidth, summarize } = attributes;
 	const update = updateAttribute(setAttributes);
 
 	const [metrics, setMetrics] = useState({});
@@ -44,24 +45,7 @@ export default function Edit( { attributes, setAttributes } ) {
 
 	const controls = (
 		<InspectorControls>
-			<PanelBody title={__('graph Settings')}>
-
-				{loading && <Spinner />}
-				{!loading && (
-					<>
-						<SelectControl
-							label={__('Metric')}
-							value={metric}
-							options={Object.keys(metrics).map((key) => ({ label: metrics[key], value: key })) }
-							onChange={update('metric')}
-						/>
-						<SelectControl
-							label={__('Dimension')}
-							value={dimension}
-							options={Object.keys(dimensions).map((key) => ({ label: dimensions[key], value: key })) }
-							onChange={update('dimension')}
-						/>
-					</>)}
+			<PanelBody title={__('Graph Settings')}>
 				<SelectControl
 					label={ __( 'Type' ) }
 					value={ type }
@@ -84,6 +68,69 @@ export default function Edit( { attributes, setAttributes } ) {
 					onChange={ update('showLegend') }
 				/>
 			</PanelBody>
+			<PanelBody title={__('Graph Data')}>
+				{loading && <Spinner />}
+				{!loading && (
+					<>
+						<SelectControl
+							label={__('Metric')}
+							value={metric}
+							options={Object.keys(metrics).map((key) => ({ label: metrics[key], value: key })) }
+							onChange={update('metric')}
+						/>
+						<SelectControl
+							label={__('Dimension')}
+							value={dimension}
+							options={Object.keys(dimensions).map((key) => ({ label: dimensions[key], value: key })) }
+							onChange={update('dimension')}
+						/>
+						<SelectControl
+							label={__('Resolution')}
+							value={resolution}
+							options={[
+								{ label: __('10 Seconds'), value: '10' },
+								{ label: __('20 Seconds'), value: '20' },
+								{ label: __('30 Seconds'), value: '30' },
+								{ label: __('1 Minute'), value: '60' },
+								{ label: __('2 Minutes'), value: '120' },
+								{ label: __('3 Minutes'), value: '180' },
+								{ label: __('4 Minutes'), value: '240' },
+								{ label: __('5 Minutes'), value: '300' },
+								{ label: __('10 Minutes'), value: '600' },
+								{ label: __('15 Minutes'), value: '900' },
+								{ label: __('20 Minutes'), value: '1200' },
+								{ label: __('30 Minutes'), value: '1800' },
+								{ label: __('1 Hour'), value: '3600' },
+								{ label: __('2 Hours'), value: '7200' },
+								{ label: __('3 Hours'), value: '10800' },
+								{ label: __('4 Hours'), value: '14400' },
+								{ label: __('6 Hours'), value: '21600' },
+								{ label: __('8 Hours'), value: '28800' },
+								{ label: __('12 Hours'), value: '43200' },
+								{ label: __('1 Day'), value: '86400' },
+							]}
+							onChange={update('resolution')}
+						/>
+						<NumberControl
+							label={__('Top X')}
+							value={topX}
+							onChange={update('topX')}
+							min={1}
+							max={20}
+							step={1}
+							isShiftStepEnabled={true}
+							shiftStep={1}
+						/>
+
+						<ToggleControl
+							label={__('Summarize')}
+							checked={summarize}
+							onChange={update('summarize')}
+						/>
+					</>)}
+
+			</PanelBody>
+
 			<PanelBody title={__('Graph Size')}>
 				<TextControl
 					label={ __( 'Minimum Width' ) }

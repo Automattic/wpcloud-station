@@ -38,6 +38,40 @@
 			"type" : "string",
 			"default" : "https_status"
 		},
+		"resolution" : {
+			"type" : "number",
+			"default" : 10,
+			"enum": [
+				10,
+				20,
+				30,
+				60,
+				120,
+				180,
+				240,
+				300,
+				600,
+				900,
+				1200,
+				1800,
+				3600,
+				7200,
+				10800,
+				14400,
+				21600,
+				28800,
+				43200,
+				86400
+			]
+		},
+		"summarize": {
+			"type": "boolean",
+			"default": false
+		},
+		"topX": {
+			"type": "number",
+			"default": 20
+		},
 		"type": {
 			"type": "string",
 			"default": "line"

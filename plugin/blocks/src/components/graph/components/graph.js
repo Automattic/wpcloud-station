@@ -20,8 +20,7 @@ import useGraphOptions from './lib/useGraphOptions';
 import stationApi from '@wpcloud/utils/api';
 import { useApiContext } from '@wpcloud/metrics/components/apiContext';
 
-
-export default function Graph({ metric, dimension, type, title, interval, refresh, showLegend, styles = {}, className = '', minWidth='500px' } ) {
+export default function Graph({ metric, dimension, resolution, summarize, topX, type, title, interval, refresh, showLegend, styles = {}, className = '', minWidth='500px' } ) {
 
 	const { apiPath } = useApiContext();
 	const { start, end } = interval || {};
@@ -47,7 +46,10 @@ export default function Graph({ metric, dimension, type, title, interval, refres
 					query: {
 						start,
 						end,
-						dimension
+						dimension,
+						resolution,
+						summarize,
+						top_x: topX,
 					}, parse: true, signal
 				});
 				setData(data);
@@ -63,7 +65,7 @@ export default function Graph({ metric, dimension, type, title, interval, refres
 
 		fetchData();
 		return () => controller.abort();
-	}, [ apiPath,start, end, refresh ] );
+	}, [ apiPath, start, end, refresh ] );
 
 
 	const { data: d, ...options } = useGraphOptions({ title, data, series, meta, containerRef, showLegend, type });
