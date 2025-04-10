@@ -45,7 +45,7 @@ export default function Edit( { attributes, setAttributes } ) {
 
 	const controls = (
 		<InspectorControls>
-			<PanelBody title={__('graph Settings')}>
+			<PanelBody title={__('Graph Settings')}>
 				<SelectControl
 					label={ __( 'Type' ) }
 					value={ type }
