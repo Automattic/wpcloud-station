@@ -20,7 +20,7 @@ import {
 
 import apiFetch from '@wordpress/api-fetch';
 
-import {  updateAttribute } from '@wpcloud/controls';
+import { updateAttribute } from '@wpcloud/controls';
 import './editor.scss';
 
 
