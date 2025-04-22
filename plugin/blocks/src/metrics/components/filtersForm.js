@@ -31,9 +31,22 @@ const operatorOptions = {
 		'<=': __('less than or equal to'),
 };
 
+// Validator function to check if the field allows the operator
+const isOperatorValidForField = (field, operator) => {
+		// For now, always return true
+		// This can be expanded later to validate specific operators for different fields
+		return true;
+};
+
+// Check if operator accepts multiple values
+const operatorAcceptsMultipleValues = (operator) => {
+		return operator === 'IN' || operator === 'NOT IN';
+};
+
 export default ({ onFilterAdd = () => {} }) => {
-		const [field, setField] = useState('http_verb');
-		const [operator, setOperator] = useState('IN');
+		const [field, setField] = useState('');
+		const [operator, setOperator] = useState('');
+		const [value, setValue] = useState('');
 		const [isOpen, setIsOpen] = useState(false);
 
 		const handleFieldChange = (event) => {
@@ -42,6 +55,10 @@ export default ({ onFilterAdd = () => {} }) => {
 
 		const handleOperatorChange = (event) => {
 				setOperator(event.target.value);
+		};
+
+		const handleValueChange = (event) => {
+				setValue(event.target.value);
 		};
 
 		return (
@@ -57,31 +74,57 @@ export default ({ onFilterAdd = () => {} }) => {
 												<div className="wpcloud-metrics-filters-picker__controls">
 														<div className="wpcloud-metrics-filters-picker__inputs">
 																<div className="wpcloud-metrics-filters-picker__field">
-																		<label htmlFor="filter-field">{__('Field')}</label>
+																		<label htmlFor="filter-field" className="screen-reader-text">{__('Field')}</label>
 																		<select
 																				id="filter-field"
 																				value={field}
 																				onChange={handleFieldChange}
+																				aria-label={__('Field')}
 																		>
+																				<option value="">{__('Field')}</option>
 																				{Object.entries(fieldOptions).map(([value, label]) => (
 																						<option key={value} value={value}>{label}</option>
 																				))}
 																		</select>
 																</div>
 																<div className="wpcloud-metrics-filters-picker__operator">
-																		<label htmlFor="filter-operator">{__('Operator')}</label>
+																		<label htmlFor="filter-operator" className="screen-reader-text">{__('Operator')}</label>
 																		<select
 																				id="filter-operator"
 																				value={operator}
 																				onChange={handleOperatorChange}
+																				disabled={!field}
+																				aria-label={__('Operator')}
 																		>
+																				<option value="">{__('Operator')}</option>
 																				{Object.entries(operatorOptions).map(([value, label]) => (
-																						<option key={value} value={value}>{label}</option>
+																						<option
+																								key={value}
+																								value={value}
+																								disabled={field && !isOperatorValidForField(field, value)}
+																						>
+																								{label}
+																						</option>
 																				))}
 																		</select>
 																</div>
+																<div className="wpcloud-metrics-filters-picker__value">
+																		<label htmlFor="filter-value" className="screen-reader-text">{__('Value')}</label>
+																		<input
+																				type="text"
+																				id="filter-value"
+																				value={value}
+																				onChange={handleValueChange}
+																				disabled={!field || !operator}
+																				placeholder={operatorAcceptsMultipleValues(operator) ? __('Value one, Value two, ...') : __('Value')}
+																				aria-label={__('Value')}
+																		/>
+																</div>
 																<div className="wpcloud-metrics-filters-picker__apply">
-																		<button onClick={onFilterAdd}>
+																		<button
+																				onClick={() => onFilterAdd({ field, operator, value })}
+																				disabled={!field || !operator || !value}
+																		>
 																				{__('Apply')}
 																		</button>
 																</div>
