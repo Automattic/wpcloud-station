@@ -73,7 +73,6 @@ function withDefaultBarOptions({ ori = 0, ...opts }) {
 			}
 		},
 	});
-	console.log('newOpts', newOpts);
 	return newOpts;
 	/*
 	return {
