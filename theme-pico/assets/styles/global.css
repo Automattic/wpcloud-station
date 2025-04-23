@@ -371,7 +371,6 @@ button.wpcloud-block-button {
 /* @TODO : This should use the spacing styles in from the editor */
 .wpcloud-graph {
 	margin: 20px 0;
-	max-height: 500px;
 }
 
 .wp-block-site-logo.hero-logo {
