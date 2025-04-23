@@ -12,18 +12,24 @@ import Filters from './filters';
 
 const identity = (v) => v;
 
-export default ({ interval, onIntervalUpdate = identity, onFilterUpdate = identity, onRefresh = identity }) => {
+export default ({ interval, onIntervalUpdate = identity, onFiltersUpdate = identity, onRefresh = identity }) => {
 	return (
+
 		<Flex direction="column" gap="2" className="wpcloud-metrics-toolbar">
+			<Flex>
+				<Filters onFiltersUpdate={(filters) => {
+					console.log('filters updated', filters);
+					onFiltersUpdate(filters);
+				}
+				} />
+			</Flex>
 			<Flex align="normal" gap="4">
 				<RangePicker interval={interval} onIntervalUpdate={onIntervalUpdate} />
 				<button onClick={onRefresh} className="wpcloud-metrics-toolbar__refresh">
 					{__('Refresh')}
 				</button>
 			</Flex>
-			<Flex>
-				<Filters onFiltersChange={onFilterUpdate} />
-			</Flex>
+
 		</Flex>
 	);
 }

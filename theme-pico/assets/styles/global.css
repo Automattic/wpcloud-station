@@ -336,7 +336,11 @@ button.wpcloud-block-button {
 		&.disabled {
 			opacity: 0.5;
 		}
-
+		svg {
+				&:hover {
+					fill: rgb(197, 47, 33);
+				}
+			}
 		.wpcloud-metrics-filters__filter-text {
 			margin-right: 6px;
 		}
@@ -351,6 +355,7 @@ button.wpcloud-block-button {
 			&:hover {
 				color: var(--pico-del-color);
 			}
+
 		}
 
 		.wpcloud-metrics-filters__filter-tooltip {

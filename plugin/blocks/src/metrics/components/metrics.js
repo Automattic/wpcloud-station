@@ -10,6 +10,7 @@ import Graph from '@wpcloud/components/graph/components/graph.js';
 import { ApiContext } from './apiContext.js';
 import Toolbar from './toolbar';
 import { useQueryBoundary } from '../hooks';
+import { compressToHash } from '../utils';
 
 function renderNodeWithProps(node, key, props) {
 
@@ -39,10 +40,13 @@ function Metrics({ tree, apiPath }) {
 		setEnd(qEnd);
 	}, [qEnd]);
 
-	const updateQueryParams = ({ start, end }) => {
+	const updateQueryParams = ({ start, end, filters }) => {
+		console.log('updateQueryParams', start, end, filters);
 		const searchParams = new URLSearchParams(window.location.search);
-		searchParams.set('start', start);
-		searchParams.set('end', end);
+		start && searchParams.set('start', start);
+		end && searchParams.set('end', end);
+		filters && searchParams.set('filters', JSON.stringify(filters));
+
 		window.history.pushState({}, '', `${window.location.pathname}?${searchParams}`);
 		window.dispatchEvent(new PopStateEvent('popstate'));
 	};
@@ -60,7 +64,7 @@ function Metrics({ tree, apiPath }) {
 		<ApiContext.Provider value={{ apiPath }}>
 			<div className="wpcloud-metrics">
 				<h3>Metrics</h3>
-				<Toolbar onIntervalUpdate={updateQueryParams} interval={interval} onRefresh={onRefresh} />
+				<Toolbar onIntervalUpdate={updateQueryParams} interval={interval} onRefresh={onRefresh} onFiltersUpdate={updateQueryParams} />
 				<div className="wpcloud-metrics__graphs">
 					{tree.children.map(renderNode)}
 				</div>

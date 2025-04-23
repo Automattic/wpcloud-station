@@ -9,7 +9,7 @@ import classnames from 'classnames';
  */
 import { FlexItem, Flex } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
-import { Icon, close } from '@wordpress/icons';
+import { Icon, trash } from '@wordpress/icons';
 
 /**
  * Internal dependencies
@@ -32,7 +32,7 @@ const getDetailedFilterText = (filter) => {
 	return `${field} ${operator} ${value}`;
 };
 
-export default ({ onFiltersChange = () => {} }) => {
+export default ({ onFiltersUpdate = console.log }) => {
 	const [filters, setFilters] = useState([]);
 
 	const handleFilterAdd = (filter) => {
@@ -44,13 +44,13 @@ export default ({ onFiltersChange = () => {} }) => {
 		}];
 
 		setFilters(updatedFilters);
-		onFiltersChange(updatedFilters);
+		onFiltersUpdate({ filters: updatedFilters });
 	};
 
 	const handleFilterRemove = (indexToRemove) => {
 		const updatedFilters = filters.filter((_, index) => index !== indexToRemove);
 		setFilters(updatedFilters);
-		onFiltersChange(updatedFilters);
+		onFiltersUpdate({ filters: updatedFilters });
 	};
 
 	const handleToggleFilter = (indexToDisable) => {
@@ -83,13 +83,12 @@ export default ({ onFiltersChange = () => {} }) => {
 								<span className="wpcloud-metrics-filters__filter-text">
 									{getCompactFilterText(filter.value)}
 								</span>
-								<span
-									className="wpcloud-metrics-filters__filter-remove"
-									onClick={() => handleFilterRemove(index)}
-									aria-label={__('Remove filter')}
-								>
-									<Icon icon={close} size={12} />
-								</span>
+								<Icon
+									onClick={(e) => {
+										e.stopPropagation(); // Stop event from bubbling up to parent button
+										handleFilterRemove(index);
+									}}
+									icon={trash} size={20} />
 							</button>
 						))}
 					</Flex>

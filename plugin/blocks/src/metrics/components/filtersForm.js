@@ -61,6 +61,27 @@ export default ({ onFilterAdd = () => {} }) => {
 				setValue(event.target.value);
 		};
 
+		const resetForm = () => {
+				setField('');
+				setOperator('');
+				setValue('');
+		};
+
+		const handleAddFilter = () => {
+				if (field && operator && value) {
+						onFilterAdd({ field, operator, value });
+						resetForm();
+						setIsOpen(false); // Close the dropdown after adding a filter
+				}
+		};
+
+		const handleKeyDown = (event) => {
+				if (event.key === 'Enter' && field && operator && value) {
+						event.preventDefault();
+						handleAddFilter();
+				}
+		};
+
 		return (
 				<FlexItem isBlock={true}>
 						<details
@@ -115,6 +136,7 @@ export default ({ onFilterAdd = () => {} }) => {
 																				id="filter-value"
 																				value={value}
 																				onChange={handleValueChange}
+																				onKeyDown={handleKeyDown}
 																				disabled={!field || !operator}
 																				placeholder={operatorAcceptsMultipleValues(operator) ? __('Value one, Value two, ...') : __('Value')}
 																				aria-label={__('Value')}
@@ -122,7 +144,7 @@ export default ({ onFilterAdd = () => {} }) => {
 																</div>
 																<div className="wpcloud-metrics-filters-picker__apply">
 																		<button
-																				onClick={() => onFilterAdd({ field, operator, value })}
+																				onClick={handleAddFilter}
 																				disabled={!field || !operator || !value}
 																		>
 																				{__('Apply')}
