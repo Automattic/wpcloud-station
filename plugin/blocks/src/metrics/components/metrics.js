@@ -10,12 +10,11 @@ import Graph from '@wpcloud/components/graph/components/graph.js';
 import { ApiContext } from './apiContext.js';
 import Toolbar from './toolbar';
 import { useQueryBoundary } from '../hooks';
-import { compressToHash } from '../utils';
+import { encodeFilter } from '../utils';
 
 function renderNodeWithProps(node, key, props) {
 
 	if ('graph' === node.type) {
-		console.log('node.style', node.style);
 		return (<Graph key={key} styles={node.style} {...node.attributes} className={node.classNames.join(' ')} {...props} />);
 	}
 	if ('group' === node.type) {
@@ -40,12 +39,11 @@ function Metrics({ tree, apiPath }) {
 		setEnd(qEnd);
 	}, [qEnd]);
 
-	const updateQueryParams = ({ start, end, filters }) => {
-		console.log('updateQueryParams', start, end, filters);
+	const updateQueryParams = async ({ start, end, filters }) => {
 		const searchParams = new URLSearchParams(window.location.search);
 		start && searchParams.set('start', start);
 		end && searchParams.set('end', end);
-		filters && searchParams.set('filters', JSON.stringify(filters));
+		filters && searchParams.set('filters', encodeFilter( filters ) );
 
 		window.history.pushState({}, '', `${window.location.pathname}?${searchParams}`);
 		window.dispatchEvent(new PopStateEvent('popstate'));

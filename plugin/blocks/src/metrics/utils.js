@@ -1,3 +1,6 @@
+import { encode as msgpackEncode, decode as msgpackDecode } from 'msgpackr';
+import base62 from 'base62/lib/ascii';
+
 export function getFromNow(date) {
 	const [match, now, dash, amount, unit] = date?.match(/(now)(.?)(?:(\d+)([smhdMy]+))?/) || [];
 
@@ -110,4 +113,48 @@ export function styleToObject(element) {
 		styleObject[camelCased] = value;
 	});
 	return styleObject;
+}
+
+const base62chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+
+function bufferToBase62(buffer) {
+	let value = 0n;
+	for (const byte of buffer) {
+		value = (value << 8n) + BigInt(byte);
+	}
+
+	let result = '';
+	while (value > 0) {
+		result = base62chars[value % 62n] + result;
+		value = value / 62n;
+	}
+
+	return result || '0';
+}
+
+function base62ToBuffer(base62) {
+	let value = 0n;
+	for (const char of base62) {
+		value = value * 62n + BigInt(base62chars.indexOf(char));
+	}
+
+	const bytes = [];
+	while (value > 0) {
+		bytes.unshift(Number(value & 255n));
+		value >>= 8n;
+	}
+
+	return new Uint8Array(bytes);
+}
+
+export function encodeFilter(obj) {
+  const json = JSON.stringify(obj);
+  const buffer = new TextEncoder().encode(json);
+  return bufferToBase62(buffer);
+}
+
+export function decodeFilter(base62) {
+  const buffer = base62ToBuffer(base62);
+  const json = new TextDecoder().decode(buffer);
+  return JSON.parse(json);
 }

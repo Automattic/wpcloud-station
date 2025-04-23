@@ -44,7 +44,8 @@ export default ({ onFiltersUpdate = console.log }) => {
 		}];
 
 		setFilters(updatedFilters);
-		onFiltersUpdate({ filters: updatedFilters });
+		const filterList = updatedFilters.map(f => [f.field, f.operator, f.value]);
+		onFiltersUpdate({ filters: filterList });
 	};
 
 	const handleFilterRemove = (indexToRemove) => {
