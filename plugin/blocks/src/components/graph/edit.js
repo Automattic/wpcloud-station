@@ -43,10 +43,6 @@ export default function Edit( { attributes, setAttributes } ) {
 		fetchAvailable();
 	}, []);
 
-	useEffect( () => {
-
-	}, [summarize] )
-
 	const controls = (
 		<InspectorControls>
 			<PanelBody title={__('Graph Settings')}>
