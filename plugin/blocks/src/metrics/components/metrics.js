@@ -45,8 +45,15 @@ function Metrics({ tree, apiPath }) {
 		start && searchParams.set('start', start);
 		end && searchParams.set('end', end);
 
-		if (filters) {
-			searchParams.set('filters', encodeFilter( filters ) );
+
+		if (filters !== undefined) {
+			if (filters.length > 0) {
+				searchParams.set('filters', encodeFilter( filters ) );
+			} else {
+				// If filters is an empty array, remove the filters parameter from the URL
+				searchParams.delete('filters');
+			}
+			// Always update the filters state, even if it's an empty array
 			setFilters(filters);
 		}
 

@@ -59,6 +59,11 @@ export default ({ onFiltersUpdate = console.log }) => {
 		const filterList = updatedFilters
 			.filter(f => f.enabled)
 			.map(f => [f.value.field, f.value.operator, f.value.value]);
+
+		console.log('Updated filter list after removal:', filterList);
+		console.log('Calling onFiltersUpdate with:', { filters: filterList });
+
+		// Even if filterList is empty, we still need to update the parent component
 		onFiltersUpdate({ filters: filterList });
 	};
 

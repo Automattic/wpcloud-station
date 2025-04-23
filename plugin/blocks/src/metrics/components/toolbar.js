@@ -18,8 +18,10 @@ export default ({ interval, onIntervalUpdate = identity, onFiltersUpdate = ident
 		<Flex direction="column" gap="2" className="wpcloud-metrics-toolbar">
 			<Flex>
 				<Filters onFiltersUpdate={(filters) => {
-					console.log('filters updated', filters);
+					console.log('Toolbar received filter update:', filters);
+					// Make sure we're passing the filters object correctly to the parent component
 					onFiltersUpdate(filters);
+					console.log('Toolbar called onFiltersUpdate with:', filters);
 				}
 				} />
 			</Flex>
