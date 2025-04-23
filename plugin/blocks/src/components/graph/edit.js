@@ -48,6 +48,7 @@ export default function Edit( { attributes, setAttributes } ) {
 		fetchAvailable();
 	}, []);
 
+<<<<<<< HEAD
 	// Define all possible options for Dimensions based on Metrics
 	// @TODo - Move this to use the php function so single mapping?
 	//  Or alternatively update the json response to contain the mapping groups so not making multiple calls.
@@ -123,6 +124,11 @@ export default function Edit( { attributes, setAttributes } ) {
 			}
 		}
 	}, [metric] );
+=======
+	useEffect( () => {
+
+	}, [summarize] )
+>>>>>>> 848432e (Graph Block : Hide resolution if summarize is requested.)
 
 	const controls = (
 		<InspectorControls>
