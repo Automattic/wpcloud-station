@@ -30,18 +30,94 @@ export default function Edit( { attributes, setAttributes } ) {
 	const update = updateAttribute(setAttributes);
 
 	const [metrics, setMetrics] = useState({});
-	const [dimensions, setDimensions] = useState({});
+	const [dimensionOptions, setDimensionOptions] = useState({});
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		async function fetchAvailable() {
 			const available = await apiFetch({ path: 'wpcloud-station/v1/metrics/available' });
 			setMetrics(available.metrics);
-			setDimensions(available.dimensions);
+			//setDimensions(available.dimensions);
 			setLoading(false);
 		}
 		fetchAvailable();
 	}, []);
+
+	// Define all possible options for Dimensions based on Metrics
+	// @TODo - Move this to use the php function so single mapping?
+	//  Or alternatively update the json response to contain the mapping groups so not making multiple calls.
+	const getDimensionsMap = function( metric ) {
+		if( metric.startsWith( 'php_') && metric !== 'php_response_time_sum' ) {
+			return [
+				{ label: 'HTTP Verb', value: 'http_verb' },
+				{ label: 'HTTP Host', value: 'http_host' },
+				{ label: 'DataCenter', value: 'datacenter' },
+				{ label: 'Atomic Site ID', value: 'atomic_site_id' },
+				{ label: 'Burst Status', value: 'burst_status' },
+			];
+		} else if ( metric.startsWith( 'mysql_pool_' ) ) {
+			return [
+				{ label: 'Pool Server Number', value: 'pool' },
+				{ label: 'Pool Server Name', value: 'server' },
+			];
+		} else if ( metric.startsWith( 'mysql_' ) ) {
+			return [
+				{ label: 'Pool Server Number', value: 'pool' },
+				{ label: 'Pool Server Name', value: 'server' },
+				{ label: 'Atomic Site ID', value: 'atomic_site_id' },
+			];
+		}else if ( metric.startsWith( 'cgroup_' ) ) {
+			return [
+				{ label: 'Pool Server Number', value: 'pool' },
+				{ label: 'Pool Server Name', value: 'server' },
+				{ label: 'Atomic Site ID', value: 'atomic_site_id' },
+			];
+		} else if ( metric === 'uniques' || metric === 'views' ) {
+			return [
+				{ label: 'Host Name', value: 'hostname' },
+			];
+		}
+		return [
+			{ label: 'Server Protocol (HTTP Version)', value: 'server_protocol' },
+			{ label: 'Request Method (HTTP Verb)', value: 'request_method' },
+			{ label: 'Host Name', value: 'http_host' },
+			{ label: 'Response Code (HTTP Status)', value: 'http_status' },
+			{ label: 'User Agent', value: 'http_user_agent' },
+			{ label: 'Referer Domain', value: 'referer_domain' },
+			{ label: 'Request Renderer', value: 'request_renderer' },
+			{ label: 'Is Upstream Cached?', value: 'is_upstream_cached' },
+			{ label: 'WP Admin Ajax Action', value: 'admin_ajax_action' },
+			{ label: 'Visitor ASN', value: 'asn' },
+			{ label: 'Visitor Country Code', value: 'country_code' },
+			{ label: 'Visitor Is Crawler?', value: 'is_crawler' },
+			{ label: 'Visitor Device Type', value: 'device_type' },
+			{ label: 'Visitor Is Logged In?', value: 'visitor_is_logged_in' },
+			{ label: 'Visitor Operating System', value: 'visitor_os' },
+			{ label: 'Visitor Browser', value: 'visitor_browser' },
+			{ label: 'Edge Cache Status', value: 'edge_cache_status' },
+			{ label: 'Is Rate Limited?', value: 'is_rate_limited' },
+			{ label: 'Rate Limit Reason', value: 'rate_limit_reason' },
+			{ label: 'DataCenter', value: 'datacenter' },
+			{ label: 'Request URL (excluding Query String)', value: 'request_url_no_qs' },
+			{ label: 'Remote Address', value: 'remote_addr' },
+			{ label: 'Atomic Site ID', value: 'atomic_site_id' },
+			{ label: 'Proxy Type', value: 'proxy_type' },
+		]
+	};
+
+	// Update Dimension Options when Metric is selected.
+	useEffect( () => {
+		// Update Dimension options when metrics changes
+		if ( metrics ) {
+			// @ToDo - don't update if in same map.
+			var _dimensionOptions = getDimensionsMap(metric);
+			setDimensionOptions(_dimensionOptions);
+			// update dimension if map has changed.
+			if (! _dimensionOptions.some(dimObj => dimObj.value === dimension)) {
+				setAttributes({ 'dimension': _dimensionOptions[0].value });
+			}
+		}
+	}, [metric] );
 
 	const controls = (
 		<InspectorControls>
@@ -90,7 +166,7 @@ export default function Edit( { attributes, setAttributes } ) {
 						<SelectControl
 							label={__('Dimension')}
 							value={dimension}
-							options={Object.keys(dimensions).map((key) => ({ label: dimensions[key], value: key })) }
+							options={[ ...dimensionOptions, ]}
 							onChange={update('dimension')}
 						/>
 						<SelectControl
