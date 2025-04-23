@@ -27,6 +27,7 @@ function Metrics({ tree, apiPath }) {
 	const [start, setStart] = useState('now-1h');
 	const [end, setEnd] = useState('now');
 	const [toggleRefresh, setToggleRefresh] = useState(false);
+	const [filters, setFilters] = useState([]);
 
 	const qSTart = useQueryBoundary('start', 'now-1h');
 	const qEnd = useQueryBoundary('end', 'now');
@@ -43,7 +44,11 @@ function Metrics({ tree, apiPath }) {
 		const searchParams = new URLSearchParams(window.location.search);
 		start && searchParams.set('start', start);
 		end && searchParams.set('end', end);
-		filters && searchParams.set('filters', encodeFilter( filters ) );
+
+		if (filters) {
+			searchParams.set('filters', encodeFilter( filters ) );
+			setFilters(filters);
+		}
 
 		window.history.pushState({}, '', `${window.location.pathname}?${searchParams}`);
 		window.dispatchEvent(new PopStateEvent('popstate'));
@@ -55,8 +60,9 @@ function Metrics({ tree, apiPath }) {
 	};
 
 	const renderNode = useCallback((node, index) => {
-		return renderNodeWithProps(node, index, { interval, refresh: toggleRefresh });
-	}, [interval, toggleRefresh]);
+		console.log('Rendering node with filters:', filters);
+		return renderNodeWithProps(node, index, { interval, refresh: toggleRefresh, filters });
+	}, [interval, toggleRefresh, filters]);
 
 	return (
 		<ApiContext.Provider value={{ apiPath }}>

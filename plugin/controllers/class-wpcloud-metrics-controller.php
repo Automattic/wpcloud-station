@@ -176,7 +176,7 @@ if ( ! class_exists( 'WPCLOUD_Metrics_Controller' ) ) {
 					if ( json_last_error() !== JSON_ERROR_NONE ) {
 						return new WP_REST_Response( esc_html__( 'Invalid filters', 'wpcloud' ), 400 );
 					}
-					$options['filters'] = $filters;
+					$options['filters'] = $this->convert_filters_format( $filters );
 				}
 
 				$site_id = $params['site_id'] ?? null;

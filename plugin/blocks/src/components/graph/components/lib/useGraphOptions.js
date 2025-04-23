@@ -52,8 +52,6 @@ export default (options) => {
 		dir: 'vertical' === orientation ? 1 : -1,
 	};
 
-	console.log('graphOptions', orientation, graphOptions);
-
 	if (!showLegend) {
 		graphOptions.legend = { live: false };
 	}

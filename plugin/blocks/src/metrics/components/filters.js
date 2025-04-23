@@ -44,14 +44,22 @@ export default ({ onFiltersUpdate = console.log }) => {
 		}];
 
 		setFilters(updatedFilters);
-		const filterList = updatedFilters.map(f => [f.field, f.operator, f.value]);
+		// Create the filter list in the format [ [ 'field','operator','values'] ]
+		const filterList = updatedFilters
+			.filter(f => f.enabled)
+			.map(f => [f.value.field, f.value.operator, f.value.value]);
 		onFiltersUpdate({ filters: filterList });
 	};
 
 	const handleFilterRemove = (indexToRemove) => {
 		const updatedFilters = filters.filter((_, index) => index !== indexToRemove);
 		setFilters(updatedFilters);
-		onFiltersUpdate({ filters: updatedFilters });
+
+		// Create the filter list in the format [ [ 'field','operator','values'] ]
+		const filterList = updatedFilters
+			.filter(f => f.enabled)
+			.map(f => [f.value.field, f.value.operator, f.value.value]);
+		onFiltersUpdate({ filters: filterList });
 	};
 
 	const handleToggleFilter = (indexToDisable) => {
@@ -62,7 +70,12 @@ export default ({ onFiltersUpdate = console.log }) => {
 			return filter;
 		});
 		setFilters(updatedFilters);
-		onFiltersChange(updatedFilters);
+
+		// Create the filter list in the format [ [ 'field','operator','values'] ]
+		const filterList = updatedFilters
+			.filter(f => f.enabled)
+			.map(f => [f.value.field, f.value.operator, f.value.value]);
+		onFiltersUpdate({ filters: filterList });
 	}
 
 	return (

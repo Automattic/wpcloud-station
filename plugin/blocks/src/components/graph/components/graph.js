@@ -42,7 +42,7 @@ export default function Graph( props ) {
 		orientation,
 
 		// Dynamic metric props.
-		interval, refresh
+		interval, refresh, filters = []
 
 	} = props;
 
@@ -66,15 +66,20 @@ export default function Graph( props ) {
 		setLoading(true);
 		async function fetchData() {
 			try {
+				const query = {
+					start,
+					end,
+					dimension,
+					resolution,
+					summarize,
+					top_x: topX,
+					filters: JSON.stringify(filters),
+				};
+
 				const { data, series, meta } = await stationApi.get( `${apiPath}/${metric}`, {
-					query: {
-						start,
-						end,
-						dimension,
-						resolution,
-						summarize,
-						top_x: topX,
-					}, parse: true, signal
+					query,
+					parse: true,
+					signal
 				});
 				setData(data);
 				setSeries(series);
@@ -89,7 +94,7 @@ export default function Graph( props ) {
 
 		fetchData();
 		return () => controller.abort();
-	}, [ apiPath, start, end, refresh ] );
+	}, [ apiPath, start, end, refresh, filters ] );
 
 
 	const { data: d, ...options } = useGraphOptions({ title, data, series, meta, containerRef, showLegend, type, orientation });
