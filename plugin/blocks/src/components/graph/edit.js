@@ -93,33 +93,6 @@ export default function Edit( { attributes, setAttributes } ) {
 							options={Object.keys(dimensions).map((key) => ({ label: dimensions[key], value: key })) }
 							onChange={update('dimension')}
 						/>
-						<SelectControl
-							label={__('Resolution')}
-							value={resolution}
-							options={[
-								{ label: __('10 Seconds'), value: '10' },
-								{ label: __('20 Seconds'), value: '20' },
-								{ label: __('30 Seconds'), value: '30' },
-								{ label: __('1 Minute'), value: '60' },
-								{ label: __('2 Minutes'), value: '120' },
-								{ label: __('3 Minutes'), value: '180' },
-								{ label: __('4 Minutes'), value: '240' },
-								{ label: __('5 Minutes'), value: '300' },
-								{ label: __('10 Minutes'), value: '600' },
-								{ label: __('15 Minutes'), value: '900' },
-								{ label: __('20 Minutes'), value: '1200' },
-								{ label: __('30 Minutes'), value: '1800' },
-								{ label: __('1 Hour'), value: '3600' },
-								{ label: __('2 Hours'), value: '7200' },
-								{ label: __('3 Hours'), value: '10800' },
-								{ label: __('4 Hours'), value: '14400' },
-								{ label: __('6 Hours'), value: '21600' },
-								{ label: __('8 Hours'), value: '28800' },
-								{ label: __('12 Hours'), value: '43200' },
-								{ label: __('1 Day'), value: '86400' },
-							]}
-							onChange={update('resolution')}
-						/>
 						<NumberControl
 							label={__('Top X')}
 							value={topX}
@@ -130,12 +103,40 @@ export default function Edit( { attributes, setAttributes } ) {
 							isShiftStepEnabled={true}
 							shiftStep={1}
 						/>
-
 						<ToggleControl
 							label={__('Summarize')}
 							checked={summarize}
 							onChange={update('summarize')}
 						/>
+						{ ! summarize && (
+							<SelectControl
+								label={__('Resolution')}
+								value={resolution}
+								options={[
+									{ label: __('10 Seconds'), value: '10' },
+									{ label: __('20 Seconds'), value: '20' },
+									{ label: __('30 Seconds'), value: '30' },
+									{ label: __('1 Minute'), value: '60' },
+									{ label: __('2 Minutes'), value: '120' },
+									{ label: __('3 Minutes'), value: '180' },
+									{ label: __('4 Minutes'), value: '240' },
+									{ label: __('5 Minutes'), value: '300' },
+									{ label: __('10 Minutes'), value: '600' },
+									{ label: __('15 Minutes'), value: '900' },
+									{ label: __('20 Minutes'), value: '1200' },
+									{ label: __('30 Minutes'), value: '1800' },
+									{ label: __('1 Hour'), value: '3600' },
+									{ label: __('2 Hours'), value: '7200' },
+									{ label: __('3 Hours'), value: '10800' },
+									{ label: __('4 Hours'), value: '14400' },
+									{ label: __('6 Hours'), value: '21600' },
+									{ label: __('8 Hours'), value: '28800' },
+									{ label: __('12 Hours'), value: '43200' },
+									{ label: __('1 Day'), value: '86400' },
+								]}
+								onChange={update('resolution')}
+							/>
+						) }
 					</>)}
 
 			</PanelBody>
