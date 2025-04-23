@@ -371,6 +371,7 @@ button.wpcloud-block-button {
 /* @TODO : This should use the spacing styles in from the editor */
 .wpcloud-graph {
 	margin: 20px 0;
+	max-height: 500px;
 }
 
 .wp-block-site-logo.hero-logo {
@@ -387,4 +388,10 @@ button.wpcloud-block-button {
 			height: auto;
 		}
 	}
+}
+
+/* @TODO - A multi-line legend causes the block to constantly render and grow in size. */
+.u-legend {
+	max-height: 30px;
+	overflow: hidden;
 }
