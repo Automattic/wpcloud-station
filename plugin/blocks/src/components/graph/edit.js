@@ -113,6 +113,7 @@ export default function Edit( { attributes, setAttributes } ) {
 								label={__('Resolution')}
 								value={resolution}
 								options={[
+									{ label: __('auto'), value: '' },
 									{ label: __('10 Seconds'), value: '10' },
 									{ label: __('20 Seconds'), value: '20' },
 									{ label: __('30 Seconds'), value: '30' },
