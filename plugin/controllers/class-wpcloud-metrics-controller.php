@@ -292,6 +292,42 @@ if ( ! class_exists( 'WPCLOUD_Metrics_Controller' ) ) {
 		}
 
 		/**
+		 * Convert filters from array format to object format.
+		 *
+		 * @param array $filters The filters in array format.
+		 * @return array The filters in object format.
+		 */
+		public function convert_filters_format( array $filters ): array {
+			$converted_filters = array();
+
+			foreach ( $filters as $filter ) {
+				if ( ! is_array( $filter ) || count( $filter ) < 3 ) {
+					// Skip invalid filters.
+					wpcloud_l( 'Invalid filter format', $filter );
+					continue;
+				}
+				$value = $filter[2];
+
+				$filter_object = array(
+					'column'   => $filter[0],
+					'operator' => $filter[1],
+					'value'    => $value,
+				);
+
+				// Check if the value contains commas, indicating multiple values.
+				if ( strpos( $value, ',' ) !== false ) {
+					// Split the value by commas and trim whitespace.
+					$values                 = array_map( 'trim', explode( ',', $value ) );
+					$filter_object['value'] = $values;
+				}
+
+				$converted_filters[] = $filter_object;
+			}
+
+			return $converted_filters;
+		}
+
+		/**
 		 * Check permissions for the current request.
 		 *
 		 * @return bool|WP_Error True if the requester has manage site capabilities. False if logged in but with out manage site capabilities, WP_Error if not logged in.

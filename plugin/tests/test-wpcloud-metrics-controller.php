@@ -194,4 +194,97 @@ class WPCLOUD_Metrics_ControllerTest extends WP_UnitTestCase {
 		$this->assertEquals( 'rest_forbidden', $result->get_error_code() );
 		$this->assertEquals( 'Unauthorized request', $result->get_error_message() );
 	}
+
+	/**
+	 * Test convert_filters_format method with single value.
+	 */
+	public function test_convert_filters_format_single_value() {
+		// Create a filter with a single value.
+		$filters = array(
+			array( 'http_verb', '=', 'GET' ),
+		);
+
+		// Call the method.
+		$result = $this->controller->convert_filters_format( $filters );
+
+		// Check the result.
+		$this->assertIsArray( $result );
+		$this->assertCount( 1, $result );
+		$this->assertEquals( 'http_verb', $result[0]['field'] );
+		$this->assertEquals( '=', $result[0]['operator'] );
+		$this->assertEquals( 'GET', $result[0]['value'] );
+	}
+
+	/**
+	 * Test convert_filters_format method with multiple values.
+	 */
+	public function test_convert_filters_format_multiple_values() {
+		// Create a filter with multiple values.
+		$filters = array(
+			array( 'http_verb', 'IN', 'GET,POST,PUT' ),
+		);
+
+		// Call the method.
+		$result = $this->controller->convert_filters_format( $filters );
+
+		// Check the result.
+		$this->assertIsArray( $result );
+		$this->assertCount( 1, $result );
+		$this->assertEquals( 'http_verb', $result[0]['field'] );
+		$this->assertEquals( 'IN', $result[0]['operator'] );
+		$this->assertIsArray( $result[0]['value'] );
+		$this->assertCount( 3, $result[0]['value'] );
+		$this->assertEquals( 'GET', $result[0]['value'][0] );
+		$this->assertEquals( 'POST', $result[0]['value'][1] );
+		$this->assertEquals( 'PUT', $result[0]['value'][2] );
+	}
+
+	/**
+	 * Test convert_filters_format method with multiple filters.
+	 */
+	public function test_convert_filters_format_multiple_filters() {
+		// Create multiple filters.
+		$filters = array(
+			array( 'http_verb', '=', 'GET' ),
+			array( 'http_status', 'IN', '200,404,500' ),
+		);
+
+		// Call the method.
+		$result = $this->controller->convert_filters_format( $filters );
+
+		// Check the result.
+		$this->assertIsArray( $result );
+		$this->assertCount( 2, $result );
+
+		// Check first filter.
+		$this->assertEquals( 'http_verb', $result[0]['field'] );
+		$this->assertEquals( '=', $result[0]['operator'] );
+		$this->assertEquals( 'GET', $result[0]['value'] );
+
+		// Check second filter.
+		$this->assertEquals( 'http_status', $result[1]['field'] );
+		$this->assertEquals( 'IN', $result[1]['operator'] );
+		$this->assertIsArray( $result[1]['value'] );
+		$this->assertCount( 3, $result[1]['value'] );
+		$this->assertEquals( '200', $result[1]['value'][0] );
+		$this->assertEquals( '404', $result[1]['value'][1] );
+		$this->assertEquals( '500', $result[1]['value'][2] );
+	}
+
+	/**
+	 * Test convert_filters_format method with invalid filter.
+	 */
+	public function test_convert_filters_format_invalid_filter() {
+		// Create an invalid filter (missing value).
+		$filters = array(
+			array( 'http_verb', '=' ), // Missing value.
+		);
+
+		// Call the method.
+		$result = $this->controller->convert_filters_format( $filters );
+
+		// Check the result - should be an empty array since the filter is invalid.
+		$this->assertIsArray( $result );
+		$this->assertEmpty( $result );
+	}
 }
