@@ -8,7 +8,7 @@ import { __ } from '@wordpress/i18n';
  * Internal dependencies
  */
 import RangePicker from './rangePicker';
-import FiltersForm from './filtersForm';
+import Filters from './filters';
 
 const identity = (v) => v;
 
@@ -22,7 +22,7 @@ export default ({ interval, onIntervalUpdate = identity, onFilterUpdate = identi
 				</button>
 			</Flex>
 			<Flex>
-				<FiltersForm onFilterUpdate={onFilterUpdate} />
+				<Filters onFiltersChange={onFilterUpdate} />
 			</Flex>
 		</Flex>
 	);

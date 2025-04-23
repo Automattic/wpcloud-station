@@ -317,6 +317,58 @@ button.wpcloud-block-button {
 
 }
 
+.wpcloud-metrics-filters {
+	width: 100%;
+
+	.wpcloud-metrics-filters__applied {
+		margin-bottom: 10px;
+		flex-wrap: wrap;
+		gap: 8px;
+	}
+
+	.wpcloud-metrics-filters__filter {
+		position: relative;
+		display: flex;
+		align-items: center;
+		border-radius: var(--pico-border-radius);
+		padding: 4px 8px;
+		font-size: 0.9rem;
+		&.disabled {
+			opacity: 0.5;
+		}
+
+		.wpcloud-metrics-filters__filter-text {
+			margin-right: 6px;
+		}
+
+		.wpcloud-metrics-filters__filter-remove {
+			all: unset;
+			cursor: pointer;
+			font-size: 1.2rem;
+			line-height: 1;
+			padding: 0 2px;
+
+			&:hover {
+				color: var(--pico-del-color);
+			}
+		}
+
+		.wpcloud-metrics-filters__filter-tooltip {
+			position: absolute;
+			bottom: 100%;
+			left: 0;
+			background-color: var(--pico-background-color);
+			border: 1px solid var(--pico-form-element-border-color);
+			border-radius: var(--pico-border-radius);
+			padding: 6px 10px;
+			font-size: 0.85rem;
+			white-space: nowrap;
+			z-index: 10;
+			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+		}
+	}
+}
+
 .wpcloud-metrics-datetime-picker__controls {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
