@@ -92,10 +92,6 @@
 			"type" : "string",
 			"default" : "500px"
 		},
-		"showFilters" : {
-			"type" : "boolean",
-			"default" : true
-		},
 		"predefinedFilters" : {
 			"type" : "array",
 			"default" : []
@@ -103,7 +99,7 @@
 		"allowFrontendFilters" : {
 			"type" : "boolean",
 			"default" : true,
-			"description": "Controls whether users can add, remove, or modify filters on the frontend"
+			"description": "Controls whether filters are shown and if users can add, remove, or modify them on the frontend"
 		}
 	}
 }

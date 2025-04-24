@@ -31,7 +31,7 @@ import FilterBuilder from './components/lib/filterBuilder';
 
 export default function Edit( { attributes, setAttributes } ) {
 
-	const { title, type, orientation, showLegend, metric, dimension, resolution, topX, summarize, minWidth, showFilters, predefinedFilters, allowFrontendFilters } = attributes;
+	const { title, type, orientation, showLegend, metric, dimension, resolution, topX, summarize, minWidth, predefinedFilters, allowFrontendFilters } = attributes;
 	const update = updateAttribute(setAttributes);
 
 	const [metrics, setMetrics] = useState({});
@@ -84,8 +84,8 @@ export default function Edit( { attributes, setAttributes } ) {
 				<ToggleControl
 					label={ __( 'Enable Filter Controls' ) }
 					help={ __( 'Allow users to view and interact with filters on the frontend. See the `Predefined Filters` section below to add default filters' ) }
-					checked={ showFilters }
-					onChange={ update('showFilters') }
+					checked={ allowFrontendFilters }
+					onChange={ update('allowFrontendFilters') }
 				/>
 			</PanelBody>
 			<PanelBody title={__('Graph Data')}>
@@ -161,22 +161,11 @@ export default function Edit( { attributes, setAttributes } ) {
 				/>
 			</PanelBody>
 
-			{showFilters && (
-				<>
-					<PanelBody title={__('Filter Settings')}>
-						<ToggleControl
-							label={ __( 'Allow Frontend Filter Building' ) }
-							help={ __( 'Enable users to add and remove filters on the frontend' ) }
-							checked={ allowFrontendFilters }
-							onChange={ update('allowFrontendFilters') }
-						/>
-					</PanelBody>
-
-					<FilterBuilder
-						filters={predefinedFilters}
-						onChange={(newFilters) => setAttributes({ predefinedFilters: newFilters })}
-					/>
-				</>
+			{allowFrontendFilters && (
+				<FilterBuilder
+					filters={predefinedFilters}
+					onChange={(newFilters) => setAttributes({ predefinedFilters: newFilters })}
+				/>
 			)}
 		</InspectorControls>
 	)
