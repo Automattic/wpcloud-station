@@ -230,6 +230,7 @@ export default function Edit( { attributes, setAttributes } ) {
 
 			<FilterBuilder
 				filters={predefinedFilters}
+				dimensionOptions={dimensionOptions}
 				onChange={(newFilters) => setAttributes({ predefinedFilters: newFilters })}
 			/>
 

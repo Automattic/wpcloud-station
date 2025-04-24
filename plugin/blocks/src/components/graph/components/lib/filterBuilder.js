@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 /**
  * WordPress dependencies
@@ -23,12 +23,6 @@ import { trash } from '@wordpress/icons';
 /**
  * Internal dependencies
  */
-
-// Field options (dimensions) - same as in filtersForm.js
-const fieldOptions = {
-    'http_verb': __('HTTP Verb'),
-    'http_status': __('HTTP Status')
-};
 
 // Operator options - same as in filtersForm.js
 const operatorOptions = {
@@ -87,7 +81,7 @@ const objectToArrayFilter = (filter) => {
 /**
  * Component for building and managing predefined filters in the block editor
  */
-export default function FilterBuilder({ filters = [], onChange }) {
+export default function FilterBuilder({ filters = [], dimensionOptions = [], onChange }) {
     const [field, setField] = useState('');
     const [operator, setOperator] = useState('');
     const [value, setValue] = useState('');
@@ -105,10 +99,25 @@ export default function FilterBuilder({ filters = [], onChange }) {
     };
 
     const resetForm = () => {
-        setField('');
+		setField( dimensionOptions[0].value ); // select first option
         setOperator('');
         setValue('');
     };
+
+	// Update Columns when dimensions change
+	useEffect( () => {
+		if ( field ) {
+			// update field and filters if dimension is no longer valid.
+			// @todo -> is there any overlap where we may keep some filters?
+			if ( ! dimensionOptions.some(dimObj => dimObj.value === field)) {
+				setField( dimensionOptions[0].value );
+				onChange( [] ); // remove filters
+			}
+		} else {
+			// select first item if none selected.
+			setField( dimensionOptions[0].value );
+		}
+	}, [dimensionOptions] );
 
     const handleAddFilter = () => {
         if (field && operator && value) {
@@ -151,13 +160,7 @@ export default function FilterBuilder({ filters = [], onChange }) {
                                 <SelectControl
                                     label={__('Field')}
                                     value={field}
-                                    options={[
-                                        { label: __('Select a field'), value: '' },
-                                        ...Object.entries(fieldOptions).map(([value, label]) => ({
-                                            label,
-                                            value
-                                        }))
-                                    ]}
+									options={[ ...dimensionOptions, ]}
                                     onChange={handleFieldChange}
                                 />
 
