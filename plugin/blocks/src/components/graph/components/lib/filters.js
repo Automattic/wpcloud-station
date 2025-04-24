@@ -18,8 +18,38 @@ import FiltersForm from './filtersForm';
 
 
 const buildFilter = (filter, enabled = true) => {
-	const [ field, operator, value ] = Array.isArray(filter) ? filter : [filter.field, filter.operator, filter.value];
-	// Convert value to string before using trim() to avoid "value.trim is not a function" error
+	// Handle different filter formats
+	let field, operator, value;
+
+	if (Array.isArray(filter)) {
+		// Array format: [field, operator, value]
+		[field, operator, value] = filter;
+	} else if (filter && typeof filter === 'object') {
+		// Object format: {field, operator, value} or {value: {field, operator, value}}
+		if (filter.value && filter.value.field) {
+			// Format: {value: {field, operator, value}}
+			field = filter.value.field;
+			operator = filter.value.operator;
+			value = filter.value.value;
+		} else {
+			// Format: {field, operator, value}
+			field = filter.field;
+			operator = filter.operator;
+			value = filter.value;
+		}
+	} else {
+		// Invalid format, provide defaults
+		field = '';
+		operator = '=';
+		value = '';
+	}
+
+	// Ensure all values are defined
+	field = field || '';
+	operator = operator || '=';
+	value = value !== undefined ? value : '';
+
+	// Convert value to string for display
 	const valueStr = String(value);
 	const hasMultipleWords = valueStr.trim().includes(' ') || valueStr.trim().includes(',');
 	const label = `${field} ${operator} ${valueStr}`;
@@ -41,9 +71,20 @@ const buildFilter = (filter, enabled = true) => {
 const updateFilters = (onFilterUpdate, setFilters) => {
 	return (filters => {
 		setFilters(filters);
+		// Extract the field, operator, and value from each filter and create an array format
+		// that the API expects: [field, operator, value]
 		const filterList = filters
 			.filter(f => f.enabled)
-			.map(f => [f.value.field, f.value.operator, f.value.value]);
+			.map(f => {
+				// Ensure the filter has the expected structure
+				if (f.value && f.value.field && f.value.operator && f.value.value !== undefined) {
+					return [f.value.field, f.value.operator, f.value.value];
+				}
+				// Fallback for unexpected filter format
+				return null;
+			})
+			.filter(f => f !== null); // Remove any null entries
+
 		onFilterUpdate({ filters: filterList });
 	});
 }

@@ -78,16 +78,26 @@ export default function Graph( props ) {
 				// Extract active filters for the API query
 				const activeFilters = filters.filter(f => f.enabled).map(f => [f.value.field, f.value.operator, f.value.value]);
 
+				// Create the query parameters
+				const queryParams = {
+					start,
+					end,
+					dimension,
+					resolution,
+					summarize,
+					top_x: topX,
+				};
+
+				// Only add filters if there are any active ones
+				// Stringify the filters array to ensure it's sent as a JSON array
+				if (activeFilters.length > 0) {
+					queryParams.filters = JSON.stringify(activeFilters);
+				}
+
 				const { data, series, meta } = await stationApi.get( `${apiPath}/${metric}`, {
-					query: {
-						start,
-						end,
-						dimension,
-						resolution,
-						summarize,
-						top_x: topX,
-						filters: activeFilters.length > 0 ? activeFilters : undefined,
-					}, parse: true, signal
+					query: queryParams,
+					parse: true,
+					signal
 				});
 				setData(data);
 				setSeries(series);
@@ -120,10 +130,22 @@ export default function Graph( props ) {
 	// Handle filter updates
 	const handleFiltersUpdate = ({ filters: newFilters }) => {
 		setFilters(newFilters.map(filter => {
-			// Ensure values are properly handled
-			const field = filter[0];
-			const operator = filter[1];
-			const value = filter[2];
+			// Handle both array format [field, operator, value] and object format {field, operator, value}
+			let field, operator, value;
+
+			if (Array.isArray(filter)) {
+				// Array format: [field, operator, value]
+				field = filter[0];
+				operator = filter[1];
+				value = filter[2];
+			} else {
+				// Object format: {field, operator, value}
+				field = filter.field;
+				operator = filter.operator;
+				value = filter.value;
+			}
+
+			// Convert value to string for display
 			const valueStr = String(value);
 
 			return {
