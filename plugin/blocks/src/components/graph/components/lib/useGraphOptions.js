@@ -3,7 +3,8 @@ import { stackedOptions, defaultOptions, barOptions, lineOptions, areaOptions } 
 
 // Remove this amount from the container height to fit the graph legend.
 const fitGraphHeight = 75;
-const fitGraphWidth = 20;
+// Reduced the width adjustment to ensure graphs aren't too skinny
+const fitGraphWidth = 10;
 
 export default (options) => {
 	const {
@@ -17,29 +18,38 @@ export default (options) => {
 		orientation,
 	} = options;
 
-	const [width, setWidth] = useState(808);
-	const [height, setHeight] = useState(404);
+	// Set more appropriate initial values for flex containers
+	const [width, setWidth] = useState(containerRef?.current?.offsetWidth || 808);
+	const [height, setHeight] = useState(containerRef?.current?.offsetHeight || 404);
 
 	useEffect(() => {
 		const updateSize = () => {
 			if ( containerRef.current ) {
-				setWidth( containerRef.current.offsetWidth - fitGraphWidth );
-				setHeight( containerRef.current.offsetHeight - fitGraphHeight );
+				const newWidth = containerRef.current.offsetWidth - fitGraphWidth;
+				const newHeight = containerRef.current.offsetHeight - fitGraphHeight;
+
+				// Only update if the size has actually changed
+				if (newWidth !== width || newHeight !== height) {
+					setWidth(newWidth);
+					setHeight(newHeight);
+				}
 			}
 		};
 
 		updateSize(); // Initial update
 
-		const resizeObserver = new ResizeObserver( () => {
+		const resizeObserver = new ResizeObserver(() => {
 			if (containerRef.current) {
 				updateSize();
 			}
 		});
+
 		if (containerRef.current) {
-			resizeObserver.observe( containerRef.current );
+			resizeObserver.observe(containerRef.current);
 		}
+
 		return () => resizeObserver.disconnect();
-	}, [ containerRef ]);
+	}, [containerRef, width, height]);
 
 	let graphOptions = {
 		title,

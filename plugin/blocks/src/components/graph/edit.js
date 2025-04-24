@@ -26,7 +26,7 @@ import './editor.scss';
 
 export default function Edit( { attributes, setAttributes } ) {
 
-	const { title, type, orientation, showLegend, metric, dimension, resolution, topX, summarize, minWidth  } = attributes;
+	const { title, type, orientation, showLegend, metric, dimension, resolution, topX, summarize, minWidth, showFilters } = attributes;
 	const update = updateAttribute(setAttributes);
 
 	const [metrics, setMetrics] = useState({});
@@ -151,6 +151,11 @@ export default function Edit( { attributes, setAttributes } ) {
 					label={ __( 'Show Legend' ) }
 					checked={ showLegend }
 					onChange={ update('showLegend') }
+				/>
+				<ToggleControl
+					label={ __( 'Show Filters' ) }
+					checked={ showFilters }
+					onChange={ update('showFilters') }
 				/>
 			</PanelBody>
 			<PanelBody title={__('Graph Data')}>
