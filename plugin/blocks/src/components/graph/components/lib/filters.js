@@ -90,7 +90,7 @@ const updateFilters = (onFilterUpdate, setFilters) => {
 	});
 }
 
-export default ({ onFiltersUpdate = console.log, filters: propFilters = [], loading = false }) => {
+export default ({ onFiltersUpdate = console.log, filters: propFilters = [], loading = false, allowFrontendFilters = true }) => {
 	const [filters, setFilters] = useState([]);
 	const [isOpen, setIsOpen] = useState(false);
 
@@ -168,15 +168,17 @@ export default ({ onFiltersUpdate = console.log, filters: propFilters = [], load
 							<span className="wpcloud-metrics-filters__filter-text">
 								{filter.compact}
 							</span>
-							<Icon
-								onClick={(e) => {
-									e.stopPropagation(); // Stop event from bubbling up to parent button
-									handleFilterRemove(index);
-								}}
-								icon={trash} size={20} />
+							{allowFrontendFilters && (
+								<Icon
+									onClick={(e) => {
+										e.stopPropagation(); // Stop event from bubbling up to parent button
+										handleFilterRemove(index);
+									}}
+									icon={trash} size={20} />
+							)}
 						</button>
 					))}
-					<FiltersForm onFilterAdd={handleFilterAdd} />
+					{allowFrontendFilters && <FiltersForm onFilterAdd={handleFilterAdd} />}
 				</Flex>
 			</div>
 		</div>

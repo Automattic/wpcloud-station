@@ -121,7 +121,13 @@ export default function Graph( props ) {
 		id = `graph-${metric}-${dimension}`,
 
 		// Show filters toggle
-		showFilters = true
+		showFilters = true,
+
+		// Predefined filters from block attributes
+		predefinedFilters = [],
+
+		// Allow frontend filter building
+		allowFrontendFilters = true
 
 	} = props;
 
@@ -153,8 +159,43 @@ export default function Graph( props ) {
 	// Initialize filters from URL parameters if available
 	const [ filters, setFilters ] = useState([]);
 
-	// Load filters from URL on mount
+	// Convert predefined filters to filter objects
+	const convertPredefinedFilters = (filters) => {
+		if (!filters || !Array.isArray(filters) || filters.length === 0) {
+			return [];
+		}
+
+		return filters.map(filter => {
+			// Handle array format [field, operator, value]
+			if (Array.isArray(filter)) {
+				const [field, operator, value] = filter;
+				return {
+					enabled: true,
+					value: {
+						field,
+						operator,
+						value
+					},
+					compact: `${field} ${operator} ${value}`,
+					label: `${field} ${operator} ${value}`
+				};
+			}
+			return null;
+		}).filter(f => f !== null);
+	};
+
+	// Load filters from predefined filters or URL on mount
 	useEffect(() => {
+		// First check if we have predefined filters from block attributes
+		if (predefinedFilters && Array.isArray(predefinedFilters) && predefinedFilters.length > 0) {
+			const blockFilters = convertPredefinedFilters(predefinedFilters);
+			if (blockFilters.length > 0) {
+				setFilters(blockFilters);
+				return; // Use predefined filters, don't check URL
+			}
+		}
+
+		// If no predefined filters, try to get from URL
 		if (typeof window !== 'undefined') {
 			try {
 				const urlFilters = getFiltersFromUrl(graphId);
@@ -165,7 +206,7 @@ export default function Graph( props ) {
 				console.error('Error initializing filters:', error);
 			}
 		}
-	}, [graphId]);
+	}, [graphId, predefinedFilters]);
 
 	const containerRef = useRef(null);
 	// Ensure the container takes full width of parent and has appropriate minimum dimensions
@@ -299,6 +340,7 @@ export default function Graph( props ) {
 						filters={filters}
 						onFiltersUpdate={handleFiltersUpdate}
 						loading={loading}
+						allowFrontendFilters={allowFrontendFilters}
 					/>
 				</div>
 			)}
