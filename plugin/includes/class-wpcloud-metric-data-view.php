@@ -53,7 +53,7 @@ class WPCLOUD_Metric_Data_View extends WPCLOUD_Metrics {
 			return new WP_Error( 'invalid_metric', 'Invalid metric', array( 'status' => 400 ) );
 		}
 
-		if ( ! array_key_exists( $this->dimension, $this->get_available_dimensions() ) ) {
+		if ( ! array_key_exists( $this->dimension, $this->get_available_dimensions( $this->metric ) ) ) {
 			return new WP_Error( 'invalid_dimension', 'Invalid dimension', array( 'status' => 400 ) );
 		}
 
