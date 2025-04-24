@@ -118,7 +118,10 @@ export default function Graph( props ) {
 		interval, refresh,
 
 		// Unique identifier for this graph
-		id = `graph-${metric}-${dimension}`
+		id = `graph-${metric}-${dimension}`,
+
+		// Show filters toggle
+		showFilters = true
 
 	} = props;
 
@@ -283,13 +286,15 @@ export default function Graph( props ) {
 			{showOverlay && <Overlay loading={loading} title={title} /> }
 			{ hasData && <UplotReact options={options} data={d} /> }
 			</div>
-			<div style={{ position: 'relative', marginTop: '10px', zIndex: 1 }}>
-				<Filters
-					filters={filters}
-					onFiltersUpdate={handleFiltersUpdate}
-					loading={loading}
-				/>
-			</div>
+			{showFilters && (
+				<div style={{ position: 'relative', marginTop: '10px', zIndex: 1 }}>
+					<Filters
+						filters={filters}
+						onFiltersUpdate={handleFiltersUpdate}
+						loading={loading}
+					/>
+				</div>
+			)}
 		</div>
 	);
 }
