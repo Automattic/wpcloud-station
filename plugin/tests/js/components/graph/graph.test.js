@@ -66,6 +66,7 @@ describe('Graph Component', () => {
                 start: '2023-01-01',
                 end: '2023-01-31',
                 dimension: 'status',
+                filters: '[]', // The component includes this parameter with an empty array by default
             },
             parse: true,
             signal: expect.any(Object),
