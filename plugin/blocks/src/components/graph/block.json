@@ -95,6 +95,10 @@
 		"showFilters" : {
 			"type" : "boolean",
 			"default" : true
+		},
+		"predefinedFilters" : {
+			"type" : "array",
+			"default" : []
 		}
 	}
 }

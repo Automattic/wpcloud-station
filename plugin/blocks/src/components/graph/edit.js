@@ -23,10 +23,15 @@ import apiFetch from '@wordpress/api-fetch';
 import { updateAttribute } from '@wpcloud/controls';
 import './editor.scss';
 
+/**
+ * Internal dependencies
+ */
+import FilterBuilder from './components/lib/filterBuilder';
+
 
 export default function Edit( { attributes, setAttributes } ) {
 
-	const { title, type, orientation, showLegend, metric, dimension, resolution, topX, summarize, minWidth, showFilters } = attributes;
+	const { title, type, orientation, showLegend, metric, dimension, resolution, topX, summarize, minWidth, showFilters, predefinedFilters } = attributes;
 	const update = updateAttribute(setAttributes);
 
 	const [metrics, setMetrics] = useState({});
@@ -153,7 +158,14 @@ export default function Edit( { attributes, setAttributes } ) {
 					value={ minWidth }
 					onChange={ update('minWidth') }
 				/>
-				</PanelBody>
+			</PanelBody>
+
+			{showFilters && (
+				<FilterBuilder
+					filters={predefinedFilters}
+					onChange={(newFilters) => setAttributes({ predefinedFilters: newFilters })}
+				/>
+			)}
 		</InspectorControls>
 	)
 	return (
