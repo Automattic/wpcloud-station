@@ -63,6 +63,11 @@ class WPCloud_Station {
 				'post_content'  => '<!-- wp:pattern {"slug":"wpcloud-station/form-add-site"} /-->',
 				'post_category' => array( $wpcloud_core_cat->term_id, get_category_by_slug( WPCLOUD_CATEGORY_PRIVATE )->term_id ),
 			),
+			'performance-dashboard' => array(
+				'post_title'    => 'Performance Dashboard',
+				'post_content'  => '<!-- wp:pattern {"slug":"wpcloud-station/performance-dashboard"} /-->',
+				'post_category' => array( $wpcloud_core_cat->term_id, get_category_by_slug( WPCLOUD_CATEGORY_PRIVATE )->term_id ),
+			),
 		);
 		$query      = new WP_Query(
 			array(
