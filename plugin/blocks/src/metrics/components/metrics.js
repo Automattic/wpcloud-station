@@ -9,8 +9,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import Graph from '@wpcloud/components/graph/components/graph.js';
 import { ApiContext } from './apiContext.js';
 import Toolbar from './toolbar';
-import { useQueryBoundary } from '../hooks';
-import { encodeFilter } from '../utils';
+import { useQueryBoundary, useQueryParams } from '../hooks';
+import { encodeFilter, decodeFilter } from '../utils';
 
 function renderNodeWithProps(node, key, props) {
 
@@ -31,6 +31,7 @@ function Metrics({ tree, apiPath }) {
 
 	const qSTart = useQueryBoundary('start', 'now-1h');
 	const qEnd = useQueryBoundary('end', 'now');
+	const qFilters = useQueryParams().get('filters');
 
 	useEffect(() => {
 		setStart(qSTart);
@@ -39,6 +40,18 @@ function Metrics({ tree, apiPath }) {
 	useEffect(() => {
 		setEnd(qEnd);
 	}, [qEnd]);
+
+	useEffect(() => {
+		if (qFilters) {
+			try {
+				const parsedFilters = decodeFilter(qFilters);
+				console.log('Parsed filters from query params:', parsedFilters);
+				setFilters(parsedFilters);
+			} catch (error) {
+				console.error('Error parsing filters from query params:', error);
+			}
+		}
+	}, []);
 
 	const updateQueryParams = async ({ start, end, filters }) => {
 		const searchParams = new URLSearchParams(window.location.search);
@@ -71,11 +84,12 @@ function Metrics({ tree, apiPath }) {
 		return renderNodeWithProps(node, index, { interval, refresh: toggleRefresh, filters });
 	}, [interval, toggleRefresh, filters]);
 
+	console.log('Rendering Metrics component with filters:', filters);
 	return (
 		<ApiContext.Provider value={{ apiPath }}>
 			<div className="wpcloud-metrics">
 				<h3>Metrics</h3>
-				<Toolbar onIntervalUpdate={updateQueryParams} interval={interval} onRefresh={onRefresh} onFiltersUpdate={updateQueryParams} />
+				<Toolbar onIntervalUpdate={updateQueryParams} interval={interval} onRefresh={onRefresh} filters={filters} onFiltersUpdate={updateQueryParams} />
 				<div className="wpcloud-metrics__graphs">
 					{tree.children.map(renderNode)}
 				</div>

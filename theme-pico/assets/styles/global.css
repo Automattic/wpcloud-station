@@ -374,6 +374,29 @@ button.wpcloud-block-button {
 	}
 }
 
+details.dropdown.wpcloud-metrics-filters-picker>summary:not([role]) {
+	border: none;
+	box-shadow: none;
+	padding: 0;
+	box-shadow: none;
+	background-color: transparent;
+	&:focus {
+		outline: none;
+		box-shadow: none;
+		background-color: transparent;
+	}
+	height: unset;
+	&::after {
+		background-image: none;;
+	}
+}
+details.wpcloud-metrics-filters-picker {
+	margin-bottom: 0;
+}
+details.wpcloud-metrics-filters-picker>summary+ul.wpcloud-metrics-filters-picker__options {
+	width: 420px;
+}
+
 .wpcloud-metrics-datetime-picker__controls {
 	display: grid;
 	grid-template-columns: 1fr 1fr;

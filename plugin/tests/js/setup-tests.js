@@ -3,6 +3,11 @@
  */
 import '@testing-library/jest-dom';
 import React from 'react';
+import { TextEncoder, TextDecoder } from 'util';
+
+// Polyfill TextEncoder and TextDecoder for Node.js environment
+global.TextEncoder = TextEncoder;
+global.TextDecoder = TextDecoder;
 
 // Mock ResizeObserver
 global.ResizeObserver = class ResizeObserver {

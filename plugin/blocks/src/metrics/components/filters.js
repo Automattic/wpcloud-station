@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import classnames from 'classnames';
 
 /**
@@ -16,55 +16,55 @@ import { Icon, trash } from '@wordpress/icons';
  */
 import FiltersForm from './filtersForm';
 
-// Helper function to create a compact representation of a filter
-const getCompactFilterText = (filter) => {
-	const { field, operator, value } = filter;
 
-	// Check if the value contains multiple words
+const buildFilter = (filter, enabled = true) => {
+	const [ field, operator, value ] = Array.isArray(filter) ? filter : [filter.field, filter.operator, filter.value];
 	const hasMultipleWords = value.trim().includes(' ') || value.trim().includes(',');
+	const label = `${field} ${operator} ${value}`;
 
-	return `${field} ${operator} ${hasMultipleWords ? '...' : value}`;
-};
+	return {
+		enabled,
+		value: {
+			field,
+			operator,
+			value,
+		},
+		compact: hasMultipleWords ? `${field} ${operator} ...` : label,
+		label,
+	}
+}
 
-// Helper function to create a detailed representation of a filter
-const getDetailedFilterText = (filter) => {
-	const { field, operator, value } = filter;
-	return `${field} ${operator} ${value}`;
-};
-
-export default ({ onFiltersUpdate = console.log }) => {
-	const [filters, setFilters] = useState([]);
-
-	const handleFilterAdd = (filter) => {
-		const updatedFilters = [...filters, {
-			enabled: true,
-			value: filter,
-			compact: getCompactFilterText(filter),
-			detailed: getDetailedFilterText(filter),
-		}];
-
-		setFilters(updatedFilters);
-		// Create the filter list in the format [ [ 'field','operator','values'] ]
-		const filterList = updatedFilters
+const updateFilters = (onFilterUpdate, setFilters) => {
+	return (filters => {
+		setFilters(filters);
+		const filterList = filters
 			.filter(f => f.enabled)
 			.map(f => [f.value.field, f.value.operator, f.value.value]);
-		onFiltersUpdate({ filters: filterList });
+		onFilterUpdate({ filters: filterList });
+	});
+}
+
+export default ({ onFiltersUpdate, filters: propFilters = [] }) => {
+	const [filters, setFilters] = useState([]);
+
+	useEffect(() => {
+		if (propFilters.length > 0) {
+			const updatedFilters = propFilters.map(filter => buildFilter(filter));
+			setFilters(updatedFilters);
+		}
+	}, [propFilters]);
+
+
+	const handleFilterUpdate =  updateFilters(onFiltersUpdate, setFilters);
+
+	const handleFilterAdd = (filter) => {
+		const updatedFilters = [...filters, buildFilter(filter)];
+		handleFilterUpdate(updatedFilters);
 	};
 
 	const handleFilterRemove = (indexToRemove) => {
 		const updatedFilters = filters.filter((_, index) => index !== indexToRemove);
-		setFilters(updatedFilters);
-
-		// Create the filter list in the format [ [ 'field','operator','values'] ]
-		const filterList = updatedFilters
-			.filter(f => f.enabled)
-			.map(f => [f.value.field, f.value.operator, f.value.value]);
-
-		console.log('Updated filter list after removal:', filterList);
-		console.log('Calling onFiltersUpdate with:', { filters: filterList });
-
-		// Even if filterList is empty, we still need to update the parent component
-		onFiltersUpdate({ filters: filterList });
+		handleFilterUpdate(updatedFilters);
 	};
 
 	const handleToggleFilter = (indexToDisable) => {
@@ -74,46 +74,37 @@ export default ({ onFiltersUpdate = console.log }) => {
 			}
 			return filter;
 		});
-		setFilters(updatedFilters);
-
-		// Create the filter list in the format [ [ 'field','operator','values'] ]
-		const filterList = updatedFilters
-			.filter(f => f.enabled)
-			.map(f => [f.value.field, f.value.operator, f.value.value]);
-		onFiltersUpdate({ filters: filterList });
+		handleFilterUpdate(updatedFilters);
 	}
 
 	return (
 		<FlexItem isBlock={true}>
 			<div className="wpcloud-metrics-filters">
-				{filters.length > 0 && (
-					<Flex className="wpcloud-metrics-filters__applied" justify="start">
-						{filters.map((filter, index) => (
-							<button
-								key={index}
-								className={
-									classnames(
-										"wpcloud-metrics-filters__filter secondary",
-										{ "disabled": !filter.enabled }
-									)}
-								{ ...( filter.compact != filter.detailed && { 'data-tooltip': filter.detailed } ) }
-								onClick={() => handleToggleFilter(index)}
-							>
-								<span className="wpcloud-metrics-filters__filter-text">
-									{getCompactFilterText(filter.value)}
-								</span>
-								<Icon
-									onClick={(e) => {
-										e.stopPropagation(); // Stop event from bubbling up to parent button
-										handleFilterRemove(index);
-									}}
-									icon={trash} size={20} />
-							</button>
-						))}
-					</Flex>
-				)}
-
-				<FiltersForm onFilterAdd={handleFilterAdd} />
+				<Flex className="wpcloud-metrics-filters__applied" justify="start">
+					{filters.map((filter, index) => (
+						<button
+							key={index}
+							className={
+								classnames(
+									"wpcloud-metrics-filters__filter secondary",
+									{ "disabled": !filter.enabled }
+								)}
+							{ ...( filter.compact != filter.detailed && { 'data-tooltip': filter.label } ) }
+							onClick={() => handleToggleFilter(index)}
+						>
+							<span className="wpcloud-metrics-filters__filter-text">
+								{filter.compact}
+							</span>
+							<Icon
+								onClick={(e) => {
+									e.stopPropagation(); // Stop event from bubbling up to parent button
+									handleFilterRemove(index);
+								}}
+								icon={trash} size={20} />
+						</button>
+					))}
+					<FiltersForm onFilterAdd={handleFilterAdd} />
+				</Flex>
 			</div>
 		</FlexItem>
 	);

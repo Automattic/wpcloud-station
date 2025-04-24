@@ -10,20 +10,12 @@ import { __ } from '@wordpress/i18n';
 import RangePicker from './rangePicker';
 import Filters from './filters';
 
-const identity = (v) => v;
 
-export default ({ interval, onIntervalUpdate = identity, onFiltersUpdate = identity, onRefresh = identity }) => {
+export default ({ interval, onIntervalUpdate, onFiltersUpdate, onRefresh, filters = [] }) => {
 	return (
-
 		<Flex direction="column" gap="2" className="wpcloud-metrics-toolbar">
 			<Flex>
-				<Filters onFiltersUpdate={(filters) => {
-					console.log('Toolbar received filter update:', filters);
-					// Make sure we're passing the filters object correctly to the parent component
-					onFiltersUpdate(filters);
-					console.log('Toolbar called onFiltersUpdate with:', filters);
-				}
-				} />
+				<Filters onFiltersUpdate={onFiltersUpdate} filters={filters} />
 			</Flex>
 			<Flex align="normal" gap="4">
 				<RangePicker interval={interval} onIntervalUpdate={onIntervalUpdate} />
@@ -31,7 +23,6 @@ export default ({ interval, onIntervalUpdate = identity, onFiltersUpdate = ident
 					{__('Refresh')}
 				</button>
 			</Flex>
-
 		</Flex>
 	);
 }

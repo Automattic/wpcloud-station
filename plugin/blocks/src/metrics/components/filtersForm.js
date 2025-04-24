@@ -83,78 +83,76 @@ export default ({ onFilterAdd = () => {} }) => {
 		};
 
 		return (
-				<FlexItem isBlock={true}>
-						<details
-								className="wpcloud-metrics-filters-picker dropdown"
-								open={isOpen}
-								onToggle={(e) => setIsOpen(e.target.open)}
-						>
-								<summary>{__('Add Filter')}</summary>
-								<ul className="wpcloud-metrics-filters-picker__options">
-										<li>
-												<div className="wpcloud-metrics-filters-picker__controls">
-														<div className="wpcloud-metrics-filters-picker__inputs">
-																<div className="wpcloud-metrics-filters-picker__field">
-																		<label htmlFor="filter-field" className="screen-reader-text">{__('Field')}</label>
-																		<select
-																				id="filter-field"
-																				value={field}
-																				onChange={handleFieldChange}
-																				aria-label={__('Field')}
-																		>
-																				<option value="">{__('Field')}</option>
-																				{Object.entries(fieldOptions).map(([value, label]) => (
-																						<option key={value} value={value}>{label}</option>
-																				))}
-																		</select>
-																</div>
-																<div className="wpcloud-metrics-filters-picker__operator">
-																		<label htmlFor="filter-operator" className="screen-reader-text">{__('Operator')}</label>
-																		<select
-																				id="filter-operator"
-																				value={operator}
-																				onChange={handleOperatorChange}
-																				disabled={!field}
-																				aria-label={__('Operator')}
-																		>
-																				<option value="">{__('Operator')}</option>
-																				{Object.entries(operatorOptions).map(([value, label]) => (
-																						<option
-																								key={value}
-																								value={value}
-																								disabled={field && !isOperatorValidForField(field, value)}
-																						>
-																								{label}
-																						</option>
-																				))}
-																		</select>
-																</div>
-																<div className="wpcloud-metrics-filters-picker__value">
-																		<label htmlFor="filter-value" className="screen-reader-text">{__('Value')}</label>
-																		<input
-																				type="text"
-																				id="filter-value"
-																				value={value}
-																				onChange={handleValueChange}
-																				onKeyDown={handleKeyDown}
-																				disabled={!field || !operator}
-																				placeholder={operatorAcceptsMultipleValues(operator) ? __('Value one, Value two, ...') : __('Value')}
-																				aria-label={__('Value')}
-																		/>
-																</div>
-																<div className="wpcloud-metrics-filters-picker__apply">
-																		<button
-																				onClick={handleAddFilter}
-																				disabled={!field || !operator || !value}
-																		>
-																				{__('Apply')}
-																		</button>
-																</div>
-														</div>
-												</div>
-										</li>
-								</ul>
-						</details>
-				</FlexItem>
+			<details
+					className="wpcloud-metrics-filters-picker no-border dropdown"
+					open={isOpen}
+					onToggle={(e) => setIsOpen(e.target.open)}
+			>
+					<summary style={{width: 'fit-content', marginLeft: '6px'}}>{__('+ Add Filter')}</summary>
+					<ul className="wpcloud-metrics-filters-picker__options">
+							<li>
+									<div className="wpcloud-metrics-filters-picker__controls">
+											<div className="wpcloud-metrics-filters-picker__inputs">
+													<div className="wpcloud-metrics-filters-picker__field">
+															<label htmlFor="filter-field" className="screen-reader-text">{__('Field')}</label>
+															<select
+																	id="filter-field"
+																	value={field}
+																	onChange={handleFieldChange}
+																	aria-label={__('Field')}
+															>
+																	<option value="">{__('Field')}</option>
+																	{Object.entries(fieldOptions).map(([value, label]) => (
+																			<option key={value} value={value}>{label}</option>
+																	))}
+															</select>
+													</div>
+													<div className="wpcloud-metrics-filters-picker__operator">
+															<label htmlFor="filter-operator" className="screen-reader-text">{__('Operator')}</label>
+															<select
+																	id="filter-operator"
+																	value={operator}
+																	onChange={handleOperatorChange}
+																	disabled={!field}
+																	aria-label={__('Operator')}
+															>
+																	<option value="">{__('Operator')}</option>
+																	{Object.entries(operatorOptions).map(([value, label]) => (
+																			<option
+																					key={value}
+																					value={value}
+																					disabled={field && !isOperatorValidForField(field, value)}
+																			>
+																					{label}
+																			</option>
+																	))}
+															</select>
+													</div>
+													<div className="wpcloud-metrics-filters-picker__value">
+															<label htmlFor="filter-value" className="screen-reader-text">{__('Value')}</label>
+															<input
+																	type="text"
+																	id="filter-value"
+																	value={value}
+																	onChange={handleValueChange}
+																	onKeyDown={handleKeyDown}
+																	disabled={!field || !operator}
+																	placeholder={operatorAcceptsMultipleValues(operator) ? __('Value one, Value two, ...') : __('Value')}
+																	aria-label={__('Value')}
+															/>
+													</div>
+													<div className="wpcloud-metrics-filters-picker__apply">
+															<button
+																	onClick={handleAddFilter}
+																	disabled={!field || !operator || !value}
+															>
+																	{__('Apply')}
+															</button>
+													</div>
+											</div>
+									</div>
+							</li>
+					</ul>
+			</details>
 		);
 };

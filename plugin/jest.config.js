@@ -22,7 +22,8 @@ module.exports = {
     testPathIgnorePatterns: ['/node_modules/'],
 
     // An array of regexp pattern strings that are matched against all source file paths
-    transformIgnorePatterns: ['/node_modules/'],
+    // Modify transformIgnorePatterns to allow transformation of msgpackr and base62
+    transformIgnorePatterns: ['/node_modules/(?!(msgpackr|base62)/)'],
 
     // A map from regular expressions to paths to transformers
     transform: {
