@@ -21,6 +21,78 @@ import stationApi from '@wpcloud/utils/api';
 import { useApiContext } from '@wpcloud/metrics/components/apiContext';
 import Filters from './lib/filters';
 
+/**
+ * Parse URL parameters to get filters for a specific graph
+ *
+ * @param {string} graphId - The unique ID of the graph
+ * @returns {Array} - Array of filter objects
+ */
+const getFiltersFromUrl = (graphId) => {
+	try {
+		// Get the URL search parameters
+		const urlParams = new URLSearchParams(window.location.search);
+
+		// Look specifically for the parameter with this graph's ID
+		const paramName = `filters_${graphId}`;
+		const filterParam = urlParams.get(paramName);
+
+		// If there's no parameter specifically for this graph, return empty array
+		if (!filterParam) {
+			return [];
+		}
+
+		// Parse the JSON string from the URL
+		const decodedFilters = JSON.parse(decodeURIComponent(filterParam));
+
+		// Convert the array format to the filter object format
+		return decodedFilters.map(filter => ({
+			enabled: true,
+			value: {
+				field: filter[0],
+				operator: filter[1],
+				value: filter[2]
+			},
+			compact: `${filter[0]} ${filter[1]} ${filter[2]}`,
+			label: `${filter[0]} ${filter[1]} ${filter[2]}`
+		}));
+	} catch (error) {
+		console.error('Error parsing filters from URL:', error);
+		return [];
+	}
+};
+
+/**
+ * Update URL parameters with filters for a specific graph
+ *
+ * @param {string} graphId - The unique ID of the graph
+ * @param {Array} filters - Array of filter objects
+ */
+const updateUrlWithFilters = (graphId, filters) => {
+	try {
+		// Get the active filters in array format
+		const activeFilters = filters
+			.filter(f => f.enabled)
+			.map(f => [f.value.field, f.value.operator, String(f.value.value)]);
+
+		// Get the current URL search parameters
+		const urlParams = new URLSearchParams(window.location.search);
+
+		// If there are active filters, add them to the URL
+		if (activeFilters.length > 0) {
+			urlParams.set(`filters_${graphId}`, encodeURIComponent(JSON.stringify(activeFilters)));
+		} else {
+			// If there are no active filters, remove the parameter
+			urlParams.delete(`filters_${graphId}`);
+		}
+
+		// Update the URL without reloading the page
+		const newUrl = `${window.location.pathname}?${urlParams.toString()}${window.location.hash}`;
+		window.history.replaceState({}, '', newUrl);
+	} catch (error) {
+		console.error('Error updating URL with filters:', error);
+	}
+};
+
 export default function Graph( props ) {
 
 	const {
@@ -43,9 +115,31 @@ export default function Graph( props ) {
 		orientation,
 
 		// Dynamic metric props.
-		interval, refresh
+		interval, refresh,
+
+		// Unique identifier for this graph
+		id = `graph-${metric}-${dimension}`
 
 	} = props;
+
+	// Create a deterministic ID based on the graph's properties
+	// This will be the same across page loads for the same graph
+	const generateStableId = (metric, dimension, title) => {
+		// Create a string that uniquely identifies this graph
+		const baseString = `${metric}-${dimension}-${title}`;
+		// Simple hash function to generate a numeric hash
+		let hash = 0;
+		for (let i = 0; i < baseString.length; i++) {
+			const char = baseString.charCodeAt(i);
+			hash = ((hash << 5) - hash) + char;
+			hash = hash & hash; // Convert to 32bit integer
+		}
+		// Convert to a positive number and return
+		return `${id.replace(/[^a-zA-Z0-9-_]/g, '-')}-${Math.abs(hash)}`;
+	};
+
+	// Generate a stable ID that will be the same across page loads
+	const graphId = generateStableId(metric, dimension, title);
 
 	const { apiPath } = useApiContext();
 	const { start, end } = interval || {};
@@ -53,7 +147,15 @@ export default function Graph( props ) {
 	const [ series, setSeries ] = useState([]);
 	const [ meta, setMeta ] = useState({});
 	const [ loading, setLoading ] = useState( true );
-	const [ filters, setFilters ] = useState([]);
+	// Initialize filters from URL parameters if available
+	const [ filters, setFilters ] = useState(() => {
+		// Only run in browser environment
+		if (typeof window !== 'undefined') {
+			const urlFilters = getFiltersFromUrl(graphId);
+			return urlFilters.length > 0 ? urlFilters : [];
+		}
+		return [];
+	});
 
 	const containerRef = useRef(null);
 	// Ensure the container takes full width of parent and has appropriate minimum dimensions
@@ -137,7 +239,7 @@ export default function Graph( props ) {
 	//
 	// Handle filter updates
 	const handleFiltersUpdate = ({ filters: newFilters }) => {
-		setFilters(newFilters.map(filter => {
+		const processedFilters = newFilters.map(filter => {
 			// Handle both array format [field, operator, value] and object format {field, operator, value}
 			let field, operator, value;
 
@@ -166,11 +268,17 @@ export default function Graph( props ) {
 				compact: `${field} ${operator} ${valueStr}`,
 				label: `${field} ${operator} ${valueStr}`
 			};
-		}));
+		});
+
+		// Update the state with the new filters
+		setFilters(processedFilters);
+
+		// Update the URL with the new filters
+		updateUrlWithFilters(graphId, processedFilters);
 	};
 
 	return (
-		<div style={{ width: '100%' }}>
+		<div style={{ width: '100%' }} data-graph-id={graphId}>
 			<div ref={containerRef} className={className} style={style}>
 			{showOverlay && <Overlay loading={loading} title={title} /> }
 			{ hasData && <UplotReact options={options} data={d} /> }
