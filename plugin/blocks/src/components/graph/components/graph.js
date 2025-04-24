@@ -75,8 +75,16 @@ export default function Graph( props ) {
 		setLoading(true);
 		async function fetchData() {
 			try {
-				// Extract active filters for the API query
-				const activeFilters = filters.filter(f => f.enabled).map(f => [f.value.field, f.value.operator, f.value.value]);
+				// Extract active filters for the API query and ensure values are strings
+				const activeFilters = filters.filter(f => f.enabled).map(f => {
+					// Ensure the value is a string to avoid PHP strpos() errors
+					return [
+						f.value.field,
+						f.value.operator,
+						// Convert all values to strings to avoid PHP type errors
+						String(f.value.value)
+					];
+				});
 
 				// Create the query parameters
 				const queryParams = {

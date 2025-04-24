@@ -78,7 +78,8 @@ const updateFilters = (onFilterUpdate, setFilters) => {
 			.map(f => {
 				// Ensure the filter has the expected structure
 				if (f.value && f.value.field && f.value.operator && f.value.value !== undefined) {
-					return [f.value.field, f.value.operator, f.value.value];
+					// Convert value to string to avoid PHP strpos() errors
+					return [f.value.field, f.value.operator, String(f.value.value)];
 				}
 				// Fallback for unexpected filter format
 				return null;
