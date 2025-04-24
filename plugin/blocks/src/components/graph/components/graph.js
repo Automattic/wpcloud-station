@@ -119,16 +119,24 @@ export default function Graph( props ) {
 	//
 	// Handle filter updates
 	const handleFiltersUpdate = ({ filters: newFilters }) => {
-		setFilters(newFilters.map(filter => ({
-			enabled: true,
-			value: {
-				field: filter[0],
-				operator: filter[1],
-				value: filter[2]
-			},
-			compact: `${filter[0]} ${filter[1]} ${filter[2]}`,
-			label: `${filter[0]} ${filter[1]} ${filter[2]}`
-		})));
+		setFilters(newFilters.map(filter => {
+			// Ensure values are properly handled
+			const field = filter[0];
+			const operator = filter[1];
+			const value = filter[2];
+			const valueStr = String(value);
+
+			return {
+				enabled: true,
+				value: {
+					field,
+					operator,
+					value
+				},
+				compact: `${field} ${operator} ${valueStr}`,
+				label: `${field} ${operator} ${valueStr}`
+			};
+		}));
 	};
 
 	return (

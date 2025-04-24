@@ -19,16 +19,20 @@ import FiltersForm from './filtersForm';
 
 const buildFilter = (filter, enabled = true) => {
 	const [ field, operator, value ] = Array.isArray(filter) ? filter : [filter.field, filter.operator, filter.value];
-	const hasMultipleWords = value.trim().includes(' ') || value.trim().includes(',');
-	const label = `${field} ${operator} ${value}`;
+	// Convert value to string before using trim() to avoid "value.trim is not a function" error
+	const valueStr = String(value);
+	const hasMultipleWords = valueStr.trim().includes(' ') || valueStr.trim().includes(',');
+	const label = `${field} ${operator} ${valueStr}`;
 
 	return {
 		enabled,
 		value: {
 			field,
 			operator,
+			// Store the original value to maintain type for API calls
 			value,
 		},
+		// Use the string version for display
 		compact: hasMultipleWords ? `${field} ${operator} ...` : label,
 		label,
 	}

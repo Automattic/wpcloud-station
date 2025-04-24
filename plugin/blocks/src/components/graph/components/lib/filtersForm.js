@@ -69,7 +69,16 @@ export default ({ onFilterAdd = () => {} }) => {
 
 		const handleAddFilter = () => {
 				if (field && operator && value) {
-						onFilterAdd({ field, operator, value });
+						// Convert value to number if it's numeric and using a numeric comparison operator
+						let processedValue = value;
+						if (['>','>=','<','<='].includes(operator) && !isNaN(Number(value))) {
+								processedValue = Number(value);
+						} else if (field === 'http_status' && !isNaN(Number(value))) {
+								// HTTP status codes should be numbers
+								processedValue = Number(value);
+						}
+
+						onFilterAdd({ field, operator, value: processedValue });
 						resetForm();
 						setIsOpen(false); // Close the dropdown after adding a filter
 				}
