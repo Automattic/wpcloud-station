@@ -15,7 +15,6 @@ import { useRef, useEffect, useState } from "@wordpress/element";
  * Internal dependencies
  */
 import Overlay from './overlay';
-import LoadingOverlay from './loadingOverlay';
 // import { stackedOptions, defaultOptions, barOptions, lineOptions, areaOptions } from './lib/options';
 import useGraphOptions from './lib/useGraphOptions';
 import stationApi from '@wpcloud/utils/api';
@@ -120,9 +119,6 @@ export default function Graph( props ) {
 
 		// Unique identifier for this graph
 		id = `graph-${metric}-${dimension}`,
-
-		// Show filters toggle
-		showFilters = true,
 
 		// Predefined filters from block attributes
 		predefinedFilters = [],
@@ -347,11 +343,11 @@ export default function Graph( props ) {
 				{hasData && (
 					<>
 						<UplotReact options={options} data={d} />
-						{refreshing && <LoadingOverlay />}
+						{refreshing && <Overlay refreshing={true} />}
 					</>
 				)}
 			</div>
-			{showFilters && (
+			{allowFrontendFilters && (
 				<div style={{ position: 'relative', marginTop: '10px', zIndex: 1 }}>
 					<Filters
 						filters={filters}
