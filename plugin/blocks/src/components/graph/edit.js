@@ -175,7 +175,8 @@ export default function Edit( { attributes, setAttributes } ) {
 						/>
 						<SelectControl
 							label={__('Dimension')}
-							value={dimension}options={[ ...dimensionOptions, ]}
+							value={dimension}
+							options={[ ...dimensionOptions, ]}
 							onChange={update('dimension')}
 						/>
 						<NumberControl
