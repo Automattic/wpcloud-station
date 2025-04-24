@@ -124,7 +124,10 @@ export default function Graph( props ) {
 		showFilters = true,
 
 		// Predefined filters from block attributes
-		predefinedFilters = []
+		predefinedFilters = [],
+
+		// Allow frontend filter building
+		allowFrontendFilters = true
 
 	} = props;
 
@@ -337,6 +340,7 @@ export default function Graph( props ) {
 						filters={filters}
 						onFiltersUpdate={handleFiltersUpdate}
 						loading={loading}
+						allowFrontendFilters={allowFrontendFilters}
 					/>
 				</div>
 			)}

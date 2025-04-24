@@ -99,6 +99,11 @@
 		"predefinedFilters" : {
 			"type" : "array",
 			"default" : []
+		},
+		"allowFrontendFilters" : {
+			"type" : "boolean",
+			"default" : true,
+			"description": "Controls whether users can add, remove, or modify filters on the frontend"
 		}
 	}
 }
