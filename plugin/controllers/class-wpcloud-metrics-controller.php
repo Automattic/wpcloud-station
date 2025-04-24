@@ -166,7 +166,7 @@ if ( ! class_exists( 'WPCLOUD_Metrics_Controller' ) ) {
 				$summarize = $params['summarize'] ?? false;
 
 				$options = array(
-					'max_bucket_size'      => $params['top_x'] ?? 20, // Metrics API has top_x as max_bucket_size.
+					'top_x'      => $params['top_x'] ?? 20,
 					'resolution' => $params['resolution'] ?? 10,
 				);
 
@@ -176,7 +176,7 @@ if ( ! class_exists( 'WPCLOUD_Metrics_Controller' ) ) {
 					if ( json_last_error() !== JSON_ERROR_NONE ) {
 						return new WP_REST_Response( esc_html__( 'Invalid filters', 'wpcloud' ), 400 );
 					}
-					$options['filters'] = $filters;
+					$options['filters'] = $this->convert_filters_format( $filters );
 				}
 
 				$site_id = $params['site_id'] ?? null;
@@ -289,6 +289,42 @@ if ( ! class_exists( 'WPCLOUD_Metrics_Controller' ) ) {
 				return new WP_Error( 'rest_invalid_param', wp_sprintf( esc_html__( 'Invalid %s time', 'wpcloud' ), $position ), array( 'status' => 400 ) );
 			}
 			return $ts;
+		}
+
+		/**
+		 * Convert filters from array format to object format.
+		 *
+		 * @param array $filters The filters in array format.
+		 * @return array The filters in object format.
+		 */
+		public function convert_filters_format( array $filters ): array {
+			$converted_filters = array();
+
+			foreach ( $filters as $filter ) {
+				if ( ! is_array( $filter ) || count( $filter ) < 3 ) {
+					// Skip invalid filters.
+					wpcloud_l( 'Invalid filter format', $filter );
+					continue;
+				}
+				$value = $filter[2];
+
+				$filter_object = array(
+					'column'   => $filter[0],
+					'operator' => $filter[1],
+					'value'    => $value,
+				);
+
+				// Check if the value contains commas, indicating multiple values.
+				if ( strpos( $value, ',' ) !== false ) {
+					// Split the value by commas and trim whitespace.
+					$values                 = array_map( 'trim', explode( ',', $value ) );
+					$filter_object['value'] = $values;
+				}
+
+				$converted_filters[] = $filter_object;
+			}
+
+			return $converted_filters;
 		}
 
 		/**

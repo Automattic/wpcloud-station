@@ -19,6 +19,79 @@ import Overlay from './overlay';
 import useGraphOptions from './lib/useGraphOptions';
 import stationApi from '@wpcloud/utils/api';
 import { useApiContext } from '@wpcloud/metrics/components/apiContext';
+import Filters from './lib/filters';
+
+/**
+ * Parse URL parameters to get filters for a specific graph
+ *
+ * @param {string} graphId - The unique ID of the graph
+ * @returns {Array} - Array of filter objects
+ */
+const getFiltersFromUrl = (graphId) => {
+	try {
+		// Get the URL search parameters
+		const urlParams = new URLSearchParams(window.location.search);
+
+		// Look specifically for the parameter with this graph's ID
+		const paramName = `filters_${graphId}`;
+		const filterParam = urlParams.get(paramName);
+
+		// If there's no parameter specifically for this graph, return empty array
+		if (!filterParam) {
+			return [];
+		}
+
+		// Parse the JSON string from the URL
+		const decodedFilters = JSON.parse(decodeURIComponent(filterParam));
+
+		// Convert the array format to the filter object format
+		return decodedFilters.map(filter => ({
+			enabled: true,
+			value: {
+				field: filter[0],
+				operator: filter[1],
+				value: filter[2]
+			},
+			compact: `${filter[0]} ${filter[1]} ${filter[2]}`,
+			label: `${filter[0]} ${filter[1]} ${filter[2]}`
+		}));
+	} catch (error) {
+		console.error('Error parsing filters from URL:', error);
+		return [];
+	}
+};
+
+/**
+ * Update URL parameters with filters for a specific graph
+ *
+ * @param {string} graphId - The unique ID of the graph
+ * @param {Array} filters - Array of filter objects
+ */
+const updateUrlWithFilters = (graphId, filters) => {
+	try {
+		// Get the active filters in array format
+		const activeFilters = filters
+			.filter(f => f.enabled)
+			.map(f => [f.value.field, f.value.operator, String(f.value.value)]);
+
+		// Get the current URL search parameters
+		const urlParams = new URLSearchParams(window.location.search);
+
+		// If there are active filters, add them to the URL
+		if (activeFilters.length > 0) {
+			urlParams.set(`filters_${graphId}`, encodeURIComponent(JSON.stringify(activeFilters)));
+		} else {
+			// If there are no active filters, remove the parameter
+			urlParams.delete(`filters_${graphId}`);
+		}
+
+		// Update the URL without reloading the page
+		const newUrl = `${window.location.pathname}?${urlParams.toString()}${window.location.hash}`;
+		window.history.replaceState({}, '', newUrl);
+	} catch (error) {
+		console.error('Error updating URL with filters:', error);
+	}
+};
 
 export default function Graph( props ) {
 
@@ -42,9 +115,34 @@ export default function Graph( props ) {
 		orientation,
 
 		// Dynamic metric props.
-		interval, refresh
+		interval, refresh,
+
+		// Unique identifier for this graph
+		id = `graph-${metric}-${dimension}`,
+
+		// Show filters toggle
+		showFilters = true
 
 	} = props;
+
+	// Create a deterministic ID based on the graph's properties
+	// This will be the same across page loads for the same graph
+	const generateStableId = (metric, dimension, title) => {
+		// Create a string that uniquely identifies this graph
+		const baseString = `${metric}-${dimension}-${title}`;
+		// Simple hash function to generate a numeric hash
+		let hash = 0;
+		for (let i = 0; i < baseString.length; i++) {
+			const char = baseString.charCodeAt(i);
+			hash = ((hash << 5) - hash) + char;
+			hash = hash & hash; // Convert to 32bit integer
+		}
+		// Convert to a positive number and return
+		return `${id.replace(/[^a-zA-Z0-9-_]/g, '-')}-${Math.abs(hash)}`;
+	};
+
+	// Generate a stable ID that will be the same across page loads
+	const graphId = generateStableId(metric, dimension, title);
 
 	const { apiPath } = useApiContext();
 	const { start, end } = interval || {};
@@ -52,9 +150,32 @@ export default function Graph( props ) {
 	const [ series, setSeries ] = useState([]);
 	const [ meta, setMeta ] = useState({});
 	const [ loading, setLoading ] = useState( true );
+	// Initialize filters from URL parameters if available
+	const [ filters, setFilters ] = useState([]);
+
+	// Load filters from URL on mount
+	useEffect(() => {
+		if (typeof window !== 'undefined') {
+			try {
+				const urlFilters = getFiltersFromUrl(graphId);
+				if (urlFilters && Array.isArray(urlFilters) && urlFilters.length > 0) {
+					setFilters(urlFilters);
+				}
+			} catch (error) {
+				console.error('Error initializing filters:', error);
+			}
+		}
+	}, [graphId]);
 
 	const containerRef = useRef(null);
-	const style = { position: "relative", minWidth, minHeight: '500px', ...styles };
+	// Ensure the container takes full width of parent and has appropriate minimum dimensions
+	const style = {
+		position: "relative",
+		width: '100%',
+		minWidth,
+		minHeight: '500px',
+		...styles
+	};
 	// if the className does not contain has-background add a background color
 	if ( ! className.includes( 'has-background' ) ) {
 		styles.backgroundColor = 'white';
@@ -66,15 +187,37 @@ export default function Graph( props ) {
 		setLoading(true);
 		async function fetchData() {
 			try {
+				// Extract active filters for the API query and ensure values are strings
+				const activeFilters = filters.filter(f => f.enabled).map(f => {
+					// Ensure the value is a string to avoid PHP strpos() errors
+					return [
+						f.value.field,
+						f.value.operator,
+						// Convert all values to strings to avoid PHP type errors
+						String(f.value.value)
+					];
+				});
+
+				// Create the query parameters
+				const queryParams = {
+					start,
+					end,
+					dimension,
+					resolution,
+					summarize,
+					top_x: topX,
+				};
+
+				// Only add filters if there are any active ones
+				// Stringify the filters array to ensure it's sent as a JSON array
+				if (activeFilters.length > 0) {
+					queryParams.filters = JSON.stringify(activeFilters);
+				}
+
 				const { data, series, meta } = await stationApi.get( `${apiPath}/${metric}`, {
-					query: {
-						start,
-						end,
-						dimension,
-						resolution,
-						summarize,
-						top_x: topX,
-					}, parse: true, signal
+					query: queryParams,
+					parse: true,
+					signal
 				});
 				setData(data);
 				setSeries(series);
@@ -89,7 +232,7 @@ export default function Graph( props ) {
 
 		fetchData();
 		return () => controller.abort();
-	}, [ apiPath, start, end, refresh ] );
+	}, [ apiPath, start, end, refresh, filters ] );
 
 
 	const { data: d, ...options } = useGraphOptions({ title, data, series, meta, containerRef, showLegend, type, orientation });
@@ -104,10 +247,61 @@ export default function Graph( props ) {
 
 	const showOverlay = loading || !hasData;
 	//
+	// Handle filter updates
+	const handleFiltersUpdate = ({ filters: newFilters }) => {
+		const processedFilters = newFilters.map(filter => {
+			// Handle both array format [field, operator, value] and object format {field, operator, value}
+			let field, operator, value;
+
+			if (Array.isArray(filter)) {
+				// Array format: [field, operator, value]
+				field = filter[0];
+				operator = filter[1];
+				value = filter[2];
+			} else {
+				// Object format: {field, operator, value}
+				field = filter.field;
+				operator = filter.operator;
+				value = filter.value;
+			}
+
+			// Convert value to string for display
+			const valueStr = String(value);
+
+			return {
+				enabled: true,
+				value: {
+					field,
+					operator,
+					value
+				},
+				compact: `${field} ${operator} ${valueStr}`,
+				label: `${field} ${operator} ${valueStr}`
+			};
+		});
+
+		// Update the state with the new filters
+		setFilters(processedFilters);
+
+		// Update the URL with the new filters
+		updateUrlWithFilters(graphId, processedFilters);
+	};
+
 	return (
-		<div ref={containerRef} className={className} style={style}>
+		<div style={{ width: '100%' }} data-graph-id={graphId}>
+			<div ref={containerRef} className={className} style={style}>
 			{showOverlay && <Overlay loading={loading} title={title} /> }
 			{ hasData && <UplotReact options={options} data={d} /> }
+			</div>
+			{showFilters && (
+				<div style={{ position: 'relative', marginTop: '10px', zIndex: 1 }}>
+					<Filters
+						filters={filters}
+						onFiltersUpdate={handleFiltersUpdate}
+						loading={loading}
+					/>
+				</div>
+			)}
 		</div>
 	);
 }

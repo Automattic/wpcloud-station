@@ -91,6 +91,10 @@
 		"minWidth" : {
 			"type" : "string",
 			"default" : "500px"
+		},
+		"showFilters" : {
+			"type" : "boolean",
+			"default" : true
 		}
 	}
 }
