@@ -153,6 +153,11 @@ export default function Edit( { attributes, setAttributes } ) {
 
 			</PanelBody>
 
+			<FilterBuilder
+				filters={predefinedFilters}
+				onChange={(newFilters) => setAttributes({ predefinedFilters: newFilters })}
+			/>
+
 			<PanelBody title={__('Graph Size')}>
 				<TextControl
 					label={ __( 'Minimum Width' ) }
@@ -161,12 +166,6 @@ export default function Edit( { attributes, setAttributes } ) {
 				/>
 			</PanelBody>
 
-			{allowFrontendFilters && (
-				<FilterBuilder
-					filters={predefinedFilters}
-					onChange={(newFilters) => setAttributes({ predefinedFilters: newFilters })}
-				/>
-			)}
 		</InspectorControls>
 	)
 	return (
