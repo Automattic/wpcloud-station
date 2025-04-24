@@ -142,7 +142,7 @@ export default function FilterBuilder({ filters = [], onChange }) {
 
     return (
         <div className="wpcloud-filter-builder">
-            <PanelBody title={__('Predefined Filters')} initialOpen={false}>
+            <PanelBody title={__('Graph Filters')} initialOpen={false}>
                 <PanelRow>
                     <div style={{ width: '100%' }}>
                         <Flex direction="column" gap={4}>
