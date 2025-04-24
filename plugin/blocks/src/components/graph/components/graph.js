@@ -15,6 +15,7 @@ import { useRef, useEffect, useState } from "@wordpress/element";
  * Internal dependencies
  */
 import Overlay from './overlay';
+import LoadingOverlay from './loadingOverlay';
 // import { stackedOptions, defaultOptions, barOptions, lineOptions, areaOptions } from './lib/options';
 import useGraphOptions from './lib/useGraphOptions';
 import stationApi from '@wpcloud/utils/api';
@@ -156,6 +157,7 @@ export default function Graph( props ) {
 	const [ series, setSeries ] = useState([]);
 	const [ meta, setMeta ] = useState({});
 	const [ loading, setLoading ] = useState( true );
+	const [ refreshing, setRefreshing ] = useState( false );
 	// Initialize filters from URL parameters if available
 	const [ filters, setFilters ] = useState([]);
 
@@ -225,7 +227,14 @@ export default function Graph( props ) {
 	useEffect(() => {
 		const controller = new AbortController();
 		const signal = controller.signal;
-		setLoading(true);
+
+		// If we already have data, we're refreshing rather than loading for the first time
+		if (hasData) {
+			setRefreshing(true);
+		} else {
+			setLoading(true);
+		}
+
 		async function fetchData() {
 			try {
 				// Extract active filters for the API query and ensure values are strings
@@ -264,9 +273,12 @@ export default function Graph( props ) {
 				setSeries(series);
 				setMeta(meta);
 				setLoading(false);
+				setRefreshing(false);
 			} catch (error) {
 				if (error.name !== 'AbortError') {
 					console.error(error);
+					setLoading(false);
+					setRefreshing(false);
 				}
 			}
 		}
@@ -331,15 +343,20 @@ export default function Graph( props ) {
 	return (
 		<div style={{ width: '100%' }} data-graph-id={graphId}>
 			<div ref={containerRef} className={className} style={style}>
-			{showOverlay && <Overlay loading={loading} title={title} /> }
-			{ hasData && <UplotReact options={options} data={d} /> }
+				{showOverlay && <Overlay loading={loading} title={title} /> }
+				{hasData && (
+					<>
+						<UplotReact options={options} data={d} />
+						{refreshing && <LoadingOverlay />}
+					</>
+				)}
 			</div>
 			{showFilters && (
 				<div style={{ position: 'relative', marginTop: '10px', zIndex: 1 }}>
 					<Filters
 						filters={filters}
 						onFiltersUpdate={handleFiltersUpdate}
-						loading={loading}
+						loading={loading || refreshing}
 						allowFrontendFilters={allowFrontendFilters}
 					/>
 				</div>
