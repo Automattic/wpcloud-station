@@ -11,18 +11,6 @@
 
 ?>
 
-<!-- wp:wpcloud/nav -->
-<nav class="wp-block-wpcloud-nav"><!-- wp:wpcloud/nav-list -->
-	<ul class="wp-block-wpcloud-nav-list"><!-- wp:wpcloud/nav-item {"url":"/sites","text":"Back to Sites","icon":"chevronLeft","iconOnly":true} -->
-		<li class="wp-block-wpcloud-nav-item"><a href="/sites" class="is-icon-only"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M14.6 7l-1.2-1L8 12l5.4 6 1.2-1-4.6-5z"></path></svg></a></li>
-		<!-- /wp:wpcloud/nav-item -->
-
-		<!-- wp:wpcloud/nav-item {"url":"/sites","text":"Back to Sites"} -->
-		<li class="wp-block-wpcloud-nav-item"><a href="/sites" class=""><span>Back to Sites</span></a></li>
-		<!-- /wp:wpcloud/nav-item --></ul>
-	<!-- /wp:wpcloud/nav-list --></nav>
-<!-- /wp:wpcloud/nav -->
-
 <!-- wp:group {"tagName":"header","layout":{"inherit":true,"type":"constrained"}} -->
 <header class="wp-block-group"><!-- wp:site-title /-->
 
