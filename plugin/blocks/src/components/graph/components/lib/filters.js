@@ -7,7 +7,7 @@ import classnames from 'classnames';
 /**
  * WordPress dependencies
  */
-import { FlexItem, Flex } from '@wordpress/components';
+import { Flex, FlexItem } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { Icon, trash } from '@wordpress/icons';
 

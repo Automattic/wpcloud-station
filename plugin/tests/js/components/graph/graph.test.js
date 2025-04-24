@@ -11,6 +11,19 @@ import Graph from '../../../../blocks/src/components/graph/components/graph';
 import stationApi from '@wpcloud/utils/api';
 import { ApiContext } from '@wpcloud/metrics/components/apiContext';
 
+// Mock the WordPress components
+jest.mock('@wordpress/components', () => ({
+    Flex: ({ children }) => <div className="mock-flex">{children}</div>,
+    FlexItem: ({ children }) => <div className="mock-flex-item">{children}</div>,
+    Spinner: () => <div className="mock-spinner">Loading...</div>,
+}));
+
+// Mock the WordPress icons
+jest.mock('@wordpress/icons', () => ({
+    Icon: ({ icon }) => <span className="mock-icon">{icon}</span>,
+    trash: 'trash-icon',
+}));
+
 // Mock the stationApi.get method
 jest.mock('@wpcloud/utils/api', () => ({
     get: jest.fn(),

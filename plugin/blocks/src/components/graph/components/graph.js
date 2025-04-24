@@ -151,14 +151,21 @@ export default function Graph( props ) {
 	const [ meta, setMeta ] = useState({});
 	const [ loading, setLoading ] = useState( true );
 	// Initialize filters from URL parameters if available
-	const [ filters, setFilters ] = useState(() => {
-		// Only run in browser environment
+	const [ filters, setFilters ] = useState([]);
+
+	// Load filters from URL on mount
+	useEffect(() => {
 		if (typeof window !== 'undefined') {
-			const urlFilters = getFiltersFromUrl(graphId);
-			return urlFilters.length > 0 ? urlFilters : [];
+			try {
+				const urlFilters = getFiltersFromUrl(graphId);
+				if (urlFilters && Array.isArray(urlFilters) && urlFilters.length > 0) {
+					setFilters(urlFilters);
+				}
+			} catch (error) {
+				console.error('Error initializing filters:', error);
+			}
 		}
-		return [];
-	});
+	}, [graphId]);
 
 	const containerRef = useRef(null);
 	// Ensure the container takes full width of parent and has appropriate minimum dimensions
