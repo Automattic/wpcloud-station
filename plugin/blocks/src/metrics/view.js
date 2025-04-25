@@ -17,16 +17,13 @@ document.addEventListener('DOMContentLoaded', () => {
 		console.error('No metrics attributes found in the container.');
 		return;
 	}
-	const { type } = JSON.parse(metricsAttributes);
-	let apiPath = `metrics/${type}`;
-	if ('site' == type) {
-		const siteId = window.wpcloudSite?.id;
-		if (!siteId) {
-			console.error('No site ID found in the window object.');
-			return;
-		}
 
-		apiPath += `/${siteId}`;
+	let apiPath = 'metrics/';
+	const siteId = window.wpcloudSite?.id;
+	if (siteId) {
+		apiPath += 'site/' + siteId;
+	} else {
+		apiPath += 'client'
 	}
 
 	const tree = {
