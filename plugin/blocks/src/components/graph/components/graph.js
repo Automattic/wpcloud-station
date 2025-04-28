@@ -287,6 +287,32 @@ export default function Graph( props ) {
 	const { data: d, ...options } = useGraphOptions({ title, data, series, meta, containerRef, showLegend, type, orientation });
 	const hasData = data.length > 0 && data[0].length > 0;
 
+	// Add u-label event handlers
+	options.hooks = {
+		ready: [
+			(u) => {
+				// Click events for atomic_site_id or http_host labels
+				if( ['atomic_site_id', 'http_host'].includes( dimension ) ) {
+					const labels = u.root.querySelectorAll('.u-label');
+					labels.forEach(label => {
+						label.style.cursor = 'pointer';
+						label.addEventListener('click', (e) => {
+							e.stopPropagation();
+							console.log(`Clicked label: ${label.textContent}`);
+							// sample: sites/spatial-raccoon-jurassic-ninja/metrics/
+							var site_url = label.textContent;
+							if( isNaN( site_url ) ) {
+								site_url = site_url.replace(/\./g, "-");
+							}
+							// Redirect to the single site metrics page.
+							window.location.href = `/sites/${site_url}/metrics/`;
+						});
+					});
+				}
+			},
+		],
+	};
+
 	// Force loading to false after data is loaded
 	useEffect(() => {
 		if (hasData && loading) {

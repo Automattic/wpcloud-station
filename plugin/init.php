@@ -63,6 +63,27 @@ if ( ! is_admin() ) {
 			}
 		}
 	);
+
+}
+
+// Redirect for WPCloud Site ID click-through, should we handle this differently?
+add_filter( 'template_redirect', 'wpcloud_redirect_site_id' );
+function wpcloud_redirect_site_id() {
+	error_log( 'in wpcloud_redirect_site_id' );
+	global $wp_query;
+	if ( isset( $wp_query->query['view'] ) && 'metrics' === $wp_query->query['view'] ) {
+		if ( isset( $wp_query->query['site_name'] ) && is_numeric( $wp_query->query['site_name'] ) ) {
+			$wpcloud_site_id = $wp_query->query['site_name'];
+
+			global $wpdb;
+			$post_name = $wpdb->get_var("SELECT p.post_name FROM $wpdb->posts p JOIN $wpdb->postmeta pm ON p.ID = pm.post_id WHERE meta_key = 'wpcloud_site_id' AND  meta_value = '$wpcloud_site_id' LIMIT 1" );
+			if ( ! is_null( $post_name ) ) {
+				header('Location: /sites/' . $post_name. '/metrics/' );
+				die();
+			}
+
+		}
+	}
 }
 
 /**

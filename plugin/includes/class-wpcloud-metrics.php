@@ -142,7 +142,7 @@ class WPCloud_Metrics {
 		}
 
 		$result = $wpcloud_client->post( $path, $options );
-		wpcloud_l( 'metrics results', $result->data );
+		//wpcloud_l( 'metrics results', $result->data );
 
 		if ( ! $result->is_ok() ) {
 			$this->result = $result->error;
