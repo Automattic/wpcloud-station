@@ -4,13 +4,13 @@
  */
 import { registerBlockType } from '@wordpress/blocks';
 import { useBlockProps } from '@wordpress/block-editor';
-import './style.scss';
 
 /**
  * Internal dependencies
  */
 import Edit from './edit';
 import metadata from './block.json';
+import './editor.scss';
 
 
 registerBlockType( metadata.name, {

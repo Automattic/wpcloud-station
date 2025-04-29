@@ -215,10 +215,6 @@ export default function Graph( props ) {
 		minHeight: '500px',
 		...styles
 	};
-	// if the className does not contain has-background add a background color
-	if ( ! className.includes( 'has-background' ) ) {
-		styles.backgroundColor = 'white';
-	}
 
 	useEffect(() => {
 		const controller = new AbortController();
