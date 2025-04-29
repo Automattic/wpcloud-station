@@ -22,34 +22,22 @@ export default (options) => {
 	const [width, setWidth] = useState(containerRef?.current?.offsetWidth || 808);
 	const [height, setHeight] = useState(containerRef?.current?.offsetHeight || 404);
 
+	// Use a more direct approach with fixed dimensions
 	useEffect(() => {
-		const updateSize = () => {
-			if ( containerRef.current ) {
-				const newWidth = containerRef.current.offsetWidth - fitGraphWidth;
-				const newHeight = containerRef.current.offsetHeight - fitGraphHeight;
-
-				// Only update if the size has actually changed
-				if (newWidth !== width || newHeight !== height) {
-					setWidth(newWidth);
-					setHeight(newHeight);
-				}
-			}
-		};
-
-		updateSize(); // Initial update
-
-		const resizeObserver = new ResizeObserver(() => {
-			if (containerRef.current) {
-				updateSize();
-			}
-		});
-
+		// Only run once on mount to set initial dimensions
 		if (containerRef.current) {
-			resizeObserver.observe(containerRef.current);
+			// Set fixed dimensions based on container size
+			const initialWidth = containerRef.current.offsetWidth - fitGraphWidth;
+			const initialHeight = containerRef.current.offsetHeight - fitGraphHeight;
+
+			if (initialWidth > 0 && initialHeight > 0) {
+				setWidth(initialWidth);
+				setHeight(initialHeight);
+			}
 		}
 
-		return () => resizeObserver.disconnect();
-	}, [containerRef, width, height]);
+		// No ResizeObserver - use fixed dimensions instead
+	}, [containerRef]); // Only run when containerRef changes (essentially on mount)
 
 	let graphOptions = {
 		title,
