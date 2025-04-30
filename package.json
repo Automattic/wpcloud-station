@@ -7,7 +7,12 @@
     "@wordpress/api-fetch": "^7.21.0",
     "@wordpress/element": "^6.21.0",
     "@wordpress/i18n": "^5.21.0",
-    "@wordpress/icons": "^10.21.0"
+    "@wordpress/icons": "^10.21.0",
+    "npm-run-all": "^4.1.5",
+    "onchange": "^7.1.0",
+    "postcss": "^8.5.3",
+    "postcss-expand-selectors": "^2.0.0",
+    "postcss-nested": "^7.0.2"
   },
   "scripts": {
     "version": "node ./bin/version.js",
@@ -15,7 +20,13 @@
     "cut": "node ./bin/cut.js",
     "package": "./bin/package.sh",
     "test:php": "./bin/test.sh $*",
-    "lint:changed": "./bin/lint-changed.sh"
+    "lint:changed": "./bin/lint-changed.sh",
+    "build:theme-css:theme": "node ./bin/build-theme-css.js theme",
+    "build:theme-css:theme-pico": "node ./bin/build-theme-css.js theme-pico",
+    "build:theme-css": "npm run build:theme-css:theme && npm run build:theme-css:theme-pico",
+    "watch:theme-css:theme": "onchange 'theme/assets/blocks/src/*.css' -- npm run build:theme-css:theme",
+    "watch:theme-css:theme-pico": "onchange 'theme-pico/assets/blocks/src/*.css' -- npm run build:theme-css:theme-pico",
+    "watch:theme-css": "npm-run-all --parallel watch:theme-css:theme watch:theme-css:theme-pico"
   },
   "keywords": [],
   "author": "",

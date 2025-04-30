@@ -27,7 +27,6 @@
 	"textdomain": "graph",
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",
-	"style": "file:./style-index.css",
 	"ancestor": ["wpcloud/metrics"],
 	"attributes" : {
 		"metric" : {

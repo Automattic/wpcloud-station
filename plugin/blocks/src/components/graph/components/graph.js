@@ -18,7 +18,7 @@ import Overlay from './overlay';
 // import { stackedOptions, defaultOptions, barOptions, lineOptions, areaOptions } from './lib/options';
 import useGraphOptions from './lib/useGraphOptions';
 import stationApi from '@wpcloud/utils/api';
-import { useApiContext } from '@wpcloud/metrics/components/apiContext';
+import { useApiContext } from '@wpcloud/metrics/components/contexts';
 import Filters from './lib/filters';
 
 /**
@@ -215,10 +215,6 @@ export default function Graph( props ) {
 		minHeight: '500px',
 		...styles
 	};
-	// if the className does not contain has-background add a background color
-	if ( ! className.includes( 'has-background' ) ) {
-		styles.backgroundColor = 'white';
-	}
 
 	useEffect(() => {
 		const controller = new AbortController();

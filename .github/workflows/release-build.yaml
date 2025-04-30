@@ -15,18 +15,18 @@ jobs:
         with:
           ref: ${{ github.ref }}
 
-      - name: Setup Node for theme
+      - name: Setup Node for theme builds
         uses: actions/setup-node@v2
         with:
           node-version: '20.11'
           cache: 'npm'
-          cache-dependency-path: './theme'
+          cache-dependency-path: '.'
 
-      - name: Build Theme
-        working-directory: './theme'
-        run: npm ci && npm run build:css
+      - name: Build Theme CSS
+        working-directory: '.'
+        run: npm ci && npm run build:theme-css
 
-      - name: Package Theme
+      - name: Package WP Cloud Theme
         run: './bin/package.sh theme'
 
       - name: Package Pico Theme

@@ -9,7 +9,7 @@ import { render, screen, waitFor, act } from '@testing-library/react';
  */
 import Graph from '../../../../blocks/src/components/graph/components/graph';
 import stationApi from '@wpcloud/utils/api';
-import { ApiContext } from '@wpcloud/metrics/components/apiContext';
+import { ApiContext } from '@wpcloud/metrics/components/contexts';
 
 // Mock the WordPress components
 jest.mock('@wordpress/components', () => ({
