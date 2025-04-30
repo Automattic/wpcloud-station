@@ -35,19 +35,34 @@ const defaultGraphOptions = {
 		"#f032e6", // Magenta
 		"#fabebe", // Rose
 	],
-	// @TODO: these need light/dark mode support
 	axes: [
 		{
-			stroke: '#FFF',
-			grid: { stroke: '#111', width: 1 },
-			ticks: { stroke: '#888', size: 5, width: 1 },
-			font: '12px sans-serif',
+			dark: {
+				stroke: '#FFF',
+				grid: { stroke: '#111', width: 1 },
+				ticks: { stroke: '#888', size: 5, width: 1 },
+				font: '12px sans-serif',
+			},
+			light: {
+				stroke: '#000',
+				grid: { stroke: '#eee', width: 1, dash: [4, 4] },
+				ticks: { stroke: '#888', size: 5, width: 1 },
+				font: '12px sans-serif',
+			}
 		},
 		{
-			stroke: '#FFF',
-			grid: { stroke: '#111', width: 1 },
-			ticks: { stroke: '#888', size: 5, width: 1 },
-			font: '12px sans-serif',
+			dark: {
+				stroke: '#FFF',
+				grid: { stroke: '#111', width: 1 },
+				ticks: { stroke: '#888', size: 5, width: 1 },
+				font: '12px sans-serif',
+			},
+			light: {
+				stroke: '#000',
+				grid: { stroke: '#eee', width: 1, dash: [4, 4] },
+				ticks: { stroke: '#888', size: 5, width: 1 },
+				font: '12px sans-serif',
+			}
 		}
 	],
 

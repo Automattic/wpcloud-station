@@ -27,6 +27,7 @@ const indexScale = (colors)  => (_, idx, opacity ) => {
 export default ({ containerRef, ...options } ) => {
 	const [width, setWidth] = useState(containerRef?.current?.offsetWidth || 808);
 	const [height, setHeight] = useState(containerRef?.current?.offsetHeight || 404);
+	const [isDark, setIsDark] = useState(() => window.matchMedia('(prefers-color-scheme: dark)').matches);
 
 	// Graph level options
 	const {
@@ -114,6 +115,21 @@ export default ({ containerRef, ...options } ) => {
 		};
 	}, [containerRef]);
 
+		// Check for dark mode preference
+	useEffect(() => {
+		const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+		const handleChange = (event) => {
+			setIsDark(event.matches);
+		};
+
+		mediaQuery.addEventListener('change', handleChange);
+
+		return () => {
+			mediaQuery.removeEventListener('change', handleChange);
+		};
+	}, []);
+
 	// Set up the series and axes options
 	let {
 		series = [],
@@ -131,7 +147,10 @@ export default ({ containerRef, ...options } ) => {
 	});
 
 	axes = axes.map((a, idx) => {
-		return { ...a, ...metricsOptions.axes[idx] }
+		const theme = isDark ? 'dark' : 'light';
+		const metricAxes = metricsOptions.axes[idx][theme] || metricsOptions.axes[idx];
+		const graphAxes = a[theme] || a;
+		return { ...metricAxes, ...graphAxes };
 	});
 	scales.y = { ...metricsOptions.scales.y, ...scales.y };
 	scales.x = { ...metricsOptions.scales.x, ...scales.x };
