@@ -378,7 +378,8 @@ export function seriesBarsPlugin(opts = {}) {
 					uPlot.assign(s, {
 						paths: barsBuilder,
 						points: {
-							show:  (i == opts.series.length-1  && drawPoints)
+							// Don't show points (totals) for stacked bar graphs
+							show: (i == opts.series.length-1 && !stacked && drawPoints)
 						}
 					});
 				}
