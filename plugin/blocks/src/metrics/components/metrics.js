@@ -42,6 +42,7 @@ const defaultGraphOptions = {
 				grid: { stroke: '#111', width: 1 },
 				ticks: { stroke: '#888', size: 5, width: 1 },
 				font: '12px sans-serif',
+				//label: "Axis 1",
 			},
 			light: {
 				stroke: '#000',
@@ -56,6 +57,7 @@ const defaultGraphOptions = {
 				grid: { stroke: '#111', width: 1 },
 				ticks: { stroke: '#888', size: 5, width: 1 },
 				font: '12px sans-serif',
+				//label: "Axis 2",
 			},
 			light: {
 				stroke: '#000',

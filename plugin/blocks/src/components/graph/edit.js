@@ -1,5 +1,5 @@
-
 import { useEffect, useState } from 'react';
+
 /**
  * WordPress dependencies
  */
@@ -27,7 +27,7 @@ import './editor.scss';
  * Internal dependencies
  */
 import FilterBuilder from './components/lib/filterBuilder';
-
+import SimpleGraph from './components/SimpleGraph';
 
 export default function Edit( { attributes, setAttributes } ) {
 
@@ -248,12 +248,13 @@ export default function Edit( { attributes, setAttributes } ) {
 		<div {...useBlockProps()}>
 			{ controls }
 			<figure>
-				<div className="graph-container">graph placeholder.. </div>
+				<div className="graph-container"></div>
 				<RichText
 					tagName="figcaption"
 					className={
 						'wpcloud-block-graph__title'
 					}
+					style={{ textAlign: 'center' }}
 					value={ title }
 					onChange={ ( newVal ) => {
 						setAttributes( {
@@ -264,6 +265,8 @@ export default function Edit( { attributes, setAttributes } ) {
 					placeholder={ __( 'Title' ) }
 				/>
 			</figure>
+			{/* SVG-based graph that shows the selected type and orientation */}
+			<SimpleGraph type={type} orientation={orientation} />
 		</div>
 	);
 }
