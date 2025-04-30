@@ -1,21 +1,24 @@
 
 & {
 	.u-title {
-		/* Use padding instead of margin to prevent layout shifts that cause rerenders */
 		padding: 10px 0;
 		margin: 0;
 	}
+
 	.u-legend {
 		.u-marker {
-			height: .25em;
+			height: .25em !important;
 			border-radius: 0.125em;
 		}
 	}
+
 	.u-series {
 		th, td {
 			background: none;
 		}
+
 	}
+
 	@media (prefers-color-scheme: dark) {
 		& {
 			border-radius: var(--pico-border-radius);
