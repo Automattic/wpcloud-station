@@ -7,7 +7,11 @@
   "styles": {
     "blocks": {
       "wpcloud/graph": {
+<<<<<<< Updated upstream
         "css": "\n.u-cursor-pt {\n\tborder-radius: 0;\n}\n\n.u-legend .u-marker {\n\theight: .25em;\n\tborder-radius: 0.125em;\n}\n\n.u-title {\n\tpadding: 10px 0;\n\tmargin: 0;\n}\n\n.u-series th {\n\tbackground: none;\n}\n\n.u-series td {\n\tbackground: none;\n}\n\n& {\n\tborder-radius: var(--pico-border-radius);\n\tborder: var(--pico-border-width) solid var(--pico-form-element-border-color);\n\tbackground-color: var(--pico-form-element-background-color);\n\tcolor: var(--pico-form-element-placeholder-color);\n}\n"
+=======
+        "css": " .u-cursor-pt {\n\tborder-radius: 0;\n }\n\n& .u-title {\n\tpadding: 10px 0;\n\tmargin: 0;\n}\n\n& .u-cursor-pt {\n\tborder-radius: 0;\n }\n\n& .u-legend .u-marker {\n\theight: .25em !important;\n\tborder-radius: 0.125em;\n}\n\n& .u-series th {\n\tbackground: none;\n}\n\n& .u-series td {\n\tbackground: none;\n}\n\n@media (prefers-color-scheme: dark) {\n& {\n\tborder-radius: var(--pico-border-radius);\n\tborder: var(--pico-border-width) solid var(--pico-form-element-border-color);\n\tbackground-color: var(--pico-form-element-background-color);\n\tcolor: var(--pico-form-element-placeholder-color);\n}\n}\n"
+>>>>>>> Stashed changes
       }
     }
   }

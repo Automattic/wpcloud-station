@@ -170,7 +170,7 @@ export default ({ containerRef, ...options } ) => {
 		ori:
 		dir,
 		padding,
-		plugins: [],
+		plugins: [], // The hover effect is now integrated into seriesBarsPlugin
 		scales,
 		legend
 	};

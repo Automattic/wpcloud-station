@@ -114,8 +114,6 @@ export function seriesBarsPlugin(opts = {}) {
 
 	let { ignore = [] } = opts;
 
-	let radius = opts.radius ?? 0;
-
 	function setPxRatio() {
 		pxRatio = devicePixelRatio;
 		font = Math.round(10 * pxRatio) + "px Arial";
@@ -153,7 +151,7 @@ export function seriesBarsPlugin(opts = {}) {
 	let barsColors;
 
 	let barsBuilder = uPlot.paths.bars({
-		radius,
+		radius: 0,
 		disp: {
 			x0: {
 				unit: 2,
@@ -290,15 +288,45 @@ export function seriesBarsPlugin(opts = {}) {
 						return hRect && seriesIdx == hRect.sidx ? hRect.didx : null;
 					},
 					points: {
-						fill: "rgba(255,255,255, 0.3)",
+						// Use a lighter fill color for the hover effect
+						fill: "rgba(255,255,255,0.2)",
+						// Ensure no rounding of corners
+						stroke: "transparent",
+						width: 0,
+						// Use a custom shape function to draw a rectangle instead of an oval
+						shape: (u, seriesIdx, dataIdx, cx, cy, radius) => {
+							if (hRect) {
+								const ctx = u.ctx;
+
+								// Get the dimensions of the bar
+								const barX = hRect.x;
+								const barY = hRect.y;
+								const barWidth = hRect.w;
+								const barHeight = hRect.h;
+
+								// Draw a rectangle over the bar
+								ctx.fillRect(barX, barY, barWidth, barHeight);
+							}
+						},
+						// Return the exact dimensions of the bar for the hover effect
 						bbox: (u, seriesIdx) => {
 							let isHovered = hRect && seriesIdx == hRect.sidx;
 
+							if (!isHovered) {
+								return {
+									left: -10,
+									top: -10,
+									width: 0,
+									height: 0,
+								};
+							}
+
+							// Return the exact dimensions of the bar
 							return {
-								left:   isHovered ? hRect.x / pxRatio : -10,
-								top:    isHovered ? hRect.y / pxRatio : -10,
-								width:  isHovered ? hRect.w / pxRatio : 0,
-								height: isHovered ? hRect.h / pxRatio : 0,
+								left: hRect.x / pxRatio,
+								top: hRect.y / pxRatio,
+								width: hRect.w / pxRatio,
+								height: hRect.h / pxRatio,
 							};
 						}
 					}
