@@ -106,6 +106,30 @@ export function isolateStackedPlugin(originalData) {
 }
 
 /**
+ * Plugin that prevents legend clicks for non-stacked bar charts
+ */
+export function preventLegendClickPlugin() {
+	return {
+		hooks: {
+			ready: (u) => {
+				// Find the legend element
+				const legendEl = u.root.querySelector(".u-legend");
+
+				if (legendEl) {
+					// Add capture phase event listener to intercept clicks before they reach uPlot's handlers
+					legendEl.addEventListener("click", (e) => {
+						// Stop propagation and prevent default to block uPlot's default behavior
+						e.stopPropagation();
+						e.preventDefault();
+						return false;
+					}, true); // true for capture phase
+				}
+			}
+		}
+	};
+}
+
+/**
  * This from https://github.com/leeoniya/uPlot/blob/4315544c319a2c9d561ebd29f54d06a034fb16f6/demos/grouped-bars.js
  */
 export function seriesBarsPlugin(opts = {}) {
@@ -242,6 +266,9 @@ export function seriesBarsPlugin(opts = {}) {
 				u.series.forEach(s => {
 					s._paths = null;
 				});
+
+				// Make the quadtree available to other plugins
+				u.qt = qt;
 
 				barsPctLayout = [null].concat(distrTwo(u.data[0].length, u.series.length - 1 - ignore.length, !stacked, groupWidth));
 

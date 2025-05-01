@@ -4,7 +4,7 @@ import chroma from 'chroma-js';
 
 import { useMetricsOptionsContext } from '@wpcloud/metrics/components/contexts';
 
-import { seriesBarsPlugin, isolateStackedPlugin } from './uplot-plugins';
+import { seriesBarsPlugin, isolateStackedPlugin, preventLegendClickPlugin, tooltipPlugin } from './uplot-plugins';
 import { stack } from './utils';
 
 const statusScale = () => ( series, _, opacity ) => {
@@ -193,7 +193,11 @@ export default ({ containerRef, ...options } ) => {
 			pluginOptions.stacked = true;
 			graphOptions = { ...graphOptions, ...stack(data) };
 			graphOptions.plugins.push(isolateStackedPlugin(data));
+		} else {
+			// For non-stacked bar charts, prevent legend clicks
+			graphOptions.plugins.push(preventLegendClickPlugin());
 		}
+
 		graphOptions.plugins.push(seriesBarsPlugin(pluginOptions));
 	}
 
