@@ -160,6 +160,14 @@ export default ({ containerRef, ...options } ) => {
 	const ori = isVertical ? 0 : 1;
 	const dir = isVertical ? 1 : -1;
 
+	// Add extra left padding for horizontal graphs to accommodate side labels
+	const adjustedPadding = isVertical
+		? padding
+		: {
+			...padding,
+			left: (padding.left || 0) + 130 // Add 130px for side labels (120px width + 10px margin)
+		};
+
 	let graphOptions = {
 		title,
 		width,
@@ -167,9 +175,9 @@ export default ({ containerRef, ...options } ) => {
 		series,
 		axes,
 		data,
-		ori:
+		ori,
 		dir,
-		padding,
+		padding: adjustedPadding,
 		plugins: [], // The hover effect is now integrated into seriesBarsPlugin
 		scales,
 		legend

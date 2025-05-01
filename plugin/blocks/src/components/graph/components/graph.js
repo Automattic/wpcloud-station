@@ -1,15 +1,15 @@
-
 /**
  * External dependencies
  */
 import UplotReact from 'uplot-react';
 import 'uplot/dist/uPlot.min.css';
+import { useSideLabels } from './lib/useSideLabels';
 
 
 /**
  * WordPress dependencies
  */
-import { useRef, useEffect, useState } from "@wordpress/element";
+import { useRef, useEffect, useState, useMemo } from "@wordpress/element";
 
 /**
  * Internal dependencies
@@ -128,6 +128,37 @@ export default function Graph( props ) {
 
 	} = props;
 
+	// Format a number with appropriate units (K, M, B)
+	const formatNumber = (num) => {
+		if (num >= 1000000000) {
+			return (num / 1000000000).toFixed(1) + 'B';
+		}
+		if (num >= 1000000) {
+			return (num / 1000000).toFixed(1) + 'M';
+		}
+		if (num >= 1000) {
+			return (num / 1000).toFixed(1) + 'K';
+		}
+		return num.toString();
+	};
+
+	// Get a color from a predefined palette based on index
+	const getColorForIndex = (index) => {
+		const colors = [
+			"#bcf60c", // Lime
+			"#4363d8", // Royal Blue
+			"#3cb44b", // Lime Green
+			"#e6194b", // Crimson
+			"#ffe119", // Lemon
+			"#f58231", // Orange
+			"#911eb4", // Purple
+			"#46f0f0", // Cyan
+			"#f032e6", // Magenta
+			"#fabebe", // Rose
+		];
+		return colors[index % colors.length];
+	};
+
 	// Create a deterministic ID based on the graph's properties
 	// This will be the same across page loads for the same graph
 	const generateStableId = (metric, dimension, title) => {
@@ -153,7 +184,13 @@ export default function Graph( props ) {
 	const [ series, setSeries ] = useState([]);
 	const [ meta, setMeta ] = useState({});
 	const [ loading, setLoading ] = useState( true );
-	const [ refreshing, setRefreshing ] = useState( false );
+	const [refreshing, setRefreshing] = useState(false);
+	// Use useRef instead of useState to avoid re-renders when setting the uPlot instance
+	const uplotInstanceRef = useRef(null);
+
+	// Create direct test labels instead of using the hook
+	const [directLabels, setDirectLabels] = useState([]);
+
 	// Initialize filters from URL parameters if available
 	const [ filters, setFilters ] = useState([]);
 
@@ -207,6 +244,8 @@ export default function Graph( props ) {
 	}, [graphId, predefinedFilters]);
 
 	const containerRef = useRef(null);
+	// Reference for the side labels container
+	const labelContainerRef = useRef(null);
 	// Ensure the container takes full width of parent and has appropriate minimum dimensions
 	const style = {
 		position: "relative",
@@ -220,8 +259,9 @@ export default function Graph( props ) {
 		const controller = new AbortController();
 		const signal = controller.signal;
 
-		// If we already have data, we're refreshing rather than loading for the first time
-		if (hasData) {
+		// Set loading state without depending on hasData
+		const isRefreshing = data.length > 0 && data[0].length > 0;
+		if (isRefreshing) {
 			setRefreshing(true);
 		} else {
 			setLoading(true);
@@ -280,41 +320,204 @@ export default function Graph( props ) {
 	}, [ apiPath, start, end, refresh, filters ] );
 
 
-	const { data: d, ...options } = useGraphOptions({ title, data, series, meta, containerRef, showLegend, type, orientation });
+	// Check if we have data before using it
 	const hasData = data.length > 0 && data[0].length > 0;
 
-	// Add u-label event handlers
-	options.hooks = {
-		ready: [
-			(u) => {
-				// Click events for atomic_site_id or http_host labels
-				if( ['atomic_site_id', 'http_host'].includes( dimension ) ) {
-					const labels = u.root.querySelectorAll('.u-label');
-					labels.forEach(label => {
-						label.style.cursor = 'pointer';
-						label.addEventListener('click', (e) => {
-							e.stopPropagation();
-							console.log(`Clicked label: ${label.textContent}`);
-							// sample: sites/spatial-raccoon-jurassic-ninja/metrics/
-							var site_url = label.textContent;
-							if( isNaN( site_url ) ) {
-								site_url = site_url.replace(/\./g, "-");
+	// Memoize the options to avoid unnecessary re-renders
+	const graphOptionsParams = useMemo(() => ({
+		title,
+		data,
+		series,
+		meta,
+		containerRef,
+		showLegend,
+		type,
+		orientation
+	}), [title, data, series, meta, containerRef, showLegend, type, orientation]);
+
+	// Only call useGraphOptions if we have data
+	const { data: d, ...options } = useGraphOptions(graphOptionsParams);
+
+	// Always call the hook, but only use its results when needed
+	const isHorizontal = orientation === 'horizontal';
+
+	// Process data for horizontal bar chart - moved outside of JSX to avoid conditional hook calls
+	const horizontalBarContent = useMemo(() => {
+		if (!hasData || !series || series.length <= 1 || !isHorizontal || !summarize) {
+			return null;
+		}
+
+		// Get the values from the data array (skip the first element which is timestamps)
+		const values = data.slice(1).map(d => d[0]);
+
+		// Find the maximum value for scaling the bars
+		const maxValue = Math.max(...values);
+
+		// Render the bars
+		return series.slice(1).map((s, i) => {
+			const value = values[i];
+			const percentage = (value / maxValue) * 100;
+
+			return (
+				<div key={i} className="wpcloud-horizontal-bar-graph-row">
+					<div
+						className="wpcloud-horizontal-bar-graph-label"
+						onClick={() => {
+							if (['atomic_site_id', 'http_host'].includes(dimension)) {
+								var site_url = s.label;
+								if (isNaN(site_url)) {
+									site_url = site_url.replace(/\./g, "-");
+								}
+								window.location.href = `/sites/${site_url}/metrics/`;
 							}
-							// Redirect to the single site metrics page.
-							window.location.href = `/sites/${site_url}/metrics/`;
-						});
-					});
+						}}
+						style={{
+							cursor: ['atomic_site_id', 'http_host'].includes(dimension) ? 'pointer' : 'default'
+						}}
+					>
+						{s.label || `Series ${i+1}`}
+					</div>
+					<div className="wpcloud-horizontal-bar-graph-bar-container">
+						<div
+							className="wpcloud-horizontal-bar-graph-bar"
+							style={{
+								width: `${percentage}%`,
+								backgroundColor: s.stroke || getColorForIndex(i)
+							}}
+						></div>
+					</div>
+					<div className="wpcloud-horizontal-bar-graph-value">
+						{formatNumber(value)}
+					</div>
+				</div>
+			);
+		});
+	}, [hasData, data, series, dimension, formatNumber, getColorForIndex, isHorizontal, summarize]);
+
+	// Setup click events for labels using a useEffect hook instead of modifying options directly
+	useEffect(() => {
+		if (!uplotInstanceRef.current || !['atomic_site_id', 'http_host'].includes(dimension)) {
+			return;
+		}
+
+		const u = uplotInstanceRef.current;
+		const labels = u.root.querySelectorAll('.u-label');
+
+		// Add click handlers
+		const clickHandlers = [];
+		labels.forEach(label => {
+			label.style.cursor = 'pointer';
+			const handler = (e) => {
+				e.stopPropagation();
+				console.log(`Clicked label: ${label.textContent}`);
+				// sample: sites/spatial-raccoon-jurassic-ninja/metrics/
+				var site_url = label.textContent;
+				if (isNaN(site_url)) {
+					site_url = site_url.replace(/\./g, "-");
 				}
-			},
-		],
-	};
+				// Redirect to the single site metrics page.
+				window.location.href = `/sites/${site_url}/metrics/`;
+			};
+
+			label.addEventListener('click', handler);
+			clickHandlers.push({ element: label, handler });
+		});
+
+		// Cleanup function to remove event listeners
+		return () => {
+			clickHandlers.forEach(({ element, handler }) => {
+				element.removeEventListener('click', handler);
+			});
+		};
+	}, [dimension]); // Only depend on dimension, not uplotInstanceRef.current
+
+	// Create a ref to track container dimensions
+	const containerDimensionsRef = useRef({ width: 0, height: 0 });
+
+	// Update container dimensions when the component mounts and on window resize
+	useEffect(() => {
+		const updateDimensions = () => {
+			if (containerRef.current) {
+				containerDimensionsRef.current = {
+					width: containerRef.current.clientWidth,
+					height: containerRef.current.clientHeight
+				};
+			}
+		};
+
+		// Initial update
+		updateDimensions();
+
+		// Add resize listener
+		window.addEventListener('resize', updateDimensions);
+
+		// Cleanup
+		return () => {
+			window.removeEventListener('resize', updateDimensions);
+		};
+	}, []);
+
+	// Generate side labels when the component mounts or when series changes
+	useEffect(() => {
+		if (!isHorizontal || !series || series.length <= 1) {
+			setDirectLabels([]);
+			return;
+		}
+
+		// Use the stored dimensions
+		const graphHeight = containerDimensionsRef.current.height || 500;
+		// Get padding values from options, but don't depend on the entire options object
+		const paddingTop = options?.padding?.top || 30;
+		const paddingBottom = options?.padding?.bottom || 30;
+		const contentHeight = graphHeight - paddingTop - paddingBottom;
+
+		// Calculate the height available for each bar
+		const numBars = series.length - 1; // Subtract 1 for the time series
+		const barHeight = contentHeight / numBars;
+
+		// Create labels based on series data with calculated positions
+		const labelEls = series.slice(1).map((s, i) => {
+			// Calculate position to align with the center of each bar
+			const topPosition = paddingTop + (i * barHeight) + (barHeight / 2);
+
+			return (
+				<div
+					key={s.label || `series-${i}`}
+					className="wpcloud-graph-side-label"
+					style={{
+						position: "absolute",
+						top: `${topPosition}px`,
+						left: '10px',
+						transform: "translateY(-50%)", // Center vertically
+						fontSize: "12px",
+						whiteSpace: "nowrap",
+						color: s.stroke || '#000',
+						padding: '5px',
+						backgroundColor: 'rgba(255,255,255,0.7)',
+						borderRadius: '3px',
+						boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+						zIndex: 1000
+					}}
+				>
+					{s.label || `Series ${i+1}`}
+				</div>
+			);
+		});
+
+		setDirectLabels(labelEls);
+	}, [isHorizontal, series]); // Remove options from dependencies
 
 	// Force loading to false after data is loaded
+	// This is a one-time effect that runs when hasData becomes true
 	useEffect(() => {
 		if (hasData && loading) {
-			setLoading(false);
+			// Use a timeout to avoid immediate state updates
+			const timer = setTimeout(() => {
+				setLoading(false);
+			}, 0);
+			return () => clearTimeout(timer);
 		}
-	}, [hasData, loading]);
+	}, [hasData]); // Only depend on hasData, not loading
 
 	const showOverlay = loading || !hasData;
 	//
@@ -364,8 +567,69 @@ export default function Graph( props ) {
 				{showOverlay && <Overlay loading={loading} title={title} /> }
 				{hasData && (
 					<>
-						<UplotReact options={options} data={d} />
-						{refreshing && <Overlay refreshing={true} />}
+						{isHorizontal && summarize ? (
+							// Horizontal Bar Graph for summarized data
+							<div className="wpcloud-horizontal-bar-graph-container">
+								{title && <h3 className="wpcloud-horizontal-bar-graph-title">{title}</h3>}
+								{horizontalBarContent}
+								{refreshing && <Overlay refreshing={true} />}
+							</div>
+						) : (
+							// Standard uPlot graph
+							<>
+								{isHorizontal && (
+									<div
+										ref={labelContainerRef}
+										className="wpcloud-graph-side-labels-container"
+										style={{
+											position: 'absolute',
+											top: options && options.padding?.top || 0,
+											left: 0,
+											bottom: options && options.padding?.bottom || 0,
+											width: '120px', // Adjust width as needed
+											zIndex: 100, // Higher z-index for debugging
+											pointerEvents: 'none', // Allow clicks to pass through to the graph
+											overflow: 'visible',
+											backgroundColor: 'rgba(200, 200, 200, 0.2)', // Light background for debugging
+											border: '1px dashed #ccc', // Border for debugging
+										}}
+									>
+										{directLabels.length > 0 ? (
+											directLabels
+										) : (
+											<div style={{padding: '10px', color: 'red'}}>No direct labels rendered</div>
+										)}
+									</div>
+								)}
+								<UplotReact
+									options={options}
+									data={d}
+									onCreate={(chart) => {
+										// Only set the instance if it's not already set or if it's a different instance
+										if (!uplotInstanceRef.current || uplotInstanceRef.current !== chart) {
+											uplotInstanceRef.current = chart;
+
+											// Update dimensions after chart is created
+											if (containerRef.current) {
+												containerDimensionsRef.current = {
+													width: containerRef.current.clientWidth,
+													height: containerRef.current.clientHeight
+												};
+
+												// Force a re-render of labels with the updated dimensions
+												if (isHorizontal && series && series.length > 1) {
+													// Use setTimeout to ensure the chart is fully rendered
+													setTimeout(() => {
+														const event = new Event('resize');
+														window.dispatchEvent(event);
+													}, 100);
+												}
+											}
+										}
+									}} />
+								{refreshing && <Overlay refreshing={true} />}
+							</>
+						)}
 					</>
 				)}
 			</div>

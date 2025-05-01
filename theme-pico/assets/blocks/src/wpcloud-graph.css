@@ -18,12 +18,92 @@
 		}
 	}
 
+	/* Horizontal Bar Graph Styles */
+	.wpcloud-horizontal-bar-graph-title {
+		padding: 10px 0;
+		margin: 0;
+		font-size: 1.2rem;
+		font-weight: 600;
+	}
+
+	.wpcloud-horizontal-bar-graph {
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+		padding: 20px;
+		box-sizing: border-box;
+	}
+
+	.wpcloud-horizontal-bar-graph-container {
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+		gap: 8px;
+	}
+
+	.wpcloud-horizontal-bar-graph-row {
+		display: grid;
+		grid-template-columns: minmax(150px, 25%) 1fr minmax(80px, 15%);
+		align-items: center;
+		gap: 10px;
+		width: 100%;
+		height: 30px;
+	}
+
+	.wpcloud-horizontal-bar-graph-label {
+		font-size: 0.9rem;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		padding-left: 5px;
+	}
+
+	.wpcloud-horizontal-bar-graph-bar-container {
+		height: 20px;
+		background-color: rgba(0, 0, 0, 0.1);
+		border-radius: 4px;
+		overflow: hidden;
+	}
+
+	.wpcloud-horizontal-bar-graph-bar {
+		height: 100%;
+		border-radius: 4px;
+		transition: width 0.3s ease;
+	}
+
+	.wpcloud-horizontal-bar-graph-value {
+		font-size: 0.9rem;
+		font-weight: 600;
+		text-align: right;
+		padding-right: 5px;
+	}
+
 	@media (prefers-color-scheme: dark) {
 		& {
 			border-radius: var(--pico-border-radius);
 			border: var(--pico-border-width) solid var(--pico-form-element-border-color);
 			background-color: var(--pico-form-element-background-color);
 			color: var(--pico-form-element-placeholder-color);
+		}
+
+		.wpcloud-horizontal-bar-graph-bar-container {
+			background-color: rgba(255, 255, 255, 0.1);
+		}
+	}
+
+	@media (max-width: 768px) {
+		.wpcloud-horizontal-bar-graph-row {
+			grid-template-columns: minmax(100px, 30%) 1fr minmax(60px, 20%);
+			height: 25px;
+		}
+
+		.wpcloud-horizontal-bar-graph-label,
+		.wpcloud-horizontal-bar-graph-value {
+			font-size: 0.8rem;
+		}
+
+		.wpcloud-horizontal-bar-graph-bar-container {
+			height: 15px;
 		}
 	}
 }
