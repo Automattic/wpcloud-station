@@ -164,60 +164,74 @@ function SimpleGraph({ type = 'line', orientation = 'vertical' }) {
         case 'bar':
           return (
             <>
-              {/* Horizontal bars for first series */}
-              {data.map((point, index) => {
-                // Adjust the y position to space bars evenly across the available height
-                const availableHeight = svgHeight - padding * 2;
-                const barSpacing = availableHeight / data.length;
-                const y = padding + barSpacing * index + barSpacing / 2;
+              {/* Horizontal bars for first series - sorted by value (longest at top) */}
+              {[...data]
+                .sort((a, b) => b.y - a.y) // Sort by y value in descending order
+                .map((point, index) => {
+                  // Adjust the y position to space bars evenly across the available height
+                  const availableHeight = svgHeight - padding * 2;
+                  const barSpacing = availableHeight / data.length;
+                  // Significantly increase spacing between bars to prevent overlap
+                  const barHeight = Math.min(barSpacing * 0.5, 15); // Limit bar height to 50% of spacing or 15px max
+                  const y = padding + barSpacing * index + barSpacing / 2;
 
-                // Scale the width to use more of the available width
-                const width = point.y * (svgWidth - padding * 2) / 100;
-                return (
-                  <rect
-                    key={`bar1-${index}`}
-                    x={padding}
-                    y={y - barWidth / 2}
-                    width={width}
-                    height={barWidth}
-                    fill="rgba(0,51,102,0.8)"
-                  />
-                );
-              })}
+                  // Scale the width to use more of the available width
+                  const width = point.y * (svgWidth - padding * 2) / 100;
+                  return (
+                    <rect
+                      key={`bar1-${index}`}
+                      x={padding}
+                      y={y - barHeight / 2} // Center the bar at y position
+                      width={width}
+                      height={barHeight} // Fixed smaller height
+                      fill="rgba(0,51,102,0.8)"
+                    />
+                  );
+                })}
             </>
           );
         case 'stacked-bar':
           return (
             <>
-              {/* Horizontal stacked bars */}
-              {data.map((point, index) => {
-                // Adjust the y position to space bars evenly across the available height
-                const availableHeight = svgHeight - padding * 2;
-                const barSpacing = availableHeight / data.length;
-                const y = padding + barSpacing * index + barSpacing / 2;
+              {/* Horizontal stacked bars - sorted by combined value (longest at top) */}
+              {[...data]
+                .map((point, index) => ({
+                  point,
+                  point2: data2[index],
+                  totalWidth: point.y + data2[index].y,
+                  originalIndex: index
+                }))
+                .sort((a, b) => b.totalWidth - a.totalWidth) // Sort by combined length in descending order
+                .map((item, index) => {
+                  // Adjust the y position to space bars evenly across the available height
+                  const availableHeight = svgHeight - padding * 2;
+                  const barSpacing = availableHeight / data.length;
+                  // Significantly increase spacing between bars to prevent overlap
+                  const barHeight = Math.min(barSpacing * 0.5, 15); // Limit bar height to 50% of spacing or 15px max
+                  const y = padding + barSpacing * index + barSpacing / 2;
 
-                // Scale the widths to use more of the available width
-                const width1 = point.y * (svgWidth - padding * 2) / 100;
-                const width2 = data2[index].y * (svgWidth - padding * 2) / 100;
-                return (
-                  <g key={`stacked-bar-${index}`}>
-                    <rect
-                      x={padding}
-                      y={y - barWidth / 2}
-                      width={width1}
-                      height={barWidth}
-                      fill="rgba(0,51,102,0.8)"
-                    />
-                    <rect
-                      x={padding + width1}
-                      y={y - barWidth / 2}
-                      width={width2}
-                      height={barWidth}
-                      fill="rgba(51,153,255,0.8)"
-                    />
-                  </g>
-                );
-              })}
+                  // Scale the widths to use more of the available width
+                  const width1 = item.point.y * (svgWidth - padding * 2) / 100;
+                  const width2 = item.point2.y * (svgWidth - padding * 2) / 100;
+                  return (
+                    <g key={`stacked-bar-${item.originalIndex}`}>
+                      <rect
+                        x={padding}
+                        y={y - barHeight / 2} // Center the bar at y position
+                        width={width1}
+                        height={barHeight} // Fixed smaller height
+                        fill="rgba(0,51,102,0.8)"
+                      />
+                      <rect
+                        x={padding + width1}
+                        y={y - barHeight / 2} // Center the bar at y position
+                        width={width2}
+                        height={barHeight} // Fixed smaller height
+                        fill="rgba(51,153,255,0.8)"
+                      />
+                    </g>
+                  );
+                })}
             </>
           );
         default: // line or area
