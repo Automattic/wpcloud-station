@@ -270,66 +270,7 @@ export function seriesBarsPlugin(opts = {}) {
 			uPlot.assign(opts, {
 				select: {show: false},
 				cursor: {
-					x: false,
-					y: false,
-					dataIdx: (u, seriesIdx) => {
-						if (seriesIdx == 1) {
-							hRect = null;
-
-							let cx = u.cursor.left * pxRatio;
-							let cy = u.cursor.top * pxRatio;
-
-							qt.get(cx, cy, 1, 1, o => {
-								if (pointWithin(cx, cy, o.x, o.y, o.x + o.w, o.y + o.h))
-									hRect = o;
-							});
-						}
-
-						return hRect && seriesIdx == hRect.sidx ? hRect.didx : null;
-					},
-					points: {
-						// Use a lighter fill color for the hover effect
-						fill: "rgba(255,255,255,0.2)",
-						// Ensure no rounding of corners
-						stroke: "transparent",
-						width: 0,
-						// Use a custom shape function to draw a rectangle instead of an oval
-						shape: (u, seriesIdx, dataIdx, cx, cy, radius) => {
-							if (hRect) {
-								const ctx = u.ctx;
-
-								// Get the dimensions of the bar
-								const barX = hRect.x;
-								const barY = hRect.y;
-								const barWidth = hRect.w;
-								const barHeight = hRect.h;
-
-								// Draw a rectangle over the bar
-								ctx.fillRect(barX, barY, barWidth, barHeight);
-							}
-						},
-						// Return the exact dimensions of the bar for the hover effect
-						bbox: (u, seriesIdx) => {
-							let isHovered = hRect && seriesIdx == hRect.sidx;
-
-							if (!isHovered) {
-								return {
-									left: -10,
-									top: -10,
-									width: 0,
-									height: 0,
-								};
-							}
-
-							// Return the exact dimensions of the bar
-							return {
-								left: hRect.x / pxRatio,
-								top: hRect.y / pxRatio,
-								width: hRect.w / pxRatio,
-								height: hRect.h / pxRatio,
-							};
-						}
-					}
+					show: false, // Completely disable the cursor/hover effect
 				},
 				scales: {
 					x: {
@@ -406,8 +347,8 @@ export function seriesBarsPlugin(opts = {}) {
 					uPlot.assign(s, {
 						paths: barsBuilder,
 						points: {
-							// Don't show points (totals) for stacked bar graphs
-							show: (i == opts.series.length-1 && !stacked && drawPoints)
+							// Don't show points (totals) for any bar graphs
+							show: false
 						}
 					});
 				}
