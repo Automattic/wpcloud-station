@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useLayoutEffect } from 'react';
 import UplotReact from 'uplot-react';
 import 'uplot/dist/uPlot.min.css';
 
@@ -134,6 +134,37 @@ export default function UplotGraph({
 				setDirectLabels(sideLabels);
 		}, [sideLabels]);
 
+		// Function to adjust container height based on legend size and apply styling for many series
+		const adjustContainerHeight = () => {
+				if (!uplotInstanceRef.current || !containerRef.current || !showLegend) {
+						return;
+				}
+
+				const chart = uplotInstanceRef.current;
+				const legendEl = chart.root.querySelector('.u-legend');
+
+				if (legendEl) {
+						// Count the number of series (excluding the first one which is usually the x-axis)
+						const seriesCount = series ? series.length - 1 : 0;
+
+						// If there are many series, add a class to enable multi-column layout
+						if (seriesCount > 5) {
+								legendEl.classList.add('u-legend-many');
+						} else {
+								legendEl.classList.remove('u-legend-many');
+						}
+				}
+		};
+
+		// Adjust container height when the component mounts and when data changes
+		useEffect(() => {
+				if (data && data.length > 0 && showLegend) {
+						// Small delay to ensure the chart is fully rendered
+						const timer = setTimeout(adjustContainerHeight, 200);
+						return () => clearTimeout(timer);
+				}
+		}, [data, showLegend]);
+
 		// Setup click events for labels using a useEffect hook
 		useEffect(() => {
 				if (!uplotInstanceRef.current || !['atomic_site_id', 'http_host'].includes(dimension)) {
@@ -181,20 +212,41 @@ export default function UplotGraph({
 										if (!uplotInstanceRef.current || uplotInstanceRef.current !== chart) {
 												uplotInstanceRef.current = chart;
 
-												// Update dimensions after chart is created
-												if (containerRef.current) {
-														containerDimensionsRef.current = {
-																width: containerRef.current.clientWidth,
-																height: containerRef.current.clientHeight
-														};
-														if (isHorizontal && series && series.length > 1) {
-																// Just update the dimensions ref
-																containerDimensionsRef.current = {
-																		width: containerRef.current.clientWidth,
-																		height: containerRef.current.clientHeight
-																};
-														}
-												}
+		// Update dimensions after chart is created
+		if (containerRef.current) {
+				containerDimensionsRef.current = {
+						width: containerRef.current.clientWidth,
+						height: containerRef.current.clientHeight
+				};
+				if (isHorizontal && series && series.length > 1) {
+						// Just update the dimensions ref
+						containerDimensionsRef.current = {
+								width: containerRef.current.clientWidth,
+								height: containerRef.current.clientHeight
+						};
+				}
+
+				// Adjust container height and apply styling for many series
+				setTimeout(() => {
+						const legendEl = chart.root.querySelector('.u-legend');
+						if (legendEl && showLegend) {
+								// Count the number of series (excluding the first one which is usually the x-axis)
+								const seriesCount = series ? series.length - 1 : 0;
+
+								// If there are many series, add a class to enable multi-column layout
+								if (seriesCount > 5) {
+										legendEl.classList.add('u-legend-many');
+								}
+
+								// Remove any extra padding that might be added
+								legendEl.style.paddingBottom = '0';
+								legendEl.style.marginBottom = '0';
+						}
+
+						// Call the adjustContainerHeight function to handle any additional adjustments
+						adjustContainerHeight();
+				}, 100); // Small delay to ensure the chart is fully rendered
+		}
 										}
 								}}
 						/>

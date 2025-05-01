@@ -24,7 +24,9 @@ const indexScale = (colors)  => (_, idx, opacity ) => {
 
 const buildPalette = ( baseColors, total ) => {
 	const scale = chroma.scale(baseColors).mode("lab");
-	 return Array.from({ length: total }, (_, i) => scale(i / total) );
+	const colors = Array.from({ length: total }, (_, i) => scale(i / total));
+	console.log('colors', baseColors, colors.map(c => c.hex()));
+	return colors;
 }
 
 const containerContentSize = (container) => {
@@ -149,7 +151,14 @@ export default ({ containerRef, ...options }) => {
 		padding: adjustedPadding,
 		plugins: [], // The hover effect is now integrated into seriesBarsPlugin
 		scales,
-		legend
+		legend: {
+			...legend,
+			show: showLegend !== false, // Show legend by default unless explicitly disabled
+			live: false, // Don't update the legend on hover
+			isolate: false, // Don't isolate series on legend hover
+			width: width, // Set legend width to match the chart width
+			stroke: null // No stroke for legend markers
+		}
 	};
 
 	if (!showLegend) {

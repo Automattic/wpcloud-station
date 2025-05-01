@@ -126,7 +126,7 @@ function Metrics({ tree, apiPath }) {
 				<h3>Metrics</h3>
 				<Toolbar onIntervalUpdate={updateQueryParams} interval={interval} onRefresh={onRefresh} />
 				<MetricsOptionsContext.Provider value={ defaultGraphOptions }>
-					<div className="wpcloud-metrics__graphs">
+					<div className="wpcloud-metrics__graphs" style={{ marginBottom: 0 }}>
 						{tree.children.map(renderNode)}
 					</div>
 				</MetricsOptionsContext.Provider>

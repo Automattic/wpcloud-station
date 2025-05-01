@@ -200,11 +200,13 @@ export default function Graph(props) {
 	const containerRef = useRef(null);
 
 	// Ensure the container takes full width of parent and has appropriate minimum dimensions
+	// Allow the container to grow in height to accommodate the legend
 	const style = {
 		position: "relative",
 		width: '100%',
 		minWidth,
 		minHeight: '500px',
+		height: 'auto', // Allow the container to grow
 		...styles
 	};
 
@@ -365,7 +367,7 @@ export default function Graph(props) {
 	};
 
 	return (
-		<div style={{ width: '100%' }} data-graph-id={graphId}>
+		<div style={{ width: '100%', marginBottom: 0 }} data-graph-id={graphId}>
 			<div ref={containerRef} className={className} style={style}>
 				{showOverlay && <Overlay loading={loading} title={title} />}
 				{hasData && renderChart()}

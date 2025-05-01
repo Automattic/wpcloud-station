@@ -1,7 +1,7 @@
-
 & {
 	padding: 1em;
 	box-sizing: border-box;
+	margin-bottom: 0 !important;
 
 	.uplot {
 		width: 100%;
@@ -10,16 +10,50 @@
 		}
 	}
 
-	.u-title {
-		padding: 10px 0;
+	.u-title, .wpcloud-horizontal-bar-graph-title {
+		padding-bottom: 10px;
 		margin: 0;
 		text-align: left;
+		font-size: 18px;
+		font-weight: bold;
+		color: var(--pico-color);
 	}
 
 	.u-legend {
 		.u-marker {
 			height: .25em !important;
 			border-radius: 0.125em;
+		}
+
+		.u-label {
+			text-overflow: ellipsis;
+			width: 80px;
+			white-space: nowrap;
+			overflow: hidden;
+		}
+
+		/* Allow the legend to grow and not be clipped */
+		max-height: none !important;
+		overflow: visible !important;
+		margin-bottom: 0 !important; /* Reduce bottom space */
+		padding-bottom: 0 !important; /* Reduce bottom space */
+
+		/* Style legend table */
+		table {
+			width: 100%;
+			margin-bottom: 0; /* Reduce bottom space */
+		}
+
+		/* When many series, allow wrapping to multiple columns */
+		&.u-legend-many {
+			display: flex;
+			flex-wrap: wrap;
+
+			tr {
+				width: auto;
+				min-width: 150px;
+				margin-right: 10px;
+			}
 		}
 	}
 
@@ -30,12 +64,6 @@
 	}
 
 	/* Horizontal Bar Graph Styles */
-	.wpcloud-horizontal-bar-graph-title {
-		padding: 10px 0;
-		margin: 0;
-		font-size: 18px;
-		font-weight: bold;
-	}
 
 	.wpcloud-horizontal-bar-graph {
 		display: flex;
@@ -50,13 +78,12 @@
 		flex-direction: column;
 		width: 100%;
 		gap: 8px;
-		padding: 1em;
 		box-sizing: border-box;
 	}
 
 	.wpcloud-horizontal-bar-graph-row {
 		display: grid;
-		grid-template-columns: minmax(150px, 25%) 1fr  minmax(45px, 7%);
+		grid-template-columns: minmax(150px, 25%) 1fr 70px;
 		align-items: center;
 		gap: 10px;
 		width: 100%;
@@ -101,22 +128,6 @@
 
 		.wpcloud-horizontal-bar-graph-bar-container {
 			background-color: rgba(255, 255, 255, 0.1);
-		}
-	}
-
-	@media (max-width: 768px) {
-		.wpcloud-horizontal-bar-graph-row {
-			grid-template-columns: minmax(100px, 30%) 1fr minmax(60px, 20%);
-			height: 25px;
-		}
-
-		.wpcloud-horizontal-bar-graph-label,
-		.wpcloud-horizontal-bar-graph-value {
-			font-size: 0.8rem;
-		}
-
-		.wpcloud-horizontal-bar-graph-bar-container {
-			height: 15px;
 		}
 	}
 }
