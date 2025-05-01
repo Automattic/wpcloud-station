@@ -7,8 +7,8 @@ import { useRef, useEffect, useState, useMemo } from "@wordpress/element";
  * Internal dependencies
  */
 import Overlay from './overlay';
-import SummaryChart from './summary-chart';
-import UplotChart from './uplot-chart';
+import SummaryGraph from './summary-graph';
+import UplotGraph from './uplot-graph';
 import stationApi from '@wpcloud/utils/api';
 import { useApiContext } from '@wpcloud/metrics/components/contexts';
 import Filters from './lib/filters';
@@ -334,10 +334,10 @@ export default function Graph(props) {
 	const renderChart = () => {
 		if (!hasData) return null;
 
-		// Use SummaryChart for horizontal bar graphs with summarized data
+		// Use SummaryGraph for horizontal bar graphs with summarized data
 		if (orientation === 'horizontal' && summarize) {
 			return (
-				<SummaryChart
+				<SummaryGraph
 					title={title}
 					data={data}
 					series={series}
@@ -347,9 +347,9 @@ export default function Graph(props) {
 			);
 		}
 
-		// Use UplotChart for all other graph types
+		// Use UplotGraph for all other graph types
 		return (
-			<UplotChart
+			<UplotGraph
 				title={title}
 				data={data}
 				series={series}
