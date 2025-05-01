@@ -1,30 +1,29 @@
 
+.u-cursor-pt {
+	border-radius: 0;
+}
+
+.u-legend {
+	.u-marker {
+		height: .25em;
+		border-radius: 0.125em;
+	}
+}
+
+.u-title {
+	padding: 10px 0;
+	margin: 0;
+}
+
+.u-series {
+	th, td {
+		background: none;
+	}
+}
+
 & {
-	.u-title {
-		padding: 10px 0;
-		margin: 0;
-	}
-
-	.u-legend {
-		.u-marker {
-			height: .25em !important;
-			border-radius: 0.125em;
-		}
-	}
-
-	.u-series {
-		th, td {
-			background: none;
-		}
-
-	}
-
-	@media (prefers-color-scheme: dark) {
-		& {
-			border-radius: var(--pico-border-radius);
-			border: var(--pico-border-width) solid var(--pico-form-element-border-color);
-			background-color: var(--pico-form-element-background-color);
-			color: var(--pico-form-element-placeholder-color);
-		}
-	}
+	border-radius: var(--pico-border-radius);
+	border: var(--pico-border-width) solid var(--pico-form-element-border-color);
+	background-color: var(--pico-form-element-background-color);
+	color: var(--pico-form-element-placeholder-color);
 }
