@@ -35,7 +35,7 @@ export default function Edit( { attributes, setAttributes } ) {
 	const update = updateAttribute(setAttributes);
 
 	const [metrics, setMetrics] = useState({});
-	const [dimensionOptions, setDimensionOptions] = useState({});
+	const [dimensionOptions, setDimensionOptions] = useState([]);
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
