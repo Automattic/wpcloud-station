@@ -19,14 +19,32 @@ const statusScale = () => ( series, _, opacity ) => {
 };
 
 const indexScale = (colors)  => (_, idx, opacity ) => {
-	const domainEnd = colors.length;
-	const scale = chroma.scale(colors).mode('lch').domain([0, domainEnd]);
-	return scale(idx).alpha(opacity).css();
+	return colors[idx].alpha(opacity).css();
 }
 
-export default ({ containerRef, ...options } ) => {
-	const [width, setWidth] = useState(containerRef?.current?.offsetWidth || 808);
-	const [height, setHeight] = useState(containerRef?.current?.offsetHeight || 404);
+const buildPalette = ( baseColors, total ) => {
+	const scale = chroma.scale(baseColors).mode("lab");
+	 return Array.from({ length: total }, (_, i) => scale(i / total) );
+}
+
+const containerContentSize = (container) => {
+	if( !container ) {
+		return { width: 808, height: 404 };
+	}
+	const style = getComputedStyle(container);
+	const paddingX = parseFloat(style.paddingLeft) + parseFloat(style.paddingRight);
+	const paddingY = parseFloat(style.paddingTop) + parseFloat(style.paddingBottom);
+
+	const width = container.clientWidth - paddingX;
+	const height = container.clientHeight - paddingY;
+	return { width, height } ;
+}
+
+export default ({ containerRef, ...options }) => {
+	const contentSize = containerContentSize(containerRef?.current);
+
+	const [width, setWidth] = useState(contentSize.width);
+	const [height, setHeight] = useState(contentSize.height);
 	const [isDark, setIsDark] = useState(() => window.matchMedia('(prefers-color-scheme: dark)').matches);
 
 	// Graph level options
@@ -49,73 +67,24 @@ export default ({ containerRef, ...options } ) => {
 		...metricsOptions
 	} = useMetricsOptionsContext(options);
 
-		// Update width and height when the container ref changes
+	const colorPalette = buildPalette(seriesPalette, data[0].length - 1);
+
+	// Update width when the container ref changes
 	useEffect(() => {
-		// Track if we're currently processing a resize
-		let resizeTimeout = null;
-		let lastWidth = width;
-		let lastHeight = height;
-		const {
-			fitWidth = 10,
-			fitHeight = 75,
-		} = fit;
+		const resizeObserver = new ResizeObserver(() => {
+			const { width } = containerContentSize(containerRef?.current);
+			setWidth(width);
+		});
 
-		const updateSize = () => {
-			if (containerRef.current) {
-				const newWidth = containerRef.current.offsetWidth - fitWidth;
-				const newHeight = containerRef.current.offsetHeight - fitHeight;
+		resizeObserver.observe(containerRef?.current);
 
-				// Only update if dimensions have changed significantly (by at least 5px)
-				// This prevents minor fluctuations from causing infinite loops
-				if (Math.abs(newWidth - lastWidth) > 5 || Math.abs(newHeight - lastHeight) > 5) {
-					if (newWidth > 0 && newHeight > 0) {
-						lastWidth = newWidth;
-						lastHeight = newHeight;
-						setWidth(newWidth);
-						setHeight(newHeight);
-					}
-				}
-			}
-		};
-
-		// Initial size update
-		updateSize();
-
-		// Set up resize observer with debounce
-		const handleResize = () => {
-			// Clear any existing timeout
-			if (resizeTimeout) {
-				clearTimeout(resizeTimeout);
-			}
-
-			// Set a new timeout to update size after 100ms of no resize events
-			resizeTimeout = setTimeout(() => {
-				updateSize();
-				resizeTimeout = null;
-			}, 100);
-		};
-
-		// Create and attach the resize observer
-		const resizeObserver = new ResizeObserver(handleResize);
-
-		if (containerRef.current) {
-			resizeObserver.observe(containerRef.current);
-		}
-
-		// Also listen for window resize events
-		window.addEventListener('resize', handleResize);
-
-		// Clean up
 		return () => {
-			if (resizeTimeout) {
-				clearTimeout(resizeTimeout);
-			}
+			u.destroy();
 			resizeObserver.disconnect();
-			window.removeEventListener('resize', handleResize);
 		};
 	}, [containerRef]);
 
-		// Check for dark mode preference
+	// Check for dark mode preference
 	useEffect(() => {
 		const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
@@ -138,7 +107,7 @@ export default ({ containerRef, ...options } ) => {
 	} = options;
 
 	const useStatus = meta.dimension?.includes('status');
-	const colors = useStatus ? statusScale() : indexScale(seriesPalette);
+	const colors = useStatus ? statusScale() : indexScale(colorPalette);
 
 	series = series.map((s, idx) => {
 		const stroke = colors(s, idx, opacity);

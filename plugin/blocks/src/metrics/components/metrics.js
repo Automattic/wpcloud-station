@@ -68,7 +68,7 @@ const defaultGraphOptions = {
 		}
 	],
 
-	padding: [20, 20, 20, 20],
+	padding: [10, 10, 0, 0],
 	fit: {
 		width: 10,
 		height: 75,
