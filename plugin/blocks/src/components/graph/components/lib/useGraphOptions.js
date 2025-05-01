@@ -4,7 +4,7 @@ import chroma from 'chroma-js';
 
 import { useMetricsOptionsContext } from '@wpcloud/metrics/components/contexts';
 
-import { seriesBarsPlugin } from './uplot-plugins';
+import { seriesBarsPlugin, isolateStackedPlugin, preventLegendClickPlugin, tooltipPlugin } from './uplot-plugins';
 import { stack } from './utils';
 
 const statusScale = () => ( series, _, opacity ) => {
@@ -170,7 +170,7 @@ export default ({ containerRef, ...options } ) => {
 		ori:
 		dir,
 		padding,
-		plugins: [],
+		plugins: [], // The hover effect is now integrated into seriesBarsPlugin
 		scales,
 		legend
 	};
@@ -191,8 +191,13 @@ export default ({ containerRef, ...options } ) => {
 		const pluginOptions = { dir, ori };
 		if ( 'stacked-bar' === type ) {
 			pluginOptions.stacked = true;
-			graphOptions = {...graphOptions, ...stack(data)};
+			graphOptions = { ...graphOptions, ...stack(data) };
+			graphOptions.plugins.push(isolateStackedPlugin(data));
+		} else {
+			// For non-stacked bar charts, prevent legend clicks
+			graphOptions.plugins.push(preventLegendClickPlugin());
 		}
+
 		graphOptions.plugins.push(seriesBarsPlugin(pluginOptions));
 	}
 
