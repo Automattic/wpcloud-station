@@ -4,7 +4,7 @@ import chroma from 'chroma-js';
 
 import { useMetricsOptionsContext } from '@wpcloud/metrics/components/contexts';
 
-import { seriesBarsPlugin, isolateStackedPlugin, preventLegendClickPlugin, tooltipPlugin } from './uplot-plugins';
+import { seriesBarsPlugin, isolateStackedPlugin, preventLegendClickPlugin, tooltipPlugin, legendLabelClickPlugin } from './uplot-plugins';
 import { stack } from './utils';
 
 const statusScale = () => ( series, _, opacity ) => {
@@ -41,7 +41,7 @@ const containerContentSize = (container) => {
 	return { width, height } ;
 }
 
-export default ({ containerRef, ...options }) => {
+export default ({ containerRef, dimension, ...options }) => {
 	const contentSize = containerContentSize(containerRef?.current);
 
 	const [width, setWidth] = useState(contentSize.width);
@@ -159,6 +159,11 @@ export default ({ containerRef, ...options }) => {
 			stroke: null // No stroke for legend markers
 		}
 	};
+
+	// Add the legend label click plugin if dimension is provided
+	if (dimension) {
+		graphOptions.plugins.push(legendLabelClickPlugin(dimension));
+	}
 
 	if (!showLegend) {
 		graphOptions.legend = { show: false };
