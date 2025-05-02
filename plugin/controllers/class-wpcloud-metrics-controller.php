@@ -166,7 +166,7 @@ if ( ! class_exists( 'WPCLOUD_Metrics_Controller' ) ) {
 				$summarize = $params['summarize'] ?? false;
 
 				$options = array(
-					'top_x'      => $params['top_x'] ?? 20,
+					'max_bucket_size'      => $params['top_x'] ?? 20, //top_x is max_bucket_size in Metrics API.
 					'resolution' => $params['resolution'] ?? 10,
 				);
 
