@@ -25,7 +25,6 @@ const indexScale = (colors)  => (_, idx, opacity ) => {
 const buildPalette = ( baseColors, total ) => {
 	const scale = chroma.scale(baseColors).mode("lab");
 	const colors = Array.from({ length: total }, (_, i) => scale(i / total));
-	console.log('colors', baseColors, colors.map(c => c.hex()));
 	return colors;
 }
 
@@ -69,7 +68,7 @@ export default ({ containerRef, ...options }) => {
 		...metricsOptions
 	} = useMetricsOptionsContext(options);
 
-	const colorPalette = buildPalette(seriesPalette, data[0].length - 1);
+	const colorPalette = buildPalette(seriesPalette, data.length);
 
 	// Update width when the container ref changes
 	useEffect(() => {
