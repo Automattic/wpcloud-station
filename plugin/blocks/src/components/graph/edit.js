@@ -90,7 +90,7 @@ export default function Edit( { attributes, setAttributes } ) {
 			{ label: 'Referer Domain', value: 'referer_domain' },
 			{ label: 'Request Renderer', value: 'request_renderer' },
 			{ label: 'Is Upstream Cached?', value: 'is_upstream_cached' },
-			{ label: 'WP Admin Ajax Action', value: 'admin_ajax_action' },
+			{ label: 'WP Admin Ajax Action', value: 'wp_admin_ajax_action' },
 			{ label: 'Visitor ASN', value: 'asn' },
 			{ label: 'Visitor Country Code', value: 'country_code' },
 			{ label: 'Visitor Is Crawler?', value: 'is_crawler' },
