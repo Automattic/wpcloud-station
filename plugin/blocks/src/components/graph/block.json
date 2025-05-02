@@ -97,7 +97,7 @@
 		},
 		"allowFrontendFilters" : {
 			"type" : "boolean",
-			"default" : true,
+			"default" : false,
 			"description": "Controls whether filters are shown and if users can add, remove, or modify them on the frontend"
 		}
 	}
