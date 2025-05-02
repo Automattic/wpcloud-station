@@ -1,14 +1,52 @@
-
 & {
-	.u-title {
-		padding: 10px 0;
+	padding: 1em;
+	box-sizing: border-box;
+	margin-bottom: 0 !important;
+
+	.uplot {
+		width: 100%;
+		.u-wrap {
+			width: 100%;
+		}
+	}
+
+	.u-title, .wpcloud-horizontal-bar-graph-title {
+		padding-bottom: 10px;
 		margin: 0;
+		text-align: left;
+		font-size: 18px;
+		font-weight: bold;
+		color: var(--pico-color);
 	}
 
 	.u-legend {
 		.u-marker {
 			height: .25em !important;
 			border-radius: 0.125em;
+		}
+
+		/* Allow the legend to grow and not be clipped */
+		max-height: none !important;
+		overflow: visible !important;
+		margin-bottom: 0 !important; /* Reduce bottom space */
+		padding-bottom: 0 !important; /* Reduce bottom space */
+
+		/* Style legend table */
+		table {
+			width: 100%;
+			margin-bottom: 0; /* Reduce bottom space */
+		}
+
+		/* When many series, allow wrapping to multiple columns */
+		&.u-legend-many {
+			display: flex;
+			flex-wrap: wrap;
+
+			tr {
+				width: auto;
+				min-width: 150px;
+				margin-right: 10px;
+			}
 		}
 	}
 
@@ -18,12 +56,76 @@
 		}
 	}
 
+	/* Horizontal Bar Graph Styles */
+
+	.wpcloud-horizontal-bar-graph {
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+		padding: 20px;
+		box-sizing: border-box;
+	}
+
+	.wpcloud-horizontal-bar-graph-container {
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+		gap: 8px;
+		box-sizing: border-box;
+	}
+
+	.wpcloud-horizontal-bar-graph-row {
+		display: grid;
+		grid-template-columns: minmax(150px, 25%) 1fr 70px;
+		align-items: center;
+		gap: 10px;
+		width: 100%;
+		height: 30px;
+	}
+
+	.wpcloud-horizontal-bar-graph-label {
+		font-size: 0.9rem;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		padding-left: 5px;
+	}
+
+	.wpcloud-horizontal-bar-graph-bar-container {
+		height: 20px;
+		background-color: rgba(0, 0, 0, 0.3);
+		border-radius: 2px;
+		overflow: hidden;
+	}
+
+	.wpcloud-horizontal-bar-graph-bar {
+		height: 100%;
+		border-radius: 2px;
+		transition: width 0.3s ease;
+	}
+
+	.wpcloud-horizontal-bar-graph-value {
+		font-size: 0.9rem;
+		font-weight: 600;
+		text-align: right;
+		padding-right: 5px;
+	}
+
 	@media (prefers-color-scheme: dark) {
 		& {
 			border-radius: var(--pico-border-radius);
 			border: var(--pico-border-width) solid var(--pico-form-element-border-color);
 			background-color: var(--pico-form-element-background-color);
 			color: var(--pico-form-element-placeholder-color);
+		}
+
+		.wpcloud-horizontal-bar-graph-bar-container {
+			background-color: rgba(255, 255, 255, 0.1);
+		}
+
+		.wpcloud-tooltip {
+			background-color: rgba(255, 255, 255, 0.8);
+			color: black;
 		}
 	}
 }

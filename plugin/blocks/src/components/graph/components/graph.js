@@ -1,22 +1,14 @@
-
-/**
- * External dependencies
- */
-import UplotReact from 'uplot-react';
-import 'uplot/dist/uPlot.min.css';
-
-
 /**
  * WordPress dependencies
  */
-import { useRef, useEffect, useState } from "@wordpress/element";
+import { useRef, useEffect, useState, useMemo } from "@wordpress/element";
 
 /**
  * Internal dependencies
  */
 import Overlay from './overlay';
-// import { stackedOptions, defaultOptions, barOptions, lineOptions, areaOptions } from './lib/options';
-import useGraphOptions from './lib/useGraphOptions';
+import SummaryGraph from './summary-graph';
+import UplotGraph from './uplot-graph';
 import stationApi from '@wpcloud/utils/api';
 import { useApiContext } from '@wpcloud/metrics/components/contexts';
 import Filters from './lib/filters';
@@ -93,8 +85,7 @@ const updateUrlWithFilters = (graphId, filters) => {
 	}
 };
 
-export default function Graph( props ) {
-
+export default function Graph(props) {
 	const {
 		// Core props.
 		title,
@@ -125,7 +116,6 @@ export default function Graph( props ) {
 
 		// Allow frontend filter building
 		allowFrontendFilters = true
-
 	} = props;
 
 	// Create a deterministic ID based on the graph's properties
@@ -149,13 +139,14 @@ export default function Graph( props ) {
 
 	const { apiPath } = useApiContext();
 	const { start, end } = interval || {};
-	const [ data, setData ] = useState([]);
-	const [ series, setSeries ] = useState([]);
-	const [ meta, setMeta ] = useState({});
-	const [ loading, setLoading ] = useState( true );
-	const [ refreshing, setRefreshing ] = useState( false );
+	const [data, setData] = useState([]);
+	const [series, setSeries] = useState([]);
+	const [meta, setMeta] = useState({});
+	const [loading, setLoading] = useState(true);
+	const [refreshing, setRefreshing] = useState(false);
+
 	// Initialize filters from URL parameters if available
-	const [ filters, setFilters ] = useState([]);
+	const [filters, setFilters] = useState([]);
 
 	// Convert predefined filters to filter objects
 	const convertPredefinedFilters = (filters) => {
@@ -207,21 +198,26 @@ export default function Graph( props ) {
 	}, [graphId, predefinedFilters]);
 
 	const containerRef = useRef(null);
+
 	// Ensure the container takes full width of parent and has appropriate minimum dimensions
+	// Allow the container to grow in height to accommodate the legend
 	const style = {
 		position: "relative",
 		width: '100%',
 		minWidth,
 		minHeight: '500px',
+		height: 'auto', // Allow the container to grow
 		...styles
 	};
 
+	// Fetch data from API
 	useEffect(() => {
 		const controller = new AbortController();
 		const signal = controller.signal;
 
-		// If we already have data, we're refreshing rather than loading for the first time
-		if (hasData) {
+		// Set loading state without depending on hasData
+		const isRefreshing = data.length > 0 && data[0].length > 0;
+		if (isRefreshing) {
 			setRefreshing(true);
 		} else {
 			setLoading(true);
@@ -256,7 +252,7 @@ export default function Graph( props ) {
 					queryParams.filters = JSON.stringify(activeFilters);
 				}
 
-				const { data, series, meta } = await stationApi.get( `${apiPath}/${metric}`, {
+				const { data, series, meta } = await stationApi.get(`${apiPath}/${metric}`, {
 					query: queryParams,
 					parse: true,
 					signal
@@ -277,47 +273,25 @@ export default function Graph( props ) {
 
 		fetchData();
 		return () => controller.abort();
-	}, [ apiPath, start, end, refresh, filters ] );
+	}, [apiPath, start, end, refresh, filters, dimension, metric, resolution, summarize, topX]);
 
-
-	const { data: d, ...options } = useGraphOptions({ title, data, series, meta, containerRef, showLegend, type, orientation });
+	// Check if we have data before using it
 	const hasData = data.length > 0 && data[0].length > 0;
 
-	// Add u-label event handlers
-	options.hooks = {
-		ready: [
-			(u) => {
-				// Click events for atomic_site_id or http_host labels
-				if( ['atomic_site_id', 'http_host'].includes( dimension ) ) {
-					const labels = u.root.querySelectorAll('.u-label');
-					labels.forEach(label => {
-						label.style.cursor = 'pointer';
-						label.addEventListener('click', (e) => {
-							e.stopPropagation();
-							console.log(`Clicked label: ${label.textContent}`);
-							// sample: sites/spatial-raccoon-jurassic-ninja/metrics/
-							var site_url = label.textContent;
-							if( isNaN( site_url ) ) {
-								site_url = site_url.replace(/\./g, "-");
-							}
-							// Redirect to the single site metrics page.
-							window.location.href = `/sites/${site_url}/metrics/`;
-						});
-					});
-				}
-			},
-		],
-	};
-
 	// Force loading to false after data is loaded
+	// This is a one-time effect that runs when hasData becomes true
 	useEffect(() => {
 		if (hasData && loading) {
-			setLoading(false);
+			// Use a timeout to avoid immediate state updates
+			const timer = setTimeout(() => {
+				setLoading(false);
+			}, 0);
+			return () => clearTimeout(timer);
 		}
 	}, [hasData, loading]);
 
 	const showOverlay = loading || !hasData;
-	//
+
 	// Handle filter updates
 	const handleFiltersUpdate = ({ filters: newFilters }) => {
 		const processedFilters = newFilters.map(filter => {
@@ -358,16 +332,45 @@ export default function Graph( props ) {
 		updateUrlWithFilters(graphId, processedFilters);
 	};
 
+	// Determine which chart component to render
+	const renderChart = () => {
+		if (!hasData) return null;
+
+		// Use SummaryGraph for horizontal bar graphs with summarized data
+		if (orientation === 'horizontal' && summarize) {
+			return (
+				<SummaryGraph
+					title={title}
+					data={data}
+					series={series}
+					dimension={dimension}
+					refreshing={refreshing}
+				/>
+			);
+		}
+
+		// Use UplotGraph for all other graph types
+		return (
+			<UplotGraph
+				title={title}
+				data={data}
+				series={series}
+				meta={meta}
+				containerRef={containerRef}
+				showLegend={showLegend}
+				type={type}
+				orientation={orientation}
+				dimension={dimension}
+				refreshing={refreshing}
+			/>
+		);
+	};
+
 	return (
-		<div style={{ width: '100%' }} data-graph-id={graphId}>
+		<div style={{ width: '100%', marginBottom: 0 }} data-graph-id={graphId}>
 			<div ref={containerRef} className={className} style={style}>
-				{showOverlay && <Overlay loading={loading} title={title} /> }
-				{hasData && (
-					<>
-						<UplotReact options={options} data={d} />
-						{refreshing && <Overlay refreshing={true} />}
-					</>
-				)}
+				{showOverlay && <Overlay loading={loading} title={title} />}
+				{hasData && renderChart()}
 			</div>
 			{allowFrontendFilters && (
 				<div style={{ position: 'relative', marginTop: '10px', zIndex: 1 }}>
