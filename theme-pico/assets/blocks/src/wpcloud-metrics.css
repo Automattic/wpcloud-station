@@ -1,0 +1,19 @@
+& {
+
+	.wpcloud-graph-tooltip {
+		background-color: var(--pico-secondary-background);
+		color: var(--pico-color);
+		padding: 4px 8px;
+		border-radius: 4px;
+		font-size: 0.8rem;
+	}
+
+	@media (prefers-color-scheme: light) {
+		.wpcloud-graph-tooltip {
+			border: var(--pico-border-width) solid var(--pico-form-element-border-color);
+			background-color: var(--pico-form-element-background-color);
+			color: var(--pico-form-element-placeholder-color);
+			padding: 2px 8px;
+		}
+	}
+}

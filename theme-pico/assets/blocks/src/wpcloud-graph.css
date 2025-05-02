@@ -25,13 +25,6 @@
 			border-radius: 0.125em;
 		}
 
-		.u-label {
-			text-overflow: ellipsis;
-			width: 80px;
-			white-space: nowrap;
-			overflow: hidden;
-		}
-
 		/* Allow the legend to grow and not be clipped */
 		max-height: none !important;
 		overflow: visible !important;
@@ -128,6 +121,11 @@
 
 		.wpcloud-horizontal-bar-graph-bar-container {
 			background-color: rgba(255, 255, 255, 0.1);
+		}
+
+		.wpcloud-tooltip {
+			background-color: rgba(255, 255, 255, 0.8);
+			color: black;
 		}
 	}
 }

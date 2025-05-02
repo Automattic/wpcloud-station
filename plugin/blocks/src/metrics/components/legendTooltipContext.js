@@ -8,7 +8,7 @@ export const LegendTooltipProvider = ({ children }) => {
 
   const show = useCallback((text, event) => {
     clearTimeout(timeoutRef.current);
-    const { clientX, clientY } = event;
+    const { clientX, clientY } = event || { clientX: 0, clientY: 0 };
     setTooltip({ visible: true, text, x: clientX + 12, y: clientY + 12 }); // offset by 12px
   }, []);
 

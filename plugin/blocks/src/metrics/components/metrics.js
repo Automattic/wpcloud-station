@@ -7,9 +7,10 @@ import React, { useState, useEffect, useCallback } from 'react';
  * Internal dependencies
  */
 import Graph from '@wpcloud/components/graph/components/graph.js';
-import { ApiContext, MetricsOptionsContext } from './contexts';
+import { ApiContext, MetricsOptionsContext, LegendTooltipProvider } from './contexts';
 import Toolbar from './toolbar';
 import { useQueryBoundary } from '../hooks';
+import { LegendTooltip } from './legendTooltip';
 
 function renderNodeWithProps(node, key, props) {
 
@@ -22,6 +23,7 @@ function renderNodeWithProps(node, key, props) {
 	return null;
 }
 
+// @TODO: Move these to the site editor as block attributes
 const defaultGraphOptions = {
 	seriesPalette: [
 		"#bcf60c", // Lime
@@ -125,10 +127,13 @@ function Metrics({ tree, apiPath }) {
 			<div className="wpcloud-metrics">
 				<h3>Metrics</h3>
 				<Toolbar onIntervalUpdate={updateQueryParams} interval={interval} onRefresh={onRefresh} />
-				<MetricsOptionsContext.Provider value={ defaultGraphOptions }>
-					<div className="wpcloud-metrics__graphs" style={{ marginBottom: 0 }}>
+				<MetricsOptionsContext.Provider value={defaultGraphOptions}>
+					<LegendTooltipProvider>
+						<div className="wpcloud-metrics__graphs" style={{ marginBottom: 0 }}>
 						{tree.children.map(renderNode)}
-					</div>
+						</div>
+						<LegendTooltip />
+					</LegendTooltipProvider>
 				</MetricsOptionsContext.Provider>
 			</div>
 		</ApiContext.Provider>
