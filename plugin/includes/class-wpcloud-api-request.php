@@ -77,7 +77,7 @@ class WPCloud_API_Request implements WPCloud_API_Request_Interface {
 	 * @return mixed The property value.
 	 */
 	public function __get( string $name ): mixed {
-		$data = $this->result->data ?? new stdClass();
+		$data = $this->result->data ?? null;
 		switch ( $name ) {
 			case 'error':
 				return $this->error;
@@ -136,7 +136,7 @@ class WPCloud_API_Request implements WPCloud_API_Request_Interface {
 			$body    = wp_remote_retrieve_body( $response );
 			$data    = json_decode( $body );
 			$message = $data->message ?? 'Unknown error';
-			return $this->fail( $response_code, $message, $data->data ?? new stdClass() );
+			return $this->fail( $response_code, $message, $data->data ?? null );
 		}
 
 		// Get the response body.
@@ -148,7 +148,7 @@ class WPCloud_API_Request implements WPCloud_API_Request_Interface {
 		if ( isset( $this->result->data ) ) {
 			$this->data = $this->result->data;
 		} else {
-			$this->data = new stdClass();
+			$this->data = null;
 		}
 
 		// Check for JSON errors.
