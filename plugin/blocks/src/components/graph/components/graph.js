@@ -91,6 +91,7 @@ export default function Graph(props) {
 		title,
 		type,
 		showLegend,
+		legendPosition = 'bottom',
 
 		// Styling props.
 		styles = {},
@@ -358,6 +359,7 @@ export default function Graph(props) {
 				meta={meta}
 				containerRef={containerRef}
 				showLegend={showLegend}
+				legendPosition={legendPosition}
 				type={type}
 				orientation={orientation}
 				dimension={dimension}

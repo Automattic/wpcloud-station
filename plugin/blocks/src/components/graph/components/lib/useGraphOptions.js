@@ -54,6 +54,7 @@ export default ({ containerRef, dimension, ...options }) => {
 		meta,
 		data,
 		showLegend,
+		legendPosition = 'bottom',
 		type,
 		orientation,
 	} = options;
@@ -138,6 +139,22 @@ export default ({ containerRef, dimension, ...options }) => {
 			left: (padding.left || 0) + 130 // Add 130px for side labels (120px width + 10px margin)
 		};
 
+	// Configure legend based on position
+	const legendConfig = {
+		...legend,
+		show: showLegend !== false, // Show legend by default unless explicitly disabled
+		live: false, // Don't update the legend on hover
+		isolate: false, // Don't isolate series on legend hover
+		width: width, // Set legend width to match the chart width
+		stroke: null, // No stroke for legend markers
+	};
+
+	// Add position-specific legend configuration
+	if (legendPosition === 'right') {
+		legendConfig.position = 'right';
+		legendConfig.width = Math.min(200, width * 0.3); // Set a reasonable width for the right legend
+	}
+
 	let graphOptions = {
 		title,
 		width,
@@ -150,14 +167,7 @@ export default ({ containerRef, dimension, ...options }) => {
 		padding: adjustedPadding,
 		plugins: [], // The hover effect is now integrated into seriesBarsPlugin
 		scales,
-		legend: {
-			...legend,
-			show: showLegend !== false, // Show legend by default unless explicitly disabled
-			live: false, // Don't update the legend on hover
-			isolate: false, // Don't isolate series on legend hover
-			width: width, // Set legend width to match the chart width
-			stroke: null // No stroke for legend markers
-		}
+		legend: legendConfig
 	};
 
 	// Add the legend label click plugin if dimension is provided

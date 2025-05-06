@@ -26,6 +26,7 @@ export default function UplotGraph({
 		meta,
 		containerRef,
 		showLegend,
+		legendPosition,
 		type,
 		orientation,
 		dimension,
@@ -51,10 +52,11 @@ export default function UplotGraph({
 		meta,
 		containerRef,
 		showLegend,
+		legendPosition,
 		type,
 		orientation,
 		dimension
-	}), [title, data, series, meta, containerRef, showLegend, type, orientation, dimension]);
+	}), [title, data, series, meta, containerRef, showLegend, legendPosition, type, orientation, dimension]);
 
 	// Get graph options from the hook
 	const { data: d, ...options } = useGraphOptions(graphOptionsParams);
