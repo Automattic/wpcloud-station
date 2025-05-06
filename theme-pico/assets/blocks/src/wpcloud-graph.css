@@ -49,32 +49,13 @@
 			}
 		}
 
-		/* Right-positioned legend styles */
-		&[data-position="right"] {
-			position: absolute !important;
-			top: 30px; /* Leave space for the title */
-			right: 0;
-			bottom: 0;
-			width: auto !important;
-			max-width: 200px;
-			overflow-y: auto !important;
-			padding-left: 10px;
-
-			table {
-				width: 100%;
-			}
-
-			tr {
-				display: block;
-				margin-bottom: 5px;
-			}
-
-			th, td {
-				display: block;
-				text-align: left;
-				padding: 2px 0;
-			}
-		}
+	/* Right-positioned legend styles - these are now applied via JavaScript in the legendPositionPlugin */
+	&[data-position="right"] {
+		/* Styles are applied directly via JavaScript for better compatibility */
+		background-color: rgba(255, 255, 255, 0.8);
+		border-radius: 4px;
+		border: 1px solid #ddd;
+	}
 	}
 
 	/* Container adjustments for right legend */

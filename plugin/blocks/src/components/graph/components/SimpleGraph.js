@@ -6,9 +6,16 @@ import { useRef } from 'react';
  * @param {Object} props Component properties
  * @param {string} props.type The type of graph to render (line, area, bar, stacked-bar)
  * @param {string} props.orientation The orientation of the graph (vertical, horizontal)
+ * @param {boolean} props.showLegend Whether to show the legend
+ * @param {string} props.legendPosition The position of the legend (bottom, right)
  * @returns {JSX.Element} The rendered graph component
  */
-function SimpleGraph({ type = 'line', orientation = 'vertical' }) {
+function SimpleGraph({
+  type = 'line',
+  orientation = 'vertical',
+  showLegend = true,
+  legendPosition = 'bottom'
+}) {
   const containerRef = useRef(null);
 
   // Demo data for the graph
@@ -480,9 +487,90 @@ function SimpleGraph({ type = 'line', orientation = 'vertical' }) {
     }
   };
 
+  // Define the legend items
+  const legendItems = [
+    { label: 'Series 1', color: '#003366' },
+    { label: 'Series 2', color: '#3399ff' },
+    { label: 'Series 3', color: '#66cc99' }
+  ];
+
+  // Render the legend based on position
+  const renderLegend = () => {
+    if (!showLegend) return null;
+
+    if (legendPosition === 'right') {
+      return (
+        <div style={{
+          position: 'absolute',
+          right: '10px',
+          top: '30px',
+          bottom: '10px',
+          width: '120px',
+          backgroundColor: 'rgba(255, 255, 255, 0.8)',
+          padding: '10px',
+          borderRadius: '4px',
+          border: '1px solid #ddd',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '10px',
+          overflowY: 'auto'
+        }}>
+          <div style={{ fontWeight: 'bold', marginBottom: '5px' }}>Legend (Right)</div>
+          {legendItems.map((item, index) => (
+            <div key={index} style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+              <div style={{ width: '12px', height: '12px', backgroundColor: item.color, borderRadius: '2px' }}></div>
+              <div>{item.label}</div>
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    return (
+      <div style={{
+        position: 'absolute',
+        bottom: '10px',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        backgroundColor: 'rgba(255, 255, 255, 0.8)',
+        padding: '10px',
+        borderRadius: '4px',
+        border: '1px solid #ddd',
+        display: 'flex',
+        gap: '15px'
+      }}>
+        <div style={{ fontWeight: 'bold', marginRight: '5px' }}>Legend (Bottom)</div>
+        {legendItems.map((item, index) => (
+          <div key={index} style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+            <div style={{ width: '12px', height: '12px', backgroundColor: item.color, borderRadius: '2px' }}></div>
+            <div>{item.label}</div>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
+  // Adjust container style based on legend position
+  const containerStyle = {
+    width: '100%',
+    height: '300px',
+    background: '#fff',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'relative'
+  };
+
+  // Adjust SVG width and padding if legend is on the right
+  const svgStyle = {
+    width: showLegend && legendPosition === 'right' ? 'calc(100% - 150px)' : '100%',
+    height: '100%',
+    paddingRight: showLegend && legendPosition === 'right' ? '150px' : '0'
+  };
+
   return (
-    <div ref={containerRef} style={{ width: '100%', height: '300px', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <svg width="100%" height="100%" viewBox={viewBox} preserveAspectRatio="xMidYMid meet">
+    <div ref={containerRef} style={containerStyle}>
+      <svg style={svgStyle} viewBox={viewBox} preserveAspectRatio="xMidYMid meet">
         {/* X and Y axes - simplified */}
         <line x1={padding} y1={svgHeight - padding} x2={svgWidth - padding} y2={svgHeight - padding} stroke="#d6e7ff" />
         <line x1={padding} y1={padding} x2={padding} y2={svgHeight - padding} stroke="#d6e7ff" />
@@ -490,6 +578,7 @@ function SimpleGraph({ type = 'line', orientation = 'vertical' }) {
         {/* Render the appropriate graph type */}
         {renderGraph()}
       </svg>
+      {renderLegend()}
     </div>
   );
 }

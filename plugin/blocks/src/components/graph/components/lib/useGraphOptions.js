@@ -5,6 +5,7 @@ import chroma from 'chroma-js';
 import { useMetricsOptionsContext } from '@wpcloud/metrics/components/contexts';
 
 import { seriesBarsPlugin, isolateStackedPlugin, preventLegendClickPlugin, tooltipPlugin, legendLabelClickPlugin } from './uplot-plugins';
+import { legendPositionPlugin } from './legendPositionPlugin';
 import { stack } from './utils';
 
 const statusScale = () => ( series, _, opacity ) => {
@@ -81,7 +82,9 @@ export default ({ containerRef, dimension, ...options }) => {
 		resizeObserver.observe(containerRef?.current);
 
 		return () => {
-			u.destroy();
+			if (typeof u !== 'undefined' && u) {
+				u.destroy();
+			}
 			resizeObserver.disconnect();
 		};
 	}, [containerRef]);
@@ -131,13 +134,25 @@ export default ({ containerRef, dimension, ...options }) => {
 	const ori = isVertical ? 0 : 1;
 	const dir = isVertical ? 1 : -1;
 
+	// Adjust padding based on orientation and legend position
+	let adjustedPadding = padding;
+
 	// Add extra left padding for horizontal graphs to accommodate side labels
-	const adjustedPadding = isVertical
-		? padding
-		: {
-			...padding,
-			left: (padding.left || 0) + 130 // Add 130px for side labels (120px width + 10px margin)
+	if (!isVertical) {
+		adjustedPadding = {
+			...adjustedPadding,
+			left: (adjustedPadding.left || 0) + 130 // Add 130px for side labels (120px width + 10px margin)
 		};
+	}
+
+	// Add extra right padding when legend is positioned on the right
+	if (showLegend && legendPosition === 'right') {
+		const legendWidth = Math.min(200, width * 0.3); // Same width calculation as used for the legend
+		adjustedPadding = {
+			...adjustedPadding,
+			right: (adjustedPadding.right || 0) + legendWidth + 10 // Add legend width plus some margin
+		};
+	}
 
 	// Configure legend based on position
 	const legendConfig = {
@@ -153,6 +168,9 @@ export default ({ containerRef, dimension, ...options }) => {
 	if (legendPosition === 'right') {
 		legendConfig.position = 'right';
 		legendConfig.width = Math.min(200, width * 0.3); // Set a reasonable width for the right legend
+		legendConfig.dataAttr = { position: 'right' }; // Add data attribute for CSS targeting
+	} else {
+		legendConfig.dataAttr = { position: 'bottom' }; // Add data attribute for CSS targeting
 	}
 
 	let graphOptions = {
@@ -169,6 +187,9 @@ export default ({ containerRef, dimension, ...options }) => {
 		scales,
 		legend: legendConfig
 	};
+
+	// Add the legend position plugin
+	graphOptions.plugins.push(legendPositionPlugin(legendPosition));
 
 	// Add the legend label click plugin if dimension is provided
 	if (dimension) {

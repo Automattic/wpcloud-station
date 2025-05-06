@@ -276,8 +276,13 @@ export default function Edit( { attributes, setAttributes } ) {
 					placeholder={ __( 'Title' ) }
 				/>
 			</figure>
-			{/* SVG-based graph that shows the selected type and orientation */}
-			<SimpleGraph type={type} orientation={orientation} />
+			{/* SVG-based graph that shows the selected type and orientation with legend */}
+			<SimpleGraph
+				type={type}
+				orientation={orientation}
+				showLegend={showLegend}
+				legendPosition={legendPosition}
+			/>
 		</div>
 	);
 }
