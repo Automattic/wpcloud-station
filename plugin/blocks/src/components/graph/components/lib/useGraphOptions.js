@@ -54,12 +54,12 @@ export default ({ containerRef, dimension, ...options }) => {
 		title,
 		meta,
 		data,
-		showLegend,
 		legendPosition = 'bottom',
 		type,
 		orientation,
 	} = options;
 
+	const showLegend = options.showLegend && legendPosition === 'bottom';
 	// Metric level options ( with Graph overrides )
 	const {
 		padding,
@@ -134,37 +134,18 @@ export default ({ containerRef, dimension, ...options }) => {
 	const ori = isVertical ? 0 : 1;
 	const dir = isVertical ? 1 : -1;
 
-	// Adjust padding based on orientation and legend position
-	let adjustedPadding = padding;
-
-	// Add extra left padding for horizontal graphs to accommodate side labels
-	if (!isVertical) {
-		adjustedPadding = {
-			...adjustedPadding,
-			left: (adjustedPadding.left || 0) + 130 // Add 130px for side labels (120px width + 10px margin)
-		};
-	}
-
-	// Add extra right padding when legend is positioned on the right
-	if (showLegend && legendPosition === 'right') {
-		const legendWidth = Math.min(200, width * 0.3); // Same width calculation as used for the legend
-		adjustedPadding = {
-			...adjustedPadding,
-			right: (adjustedPadding.right || 0) + legendWidth + 10 // Add legend width plus some margin
-		};
-	}
-
 	// Configure legend based on position
 	const legendConfig = {
-		...legend,
-		show: showLegend !== false, // Show legend by default unless explicitly disabled
-		live: false, // Don't update the legend on hover
-		isolate: false, // Don't isolate series on legend hover
-		width: width, // Set legend width to match the chart width
-		stroke: null, // No stroke for legend markers
+	...legend,
+		show: showLegend,
+		live: false,
+		isolate: false,
+		width: width,
+		stroke: null,
 	};
-
+console.log('legendConfig', legend, legendConfig);
 	// Add position-specific legend configuration
+	/*
 	if (legendPosition === 'right') {
 		legendConfig.position = 'right';
 		legendConfig.width = Math.min(200, width * 0.3); // Set a reasonable width for the right legend
@@ -172,7 +153,7 @@ export default ({ containerRef, dimension, ...options }) => {
 	} else {
 		legendConfig.dataAttr = { position: 'bottom' }; // Add data attribute for CSS targeting
 	}
-
+*/
 	let graphOptions = {
 		title,
 		width,
@@ -182,7 +163,6 @@ export default ({ containerRef, dimension, ...options }) => {
 		data,
 		ori,
 		dir,
-		padding: adjustedPadding,
 		plugins: [], // The hover effect is now integrated into seriesBarsPlugin
 		scales,
 		legend: legendConfig

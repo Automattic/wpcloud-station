@@ -4,11 +4,13 @@
 import React, { useRef, useEffect } from 'react';
 import UplotReact from 'uplot-react';
 import 'uplot/dist/uPlot.min.css';
+import classnames from 'classnames';
 
 /**
  * Internal dependencies
  */
 import Overlay from './overlay';
+import SideLegend from './SideLegend';
 import useGraphOptions from './lib/useGraphOptions';
 import useUplotHeight from './lib/useUplotHeight';
 
@@ -61,22 +63,35 @@ export default function UplotGraph({
 	// Get graph options from the hook
 	const { data: d, ...options } = useGraphOptions(graphOptionsParams);
 
-	return (
-		<>
-			<UplotReact
-				options={options}
-				data={d}
-				onCreate={(chart) => {
-					// Only set the instance if it's not already set or if it's a different instance
-					if (!uplotInstanceRef.current || uplotInstanceRef.current !== chart) {
-						uplotInstanceRef.current = chart;
+	// Extract colors from series for the SideLegend
+	const seriesColors = options.series.map(s => s.stroke).filter(Boolean);
 
-						// Use the handleChartCreated function from the hook
-						handleChartCreated(chart);
-					}
-				}}
-			/>
-			{refreshing && <Overlay refreshing={true} />}
-		</>
+	return (
+		<div className={classnames('wpcloud-uplot-graph',{
+			'wpcloud-uplot-graph--with-side-legend': showLegend && legendPosition === 'right'
+		})}>
+			<div className="wpcloud-uplot-graph__chart-container">
+				<UplotReact
+					options={options}
+					data={d}
+					onCreate={(chart) => {
+						// Only set the instance if it's not already set or if it's a different instance
+						if (!uplotInstanceRef.current || uplotInstanceRef.current !== chart) {
+							uplotInstanceRef.current = chart;
+
+							// Use the handleChartCreated function from the hook
+							handleChartCreated(chart);
+						}
+					}}
+				/>
+				{refreshing && <Overlay refreshing={true} />}
+			</div>
+
+			{showLegend && legendPosition === 'right' && (
+				<div className="wpcloud-uplot-graph__legend-container">
+					<SideLegend series={options.series} colors={seriesColors} />
+				</div>
+			)}
+		</div>
 	);
 }
