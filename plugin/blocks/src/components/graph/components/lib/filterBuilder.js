@@ -99,23 +99,31 @@ export default function FilterBuilder({ filters = [], dimensionOptions = [], onC
     };
 
     const resetForm = () => {
-		setField( dimensionOptions[0].value ); // select first option
+        // Only set field if dimensionOptions has items
+        if (dimensionOptions && dimensionOptions.length > 0) {
+            setField(dimensionOptions[0].value); // select first option
+        } else {
+            setField('');
+        }
         setOperator('');
         setValue('');
     };
 
 	// Update Columns when dimensions change
 	useEffect( () => {
-		if ( field ) {
-			// update field and filters if dimension is no longer valid.
-			// @todo -> is there any overlap where we may keep some filters?
-			if ( ! dimensionOptions.some(dimObj => dimObj.value === field)) {
+		// Only proceed if dimensionOptions has items
+		if (dimensionOptions && dimensionOptions.length > 0) {
+			if ( field ) {
+				// update field and filters if dimension is no longer valid.
+				// @todo -> is there any overlap where we may keep some filters?
+				if ( ! dimensionOptions.some(dimObj => dimObj.value === field)) {
+					setField( dimensionOptions[0].value );
+					onChange( [] ); // remove filters
+				}
+			} else {
+				// select first item if none selected.
 				setField( dimensionOptions[0].value );
-				onChange( [] ); // remove filters
 			}
-		} else {
-			// select first item if none selected.
-			setField( dimensionOptions[0].value );
 		}
 	}, [dimensionOptions] );
 

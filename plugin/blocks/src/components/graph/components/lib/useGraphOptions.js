@@ -5,6 +5,7 @@ import chroma from 'chroma-js';
 import { useMetricsOptionsContext } from '@wpcloud/metrics/components/contexts';
 
 import { seriesBarsPlugin, isolateStackedPlugin, preventLegendClickPlugin, tooltipPlugin, legendLabelClickPlugin } from './uplot-plugins';
+import { legendPositionPlugin } from './legendPositionPlugin';
 import { stack } from './utils';
 
 const statusScale = () => ( series, _, opacity ) => {
@@ -53,11 +54,12 @@ export default ({ containerRef, dimension, ...options }) => {
 		title,
 		meta,
 		data,
-		showLegend,
+		legendPosition = 'bottom',
 		type,
 		orientation,
 	} = options;
 
+	const showLegend = options.showLegend && legendPosition === 'bottom';
 	// Metric level options ( with Graph overrides )
 	const {
 		padding,
@@ -80,7 +82,9 @@ export default ({ containerRef, dimension, ...options }) => {
 		resizeObserver.observe(containerRef?.current);
 
 		return () => {
-			u.destroy();
+			if (typeof u !== 'undefined' && u) {
+				u.destroy();
+			}
 			resizeObserver.disconnect();
 		};
 	}, [containerRef]);
@@ -130,13 +134,15 @@ export default ({ containerRef, dimension, ...options }) => {
 	const ori = isVertical ? 0 : 1;
 	const dir = isVertical ? 1 : -1;
 
-	// Add extra left padding for horizontal graphs to accommodate side labels
-	const adjustedPadding = isVertical
-		? padding
-		: {
-			...padding,
-			left: (padding.left || 0) + 130 // Add 130px for side labels (120px width + 10px margin)
-		};
+	// Configure legend based on position
+	const legendConfig = {
+	...legend,
+		show: showLegend,
+		live: false,
+		isolate: false,
+		width: width,
+		stroke: null,
+	};
 
 	let graphOptions = {
 		title,
@@ -147,18 +153,13 @@ export default ({ containerRef, dimension, ...options }) => {
 		data,
 		ori,
 		dir,
-		padding: adjustedPadding,
 		plugins: [], // The hover effect is now integrated into seriesBarsPlugin
 		scales,
-		legend: {
-			...legend,
-			show: showLegend !== false, // Show legend by default unless explicitly disabled
-			live: false, // Don't update the legend on hover
-			isolate: false, // Don't isolate series on legend hover
-			width: width, // Set legend width to match the chart width
-			stroke: null // No stroke for legend markers
-		}
+		legend: legendConfig
 	};
+
+	// Add the legend position plugin
+	graphOptions.plugins.push(legendPositionPlugin(legendPosition));
 
 	// Add the legend label click plugin if dimension is provided
 	if (dimension) {

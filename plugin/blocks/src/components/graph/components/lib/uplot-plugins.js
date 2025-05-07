@@ -380,7 +380,10 @@ export function seriesBarsPlugin(opts = {}) {
 			uPlot.assign(opts, {
 				select: {show: false},
 				cursor: {
-					show: false, // Completely disable the cursor/hover effect
+					show: false, // Disable the default cursor/hover effect but allow our custom hover
+					points: {
+						show: false,
+					}
 				},
 				scales: {
 					x: {

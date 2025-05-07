@@ -87,6 +87,11 @@
 			"type" : "boolean",
 			"default" : true
 		},
+		"legendPosition" : {
+			"type" : "string",
+			"default" : "bottom",
+			"enum": ["bottom", "right"]
+		},
 		"minWidth" : {
 			"type" : "string",
 			"default" : "500px"
