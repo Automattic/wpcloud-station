@@ -168,8 +168,10 @@
 
 	.wpcloud-side-legend__marker {
 		width: 12px;
-		height: 12px;
-		border-radius: 2px;
+		height: .25em !important;
+		border-radius: 0.125em;
+		flex-shrink: 0; /* Prevent the marker from shrinking */
+		min-width: 12px; /* Ensure minimum width */
 	}
 
 	.wpcloud-side-legend__label {
@@ -179,6 +181,8 @@
 		text-overflow: ellipsis;
 		color: var(--pico-muted-color, #666);
 		transition: color 0.2s ease;
+		flex: 1; /* Allow the label to take up remaining space */
+		min-width: 0; /* Allow the label to shrink below its content size */
 	}
 
 	.wpcloud-side-legend__item:hover .wpcloud-side-legend__label {
