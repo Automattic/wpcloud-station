@@ -37,6 +37,44 @@ const defaultGraphOptions = {
 		"#f032e6", // Magenta
 		"#fabebe", // Rose
 	],
+	axes: [
+		{
+			dark: {
+				stroke: '#FFF',
+				grid: { stroke: '#111', width: 1 },
+				ticks: { stroke: '#888', size: 5, width: 1 },
+				font: '12px sans-serif',
+			},
+			light: {
+				stroke: '#000',
+				grid: { stroke: '#eee', width: 1, dash: [4, 4] },
+				ticks: { stroke: '#888', size: 5, width: 1 },
+				font: '12px sans-serif',
+			}
+		},
+		{
+			dark: {
+				stroke: '#FFF',
+				grid: { stroke: '#111', width: 1 },
+				ticks: { stroke: '#888', size: 5, width: 1 },
+				font: '12px sans-serif',
+			},
+			light: {
+				stroke: '#000',
+				grid: { stroke: '#eee', width: 1, dash: [4, 4] },
+				ticks: { stroke: '#888', size: 5, width: 1 },
+				font: '12px sans-serif',
+			}
+		}
+	],
+	padding: [10, 10, 0, 0],
+	scales: {
+		y: {
+			range: [0, null],
+			ori: 1,
+		},
+		x: {},
+	},
 	legend: { live: false, isolate: false },
 	series: {
 		points: { show: false },
