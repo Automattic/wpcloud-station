@@ -21,22 +21,16 @@ import Filters from './lib/filters';
  */
 const getFiltersFromUrl = (graphId) => {
 	try {
-		// Get the URL search parameters
 		const urlParams = new URLSearchParams(window.location.search);
-
-		// Look specifically for the parameter with this graph's ID
 		const paramName = `filters_${graphId}`;
 		const filterParam = urlParams.get(paramName);
 
-		// If there's no parameter specifically for this graph, return empty array
 		if (!filterParam) {
 			return [];
 		}
 
-		// Parse the JSON string from the URL
 		const decodedFilters = JSON.parse(decodeURIComponent(filterParam));
 
-		// Convert the array format to the filter object format
 		return decodedFilters.map(filter => ({
 			enabled: true,
 			value: {
@@ -61,23 +55,18 @@ const getFiltersFromUrl = (graphId) => {
  */
 const updateUrlWithFilters = (graphId, filters) => {
 	try {
-		// Get the active filters in array format
 		const activeFilters = filters
 			.filter(f => f.enabled)
 			.map(f => [f.value.field, f.value.operator, String(f.value.value)]);
 
-		// Get the current URL search parameters
 		const urlParams = new URLSearchParams(window.location.search);
 
-		// If there are active filters, add them to the URL
 		if (activeFilters.length > 0) {
 			urlParams.set(`filters_${graphId}`, encodeURIComponent(JSON.stringify(activeFilters)));
 		} else {
-			// If there are no active filters, remove the parameter
 			urlParams.delete(`filters_${graphId}`);
 		}
 
-		// Update the URL without reloading the page
 		const newUrl = `${window.location.pathname}?${urlParams.toString()}${window.location.hash}`;
 		window.history.replaceState({}, '', newUrl);
 	} catch (error) {

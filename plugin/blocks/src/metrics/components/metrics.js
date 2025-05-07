@@ -23,7 +23,7 @@ function renderNodeWithProps(node, key, props) {
 	return null;
 }
 
-// @TODO: Move these to the site editor as block attributes
+// Default graph options
 const defaultGraphOptions = {
 	seriesPalette: [
 		"#bcf60c", // Lime
@@ -37,51 +37,6 @@ const defaultGraphOptions = {
 		"#f032e6", // Magenta
 		"#fabebe", // Rose
 	],
-	axes: [
-		{
-			dark: {
-				stroke: '#FFF',
-				grid: { stroke: '#111', width: 1 },
-				ticks: { stroke: '#888', size: 5, width: 1 },
-				font: '12px sans-serif',
-				//label: "Axis 1",
-			},
-			light: {
-				stroke: '#000',
-				grid: { stroke: '#eee', width: 1, dash: [4, 4] },
-				ticks: { stroke: '#888', size: 5, width: 1 },
-				font: '12px sans-serif',
-			}
-		},
-		{
-			dark: {
-				stroke: '#FFF',
-				grid: { stroke: '#111', width: 1 },
-				ticks: { stroke: '#888', size: 5, width: 1 },
-				font: '12px sans-serif',
-				//label: "Axis 2",
-			},
-			light: {
-				stroke: '#000',
-				grid: { stroke: '#eee', width: 1, dash: [4, 4] },
-				ticks: { stroke: '#888', size: 5, width: 1 },
-				font: '12px sans-serif',
-			}
-		}
-	],
-
-	padding: [10, 10, 0, 0],
-	fit: {
-		width: 10,
-		height: 75,
-	},
-	scales: {
-		y: {
-			range: [0, null],
-			ori: 1,
-		},
-		x: {},
-	},
 	legend: { live: false, isolate: false },
 	series: {
 		points: { show: false },
