@@ -163,6 +163,7 @@
 		display: flex;
 		align-items: center;
 		gap: 6px;
+		cursor: default;
 	}
 
 	.wpcloud-side-legend__marker {
@@ -176,6 +177,13 @@
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
+		color: var(--pico-muted-color, #666);
+		transition: color 0.2s ease;
+	}
+
+	.wpcloud-side-legend__item:hover .wpcloud-side-legend__label {
+		color: var(--pico-color, #000);
+		font-weight: 500;
 	}
 
 	.u-series {

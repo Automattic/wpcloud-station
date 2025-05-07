@@ -143,17 +143,7 @@ export default ({ containerRef, dimension, ...options }) => {
 		width: width,
 		stroke: null,
 	};
-console.log('legendConfig', legend, legendConfig);
-	// Add position-specific legend configuration
-	/*
-	if (legendPosition === 'right') {
-		legendConfig.position = 'right';
-		legendConfig.width = Math.min(200, width * 0.3); // Set a reasonable width for the right legend
-		legendConfig.dataAttr = { position: 'right' }; // Add data attribute for CSS targeting
-	} else {
-		legendConfig.dataAttr = { position: 'bottom' }; // Add data attribute for CSS targeting
-	}
-*/
+
 	let graphOptions = {
 		title,
 		width,
