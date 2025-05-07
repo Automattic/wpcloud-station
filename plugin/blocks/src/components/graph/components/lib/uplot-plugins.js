@@ -23,7 +23,7 @@ export function legendLabelClickPlugin(dimension) {
 						const labels = u.root.querySelectorAll('.u-label');
 
 						// Add click event for specific dimensions
-						if (['atomic_site_id', 'http_host'].includes(dimension)) {
+						if ('atomic_site_id' === dimension) {
 							labels.forEach(label => {
 								// Skip labels that already have event handlers attached
 								if (label.dataset.hasClickEvent === 'true') {
