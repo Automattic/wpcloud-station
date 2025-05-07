@@ -4,7 +4,7 @@ import chroma from 'chroma-js';
 
 import { useMetricsOptionsContext } from '@wpcloud/metrics/components/contexts';
 
-import { seriesBarsPlugin, isolateStackedPlugin, preventLegendClickPlugin, tooltipPlugin, legendLabelClickPlugin } from './uplot-plugins';
+import { seriesBarsPlugin, isolateStackedPlugin, preventLegendClickPlugin, tooltipPlugin, legendLabelClickPlugin } from './uplot-plugins/';
 import { legendPositionPlugin } from './legendPositionPlugin';
 import { stack } from './utils';
 
