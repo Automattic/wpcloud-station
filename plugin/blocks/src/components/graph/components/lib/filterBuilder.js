@@ -66,19 +66,6 @@ const arrayToObjectFilter = (filter) => {
 };
 
 /**
- * Convert a filter from the object format {field, operator, value} to an array format
- *
- * @param {Object} filter - Filter in object format {field, operator, value}
- * @returns {Array} - Filter in array format [field, operator, value]
- */
-const objectToArrayFilter = (filter) => {
-    if (filter && typeof filter === 'object' && !Array.isArray(filter)) {
-        return [filter.field, filter.operator, filter.value];
-    }
-    return filter;
-};
-
-/**
  * Component for building and managing predefined filters in the block editor
  */
 export default function FilterBuilder({ filters = [], dimensionOptions = [], onChange }) {
