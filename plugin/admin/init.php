@@ -636,3 +636,9 @@ function wpcloud_admin_options_controller(): void {
 	 */
 	require_once plugin_dir_path( __FILE__ ) . 'includes/class-wpcloud-content-exporter.php';
 	new WPCloud_Content_Exporter();
+
+	/**
+	 * Initialize the pattern admin.
+	 */
+	require_once plugin_dir_path( __FILE__ ) . 'includes/class-wpcloud-pattern-admin.php';
+	new WPCloud_Pattern_Admin();
