@@ -611,3 +611,9 @@ function wpcloud_admin_options_controller(): void {
 			wp_enqueue_script( 'wpcloud-admin', plugin_dir_url( __FILE__ ) . 'assets/js/build/index.js', $config['dependencies'], $config['version'], true );
 		}
 	);
+
+	/**
+	 * Initialize the pattern exporter.
+	 */
+	require_once plugin_dir_path( __FILE__ ) . 'includes/class-wpcloud-pattern-exporter.php';
+	new WPCloud_Pattern_Exporter();
