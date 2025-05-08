@@ -73,16 +73,22 @@ class WPCloud_Pattern_Exporter {
 	}
 
 	/**
-	 * Check if this is a development environment.
+	 * Check if the pattern exporter should be enabled.
 	 *
-	 * @return bool Whether this is a development environment.
+	 * @return bool Whether the pattern exporter should be enabled.
 	 */
 	private function is_development_environment() {
+		// Check if the pattern exporter is enabled in settings.
+		$options             = get_option( 'wpcloud_settings', array() );
+		$enabled_in_settings = isset( $options['enable_pattern_exporter'] ) && $options['enable_pattern_exporter'];
+
 		// Logic to determine if this is a development environment.
 		$is_debug   = defined( 'WP_DEBUG' ) && WP_DEBUG;
 		$is_dev_env = defined( 'WP_ENVIRONMENT_TYPE' ) && 'development' === WP_ENVIRONMENT_TYPE;
+		$is_dev     = ( $is_debug || $is_dev_env );
 
-		return ( $is_debug || $is_dev_env );
+		// The pattern exporter should be enabled if it's enabled in settings AND we're in a development environment.
+		return $enabled_in_settings && $is_dev;
 	}
 
 	/**

@@ -254,6 +254,25 @@ function wpcloud_settings_init(): void {
 				'disabled'            => ! $wpcloud_api_healthy,
 			)
 		);
+
+		// Only show the pattern exporter option if IS_ATOMIC is not defined.
+	if ( ! defined( 'IS_ATOMIC' ) ) {
+		add_settings_field(
+			'wpcloud_field_enable_pattern_exporter',
+			__( 'Enable pattern exporter', 'wpcloud' ),
+			'wpcloud_field_input_cb',
+			'wpcloud',
+			'wpcloud_section_settings',
+			array(
+				'label_for'           => 'enable_pattern_exporter',
+				'class'               => 'wpcloud_row',
+				'wpcloud_custom_data' => 'custom',
+				'description'         => __( 'Automatically export patterns to JSON files in the plugin/patterns directory when they are saved in the WordPress editor. This is useful for development environments.' ),
+				'type'                => 'checkbox',
+				'checked'             => get_option( 'wpcloud_settings', array() )['enable_pattern_exporter'] ?? false,
+			)
+		);
+	}
 }
 	add_action( 'admin_init', 'wpcloud_settings_init' );
 
