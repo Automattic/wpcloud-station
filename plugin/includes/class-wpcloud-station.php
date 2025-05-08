@@ -29,7 +29,7 @@ class WPCloud_Station {
 	}
 
 	/**
-	 * Setup the site .
+	 * Setup the site.
 	 *
 	 * @param array $options The options.
 	 *
@@ -37,6 +37,12 @@ class WPCloud_Station {
 	 */
 	public function setup( array $options ): array {
 		$errors = array();
+
+		// Import patterns from plugin/patterns directory.
+		$pattern_errors = $this->import_patterns();
+		if ( ! empty( $pattern_errors ) ) {
+			$errors = array_merge( $errors, $pattern_errors );
+		}
 
 		// Setup the site name.
 		$site_name = $options['site-name'] ?? $this->wp_cloud_client_name;
@@ -58,7 +64,7 @@ class WPCloud_Station {
 
 		// Create add site page.
 		$core_pages = array(
-			'add-site' => array(
+			'add-site'              => array(
 				'post_title'    => 'Add Site',
 				'post_content'  => '<!-- wp:pattern {"slug":"wpcloud-station/form-add-site"} /-->',
 				'post_category' => array( $wpcloud_core_cat->term_id, get_category_by_slug( WPCLOUD_CATEGORY_PRIVATE )->term_id ),
@@ -106,10 +112,92 @@ class WPCloud_Station {
 	}
 
 	/**
-	 * Add getter to fetch persistent data .
+	 * Import patterns from the plugin/patterns directory.
 	 *
-	 * @param string $name The name .
-	 * @return mixed The persistent data .
+	 * @return array Array of errors encountered during import.
+	 */
+	private function import_patterns(): array {
+		$errors       = array();
+		$patterns_dir = plugin_dir_path( __DIR__ ) . 'patterns';
+
+		// Check if patterns directory exists.
+		if ( ! file_exists( $patterns_dir ) || ! is_dir( $patterns_dir ) ) {
+			if ( function_exists( 'WP_CLI::log' ) ) {
+				WP_CLI::log( 'Patterns directory not found: ' . $patterns_dir );
+			}
+			return $errors;
+		}
+
+		// Get all JSON files in the patterns directory.
+		$pattern_files = glob( $patterns_dir . '/*.json' );
+		if ( empty( $pattern_files ) ) {
+			if ( function_exists( 'WP_CLI::log' ) ) {
+				WP_CLI::log( 'No pattern files found in: ' . $patterns_dir );
+			}
+			return $errors;
+		}
+
+		if ( function_exists( 'WP_CLI::log' ) ) {
+			WP_CLI::log( 'Found ' . count( $pattern_files ) . ' pattern files to import.' );
+		}
+
+		foreach ( $pattern_files as $pattern_file ) {
+			$pattern_filename = basename( $pattern_file );
+			if ( function_exists( 'WP_CLI::log' ) ) {
+				WP_CLI::log( 'Importing pattern: ' . $pattern_filename );
+			}
+
+			$pattern_content = file_get_contents( $pattern_file );
+			if ( ! $pattern_content ) {
+				$error_message = 'Failed to read pattern file: ' . $pattern_filename;
+				if ( function_exists( 'WP_CLI::warning' ) ) {
+					WP_CLI::warning( $error_message );
+				}
+				$errors[] = new WP_Error( 'pattern_read_error', $error_message );
+				continue;
+			}
+
+			$pattern_data = json_decode( $pattern_content, true );
+			if ( json_last_error() !== JSON_ERROR_NONE ) {
+				$error_message = 'Failed to parse pattern JSON: ' . $pattern_filename;
+				if ( function_exists( 'WP_CLI::warning' ) ) {
+					WP_CLI::warning( $error_message );
+				}
+				$errors[] = new WP_Error( 'pattern_json_error', $error_message );
+				continue;
+			}
+
+			// Extract pattern name from filename (without extension).
+			$pattern_name = pathinfo( $pattern_file, PATHINFO_FILENAME );
+
+			// Register the pattern.
+			if ( function_exists( 'register_block_pattern' ) ) {
+				$pattern_title = $pattern_data['title'] ?? $pattern_name;
+				register_block_pattern(
+					'wpcloud-station/' . $pattern_name,
+					array(
+						'title'       => $pattern_title,
+						'content'     => $pattern_data['content'] ?? '',
+						'categories'  => array( 'wpcloud' ),
+						'description' => $pattern_data['description'] ?? '',
+					)
+				);
+				if ( function_exists( 'WP_CLI::success' ) ) {
+					WP_CLI::success( 'Registered pattern: ' . $pattern_title );
+				}
+			} elseif ( function_exists( 'WP_CLI::warning' ) ) {
+					WP_CLI::warning( 'register_block_pattern function not available, skipping pattern: ' . $pattern_name );
+			}
+		}
+
+		return $errors;
+	}
+
+	/**
+	 * Add getter to fetch persistent data.
+	 *
+	 * @param string $name The name.
+	 * @return mixed The persistent data.
 	 */
 	public function __get( string $name ): mixed {
 		$as_upper = $this->get_persistent_data( strtoupper( $name ) );
@@ -139,7 +227,7 @@ class WPCloud_Station {
 			return '';
 		}
 
-		// Try parsing any json.
+		// Try parsing any JSON.
 		$value = json_decode( $this->apd->$key, true );
 		if ( json_last_error() === JSON_ERROR_NONE ) {
 			return $value;
