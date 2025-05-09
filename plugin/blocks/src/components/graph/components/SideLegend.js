@@ -104,7 +104,18 @@ const SideLegend = ({ series, colors: propColors, onLegendItemClick, dimension }
 	const showTooltip = (text, event) => {
 		clearTimeout(tooltipTimeoutRef.current);
 		const { clientX, clientY } = event;
-		setTooltip({ visible: true, text, x: clientX + 12, y: clientY + 12 });
+
+		// Check if cursor is close to the right edge of the window
+		const windowWidth = window.innerWidth;
+		const tooltipWidth = Math.min(300, text.length * 8); // Estimate tooltip width
+		const rightEdgeDistance = windowWidth - clientX;
+
+		// If cursor is close to the right edge, position tooltip to the left
+		const xPosition = rightEdgeDistance < (tooltipWidth + 20)
+			? clientX - tooltipWidth - 12 // Position to the left of cursor
+			: clientX + 12; // Default position to the right of cursor
+
+		setTooltip({ visible: true, text, x: xPosition, y: clientY + 12 });
 	};
 
 	// Hide tooltip
