@@ -1,4 +1,4 @@
-<!-- wp:template-part {"slug":"header","tagName":"header","area":"header"} /-->
+<!-- wp:template-part {"slug":"header","theme":"wpcloud-station-pico","tagName":"header","area":"header"} /-->
 
 <!-- wp:spacer {"height":"12px","className":"wpcloud-site-view\u002d\u002dcontent\u002d\u002dspacer"} -->
 <div style="height:12px" aria-hidden="true" class="wp-block-spacer wpcloud-site-view--content--spacer"></div>
@@ -10,61 +10,61 @@
 <!-- /wp:column -->
 
 <!-- wp:column {"width":"1100px","className":"wpcloud-site-view\u002d\u002ddetails"} -->
-<div class="wp-block-column wpcloud-site-view--details" style="flex-basis:1200px"><!-- wp:template-part {"slug":"site-header","area":"uncategorized"} /-->
+<div class="wp-block-column wpcloud-site-view--details" style="flex-basis:1100px"><!-- wp:template-part {"slug":"site-header","theme":"wpcloud-station-pico","area":"uncategorized"} /-->
 
 <!-- wp:wpcloud/metrics -->
-<div class="wp-block-wpcloud-metrics" id="metrics"><!-- wp:group {"metadata":{"name":"Graphs"},"className":"wpcloud-metrics","layout":{"type":"grid","columnCount":2,"minimumColumnWidth":null}} -->
-<div class="wp-block-group wpcloud-metrics"><!-- wp:wpcloud/graph {"type":"bar"} -->
-	<div class="wp-block-wpcloud-graph" data-graph-attributes="{&quot;metric&quot;:&quot;requests&quot;,&quot;dimension&quot;:&quot;http_status&quot;,&quot;resolution&quot;:&quot;60&quot;,&quot;summarize&quot;:false,&quot;topX&quot;:&quot;1&quot;,&quot;type&quot;:&quot;line&quot;,&quot;orientation&quot;:&quot;vertical&quot;,&quot;title&quot;:&quot;Requests by HTTP Response Code&quot;,&quot;showLegend&quot;:true,&quot;minWidth&quot;:&quot;500px&quot;,&quot;predefinedFilters&quot;:[],&quot;allowFrontendFilters&quot;:false}">Graph</div>
-	<!-- /wp:wpcloud/graph -->
+<div class="wp-block-wpcloud-metrics" id="metrics" data-metrics-attributes="{&quot;id&quot;:&quot;metrics&quot;,&quot;type&quot;:&quot;client&quot;}"><!-- wp:group {"metadata":{"name":"Graphs"},"className":"wpcloud-metrics","layout":{"type":"grid","columnCount":2,"minimumColumnWidth":null}} -->
+<div class="wp-block-group wpcloud-metrics"><!-- wp:wpcloud/graph {"dimension":"server_protocol","type":"bar"} -->
+<div class="wp-block-wpcloud-graph" data-graph-attributes="{&quot;metric&quot;:&quot;requests&quot;,&quot;dimension&quot;:&quot;server_protocol&quot;,&quot;resolution&quot;:10,&quot;summarize&quot;:false,&quot;topX&quot;:&quot;20&quot;,&quot;type&quot;:&quot;bar&quot;,&quot;orientation&quot;:&quot;vertical&quot;,&quot;title&quot;:&quot;Status Codes&quot;,&quot;showLegend&quot;:true,&quot;legendPosition&quot;:&quot;bottom&quot;,&quot;minWidth&quot;:&quot;500px&quot;,&quot;predefinedFilters&quot;:[],&quot;allowFrontendFilters&quot;:false}">Graph</div>
+<!-- /wp:wpcloud/graph -->
 
-	<!-- wp:wpcloud/graph {"metric":"response_bytes_persec","dimension":"atomic_site_id","resolution":"60","topX":"1","title":"Bandwidth","allowFrontendFilters":false} -->
-	<div class="wp-block-wpcloud-graph" data-graph-attributes="{&quot;metric&quot;:&quot;response_bytes_persec&quot;,&quot;dimension&quot;:&quot;atomic_site_id&quot;,&quot;resolution&quot;:&quot;60&quot;,&quot;summarize&quot;:false,&quot;topX&quot;:&quot;1&quot;,&quot;type&quot;:&quot;line&quot;,&quot;orientation&quot;:&quot;vertical&quot;,&quot;title&quot;:&quot;Bandwidth&quot;,&quot;showLegend&quot;:true,&quot;minWidth&quot;:&quot;500px&quot;,&quot;predefinedFilters&quot;:[],&quot;allowFrontendFilters&quot;:false}">Graph</div>
-	<!-- /wp:wpcloud/graph -->
+<!-- wp:wpcloud/graph {"metric":"response_bytes_persec","dimension":"atomic_site_id","resolution":"60","topX":"1","title":"Bandwidth"} -->
+<div class="wp-block-wpcloud-graph" data-graph-attributes="{&quot;metric&quot;:&quot;response_bytes_persec&quot;,&quot;dimension&quot;:&quot;atomic_site_id&quot;,&quot;resolution&quot;:&quot;60&quot;,&quot;summarize&quot;:false,&quot;topX&quot;:&quot;1&quot;,&quot;type&quot;:&quot;line&quot;,&quot;orientation&quot;:&quot;vertical&quot;,&quot;title&quot;:&quot;Bandwidth&quot;,&quot;showLegend&quot;:true,&quot;legendPosition&quot;:&quot;bottom&quot;,&quot;minWidth&quot;:&quot;500px&quot;,&quot;predefinedFilters&quot;:[],&quot;allowFrontendFilters&quot;:false}">Graph</div>
+<!-- /wp:wpcloud/graph -->
 
-	<!-- wp:wpcloud/graph {"metric":"cgroup_cpu_usage_persec","dimension":"atomic_site_id","resolution":"60","topX":"1","title":"PHP CPU (cores)","showLegend":false,"allowFrontendFilters":false} -->
-	<div class="wp-block-wpcloud-graph" data-graph-attributes="{&quot;metric&quot;:&quot;cgroup_cpu_usage_persec&quot;,&quot;dimension&quot;:&quot;atomic_site_id&quot;,&quot;resolution&quot;:&quot;60&quot;,&quot;summarize&quot;:false,&quot;topX&quot;:&quot;1&quot;,&quot;type&quot;:&quot;line&quot;,&quot;orientation&quot;:&quot;vertical&quot;,&quot;title&quot;:&quot;PHP CPU (cores)&quot;,&quot;showLegend&quot;:false,&quot;minWidth&quot;:&quot;500px&quot;,&quot;predefinedFilters&quot;:[],&quot;allowFrontendFilters&quot;:false}">Graph</div>
-	<!-- /wp:wpcloud/graph -->
+<!-- wp:wpcloud/graph {"metric":"cgroup_cpu_usage_persec","dimension":"atomic_site_id","resolution":"60","topX":"1","title":"PHP CPU (cores)","showLegend":false} -->
+<div class="wp-block-wpcloud-graph" data-graph-attributes="{&quot;metric&quot;:&quot;cgroup_cpu_usage_persec&quot;,&quot;dimension&quot;:&quot;atomic_site_id&quot;,&quot;resolution&quot;:&quot;60&quot;,&quot;summarize&quot;:false,&quot;topX&quot;:&quot;1&quot;,&quot;type&quot;:&quot;line&quot;,&quot;orientation&quot;:&quot;vertical&quot;,&quot;title&quot;:&quot;PHP CPU (cores)&quot;,&quot;showLegend&quot;:false,&quot;legendPosition&quot;:&quot;bottom&quot;,&quot;minWidth&quot;:&quot;500px&quot;,&quot;predefinedFilters&quot;:[],&quot;allowFrontendFilters&quot;:false}">Graph</div>
+<!-- /wp:wpcloud/graph -->
 
-	<!-- wp:wpcloud/graph {"dimension":"is_upstream_cached","resolution":"60","title":"HTTP Requests per 1m","allowFrontendFilters":false} -->
-	<div class="wp-block-wpcloud-graph" data-graph-attributes="{&quot;metric&quot;:&quot;requests&quot;,&quot;dimension&quot;:&quot;is_upstream_cached&quot;,&quot;resolution&quot;:&quot;60&quot;,&quot;summarize&quot;:false,&quot;topX&quot;:&quot;20&quot;,&quot;type&quot;:&quot;line&quot;,&quot;orientation&quot;:&quot;vertical&quot;,&quot;title&quot;:&quot;HTTP Requests per 1m&quot;,&quot;showLegend&quot;:true,&quot;minWidth&quot;:&quot;500px&quot;,&quot;predefinedFilters&quot;:[],&quot;allowFrontendFilters&quot;:false}">Graph</div>
-	<!-- /wp:wpcloud/graph -->
+<!-- wp:wpcloud/graph {"dimension":"is_upstream_cached","resolution":"60","title":"HTTP Requests per 1m"} -->
+<div class="wp-block-wpcloud-graph" data-graph-attributes="{&quot;metric&quot;:&quot;requests&quot;,&quot;dimension&quot;:&quot;is_upstream_cached&quot;,&quot;resolution&quot;:&quot;60&quot;,&quot;summarize&quot;:false,&quot;topX&quot;:&quot;20&quot;,&quot;type&quot;:&quot;line&quot;,&quot;orientation&quot;:&quot;vertical&quot;,&quot;title&quot;:&quot;HTTP Requests per 1m&quot;,&quot;showLegend&quot;:true,&quot;legendPosition&quot;:&quot;bottom&quot;,&quot;minWidth&quot;:&quot;500px&quot;,&quot;predefinedFilters&quot;:[],&quot;allowFrontendFilters&quot;:false}">Graph</div>
+<!-- /wp:wpcloud/graph -->
 
-	<!-- wp:wpcloud/graph {"metric":"response_bytes_average","dimension":"is_upstream_cached","resolution":"60","title":"Average HTTP Request Time","allowFrontendFilters":false} -->
-	<div class="wp-block-wpcloud-graph" data-graph-attributes="{&quot;metric&quot;:&quot;response_bytes_average&quot;,&quot;dimension&quot;:&quot;is_upstream_cached&quot;,&quot;resolution&quot;:&quot;60&quot;,&quot;summarize&quot;:false,&quot;topX&quot;:&quot;20&quot;,&quot;type&quot;:&quot;line&quot;,&quot;orientation&quot;:&quot;vertical&quot;,&quot;title&quot;:&quot;Average HTTP Request Time&quot;,&quot;showLegend&quot;:true,&quot;minWidth&quot;:&quot;500px&quot;,&quot;predefinedFilters&quot;:[],&quot;allowFrontendFilters&quot;:false}">Graph</div>
-	<!-- /wp:wpcloud/graph -->
+<!-- wp:wpcloud/graph {"metric":"response_bytes_average","dimension":"is_upstream_cached","resolution":"60","title":"Average HTTP Request Time ","metadata":{"name":"Average HTTP Request Time "}} -->
+<div class="wp-block-wpcloud-graph" data-graph-attributes="{&quot;metric&quot;:&quot;response_bytes_average&quot;,&quot;dimension&quot;:&quot;is_upstream_cached&quot;,&quot;resolution&quot;:&quot;60&quot;,&quot;summarize&quot;:false,&quot;topX&quot;:&quot;20&quot;,&quot;type&quot;:&quot;line&quot;,&quot;orientation&quot;:&quot;vertical&quot;,&quot;title&quot;:&quot;Average HTTP Request Time &quot;,&quot;showLegend&quot;:true,&quot;legendPosition&quot;:&quot;bottom&quot;,&quot;minWidth&quot;:&quot;500px&quot;,&quot;predefinedFilters&quot;:[],&quot;allowFrontendFilters&quot;:false,&quot;metadata&quot;:{&quot;name&quot;:&quot;Average HTTP Request Time &quot;}}">Graph</div>
+<!-- /wp:wpcloud/graph -->
 
-	<!-- wp:wpcloud/graph {"dimension":"visitor_is_logged_in","resolution":"60","title":"Requests to wp-admin/admin-ajax.php per 1m","predefinedFilters":[["request_url_no_qs","=","/wp-admin/admin-ajax.php"]],"allowFrontendFilters":false} -->
-	<div class="wp-block-wpcloud-graph" data-graph-attributes="{&quot;metric&quot;:&quot;requests&quot;,&quot;dimension&quot;:&quot;visitor_is_logged_in&quot;,&quot;resolution&quot;:&quot;60&quot;,&quot;summarize&quot;:false,&quot;topX&quot;:&quot;20&quot;,&quot;type&quot;:&quot;line&quot;,&quot;orientation&quot;:&quot;vertical&quot;,&quot;title&quot;:&quot;Requests to wp-admin/admin-ajax.php per 1m&quot;,&quot;showLegend&quot;:true,&quot;minWidth&quot;:&quot;500px&quot;,&quot;predefinedFilters&quot;:[[&quot;request_url_no_qs&quot;,&quot;=&quot;,&quot;/wp-admin/admin-ajax.php&quot;]],&quot;allowFrontendFilters&quot;:false}">Graph</div>
-	<!-- /wp:wpcloud/graph -->
+<!-- wp:wpcloud/graph {"dimension":"visitor_is_logged_in","resolution":"60","title":"Requests to wp-admin/admin-ajax.php per 1m","predefinedFilters":[["request_url_no_qs","=","/wp-admin/admin-ajax.php"]]} -->
+<div class="wp-block-wpcloud-graph" data-graph-attributes="{&quot;metric&quot;:&quot;requests&quot;,&quot;dimension&quot;:&quot;visitor_is_logged_in&quot;,&quot;resolution&quot;:&quot;60&quot;,&quot;summarize&quot;:false,&quot;topX&quot;:&quot;20&quot;,&quot;type&quot;:&quot;line&quot;,&quot;orientation&quot;:&quot;vertical&quot;,&quot;title&quot;:&quot;Requests to wp-admin/admin-ajax.php per 1m&quot;,&quot;showLegend&quot;:true,&quot;legendPosition&quot;:&quot;bottom&quot;,&quot;minWidth&quot;:&quot;500px&quot;,&quot;predefinedFilters&quot;:[[&quot;request_url_no_qs&quot;,&quot;=&quot;,&quot;/wp-admin/admin-ajax.php&quot;]],&quot;allowFrontendFilters&quot;:false}">Graph</div>
+<!-- /wp:wpcloud/graph -->
 
-	<!-- wp:wpcloud/graph {"dimension":"wp_admin_ajax_action","resolution":"300","title":"wp-admin/admin-ajax.php actions per 5m","allowFrontendFilters":false} -->
-	<div class="wp-block-wpcloud-graph" data-graph-attributes="{&quot;metric&quot;:&quot;requests&quot;,&quot;dimension&quot;:&quot;wp_admin_ajax_action&quot;,&quot;resolution&quot;:&quot;300&quot;,&quot;summarize&quot;:false,&quot;topX&quot;:&quot;20&quot;,&quot;type&quot;:&quot;line&quot;,&quot;orientation&quot;:&quot;vertical&quot;,&quot;title&quot;:&quot;wp-admin/admin-ajax.php actions per 5m&quot;,&quot;showLegend&quot;:true,&quot;minWidth&quot;:&quot;500px&quot;,&quot;predefinedFilters&quot;:[],&quot;allowFrontendFilters&quot;:false}">Graph</div>
-	<!-- /wp:wpcloud/graph -->
+<!-- wp:wpcloud/graph {"dimension":"wp_admin_ajax_action","resolution":"300","title":"wp-admin/admin-ajax.php actions per 5m"} -->
+<div class="wp-block-wpcloud-graph" data-graph-attributes="{&quot;metric&quot;:&quot;requests&quot;,&quot;dimension&quot;:&quot;wp_admin_ajax_action&quot;,&quot;resolution&quot;:&quot;300&quot;,&quot;summarize&quot;:false,&quot;topX&quot;:&quot;20&quot;,&quot;type&quot;:&quot;line&quot;,&quot;orientation&quot;:&quot;vertical&quot;,&quot;title&quot;:&quot;wp-admin/admin-ajax.php actions per 5m&quot;,&quot;showLegend&quot;:true,&quot;legendPosition&quot;:&quot;bottom&quot;,&quot;minWidth&quot;:&quot;500px&quot;,&quot;predefinedFilters&quot;:[],&quot;allowFrontendFilters&quot;:false}">Graph</div>
+<!-- /wp:wpcloud/graph -->
 
-	<!-- wp:wpcloud/graph {"dimension":"asn","resolution":"300","topX":"10","title":"Top AS Numbers per 5m","allowFrontendFilters":false} -->
-	<div class="wp-block-wpcloud-graph" data-graph-attributes="{&quot;metric&quot;:&quot;requests&quot;,&quot;dimension&quot;:&quot;asn&quot;,&quot;resolution&quot;:&quot;300&quot;,&quot;summarize&quot;:false,&quot;topX&quot;:&quot;10&quot;,&quot;type&quot;:&quot;line&quot;,&quot;orientation&quot;:&quot;vertical&quot;,&quot;title&quot;:&quot;Top AS Numbers per 5m&quot;,&quot;showLegend&quot;:true,&quot;minWidth&quot;:&quot;500px&quot;,&quot;predefinedFilters&quot;:[],&quot;allowFrontendFilters&quot;:false}">Graph</div>
-	<!-- /wp:wpcloud/graph -->
+<!-- wp:wpcloud/graph {"dimension":"asn","resolution":"300","topX":"10","title":"Top AS Numbers per 5m"} -->
+<div class="wp-block-wpcloud-graph" data-graph-attributes="{&quot;metric&quot;:&quot;requests&quot;,&quot;dimension&quot;:&quot;asn&quot;,&quot;resolution&quot;:&quot;300&quot;,&quot;summarize&quot;:false,&quot;topX&quot;:&quot;10&quot;,&quot;type&quot;:&quot;line&quot;,&quot;orientation&quot;:&quot;vertical&quot;,&quot;title&quot;:&quot;Top AS Numbers per 5m&quot;,&quot;showLegend&quot;:true,&quot;legendPosition&quot;:&quot;bottom&quot;,&quot;minWidth&quot;:&quot;500px&quot;,&quot;predefinedFilters&quot;:[],&quot;allowFrontendFilters&quot;:false}">Graph</div>
+<!-- /wp:wpcloud/graph -->
 
-	<!-- wp:wpcloud/graph {"dimension":"is_crawler","resolution":"120","title":"Bot vs Not-bot per 2m","allowFrontendFilters":false} -->
-	<div class="wp-block-wpcloud-graph" data-graph-attributes="{&quot;metric&quot;:&quot;requests&quot;,&quot;dimension&quot;:&quot;is_crawler&quot;,&quot;resolution&quot;:&quot;120&quot;,&quot;summarize&quot;:false,&quot;topX&quot;:&quot;20&quot;,&quot;type&quot;:&quot;line&quot;,&quot;orientation&quot;:&quot;vertical&quot;,&quot;title&quot;:&quot;Bot vs Not-bot per 2m&quot;,&quot;showLegend&quot;:true,&quot;minWidth&quot;:&quot;500px&quot;,&quot;predefinedFilters&quot;:[],&quot;allowFrontendFilters&quot;:false}">Graph</div>
-	<!-- /wp:wpcloud/graph -->
+<!-- wp:wpcloud/graph {"dimension":"is_crawler","resolution":"120","title":"Bot vs Not-bot per 2m"} -->
+<div class="wp-block-wpcloud-graph" data-graph-attributes="{&quot;metric&quot;:&quot;requests&quot;,&quot;dimension&quot;:&quot;is_crawler&quot;,&quot;resolution&quot;:&quot;120&quot;,&quot;summarize&quot;:false,&quot;topX&quot;:&quot;20&quot;,&quot;type&quot;:&quot;line&quot;,&quot;orientation&quot;:&quot;vertical&quot;,&quot;title&quot;:&quot;Bot vs Not-bot per 2m&quot;,&quot;showLegend&quot;:true,&quot;legendPosition&quot;:&quot;bottom&quot;,&quot;minWidth&quot;:&quot;500px&quot;,&quot;predefinedFilters&quot;:[],&quot;allowFrontendFilters&quot;:false}">Graph</div>
+<!-- /wp:wpcloud/graph -->
 
-	<!-- wp:wpcloud/graph {"dimension":"proxy_type","resolution":"300","topX":"10","title":"Proxy Type per 5m","allowFrontendFilters":false} -->
-	<div class="wp-block-wpcloud-graph" data-graph-attributes="{&quot;metric&quot;:&quot;requests&quot;,&quot;dimension&quot;:&quot;proxy_type&quot;,&quot;resolution&quot;:&quot;300&quot;,&quot;summarize&quot;:false,&quot;topX&quot;:&quot;10&quot;,&quot;type&quot;:&quot;line&quot;,&quot;orientation&quot;:&quot;vertical&quot;,&quot;title&quot;:&quot;Proxy Type per 5m&quot;,&quot;showLegend&quot;:true,&quot;minWidth&quot;:&quot;500px&quot;,&quot;predefinedFilters&quot;:[],&quot;allowFrontendFilters&quot;:false}">Graph</div>
-	<!-- /wp:wpcloud/graph -->
+<!-- wp:wpcloud/graph {"dimension":"proxy_type","resolution":"300","topX":"10","title":"Proxy Type per 5m"} -->
+<div class="wp-block-wpcloud-graph" data-graph-attributes="{&quot;metric&quot;:&quot;requests&quot;,&quot;dimension&quot;:&quot;proxy_type&quot;,&quot;resolution&quot;:&quot;300&quot;,&quot;summarize&quot;:false,&quot;topX&quot;:&quot;10&quot;,&quot;type&quot;:&quot;line&quot;,&quot;orientation&quot;:&quot;vertical&quot;,&quot;title&quot;:&quot;Proxy Type per 5m&quot;,&quot;showLegend&quot;:true,&quot;legendPosition&quot;:&quot;bottom&quot;,&quot;minWidth&quot;:&quot;500px&quot;,&quot;predefinedFilters&quot;:[],&quot;allowFrontendFilters&quot;:false}">Graph</div>
+<!-- /wp:wpcloud/graph -->
 
-	<!-- wp:wpcloud/graph {"metric":"mysql_cpu_time_persec","dimension":"atomic_site_id","resolution":"60","title":"MySQL CPU (cores)","showLegend":false,"allowFrontendFilters":false} -->
-	<div class="wp-block-wpcloud-graph" data-graph-attributes="{&quot;metric&quot;:&quot;mysql_cpu_time_persec&quot;,&quot;dimension&quot;:&quot;atomic_site_id&quot;,&quot;resolution&quot;:&quot;60&quot;,&quot;summarize&quot;:false,&quot;topX&quot;:&quot;20&quot;,&quot;type&quot;:&quot;line&quot;,&quot;orientation&quot;:&quot;vertical&quot;,&quot;title&quot;:&quot;MySQL CPU (cores)&quot;,&quot;showLegend&quot;:false,&quot;minWidth&quot;:&quot;500px&quot;,&quot;predefinedFilters&quot;:[],&quot;allowFrontendFilters&quot;:false}">Graph</div>
-	<!-- /wp:wpcloud/graph -->
+<!-- wp:wpcloud/graph {"metric":"mysql_cpu_time_persec","dimension":"atomic_site_id","resolution":"60","title":"MySQL CPU (cores)","showLegend":false} -->
+<div class="wp-block-wpcloud-graph" data-graph-attributes="{&quot;metric&quot;:&quot;mysql_cpu_time_persec&quot;,&quot;dimension&quot;:&quot;atomic_site_id&quot;,&quot;resolution&quot;:&quot;60&quot;,&quot;summarize&quot;:false,&quot;topX&quot;:&quot;20&quot;,&quot;type&quot;:&quot;line&quot;,&quot;orientation&quot;:&quot;vertical&quot;,&quot;title&quot;:&quot;MySQL CPU (cores)&quot;,&quot;showLegend&quot;:false,&quot;legendPosition&quot;:&quot;bottom&quot;,&quot;minWidth&quot;:&quot;500px&quot;,&quot;predefinedFilters&quot;:[],&quot;allowFrontendFilters&quot;:false}">Graph</div>
+<!-- /wp:wpcloud/graph -->
 
-	<!-- wp:wpcloud/graph {"metric":"mysql_rows_inserted_persec","dimension":"atomic_site_id","resolution":"60","title":"Change Rows per 1m (multi-metric)","allowFrontendFilters":false} -->
-	<div class="wp-block-wpcloud-graph" data-graph-attributes="{&quot;metric&quot;:&quot;mysql_rows_inserted_persec&quot;,&quot;dimension&quot;:&quot;atomic_site_id&quot;,&quot;resolution&quot;:&quot;60&quot;,&quot;summarize&quot;:false,&quot;topX&quot;:&quot;20&quot;,&quot;type&quot;:&quot;line&quot;,&quot;orientation&quot;:&quot;vertical&quot;,&quot;title&quot;:&quot;Change Rows per 1m (multi-metric)&quot;,&quot;showLegend&quot;:true,&quot;minWidth&quot;:&quot;500px&quot;,&quot;predefinedFilters&quot;:[],&quot;allowFrontendFilters&quot;:false}">Graph</div>
-	<!-- /wp:wpcloud/graph -->
+<!-- wp:wpcloud/graph {"metric":"mysql_rows_inserted_persec","dimension":"atomic_site_id","resolution":"60","title":"Change Rows per 1m (multi-metric)"} -->
+<div class="wp-block-wpcloud-graph" data-graph-attributes="{&quot;metric&quot;:&quot;mysql_rows_inserted_persec&quot;,&quot;dimension&quot;:&quot;atomic_site_id&quot;,&quot;resolution&quot;:&quot;60&quot;,&quot;summarize&quot;:false,&quot;topX&quot;:&quot;20&quot;,&quot;type&quot;:&quot;line&quot;,&quot;orientation&quot;:&quot;vertical&quot;,&quot;title&quot;:&quot;Change Rows per 1m (multi-metric)&quot;,&quot;showLegend&quot;:true,&quot;legendPosition&quot;:&quot;bottom&quot;,&quot;minWidth&quot;:&quot;500px&quot;,&quot;predefinedFilters&quot;:[],&quot;allowFrontendFilters&quot;:false}">Graph</div>
+<!-- /wp:wpcloud/graph -->
 
-	<!-- wp:wpcloud/graph {"metric":"mysql_binlog_bytes_written_persec","dimension":"atomic_site_id","resolution":"60","title":"Binary Log Bytes Written per 1m","showLegend":false,"allowFrontendFilters":false} -->
-	<div class="wp-block-wpcloud-graph" data-graph-attributes="{&quot;metric&quot;:&quot;mysql_binlog_bytes_written_persec&quot;,&quot;dimension&quot;:&quot;atomic_site_id&quot;,&quot;resolution&quot;:&quot;60&quot;,&quot;summarize&quot;:false,&quot;topX&quot;:&quot;20&quot;,&quot;type&quot;:&quot;line&quot;,&quot;orientation&quot;:&quot;vertical&quot;,&quot;title&quot;:&quot;Binary Log Bytes Written per 1m&quot;,&quot;showLegend&quot;:false,&quot;minWidth&quot;:&quot;500px&quot;,&quot;predefinedFilters&quot;:[],&quot;allowFrontendFilters&quot;:false}">Graph</div>
-	<!-- /wp:wpcloud/graph --></div>
+<!-- wp:wpcloud/graph {"metric":"mysql_binlog_bytes_written_persec","dimension":"atomic_site_id","resolution":"60","title":"Binary Log Bytes Written per 1m","showLegend":false} -->
+<div class="wp-block-wpcloud-graph" data-graph-attributes="{&quot;metric&quot;:&quot;mysql_binlog_bytes_written_persec&quot;,&quot;dimension&quot;:&quot;atomic_site_id&quot;,&quot;resolution&quot;:&quot;60&quot;,&quot;summarize&quot;:false,&quot;topX&quot;:&quot;20&quot;,&quot;type&quot;:&quot;line&quot;,&quot;orientation&quot;:&quot;vertical&quot;,&quot;title&quot;:&quot;Binary Log Bytes Written per 1m&quot;,&quot;showLegend&quot;:false,&quot;legendPosition&quot;:&quot;bottom&quot;,&quot;minWidth&quot;:&quot;500px&quot;,&quot;predefinedFilters&quot;:[],&quot;allowFrontendFilters&quot;:false}">Graph</div>
+<!-- /wp:wpcloud/graph --></div>
 <!-- /wp:group --></div>
 <!-- /wp:wpcloud/metrics --></div>
 <!-- /wp:column -->
@@ -74,4 +74,4 @@
 <!-- /wp:column --></div>
 <!-- /wp:columns -->
 
-<!-- wp:template-part {"slug":"footer","area":"footer","className":"wpcloud-footer"} /-->
+<!-- wp:template-part {"slug":"footer","theme":"wpcloud-station-pico","area":"footer","className":"wpcloud-footer"} /-->
