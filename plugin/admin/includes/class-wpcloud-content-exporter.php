@@ -240,6 +240,7 @@ class WPCloud_Content_Exporter {
 			'__file'     => 'wp_block',
 			'title'      => $post->post_title,
 			'content'    => $post->post_content,
+			'slug'       => 'wpcloud-station/' . sanitize_title( $post->post_title ),
 			'syncStatus' => '',
 		);
 
