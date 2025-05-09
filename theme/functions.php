@@ -45,3 +45,14 @@ if ( function_exists( 'register_block_pattern_category' ) ) {
 		)
 	);
 }
+
+// Register patterns on init
+add_action(
+	'init',
+	function () {
+		// Register patterns.
+		if ( function_exists( 'wpcloud_register_patterns' ) ) {
+			wpcloud_register_patterns();
+		}
+	}
+);

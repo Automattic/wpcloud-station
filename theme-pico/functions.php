@@ -40,5 +40,10 @@ add_action(
 		wpcloud_station_register_site_view( 'users' );
 		wpcloud_station_register_site_view( 'metrics' );
 		flush_rewrite_rules();
+
+		// Register patterns.
+		if ( function_exists( 'wpcloud_register_patterns' ) ) {
+			wpcloud_register_patterns();
+		}
 	}
 );

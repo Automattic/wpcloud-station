@@ -38,17 +38,12 @@ class WPCloud_Station {
 	public function setup( array $options ): array {
 		$errors = array();
 
-		// Import patterns from plugin/patterns directory.
-		$pattern_errors = $this->import_patterns();
-		if ( ! empty( $pattern_errors ) ) {
-			$errors = array_merge( $errors, $pattern_errors );
-		}
-
 		// Setup the site name.
 		$site_name = $options['site-name'] ?? $this->wp_cloud_client_name;
 		if ( $site_name ) {
 			update_option( 'blogname', $site_name );
 		}
+
 		// Setup the site logo.
 		$attachment_id = $this->add_logo_attachment( $options['site-logo'] ?? '' );
 		if ( is_wp_error( $attachment_id ) ) {
@@ -69,6 +64,7 @@ class WPCloud_Station {
 				'post_content'  => '<!-- wp:pattern {"slug":"wpcloud-station/form-add-site"} /-->',
 				'post_category' => array( $wpcloud_core_cat->term_id, get_category_by_slug( WPCLOUD_CATEGORY_PRIVATE )->term_id ),
 			),
+
 			'performance-dashboard' => array(
 				'post_title'    => 'Performance Dashboard',
 				'post_content'  => '<!-- wp:pattern {"slug":"wpcloud-station/performance-dashboard"} /-->',
@@ -98,95 +94,6 @@ class WPCloud_Station {
 				if ( is_wp_error( $page_id ) ) {
 					$errors[] = $page_id;
 				}
-			}
-		}
-		// Configure permalinks.
-		global $wp_rewrite;
-
-		$permalink_structure = '/%postname%/';
-		update_option( 'permalink_structure', $permalink_structure );
-		$wp_rewrite->set_permalink_structure( $permalink_structure );
-		flush_rewrite_rules();
-
-		return $errors;
-	}
-
-	/**
-	 * Import patterns from the plugin/patterns directory.
-	 *
-	 * @return array Array of errors encountered during import.
-	 */
-	private function import_patterns(): array {
-		$errors       = array();
-		$patterns_dir = plugin_dir_path( __DIR__ ) . 'patterns';
-
-		// Check if patterns directory exists.
-		if ( ! file_exists( $patterns_dir ) || ! is_dir( $patterns_dir ) ) {
-			if ( function_exists( 'WP_CLI::log' ) ) {
-				WP_CLI::log( 'Patterns directory not found: ' . $patterns_dir );
-			}
-			return $errors;
-		}
-
-		// Get all JSON files in the patterns directory.
-		$pattern_files = glob( $patterns_dir . '/*.json' );
-		if ( empty( $pattern_files ) ) {
-			if ( function_exists( 'WP_CLI::log' ) ) {
-				WP_CLI::log( 'No pattern files found in: ' . $patterns_dir );
-			}
-			return $errors;
-		}
-
-		if ( function_exists( 'WP_CLI::log' ) ) {
-			WP_CLI::log( 'Found ' . count( $pattern_files ) . ' pattern files to import.' );
-		}
-
-		foreach ( $pattern_files as $pattern_file ) {
-			$pattern_filename = basename( $pattern_file );
-			if ( function_exists( 'WP_CLI::log' ) ) {
-				WP_CLI::log( 'Importing pattern: ' . $pattern_filename );
-			}
-
-			$pattern_content = file_get_contents( $pattern_file );
-			if ( ! $pattern_content ) {
-				$error_message = 'Failed to read pattern file: ' . $pattern_filename;
-				if ( function_exists( 'WP_CLI::warning' ) ) {
-					WP_CLI::warning( $error_message );
-				}
-				$errors[] = new WP_Error( 'pattern_read_error', $error_message );
-				continue;
-			}
-
-			$pattern_data = json_decode( $pattern_content, true );
-			if ( json_last_error() !== JSON_ERROR_NONE ) {
-				$error_message = 'Failed to parse pattern JSON: ' . $pattern_filename;
-				if ( function_exists( 'WP_CLI::warning' ) ) {
-					WP_CLI::warning( $error_message );
-				}
-				$errors[] = new WP_Error( 'pattern_json_error', $error_message );
-				continue;
-			}
-
-			// Extract pattern name from filename (without extension).
-			$pattern_name = pathinfo( $pattern_file, PATHINFO_FILENAME );
-
-			// Register the pattern.
-			if ( function_exists( 'register_block_pattern' ) ) {
-				$pattern_title = $pattern_data['title'] ?? $pattern_name;
-				register_block_pattern(
-					'wpcloud-station/' . $pattern_name,
-					array(
-						'title'       => $pattern_title,
-						'content'     => $pattern_data['content'] ?? '',
-						'categories'  => array( 'wpcloud' ),
-						'description' => $pattern_data['description'] ?? '',
-					)
-				);
-				if ( function_exists( 'WP_CLI::success' ) ) {
-					WP_CLI::success( 'Registered pattern: ' . $pattern_title );
-				}
-			} elseif ( function_exists( 'WP_CLI::warning' ) ) {
-					WP_CLI::warning( 'register_block_pattern function not available, skipping pattern: ' . $pattern_name );
 			}
 		}
 
