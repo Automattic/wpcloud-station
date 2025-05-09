@@ -1,12 +1,12 @@
-<!-- wp:template-part {"slug":"header","tagName":"header","area":"header"} /-->
+<!-- wp:template-part {"slug":"header","theme":"wpcloud-station-pico","tagName":"header","area":"header"} /-->
 
 <!-- wp:columns {"className":"wpcloud-site-view\u002d\u002dcontent"} -->
 <div class="wp-block-columns wpcloud-site-view--content"><!-- wp:column {"width":""} -->
 <div class="wp-block-column"></div>
 <!-- /wp:column -->
 
-<!-- wp:column {"width":"1100px","className":"wpcloud-site-view\u002d\u002ddetails"} -->
-<div class="wp-block-column wpcloud-site-view--details" style="flex-basis:1100px"><!-- wp:template-part {"slug":"site-header","area":"uncategorized"} /-->
+<!-- wp:column {"width":"1800px","className":"wpcloud-site-view\u002d\u002ddetails"} -->
+<div class="wp-block-column wpcloud-site-view--details" style="flex-basis:1800px"><!-- wp:template-part {"slug":"site-header","theme":"wpcloud-station-pico","area":"uncategorized"} /-->
 
 <!-- wp:group {"metadata":{"name":"Notifications"},"style":{"dimensions":{"minHeight":"80px"},"spacing":{"margin":{"top":"0","bottom":"0"},"blockGap":"var:preset|spacing|20"}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group" style="min-height:80px;margin-top:0;margin-bottom:0"><!-- wp:wpcloud/form-message {"action":"site_update","message":"Site updated","style":{"elements":{"link":{"color":{"text":"var:preset|color|white"}}}},"backgroundColor":"vivid-green-cyan","textColor":"white"} -->
@@ -18,7 +18,13 @@
 <!-- /wp:wpcloud/form-message --></div>
 <!-- /wp:group -->
 
-<!-- wp:wpcloud/card {"style":{"spacing":{"margin":{"top":"var:preset|spacing|20","bottom":"var:preset|spacing|20"}}},"metadata":{"name":"Card: Admin"}} -->
+<!-- wp:columns -->
+<div class="wp-block-columns"><!-- wp:column {"width":"25%"} -->
+<div class="wp-block-column" style="flex-basis:25%"></div>
+<!-- /wp:column -->
+
+<!-- wp:column {"width":"50%"} -->
+<div class="wp-block-column" style="flex-basis:50%"><!-- wp:wpcloud/card {"style":{"spacing":{"margin":{"top":"var:preset|spacing|20","bottom":"var:preset|spacing|20"}}},"metadata":{"name":"Card: Admin"}} -->
 <article style="margin-top:var(--wp--preset--spacing--20);margin-bottom:var(--wp--preset--spacing--20);spacing:[object Object]" class="wp-block-wpcloud-card"><!-- wp:wpcloud/card-section {"text":"Admin","metadata":{"name":"Admin"}} -->
 <header class="wp-block-wpcloud-card-section"><h2>Admin</h2></header>
 <!-- /wp:wpcloud/card-section -->
@@ -39,8 +45,8 @@
 
 <!-- wp:wpcloud/site-update -->
 <!-- wp:wpcloud/form {"wpcloudAction":" site_update"} -->
-<form class="wp-block-wpcloud-form wpcloud-block-form" enctype="text/plain"><!-- wp:wpcloud/form-input {"type":"select","name":"static_file_404","label":"","options":[{"value":"lightweight","label":"Lightweight"},{"value":"wordpress","label":"WordPress"}],"uniqueId":"5d29bccd-c6f7-4f55-b970-193ca2dc45e6-static_file_404","submitOnChange":true,"metadata":{"name":"static 404 page"}} -->
-<div class="wpcloud-block-form--input wp-block-wpcloud-form-input wpcloud-block-form--input--select"><label class="wpcloud-block-form-input__label" for="5d29bccd-c6f7-4f55-b970-193ca2dc45e6-static_file_404"><span class="wpcloud-block-form-input__label-content"><span class="wpcloud-block-form-input__label-text"></span><!-- wp:group {"layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"left"}} -->
+<form class="wp-block-wpcloud-form wpcloud-block-form" enctype="text/plain"><!-- wp:wpcloud/form-input {"type":"select","name":"static_file_404","label":"","options":[{"value":"lightweight","label":"Lightweight"},{"value":"wordpress","label":"WordPress"}],"uniqueId":"83d46602-61fc-4fdc-a514-94bc510b8f3b-static_file_404","submitOnChange":true,"metadata":{"name":"static 404 page"}} -->
+<div class="wpcloud-block-form--input wp-block-wpcloud-form-input wpcloud-block-form--input--select"><label class="wpcloud-block-form-input__label" for="83d46602-61fc-4fdc-a514-94bc510b8f3b-static_file_404"><span class="wpcloud-block-form-input__label-content"><span class="wpcloud-block-form-input__label-text"></span><!-- wp:group {"layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"left"}} -->
 <div class="wp-block-group"><!-- wp:paragraph -->
 <p>Static 404 page</p>
 <!-- /wp:paragraph -->
@@ -63,16 +69,16 @@
 <!-- /wp:group --></span><div class="wpcloud-form-input--select--wrapper"><select class="wpcloud-block-form-input__input submit-on-change wpcloud-station-form-input__select" aria-label="Select" name="static_file_404"><option value="lightweight">Lightweight</option><option value="wordpress">WordPress</option></select></div></label></div>
 <!-- /wp:wpcloud/form-input -->
 
-<!-- wp:wpcloud/form-input {"type":"select","name":"wp_version","label":"","options":[{"value":"latest","label":"latest"},{"value":"previous","label":"previous"},{"value":"beta","label":"beta"}],"uniqueId":"652e5737-ae23-49d7-9f74-456b0a62d3af-wp_version","submitOnChange":true,"metadata":{"name":"WP Version"}} -->
-<div class="wpcloud-block-form--input wp-block-wpcloud-form-input wpcloud-block-form--input--select"><label class="wpcloud-block-form-input__label" for="652e5737-ae23-49d7-9f74-456b0a62d3af-wp_version"><span class="wpcloud-block-form-input__label-content"><span class="wpcloud-block-form-input__label-text"></span><!-- wp:group {"style":{"spacing":{"blockGap":"var:preset|spacing|20"}},"layout":{"type":"flex","flexWrap":"nowrap"}} -->
+<!-- wp:wpcloud/form-input {"type":"select","name":"wp_version","label":"","options":[{"value":"latest","label":"latest"},{"value":"previous","label":"previous"},{"value":"beta","label":"beta"}],"uniqueId":"afd4fded-58c5-4b00-8963-82fdcbd3070c-wp_version","submitOnChange":true,"metadata":{"name":"WP Version"}} -->
+<div class="wpcloud-block-form--input wp-block-wpcloud-form-input wpcloud-block-form--input--select"><label class="wpcloud-block-form-input__label" for="afd4fded-58c5-4b00-8963-82fdcbd3070c-wp_version"><span class="wpcloud-block-form-input__label-content"><span class="wpcloud-block-form-input__label-text"></span><!-- wp:group {"style":{"spacing":{"blockGap":"var:preset|spacing|20"}},"layout":{"type":"flex","flexWrap":"nowrap"}} -->
 <div class="wp-block-group"><!-- wp:paragraph {"style":{"layout":{"selfStretch":"fit","flexSize":null}}} -->
 <p>WP Version </p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group --></span><div class="wpcloud-form-input--select--wrapper"><select class="wpcloud-block-form-input__input submit-on-change wpcloud-station-form-input__select" aria-label="Select" name="wp_version"><option value="latest">latest</option><option value="previous">previous</option><option value="beta">beta</option></select></div></label></div>
 <!-- /wp:wpcloud/form-input -->
 
-<!-- wp:wpcloud/form-input {"type":"select","name":"php_version","label":"","uniqueId":"6439e0ae-2a54-435a-840c-b08a4aa5073c-php_version","submitOnChange":true,"metadata":{"name":"PHP Version"}} -->
-<div class="wpcloud-block-form--input wp-block-wpcloud-form-input wpcloud-block-form--input--select"><label class="wpcloud-block-form-input__label" for="6439e0ae-2a54-435a-840c-b08a4aa5073c-php_version"><span class="wpcloud-block-form-input__label-content"><span class="wpcloud-block-form-input__label-text"></span><!-- wp:group {"style":{"spacing":{"padding":{"top":"0","bottom":"0"},"blockGap":"var:preset|spacing|20"}},"layout":{"type":"flex","flexWrap":"nowrap"}} -->
+<!-- wp:wpcloud/form-input {"type":"select","name":"php_version","label":"","uniqueId":"6e3e9410-e9b1-453c-8755-c4069c83ea86-php_version","submitOnChange":true,"metadata":{"name":"PHP Version"}} -->
+<div class="wpcloud-block-form--input wp-block-wpcloud-form-input wpcloud-block-form--input--select"><label class="wpcloud-block-form-input__label" for="6e3e9410-e9b1-453c-8755-c4069c83ea86-php_version"><span class="wpcloud-block-form-input__label-content"><span class="wpcloud-block-form-input__label-text"></span><!-- wp:group {"style":{"spacing":{"padding":{"top":"0","bottom":"0"},"blockGap":"var:preset|spacing|20"}},"layout":{"type":"flex","flexWrap":"nowrap"}} -->
 <div class="wp-block-group" style="padding-top:0;padding-bottom:0"><!-- wp:paragraph -->
 <p>PHP version</p>
 <!-- /wp:paragraph --></div>
@@ -83,9 +89,15 @@
 <!-- /wp:wpcloud/card --></div>
 <!-- /wp:column -->
 
+<!-- wp:column {"width":"25%"} -->
+<div class="wp-block-column" style="flex-basis:25%"></div>
+<!-- /wp:column --></div>
+<!-- /wp:columns --></div>
+<!-- /wp:column -->
+
 <!-- wp:column -->
 <div class="wp-block-column"></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns -->
 
-<!-- wp:template-part {"slug":"footer","area":"footer","className":"wpcloud-footer"} /-->
+<!-- wp:template-part {"slug":"footer","theme":"wpcloud-station-pico","area":"footer","className":"wpcloud-footer"} /-->
