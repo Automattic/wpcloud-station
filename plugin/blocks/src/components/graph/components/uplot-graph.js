@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import UplotReact from 'uplot-react';
 import 'uplot/dist/uPlot.min.css';
 import classnames from 'classnames';
@@ -36,12 +36,26 @@ export default function UplotGraph({
 }) {
 	// Use useRef instead of useState to avoid re-renders when setting the uPlot instance
 	const uplotInstanceRef = useRef(null);
+	// Track which series is active (null means all series are shown)
+	const [activeSeriesIdx, setActiveSeriesIdx] = useState(null);
+	// Store the original data
+	const originalDataRef = useRef(data);
+	// Store the current chart data
+	const [chartData, setChartData] = useState(data);
+
+	// Update original data reference when data changes
+	useEffect(() => {
+		originalDataRef.current = data;
+		setChartData(data);
+		// Reset active series when data changes
+		setActiveSeriesIdx(null);
+	}, [data]);
 
 	// Use the height adjustment hook
 	const { containerDimensionsRef, handleChartCreated } = useUplotHeight({
 		containerRef,
 		uplotInstanceRef,
-		data,
+		data: chartData,
 		series,
 		showLegend
 	});
@@ -49,7 +63,7 @@ export default function UplotGraph({
 	// Memoize the options params to avoid unnecessary re-renders
 	const graphOptionsParams = React.useMemo(() => ({
 		title,
-		data,
+		data: chartData,
 		series,
 		meta,
 		containerRef,
@@ -58,13 +72,53 @@ export default function UplotGraph({
 		type,
 		orientation,
 		dimension
-	}), [title, data, series, meta, containerRef, showLegend, legendPosition, type, orientation, dimension]);
+	}), [title, chartData, series, meta, containerRef, showLegend, legendPosition, type, orientation, dimension]);
 
 	// Get graph options from the hook
+	// Use chartData instead of the original data
 	const { data: d, ...options } = useGraphOptions(graphOptionsParams);
 
 	// Extract colors from series for the SideLegend
 	const seriesColors = options.series.map(s => s.stroke).filter(Boolean);
+
+	// Handle legend item click
+	const handleLegendItemClick = (idx) => {
+		// If idx is null, show all series
+		if (idx === null) {
+			setActiveSeriesIdx(null);
+			setChartData(originalDataRef.current);
+
+			// Update the uPlot instance if it exists
+			if (uplotInstanceRef.current) {
+				uplotInstanceRef.current.setData(originalDataRef.current);
+			}
+			return;
+		}
+
+		// Otherwise, show only the clicked series
+		setActiveSeriesIdx(idx);
+
+		// Create a new data array with just the x-axis values and the clicked series
+		const newData = originalDataRef.current.map((series, seriesIdx) => {
+			if (seriesIdx === 0) {
+				// Keep x-axis values
+				return series;
+			} else if (seriesIdx === idx) {
+				// Keep the clicked series data
+				return originalDataRef.current[seriesIdx];
+			} else {
+				// For other series, create an array of the same length as the x-axis but with null values
+				return Array(originalDataRef.current[0].length).fill(null);
+			}
+		});
+
+		setChartData(newData);
+
+		// Update the uPlot instance if it exists
+		if (uplotInstanceRef.current) {
+			uplotInstanceRef.current.setData(newData);
+		}
+	};
 
 	return (
 		<div className={classnames('wpcloud-uplot-graph',{
@@ -92,6 +146,7 @@ export default function UplotGraph({
 					<SideLegend
 						series={options.series}
 						colors={seriesColors}
+						onLegendItemClick={handleLegendItemClick}
 					/>
 				</div>
 			)}
