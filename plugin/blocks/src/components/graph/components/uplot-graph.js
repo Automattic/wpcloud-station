@@ -81,12 +81,16 @@ export default function UplotGraph({
 	// Extract colors from series for the SideLegend
 	const seriesColors = options.series.map(s => s.stroke).filter(Boolean);
 
+	// Track which series are toggled off
+	const [toggledOffSeries, setToggledOffSeries] = useState(new Set());
+
 	// Handle legend item click
 	const handleLegendItemClick = (idx) => {
 		// If idx is null, show all series
 		if (idx === null) {
 			setActiveSeriesIdx(null);
 			setChartData(originalDataRef.current);
+			setToggledOffSeries(new Set());
 
 			// Update the uPlot instance if it exists
 			if (uplotInstanceRef.current) {
@@ -95,28 +99,68 @@ export default function UplotGraph({
 			return;
 		}
 
-		// Otherwise, show only the clicked series
-		setActiveSeriesIdx(idx);
+		// Different behavior based on dimension
+		if (dimension === 'atomic_site_id') {
+			// For atomic_site_id, show only the clicked series (isolate mode)
+			setActiveSeriesIdx(idx);
 
-		// Create a new data array with just the x-axis values and the clicked series
-		const newData = originalDataRef.current.map((series, seriesIdx) => {
-			if (seriesIdx === 0) {
-				// Keep x-axis values
-				return series;
-			} else if (seriesIdx === idx) {
-				// Keep the clicked series data
-				return originalDataRef.current[seriesIdx];
-			} else {
-				// For other series, create an array of the same length as the x-axis but with null values
-				return Array(originalDataRef.current[0].length).fill(null);
+			// Create a new data array with just the x-axis values and the clicked series
+			const newData = originalDataRef.current.map((series, seriesIdx) => {
+				if (seriesIdx === 0) {
+					// Keep x-axis values
+					return series;
+				} else if (seriesIdx === idx) {
+					// Keep the clicked series data
+					return originalDataRef.current[seriesIdx];
+				} else {
+					// For other series, create an array of the same length as the x-axis but with null values
+					return Array(originalDataRef.current[0].length).fill(null);
+				}
+			});
+
+			setChartData(newData);
+
+			// Update the uPlot instance if it exists
+			if (uplotInstanceRef.current) {
+				uplotInstanceRef.current.setData(newData);
 			}
-		});
+		} else {
+			// For other dimensions, toggle the clicked series (toggle mode)
+			const newToggledOffSeries = new Set(toggledOffSeries);
 
-		setChartData(newData);
+			if (newToggledOffSeries.has(idx)) {
+				// If the series is already toggled off, turn it back on
+				newToggledOffSeries.delete(idx);
+			} else {
+				// Otherwise, toggle it off
+				newToggledOffSeries.add(idx);
+			}
 
-		// Update the uPlot instance if it exists
-		if (uplotInstanceRef.current) {
-			uplotInstanceRef.current.setData(newData);
+			setToggledOffSeries(newToggledOffSeries);
+
+			// Create a new data array with toggled series set to null
+			const newData = originalDataRef.current.map((series, seriesIdx) => {
+				if (seriesIdx === 0) {
+					// Keep x-axis values
+					return series;
+				} else if (newToggledOffSeries.has(seriesIdx)) {
+					// For toggled off series, create an array of null values
+					return Array(originalDataRef.current[0].length).fill(null);
+				} else {
+					// Keep the data for visible series
+					return originalDataRef.current[seriesIdx];
+				}
+			});
+
+			setChartData(newData);
+
+			// Update the uPlot instance if it exists
+			if (uplotInstanceRef.current) {
+				uplotInstanceRef.current.setData(newData);
+			}
+
+			// Update active series for styling
+			setActiveSeriesIdx(newToggledOffSeries.size > 0 ? -1 : null);
 		}
 	};
 
@@ -147,6 +191,7 @@ export default function UplotGraph({
 						series={options.series}
 						colors={seriesColors}
 						onLegendItemClick={handleLegendItemClick}
+						dimension={dimension}
 					/>
 				</div>
 			)}

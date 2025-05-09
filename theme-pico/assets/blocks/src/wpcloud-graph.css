@@ -168,7 +168,7 @@
 
 	.wpcloud-side-legend__marker {
 		width: 12px;
-		height: .25em !important;
+		height: .25em;
 		border-radius: 0.125em;
 		flex-shrink: 0; /* Prevent the marker from shrinking */
 		min-width: 12px; /* Ensure minimum width */
