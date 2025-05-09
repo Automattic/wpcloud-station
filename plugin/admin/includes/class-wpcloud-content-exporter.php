@@ -84,7 +84,7 @@ class WPCloud_Content_Exporter {
 	}
 
 	/**
-	 * Debug function to check for templates and export them.
+	 * Debug function to check for templates and template parts and export them.
 	 */
 	private function debug_templates() {
 		// Get all template posts.
@@ -95,9 +95,22 @@ class WPCloud_Content_Exporter {
 			)
 		);
 
-		// Export each template.
+		// Get all template part posts.
+		$template_parts = get_posts(
+			array(
+				'post_type'      => 'wp_template_part',
+				'posts_per_page' => -1,
+			)
+		);
+
+		// Combine templates and template parts.
+		$all_templates = array_merge( $templates, $template_parts );
+		$this->debug_log( 'Found templates and parts', count( $all_templates ) );
+
+		// Export each template/part.
 		$exported_count = 0;
-		foreach ( $templates as $template ) {
+		foreach ( $all_templates as $template ) {
+			$this->debug_log( 'Processing template/part', $template->post_type . ' - ' . $template->post_name );
 			if ( $this->do_export_template( $template ) ) {
 				++$exported_count;
 			}
@@ -114,7 +127,7 @@ class WPCloud_Content_Exporter {
 						<?php
 						// translators: %d: Number of templates exported.
 						printf(
-							esc_html__( 'Exported %d templates to the theme directory.', 'wpcloud' ),
+							esc_html__( 'Exported %d templates/parts to the theme directory.', 'wpcloud' ),
 							$exported_count
 						);
 						?>
@@ -206,6 +219,12 @@ class WPCloud_Content_Exporter {
 			$this->do_export_template( $post );
 			return;
 		}
+
+		// Handle template parts.
+		if ( 'wp_template_part' === $post->post_type ) {
+			$this->do_export_template( $post );
+			return;
+		}
 	}
 
 	/**
@@ -224,6 +243,12 @@ class WPCloud_Content_Exporter {
 
 		// Handle templates.
 		if ( 'wp_template' === $post_after->post_type ) {
+			$this->do_export_template( $post_after );
+			return;
+		}
+
+		// Handle template parts.
+		if ( 'wp_template_part' === $post_after->post_type ) {
 			$this->do_export_template( $post_after );
 			return;
 		}
@@ -293,59 +318,215 @@ class WPCloud_Content_Exporter {
 	}
 
 	/**
+	 * Log debug information to the error log.
+	 *
+	 * @param string $message The message to log.
+	 * @param mixed  $data    Optional data to include in the log.
+	 */
+	private function debug_log( $message, $data = null ) {
+		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+			$log_message = '[WPCloud Content Exporter] ' . $message;
+			if ( null !== $data ) {
+				$log_message .= ': ' . print_r( $data, true );
+			}
+			error_log( $log_message );
+		}
+	}
+
+	/**
+	 * Get the mapped theme directory name.
+	 *
+	 * This handles the mapping between theme names in the database and actual directory names
+	 * on the local file system, which can be different when using Docker/wp-env.
+	 *
+	 * @param string $theme_name The theme name from the database.
+	 * @return string The mapped directory name.
+	 */
+	private function get_mapped_theme_dir( $theme_name ) {
+		// Define mappings between theme names in DB and local directory names.
+		$theme_mappings = array(
+			'wpcloud-station'        => 'theme',
+			'wpcloud-station-plugin' => 'theme-pico',
+		);
+
+		$this->debug_log( 'Original theme name', $theme_name );
+
+		// Check if we have a mapping for this theme.
+		if ( isset( $theme_mappings[ $theme_name ] ) ) {
+			$mapped_name = $theme_mappings[ $theme_name ];
+			$this->debug_log( 'Mapped to directory', $mapped_name );
+			return $mapped_name;
+		}
+
+		// No mapping found, return the original name.
+		$this->debug_log( 'No mapping found, using original name' );
+		return $theme_name;
+	}
+
+	/**
+	 * Get all post meta for debugging.
+	 *
+	 * @param int $post_id The post ID.
+	 * @return array The post meta.
+	 */
+	private function get_all_post_meta( $post_id ) {
+		global $wpdb;
+		$meta       = $wpdb->get_results( $wpdb->prepare( "SELECT meta_key, meta_value FROM $wpdb->postmeta WHERE post_id = %d", $post_id ) );
+		$meta_array = array();
+		foreach ( $meta as $row ) {
+			$meta_array[ $row->meta_key ] = $row->meta_value;
+		}
+		return $meta_array;
+	}
+
+	/**
 	 * Common function to export a template to an HTML file.
 	 *
 	 * @param WP_Post $post The post object.
 	 * @return bool Whether the template was exported successfully.
 	 */
 	private function do_export_template( $post ) {
-		// Get the template slug and theme.
-		$template_slug  = get_post_meta( $post->ID, '_wp_template_slug', true );
-		$template_theme = get_post_meta( $post->ID, 'theme', true );
+		$this->debug_log( 'Starting template export for post ID', $post->ID );
+		$this->debug_log( 'Post type', $post->post_type );
+		$this->debug_log( 'Post name', $post->post_name );
+		$this->debug_log( 'Post title', $post->post_title );
 
-		// If no slug or theme, we can't export.
-		if ( empty( $template_slug ) || empty( $template_theme ) ) {
+		// Dump all post meta for debugging.
+		$all_meta = $this->get_all_post_meta( $post->ID );
+		$this->debug_log( 'All post meta', $all_meta );
+
+		// Try different approaches to get the template slug.
+		$template_slug = get_post_meta( $post->ID, '_wp_template_slug', true );
+		if ( empty( $template_slug ) ) {
+			$template_slug = get_post_meta( $post->ID, 'wp_template_slug', true );
+		}
+		if ( empty( $template_slug ) ) {
+			$template_slug = get_post_meta( $post->ID, 'slug', true );
+		}
+		if ( empty( $template_slug ) ) {
+			// Try to infer from post name.
+			$template_slug = $post->post_name;
+		}
+
+		// Try different approaches to get the theme.
+		$template_theme = get_post_meta( $post->ID, 'theme', true );
+		if ( empty( $template_theme ) ) {
+			$template_theme = get_post_meta( $post->ID, '_wp_theme', true );
+		}
+		if ( empty( $template_theme ) ) {
+			// Default to the active theme if we can't find it.
+			$template_theme = wp_get_theme()->get_stylesheet();
+		}
+
+		$this->debug_log( 'Final template slug', $template_slug );
+		$this->debug_log( 'Final template theme', $template_theme );
+
+		// If no slug, we can't export.
+		if ( empty( $template_slug ) ) {
+			$this->debug_log( 'Cannot export template: missing slug' );
 			return false;
 		}
 
+		// If no theme, use a default.
+		if ( empty( $template_theme ) ) {
+			$template_theme = 'wpcloud-station'; // Default to main theme
+			$this->debug_log( 'Using default theme', $template_theme );
+		}
+
+		// Check if the template is a template part.
+		$is_template_part = false;
+		if ( 'wp_template_part' === $post->post_type ) {
+			$is_template_part = true;
+			$this->debug_log( 'This is a template part' );
+		}
+
+		// Get the mapped theme directory name.
+		$mapped_theme_dir = $this->get_mapped_theme_dir( $template_theme );
+
 		// Check if the theme directory exists locally.
-		$theme_dir = WP_CONTENT_DIR . '/themes/' . $template_theme;
+		$theme_dir = WP_CONTENT_DIR . '/themes/' . $mapped_theme_dir;
+		$this->debug_log( 'Checking theme directory at', $theme_dir );
+
 		if ( ! file_exists( $theme_dir ) ) {
+			$this->debug_log( 'Theme directory not found at WP_CONTENT_DIR, checking project directory' );
 			// Also check in our project directory.
-			$theme_dir = dirname( plugin_dir_path( __DIR__ ), 2 ) . '/' . $template_theme;
+			$theme_dir = dirname( plugin_dir_path( __DIR__ ), 2 ) . '/' . $mapped_theme_dir;
+			$this->debug_log( 'Checking theme directory at', $theme_dir );
+
 			if ( ! file_exists( $theme_dir ) ) {
-				// Theme doesn't exist locally, so we can't export.
+				// Try with the original theme name as a last resort.
+				$theme_dir = dirname( plugin_dir_path( __DIR__ ), 2 ) . '/' . $template_theme;
+				$this->debug_log( 'Trying with original theme name at', $theme_dir );
+
+				if ( ! file_exists( $theme_dir ) ) {
+					// Theme doesn't exist locally, so we can't export.
+					$this->debug_log( 'Theme directory not found in any location. Cannot export.' );
+					return false;
+				}
+			}
+		}
+
+		// Determine the correct directory (templates or parts).
+		if ( $is_template_part ) {
+			$export_dir = $theme_dir . '/parts';
+			$this->debug_log( 'Using parts directory for template part' );
+		} else {
+			$export_dir = $theme_dir . '/templates';
+			$this->debug_log( 'Using templates directory for template' );
+		}
+
+		$this->debug_log( 'Export directory', $export_dir );
+
+		// Create export directory if it doesn't exist.
+		if ( ! file_exists( $export_dir ) ) {
+			$this->debug_log( 'Export directory does not exist, creating it' );
+			$mkdir_result = mkdir( $export_dir, 0755, true );
+			$this->debug_log( 'mkdir result', $mkdir_result ? 'success' : 'failed' );
+
+			if ( ! $mkdir_result ) {
+				$this->debug_log( 'Failed to create export directory. Error', error_get_last() );
 				return false;
 			}
 		}
 
-		// Create templates directory if it doesn't exist.
-		$templates_dir = $theme_dir . '/templates';
-		if ( ! file_exists( $templates_dir ) ) {
-			mkdir( $templates_dir, 0755, true );
-		}
-
 		// Generate filename.
-		$file_path = $templates_dir . '/' . $template_slug . '.html';
+		$file_path = $export_dir . '/' . $template_slug . '.html';
+		$this->debug_log( 'File path for export', $file_path );
 
 		// Write template content to file.
+		$this->debug_log( 'Writing content to file' );
 		$write_result = file_put_contents( $file_path, $post->post_content );
+		$this->debug_log( 'file_put_contents result', $write_result ? 'success (' . $write_result . ' bytes)' : 'failed' );
+
+		if ( false === $write_result ) {
+			$this->debug_log( 'Failed to write file. Error', error_get_last() );
+		}
 
 		// Add admin notice to inform the user.
 		if ( false !== $write_result ) {
+			$this->debug_log( 'Export successful' );
 			add_action(
 				'admin_notices',
-				function () use ( $post, $template_slug, $template_theme, $file_path ) {
+				function () use ( $post, $template_slug, $template_theme, $file_path, $is_template_part ) {
 					?>
 					<div class="notice notice-success is-dismissible">
 						<p>
 						<?php
-						// translators: %1$s: Template slug, %2$s: Theme name, %3$s: File path.
-						printf(
-							esc_html__( 'Template "%1$s" exported to %2$s/templates/%1$s.html', 'wpcloud' ),
-							esc_html( $template_slug ),
-							esc_html( $template_theme )
-						);
+						if ( $is_template_part ) {
+							// translators: %1$s: Template slug, %2$s: Theme name.
+							printf(
+								esc_html__( 'Template part "%1$s" exported to %2$s/parts/%1$s.html', 'wpcloud' ),
+								esc_html( $template_slug ),
+								esc_html( $template_theme )
+							);
+						} else {
+							// translators: %1$s: Template slug, %2$s: Theme name.
+							printf(
+								esc_html__( 'Template "%1$s" exported to %2$s/templates/%1$s.html', 'wpcloud' ),
+								esc_html( $template_slug ),
+								esc_html( $template_theme )
+							);
+						}
 						?>
 						</p>
 					</div>
@@ -353,19 +534,29 @@ class WPCloud_Content_Exporter {
 				}
 			);
 		} else {
+			$this->debug_log( 'Export failed' );
 			add_action(
 				'admin_notices',
-				function () use ( $post, $template_slug, $template_theme ) {
+				function () use ( $post, $template_slug, $template_theme, $is_template_part ) {
 					?>
 					<div class="notice notice-error is-dismissible">
 						<p>
 						<?php
-						// translators: %1$s: Template slug, %2$s: Theme name.
-						printf(
-							esc_html__( 'Failed to export template "%1$s" for theme "%2$s". Check PHP error log for details.', 'wpcloud' ),
-							esc_html( $template_slug ),
-							esc_html( $template_theme )
-						);
+						if ( $is_template_part ) {
+							// translators: %1$s: Template slug, %2$s: Theme name.
+							printf(
+								esc_html__( 'Failed to export template part "%1$s" for theme "%2$s". Check PHP error log for details.', 'wpcloud' ),
+								esc_html( $template_slug ),
+								esc_html( $template_theme )
+							);
+						} else {
+							// translators: %1$s: Template slug, %2$s: Theme name.
+							printf(
+								esc_html__( 'Failed to export template "%1$s" for theme "%2$s". Check PHP error log for details.', 'wpcloud' ),
+								esc_html( $template_slug ),
+								esc_html( $template_theme )
+							);
+						}
 						?>
 						</p>
 					</div>
