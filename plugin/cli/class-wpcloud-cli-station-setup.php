@@ -32,14 +32,25 @@ class WPCloud_CLI_Station_Setup extends WPCloud_CLI_Station {
 	 * [--set-debug]
 	 * : Set the site to debug mode.
 	 *
+	 * [--setup-only]
+	 * : Only run WPCloud_Station::setup() without any other setup.
 	 *
 	 * ## EXAMPLES
 	 * wp cloud station setup --internal
+	 * wp cloud station setup --setup-only
 	 *
 	 * @param array $args       The arguments.
 	 * @param array $switches The switches.
 	 */
 	public function __invoke( $args, $switches = array() ) {
+		$setup_only = $switches['setup-only'] ?? false;
+		if ( $setup_only ) {
+			$this->log( '%ySkipping symlinking hosting plugins.' );
+			$this->set_debug( $switches['set-debug'] ?? false );
+			$this->run_setup( $switches );
+			$this->log( '%GStation setup complete.' );
+			return;
+		}
 
 		// Setup the mu hosting plugins.
 		$this->symlink_hosting( 'wpcloud-station.php' );
@@ -62,7 +73,7 @@ class WPCloud_CLI_Station_Setup extends WPCloud_CLI_Station {
 					$this->add_users( $wpcom_users );
 				}
 				$this->symlink_hosting( 'a8c-station.php' );
-				// No break, include client setup.
+				// No break, include client setup too.
 			case 'client':
 				$this->symlink_hosting( 'client-station.php' );
 				WP_CLI::runcommand( 'config set DISALLOW_FILE_EDIT true --raw' );
@@ -72,19 +83,8 @@ class WPCloud_CLI_Station_Setup extends WPCloud_CLI_Station {
 				WP_CLI::error( 'Please provide a valid internal switch.' );
 		}
 
-		if ( $switches['set-debug'] ?? false ) {
-			WP_CLI::runcommand( 'config set WP_DEBUG true --raw' );
-			WP_CLI::runcommand( 'config set WP_DEBUG_LOG true --raw' );
-			WP_CLI::runcommand( 'config set WP_DEBUG_DISPLAY false --raw' );
-		}
-
-		$errors = $this->station->setup( $switches );
-		if ( ! empty( $errors ) ) {
-			foreach ( $errors as $error ) {
-				$this->log( '%r' . $error->get_error_message() );
-			}
-		}
-
+		$this->set_debug( $switches['set-debug'] ?? false );
+		$this->run_setup( $switches );
 		$this->log( '%GStation setup complete.' );
 	}
 
@@ -105,7 +105,7 @@ class WPCloud_CLI_Station_Setup extends WPCloud_CLI_Station {
 				$this->log( 'Symlink already exists for ' . $filename );
 				return;
 			}
-			// Remove the existing symlink.
+			// Remove the existing symlink first.
 			wp_delete_file( $mu_hosting_link );
 		}
 
@@ -144,5 +144,37 @@ class WPCloud_CLI_Station_Setup extends WPCloud_CLI_Station {
 		}
 
 		return 'client';
+	}
+
+	/**
+	 * Set the debug mode.
+	 *
+	 * @param bool $debug The debug mode.
+	 */
+	private function set_debug( bool $debug ): void {
+		if ( ! $debug ) {
+			$this->log( '%yDebug mode is off.' );
+			return;
+		}
+		WP_CLI::runcommand( 'config set WP_DEBUG ' . ( $debug ? 'true' : 'false' ) . ' --raw' );
+		WP_CLI::runcommand( 'config set WP_DEBUG_LOG ' . ( $debug ? 'true' : 'false' ) . ' --raw' );
+		WP_CLI::runcommand( 'config set WP_DEBUG_DISPLAY ' . ( $debug ? 'true' : 'false' ) . ' --raw' );
+	}
+
+	/**
+	 * Run the setup.
+	 *
+	 * @param array $switches The switches.
+	 */
+	private function run_setup( array $switches ): void {
+		// Run the setup.
+		$errors = $this->station->setup( $switches );
+
+		// Log the results.
+		if ( ! empty( $errors ) ) {
+			foreach ( $errors as $error ) {
+				$this->log( '%r' . $error->get_error_message() );
+			}
+		}
 	}
 }
