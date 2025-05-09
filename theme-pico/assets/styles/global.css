@@ -389,8 +389,16 @@ button.wpcloud-block-button {
 	}
 }
 
-/* @TODO - A multi-line legend causes the block to constantly render and grow in size. */
+/* @TODO - A multi-line legend causes the block to constantly render and grow in size.
 .u-legend {
 	max-height: 30px;
 	overflow: hidden;
+}
+*/
+/* collapse graph grids to columns when below 1200px */
+@media (max-width: 1200px) {
+	.wpcloud-metrics__graphs .wp-block-group-is-layout-grid.is-layout-grid {
+		display:flex;
+		flex-direction: column;
+	}
 }

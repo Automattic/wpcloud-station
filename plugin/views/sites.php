@@ -21,14 +21,14 @@ $post = $site_cpt; // phpcs:ignore
 
 $template       = '';
 $theme          = get_stylesheet();
-$block_template = get_block_template( "$theme//$view-wpcloud_site" );
+$block_template = get_block_template( "$theme//wpcloud_site-$view" );
 
 // Check if there are modifications to the block template.
 if ( $block_template && ! empty( $block_template->content ) ) {
 	$template = $block_template->content;
 } else {
 	// Else check if there is a custom template in the theme.
-	$template_path = get_stylesheet_directory() . "/templates/$view-wpcloud_site.html";
+	$template_path = get_stylesheet_directory() . "/templates/wpcloud_site-$view.html";
 	if ( file_exists( $template_path ) ) {
 		$template = file_get_contents( $template_path ); // phpcs:ignore
 	}

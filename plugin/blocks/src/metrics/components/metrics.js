@@ -118,7 +118,6 @@ function Metrics({ tree, apiPath }) {
 	return (
 		<ApiContext.Provider value={{ apiPath }}>
 			<div className="wpcloud-metrics">
-				<h3>Metrics</h3>
 				<Toolbar onIntervalUpdate={updateQueryParams} interval={interval} onRefresh={onRefresh} />
 				<MetricsOptionsContext.Provider value={defaultGraphOptions}>
 					<LegendTooltipProvider>
