@@ -55,32 +55,18 @@ class WPCloud_Content_Exporter {
 			)
 		);
 
+		$this->debug_log( 'Found patterns', count( $patterns ) );
+
 		// Export each pattern.
+		$exported_count = 0;
 		foreach ( $patterns as $pattern ) {
-			$this->do_export_pattern( $pattern );
+			$this->debug_log( 'Processing pattern', $pattern->post_name );
+			if ( $this->do_export_pattern( $pattern ) ) {
+				++$exported_count;
+			}
 		}
 
-		// Add a notice about the export.
-		if ( ! empty( $patterns ) ) {
-			add_action(
-				'admin_notices',
-				function () use ( $patterns ) {
-					?>
-					<div class="notice notice-info is-dismissible">
-						<p>
-						<?php
-						// translators: %d: Number of patterns exported.
-						printf(
-							esc_html__( 'Exported %d patterns to the plugin/patterns directory.', 'wpcloud' ),
-							count( $patterns )
-						);
-						?>
-						</p>
-					</div>
-					<?php
-				}
-			);
-		}
+		$this->debug_log( 'Exported patterns', $exported_count );
 	}
 
 	/**
@@ -116,27 +102,7 @@ class WPCloud_Content_Exporter {
 			}
 		}
 
-		// Add a notice about the export.
-		if ( $exported_count > 0 ) {
-			add_action(
-				'admin_notices',
-				function () use ( $exported_count ) {
-					?>
-					<div class="notice notice-info is-dismissible">
-						<p>
-						<?php
-						// translators: %d: Number of templates exported.
-						printf(
-							esc_html__( 'Exported %d templates/parts to the theme directory.', 'wpcloud' ),
-							$exported_count
-						);
-						?>
-						</p>
-					</div>
-					<?php
-				}
-			);
-		}
+		$this->debug_log( 'Exported templates/parts', $exported_count );
 	}
 
 	/**
@@ -284,35 +250,12 @@ class WPCloud_Content_Exporter {
 		$json_data    = json_encode( $pattern_data, JSON_PRETTY_PRINT );
 		$write_result = file_put_contents( $file_path, $json_data );
 
-		// Add admin notice to inform the user.
-		add_action(
-			'admin_notices',
-			function () use ( $post, $filename, $file_path, $write_result ) {
-				if ( false !== $write_result ) {
-					?>
-					<div class="notice notice-success is-dismissible">
-						<p>
-						<?php
-						// translators: %1$s: Pattern title, %2$s: Filename.
-						printf( esc_html__( 'Pattern "%1$s" exported to plugin/patterns/%2$s.json', 'wpcloud' ), esc_html( $post->post_title ), esc_html( $filename ) );
-						?>
-						</p>
-					</div>
-					<?php
-				} else {
-					?>
-					<div class="notice notice-error is-dismissible">
-						<p>
-						<?php
-						// translators: %1$s: Pattern title.
-						printf( esc_html__( 'Failed to export pattern "%1$s". Check PHP error log for details.', 'wpcloud' ), esc_html( $post->post_title ) );
-						?>
-						</p>
-					</div>
-					<?php
-				}
-			}
-		);
+		// Log the result but don't show admin notices.
+		if ( false !== $write_result ) {
+			$this->debug_log( 'Pattern export successful', $post->post_title . ' to plugin/patterns/' . $filename . '.json' );
+		} else {
+			$this->debug_log( 'Pattern export failed', $post->post_title );
+		}
 
 		return false !== $write_result;
 	}
@@ -502,67 +445,21 @@ class WPCloud_Content_Exporter {
 			$this->debug_log( 'Failed to write file. Error', error_get_last() );
 		}
 
-		// Add admin notice to inform the user.
+		// Log the result but don't show admin notices.
 		if ( false !== $write_result ) {
 			$this->debug_log( 'Export successful' );
-			add_action(
-				'admin_notices',
-				function () use ( $post, $template_slug, $template_theme, $file_path, $is_template_part ) {
-					?>
-					<div class="notice notice-success is-dismissible">
-						<p>
-						<?php
-						if ( $is_template_part ) {
-							// translators: %1$s: Template slug, %2$s: Theme name.
-							printf(
-								esc_html__( 'Template part "%1$s" exported to %2$s/parts/%1$s.html', 'wpcloud' ),
-								esc_html( $template_slug ),
-								esc_html( $template_theme )
-							);
-						} else {
-							// translators: %1$s: Template slug, %2$s: Theme name.
-							printf(
-								esc_html__( 'Template "%1$s" exported to %2$s/templates/%1$s.html', 'wpcloud' ),
-								esc_html( $template_slug ),
-								esc_html( $template_theme )
-							);
-						}
-						?>
-						</p>
-					</div>
-					<?php
-				}
-			);
+			if ( $is_template_part ) {
+				$this->debug_log( 'Template part exported', $template_slug . ' to ' . $template_theme . '/parts/' . $template_slug . '.html' );
+			} else {
+				$this->debug_log( 'Template exported', $template_slug . ' to ' . $template_theme . '/templates/' . $template_slug . '.html' );
+			}
 		} else {
 			$this->debug_log( 'Export failed' );
-			add_action(
-				'admin_notices',
-				function () use ( $post, $template_slug, $template_theme, $is_template_part ) {
-					?>
-					<div class="notice notice-error is-dismissible">
-						<p>
-						<?php
-						if ( $is_template_part ) {
-							// translators: %1$s: Template slug, %2$s: Theme name.
-							printf(
-								esc_html__( 'Failed to export template part "%1$s" for theme "%2$s". Check PHP error log for details.', 'wpcloud' ),
-								esc_html( $template_slug ),
-								esc_html( $template_theme )
-							);
-						} else {
-							// translators: %1$s: Template slug, %2$s: Theme name.
-							printf(
-								esc_html__( 'Failed to export template "%1$s" for theme "%2$s". Check PHP error log for details.', 'wpcloud' ),
-								esc_html( $template_slug ),
-								esc_html( $template_theme )
-							);
-						}
-						?>
-						</p>
-					</div>
-					<?php
-				}
-			);
+			if ( $is_template_part ) {
+				$this->debug_log( 'Failed to export template part', $template_slug . ' for theme ' . $template_theme );
+			} else {
+				$this->debug_log( 'Failed to export template', $template_slug . ' for theme ' . $template_theme );
+			}
 		}
 
 		return false !== $write_result;

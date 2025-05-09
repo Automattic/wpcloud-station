@@ -1,4 +1,4 @@
-<!-- wp:template-part {"slug":"header","tagName":"header","area":"header"} /-->
+<!-- wp:template-part {"slug":"header","theme":"wpcloud-station-pico","tagName":"header","area":"header"} /-->
 
 <!-- wp:spacer {"height":"12px","className":"wpcloud-site-view\u002d\u002dcontent\u002d\u002dspacer"} -->
 <div style="height:12px" aria-hidden="true" class="wp-block-spacer wpcloud-site-view--content--spacer"></div>
@@ -9,8 +9,8 @@
 <div class="wp-block-column"></div>
 <!-- /wp:column -->
 
-<!-- wp:column {"width":"1100px","className":"wpcloud-site-view\u002d\u002ddetails"} -->
-<div class="wp-block-column wpcloud-site-view--details" style="flex-basis:1100px"><!-- wp:template-part {"slug":"site-header","area":"uncategorized"} /-->
+<!-- wp:column {"width":"1800px","className":"wpcloud-site-view\u002d\u002ddetails"} -->
+<div class="wp-block-column wpcloud-site-view--details" style="flex-basis:1800px"><!-- wp:template-part {"slug":"site-header","theme":"wpcloud-station-pico","area":"uncategorized"} /-->
 
 <!-- wp:wpcloud/form-messages {"previewSchema":{"response":{"user?":{"user":""},"message":"","user":""}}} -->
 <div class="wp-block-wpcloud-form-messages"><!-- wp:wpcloud/form-message {"action":"site_ssh_user_update","message":"User ${response.user?.user} updated.","metadata":{"name":"User updated success"},"className":"hidden","style":{"elements":{"link":{"color":{"text":"var:preset|color|white"}}}},"backgroundColor":"vivid-green-cyan","textColor":"white"} -->
@@ -38,7 +38,13 @@
 <!-- /wp:wpcloud/form-message --></div>
 <!-- /wp:wpcloud/form-messages -->
 
-<!-- wp:wpcloud/card {"style":{"spacing":{"margin":{"top":"var:preset|spacing|20","bottom":"var:preset|spacing|20"}}},"metadata":{"name":"Card: SSH Users"}} -->
+<!-- wp:columns -->
+<div class="wp-block-columns"><!-- wp:column {"width":"25%"} -->
+<div class="wp-block-column" style="flex-basis:25%"></div>
+<!-- /wp:column -->
+
+<!-- wp:column {"width":"50%"} -->
+<div class="wp-block-column" style="flex-basis:50%"><!-- wp:wpcloud/card {"style":{"spacing":{"margin":{"top":"var:preset|spacing|20","bottom":"var:preset|spacing|20"}}},"metadata":{"name":"Card: SSH Users"}} -->
 <article style="margin-top:var(--wp--preset--spacing--20);margin-bottom:var(--wp--preset--spacing--20);spacing:[object Object]" class="wp-block-wpcloud-card"><!-- wp:wpcloud/card-section {"text":"SSH Users","metadata":{"name":"SSH Users"}} -->
 <header class="wp-block-wpcloud-card-section"><h2>SSH Users</h2></header>
 <!-- /wp:wpcloud/card-section -->
@@ -46,16 +52,16 @@
 <!-- wp:wpcloud/card {"style":{"spacing":{"margin":{"top":"var:preset|spacing|50","bottom":"var:preset|spacing|50"}}},"metadata":{"name":"Card: Add User"}} -->
 <article style="margin-top:var(--wp--preset--spacing--50);margin-bottom:var(--wp--preset--spacing--50);spacing:[object Object]" class="wp-block-wpcloud-card"><!-- wp:wpcloud/ssh-user-form -->
 <div class="wpcloud-ssh-form wp-block-wpcloud-ssh-user-form"><!-- wp:wpcloud/form {"wpcloudAction":"site_ssh_user_add","metadata":{"name":"SSH User Form"},"className":"wpcloud-form-ssh-user"} -->
-<form class="wp-block-wpcloud-form wpcloud-form-ssh-user wpcloud-block-form" enctype="text/plain"><!-- wp:wpcloud/form-input {"name":"user","label":"User","uniqueId":"91e25fc3-350d-4ea2-aa39-20fc548e5314-user"} -->
-<div class="wpcloud-block-form--input wp-block-wpcloud-form-input wpcloud-block-form--input--text"><label class="wpcloud-block-form-input__label" for="91e25fc3-350d-4ea2-aa39-20fc548e5314-user"><span class="wpcloud-block-form-input__label-content"><span class="wpcloud-block-form-input__label-text">User</span></span><input type="text" class="wpcloud-block-form-input__input" aria-label="Optional placeholder text" placeholder=" " name="user" id="91e25fc3-350d-4ea2-aa39-20fc548e5314-user" aria-required="false"/></label></div>
+<form class="wp-block-wpcloud-form wpcloud-form-ssh-user wpcloud-block-form" enctype="text/plain"><!-- wp:wpcloud/form-input {"name":"user","label":"User","uniqueId":"176350f6-e096-40c9-a669-9132c840f91d-user"} -->
+<div class="wpcloud-block-form--input wp-block-wpcloud-form-input wpcloud-block-form--input--text"><label class="wpcloud-block-form-input__label" for="176350f6-e096-40c9-a669-9132c840f91d-user"><span class="wpcloud-block-form-input__label-content"><span class="wpcloud-block-form-input__label-text">User</span></span><input type="text" class="wpcloud-block-form-input__input" aria-label="Optional placeholder text" placeholder=" " name="user" id="176350f6-e096-40c9-a669-9132c840f91d-user" aria-required="false"/></label></div>
 <!-- /wp:wpcloud/form-input -->
 
-<!-- wp:wpcloud/form-input {"type":"password","name":"pass","label":"Password","uniqueId":"0326975f-102f-412d-92cc-08c00d7df6e9-pass"} -->
-<div class="wpcloud-block-form--input wp-block-wpcloud-form-input wpcloud-block-form--input--password"><label class="wpcloud-block-form-input__label" for="0326975f-102f-412d-92cc-08c00d7df6e9-pass"><span class="wpcloud-block-form-input__label-content"><span class="wpcloud-block-form-input__label-text">Password</span></span><span class="wpcloud-block-form-input--password"><input type="password" class="wpcloud-block-form-input__input" aria-label="Optional placeholder text" name="pass" id="0326975f-102f-412d-92cc-08c00d7df6e9-pass" aria-required="false"/><span class="wpcloud-block-form-input--toggle-hidden"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="wpcloud-block-form-input--toggle-hidden--seen" aria-hidden="true"><path d="M3.99961 13C4.67043 13.3354 4.6703 13.3357 4.67017 13.3359L4.67298 13.3305C4.67621 13.3242 4.68184 13.3135 4.68988 13.2985C4.70595 13.2686 4.7316 13.2218 4.76695 13.1608C4.8377 13.0385 4.94692 12.8592 5.09541 12.6419C5.39312 12.2062 5.84436 11.624 6.45435 11.0431C7.67308 9.88241 9.49719 8.75 11.9996 8.75C14.502 8.75 16.3261 9.88241 17.5449 11.0431C18.1549 11.624 18.6061 12.2062 18.9038 12.6419C19.0523 12.8592 19.1615 13.0385 19.2323 13.1608C19.2676 13.2218 19.2933 13.2686 19.3093 13.2985C19.3174 13.3135 19.323 13.3242 19.3262 13.3305L19.3291 13.3359C19.3289 13.3357 19.3288 13.3354 19.9996 13C20.6704 12.6646 20.6703 12.6643 20.6701 12.664L20.6697 12.6632L20.6688 12.6614L20.6662 12.6563L20.6583 12.6408C20.6517 12.6282 20.6427 12.6108 20.631 12.5892C20.6078 12.5459 20.5744 12.4852 20.5306 12.4096C20.4432 12.2584 20.3141 12.0471 20.1423 11.7956C19.7994 11.2938 19.2819 10.626 18.5794 9.9569C17.1731 8.61759 14.9972 7.25 11.9996 7.25C9.00203 7.25 6.82614 8.61759 5.41987 9.9569C4.71736 10.626 4.19984 11.2938 3.85694 11.7956C3.68511 12.0471 3.55605 12.2584 3.4686 12.4096C3.42484 12.4852 3.39142 12.5459 3.36818 12.5892C3.35656 12.6108 3.34748 12.6282 3.34092 12.6408L3.33297 12.6563L3.33041 12.6614L3.32948 12.6632L3.32911 12.664C3.32894 12.6643 3.32879 12.6646 3.99961 13ZM11.9996 16C13.9326 16 15.4996 14.433 15.4996 12.5C15.4996 10.567 13.9326 9 11.9996 9C10.0666 9 8.49961 10.567 8.49961 12.5C8.49961 14.433 10.0666 16 11.9996 16Z"></path></svg><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="16" height="16" style="display:none" class="wpcloud-block-form-input--toggle-hidden--unseen" aria-hidden="true"><path d="M4.67 10.664s-2.09 1.11-2.917 1.582l.494.87 1.608-.914.002.002c.343.502.86 1.17 1.563 1.84.348.33.742.663 1.185.976L5.57 16.744l.858.515 1.02-1.701a9.1 9.1 0 0 0 4.051 1.18V19h1v-2.263a9.1 9.1 0 0 0 4.05-1.18l1.021 1.7.858-.514-1.034-1.723c.442-.313.837-.646 1.184-.977.703-.669 1.22-1.337 1.563-1.839l.002-.003 1.61.914.493-.87c-1.75-.994-2.918-1.58-2.918-1.58l-.003.005a8.29 8.29 0 0 1-.422.689 10.097 10.097 0 0 1-1.36 1.598c-1.218 1.16-3.042 2.293-5.544 2.293-2.503 0-4.327-1.132-5.546-2.293a10.099 10.099 0 0 1-1.359-1.599 8.267 8.267 0 0 1-.422-.689l-.003-.005Z"></path></svg></span></span></label></div>
+<!-- wp:wpcloud/form-input {"type":"password","name":"pass","label":"Password","uniqueId":"d6ac8861-3afe-4177-a9c0-df91784e5f4d-pass"} -->
+<div class="wpcloud-block-form--input wp-block-wpcloud-form-input wpcloud-block-form--input--password"><label class="wpcloud-block-form-input__label" for="d6ac8861-3afe-4177-a9c0-df91784e5f4d-pass"><span class="wpcloud-block-form-input__label-content"><span class="wpcloud-block-form-input__label-text">Password</span></span><span class="wpcloud-block-form-input--password"><input type="password" class="wpcloud-block-form-input__input" aria-label="Optional placeholder text" name="pass" id="d6ac8861-3afe-4177-a9c0-df91784e5f4d-pass" aria-required="false"/><span class="wpcloud-block-form-input--toggle-hidden"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="wpcloud-block-form-input--toggle-hidden--seen" aria-hidden="true"><path d="M3.99961 13C4.67043 13.3354 4.6703 13.3357 4.67017 13.3359L4.67298 13.3305C4.67621 13.3242 4.68184 13.3135 4.68988 13.2985C4.70595 13.2686 4.7316 13.2218 4.76695 13.1608C4.8377 13.0385 4.94692 12.8592 5.09541 12.6419C5.39312 12.2062 5.84436 11.624 6.45435 11.0431C7.67308 9.88241 9.49719 8.75 11.9996 8.75C14.502 8.75 16.3261 9.88241 17.5449 11.0431C18.1549 11.624 18.6061 12.2062 18.9038 12.6419C19.0523 12.8592 19.1615 13.0385 19.2323 13.1608C19.2676 13.2218 19.2933 13.2686 19.3093 13.2985C19.3174 13.3135 19.323 13.3242 19.3262 13.3305L19.3291 13.3359C19.3289 13.3357 19.3288 13.3354 19.9996 13C20.6704 12.6646 20.6703 12.6643 20.6701 12.664L20.6697 12.6632L20.6688 12.6614L20.6662 12.6563L20.6583 12.6408C20.6517 12.6282 20.6427 12.6108 20.631 12.5892C20.6078 12.5459 20.5744 12.4852 20.5306 12.4096C20.4432 12.2584 20.3141 12.0471 20.1423 11.7956C19.7994 11.2938 19.2819 10.626 18.5794 9.9569C17.1731 8.61759 14.9972 7.25 11.9996 7.25C9.00203 7.25 6.82614 8.61759 5.41987 9.9569C4.71736 10.626 4.19984 11.2938 3.85694 11.7956C3.68511 12.0471 3.55605 12.2584 3.4686 12.4096C3.42484 12.4852 3.39142 12.5459 3.36818 12.5892C3.35656 12.6108 3.34748 12.6282 3.34092 12.6408L3.33297 12.6563L3.33041 12.6614L3.32948 12.6632L3.32911 12.664C3.32894 12.6643 3.32879 12.6646 3.99961 13ZM11.9996 16C13.9326 16 15.4996 14.433 15.4996 12.5C15.4996 10.567 13.9326 9 11.9996 9C10.0666 9 8.49961 10.567 8.49961 12.5C8.49961 14.433 10.0666 16 11.9996 16Z"></path></svg><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="16" height="16" style="display:none" class="wpcloud-block-form-input--toggle-hidden--unseen" aria-hidden="true"><path d="M4.67 10.664s-2.09 1.11-2.917 1.582l.494.87 1.608-.914.002.002c.343.502.86 1.17 1.563 1.84.348.33.742.663 1.185.976L5.57 16.744l.858.515 1.02-1.701a9.1 9.1 0 0 0 4.051 1.18V19h1v-2.263a9.1 9.1 0 0 0 4.05-1.18l1.021 1.7.858-.514-1.034-1.723c.442-.313.837-.646 1.184-.977.703-.669 1.22-1.337 1.563-1.839l.002-.003 1.61.914.493-.87c-1.75-.994-2.918-1.58-2.918-1.58l-.003.005a8.29 8.29 0 0 1-.422.689 10.097 10.097 0 0 1-1.36 1.598c-1.218 1.16-3.042 2.293-5.544 2.293-2.503 0-4.327-1.132-5.546-2.293a10.099 10.099 0 0 1-1.359-1.599 8.267 8.267 0 0 1-.422-.689l-.003-.005Z"></path></svg></span></span></label></div>
 <!-- /wp:wpcloud/form-input -->
 
-<!-- wp:wpcloud/form-input {"type":"textarea","name":"pkey","label":"Public Key","uniqueId":"8834c3e9-d96b-4e9f-b560-4e537eed4b74-pkey"} -->
-<div class="wpcloud-block-form--input wp-block-wpcloud-form-input wpcloud-block-form--input--textarea"><label class="wpcloud-block-form-input__label" for="8834c3e9-d96b-4e9f-b560-4e537eed4b74-pkey"><span class="wpcloud-block-form-input__label-content"><span class="wpcloud-block-form-input__label-text">Public Key</span></span><textarea class="wpcloud-block-form-input__input" aria-label="Optional placeholder text" placeholder=" " name="pkey" id="8834c3e9-d96b-4e9f-b560-4e537eed4b74-pkey" aria-required="false"></textarea></label></div>
+<!-- wp:wpcloud/form-input {"type":"textarea","name":"pkey","label":"Public Key","uniqueId":"2c2d0a3c-4c2c-4726-b880-8cd1376d0923-pkey"} -->
+<div class="wpcloud-block-form--input wp-block-wpcloud-form-input wpcloud-block-form--input--textarea"><label class="wpcloud-block-form-input__label" for="2c2d0a3c-4c2c-4726-b880-8cd1376d0923-pkey"><span class="wpcloud-block-form-input__label-content"><span class="wpcloud-block-form-input__label-text">Public Key</span></span><textarea class="wpcloud-block-form-input__input" aria-label="Optional placeholder text" placeholder=" " name="pkey" id="2c2d0a3c-4c2c-4726-b880-8cd1376d0923-pkey" aria-required="false"></textarea></label></div>
 <!-- /wp:wpcloud/form-input -->
 
 <!-- wp:group {"layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"right"}} -->
@@ -120,8 +126,8 @@
 <!-- /wp:wpcloud/form -->
 
 <!-- wp:wpcloud/form {"wpcloudAction":"site_access_type","metadata":{"name":"Connection Type"}} -->
-<form class="wp-block-wpcloud-form wpcloud-block-form" enctype="text/plain"><!-- wp:wpcloud/form-input {"type":"checkbox","name":"site_access_with_ssh","label":"Access via SSH (if disabled, SFTP will be used)","displayAsToggle":true,"uniqueId":"06eae8ae-339b-4491-ae5b-37c7187dbb44-site_access_with_ssh","submitOnChange":true} -->
-<div class="wpcloud-block-form--input wp-block-wpcloud-form-input wpcloud-block-form--input--toggle"><input type="checkbox" class="wpcloud-block-form-input__input is-toggle submit-on-change" aria-label="Optional placeholder text" placeholder="Optional placeholder..." name="site_access_with_ssh" id="06eae8ae-339b-4491-ae5b-37c7187dbb44-site_access_with_ssh" aria-required="false"/><label class="wpcloud-block-form-input__label is-toggle" for="06eae8ae-339b-4491-ae5b-37c7187dbb44-site_access_with_ssh"><span class="toggle-container"></span><span class="wpcloud-block-form-input__label-content"><span class="wpcloud-block-form-input__label-text">Access via SSH (if disabled, SFTP will be used)</span></span></label></div>
+<form class="wp-block-wpcloud-form wpcloud-block-form" enctype="text/plain"><!-- wp:wpcloud/form-input {"type":"checkbox","name":"site_access_with_ssh","label":"Access via SSH (if disabled, SFTP will be used)","displayAsToggle":true,"uniqueId":"3dec9d5a-c2e3-4434-8d20-6f08c183573e-site_access_with_ssh","submitOnChange":true} -->
+<div class="wpcloud-block-form--input wp-block-wpcloud-form-input wpcloud-block-form--input--toggle"><input type="checkbox" class="wpcloud-block-form-input__input is-toggle submit-on-change" aria-label="Optional placeholder text" placeholder="Optional placeholder..." name="site_access_with_ssh" id="3dec9d5a-c2e3-4434-8d20-6f08c183573e-site_access_with_ssh" aria-required="false"/><label class="wpcloud-block-form-input__label is-toggle" for="3dec9d5a-c2e3-4434-8d20-6f08c183573e-site_access_with_ssh"><span class="toggle-container"></span><span class="wpcloud-block-form-input__label-content"><span class="wpcloud-block-form-input__label-text">Access via SSH (if disabled, SFTP will be used)</span></span></label></div>
 <!-- /wp:wpcloud/form-input --></form>
 <!-- /wp:wpcloud/form --></details>
 <!-- /wp:wpcloud/dropdown --></article>
@@ -159,7 +165,7 @@
 
 <!-- wp:wpcloud/list-item -->
 <li class="wp-block-wpcloud-list-item"><!-- wp:wpcloud/form {"wpcloudAction":"site_ssh_user_remove","inline":true,"className":"wpcloud-block-site-ssh-user\u002d\u002dremove wpcloud-more-menu__row"} -->
-<form class="wp-block-wpcloud-form wpcloud-block-site-ssh-user--remove wpcloud-more-menu__row wpcloud-block-form is-inline" enctype="text/plain"><!-- wp:wpcloud/form-input {"type":"hidden","name":"ssh_user","uniqueId":"d1af6c55-06d0-4759-a0fd-1c8c54291fc4-ssh_user"} -->
+<form class="wp-block-wpcloud-form wpcloud-block-site-ssh-user--remove wpcloud-more-menu__row wpcloud-block-form is-inline" enctype="text/plain"><!-- wp:wpcloud/form-input {"type":"hidden","name":"ssh_user","uniqueId":"f342e315-cb9d-4624-a4ac-1bd5409c096b-ssh_user"} -->
 <input type="hidden" name="ssh_user" value=""/>
 <!-- /wp:wpcloud/form-input -->
 
@@ -181,9 +187,15 @@
 <!-- /wp:wpcloud/card --></div>
 <!-- /wp:column -->
 
+<!-- wp:column {"width":"25%"} -->
+<div class="wp-block-column" style="flex-basis:25%"></div>
+<!-- /wp:column --></div>
+<!-- /wp:columns --></div>
+<!-- /wp:column -->
+
 <!-- wp:column -->
 <div class="wp-block-column"></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns -->
 
-<!-- wp:template-part {"slug":"footer","area":"footer","className":"wpcloud-footer"} /-->
+<!-- wp:template-part {"slug":"footer","theme":"wpcloud-station-pico","area":"footer","className":"wpcloud-footer"} /-->
