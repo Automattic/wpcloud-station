@@ -1,6 +1,0 @@
-{
-    "__file": "wp_block",
-    "title": "Test",
-    "content": "<!-- wp:heading -->\n<h2 class=\"wp-block-heading\">test pattern<\/h2>\n<!-- \/wp:heading -->",
-    "syncStatus": ""
-}
