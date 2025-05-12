@@ -6,6 +6,7 @@
  */
 import React, { useState, useRef, useEffect } from 'react';
 import classnames from 'classnames';
+import useGraphOptions from './lib/useGraphOptions';
 
 // Inline styles for the legend
 const styles = {
@@ -82,17 +83,55 @@ const styles = {
 };
 
 const SideLegend = ({
-	series,
 	colors: propColors,
 	onLegendItemClick,
 	dimension,
 	activeSeriesIdx: externalActiveSeriesIdx = null,
 	toggledOffSeries = new Set(),
-	legendBehavior = 'toggle'
+	legendBehavior = 'toggle',
+	options = {}
 }) => {
-	const colors = propColors || series.map(s => s.stroke).filter(Boolean);
-	// Filter out the first series (which is usually the x-axis)
-	const displaySeries = series.slice(1);
+	// Extract options for useGraphOptions if provided
+	const {
+		title,
+		meta,
+		data,
+		containerRef,
+		showLegend = true,
+		legendPosition = 'right',
+		type,
+		orientation
+	} = options;
+
+	// Create options object for useGraphOptions
+	const graphOptionsParams = {
+		title,
+		data,
+		series: options.series || [], // Use series from options if provided
+		meta,
+		containerRef,
+		showLegend,
+		legendPosition,
+		type,
+		orientation,
+		dimension
+	};
+
+	// Get graph options from the hook
+	const graphOptions = useGraphOptions(graphOptionsParams);
+
+	// Extract series from the graph options
+	const series = graphOptions.series || [];
+
+	// Use colors from props or extract from series
+	let colors = propColors || series.map(s => s.stroke).filter(Boolean);
+
+	// Filter out the first series (which is usually the x-axis) if it hasn't been filtered already
+	// Check if the first item is likely an x-axis by looking at its properties
+	const isFirstItemXAxis = series.length > 0 &&
+		(series[0].label === 'x' || series[0].scale === 'x' || !series[0].stroke);
+
+	const displaySeries = isFirstItemXAxis ? series.slice(1) : series;
 	// Use internal state for hover only, active state comes from parent
 	const [hoveredIdx, setHoveredIdx] = useState(null);
 
@@ -160,10 +199,11 @@ const SideLegend = ({
 		// Stop event propagation to prevent it from triggering the item click
 		event.stopPropagation();
 
-		// Call the parent handler with the adjusted index (accounting for x-axis series)
+		// Call the parent handler with the adjusted index
 		if (onLegendItemClick) {
-			// Add 1 to account for the x-axis series that was filtered out
-			onLegendItemClick(index + 1);
+			// Only add 1 if we detected an x-axis series that was filtered out
+			const adjustedIndex = isFirstItemXAxis ? index + 1 : index;
+			onLegendItemClick(adjustedIndex);
 		}
 	};
 
@@ -209,8 +249,8 @@ const SideLegend = ({
 			)}
 			<div className="wpcloud-side-legend__items" style={styles.items}>
 				{displaySeries.map((s, i) => {
-					// Adjust index for toggledOffSeries (add 1 for x-axis)
-					const adjustedIdx = i + 1;
+					// Adjust index for toggledOffSeries (add 1 for x-axis if needed)
+					const adjustedIdx = isFirstItemXAxis ? i + 1 : i;
 
 					// Determine if this series is visible
 					const isIsolateMode = legendBehavior === 'isolate';

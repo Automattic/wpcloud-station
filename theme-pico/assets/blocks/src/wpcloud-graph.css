@@ -2,7 +2,6 @@
 	padding: 1em;
 	box-sizing: border-box;
 	margin-bottom: 0 !important;
-
 	.uplot {
 		width: 100%;
 		.u-wrap {
@@ -62,64 +61,65 @@
 		position: relative;
 	}
 
-	/* Flex layout for graph with side legend */
-	.wpcloud-uplot-graph {
+	/* Layout for graph with side legend */
+	.wp-block-wpcloud-graph {
+		display: block;
 		width: 100%;
 		position: relative;
 		box-sizing: border-box;
+		min-height: 400px; /* Ensure minimum height */
 	}
 
-	.wpcloud-uplot-graph--with-side-legend {
+	&.wp-block-wpcloud-graph--with-side-legend {
 		display: flex;
-		flex-direction: row;
-		align-items: stretch;
-		width: 100%;
+		align-items: flex-start;
+		gap: 20px;
 	}
 
-	.wpcloud-uplot-graph__chart-container {
+	.wp-block-wpcloud-graph__chart-container {
 		flex: 1;
 		min-width: 0; /* Prevent flex item from overflowing */
+		position: relative;
+		min-height: 400px; /* Ensure minimum height */
 	}
 
 	/* Apply width constraints only to charts with side legends */
-	.wpcloud-uplot-graph--with-side-legend .wpcloud-uplot-graph__chart-container {
+	.wp-block-wpcloud-graph--with-side-legend .wp-block-wpcloud-graph__chart-container {
 		max-width: calc(100% - 130px); /* Account for legend width (110px) + margin (20px) */
 		width: calc(100% - 130px); /* Force width to be fixed */
 	}
 
-	/* Force uPlot to respect container width only when side legend is present */
-	.wpcloud-uplot-graph--with-side-legend .wpcloud-uplot-graph__chart-container .uplot {
-		width: 100% !important;
-		max-width: 100% !important;
+	/* The uPlot graph itself takes full width of its container */
+	.wpcloud-uplot-graph {
+		width: 100%;
+		position: relative;
+		box-sizing: border-box;
+		min-height: 400px; /* Ensure minimum height */
 	}
 
-	.wpcloud-uplot-graph--with-side-legend .wpcloud-uplot-graph__chart-container .u-wrap {
-		width: 100% !important;
-		max-width: 100% !important;
-	}
-
-	/* Add overflow hidden to prevent elements from flowing outside their container */
-	.wpcloud-uplot-graph--with-side-legend .wpcloud-uplot-graph__chart-container {
-		overflow: hidden;
-	}
-
+	/* Legend container has fixed width and scrolls vertically */
 	.wpcloud-uplot-graph__legend-container {
 		width: 110px;
 		flex-shrink: 0;
-		margin-left: 20px;
-		align-self: flex-start; /* Align to the top of the container */
+		max-height: 400px; /* Match the min-height of the graph container */
+		overflow-y: auto; /* Enable vertical scrolling */
+		scrollbar-width: none !important; /* Firefox */
+		-ms-overflow-style: none !important; /* IE and Edge */
 	}
 
-	/* Match the height of the legend container to the uPlot element */
-	.wpcloud-uplot-graph--with-side-legend .wpcloud-uplot-graph__legend-container {
-		height: 456px; /* Fixed height that matches typical uPlot height */
-		max-height: 456px; /* Set a maximum height that matches typical uPlot height */
-		overflow: hidden; /* Ensure the container doesn't overflow */
+	/* Hide scrollbar for Chrome, Safari and Opera for the legend container */
+	.wpcloud-uplot-graph__legend-container::-webkit-scrollbar,
+	.wpcloud-uplot-graph__legend-container::-webkit-scrollbar-thumb,
+	.wpcloud-uplot-graph__legend-container::-webkit-scrollbar-track {
+		width: 0 !important;
+		height: 0 !important;
+		background-color: transparent !important;
+		display: none !important;
 	}
 
-	/* When the uPlot element is present, match its height exactly */
-	.wpcloud-uplot-graph--with-side-legend .uplot + .wpcloud-uplot-graph__legend-container {
-		height: 100%; /* Match the height of the graph container */
+	/* Ensure uPlot has proper height */
+	.uplot {
+		min-height: 400px;
 	}
 
 	/* Custom Side Legend Styles */
@@ -127,7 +127,7 @@
 		height: 100%;
 		padding: 10px;
 		box-sizing: border-box;
-		overflow-y: auto; /* Make y-overflow scrollable */
+		/* Remove overflow-y: auto from here since it's now on the container */
 		scrollbar-width: none !important; /* Firefox */
 		-ms-overflow-style: none !important; /* IE and Edge */
 	}
@@ -268,4 +268,6 @@
 			color: black;
 		}
 	}
+
+	/* Remove duplicate rule */
 }

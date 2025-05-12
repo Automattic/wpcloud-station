@@ -5,6 +5,12 @@
  * @package wpcloud-station
  */
 
+// Redirect to login page if user is not logged in
+if ( ! is_user_logged_in() ) {
+	wp_redirect( wp_login_url( $_SERVER['REQUEST_URI'] ) );
+	exit;
+}
+
 $site_name = get_query_var( 'site_name' );
 $view      = get_query_var( 'view', '' );
 $site_cpt  = get_page_by_path( $site_name, OBJECT, 'wpcloud_site' );

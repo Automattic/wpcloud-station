@@ -20,12 +20,22 @@ const statusScale = () => ( series, _, opacity ) => {
 };
 
 const indexScale = (colors)  => (_, idx, opacity ) => {
-	return colors[idx].alpha(opacity).css();
+	// Make sure the color exists, use a default color if not
+	const color = colors[idx] || chroma('#000');
+	return color.alpha(opacity).css();
 }
 
 const buildPalette = ( baseColors, total ) => {
+	// Ensure we have at least one color to work with
+	if (!baseColors || !baseColors.length) {
+		baseColors = ['#3498db', '#2ecc71', '#e74c3c', '#f39c12', '#9b59b6'];
+	}
+
+	// Ensure total is a positive number
+	total = Math.max(1, total || 1);
+
 	const scale = chroma.scale(baseColors).mode("lab");
-	const colors = Array.from({ length: total }, (_, i) => scale(i / total));
+	const colors = Array.from({ length: total }, (_, i) => scale(i / (total - 1 || 1)));
 	return colors;
 }
 

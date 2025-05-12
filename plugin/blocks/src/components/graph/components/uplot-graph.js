@@ -4,13 +4,11 @@
 import React, { useRef, useState, useEffect } from 'react';
 import UplotReact from 'uplot-react';
 import 'uplot/dist/uPlot.min.css';
-import classnames from 'classnames';
 
 /**
  * Internal dependencies
  */
 import Overlay from './overlay';
-import SideLegend from './SideLegend';
 import useGraphOptions from './lib/useGraphOptions';
 import useUplotHeight from './lib/useUplotHeight';
 
@@ -18,12 +16,19 @@ import useUplotHeight from './lib/useUplotHeight';
  * UplotGraph component for rendering charts using uPlot
  *
  * @param {Object} props - Component props
+ * @param {Array} props.data - Chart data (controlled by state in graph.js)
+ * @param {boolean} props.refreshing - Whether the chart is refreshing (controlled by state in graph.js)
+ * @param {Object} props.options - All other options for the chart
  * @returns {JSX.Element} - Rendered component
  */
-
 export default function UplotGraph({
-		title,
 		data,
+		refreshing,
+		options
+}) {
+	// Extract options
+	const {
+		title,
 		series,
 		meta,
 		containerRef,
@@ -32,9 +37,7 @@ export default function UplotGraph({
 		type,
 		orientation,
 		dimension,
-		refreshing,
-		legendBehavior = 'toggle' // 'toggle' or 'isolate'
-}) {
+	} = options;
 	// Use useRef instead of useState to avoid re-renders when setting the uPlot instance
 	const uplotInstanceRef = useRef(null);
 	// Track which series is active (null means all series are shown)
@@ -77,115 +80,20 @@ export default function UplotGraph({
 
 	// Get graph options from the hook
 	// Use chartData instead of the original data
-	const { data: d, ...options } = useGraphOptions(graphOptionsParams);
+	const { data: d, ...uplotOptions } = useGraphOptions(graphOptionsParams);
 
-	// Extract colors from series for the SideLegend
-	const seriesColors = options.series.map(s => s.stroke).filter(Boolean);
+	// Extract colors from series for the SideLegend if needed
+	if (showLegend && legendPosition === 'right') {
+		const seriesColors = uplotOptions.series.map(s => s.stroke).filter(Boolean);
+		console.log('seriesColors', seriesColors);
+	}
 
-	// Track which series are toggled off
-	const [toggledOffSeries, setToggledOffSeries] = useState(new Set());
-
-	// Handle legend item click
-	const handleLegendItemClick = (idx) => {
-		// If idx is null, show all series
-		if (idx === null) {
-			setActiveSeriesIdx(null);
-			setChartData(originalDataRef.current);
-			setToggledOffSeries(new Set());
-
-			// Update the uPlot instance if it exists
-			if (uplotInstanceRef.current) {
-				uplotInstanceRef.current.setData(originalDataRef.current);
-			}
-			return;
-		}
-
-		// Determine which behavior to use based solely on the legendBehavior setting
-		const useIsolateMode = legendBehavior === 'isolate';
-
-		if (useIsolateMode) {
-			// Isolate mode: show only the clicked series
-			// If the same series is already isolated, reset to show all
-			if (activeSeriesIdx === idx) {
-				setActiveSeriesIdx(null);
-				setChartData(originalDataRef.current);
-
-				// Update the uPlot instance if it exists
-				if (uplotInstanceRef.current) {
-					uplotInstanceRef.current.setData(originalDataRef.current);
-				}
-				return;
-			}
-
-			setActiveSeriesIdx(idx);
-
-			// Create a new data array with just the x-axis values and the clicked series
-			const newData = originalDataRef.current.map((series, seriesIdx) => {
-				if (seriesIdx === 0) {
-					// Keep x-axis values
-					return series;
-				} else if (seriesIdx === idx) {
-					// Keep the clicked series data
-					return originalDataRef.current[seriesIdx];
-				} else {
-					// For other series, create an array of the same length as the x-axis but with null values
-					return Array(originalDataRef.current[0].length).fill(null);
-				}
-			});
-
-			setChartData(newData);
-
-			// Update the uPlot instance if it exists
-			if (uplotInstanceRef.current) {
-				uplotInstanceRef.current.setData(newData);
-			}
-		} else {
-			// Toggle mode: toggle the clicked series on/off
-			const newToggledOffSeries = new Set(toggledOffSeries);
-
-			if (newToggledOffSeries.has(idx)) {
-				// If the series is already toggled off, turn it back on
-				newToggledOffSeries.delete(idx);
-			} else {
-				// Otherwise, toggle it off
-				newToggledOffSeries.add(idx);
-			}
-
-			setToggledOffSeries(newToggledOffSeries);
-
-			// Create a new data array with toggled series set to null
-			const newData = originalDataRef.current.map((series, seriesIdx) => {
-				if (seriesIdx === 0) {
-					// Keep x-axis values
-					return series;
-				} else if (newToggledOffSeries.has(seriesIdx)) {
-					// For toggled off series, create an array of null values
-					return Array(originalDataRef.current[0].length).fill(null);
-				} else {
-					// Keep the data for visible series
-					return originalDataRef.current[seriesIdx];
-				}
-			});
-
-			setChartData(newData);
-
-			// Update the uPlot instance if it exists
-			if (uplotInstanceRef.current) {
-				uplotInstanceRef.current.setData(newData);
-			}
-
-			// Update active series for styling
-			setActiveSeriesIdx(newToggledOffSeries.size > 0 ? -1 : null);
-		}
-	};
-
+	// Return the chart
 	return (
-		<div className={classnames('wpcloud-uplot-graph',{
-			'wpcloud-uplot-graph--with-side-legend': showLegend && legendPosition === 'right'
-		})}>
-			<div className="wpcloud-uplot-graph__chart-container">
+		<div className="wpcloud-uplot-graph">
+			<div className="wpcloud-uplot-graph__chart-container" style={{ height: '100%' }}>
 				<UplotReact
-					options={options}
+					options={uplotOptions}
 					data={d}
 					onCreate={(chart) => {
 						// Only set the instance if it's not already set or if it's a different instance
@@ -199,20 +107,6 @@ export default function UplotGraph({
 				/>
 				{refreshing && <Overlay refreshing={true} />}
 			</div>
-
-			{showLegend && legendPosition === 'right' && (
-				<div className="wpcloud-uplot-graph__legend-container">
-					<SideLegend
-						series={options.series}
-						colors={seriesColors}
-						onLegendItemClick={handleLegendItemClick}
-						dimension={dimension}
-						activeSeriesIdx={activeSeriesIdx}
-						toggledOffSeries={toggledOffSeries}
-						legendBehavior={legendBehavior}
-					/>
-				</div>
-			)}
 		</div>
 	);
 }
