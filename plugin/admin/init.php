@@ -254,6 +254,25 @@ function wpcloud_settings_init(): void {
 				'disabled'            => ! $wpcloud_api_healthy,
 			)
 		);
+
+		// Only show the content exporter option if IS_ATOMIC is not defined.
+	if ( ! defined( 'IS_ATOMIC' ) ) {
+		add_settings_field(
+			'wpcloud_field_enable_content_exporter',
+			__( 'Enable content exporter', 'wpcloud' ),
+			'wpcloud_field_input_cb',
+			'wpcloud',
+			'wpcloud_section_settings',
+			array(
+				'label_for'           => 'enable_content_exporter',
+				'class'               => 'wpcloud_row',
+				'wpcloud_custom_data' => 'custom',
+				'description'         => __( 'Automatically export patterns to JSON files and templates to HTML files when they are saved in the WordPress editor. This is useful for development environments.' ),
+				'type'                => 'checkbox',
+				'checked'             => get_option( 'wpcloud_settings', array() )['enable_content_exporter'] ?? false,
+			)
+		);
+	}
 }
 	add_action( 'admin_init', 'wpcloud_settings_init' );
 
@@ -611,3 +630,15 @@ function wpcloud_admin_options_controller(): void {
 			wp_enqueue_script( 'wpcloud-admin', plugin_dir_url( __FILE__ ) . 'assets/js/build/index.js', $config['dependencies'], $config['version'], true );
 		}
 	);
+
+	/**
+	 * Initialize the content exporter.
+	 */
+	require_once plugin_dir_path( __FILE__ ) . 'includes/class-wpcloud-content-exporter.php';
+	new WPCloud_Content_Exporter();
+
+	/**
+	 * Initialize the pattern admin.
+	 */
+	require_once plugin_dir_path( __FILE__ ) . 'includes/class-wpcloud-pattern-admin.php';
+	new WPCloud_Pattern_Admin();

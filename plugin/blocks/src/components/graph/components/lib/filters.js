@@ -59,10 +59,8 @@ const buildFilter = (filter, enabled = true) => {
 		value: {
 			field,
 			operator,
-			// Store the original value to maintain type for API calls
 			value,
 		},
-		// Use the string version for display
 		compact: hasMultipleWords ? `${field} ${operator} ...` : label,
 		label,
 	}

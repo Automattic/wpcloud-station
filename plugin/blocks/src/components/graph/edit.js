@@ -31,7 +31,7 @@ import SimpleGraph from './components/SimpleGraph';
 
 export default function Edit( { attributes, setAttributes } ) {
 
-	const { title, type, orientation, showLegend, metric, dimension, resolution, topX, summarize, minWidth, predefinedFilters, allowFrontendFilters } = attributes;
+	const { title, type, orientation, showLegend, legendPosition, legendBehavior, metric, dimension, resolution, topX, summarize, minWidth, predefinedFilters, allowFrontendFilters } = attributes;
 	const update = updateAttribute(setAttributes);
 
 	const [metrics, setMetrics] = useState({});
@@ -156,16 +156,42 @@ export default function Edit( { attributes, setAttributes } ) {
 					checked={ showLegend }
 					onChange={ update('showLegend') }
 				/>
-				{ /*
-				// @TODO - Add this back once we clean up the UI for frontend filters.
+
+				{showLegend && (
+					<>
+						<SelectControl
+							label={ __( 'Legend Position' ) }
+							value={ legendPosition }
+							options={ [
+								{ label: __( 'Bottom' ), value: 'bottom' },
+								{ label: __( 'Right' ), value: 'right' },
+							] }
+							onChange={ update('legendPosition') }
+						/>
+						{legendPosition === 'right' && (
+							<SelectControl
+								label={ __( 'Legend Behavior' ) }
+								value={ legendBehavior }
+								options={ [
+									{ label: __( 'Toggle Series' ), value: 'toggle' },
+									{ label: __( 'Isolate Series' ), value: 'isolate' },
+								] }
+								onChange={ update('legendBehavior') }
+								help={ __( 'Toggle: Click to show/hide individual series. Isolate: Click to show only that series.' ) }
+							/>
+						)}
+					</>
+				)}
+				{ /* The frontend filter UI is not ready yet. Hiding this for now.
+
 				<ToggleControl
 					label={ __( 'Enable Filter Controls' ) }
 					help={ __( 'Allow users to view and interact with filters on the frontend. See the `Predefined Filters` section below to add default filters' ) }
 					checked={ allowFrontendFilters }
 					onChange={ update('allowFrontendFilters') }
-
 				/>
 				*/}
+
 			</PanelBody>
 			<PanelBody title={__('Graph Data')}>
 				{loading && <Spinner />}
@@ -269,8 +295,14 @@ export default function Edit( { attributes, setAttributes } ) {
 					placeholder={ __( 'Title' ) }
 				/>
 			</figure>
-			{/* SVG-based graph that shows the selected type and orientation */}
-			<SimpleGraph type={type} orientation={orientation} />
+			{/* SVG-based graph that shows the selected type and orientation with legend */}
+			<SimpleGraph
+				type={type}
+				orientation={orientation}
+				showLegend={showLegend}
+				legendPosition={legendPosition}
+				legendBehavior={legendBehavior}
+			/>
 		</div>
 	);
 }

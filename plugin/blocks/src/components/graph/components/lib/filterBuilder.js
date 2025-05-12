@@ -66,19 +66,6 @@ const arrayToObjectFilter = (filter) => {
 };
 
 /**
- * Convert a filter from the object format {field, operator, value} to an array format
- *
- * @param {Object} filter - Filter in object format {field, operator, value}
- * @returns {Array} - Filter in array format [field, operator, value]
- */
-const objectToArrayFilter = (filter) => {
-    if (filter && typeof filter === 'object' && !Array.isArray(filter)) {
-        return [filter.field, filter.operator, filter.value];
-    }
-    return filter;
-};
-
-/**
  * Component for building and managing predefined filters in the block editor
  */
 export default function FilterBuilder({ filters = [], dimensionOptions = [], onChange }) {
@@ -99,23 +86,31 @@ export default function FilterBuilder({ filters = [], dimensionOptions = [], onC
     };
 
     const resetForm = () => {
-		setField( dimensionOptions[0].value ); // select first option
+        // Only set field if dimensionOptions has items
+        if (dimensionOptions && dimensionOptions.length > 0) {
+            setField(dimensionOptions[0].value); // select first option
+        } else {
+            setField('');
+        }
         setOperator('');
         setValue('');
     };
 
 	// Update Columns when dimensions change
 	useEffect( () => {
-		if ( field ) {
-			// update field and filters if dimension is no longer valid.
-			// @todo -> is there any overlap where we may keep some filters?
-			if ( ! dimensionOptions.some(dimObj => dimObj.value === field)) {
+		// Only proceed if dimensionOptions has items
+		if (dimensionOptions && dimensionOptions.length > 0) {
+			if ( field ) {
+				// update field and filters if dimension is no longer valid.
+				// @todo -> is there any overlap where we may keep some filters?
+				if ( ! dimensionOptions.some(dimObj => dimObj.value === field)) {
+					setField( dimensionOptions[0].value );
+					onChange( [] ); // remove filters
+				}
+			} else {
+				// select first item if none selected.
 				setField( dimensionOptions[0].value );
-				onChange( [] ); // remove filters
 			}
-		} else {
-			// select first item if none selected.
-			setField( dimensionOptions[0].value );
 		}
 	}, [dimensionOptions] );
 

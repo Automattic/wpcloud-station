@@ -15,6 +15,8 @@ require_once __DIR__ . '/class-wpcloud-cli-job.php';
 
 require_once __DIR__ . '/class-wpcloud-cli-metrics.php';
 
+require_once __DIR__ . '/class-wpcloud-cli-patterns.php';
+
 require_once __DIR__ . '/class-wpcloud-cli-site.php';
 require_once __DIR__ . '/class-wpcloud-cli-site-domain.php';
 require_once __DIR__ . '/class-wpcloud-cli-site-ssh-user.php';
@@ -30,6 +32,7 @@ add_action(
 		WP_CLI::add_command( 'cloud client meta', 'WPCloud_CLI_Client_Meta' );
 		WP_CLI::add_command( 'cloud job', 'WPCloud_CLI_Job' );
 		WP_CLI::add_command( 'cloud metrics', 'WPCloud_CLI_Metrics' );
+		WP_CLI::add_command( 'cloud patterns', 'WPCloud_CLI_Patterns' );
 		WP_CLI::add_command( 'cloud site', 'WPCloud_CLI_Site' );
 		WP_CLI::add_command( 'cloud site domain', 'WPCloud_CLI_Site_Domain' );
 		WP_CLI::add_command( 'cloud site ssh-user', 'WPCloud_CLI_Site_SSH_User' );

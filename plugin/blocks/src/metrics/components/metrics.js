@@ -23,7 +23,7 @@ function renderNodeWithProps(node, key, props) {
 	return null;
 }
 
-// @TODO: Move these to the site editor as block attributes
+// Default graph options
 const defaultGraphOptions = {
 	seriesPalette: [
 		"#bcf60c", // Lime
@@ -44,7 +44,6 @@ const defaultGraphOptions = {
 				grid: { stroke: '#111', width: 1 },
 				ticks: { stroke: '#888', size: 5, width: 1 },
 				font: '12px sans-serif',
-				//label: "Axis 1",
 			},
 			light: {
 				stroke: '#000',
@@ -59,7 +58,6 @@ const defaultGraphOptions = {
 				grid: { stroke: '#111', width: 1 },
 				ticks: { stroke: '#888', size: 5, width: 1 },
 				font: '12px sans-serif',
-				//label: "Axis 2",
 			},
 			light: {
 				stroke: '#000',
@@ -69,12 +67,7 @@ const defaultGraphOptions = {
 			}
 		}
 	],
-
 	padding: [10, 10, 0, 0],
-	fit: {
-		width: 10,
-		height: 75,
-	},
 	scales: {
 		y: {
 			range: [0, null],
@@ -125,7 +118,6 @@ function Metrics({ tree, apiPath }) {
 	return (
 		<ApiContext.Provider value={{ apiPath }}>
 			<div className="wpcloud-metrics">
-				<h3>Metrics</h3>
 				<Toolbar onIntervalUpdate={updateQueryParams} interval={interval} onRefresh={onRefresh} />
 				<MetricsOptionsContext.Provider value={defaultGraphOptions}>
 					<LegendTooltipProvider>

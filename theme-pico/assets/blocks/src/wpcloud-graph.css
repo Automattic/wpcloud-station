@@ -2,7 +2,6 @@
 	padding: 1em;
 	box-sizing: border-box;
 	margin-bottom: 0 !important;
-
 	.uplot {
 		width: 100%;
 		.u-wrap {
@@ -44,10 +43,151 @@
 
 			tr {
 				width: auto;
-				min-width: 150px;
 				margin-right: 10px;
 			}
 		}
+
+	/* Right-positioned legend styles - these are now applied via JavaScript in the legendPositionPlugin */
+	&[data-position="right"] {
+		/* Styles are applied directly via JavaScript for better compatibility */
+		background-color: rgba(255, 255, 255, 0.8);
+		border-radius: 4px;
+		border: 1px solid #ddd;
+	}
+	}
+
+	/* Container adjustments for right legend */
+	.u-wrap {
+		position: relative;
+	}
+
+	/* Layout for graph with side legend */
+	.wp-block-wpcloud-graph {
+		display: block;
+		width: 100%;
+		position: relative;
+		box-sizing: border-box;
+		min-height: 400px; /* Ensure minimum height */
+	}
+
+	&.wp-block-wpcloud-graph--with-side-legend {
+		display: flex;
+		align-items: flex-start;
+		gap: 20px;
+	}
+
+	.wp-block-wpcloud-graph__chart-container {
+		flex: 1;
+		min-width: 0; /* Prevent flex item from overflowing */
+		position: relative;
+		min-height: 400px; /* Ensure minimum height */
+	}
+
+	/* Apply width constraints only to charts with side legends */
+	.wp-block-wpcloud-graph--with-side-legend .wp-block-wpcloud-graph__chart-container {
+		max-width: calc(100% - 130px); /* Account for legend width (110px) + margin (20px) */
+		width: calc(100% - 130px); /* Force width to be fixed */
+	}
+
+	/* The uPlot graph itself takes full width of its container */
+	.wpcloud-uplot-graph {
+		width: 100%;
+		position: relative;
+		box-sizing: border-box;
+		min-height: 400px; /* Ensure minimum height */
+	}
+
+	/* Legend container has fixed width and scrolls vertically */
+	.wpcloud-uplot-graph__legend-container {
+		width: 110px;
+		flex-shrink: 0;
+		max-height: 400px; /* Match the min-height of the graph container */
+		overflow-y: auto; /* Enable vertical scrolling */
+		scrollbar-width: none !important; /* Firefox */
+		-ms-overflow-style: none !important; /* IE and Edge */
+	}
+
+	/* Hide scrollbar for Chrome, Safari and Opera for the legend container */
+	.wpcloud-uplot-graph__legend-container::-webkit-scrollbar,
+	.wpcloud-uplot-graph__legend-container::-webkit-scrollbar-thumb,
+	.wpcloud-uplot-graph__legend-container::-webkit-scrollbar-track {
+		width: 0 !important;
+		height: 0 !important;
+		background-color: transparent !important;
+		display: none !important;
+	}
+
+	/* Ensure uPlot has proper height */
+	.uplot {
+		min-height: 400px;
+	}
+
+	/* Custom Side Legend Styles */
+	.wpcloud-side-legend {
+		height: 100%;
+		padding: 10px;
+		box-sizing: border-box;
+		/* Remove overflow-y: auto from here since it's now on the container */
+		scrollbar-width: none !important; /* Firefox */
+		-ms-overflow-style: none !important; /* IE and Edge */
+	}
+
+	/* Add some spacing at the top of the items to replace the removed heading */
+	.wpcloud-side-legend__items {
+		padding-top: 5px;
+	}
+
+	/* Hide scrollbar for Chrome, Safari and Opera */
+	.wpcloud-side-legend::-webkit-scrollbar,
+	.wpcloud-side-legend::-webkit-scrollbar-thumb,
+	.wpcloud-side-legend::-webkit-scrollbar-track {
+		width: 0 !important;
+		height: 0 !important;
+		background-color: transparent !important;
+		display: none !important;
+	}
+
+	.wpcloud-side-legend__title {
+		font-weight: bold;
+		margin-bottom: 10px;
+		font-size: 14px;
+	}
+
+	.wpcloud-side-legend__items {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+	}
+
+	.wpcloud-side-legend__item {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		cursor: default;
+	}
+
+	.wpcloud-side-legend__marker {
+		width: 12px;
+		height: .25em;
+		border-radius: 0.125em;
+		flex-shrink: 0; /* Prevent the marker from shrinking */
+		min-width: 12px; /* Ensure minimum width */
+	}
+
+	.wpcloud-side-legend__label {
+		font-size: 12px;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		color: var(--pico-muted-color, #666);
+		transition: color 0.2s ease;
+		flex: 1; /* Allow the label to take up remaining space */
+		min-width: 0; /* Allow the label to shrink below its content size */
+	}
+
+	.wpcloud-side-legend__item:hover .wpcloud-side-legend__label {
+		color: var(--pico-color, #000);
+		font-weight: 500;
 	}
 
 	.u-series {
@@ -128,4 +268,6 @@
 			color: black;
 		}
 	}
+
+	/* Remove duplicate rule */
 }

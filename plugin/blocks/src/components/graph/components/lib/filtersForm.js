@@ -15,20 +15,20 @@ import { __ } from '@wordpress/i18n';
 
 // Field options (dimensions)
 const fieldOptions = {
-		'http_verb': __('HTTP Verb'),
-		'http_status': __('HTTP Status')
+	'http_verb': __('HTTP Verb'),
+	'http_status': __('HTTP Status')
 };
 
 // Operator options
 const operatorOptions = {
-		'=': __('is'),
-		'!=': __('is not'),
-		'IN': __('is one of'),
-		'NOT IN': __('is not one of'),
-		'>': __('greater than'),
-		'>=': __('greater than or equal to'),
-		'<': __('less than'),
-		'<=': __('less than or equal to'),
+	'=': __('is'),
+	'!=': __('is not'),
+	'IN': __('is one of'),
+	'NOT IN': __('is not one of'),
+	'>': __('greater than'),
+	'>=': __('greater than or equal to'),
+	'<': __('less than'),
+	'<=': __('less than or equal to'),
 };
 
 // Validator function to check if the field allows the operator

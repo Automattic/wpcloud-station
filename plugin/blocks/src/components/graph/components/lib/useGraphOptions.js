@@ -4,7 +4,8 @@ import chroma from 'chroma-js';
 
 import { useMetricsOptionsContext } from '@wpcloud/metrics/components/contexts';
 
-import { seriesBarsPlugin, isolateStackedPlugin, preventLegendClickPlugin, tooltipPlugin, legendLabelClickPlugin } from './uplot-plugins';
+import { seriesBarsPlugin, isolateStackedPlugin, preventLegendClickPlugin, tooltipPlugin, legendLabelClickPlugin } from './uplot-plugins/';
+import { legendPositionPlugin } from './legendPositionPlugin';
 import { stack } from './utils';
 
 const statusScale = () => ( series, _, opacity ) => {
@@ -19,12 +20,22 @@ const statusScale = () => ( series, _, opacity ) => {
 };
 
 const indexScale = (colors)  => (_, idx, opacity ) => {
-	return colors[idx].alpha(opacity).css();
+	// Make sure the color exists, use a default color if not
+	const color = colors[idx] || chroma('#000');
+	return color.alpha(opacity).css();
 }
 
 const buildPalette = ( baseColors, total ) => {
+	// Ensure we have at least one color to work with
+	if (!baseColors || !baseColors.length) {
+		baseColors = ['#3498db', '#2ecc71', '#e74c3c', '#f39c12', '#9b59b6'];
+	}
+
+	// Ensure total is a positive number
+	total = Math.max(1, total || 1);
+
 	const scale = chroma.scale(baseColors).mode("lab");
-	const colors = Array.from({ length: total }, (_, i) => scale(i / total));
+	const colors = Array.from({ length: total }, (_, i) => scale(i / (total - 1 || 1)));
 	return colors;
 }
 
@@ -53,11 +64,12 @@ export default ({ containerRef, dimension, ...options }) => {
 		title,
 		meta,
 		data,
-		showLegend,
+		legendPosition = 'bottom',
 		type,
 		orientation,
 	} = options;
 
+	const showLegend = options.showLegend && legendPosition === 'bottom';
 	// Metric level options ( with Graph overrides )
 	const {
 		padding,
@@ -80,7 +92,9 @@ export default ({ containerRef, dimension, ...options }) => {
 		resizeObserver.observe(containerRef?.current);
 
 		return () => {
-			u.destroy();
+			if (typeof u !== 'undefined' && u) {
+				u.destroy();
+			}
 			resizeObserver.disconnect();
 		};
 	}, [containerRef]);
@@ -130,13 +144,15 @@ export default ({ containerRef, dimension, ...options }) => {
 	const ori = isVertical ? 0 : 1;
 	const dir = isVertical ? 1 : -1;
 
-	// Add extra left padding for horizontal graphs to accommodate side labels
-	const adjustedPadding = isVertical
-		? padding
-		: {
-			...padding,
-			left: (padding.left || 0) + 130 // Add 130px for side labels (120px width + 10px margin)
-		};
+	// Configure legend based on position
+	const legendConfig = {
+	...legend,
+		show: showLegend,
+		live: false,
+		isolate: false,
+		width: width,
+		stroke: null,
+	};
 
 	let graphOptions = {
 		title,
@@ -147,18 +163,13 @@ export default ({ containerRef, dimension, ...options }) => {
 		data,
 		ori,
 		dir,
-		padding: adjustedPadding,
 		plugins: [], // The hover effect is now integrated into seriesBarsPlugin
 		scales,
-		legend: {
-			...legend,
-			show: showLegend !== false, // Show legend by default unless explicitly disabled
-			live: false, // Don't update the legend on hover
-			isolate: false, // Don't isolate series on legend hover
-			width: width, // Set legend width to match the chart width
-			stroke: null // No stroke for legend markers
-		}
+		legend: legendConfig
 	};
+
+	// Add the legend position plugin
+	graphOptions.plugins.push(legendPositionPlugin(legendPosition));
 
 	// Add the legend label click plugin if dimension is provided
 	if (dimension) {

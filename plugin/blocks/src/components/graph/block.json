@@ -87,6 +87,17 @@
 			"type" : "boolean",
 			"default" : true
 		},
+		"legendPosition" : {
+			"type" : "string",
+			"default" : "bottom",
+			"enum": ["bottom", "right"]
+		},
+		"legendBehavior" : {
+			"type" : "string",
+			"default" : "toggle",
+			"enum": ["toggle", "isolate"],
+			"description": "Controls whether clicking a legend item toggles that series or isolates it (hiding all others)"
+		},
 		"minWidth" : {
 			"type" : "string",
 			"default" : "500px"

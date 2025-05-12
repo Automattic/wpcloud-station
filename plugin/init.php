@@ -21,6 +21,7 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/class-wpcloud-site.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/wpcloud-client.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/class-wpcloud-metrics.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/class-wpcloud-metric-data-view.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/wpcloud-patterns.php';
 require_once plugin_dir_path( __FILE__ ) . 'blocks/init.php';
 if ( is_admin() ) {
 	require_once plugin_dir_path( __FILE__ ) . 'admin/init.php';
@@ -76,12 +77,11 @@ function wpcloud_redirect_site_id() {
 			$wpcloud_site_id = $wp_query->query['site_name'];
 
 			global $wpdb;
-			$post_name = $wpdb->get_var("SELECT p.post_name FROM $wpdb->posts p JOIN $wpdb->postmeta pm ON p.ID = pm.post_id WHERE meta_key = 'wpcloud_site_id' AND  meta_value = '$wpcloud_site_id' LIMIT 1" );
+			$post_name = $wpdb->get_var( "SELECT p.post_name FROM $wpdb->posts p JOIN $wpdb->postmeta pm ON p.ID = pm.post_id WHERE meta_key = 'wpcloud_site_id' AND  meta_value = '$wpcloud_site_id' LIMIT 1" );
 			if ( ! is_null( $post_name ) ) {
-				header('Location: /sites/' . $post_name. '/metrics/' );
+				header( 'Location: /sites/' . $post_name . '/metrics/' );
 				die();
 			}
-
 		}
 	}
 }

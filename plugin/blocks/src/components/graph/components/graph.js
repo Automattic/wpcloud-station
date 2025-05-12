@@ -1,7 +1,8 @@
 /**
  * WordPress dependencies
  */
-import { useRef, useEffect, useState, useMemo } from "@wordpress/element";
+import { useRef, useEffect, useState } from "@wordpress/element";
+import classnames from "classnames";
 
 /**
  * Internal dependencies
@@ -9,6 +10,7 @@ import { useRef, useEffect, useState, useMemo } from "@wordpress/element";
 import Overlay from './overlay';
 import SummaryGraph from './summary-graph';
 import UplotGraph from './uplot-graph';
+import SideLegend from './SideLegend';
 import stationApi from '@wpcloud/utils/api';
 import { useApiContext } from '@wpcloud/metrics/components/contexts';
 import Filters from './lib/filters';
@@ -21,22 +23,16 @@ import Filters from './lib/filters';
  */
 const getFiltersFromUrl = (graphId) => {
 	try {
-		// Get the URL search parameters
 		const urlParams = new URLSearchParams(window.location.search);
-
-		// Look specifically for the parameter with this graph's ID
 		const paramName = `filters_${graphId}`;
 		const filterParam = urlParams.get(paramName);
 
-		// If there's no parameter specifically for this graph, return empty array
 		if (!filterParam) {
 			return [];
 		}
 
-		// Parse the JSON string from the URL
 		const decodedFilters = JSON.parse(decodeURIComponent(filterParam));
 
-		// Convert the array format to the filter object format
 		return decodedFilters.map(filter => ({
 			enabled: true,
 			value: {
@@ -61,23 +57,18 @@ const getFiltersFromUrl = (graphId) => {
  */
 const updateUrlWithFilters = (graphId, filters) => {
 	try {
-		// Get the active filters in array format
 		const activeFilters = filters
 			.filter(f => f.enabled)
 			.map(f => [f.value.field, f.value.operator, String(f.value.value)]);
 
-		// Get the current URL search parameters
 		const urlParams = new URLSearchParams(window.location.search);
 
-		// If there are active filters, add them to the URL
 		if (activeFilters.length > 0) {
 			urlParams.set(`filters_${graphId}`, encodeURIComponent(JSON.stringify(activeFilters)));
 		} else {
-			// If there are no active filters, remove the parameter
 			urlParams.delete(`filters_${graphId}`);
 		}
 
-		// Update the URL without reloading the page
 		const newUrl = `${window.location.pathname}?${urlParams.toString()}${window.location.hash}`;
 		window.history.replaceState({}, '', newUrl);
 	} catch (error) {
@@ -91,6 +82,8 @@ export default function Graph(props) {
 		title,
 		type,
 		showLegend,
+		legendPosition = 'bottom',
+		legendBehavior = 'toggle',
 
 		// Styling props.
 		styles = {},
@@ -292,6 +285,9 @@ export default function Graph(props) {
 
 	const showOverlay = loading || !hasData;
 
+	// Check if we should show the side legend
+	const shouldShowSideLegend = showLegend && legendPosition === 'right';
+
 	// Handle filter updates
 	const handleFiltersUpdate = ({ filters: newFilters }) => {
 		const processedFilters = newFilters.map(filter => {
@@ -332,6 +328,95 @@ export default function Graph(props) {
 		updateUrlWithFilters(graphId, processedFilters);
 	};
 
+	// State for legend interaction
+	const [activeSeriesIdx, setActiveSeriesIdx] = useState(null);
+	const [toggledOffSeries, setToggledOffSeries] = useState(new Set());
+	const [chartData, setChartData] = useState(data);
+	const originalDataRef = useRef(data);
+
+	// Update original data reference when data changes
+	useEffect(() => {
+		originalDataRef.current = data;
+		setChartData(data);
+		// Reset active series when data changes
+		setActiveSeriesIdx(null);
+		setToggledOffSeries(new Set());
+	}, [data]);
+
+	// Handle legend item click
+	const handleLegendItemClick = (idx) => {
+		// If idx is null, show all series
+		if (idx === null) {
+			setActiveSeriesIdx(null);
+			setChartData(originalDataRef.current);
+			setToggledOffSeries(new Set());
+			return;
+		}
+
+		// Determine which behavior to use based solely on the legendBehavior setting
+		const useIsolateMode = legendBehavior === 'isolate';
+
+		if (useIsolateMode) {
+			// Isolate mode: show only the clicked series
+			// If the same series is already isolated, reset to show all
+			if (activeSeriesIdx === idx) {
+				setActiveSeriesIdx(null);
+				setChartData(originalDataRef.current);
+				return;
+			}
+
+			setActiveSeriesIdx(idx);
+
+			// Create a new data array with just the x-axis values and the clicked series
+			const newData = originalDataRef.current.map((series, seriesIdx) => {
+				if (seriesIdx === 0) {
+					// Keep x-axis values
+					return series;
+				} else if (seriesIdx === idx) {
+					// Keep the clicked series data
+					return originalDataRef.current[seriesIdx];
+				} else {
+					// For other series, create an array of the same length as the x-axis but with null values
+					return Array(originalDataRef.current[0].length).fill(null);
+				}
+			});
+
+			setChartData(newData);
+		} else {
+			// Toggle mode: toggle the clicked series on/off
+			const newToggledOffSeries = new Set(toggledOffSeries);
+
+			if (newToggledOffSeries.has(idx)) {
+				// If the series is already toggled off, turn it back on
+				newToggledOffSeries.delete(idx);
+			} else {
+				// Otherwise, toggle it off
+				newToggledOffSeries.add(idx);
+			}
+
+			setToggledOffSeries(newToggledOffSeries);
+
+			// Create a new data array with toggled series set to null
+			const newData = originalDataRef.current.map((series, seriesIdx) => {
+				if (seriesIdx === 0) {
+					// Keep x-axis values
+					return series;
+				} else if (newToggledOffSeries.has(seriesIdx)) {
+					// For toggled off series, create an array of null values
+					return Array(originalDataRef.current[0].length).fill(null);
+				} else {
+					// Keep the data for visible series
+					return originalDataRef.current[seriesIdx];
+				}
+			});
+
+			setChartData(newData);
+
+			// Update active series for styling
+			setActiveSeriesIdx(newToggledOffSeries.size > 0 ? -1 : null);
+		}
+	};
+
 	// Determine which chart component to render
 	const renderChart = () => {
 		if (!hasData) return null;
@@ -349,29 +434,61 @@ export default function Graph(props) {
 			);
 		}
 
-		// Use UplotGraph for all other graph types
+		// For UplotGraph, we'll render the main component
 		return (
 			<UplotGraph
-				title={title}
-				data={data}
-				series={series}
-				meta={meta}
-				containerRef={containerRef}
-				showLegend={showLegend}
-				type={type}
-				orientation={orientation}
-				dimension={dimension}
+				data={chartData} // Use the modified data
 				refreshing={refreshing}
+				options={{
+					title,
+					series,
+					meta,
+					containerRef,
+					showLegend,
+					legendPosition,
+					legendBehavior,
+					type,
+					orientation,
+					dimension
+				}}
 			/>
 		);
 	};
 
 	return (
 		<div style={{ width: '100%', marginBottom: 0 }} data-graph-id={graphId}>
-			<div ref={containerRef} className={className} style={style}>
-				{showOverlay && <Overlay loading={loading} title={title} />}
-				{hasData && renderChart()}
+			<div className={classnames(className, {
+				'wp-block-wpcloud-graph--with-side-legend': shouldShowSideLegend
+			})} style={style}>
+				<div ref={containerRef} className="wp-block-wpcloud-graph__chart-container">
+					{showOverlay && <Overlay loading={loading} title={title} />}
+					{hasData && renderChart()}
+				</div>
+
+				{hasData && shouldShowSideLegend && series.length > 1 && (
+					<div className="wpcloud-uplot-graph__legend-container">
+						<SideLegend
+							onLegendItemClick={handleLegendItemClick} // SideLegend now handles the index adjustment internally
+							dimension={dimension}
+							activeSeriesIdx={activeSeriesIdx}
+							toggledOffSeries={toggledOffSeries}
+							legendBehavior={legendBehavior}
+							options={{
+								title,
+								meta,
+								data,
+								series, // Pass series in options instead of as a direct prop
+								containerRef,
+								showLegend,
+								legendPosition,
+								type,
+								orientation
+							}}
+						/>
+					</div>
+				)}
 			</div>
+
 			{allowFrontendFilters && (
 				<div style={{ position: 'relative', marginTop: '10px', zIndex: 1 }}>
 					<Filters

@@ -18,9 +18,7 @@ jobs:
       - name: Setup Node for theme builds
         uses: actions/setup-node@v2
         with:
-          node-version: '20.11'
-          cache: 'npm'
-          cache-dependency-path: '.'
+           node-version: '20.11'
 
       - name: Build Theme CSS
         working-directory: '.'
@@ -35,9 +33,17 @@ jobs:
       - name: Setup Node for plugin
         uses: actions/setup-node@v2
         with:
-          node-version: '20.11'
-          cache: 'npm'
-          cache-dependency-path: './plugin'
+           node-version: '20.11'
+
+      - name: Validate Cache Dependency Path
+        run: |
+          if [ ! -f ./package-lock.json ]; then
+            echo "Warning: ./package-lock.json is missing. Skipping cache."
+          fi
+          if [ ! -f ./plugin/package-lock.json ]; then
+            echo "Warning: ./plugin/package-lock.json is missing. Skipping cache."
+          fi
+
 
       - name: Build Plugin
         working-directory: './plugin'
