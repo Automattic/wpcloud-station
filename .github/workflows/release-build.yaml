@@ -39,6 +39,15 @@ jobs:
            cache: 'npm'
            cache-dependency-path: './plugin/package-lock.json'
 
+      - name: Validate Cache Dependency Path
+        run: |
+          if [ ! -f ./package-lock.json ]; then
+            echo "Warning: ./package-lock.json is missing. Skipping cache."
+          fi
+          if [ ! -f ./plugin/package-lock.json ]; then
+            echo "Warning: ./plugin/package-lock.json is missing. Skipping cache."
+          fi
+
 
       - name: Build Plugin
         working-directory: './plugin'
