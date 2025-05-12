@@ -156,6 +156,7 @@ export default function Edit( { attributes, setAttributes } ) {
 					checked={ showLegend }
 					onChange={ update('showLegend') }
 				/>
+
 				{showLegend && (
 					<>
 						<SelectControl
@@ -182,13 +183,15 @@ export default function Edit( { attributes, setAttributes } ) {
 					</>
 				)}
 				{ /* The frontend filter UI is not ready yet. Hiding this for now.
+
 				<ToggleControl
 					label={ __( 'Enable Filter Controls' ) }
 					help={ __( 'Allow users to view and interact with filters on the frontend. See the `Predefined Filters` section below to add default filters' ) }
 					checked={ allowFrontendFilters }
 					onChange={ update('allowFrontendFilters') }
 				/>
-				*/ }
+				*/}
+
 			</PanelBody>
 			<PanelBody title={__('Graph Data')}>
 				{loading && <Spinner />}
