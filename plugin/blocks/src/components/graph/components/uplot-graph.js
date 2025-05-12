@@ -40,8 +40,6 @@ export default function UplotGraph({
 	} = options;
 	// Use useRef instead of useState to avoid re-renders when setting the uPlot instance
 	const uplotInstanceRef = useRef(null);
-	// Track which series is active (null means all series are shown)
-	const [activeSeriesIdx, setActiveSeriesIdx] = useState(null);
 	// Store the original data
 	const originalDataRef = useRef(data);
 	// Store the current chart data
@@ -51,12 +49,10 @@ export default function UplotGraph({
 	useEffect(() => {
 		originalDataRef.current = data;
 		setChartData(data);
-		// Reset active series when data changes
-		setActiveSeriesIdx(null);
 	}, [data]);
 
 	// Use the height adjustment hook
-	const { containerDimensionsRef, handleChartCreated } = useUplotHeight({
+	const { handleChartCreated } = useUplotHeight({
 		containerRef,
 		uplotInstanceRef,
 		data: chartData,
@@ -82,11 +78,7 @@ export default function UplotGraph({
 	// Use chartData instead of the original data
 	const { data: d, ...uplotOptions } = useGraphOptions(graphOptionsParams);
 
-	// Extract colors from series for the SideLegend if needed
-	if (showLegend && legendPosition === 'right') {
-		const seriesColors = uplotOptions.series.map(s => s.stroke).filter(Boolean);
-		console.log('seriesColors', seriesColors);
-	}
+	// No need to extract colors here as they're handled in the SideLegend component
 
 	// Return the chart
 	return (

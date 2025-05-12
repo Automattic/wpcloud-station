@@ -124,7 +124,7 @@ const SideLegend = ({
 	const series = graphOptions.series || [];
 
 	// Use colors from props or extract from series
-	let colors = propColors || series.map(s => s.stroke).filter(Boolean);
+	const colors = propColors || series.map(s => s.stroke).filter(Boolean);
 
 	// Filter out the first series (which is usually the x-axis) if it hasn't been filtered already
 	// Check if the first item is likely an x-axis by looking at its properties
