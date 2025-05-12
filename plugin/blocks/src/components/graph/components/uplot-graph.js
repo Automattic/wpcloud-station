@@ -32,7 +32,8 @@ export default function UplotGraph({
 		type,
 		orientation,
 		dimension,
-		refreshing
+		refreshing,
+		legendBehavior = 'toggle' // 'toggle' or 'isolate'
 }) {
 	// Use useRef instead of useState to avoid re-renders when setting the uPlot instance
 	const uplotInstanceRef = useRef(null);
@@ -99,9 +100,23 @@ export default function UplotGraph({
 			return;
 		}
 
-		// Different behavior based on dimension
-		if (dimension === 'atomic_site_id') {
-			// For atomic_site_id, show only the clicked series (isolate mode)
+		// Determine which behavior to use based solely on the legendBehavior setting
+		const useIsolateMode = legendBehavior === 'isolate';
+
+		if (useIsolateMode) {
+			// Isolate mode: show only the clicked series
+			// If the same series is already isolated, reset to show all
+			if (activeSeriesIdx === idx) {
+				setActiveSeriesIdx(null);
+				setChartData(originalDataRef.current);
+
+				// Update the uPlot instance if it exists
+				if (uplotInstanceRef.current) {
+					uplotInstanceRef.current.setData(originalDataRef.current);
+				}
+				return;
+			}
+
 			setActiveSeriesIdx(idx);
 
 			// Create a new data array with just the x-axis values and the clicked series
@@ -125,7 +140,7 @@ export default function UplotGraph({
 				uplotInstanceRef.current.setData(newData);
 			}
 		} else {
-			// For other dimensions, toggle the clicked series (toggle mode)
+			// Toggle mode: toggle the clicked series on/off
 			const newToggledOffSeries = new Set(toggledOffSeries);
 
 			if (newToggledOffSeries.has(idx)) {
@@ -192,6 +207,9 @@ export default function UplotGraph({
 						colors={seriesColors}
 						onLegendItemClick={handleLegendItemClick}
 						dimension={dimension}
+						activeSeriesIdx={activeSeriesIdx}
+						toggledOffSeries={toggledOffSeries}
+						legendBehavior={legendBehavior}
 					/>
 				</div>
 			)}

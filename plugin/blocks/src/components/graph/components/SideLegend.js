@@ -43,6 +43,9 @@ const styles = {
 	itemInactive: {
 		opacity: 0.5,
 	},
+	itemHidden: {
+		opacity: 0.5,
+	},
 	itemHover: {
 		backgroundColor: 'rgba(0, 0, 0, 0.05)',
 	},
@@ -57,8 +60,8 @@ const styles = {
 		height: '12px',
 	},
 	markerActive: {
-		filter: 'brightness(1.3)',
-		boxShadow: '0 0 3px rgba(0, 0, 0, 0.2)',
+		filter: 'brightness(1.5)',
+		boxShadow: '0 0 4px rgba(0, 0, 0, 0.3)',
 	},
 	markerHover: {
 		filter: 'brightness(1.2)',
@@ -72,14 +75,25 @@ const styles = {
 	},
 	labelClickable: {
 		cursor: 'pointer',
+	},
+	labelHover: {
+		textDecoration: 'underline',
 	}
 };
 
-const SideLegend = ({ series, colors: propColors, onLegendItemClick, dimension }) => {
+const SideLegend = ({
+	series,
+	colors: propColors,
+	onLegendItemClick,
+	dimension,
+	activeSeriesIdx: externalActiveSeriesIdx = null,
+	toggledOffSeries = new Set(),
+	legendBehavior = 'toggle'
+}) => {
 	const colors = propColors || series.map(s => s.stroke).filter(Boolean);
 	// Filter out the first series (which is usually the x-axis)
 	const displaySeries = series.slice(1);
-	const [activeSeriesIdx, setActiveSeriesIdx] = useState(null);
+	// Use internal state for hover only, active state comes from parent
 	const [hoveredIdx, setHoveredIdx] = useState(null);
 
 	// Tooltip state
@@ -146,14 +160,10 @@ const SideLegend = ({ series, colors: propColors, onLegendItemClick, dimension }
 		// Stop event propagation to prevent it from triggering the item click
 		event.stopPropagation();
 
-		// If the same item is clicked again, reset to show all series
-		const newActiveIdx = activeSeriesIdx === index ? null : index;
-		setActiveSeriesIdx(newActiveIdx);
-
 		// Call the parent handler with the adjusted index (accounting for x-axis series)
 		if (onLegendItemClick) {
 			// Add 1 to account for the x-axis series that was filtered out
-			onLegendItemClick(newActiveIdx !== null ? newActiveIdx + 1 : null);
+			onLegendItemClick(index + 1);
 		}
 	};
 
@@ -199,18 +209,38 @@ const SideLegend = ({ series, colors: propColors, onLegendItemClick, dimension }
 			)}
 			<div className="wpcloud-side-legend__items" style={styles.items}>
 				{displaySeries.map((s, i) => {
+					// Adjust index for toggledOffSeries (add 1 for x-axis)
+					const adjustedIdx = i + 1;
+
+					// Determine if this series is visible
+					const isIsolateMode = legendBehavior === 'isolate';
+
+					// Determine if this series is active
+					const isActive = isIsolateMode
+						? externalActiveSeriesIdx === adjustedIdx
+						: !toggledOffSeries.has(adjustedIdx);
+
 					// Determine item style based on active state and hover state
 					const itemStyle = {
 						...styles.item,
-						...(activeSeriesIdx === i ? styles.itemActive : {}),
-						...(activeSeriesIdx !== null && activeSeriesIdx !== i ? styles.itemInactive : {}),
+						...(isActive ? {} : styles.itemHidden),
 						...(hoveredIdx === i ? styles.itemHover : {})
 					};
 
-					// Determine label style based on clickability
+					// Determine label style based on clickability and hover
 					const labelStyle = {
 						...styles.label,
-						...(isLabelClickable ? styles.labelClickable : {})
+						...(isLabelClickable ? styles.labelClickable : {}),
+						...(isAtomicSiteId && hoveredIdx === i ? styles.labelHover : {})
+					};
+
+					// Determine marker style
+					const markerStyle = {
+						...styles.marker,
+						...(isAtomicSiteId ? styles.markerTall : {}),
+						...(isActive ? styles.markerActive : {}),
+						...(hoveredIdx === i ? styles.markerHover : {}),
+						backgroundColor: s.stroke || colors?.[i] || '#000'
 					};
 
 					const label = s.label || `Series ${i + 1}`;
@@ -219,8 +249,8 @@ const SideLegend = ({ series, colors: propColors, onLegendItemClick, dimension }
 						<div
 							key={i}
 							className={classnames('wpcloud-side-legend__item', {
-								'wpcloud-side-legend__item--active': activeSeriesIdx === i,
-								'wpcloud-side-legend__item--inactive': activeSeriesIdx !== null && activeSeriesIdx !== i
+								'wpcloud-side-legend__item--active': isActive,
+								'wpcloud-side-legend__item--inactive': !isActive
 							})}
 							style={itemStyle}
 							onMouseEnter={() => setHoveredIdx(i)}
@@ -228,15 +258,9 @@ const SideLegend = ({ series, colors: propColors, onLegendItemClick, dimension }
 						>
 							<div
 								className="wpcloud-side-legend__marker"
-								style={{
-									...styles.marker,
-									...(isAtomicSiteId ? styles.markerTall : {}),
-									...(activeSeriesIdx === i ? styles.markerActive : {}),
-									...(hoveredIdx === i ? styles.markerHover : {}),
-									backgroundColor: s.stroke || colors?.[i] || '#000'
-								}}
+								style={markerStyle}
 								onClick={(e) => handleMarkerClick(i, e)}
-								title="Click to show/hide this series"
+								title={isIsolateMode ? "Click to show only this series" : "Click to show/hide this series"}
 							></div>
 							<div
 								ref={el => labelRefs.current[i] = el}

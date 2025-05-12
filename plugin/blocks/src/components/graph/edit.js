@@ -31,7 +31,7 @@ import SimpleGraph from './components/SimpleGraph';
 
 export default function Edit( { attributes, setAttributes } ) {
 
-	const { title, type, orientation, showLegend, legendPosition, metric, dimension, resolution, topX, summarize, minWidth, predefinedFilters, allowFrontendFilters } = attributes;
+	const { title, type, orientation, showLegend, legendPosition, legendBehavior, metric, dimension, resolution, topX, summarize, minWidth, predefinedFilters, allowFrontendFilters } = attributes;
 	const update = updateAttribute(setAttributes);
 
 	const [metrics, setMetrics] = useState({});
@@ -157,15 +157,29 @@ export default function Edit( { attributes, setAttributes } ) {
 					onChange={ update('showLegend') }
 				/>
 				{showLegend && (
-					<SelectControl
-						label={ __( 'Legend Position' ) }
-						value={ legendPosition }
-						options={ [
-							{ label: __( 'Bottom' ), value: 'bottom' },
-							{ label: __( 'Right' ), value: 'right' },
-						] }
-						onChange={ update('legendPosition') }
-					/>
+					<>
+						<SelectControl
+							label={ __( 'Legend Position' ) }
+							value={ legendPosition }
+							options={ [
+								{ label: __( 'Bottom' ), value: 'bottom' },
+								{ label: __( 'Right' ), value: 'right' },
+							] }
+							onChange={ update('legendPosition') }
+						/>
+						{legendPosition === 'right' && (
+							<SelectControl
+								label={ __( 'Legend Behavior' ) }
+								value={ legendBehavior }
+								options={ [
+									{ label: __( 'Toggle Series' ), value: 'toggle' },
+									{ label: __( 'Isolate Series' ), value: 'isolate' },
+								] }
+								onChange={ update('legendBehavior') }
+								help={ __( 'Toggle: Click to show/hide individual series. Isolate: Click to show only that series.' ) }
+							/>
+						)}
+					</>
 				)}
 				{ /* The frontend filter UI is not ready yet. Hiding this for now.
 				<ToggleControl
@@ -284,6 +298,7 @@ export default function Edit( { attributes, setAttributes } ) {
 				orientation={orientation}
 				showLegend={showLegend}
 				legendPosition={legendPosition}
+				legendBehavior={legendBehavior}
 			/>
 		</div>
 	);

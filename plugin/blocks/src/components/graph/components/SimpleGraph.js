@@ -14,7 +14,8 @@ function SimpleGraph({
 	type = 'line',
 	orientation = 'vertical',
 	showLegend = true,
-	legendPosition = 'bottom'
+	legendPosition = 'bottom',
+	legendBehavior = 'toggle'
 }) {
 	const containerRef = useRef(null);
 
