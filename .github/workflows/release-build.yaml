@@ -19,8 +19,6 @@ jobs:
         uses: actions/setup-node@v2
         with:
            node-version: '20.11'
-           cache: 'npm'
-           cache-dependency-path: './package-lock.json'
 
       - name: Build Theme CSS
         working-directory: '.'
@@ -36,8 +34,6 @@ jobs:
         uses: actions/setup-node@v2
         with:
            node-version: '20.11'
-           cache: 'npm'
-           cache-dependency-path: './plugin/package-lock.json'
 
       - name: Validate Cache Dependency Path
         run: |
