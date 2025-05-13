@@ -12,8 +12,8 @@
 	},
 	"mappings": {
 		 "wp-content/plugins/wpcloud-station-plugin": "./plugin",
-		 "wp-content/themes/wpcloud-station": "./theme",
-		 "wp-content/themes/wpcloud-station-pico": "./theme-pico",
+		 "wp-content/themes/wpcloud-station-theme": "./theme",
+		 "wp-content/themes/wpcloud-station-theme-pico": "./theme-pico",
 		 "wp-content/mu-plugins": "./wp-env-mu-plugins"
 		}
 }
