@@ -5,41 +5,70 @@ const createRelease = require('./tools/release.js');
 // Configuration
 const POLL_INTERVAL = 10000; // Check every 10 seconds
 
-// Function to check PR mergeability
-async function isMergeable(prNumber) {
+// Function to check PR mergeability and test status
+async function isPRReadyToMerge(prNumber) {
 	try {
-		// Execute the `gh` command to get PR details
-		const output = execSync(`gh pr view ${prNumber} --json mergeable`, { encoding: 'utf8' })
+		// Execute the `gh` command to get PR details including mergeable status and status checks
+		const output = execSync(`gh pr view ${prNumber} --json mergeable,statusCheckRollup`, { encoding: 'utf8' })
 
 		// Parse the JSON output
 		const prData = JSON.parse(output);
 
-		// Return the mergeable status
-		return prData.mergeable === 'MERGEABLE';
+		// Check if PR is mergeable
+		const isMergeable = prData.mergeable === 'MERGEABLE';
+
+		// Check if all required status checks have passed
+		let allTestsPassed = true;
+		if (prData.statusCheckRollup && prData.statusCheckRollup.length > 0) {
+			for (const check of prData.statusCheckRollup) {
+				// Consider only required checks or all checks if none are explicitly required
+				if (check.state !== 'SUCCESS') {
+					allTestsPassed = false;
+					console.log(`Status check "${check.name}" is in state "${check.state}"`);
+					break;
+				}
+			}
+		} else {
+			console.log('No status checks found for this PR');
+		}
+
+		return {
+			mergeable: isMergeable,
+			testsPassed: allTestsPassed,
+			readyToMerge: isMergeable && allTestsPassed
+		};
 	} catch (error) {
 		console.error(`Error fetching PR details: ${error.message}`);
-		return null;
+		return {
+			mergeable: null,
+			testsPassed: null,
+			readyToMerge: false
+		};
 	}
 }
 
-// Function to wait for PR to be mergeable
-async function waitForMergeable(prNumber) {
-	console.log(`Waiting for PR #${prNumber} to become mergeable...`);
+// Function to wait for PR to be mergeable and tests to pass
+async function waitForPRReadyToMerge(prNumber) {
+	console.log(`Waiting for PR #${prNumber} to become mergeable and tests to pass...`);
 
 	while (true) {
 		try {
-			const mergeable = await isMergeable(prNumber);
+			const status = await isPRReadyToMerge(prNumber);
 
-			if (mergeable === true) {
-				console.log(`PR #${prNumber} is mergeable!`);
+			if (status.readyToMerge) {
+				console.log(`PR #${prNumber} is mergeable and all tests have passed!`);
 				break;
-			} else if (mergeable === false) {
-				console.log(`PR #${prNumber} is not mergeable. Retrying...`);
 			} else {
-				console.log(`Mergeable status is unknown. Retrying...`);
+				if (!status.mergeable) {
+					console.log(`PR #${prNumber} is not mergeable. Retrying...`);
+				} else if (!status.testsPassed) {
+					console.log(`PR #${prNumber} is mergeable but tests have not passed. Retrying...`);
+				} else {
+					console.log(`PR #${prNumber} status is unknown. Retrying...`);
+				}
 			}
 		} catch (error) {
-			console.error(`Error checking mergeability: ${error.message}`);
+			console.error(`Error checking PR status: ${error.message}`);
 		}
 
 		// Wait before retrying
@@ -63,7 +92,7 @@ async function main() {
 	}
 
 	// Start the script
-	await waitForMergeable(prNum);
+	await waitForPRReadyToMerge(prNum);
 
 	execSync(`gh pr merge ${prNum} --admin --squash`);
 	createRelease();
