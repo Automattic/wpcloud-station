@@ -1,3 +1,5 @@
+> ### ⚠️ Currently, Station is not recommended for production usage. It is an experimental example dashboard to demonstrate how to interact with the WP Cloud API. Some WP Cloud features are not be available or fully functional within Station.
+
 # WP Cloud Station
 
 WP Cloud Station is a client plugin to manage WP Cloud sites.
