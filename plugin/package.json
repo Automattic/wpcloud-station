@@ -43,5 +43,9 @@
 		"remove-accents": "~0.5.0",
 		"uplot": "~1.6.31",
 		"uplot-react": "~1.2.2"
+	},
+	"overrides": {
+		"basic-ftp": "5.2.1",
+		"form-data": "4.0.4"
 	}
 }
