@@ -11,12 +11,12 @@ jobs:
     permissions: write-all
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6.0.2
         with:
           ref: ${{ github.ref }}
 
       - name: Setup Node for theme builds
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v6
         with:
            node-version: '20.11'
 
@@ -31,7 +31,7 @@ jobs:
         run: './bin/package.sh theme-pico'
 
       - name: Setup Node for plugin
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v6
         with:
            node-version: '20.11'
 
