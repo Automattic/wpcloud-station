@@ -1,4 +1,4 @@
-> ### ⚠️ Currently, Station is not recommended for production usage. It is an experimental example dashboard to demonstrate how to interact with the WP Cloud API. Some WP Cloud features are not available or fully functional within Station.
+> ### ⚠️ WP Cloud Station is not actively maintained and is not for production usage. It is an experimental example dashboard to demonstrate how to interact with the WP Cloud API. Some WP Cloud features are not available or fully functional within Station. 
 
 # WP Cloud Station
 
@@ -169,7 +169,7 @@ Finally, in the browser, the `&` will be expanded to the core block class:
 
 * Can I use WP Cloud Station plugin on any site?
 
-  Yes, WP Cloud Station plugin can be installed on any existing WordPress site.
+  Yes, WP Cloud Station plugin can be installed on any existing WordPress site. Please note Station is not actively maintained and should not be used in production. 
 
 * How much does it cost?
 
