@@ -38,7 +38,6 @@ function releaseExists(tag) {
 }
 
 // Function to get PRs between two tags
-// @TODO: fix this
 function getPRsBetweenTags(previousTag, currentTag) {
 	if (!previousTag) {
 			console.log('No previous tag found. Cannot list PRs.');
@@ -46,12 +45,57 @@ function getPRsBetweenTags(previousTag, currentTag) {
 	}
 
 	console.log(`Fetching PRs between ${previousTag} and ${currentTag}...`);
-	const previousTagDate = execSync( `git log -1 --format=%ci ${previousTag}`, { encoding: 'utf8' }).split(' ')[0];
-	const currentTagDate = execSync( `git log -1 --format=%ci ${currentTag}`, { encoding: 'utf8' }).split(' ')[0];
-	const prs = execSync(
-			`gh pr list --search "merged:${previousTagDate}..${currentTagDate}" --json title,number --jq ".[] | \\\"#\\(.number) \\(.title)\\\""`, {encoding: 'utf8'}
-	);
-	return prs ? prs.split('\n') : [];
+
+	// Get the commit range between the two tags
+	const commitRange = `${previousTag}..${currentTag}`;
+
+	// Get the list of commit SHAs in the range
+	const commits = execSync(`git log --pretty=format:"%H" ${commitRange}`, { encoding: 'utf8' })
+		.trim()
+		.split('\n');
+
+	if (!commits || commits.length === 0) {
+		console.log('No commits found between tags.');
+		return [];
+	}
+
+	// Create a query to find PRs that include these commits
+	// We'll use the GitHub search syntax to find PRs that include any of these commits
+	const prNumbers = new Set();
+	const prDetails = [];
+
+	// Process commits in batches to avoid command line length limits
+	const batchSize = 10;
+	for (let i = 0; i < commits.length; i += batchSize) {
+		const batchCommits = commits.slice(i, i + batchSize);
+
+		// For each commit, try to find the associated PR
+		for (const commit of batchCommits) {
+			try {
+				// Use GitHub CLI to get the PR number for this commit
+				const prInfo = execSync(`gh pr list --search "hash:${commit}" --json number,title --limit 1`,
+					{ encoding: 'utf8' });
+
+				if (prInfo && prInfo.trim()) {
+					const prData = JSON.parse(prInfo);
+					if (prData && prData.length > 0) {
+						const { number, title } = prData[0];
+
+						// Only add if we haven't seen this PR number before
+						if (!prNumbers.has(number)) {
+							prNumbers.add(number);
+							prDetails.push(`#${number} ${title}`);
+						}
+					}
+				}
+			} catch (error) {
+				console.log(`Could not find PR for commit ${commit.substring(0, 8)}`);
+			}
+		}
+	}
+
+	console.log(`Found ${prDetails.length} PRs between ${previousTag} and ${currentTag}`);
+	return prDetails;
 }
 
 // Function to get the previous tag
